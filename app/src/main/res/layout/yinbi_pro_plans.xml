@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/accent_white"
+    android:id="@+id/plansView">
+
+    <fragment
+        xmlns:lantern="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/titlebar_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        class="org.lantern.app.fragment.TitleBar"
+        lantern:titleBackgroundColor="@drawable/nav_background_white"
+        lantern:titleImage="@drawable/lantern_pro_plans"/>
+
+    <LinearLayout
+        android:layout_below="@+id/titlebar_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!-- The main content view -->
+        <RelativeLayout android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardsView"
+            android:layout_gravity="center">
+
+            <org.lantern.app.model.DynamicViewPager
+                android:id="@+id/viewPager"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="305dp"
+                />
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/viewPagerTab"
+                android:layout_below="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom|center_horizontal"
+                app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
+                app:stl_dividerColor="@color/transparent"
+                app:stl_dividerThickness="36dp"
+                app:stl_indicatorAlwaysInCenter="true"
+                app:stl_indicatorColor="@color/icon_enabled"
+                app:stl_indicatorWidth="auto"
+                app:stl_indicatorCornerRadius="12dp"
+                app:stl_indicatorGravity="center"
+                app:stl_indicatorInterpolation="linear"
+                app:stl_indicatorThickness="12dp"
+                app:stl_underlineColor="@color/transparent"
+                app:stl_underlineThickness="0dp"
+                />
+
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#7c7c7c"
+                    android:lineSpacingExtra="5sp"
+                    android:text="@string/one_year_yinbi"/>
+
+                <TextView
+                    android:id="@+id/oneYearCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingLeft="5dp"
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:lineSpacingExtra="5sp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/oneYearBtn"
+                android:layout_height="36dp"
+                android:layout_width="216dp"
+                android:text="@string/purchase"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="14sp"
+                android:minHeight="48dp"
+                android:textAllCaps="true"
+                android:textColor="@color/pink"
+                android:stateListAnimator="@null"
+                android:clickable = "true"
+                android:background="@drawable/text_invite"
+                android:layout_centerInParent="true"
+                android:onClick="textInvite" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:paddingTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#7c7c7c"
+                    android:lineSpacingExtra="5sp"
+                    android:text="@string/two_years_yinbi"
+                    />
+
+                <TextView
+                    android:id="@+id/twoYearCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingLeft="5dp"
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:lineSpacingExtra="5sp"
+                    />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/twoYearBtn"
+                    android:layout_height="36dp"
+                    android:layout_width="216dp"
+                    android:text="@string/purchase"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="14sp"
+                    android:elevation="2dp"
+                    android:minHeight="48dp"
+                    android:textAllCaps="true"
+                    android:stateListAnimator="@null"
+                    android:shadowRadius="0"
+                    android:textColor="@color/accent_white"
+                    android:clickable="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/pink"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_centerInParent="true"
+                    android:onClick="emailInvite" />
+
+                    <ImageView
+                        android:id="@+id/ribbon"
+                        android:layout_toRightOf="@+id/twoYearBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:src="@drawable/best_deal"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/resellerSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:gravity="bottom|center"
+        android:background="@drawable/reseller_bg"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/resellerText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:singleLine="true"
+            android:fontFamily="sans-serif"
+            android:clickable="true"
+            android:text="@string/get_bulk_yinbi"
+            android:textSize="12sp"
+            android:textColor="@color/reseller_text"/>
+
+    </LinearLayout>
+</RelativeLayout>

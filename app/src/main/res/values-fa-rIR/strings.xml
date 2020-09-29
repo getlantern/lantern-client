@@ -1,0 +1,484 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">لنترن</string>
+  <string name="action_settings">تنظیمات</string>
+  <string name="proxy_all_setting">پراکسی کردن تمام ترافیک رد و بدل شده</string>
+  <string name="proxy_all_on_header">روشن(امن ترین روش)</string>
+  <string name="proxy_all_off_header">خاموش (سریع ترین روش)</string>
+  <string name="proxy_all_on">با این روش تمام ترافیک دستگاه شما از طریق فانوس ارسال خواهد شد.</string>
+  <string name="proxy_all_off">اگر این روش خاموش باشد  فقط ترافیک هاس سایت های بلوک شده از طریق فانوس ارسال خواهد شد.</string>
+  <string name="button_text">شروع</string>
+  <string name="drawer_open">کشو باز</string>
+  <string name="drawer_close">کشو بسته</string>
+  <string name="default_fragment">به طور پیش فرض قطعه</string>
+  <string name="receive_lantern">فانوس نسخه رایانه را ازطریق ایمیل دریافت نمایید</string>
+  <string name="lantern_desktop">فانوس رایانه</string>
+  <string name="email_hint">ایمیل</string>
+  <string name="send_button">ارسال</string>
+  <string name="send_desktop">ارسال به دسکتاپ</string>
+  <string name="send_email">ارسال ایمیل</string>
+  <string name="your_email">ایمیل شما</string>
+  <string name="your_email_address">آدرس ایمیل شما</string>
+  <string name="please_enter">لطفا وارد کنید و آدرس ایمیل خود را تأیید کنید.</string>
+  <string name="please_enter_register">لطفا آدرس ایمیل خود را وارد و آن را تایید کنید تا بتوانید در حساب ویژه فانوس ثبت نام کنید.</string>
+  <string name="your_referral_code">کد ارجاع شما</string>
+  <string name="report_an_issue">گزارش یک مشکل</string>
+  <string name="select_issue">لطفا یک موضوع را انتخاب کنید</string>
+  <string name="select_issue_desc">لطفاً شرح مختصری از مشکل خود را برای مان در اینجا بگذارید،
+و ما در اولین فرصت ممکنه به شما پاسخ خواهیم داد.</string>
+  <string name="submit">ثبت اطلاعات</string>
+  <string name="submit_issue">ارسال موضوع</string>
+  <string name="no_issue_selected">لطفاً یک مشکل را پیش از ارسال گزارش انتخاب کنید</string>
+  <string name="cannot_find_email">آخ! ما در پیدا کردن آن نشانی ایمیل به مشکل برخوردیم.</string>
+  <string name="no_purchase_date">لطفاً تاریخ تقریبی از وقتی که لنترن حرفه ای را خریداری نمودید انتخاب نمایید</string>
+  <string name="purchase_date">تاریخ خرید</string>
+  <string-array name="common_issue_list">
+    <item>عدم امکان دسترسی به سایت های بسته شده</item>
+    <item>عدم امکان کامل نمودن خرید</item>
+    <item>عدم امکان ورود</item>
+    <item>نشان چرخنده به طور بی پایان می چرخد</item>
+    <item>سرعت پایین</item>
+    <item>غیره</item>
+  </string-array>
+  <string name="submit_code">کد تایید</string>
+  <string name="on_text">روشن</string>
+  <string name="off_text">خاموش</string>
+  <string name="lantern_off">فانوس خاموش است، کلید را بچرخوانید تا به سایت ها و خدمات بسته شده دسترسی پیدا کنید!</string>
+  <string name="lantern_on">فانوس روشن است. اکنون شما می توانید به سایت ها و خدمات بسته شده دسترسی پیدا کنید!</string>
+  <string name="on_desc">اکنون شما می توانید/n/r به سایت ها و خدمات بسته شده دسترسی پیدا کنید</string>
+  <string name="off_desc">دکمه را کلیک نموده تا به سایت ها و خدمات بسته شده دسترسی یابید</string>
+  <string name="service_connected">فانوس متصل شد</string>
+  <string name="desktop_option">نسخه ویندوز</string>
+  <string name="contact_option">‫تماس‬</string>
+  <string name="check_for_update">چک کردن برای به روز رسانی</string>
+  <string name="no_update_available">شما به روز هستید!</string>
+  <string name="error_checking_for_update">خطا در استعلام نسخه جدید فانوس</string>
+  <string name="error_making_purchase">خطا در تلاش برای ایجاد خرید</string>
+  <string name="have_latest_version">فانوس %1$s آخرین نسخه موجود می باشد.</string>
+  <string name="updating_lantern">به روزرسانی فانوس</string>
+  <string name="cancel">انصراف</string>
+  <string name="newsfeed_option">سرعنوان فانوس را امتحان کنید</string>
+  <string name="newsfeed_off_option">سرعنوان را خاموش کن</string>
+  <string name="privacy_policy">حریم خصوصی</string>
+  <string name="share_option">اشتراك گذاري</string>
+  <string name="quit_option">خروج</string>
+  <string name="share_email_native"></string>
+  <string name="share_email_subject">فانوس آندروید</string>
+  <string name="fatal_error">فانوس با خطای شدیدی مواجه شده و دیگر در حال اجرا نمی باشد</string>
+  <string name="share_twitter">فانوس آندروید را بررسی کنید: https://bit.ly/lanternapk</string>
+  <string name="share_facebook">من دارم فانوس  در آندروید را استفاده می کنم، که در اینجا موجود است: https://bit.ly/lanternapk</string>
+  <string name="share_email_gmail">من دارم  فانوس  را در آندروید استفاده می کنم، و فایل ای پی کی آن را پیوست کرده ام!</string>
+  <string name="share_sms">من دارم لنترن برای آندروید را استفاده می کنم، از این دانلودش کن: https://bit.ly/lanternapk</string>
+  <string name="share_chooser_text">شروع فانوس اندروید</string>
+  <string name="card">کارت</string>
+  <string name="credit_card">کارت اعتباری</string>
+  <string name="Alipay">علیپی</string>
+  <string name="alipay_account">حساب علیپی</string>
+  <string name="month">ماه</string>
+  <string name="year">سال</string>
+  <string name="success_email"> فانوس برای کامپیوتر رومیزی برای شما ایمیل شده است!</string>
+  <string name="error_email">مشکلی در ارسال فانوس برای کامپیوتر رومیزی وجود داشت. لطفاً بعداً تلاش کنید.</string>
+  <string name="send_logs">ارسال گزارش وقایع</string>
+  <string name="help_survey">برای بهتر کردن فانوس کمک کنید، این نظرسنجی تک سوالی را اکنون انجام دهید!</string>
+  <string name="take_survey">نظرسنجی را پر کنید!</string>
+  <string name="thanks_survey">از این که در نظر سنجی ما شرکت کردید تشکر می کنیم.</string>
+  <string name="success_log_email">ورود ها به سیستم با موفقیت به فانوس ارسال شد.</string>
+  <string name="error_log_email">ورودتان به فانوس با خطا مواجه شد. لطفا دوباره امتحان کنید.</string>
+  <string name="invalid_email">آدرس ایمیل نامعتبر</string>
+  <string name="error_payment_gateway">ارتباط با سیستم پرداخت با خطا مواجه شد. </string>
+  <string name="emails_do_not_match">ایمیل وارد شده یکسان نمی باشد</string>
+  <string name="invalid_reseller_code">کد خریدار وارد شده از طرف شما معتبر نیست.</string>
+  <string name="invalid_referral_code">کد ارجاع معتبر نیست.</string>
+  <string name="invalid_voucher_code">کد کوپن نامعتبر است.</string>
+  <string name="cannot_use_own_referral_code">نمیتوانید از کد ارجاع خود برای ارتقاع استفاده کنید.</string>
+  <string name="no_internet_connection"> دسترسی به اینترنت امکان پذیر نیست.</string>
+  <string name="unable_remove_device">قادر به خروج دستگاه نیست. لطفا دوباره امتحان کنید.</string>
+  <string name="remove">حذف</string>
+  <string name="contact_email">team@getlantern.org</string>
+  <string name="contact_message">کمکم کنید</string>
+  <string name="contact_subject">فانوس آندروید</string>
+  <string name="update_available">نسخه جدیدی از فانوس موجودست آیا اکنون مایل به ارتقاء هستید؟ </string>
+  <string name="not_now">الان نه</string>
+  <string name="install_update">به روز رسانی</string>
+  <string name="error_update">ایراد در دانلود به روز رسانی</string>
+  <string name="loading">در حال بارگذاری...</string>
+  <string name="manual_update">به صورت دستی آخرین نسخه را از  &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt; دانلود کنید</string>
+  <string name="pro_welcome_text">به  فانوس Pro خوش آمدید!</string>
+  <string name="happy_anniversary">سالگرد فانوس مبارک!</string>
+  <string name="welcome_greeting">به  فانوس خوش آمدید</string>
+  <string name="upgrade_for">برای ثبات صفحه های سریع موبایل و سرعت بالا آپدیت کنید</string>
+  <string name="what_kind_of_lantern">چه نوع از فانوس \ n آیا دوست دارید؟</string>
+  <string name="lantern_pro_radio">فانوس ویژه - دیتای نامحدود</string>
+  <string name="lantern_free_radio">فانوس پایه - اطلاعات 500 مگابایت</string>
+  <string name="welcome_to_lantern">به فانوس جدید و بهینه شده خوش آمدید</string>
+  <string name="to_get_unlimited">برای دریافت دیتای نامحدود , سرعت بالا و حتی مقاومت در برابر فیلتر  قوی تر به نسخه ویژه ارتقا کنید</string>
+  <string name="renew_pro_account">حساب ویژه  خود را تجدید کنید</string>
+  <string name="logout">خروج از سیستم</string>
+  <string name="change_phone_number">تغییر شماره تلفن</string>
+  <string name="change_email_address">تغییر آدرس ایمیل</string>
+  <string name="pro_account_expires">حساب ویژه شما در %1$s  انقضا می شود</string>
+  <string name="includes_free_months">   این شامل پاداش%2$dماهانه شما می شود</string>
+  <string name="verified_phone_number">شماره تلفن تایید شده:</string>
+  <string name="devices_authorized">دستگاه‌هایی که مجاز به استفاده از حساب  Pro هستند:</string>
+  <string name="send_us_your_logs">ارسال گزارش وقایع</string>
+  <string name="thanks_purchase">برای خریداری حساب کاربری  فانوس Pro از شما ممنونیم!</string>
+  <string name="start_inviting">دعوت را شروع کنید </string>
+  <string name="sending_request">پردازش درخواست</string>
+  <string name="invite_friends">ایمیل خود را برای دریافت ایمیل و اشتراک گذاری با دوستانتان وارد کنید. هنگامی که آنها عضو شوند شما یک ماه عضویت رایگان ویژه دریافت خواهید کرد.</string>
+  <string name="invite_friends_welcome">هنگامی که دوست‌تان یک بسته‌ی خدماتی دو ساله خریداری کند، شما سه ماه اضافی رایگان دریافت می‌کنید و بسته‌ی یک ساله به شما یک ماه رایگان خواهد داد.</string>
+  <string name="invite_friends_btn">دعوت از دوستان</string>
+  <string name="share_friends_text">با دوستانتان به اشتراک بگذارید تا یک ماه عضویت ویژه رایگان دریافت کنید</string>
+  <string name="email_address">آدرس ایمیل</string>
+  <string name="switch_to_alipay">به Allpay بروید</string>
+  <string name="switch_to_credit_card">به بخش پرداخت با کارت اعتباری بروید</string>
+  <string name="continue_to_pro">به استفاده از فانوس  Pro ادامه دهید!</string>
+  <string name="continue_to_basic">به نسخه پایه ادامه دهید</string>
+  <string name="continue_">ادامه</string>
+  <string name="complete_purchase">خرید خود را کامل کنید</string>
+  <string name="continue_to_payment">ادامه برای پرداخت</string>
+  <string name="purchase_voucher">خرید کوپن </string>
+  <string name="skip_to_checkout">به صندوق پرداخت برو</string>
+  <string name="free_pro_credits">اعتبار حرفه ای رایگان</string>
+  <string name="get_pro_credits">اعتبار نسخه ویژه (پرو) را به صورت مجانی دریافت کنید</string>
+  <string name="get_free_months">ماه رایگان دریافت کنید</string>
+  <string name="text_invite">متن دعوت</string>
+  <string name="email_invite">ایمیل دعوت</string>
+  <string name="share_your_referral_code">کد ارجاع شما</string>
+  <string name="get_code">دریافت کد</string>
+  <string name="get_code_text">ایمیل خود را برای دریافت ایمیل و اشتراک گذاری با دوستانتان وارد کنید. هنگامی که آنها عضو شوند شما یک ماه عضویت رایگان ویژه دریافت خواهید کرد.</string>
+  <string name="enter_your_email">ایمیل خود را برای دریافت کد ارجاعی وارد کنید.</string>
+  <string name="referral_copied_to_clipboard">متن در کلیپ بورد کپی شد.</string>
+  <string name="fastworldpay_text">هنگامی که دکمه تکمیل خرید را کلیک می کنید، برای تکمیل پرداخت و دریافت کد فعالسازی به یک سایت خارجی منتقل می شوید.</string>
+  <string name="share_referral_text">از کد  %1$s  استفاده کنید تا از حداکثر 3 ماه عضویت رایگان بعد از خرید استفاده کنید.لینک  فانوس را دانلود کنید https://bit.ly/lanternapk</string>
+  <string name="previous_code">اگر قبلا کد ارجاعی را دریافت نموده اید لطفا از آدرس ایمیل یکسان قبلی استفاده کنید</string>
+  <string name="payment_plans">طرح های حرفه ای لنترن</string>
+  <string name="features_text">فانوس با خصوصیات ویژه</string>
+  <string name="checkout">وارسی</string>
+  <string name="cvc">CVC</string>
+  <string name="cc_number">کارت اعتباری</string>
+  <string name="card_number">شماره کارت</string>
+  <string name="card_expiration">سال/ماه</string>
+  <string name="invalid_card">شماره کارت نادرست است</string>
+  <string name="invalid_expiration">تاریخ انقضاء نامعتبر است</string>
+  <string name="invalid_cvc">رمز دوم نامعتبر است</string>
+  <string name="validation_errors">خطاهای اعتبار</string>
+  <string name="ok">بسیار خوب</string>
+  <string name="progressMessage">درخواست پردازش</string>
+  <string name="progressMessage2">گرفتن کد ارجاع </string>
+  <string name="language">زبان</string>
+  <string name="settings">تنظیمات</string>
+  <string name="referral_applied">عضویت رایگان برای  شما و دوستتان اضافه خواهد شد هنگامی که پرداخت کامل شود</string>
+  <string name="all_feeds">همه</string>
+  <string name="feed.error.oops">اوه!</string>
+  <string name="feed.error.error_fetching_feed">خطا در بارگیری فید</string>
+  <string name="feed.error.try_again">لطفا دوباره تلاش کنید</string>
+  <string name="authorize_device_pro">تایید دستگاه برای استفاده از نسخه ویژه (پرو)</string>
+  <string name="add_device">افزودن دستگاه جدید</string>
+  <string name="now_authorized">این دستگاه اکنون مجاز به استفاده از حساب کاربری ویژه شما است!</string>
+  <string name="i_have_another">من یک دستگاه لنترن حرفه ای دیگر دارم</string>
+  <string name="link_this_device">پیوند این دستگاه</string>
+  <string name="or">یا</string>
+  <string name="need_to_recover">لازم دارم که حساب لنترن حرفه ام را بازیابی کنم</string>
+  <string name="start_recovery">شروع بازیابی</string>
+  <string name="account_recovery">بازیابی حساب</string>
+  <string name="account_recovery_code">کد بازیابی حساب</string>
+  <string name="email_recovery_code">ایمیلی با کد بازیابی به %1$s ارسال شده است، البته اگر این حساب وجود داشته باشد. کد موجود در ایمیل را در بخش بالا وارد کنید . ممکن است این ایمیل چند ساعت طول بکشد تا برسد.</string>
+  <string name="thanks_report">با تشکر از شما،  سرویس پشتیبانی مشتری  فانوس در عرض 48 ساعت  با شما تماس خواهد گرفت.</string>
+  <string name="enter_valid_code">لطفا یک کد بازیابی معتبر وارد کنید.</string>
+  <string name="too_many_devices">تعداد دستگاه هایی که می توانند با حساب کاربری Pro شما مرتبط شوند  به حداکثر لیمیت رسیده است.</string>
+  <string name="check_spam_folder">اگر ایمیل را دریافت نکنید، لطفا پوشه اسپم  خود را بررسی کنید</string>
+  <string name="by_referral">دریافت حساب کاربری Pro با ارجاع یک دوست</string>
+  <string-array name="payment_method_list">
+    <item>Alipay  </item>
+    <item> کارت اعتباری </item>
+    <item>دریافت حساب کاربری Pro با ارجاع یک دوست </item>
+  </string-array>
+  <string name="payment_method">روش پرداخت</string>
+  <string name="payment_account">حساب پرداخت</string>
+  <string name="oops_having_trouble">اوه! ما در پیدا کردن آدرس ایمیل مشکل داریم. لطفا اطلاعات زیر را برای کمک به ما در پیدا کردن حساب کاربری خود ارائه دهید.</string>
+  <string name="locate_account">لطفاً هر گونه اطلاعاتی که ممکن است در یافتن حساب شما به ما کمک کند را یادداشت کنید.</string>
+  <string name="resend_email">ارسال دوباره ایمیل</string>
+  <string name="dont_remember">ایمیل خود را به یاد ندارید؟</string>
+  <string name="device_code"> کد اتصال دستگاه‌</string>
+  <string name="device_now_linked">شما با موفقیت دستگاه خود را متصل نموده اید! 
+</string>
+  <string name="device_linked_success">موفقیت ! دستگاه جدید شما به زودی متصل خواهد شد      
+</string>
+  <string name="link_this_device_0">برای ارتباط این دستگاه با حساب ویژه (پرو) خود:</string>
+  <string name="link_this_device_1"><b>1.</b>  بخش منوی «افزودن دستگاه» را در دستگاه Pro خود باز کنید.  </string>
+  <string name="link_this_device_2"><b>.2</b> کد اتصال دستگاه را وارد و ارسال کنید.</string>
+  <string name="make_sure_updated">* اطمینان حاصل کنید که شما با آخرین نسخه فانوس در دستگاه Pro خود به روزرسانی شده اید</string>
+  <string name="make_sure_updated_2">* اطمینان حاصل کنید که شما با آخرین نسخه فانوس بر روی دستگاه تایید نشده خود به روزرسانی شده اید</string>
+  <string name="error_device_code">خطا در بازیابی کد اتصال دستگاه! لطفا بعدا دوباره امتحان کنید.</string>
+  <string name="decline_offer">آیا مطمئن هستید که میخواهید این پیشنهاد را رد کنید؟</string>
+  <string-array name="renewal_confirm">
+    <item>بله، من بعدا تجدید خواهم کرد </item>
+    <item> این را دوباره به من نشان نده</item>
+  </string-array>
+  <string-array name="pro_features">
+    <item>سرعت بالا</item>
+    <item>دیتای نامحدود</item>
+    <item>مقاومت در برابر مسدود کننده </item>
+    <item>سه دستگاه</item>
+    <item>بدون آگهی </item>
+  </string-array>
+  <string-array name="pro_features_new">
+    <item>سرعت بالاتر</item>
+    <item>مقاومت در برابر فیلترینگ</item>
+    <item>قابل اعتمادتر</item>
+    <item>قابل نصب تا 3 دستگاه</item>
+    <item>داده نامحدود</item>
+    <item>Yinbi رایگان در صورت خرید!</item>
+  </string-array>
+  <string-array name="yinbi_renew_features">
+    <item>رمزارز Yinbi رایگان</item>
+    <item>ماه‌های رایگان</item>
+    <item>موقعیت محدود، الآن اقدام کنید!</item>
+  </string-array>
+  <string-array name="pro_features_welcome">
+    <item>  دیتای نامحدود با سرعت بالا </item>
+    <item>مقاومت قوی در برابر مسدود شدن </item>
+    <item>انتخاب سرور بهینه شده </item>
+    <item>اتصالات قابل اعتماد و امن </item>
+  </string-array>
+  <string-array name="basic_features">
+    <item>داده های با سرعت بالا 500 مگابایتی در1ماه</item>
+    <item> دسترسی مطمئن و ایمن به اینترنت باز </item>
+  </string-array>
+  <string name="purchased_from_reseller"> فانوس pro را  از یک نمایندگی فروش خریداری کرده اید؟ اینجا کلیک کنید!</string>
+  <string-array name="authorize_device_list">
+    <item><b>1. </b> منوی \"تایید عضویت pro دستگاه \" را در دستگاه غیر مجاز خود باز کنید.</item>
+    <item><b>2.</b>کد اتصال به دست آمده از مرحله 1 را وارد کنید و ارسال کنید</item>
+  </string-array>
+  <string-array name="enter_code_steps_referral">
+    <item>کد تأیید را که از طریق ایمیل دریافت کردید وارد کنید تا Pro را ادامه دهید! </item>
+    <item>کد را دریافت نکرده اید ؟ پوشه اسپم خود را بررسی کنید و مطمئن شوید که در آدرس ایمیل خود به درستی وارد کرده اید.</item>
+  </string-array>
+  <string-array name="referral_promotion_list">
+    <item>اگر دوستی کد ارجاعش را با شما به اشتراک گذاشته، لطفا کد را برای دریافت یک ماه حساب فانوس حرفه‌ای وارد کنید</item>
+  </string-array>
+  <string-array name="referral_promotion_list_two_year">
+    <item>اگر دوستی کد ارجاعش را با شما به اشتراک گذاشته، لطفا کد را برای دریافت یک ماه حساب فانوس حرفه‌ای وارد کنید</item>
+  </string-array>
+  <string name="only_one_device">فقط یک دستگاه</string>
+  <string name="sorry_cannot_remove">با عرض پوزش،  شما نمی توانید آخرین دستگاه مجاز خود را حذف کنید</string>
+  <string name="send_link">ارسال لینک</string>
+  <string name="click_button">دکمه را کلیک نموده تا به سایت ها و خدمات بسته شده دسترسی یابید</string>
+  <string name="lantern_pro">فانوس حرفه ای</string>
+  <string name="lantern_pro_header">فانوس pro</string>
+  <string name="lantern_pro_checkout">پرداخت لنترن پرو</string>
+  <string name="invite_friends_header">دعوت از دوستان</string>
+  <string name="pro_desc">سریع تر، دقیق تر، انعطاف پذیر تر</string>
+  <string name="free_month">برای هر ثبت نام یک ماه رایگان pro  دریافت کنید</string>
+  <string name="get_pro_now">گرفتن نسخه حرفه ای حالا</string>
+  <string name="inviting_friends">با دعوت از دوستان خود از اعتبار pro استفاده کنید</string>
+  <string name="data_cap_percent">شما از  %1$s  %%   داده های با سرعت بالای  فانوس خود برای یک ماه استفاده کرده اید.  برای سرعت بالای نا محدود به فانوس Pro ارتقا یابید.  </string>
+  <string name="data_cap">شما از تمام داده های با سرعت بالا فانوس خود برای  یک ماه استفاده کرده اید. به فانوس Pro ارتقا یابید تا  استفاده از فانوس را با سرعت کامل ادامه دهید.</string>
+  <string name="data_cap_reset">برای یک ماه دیتای رایگان  فانوس با سرعت بالای برای شما تنظیم مجدد شده است. در حال حاضر  میتوانید سایت ها و خدمات مسدود شده را مرور کنید!</string>
+  <string name="select">انتخاب</string>
+  <string name="one_year">یک (1)ساله ( بدون تمدید)</string>
+  <string name="two_years">2 ساله ( بدون تمدید)</string>
+  <string name="one_year_lantern_pro">اشتراک یکساله حرفه‌ای لنترن</string>
+  <string name="two_years_lantern_pro">اشتراک دوساله حرفه‌ای لنترن</string>
+  <string name="special_launch">قیمت ویژه انتشار!</string>
+  <string name="best_value">بهترین ارزش!</string>
+  <string name="referral_code_opt">کد ارجاع (اختیاری)</string>
+  <string name="total">جمع:</string>
+  <string name="pro_account_header">مدیریت حساب نسخه حرفه ای</string>
+  <string name="pro_account_month_text">شما در حال حاضر یک حساب ماهانه فانوس PRO دارید. از حساب شما به صورت خودکار برای ماه دیگر فانوس Pro در پایان چرخه صدور صورتحساب هزینه برداشت  خواهد شد.</string>
+  <string name="pro_account_year_text">شما در حال حاضر یک حساب کاربری  فانوس  Pro سالانه دارید. از حساب شما به صورت خودکار برای سال دیگر در پایان سال چرخه صدور صورتحساب هزینه برداشت خواهد شد. </string>
+  <string name="cancel_pro_account">لغو PRO حساب</string>
+  <string name="account_verification">تایید حساب</string>
+  <string name="enter_verification_code">کد تایید را وارد کنید</string>
+  <string name="referral_code">کد ارجاع شده</string>
+  <string name="get_lantern_pro">دریافت فانوس حرفه ای</string>
+  <string name="upgrade_to_lantern_pro">رتقاء به نسخه Pro  فانوس</string>
+  <string name="pro_available_for">برای ویندوز، اندروید، مک و اوبونتو. iOS به زودی</string>
+  <string name="upgrade_to_pro">برای بهره‌مندی از داده نامحدود، سرعت و مقاومت بیشتر در برابر سانسور به نسخه حرفه‌ای ارتقا دهید!</string>
+  <string name="upgrade_to_pro_yinbi">برای بهره‌مندی از داده نامحدود، سرعت و مقاومت بیشتر در برابر سانسور و رمزارز Yinbi به نسخه حرفه‌ای ارتقا دهید!</string>
+  <string name="data_remaining">%1$s %% از دیتای با سرعت بالای شما باقی مانذه است</string>
+  <string name="data_used">%1$s%% از داده های سریع ماهانه با سرعت بالا استفاده کنید</string>
+  <string name="upgrade">ارتقا‌‌ء </string>
+  <string name="upgrade_pro">ارتقاء بهpro</string>
+  <string name="upgrade_now">همین حالاارتقا بدهید</string>
+  <string name="next">بعدی</string>
+  <string name="become_reseller">درآمد سازی کنید! جهت پیوستن به نمایندگان فروش فانوس، اینجا کلیک کنید.</string>
+  <string name="faster_stronger">سریع‌تر. قوی‌تر. نامحدود. امن</string>
+  <string name="reseller_email_subject">درباره برنامه فروش نمایندگی فانوس توضیح بیشتری بده!</string>
+  <string name="reseller_email_message">وقتی شما عضو نمایندگان فروش فانوس شوید، می توانید با فروش هر فانوس  پرو تا حداکثر 25% کمیسیون دریافت کنید. در پایین کمی درباره چرایی پیوستن به نمایندگان فانوس توضیح دهید. </string>
+  <string name="no_email_client">ایمیل مشتریان نصب شده نیست.</string>
+  <string name="no_wall_at_all">هیچ دیواری موجود نیست.</string>
+  <string name="buy_pro_now">نسخه ویژه (پرو) را خریداری کنید</string>
+  <string name="update_billing_info">اطلاعات صورتحسابتان را به روزرسانی کنید</string>
+  <string name="pro_credits_text">دوستانتان را دعوت کنید تا pro بیشتری دریافت کنید. </string>
+  <string name="could_not_complete_purchase">اگر حالا خرید Pro را  نمیتوانید کامل کنید . بعدا دوباره امتحان کنید!</string>
+  <string name="invalid_verification_code">کد تأیید نامعتبر</string>
+  <string name="invalid_payment_method">روش پرداخت نامعتبر</string>
+  <string name="unable_to_cancel_account">قادر به لغو حساب کاربری Pro نیستید! لطفا با  team@getlantern.org تماس بگیرید</string>
+  <string name="earn_free_month">یک ماه عضویت رایگان برای هر دوستی که ثبت نام کنید را کسب کنید</string>
+  <string name="credits_applied">اعتبارات شما در چرخه صدور صورتحساب بعدی به حساب شما اعمال خواهد شد.</string>
+  <string name="pro_invitation_subject">دعوت به عضویت فانوس pro</string>
+  <string name="receive_free_month">برای  یک ماه استفاده  رایگان  از فانوس Pro، از این کد ارجاع استفاده کنید %1$s ؛ شما می توانید آن را از اینجا دانلود کنید:
+https://bit.ly/1M8x04u</string>
+  <string name="share_feed_item">من از طریق فانوس در باره ی  %1$s در %2$s  می خوانم. برای دسترسی به سایت ها و خدمات مسدود شده از فانوس استفاده کنید. شما می توانید آن را بر روی Android از لینک زیر دانلود کنید.
+https://bit.ly/lanternapk</string>
+  <string name="cancel_pro_confirmation">آیا مطمئن هستید؟ این عمل قابل لغو نیست! شما میتوانید در هر زمان برای حساب pro دوباره ثبت نام کنید.</string>
+  <string name="unauthorize_confirmation">آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ </string>
+  <string name="yes">بله</string>
+  <string name="no">خیر</string>
+  <string name="item_image_contentDescription">پرچم کشور</string>
+  <string name="item_preview_country">ایالات متحده آمریکا</string>
+  <string name="item_preview_dialCode">+1</string>
+  <string name="refresh">ریفرش</string>
+  <string name="find">جستجو</string>
+  <string name="share_via">اشتراک از طریق</string>
+  <string name="copy_link">کپی لینک</string>
+  <string name="open_with">بازکردن با</string>
+  <string name="copied_to_clipboard">کپی شد به کلیپ بورد</string>
+  <string name="welcome_to_new">به نسخه جدید و بهینه شده  ی فانوس خوش آمدید</string>
+  <string name="now_using">شما در حال حاضر از سریعترین و پایدار ترین نسخه  فانوس تا به امروز استفاده می کنید.</string>
+  <string name="get_unlimited_data">برای به دست آوردن داده های نامحدود، سرعت بالا، و حتی مقاومت  مسدود کردن بیشتر به نسخه pro  به رزوط رسانی شوید.</string>
+  <string name="start_using">شروع به استفاده از فانوس کنید</string>
+  <string name="device_already_registered">این آدرس ایمیل در حال حاضر یک مشترک Pro است. لطفا این دستگاه رااز  اینجا  تایید بگذارید</string>
+  <string name="email_in_use">این ایمیل در حال حاضر توسط کاربری دیگر مورد استفاده است</string>
+  <string name="congratulations">مبارك باشد!</string>
+  <string name="referral_code_used">دوستی که به فانوس ویژه خریداری شده ارجاع داده اید .  %dماه  حساب ویژه  رایگان به حساب شما اعمال شده اند</string>
+  <string name="enter_email">آدرس ایمیل را وارد کن</string>
+  <string name="confirm_email">ایمیل تایید شد</string>
+  <string name="confirm_email_address">تکرار آدرس ایمیل</string>
+  <string name="register_pro_account">ثبت نام حساب نسحه حرفه ای</string>
+  <string name="renew_now">اکنون تجدید کنید و 3 ماه رایگان دریافت کنید</string>
+  <string name="renew_ends_tomorrow">تخفیف تمدید  فردا به پایان می رسد </string>
+  <string name="renew_ends_today">آخرین شانس برای 3 ماه رایگان !</string>
+  <string name="renew_after">برای 45 روز رایگان اضافه تمدید کنید</string>
+  <string name="renew_sub">توجه: برنامه تازه خریداری شده شما به زمان فعلی شما افزوده خواهد شد</string>
+  <string name="offer_ends_tomorrow">این پیشنهاد  فردا به پایان میرسد.</string>
+  <string name="offer_ends_today">پیشنهاد امروز به پایان می رسد .</string>
+  <string name="limited_time_offer">پیشنهاد برای محدود مدت</string>
+  <string name="months_free">ماه های رایگان</string>
+  <string name="month_free">یک ماه مجانی</string>
+  <string name="days_free">روزهای  رایگان</string>
+  <string name="enter_pro_activation_code">لطفا کد فعال سازی   25 رقمی  فانوس  Pro خود را در بالا وارد کنید. اگر یک کد دریافت نکرده اید، لطفا با نماینده فروش خریداری شده خود تماس بگیرید.</string>
+  <string name="no_title">بدون عنوان</string>
+  <string name="current_location_desc">
+فانوس از  سرورهای انتخابی  هوشمند استفاده می کندتا شما را  به بهترین مراکز داده متصل کند. برای سرعت بیشتر با انتخاب سرور بهینه از مراکز داده های منحصر به فرد فانوس خود را به فانوسpro ارتقا دهید.</string>
+  <string name="ad_blocking_desc">فانوس تبلیغات مزاحم را برای سرعت بخشیدن به زمان بارگذاری صفحه وب، صرفه جویی در پهنای باند، و  برای داشتن تجربه مرور راحت تر  متوقف می کند.</string>
+  <string name="https_upgrade_desc">فانوس به طور خودکار ارتباطات HTTP غیر امن را به اتصالات HTTPS رمزگذاری شده ارتقا می دهد تا بتواند اطلاعات خود را در حین گشت و گذار در وب حفظ کند.</string>
+  <string name="data_usage_desc">شما %1$s مگابایت از حجم ماهانه‌ی %2$s مگابایتی‌تان را استفاده کرد‌ه‌اید.</string>
+  <string name="account_left_desc">%1$d ماه از حساب لنترن پروی‌ اکانت شما مانده است.</string>
+  <string name="optimized_location">بهینه سازی موقعیت سرور</string>
+  <string name="current_location">موقعیت فعلی:</string>
+  <string name="disconnected">قطع شده است</string>
+  <string name="https_upgrades">ارتقاء های HTTPS</string>
+  <string name="data_usage">داده های استفاده شده</string>
+  <string name="pro_account">حساب کاربری Pro</string>
+  <string name="creditcard_alipay">کارت اعتباری / Alipay</string>
+  <string name="fastworldpay"> پرداخت جهانی سریع (شتاب)</string>
+  <string name="blocked_ads">تبلیغات مسدود شده</string>
+  <string name="upgrade_now_data">هم اکنون برای خدمات نامحدود با سرعت بالا  ارتقا دهید !
+</string>
+  <string name="renew_your_account">حساب کاربری خود را تجدید کنید تا زمان بیشتری را اضافه کنید</string>
+  <string name="turn_on_lantern">  برای دسترسی سریع و امن به سایت ها و خدمات مسدود شده فانوس راروشن کنید.</string>
+  <string name="lantern_on_text">شما به سریعترین سرور فانوس متصل هستید.  مرور را شروع کنید!</string>
+  <string name="lantern_notification">اطلاع رسانی فانوس</string>
+  <string name="sponsored">حمایت شده</string>
+  <string name="ad_attribution">آگهی</string>
+  <string name="to_purchase_pro">برای خرید فانوس pro</string>
+  <string name="fastworldpay_desc">لطفا برای خرید کوپن از Fast World Pay دیدن کنید. \ n پس از خرید کوپن، به این صفحه بازگردید و برای تکمیل ارتقاء \ n روند ادامه کلیک کنید. (آموزش فارسی)</string>
+  <string name="fastworldpay_tutorial_link">آموزش فارسی</string>
+  <string name="input_activation_code">کد فعالسازی را وارد کنید</string>
+  <string name="voucher_code">کد کوپن</string>
+  <string name="voucher_code_placeholder">XXXXXXXXXXXX</string>
+  <string name="enter_voucher_code">لطفا کد فعالسازی 12 رقمی Fast World Pay را در بالا وارد کنید</string>
+  <string name="unable_init_adyen_session">قادر به شروع مرحله ی  پرداخت نیست .لطفا دوباره تلاش کنید</string>
+  <string name="unable_init_test_payment">مشکل در آغاز پرداخت تست</string>
+  <string name="successful_purchase">خریداری موفق</string>
+  <string name="submitting_purchase">در حال ارسال خرید</string>
+  <string name="confirming_email">در حال تائید آدرس ایمیل</string>
+  <string name="applying_referral_code">در حال ثبت کد ارجاع</string>
+  <string name="apply_referral_code">ثبت کد ارجاع شده</string>
+  <string name="processing_payment">پردازش پرداخت</string>
+  <string name="now_converting_to_pro">در حال حاضر انتقال  شما به Pro هستیم.. لطفا صبر کنید ...</string>
+  <string name="have_an_activation_code">آیا کد فعالسازی دارید؟ اینجا کلیک کنید</string>
+  <string name="yinbi_greeting">رمزارز به زودی افزوده خواهد شد. برای اطلاعات بیشتر در خصوص نحوه‌ی دریافت آن به صورت رایگان، اینجا کلیک کنید.</string>
+  <string name="test_payment_page">صفحه پرداخت تست</string>
+  <string name="pay_now">الآن پرداخت کنید</string>
+  <string name="error_bulk_codes">خطا در ارسال مجموعه کدهای حساب حرفه‌ای</string>
+  <string name="invalid_bulk_codes">کدهای حساب حرفه‌ای وارد شده معتبر نیستند.</string>
+  <string name="renew_today">امروز تمدید کنید!</string>
+  <string name="receive_free_yinbi">رمزارز رایگان Yinbi دریافت کنید!</string>
+  <string name="purchased_pro_activation_codes">کدهای فعالسازی فانوس حرفه‌ای را به صورت آنلاین خریداری کرده‌اید؟</string>
+  <string name="renew_grab_free_yinbi"><u>از کدهای فعالسازی حرفه‌ای استفاده کنید تا Yinbi رایگان دریافت کنید</u></string>
+  <string name="upgrade_now_get_free_yinbi"><u>با کدهای فعالسازی حرفه‌ای ارتقا دهید تا Yinbi رایگان دریافت کنید</u></string>
+  <string name="renew">تمدید!</string>
+  <string name="terms_of_service_text">با کلیک کردن روی \"ادامه برای پرداخت\"، شما با شرایط خدمات ما موافقت می‌کنید</string>
+  <string name="terms_of_service_text_complete_purchase">با کلیک کردن روی \"نهایی کردن خرید\"، شما با شرایط خدمات ما موافقت می‌کنید</string>
+  <string name="terms_of_service_enter_pro_codes">با کلیک بر روی ارسال، شرایط استفاده از خدمات را می‌پذیرید</string>
+  <string name="terms_of_service">شرایط استفاده از خدمات</string>
+  <string name="card_info_text">با کارت اعتباری بپردازید</string>
+  <string name="enter_lantern_pro_codes">کدهای فانوس حرفه‌ای را وارد کنید</string>
+  <string name="renewal_success">تمدید با موفقیت انجام شد!</string>
+  <string name="thank_you_for_renewing">از اینکه حساب حرفه‌ای فانوس را تمدید کردید، متشکریم</string>
+  <string name="yinbi">Yinbi</string>
+  <string name="visit_yinbi_website">مشاهده وبسایت</string>
+  <string name="yinbi_redemption">بازخرید Yinbi</string>
+  <string name="yinbi_account_info">اطلاعات حساب Yinbi</string>
+  <string name="lantern_partnered_yinbi_free">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را خریداری می‌کنند، همکاری دارد! هم‌اکنون خریداری کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
+  <string name="lantern_partnered_yinbi_pro">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
+  <string name="enter_bulk_pro_codes">کدهای فانوس حرفه‌ای را وارد کنید</string>
+  <string name="renew_pro_get_yinbi">حساب حرفه‌ای را تمدید کنید تا Yinbi دریافت کنید</string>
+  <string name="you_have">شما</string>
+  <string name="yinbi_code">YNB</string>
+  <string name="unable_to_get_yinbi_account_info">مشکل در دریافت اطلاعات حساب Yinbi</string>
+  <string name="redeem_bulk_codes">دریافت مجموعه کدها</string>
+  <string name="paste_pro_account_codes">مجموعه کدهای حساب حرفه‌ای را اینجا پیست کنید تا حساب حرفه‌ای فانوس دریافت کنید و یا به زمان حساب حرفه‌ای فانوس شما افزوده شود.</string>
+  <string name="special_offer">پیشنهاد ویژه!</string>
+  <string name="cryptocurrency_giveaway">هدیه رمزارز!</string>
+  <string name="lantern_partnered_renew_now">فانوس با Yinbi (YNB) برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید!</string>
+  <string name="what_is_yinbi">Yinbi چیست؟</string>
+  <string name="renew_now_get_yinbi">هم‌اکنون تمدید کنید تا Yinbi دریافت کنید</string>
+  <string name="purchase">خرید</string>
+  <string name="one_year_yinbi">1 سال + Yinbi رایگان:</string>
+  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
+  <string name="two_years_yinbi">2 سال + 2 برابر Yinbi رایگان:</string>
+  <string name="thank_you_purchasing_pro">برای خریداری فانوس حرفه‌ای از شما تشکر می‌کنیم!</string>
+  <string name="you_will_receive_yinbi">وقتی که مهلت هدیه امروز تمام شود، n\ شما رمز ارز Yinbi)YNB) خود را دریافت خواهیدکرد n\</string>
+  <string name="yinbi_menu">منوی Yinbi</string>
+  <string name="yinbi_redemption_code">کد هدیه Yinbi</string>
+  <string name="continue_to_lantern_pro">ادامه به فانوس حرفه‌ای</string>
+  <string name="yinbi_website">Yin.bi</string>
+  <string name="date">تاریخ</string>
+  <string name="redemption_code">کد هدیه</string>
+  <string name="status">وضعیت</string>
+  <string name="copy_all_codes">کپی همه‌ی کدها</string>
+  <string name="visit_yinbi">از سایت Yin.bi بازدید کنید و هدیه YNB خود را دریافت کنید و حساب خود را نیز کنترل نمایید. کد‌های هدیه YNB سی روز بعد از خرید باطل خواهند‌شد.</string>
+  <string name="successfully_copied_codes">کدهای هدیه با موفقیت کپی شدند</string>
+  <string name="no_active_codes">کد هدیه فعالی ندارید. بعدا دوباره امتحان کنید</string>
+  <string name="thanks_purchase_yinbi">از این‌ که طرح لنترن را خریداری کرده‌اید سپاسگزاریم. کد هدیه Yinbi شما وقتی که هدیهٔ امروز فعال کامل شود روی این صفحه نشان داده‌خواهد شد. وقتی که تایمر کامل‌شد لطفا دوباره وارد شوید.</string>
+  <string name="yinbi_details">رمز ارز Yinbi با YNB یک رمز ارز غیرقابل بلوک جدید است که به زودی راه اندازی می‌شود و تراکنش‌های سریع، ایمن، آسان و کم هزینه را از طریق موبایل امکان پذیر می‌سازد. کاربران لنترن اولین کسانی هستند که دسترسی زودهنگام به این ارزرمز خواهند داشت.</string>
+  <string name="find_out_more">بیشتر بخوانید در: Yin.bi</string>
+  <string name="best_deal">بهترین معامله</string>
+  <string name="launches_soon">Yinbi یا کد YNB به زودی راه اندازی خواهد‌شد و کاربران لنترن اولین گروهی خواهند‌بود که به این ارز رمز جدید دسترسی دارند. YNB در پایان هر روز با توجه به تعداد کسانی که عضویت خود را ارتقاء داده اند یا تعداد سالهای عضویت یا حساب‌های عضویت توزیع می‌شود.</string>
+  <string name="how_yinbis_distributed">Yinbi در پایان هر روز با توجه به تعداد Yinbi آزاد شده در همان روز، تعداد کسانی که عضویت خود را ارتقاء می‌دهند، تعداد سال‌های عضویت و یا حساب‌هایی که شما خریداری می‌کنید توزیع می‌شود. کد هدیه Yinbi شما وقتی کن مهلت هدیه امروز تمام شود روی این صفحه ظاهر خواهد شد. وقتی که زمان تایمر تمام شد دو باره این صفحه را کنترل کنید.</string>
+  <string name="get_bulk_yinbi"><u>مجموعه حساب‌های حرفه‌ای را خریداری کنید تا مجموعه‌ای از Yinbi دریافت کنید!</u></string>
+  <string name="loading_yinbi_account_info">در حال بارگذاری اطلاعات حساب Yinbi</string>
+  <string name="free_yinbi_with_purchase">Yinbi رایگان در ازای خرید</string>
+  <string name="renew_now_get_more">تمدید کنید و بیشتر دریافت کنید!</string>
+  <string name="buy_pro_get_yinbi">حساب حرفه‌ای بخرید و Yinbi دریافت کنید</string>
+  <string name="renewal_note">توجه: زمان طرح جدیدی که خریده‌اید به زمان طرح فعلی شما اضافه خواهد شد.</string>
+  <string name="bulk_codes_error">خطا! لطفا کدهای نشانه‌گذاری شده را بررسی کنید.</string>
+  <string name="loading_yinbi">در حال بارگذاری کدهای هدیه</string>
+  <string name="lantern_partnered_yinbi">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
+  <string name="time_left_giveaway">زمان باقی‌مانده هدیه Yinbi امروز</string>
+  <string name="yinbi_released_today">امروز %d آزاد می‌شود</string>
+  <string name="yinbi_distribution_details">YNB در پایان هر روز بر اساس تعداد Yinbi آزاد شده در همان روز وتعداد کسانی که عضویت خود را ارتقاء می‌دهند یا تمدید می‌کنند و تعداد سال‌های عضویت و تعداد حساب‌های شما توزیع می‌شود.</string>
+  <string name="total_yinbi_released">مجموع YNB های آزاد شده هر روز کمتر می‌شود و هر سال هم نصف خواهد شد. بشتابید!</string>
+  <string name="please_allow_lantern_to">لطفاً به Lantern اجازه بدهید تا...</string>
+  <string name="permission_for">برای فعال‌سازی</string>
+  <string name="android.permission.INTERNET">در حال اتصال به سرورهای Lantern</string>
+  <string name="android.permission.ACCESS_WIFI_STATE">در حال پراکسی کردن ترافیک شما</string>
+  <string name="android.permission.ACCESS_NETWORK_STATE">در حال پراکسی کردن ترافیک شما</string>
+  <string name="privacy_disclosure_title">اعلامیه حریم خصوصی Lantern</string>
+  <string name="privacy_disclosure_accept">می‌پذیرم</string>
+  <string name="privacy_disclosure_body">Lantern متعهد است از حریم خصوصی شما حفاظت کند. از شما می‌خواهیم که بدانید چه اطلاعاتی را جمع‌آوری می‌کنیم، و چه اطلاعاتی را جمع‌آوری نمی‌کنیم، و چگونه اطلاعات را استفاده و ذخیره می‌کنیم. \n\nما گزارش فعالیت‌های شما، اعم از تاریخچه مرور وب‌سایت‌ها، مقصد ترافیک، محتوای داده‌ها، یا جستارهای DNS را جمع‌آوری نمی‌کنیم. همچنین هرگز گزارش اتصال‌ها را ذخیره نمی‌کنیم، یعنی هیچ گزارشی از آدرس IP شما، آدرس IP سرور Lantern خروجی مرتبط با مهر زمانی اتصال، یا مدت جلسه را ذخیره نمی‌کنیم. /n/nبرای کاربران Lantern Free، ما IP کاربر را برای محدود کردن سوء ‌‌‌استفاده جمع‌آوری می‌کنیم. اما نمی‌توانیم IP سرور Lantern را به آدرس IP کاربر مرتبط کنیم، حتی با مهر زمانی دقیق. اگر یک حساب Lantern Pro بخرید، ما آدرس ایمیل و اطلاعات پرداخت شما را جمع‌آوری می‌کنیم./n/nما اطلاعات تشخیصی در مورد عملکرد برنامه کاربردی، از جمله گزارش‌های خرابی و اطلاعات پیرامون بسته‌های نصب‌شده را جمع‌آوری می‌کنیم.</string>
+</resources>

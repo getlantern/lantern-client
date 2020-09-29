@@ -1,0 +1,50 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/yinbiAdLayout"
+    android:background="@color/yinbi_yellow"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="76dp">
+
+    <ImageView
+        android:id="@+id/yinbiIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:adjustViewBounds="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="40dp"
+        android:src="@drawable/yinbi_logo_black" />
+
+
+    <TextView
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/yinbiAdText"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-light"
+        android:lineSpacingExtra="6sp"
+        android:textSize="10sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yinbiWebsite"
+        android:textColor="@color/yinbi_red"
+        android:textColorLink="@color/yinbi_red"
+        android:gravity="right"
+        android:layout_gravity="right|center_vertical"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/visit_yinbi_website"
+        android:textSize="14sp"
+        android:paddingLeft="10dp"
+        android:lineSpacingExtra="3sp"
+        />
+</LinearLayout>

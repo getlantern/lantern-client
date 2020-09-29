@@ -1,0 +1,10 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rowTextView"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:elevation="2dp"
+    android:textColor="@color/black"
+    android:fontFamily="sans-serif-medium"
+    android:padding="10dp"
+    android:textSize="16sp" >
+</TextView>
