@@ -15,7 +15,7 @@
         android:id="@+id/titlebar_fragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        class="org.lantern.app.fragment.TitleBar"
+        class="org.getlantern.lantern.fragment.TitleBar"
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/account_recovery"/>
 

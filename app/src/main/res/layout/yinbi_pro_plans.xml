@@ -11,7 +11,7 @@
         android:id="@+id/titlebar_fragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        class="org.lantern.app.fragment.TitleBar"
+        class="org.getlantern.lantern.fragment.TitleBar"
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleImage="@drawable/lantern_pro_plans"/>
 
@@ -31,7 +31,7 @@
             android:id="@+id/cardsView"
             android:layout_gravity="center">
 
-            <org.lantern.app.model.DynamicViewPager
+            <org.getlantern.lantern.model.DynamicViewPager
                 android:id="@+id/viewPager"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"

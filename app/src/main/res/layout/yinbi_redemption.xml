@@ -24,7 +24,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            class="org.lantern.app.fragment.TitleBar"
+            class="org.getlantern.lantern.fragment.TitleBar"
             lantern:titleBackgroundColor="@drawable/nav_background_white"
             lantern:titleText="@string/yinbi_redemption"/>
 

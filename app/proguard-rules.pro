@@ -27,7 +27,7 @@
 -keepattributes SourceFile,LineNumberTable
 
 # Lantern
--keep class org.lantern.mobilesdk.** { *; }
+-keep class org.getlantern.mobilesdk.** { *; }
 
 # PW
 -keep class com.paymentwall.alipayadapter.** { *; }

@@ -98,7 +98,7 @@ make debug-install
 Run the app on the device from the command line:
 
 ```
-adb shell am start -n org.lantern.app/org.lantern.app.activity.LanternMainActivity
+adb shell am start -n org.getlantern.lantern/org.getlantern.lantern.activity.LanternMainActivity
 ```
 
 Note - if you want to test with an emulator, run `android` and then choose
