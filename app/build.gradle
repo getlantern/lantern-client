@@ -59,7 +59,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ['resourcePackageName': 'org.lantern.app', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
+                arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
             }
         }
 

@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/titlebar_fragment"
-        class="org.lantern.app.fragment.TitleBar"
+        class="org.getlantern.lantern.fragment.TitleBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         lantern:titleBackgroundColor="@drawable/nav_background_white"
@@ -23,13 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <org.lantern.app.widget.TextInputLayout style="@style/MaterialFieldLayout" android:id="@+id/emailLayout">
+        <org.getlantern.lantern.widget.TextInputLayout
+            style="@style/MaterialFieldLayout" android:id="@+id/emailLayout">
             <com.google.android.material.textfield.TextInputEditText style="@style/MaterialField"
                 android:id="@+id/emailInput"
                 android:drawableLeft="@drawable/email_icon"
                 android:hint="@string/email_address"
                 android:inputType="textEmailAddress" />
-        </org.lantern.app.widget.TextInputLayout>
+        </org.getlantern.lantern.widget.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/stripeSection"
@@ -38,14 +39,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <org.lantern.app.widget.TextInputLayout style="@style/MaterialFieldLayout" android:id="@+id/cardLayout">
+            <org.getlantern.lantern.widget.TextInputLayout
+                style="@style/MaterialFieldLayout" android:id="@+id/cardLayout">
                 <com.stripe.android.view.CardNumberEditText style="@style/MaterialField"
                     android:id="@+id/cardInput"
                     android:drawableLeft="@drawable/credit_card"
                     android:hint="@string/credit_card"
                     android:inputType="number"
                     android:nextFocusDown="@+id/expirationInput" />
-            </org.lantern.app.widget.TextInputLayout>
+            </org.getlantern.lantern.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,7 +55,8 @@
                 android:layout_gravity="center_vertical"
                 android:paddingBottom="5dp"
                 android:orientation="horizontal">
-                <org.lantern.app.widget.TextInputLayout style="@style/MaterialFieldLayout"
+                <org.getlantern.lantern.widget.TextInputLayout
+                    style="@style/MaterialFieldLayout"
                     android:id="@+id/expirationLayout"
                     android:layout_weight="50">
                     <com.stripe.android.view.ExpiryDateEditText style="@style/MaterialField"
@@ -63,9 +66,10 @@
                         android:inputType="number"
                         android:maxLength="5"
                         android:nextFocusDown="@+id/cvcInput" />
-                </org.lantern.app.widget.TextInputLayout>
+                </org.getlantern.lantern.widget.TextInputLayout>
 
-                <org.lantern.app.widget.TextInputLayout style="@style/MaterialFieldLayout"
+                <org.getlantern.lantern.widget.TextInputLayout
+                    style="@style/MaterialFieldLayout"
                     android:id="@+id/cvcLayout"
                     android:layout_weight="50"
                     android:layout_marginLeft="15dp">
@@ -75,17 +79,18 @@
                         android:hint="@string/cvc"
                         android:maxLength="4"
                         android:inputType="number" />
-                </org.lantern.app.widget.TextInputLayout>
+                </org.getlantern.lantern.widget.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <org.lantern.app.widget.TextInputLayout style="@style/MaterialFieldLayout" android:id="@+id/referralCodeLayout">
+        <org.getlantern.lantern.widget.TextInputLayout
+            style="@style/MaterialFieldLayout" android:id="@+id/referralCodeLayout">
             <com.google.android.material.textfield.TextInputEditText style="@style/MaterialField"
                 android:id="@+id/referralCodeInput"
                 android:drawableLeft="@drawable/referral_code"
                 android:hint="@string/referral_code_opt"
                 android:inputType="text" />
-        </org.lantern.app.widget.TextInputLayout>
+        </org.getlantern.lantern.widget.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/bottomSection"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.lantern.app"
+    package="org.getlantern.lantern"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="org.lantern.app.LanternApp"
+        android:name="org.getlantern.lantern.LanternApp"
         android:hardwareAccelerated="true"
         tools:replace="allowBackup, label"
         android:allowBackup="false"
@@ -46,7 +46,7 @@
         </service>
 
         <receiver
-            android:name=".receiver.LanternBootReceiver"
+            android:name="org.getlantern.lantern.receiver.LanternBootReceiver"
             android:enabled="true"
             android:exported="true" >
           <intent-filter android:priority="500" >
@@ -62,7 +62,7 @@
             android:theme="@style/FinestWebViewTheme.Light" />
 
         <activity
-            android:name=".activity.Launcher"
+            android:name="org.getlantern.lantern.activity.Launcher"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,7 +71,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LanternFreeActivity"
+            android:name="org.getlantern.lantern.activity.LanternFreeActivity"
             android:launchMode="singleTop"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"
@@ -86,7 +86,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LanternProActivity"
+            android:name="org.getlantern.lantern.activity.LanternProActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
@@ -167,32 +167,32 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.LanternPlansActivity"
+            android:name="org.getlantern.lantern.activity.LanternPlansActivity"
             android:screenOrientation="portrait"
             />
 
         <activity
-            android:name=".activity.yinbi.YinbiPlansActivity"
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiPlansActivity"
             android:screenOrientation="portrait"
             />
 
         <activity
-            android:name=".activity.yinbi.YinbiRenewActivity"
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiRenewActivity"
             android:screenOrientation="portrait"
             />
 
         <activity
-            android:name=".activity.yinbi.YinbiLauncher"
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
             android:screenOrientation="portrait"
             />
 
         <activity
-            android:name=".activity.yinbi.YinbiScreenActivity"
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiScreenActivity"
             android:screenOrientation="portrait"
             />
 
         <activity
-            android:name=".activity.yinbi.YinbiRedemptionActivity"
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiRedemptionActivity"
             android:screenOrientation="portrait"
             />
 
@@ -279,7 +279,7 @@
               android:resource="@xml/file_paths" />
           </provider>
 
-          <service android:name=".vpn.LanternVpnService"
+          <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>
@@ -289,9 +289,9 @@
         <service android:enabled="true" android:name=".service.LinkDeviceService_"/>
         <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
 
-        <receiver android:name=".model.Notify">
+        <receiver android:name="org.getlantern.lantern.model.Notify">
             <intent-filter>
-                <action android:name="org.lantern.main.intent.DATA_USAGE" />
+                <action android:name="org.getlantern.lantern.intent.DATA_USAGE" />
             </intent-filter>
         </receiver>
 
