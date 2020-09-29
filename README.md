@@ -38,7 +38,7 @@ STAGING="true" make android-debug
 * [Android NDK][2]
 
 In the welcome screen choose the "Open an existing Android Studio" option and
-select the `lantern-mobile` folder inside the lantern-build project you
+select the `android-lantern` folder inside the lantern-build project you
 downloaded via git.
 
 ### Building from the Command Line
@@ -136,7 +136,7 @@ Emulation Options: x Use Host GPU
 
 ##### Unit Tests
 
-`cd lantern-mobile && ./gradlew testAutoTestDebugUnitTest`
+`cd android-lantern && ./gradlew testAutoTestDebugUnitTest`
 
 #### Testing UI on GenyMotion Cloud
 
