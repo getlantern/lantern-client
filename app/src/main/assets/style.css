@@ -1,0 +1,52 @@
+html, body {
+    font-size: 16px;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+}
+h1 {
+    background: url('img/lantern_logo.svg') no-repeat center;
+    background-size: contain;
+    display: block;
+    margin: 2.5rem 4.5rem 2.0rem 4.5rem;
+    height: 11rem;
+}
+h2 {
+    font: normal 1.275rem/1.5rem 'prxnv_sb', sans-serif;
+    color: #2A2A2A;
+    text-align: center;
+}
+
+#purchase-pro-section {
+    display: none;
+}
+
+#complete-purchase {
+    margin-top: 1rem;
+    display: block;
+}
+
+.stripe_checkout_app { height: 580px !important; }
+
+a.button-purchase {
+    height: 60px;
+    display: block;
+    margin: 0 auto 1rem;
+    margin-top:50px;
+    background-color: #FF4081;
+    color: #fff;
+    border-radius: 5px;
+    width: 90%;
+    font: normal 1.275rem/1.5rem 'prxnv_sb', sans-serif;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+}
+
+@media (max-width: 649px) and (min-width: 320px) a.button-purchase {
+    min-width: 80%;
+}
+
+@media (max-width: 649px) and (min-width: 320px) h2 {
+    padding: 0 2rem;
+}
