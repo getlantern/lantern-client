@@ -44,7 +44,7 @@
             android:id="@+id/cardsView"
             android:layout_gravity="center">
 
-            <org.lantern.app.model.DynamicViewPager
+            <org.getlantern.lantern.model.DynamicViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="wrap_content"
                 android:layout_height="309dp"
