@@ -271,7 +271,7 @@
           <!-- It's required to update Lantern on API 24+ -->
           <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.lantern.app.fileProvider"
+            android:authorities="org.getlantern.beam.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

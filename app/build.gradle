@@ -69,7 +69,7 @@ android {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
 
-        applicationId "org.getlantern.lantern"
+        applicationId "org.getlantern.beam"
         versionCode code
 
         if (project.hasProperty('lanternVersion')) {

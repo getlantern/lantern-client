@@ -227,7 +227,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
               i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
               apkURI = FileProvider.getUriForFile(
                   this.context,
-                  "org.lantern.app.fileProvider",
+                  "org.getlantern.beam.fileProvider",
                   apkPath);
             };
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
