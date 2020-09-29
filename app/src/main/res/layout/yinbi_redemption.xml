@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:baselineAligned="false"
+    android:background="@color/accent_white"
+    android:id="@+id/settingsView"
+    tools:context=".SettingsActivity">
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/coordinatorLayout"
+        android:background="@color/accent_white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            xmlns:lantern="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/titlebar_fragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            class="org.lantern.app.fragment.TitleBar"
+            lantern:titleBackgroundColor="@drawable/nav_background_white"
+            lantern:titleText="@string/yinbi_redemption"/>
+
+        <FrameLayout
+            android:id="@+id/distributionSection"
+            android:background="@drawable/thanks_card"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:lineSpacingExtra="8sp"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:text="@string/how_yinbis_distributed"/>
+
+            <TextView
+                android:id="@+id/okDistributionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:lineSpacingExtra="10sp"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/pink"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/ok"/>
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/redemptionSection"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/bottomSection"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:id="@+id/tableHeader"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:stretchColumns="*"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textColor="#000000"
+                            android:lineSpacingExtra="2sp"
+                            android:text="@string/date"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:lineSpacingExtra="2sp"
+                            android:text="@string/redemption_code"
+                            />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:gravity="right"
+                            android:lineSpacingExtra="2sp"
+                            android:text="@string/status"
+                            />
+                    </TableRow>
+                </TableLayout>
+
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/scrollView1"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:scrollbars="none"
+                    android:fillViewport="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TableLayout
+                            android:id="@+id/redemptionTable"
+                            android:weightSum="2"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:stretchColumns="*"
+                            android:layout_gravity="center">
+                        </TableLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/bottomSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:gravity="bottom"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_alignParentBottom="true">
+
+                <Button
+                    android:id="@+id/copyAllCodes"
+                    android:layout_height="27dp"
+                    android:layout_width="130dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/copy_all_codes"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="10sp"
+                    android:elevation="2dp"
+                    android:minHeight="48dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/accent_white"
+                    android:clickable = "true"
+                    android:background="#484848"
+                    android:onClick="enterBulkProCodes" />
+
+
+                <TextView
+                    android:id="@+id/visitYinbi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="12sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#7c7c7c"
+                    android:letterSpacing="0.01"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:linksClickable="false"
+                    android:textColorLink="@color/pink"
+                    android:text="@string/visit_yinbi"/>
+
+                <View android:id="@+id/separator"
+                    android:background="@color/black"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="15dp"
+                    android:layout_below="@+id/visitYinbi"
+                    android:layout_width = "fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_centerVertical ="true"
+                    android:layout_alignParentTop="true"/>
+
+                <Button
+                    android:id="@+id/enterProCodes"
+                    android:layout_height="36dp"
+                    android:layout_width="216dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:text="@string/enter_bulk_pro_codes"
+                    android:stateListAnimator="@null"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="14sp"
+                    android:minHeight="48dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/accent_white"
+                    android:clickable = "true"
+                    android:layout_gravity="center"
+                    android:background="@color/pink"
+                    android:layout_centerInParent="true"
+                    android:onClick="enterBulkProCodes" />
+
+                <Button
+                    android:id="@+id/renewPro"
+                    android:layout_height="36dp"
+                    android:layout_width="216dp"
+                    android:text="@string/renew_pro_get_yinbi"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="14sp"
+                    android:minHeight="48dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/pink"
+                    android:layout_gravity="center"
+                    android:clickable = "true"
+                    android:background="@drawable/text_invite"
+                    android:layout_centerInParent="true"
+                    android:onClick="resendEmail" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
