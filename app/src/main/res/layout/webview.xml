@@ -1,0 +1,32 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/webViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black"
+    >
+
+    <ImageView
+        android:id="@+id/close"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:paddingTop="7dp"
+        android:paddingRight="7dp"
+        android:onClick="closeWebView"
+        android:src="@drawable/close_on" />
+
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/webView"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        />
+</FrameLayout>

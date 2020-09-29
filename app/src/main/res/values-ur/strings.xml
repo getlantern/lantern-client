@@ -1,0 +1,345 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">لینٹرن</string>
+  <string name="action_settings">سینٹنگ</string>
+  <string name="proxy_all_setting">تمام ٹریفک پراکسی کریں</string>
+  <string name="proxy_all_on_header">آن (سب سے ذیادہ محفوظ انتخاب)</string>
+  <string name="proxy_all_off_header">آف ( تیز ترین انتخاب)</string>
+  <string name="proxy_all_on">اس انتخاب کی صورت میں آپ کی تمام ٹریفک لینٹرن کے ذریعے بھیجی جائے گی۔ </string>
+  <string name="proxy_all_off">اگر یہ انتخاب آف ہو تو صرف بلاک سائٹس  کی طرف جاننے والی ٹریفک لینٹرن کے ذریعے بھیجی جائے گی ۔ </string>
+  <string name="button_text">شرو ع کیجئے</string>
+  <string name="drawer_open">دراز کھلی ہے</string>
+  <string name="drawer_close">درازبند</string>
+  <string name="default_fragment">ڈیفالٹ فریگمنٹیشن</string>
+  <string name="receive_lantern">لینٹرن ڈیسک ٹاپ کو ای میل کے ذریعے حاصل کیجئے</string>
+  <string name="lantern_desktop">لینٹرن ڈیسک ٹاپ</string>
+  <string name="email_hint">ای میل</string>
+  <string name="send_button">بھیجئے</string>
+  <string name="send_desktop">ڈیسک ٹاپ بھیجئے</string>
+  <string name="send_email">ای میل بھیجئے</string>
+  <string name="your_email">آپ کا ای میل </string>
+  <string name="your_email_address">آپ کا ای میل ایڈریس</string>
+  <string name="please_enter">برائے مہربانی اپنے ای میل ایڈریس کا اندراج کیجئے اور اس کی تصدیق کیجئے</string>
+  <string name="please_enter_register">برائے مہربانی اپنا لینٹرن پرو اکاؤنٹ ریجسٹر کرنے کے لئے اپنے ای میل ایڈریس کا اندراج کیجئے اور اس کی تصدیق کیجئے۔ </string>
+  <string name="your_referral_code">آپ کا ریفرل کوڈ</string>
+  <string name="report_an_issue">مسئلہ رپورٹ کیجئے</string>
+  <string name="select_issue">برائے مہربانی ایک مسئلے کا انتخاب کیجئے</string>
+  <string name="select_issue_desc">برائے مہربانی ہمیں یہاں اپنے مسئلے کی مختصر تفصیل دیجئے n\اور ہم جلد سے جلد آپ سے رابطہ کریں گے۔.</string>
+  <string name="submit">جمع کرائیے</string>
+  <string name="submit_issue">مسئلہ جمع کرائیے</string>
+  <string name="no_issue_selected">برائے مہربانی رپورٹ جمع کرانے سے پہلے  کسی ایک مسئلے کا انتخاب کیجئے۔ </string>
+  <string name="cannot_find_email">اوہ! ہمیں ای میل ایڈریس تلاش کرنے مین دشواری پیش آرہی ہے۔ </string>
+  <string name="no_purchase_date">برائے مہربانی انداز سے کسی اس تاریخ کا انتخاب کیجئے جب آپ کو لگتا ہو کہ آپ نے لینٹرن پرو خریدا تھا۔ </string>
+  <string name="purchase_date">خریداری کی تاریخ</string>
+  <string-array name="common_issue_list">
+    <item>بلاک ہوئی سائٹس تک رسائی ممکن نہیں</item>
+    <item>خریداری کی تکمیل نہیں کی جاسکتی</item>
+    <item>سائن اِن نہیں کیا جا سکتا</item>
+    <item>سپنر لوڈ بناء اختتام کے بے لگام چل رہا ہے</item>
+    <item>آہستہ</item>
+    <item>دوسرا یا علیحدہ</item>
+  </string-array>
+  <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
+  <string name="on_text">آن</string>
+  <string name="off_text">آف</string>
+  <string name="lantern_off">لینٹرن آف ہے۔ بلاک ہوئی سائٹس اور سروسز تک رسائی کے لئے سوِچ کو پلٹیے!</string>
+  <string name="lantern_on">لینٹرن آن ہے ۔ اب آپ بلاک سائٹس اور سروسز تک رسائی حاصل کر سکتے ۔ </string>
+  <string name="on_desc">  اب آپ r\n\بلاک سائٹس اور سروس تک رسائی  حاصل کر سکتےہیں</string>
+  <string name="off_desc">بلاک سائٹس اور سروسز تک رسائی  کےلئے بٹن پر کلک کیجئے</string>
+  <string name="service_connected">لینٹرن کنیکٹ ہو گئی ہے</string>
+  <string name="desktop_option">ڈیسک ٹاپ ورژن</string>
+  <string name="contact_option">رابطہ کیجئے</string>
+  <string name="check_for_update">اپ ڈیٹ کے لئے چیک کیجئے</string>
+  <string name="no_update_available">آپ اَپ ٹو ڈیٹ ہیں !</string>
+  <string name="error_checking_for_update">لینٹرن کے نئے ورژن کو چیک کرنے میں دشواری</string>
+  <string name="error_making_purchase">خریداری کرنے میں دشواری</string>
+  <string name="have_latest_version">لینٹرن %1$s سب سے نیا ورژن ہے</string>
+  <string name="updating_lantern">لینٹرن کو اپ ڈیٹ کیا جا رہا ہے</string>
+  <string name="cancel">منسوخ</string>
+  <string name="newsfeed_option">لینٹرن فیڈ کو آزمائیے</string>
+  <string name="newsfeed_off_option">فیڈ کو بند کر دیں</string>
+  <string name="privacy_policy">پرائیوسی پالیسی</string>
+  <string name="share_option">شیئر</string>
+  <string name="quit_option">دست بردار ہو جائیں</string>
+  <string name="share_email_native"></string>
+  <string name="share_email_subject">لینٹرن اینڈروائڈ</string>
+  <string name="fatal_error">لینٹرن میں ایک انتہائی سنگین مسئلہ آ گیا ہے اوریہ مزید کام نہیں کر رہا</string>
+  <string name="share_twitter">لینٹرن اینڈروائڈ چیک کیجئے: https://bit.ly/lanternapk</string>
+  <string name="share_facebook">میں اینڈروائڈ کے لئے دستیاب لینٹرن کا استعمال کررہا/رہی ہوں ۔ یہ یہاں پر دستیاب ہے : https://bit.ly/lanternapk</string>
+  <string name="share_email_gmail">میں اینڈروائڈ کے لئے دستیاب لینٹرن کا استعمال کرہا /رہی ہوں اور میں نے اے پی کے فائل یہاں اٹیچ کی ہے!</string>
+  <string name="share_sms">میں اینڈروائڈ کے لئے دستیاب لینٹرن کا استعمال کرہا /رہی ہوں ۔  اسے یہاں سے ڈاؤن لوڈ کیجئے: https://bit.ly/lanternapk</string>
+  <string name="share_chooser_text">لینٹرن اینڈروائڈ شیئر کیجئے</string>
+  <string name="card">کارڈ</string>
+  <string name="credit_card">کریڈٹ کارڈ</string>
+  <string name="Alipay">ایلی پے</string>
+  <string name="alipay_account">ایلی پےاکاؤنٹ</string>
+  <string name="month">ماہ</string>
+  <string name="year">سال</string>
+  <string name="success_email">لینٹرن ڈیسک ٹاپ آپ کو ای میل کر دیا گیا ہے!</string>
+  <string name="error_email">آپ کو لینٹرن ڈیسک ٹاپ بھیجتے ہوئے کوئی مسئلہ درپیش آ گیا ہے۔ برائے مہر بانی دوبارہ کو شش کیجئے۔ </string>
+  <string name="send_logs">لاگز بھیجئے</string>
+  <string name="help_survey">لینٹرن کو بہتر بنانے میں ہماری مدد کیجئے۔ ابھی ایک سوال پر مشتمل سروے کیجئے!</string>
+  <string name="take_survey">سروے کیجئے!</string>
+  <string name="thanks_survey">ہمارا سروے کرنے کا شکریہ!</string>
+  <string name="success_log_email">لیٹرن کو کامیابی کے ساتھ لاگز جمع کروا دیے گئے ہیں !</string>
+  <string name="error_log_email">لینٹرن کو لاگز بھیجتے ہوئے کوئی مسئلہ پیش آ گیا ہے۔ برائے مہربانی دوبارہ کوشش کیجئے۔ </string>
+  <string name="invalid_email">غیر تصدیق شدہ ای میل ایڈریس</string>
+  <string name="error_payment_gateway">رقم ادائیگی گیٹ وے سے رابطہ کرنے میں دشواری</string>
+  <string name="emails_do_not_match">ای میل  فیلڈز یکساں نہیں ہیں </string>
+  <string name="invalid_reseller_code">آپ نےجو ری سیلر کوڈ داخل کیاہےوہ غیر درست ہے</string>
+  <string name="invalid_referral_code">غیر درست ریفرل کوڈ</string>
+  <string name="cannot_use_own_referral_code">پروموشن کے لئے اپنا ریفرل کوڈ استعمال نہیں کیا جا سکتا</string>
+  <string name="no_internet_connection">انٹر نیٹ کنیکشن میسر نہیں ہے!</string>
+  <string name="unable_remove_device">ڈیوائس ہٹانے میں ناکامی۔ برائے مہربانی کچھ دیر بعد دوبارہ کوشش کیجئے!</string>
+  <string name="remove">ہٹا دیں</string>
+  <string name="contact_email">team@getlantern.org</string>
+  <string name="contact_message">میری مدد کریں</string>
+  <string name="contact_subject">لینٹرن اینڈروائڈ</string>
+  <string name="update_available">لینٹرن کا نیا ورژن دستیاب ہے! کیا آپ ابھی اَپ گریڈ کرنا چاہیں گے؟</string>
+  <string name="not_now">ابھی نہیں </string>
+  <string name="install_update">اَپ ڈیٹ</string>
+  <string name="error_update">اَپ ڈیٹ ڈاؤن لوڈ کرنے میں دشواری</string>
+  <string name="loading">لوڈ ہو رہا ہے۔۔</string>
+  <string name="manual_update">حالیہ ورژن کو یہاں سے ڈاؤن لوڈ کرنے کی کوشش کیجئے &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="pro_welcome_text">لینٹرن پرو میں خوش آمدید!</string>
+  <string name="happy_anniversary">لینٹرن سالگرہ مبارک!</string>
+  <string name="welcome_greeting">لینٹرن میں خوش آمدید!</string>
+  <string name="upgrade_for">بہترین کے لئے اَپ گریڈ کیجئےn\ رفتار; استحکام</string>
+  <string name="what_kind_of_lantern">آپ کس قسم کا لینٹرنn\ پسند کریں گے</string>
+  <string name="lantern_pro_radio">لینٹرن پرو – لامحدود ڈیٹا</string>
+  <string name="lantern_free_radio">لینٹرن بیسک – 500ایم بی ڈیٹا</string>
+  <string name="welcome_to_lantern">نئے اور بہتر لینٹرن میں خوش آمدید</string>
+  <string name="to_get_unlimited">لامحدو ڈیٹا، تیز ترین رفتار اور  مضبوط بلاکنک رززسٹینس کے لئے\nپرو پر اَپ گریڈ کیجئے!</string>
+  <string name="renew_pro_account">پرو اکاؤنٹ کی تجدید کیجئے</string>
+  <string name="logout">لاگ آؤٹ</string>
+  <string name="change_phone_number">فون نمبر تبدیل کیجئے</string>
+  <string name="change_email_address">ای میل ایڈریس تبدیل کیجئے</string>
+  <string name="pro_account_expires">آپ کے پرو اکاؤنٹ کی معیاد %1$sکو ختم ہو رہی ہے</string>
+  <string name="includes_free_months">اس میں آپ کے %2$dماہ شامل ہیں!</string>
+  <string name="verified_phone_number">تصدیق شدہ فون نمبر:</string>
+  <string name="devices_authorized">آپ  کے پرو اکاؤنٹ پر استعمال کی جانے والی  منظور شدہ  ڈیوائسز</string>
+  <string name="send_us_your_logs">ہمیں اپنے لاگز بھیجئے</string>
+  <string name="thanks_purchase">لینٹرن پرو کی خریداری پر آ پ کا شکریہ!</string>
+  <string name="start_inviting">\r\nمدعو کرنا شروع کیجئے!</string>
+  <string name="sending_request">درخواست پر عمل جاری ہے</string>
+  <string name="invite_friends">اپنے دوستوں کے ساتھ شئیر کرنے کا کوڈ حاصل کرنے کے لئےاپنے ای میل کا اندراج کیجئے۔ ان کے سائن اَپ کرنے پر پرو کا ایک ماہ مفت حاصل کیجئے!</string>
+  <string name="invite_friends_welcome">جب آپ کے دوست دو سالہ منصوبے کی خریداری کریں گے تو آپ میں سے ہر ایک کو 3 ماہ مفت حاصل ہوں گے۔ ایک سالہ منصوبہ آپ میں سے ہر ایک کو 1 ماہ مفت دلاتا ہے۔ </string>
+  <string name="invite_friends_btn">دوستوں کو مدعو کیجئے</string>
+  <string name="share_friends_text">مفت ماہ حاصل کرنے کے لئے دوستوں کو مدعو کیجئے!</string>
+  <string name="email_address">ای میل ایڈریس</string>
+  <string name="continue_to_pro">پرو کو جاری رکھئے</string>
+  <string name="continue_to_basic">بیسک ورژن کو جاری رکھئے</string>
+  <string name="continue_">جاری رکھئے</string>
+  <string name="continue_to_payment">رقم ادائیگی جاری  رکھیں</string>
+  <string name="skip_to_checkout">چیک آؤٹ کرنے کےلئے سکِپ کیجئے</string>
+  <string name="free_pro_credits">مفت  پرو کریڈٹس</string>
+  <string name="get_pro_credits">مفت پرو کریڈٹس حاصل کیجئے</string>
+  <string name="get_free_months">مفت ماہ حاصل کیجئے</string>
+  <string name="text_invite">ٹیکسٹ کے ذریعے مدعو کرنا</string>
+  <string name="email_invite">ای میل کے ذریعے مدعو کرنا</string>
+  <string name="share_your_referral_code">اپنا ریفرل کوڈ شیئر کیجئے</string>
+  <string name="get_code">کوڈ حاصل کیجئے</string>
+  <string name="get_code_text">اپنے دوستوں سے شیئر کرنے کا کوڈ حاصل کرنے کے لئے اپنے ای میل کا اندراج کیجئے۔ ان کے سائن اَپ کرنے پر پرو کا 1 ماہ مفت حاصل کیجئے!</string>
+  <string name="enter_your_email">ریفرل کوڈ حاصل کرنے کے لئے اپنے ای میل کا اندراج کیجئے</string>
+  <string name="referral_copied_to_clipboard">ریفرل کوڈ کلپ بورڈ پر کاپی کر دیا گیاہے!</string>
+  <string name="share_referral_text">خریداری کے بعد 3 اضافی مفت ماہ حاصل کرنے کے لئے میرے کوڈ کا استعمال کیجئے۔ %1$s لینٹرن ڈاؤن لوڈ کیجئے https://bit.ly/lanternapk</string>
+  <string name="previous_code">اگر آپ پہلے ریفرل کوڈ حاصل کر چکے ہیں \r\nتو برائے اس ای میل ایڈریس کا استعما ل کرنے کی یقین دہانی کیجئے ۔</string>
+  <string name="payment_plans">لینٹرن پرو رقم  ادائیگی کے منصوبے</string>
+  <string name="features_text">لینٹرن پرو کی خصوصیات</string>
+  <string name="checkout">چیک آؤٹ</string>
+  <string name="cvc">سی وی سی</string>
+  <string name="cc_number">کریڈٹ کارڈ</string>
+  <string name="card_number">کارڈ نمبر</string>
+  <string name="validation_errors">تصدیق میں دشواری</string>
+  <string name="progressMessage">درخواست پر عمل جاری ہے</string>
+  <string name="progressMessage2">ریفرل کو ڈ ریٹریو کیا جا رہا ہے</string>
+  <string name="language">زبان</string>
+  <string name="settings">سینٹنگ</string>
+  <string name="referral_applied">چیک آؤٹ مکمل ہو جانے پر مفت ماہ آپ کے لئے اور آپ کے دوست کے لئے جمع کر دیے جائیں گے!</string>
+  <string name="all_feeds">تمام</string>
+  <string name="feed.error.oops">اوہ!</string>
+  <string name="feed.error.error_fetching_feed">فیڈ حاصل کرنے میں دشواری</string>
+  <string name="feed.error.try_again">برائے مہربانی دوبارہ کوشش کیجئے</string>
+  <string name="authorize_device_pro">پرو کے لئے منظور شدہ ڈیوائس</string>
+  <string name="add_device">ڈیوائس شامل کیجئے</string>
+  <string name="now_authorized">اب  اس ڈیوائس پر آپ کو اپنا پرو اکاؤنٹ استعمال کرنے میں اجازت ہے!</string>
+  <string name="i_have_another">میرے پاس ایک اور لینٹرن پرو ڈیوائس ہے</string>
+  <string name="link_this_device">اس ڈیوائس کو منسلک کریں</string>
+  <string name="or">یا</string>
+  <string name="need_to_recover">مجھے میرا لینٹرن پرو اکاؤنٹ بحال کرنا ہے</string>
+  <string name="start_recovery">بحالی کا آغاز</string>
+  <string name="account_recovery">اکاؤنٹ کی بحالی</string>
+  <string name="account_recovery_code">اکاؤنٹ بحالی کا کوڈ</string>
+  <string name="email_recovery_code">%1$sپر بحالی کے ساتھ ای میل بھیج دی گئی ہے۔ اس ای میل میں سے کوڈ لیکر اس کا اوپر اندراج کیجئے۔ یہ ای میل ملنے میں کئی گھنٹے لگ سکتے ہیں ۔ </string>
+  <string name="thanks_report">شکریہ۔ لینٹرن کسٹمر سپورٹ 48 گھنٹوں کے دوران آپ سے رابطہ کرے گی۔ </string>
+  <string name="enter_valid_code">برائےمہربانی درست بحالی کوڈ کا اندارج کیجئے۔ </string>
+  <string name="too_many_devices">آپ کے پرو اکاؤنٹ سے منسلک کی جانے والی ڈیوائسز کی حد ختم ہو چکی ہے۔ </string>
+  <string name="check_spam_folder">٭اگر آپ کو ای میل موصول نہیں ہوئی تو برائے مہربانی اپنا سپیم فولڈر چیک کیجئے</string>
+  <string name="by_referral">دوست کو ریفر کرتے ہوئے پرو حاصل کیا</string>
+  <string-array name="payment_method_list">
+    <item>ایلی پے</item>
+    <item>کریڈٹ کارڈ</item>
+    <item>دوست کو ریفر کرنے پر پرو حاصل کیا</item>
+  </string-array>
+  <string name="payment_method">رقم ادائیگی کا طریقہ</string>
+  <string name="payment_account">رقم ادائیگی اکاؤنٹ</string>
+  <string name="oops_having_trouble">اوہ! ہمیں ای میل ایڈریس تلاش کرنے میں دشواری پیش آ رہی ہے۔ برائے مہربانی ہمیں آپ کا اکاؤنٹ ڈھونڈنے کے لئے نیچے دی گئی  مطلوبہ معلومات فراہم کیجئے ۔ </string>
+  <string name="locate_account">برائے مہربانی نوٹ کیجئے کوئی بھی ایسی معلومات جو آپ کا اکؤنٹ تلاش کرنے میں ہمارے لئے معاون ہوں۔ </string>
+  <string name="resend_email">دوبارہ ای میل بھیجیں</string>
+  <string name="dont_remember">کیا آپ کو اپنا ای میل یاد نہیں ہے؟</string>
+  <string name="device_code">ڈیوائس منسلک کرنے کا کوڈ</string>
+  <string name="device_now_linked">آپ کامیابی سے اپنی ڈیوائس منسلک کر چکے ہیں !\n</string>
+  <string name="device_linked_success">کامیابی! آپ کی نئی ڈیوائس کچھ دیر میں منسلک کر دی جائے گی.\n</string>
+  <string name="link_this_device_0">آپ کے پرو اکاؤنٹ کے ساتھ اس ڈئوایس کو منسلک کریں:</string>
+  <string name="link_this_device_1"><b>1.</b> اپنی  پرو اکاؤنٹ  ڈیوائس پر \"ڈیوائس  شامل کریں\" مینو آئٹم کھولئے.</string>
+  <string name="link_this_device_2"><b>2.</b> ڈیوائس منسلک کرنے کا کوڈ داخل کیجئے اور جمع کرائیے.</string>
+  <string name="make_sure_updated">٭اس بات کی یقین دہانی    کیجئےکہ آپ اپنی پروڈیوائس پر لینٹرن کا حالیہ ورژن اَپ ڈیٹ کر چکے ہیں ۔ </string>
+  <string name="make_sure_updated_2">٭ اس بات کی یقین دہانی    کیجئےکہ آپ اپنی پر غیر منظور شدہ  وڈیوائس پر لینٹرن کا حالیہ ورژن اَپ ڈیٹ کر چکے ہیں ۔ </string>
+  <string name="error_device_code">ڈیوائس منسلک  کرنے کا کوڈ ریٹریو کرنے میں دشواری پیش آ رہی ہے! برائے مہر بانی کچھ دیر بعد دوبارہ کوشش کیجئے۔ </string>
+  <string name="decline_offer">کیا آپ واقعی \n اس پیشکش کو مسترد کرنا چاہتے ہیں؟</string>
+  <string-array name="renewal_confirm">
+    <item>جی ہاں، میں بعد میں تجدید کروں گا/گی</item>
+    <item>مجھےیہ دوبارہ نہیں دیکھنا</item>
+  </string-array>
+  <string-array name="pro_features">
+    <item>مزید تیز رفتا</item>
+    <item>لامحدود ڈیٹا</item>
+    <item>بلاکنک رززسٹنس</item>
+    <item>تین ڈیوائسز</item>
+    <item>کوئی اشتہار نہیں</item>
+  </string-array>
+  <string-array name="pro_features_welcome">
+    <item>لامحدود تیز رفتار ڈیٹا</item>
+    <item>طاقتور بلاکنگ رززسٹنس</item>
+    <item>اوپٹمائزڈ سرور سلیکشن</item>
+    <item>قابلِ اعتماد اور محفوظ کنکشن</item>
+  </string-array>
+  <string-array name="basic_features">
+    <item>ہر ماہ 500 ایم بی تیز رفتار ڈیٹا</item>
+    <item>اوپن انٹرنیٹ تک قابلِ اعتماد اور محفوظ رسائی</item>
+  </string-array>
+  <string name="purchased_from_reseller">کیا ری سیلر سے لینٹرن پرو خریدا ہے؟ یہاں کلک کیجئے!</string>
+  <string-array name="authorize_device_list">
+    <item><b>1.</b> اپنی غیر منظور شدہ ڈیوائس پر \"منظور شدہ ڈیوائس\" مینو آئٹم کھولئے.</item>
+    <item><b>2.</b> پہلے مرحلے پر موصول شدہ منسلک کرنے کے کوڈ کا اندراج کیجئے اور جمع کرائیے۔</item>
+  </string-array>
+  <string-array name="enter_code_steps_referral">
+    <item>پرو کو جاری رکھنے کےلئےاپنی ای میل پر موصول شدہ تصدیقی کوڈ کا اندارج کیجئے !</item>
+    <item>کیا کوڈ موصول نہیں ہوا؟اپنا سپیم فولڈر چیک کیجئے اور اس بات کی یقین دہانی کیجئے کہ آپ نے اپنے ای میل کا درست اندراج کیا ہے.</item>
+  </string-array>
+  <string-array name="enter_email_list">
+    <item>اپنے مفت لینٹرن پرو ماہ استعمال کرنے لئےاس  ڈ یوائس کی منظوری کے لئے اپنے ای میل ایڈریس کا اندارج کیجئے </item>
+    <item>ہم آپ کو ای میل پر ایک تصدیقی کوڈ بھیجیں گے</item>
+  </string-array>
+  <string name="only_one_device">صرف ایک ڈیوائس</string>
+  <string name="sorry_cannot_remove">معاف کیجئے، لیکن آپ اپنی پچھلی منظور شدہ ڈیوائس کو ہٹا نہیں سکتے</string>
+  <string name="send_link">لنک بھیجئے    </string>
+  <string name="click_button">بلاک سائٹس اور سروسز تک رسائی  کےلئے بٹن پر کلک کیجئے</string>
+  <string name="lantern_pro">لینٹرن پرو</string>
+  <string name="lantern_pro_header">لینٹرن پرو:</string>
+  <string name="lantern_pro_checkout">لینٹرن پرو چیک آؤٹ</string>
+  <string name="invite_friends_header">دوستوں کو مدعو کیجئے</string>
+  <string name="pro_desc">مزید تیز رفتار، مزید  سمارٹ، مزیدلچکدار</string>
+  <string name="free_month">ہر سائن اَپ پر پرو کا ایک مفت ماہ حاصل کیجئے</string>
+  <string name="get_pro_now">ابھی پرو حاصل کیجئے</string>
+  <string name="inviting_friends">دوستوں کو مدعو کریں اور پرو کریڈٹس حاصل کیجئے</string>
+  <string name="data_cap_percent">آپ اپنے ماہانہ لیٹرن تیز رفتار ڈیٹا کا %1$s%% استعمال  کر چکے ہیں ۔ لامحدود تیز رفتارڈیٹا کے لئے پرو پر اَپ گریڈ کیجئے۔ </string>
+  <string name="data_cap">آپ اپنے ماہانہ لینٹرن تیز رفتا ڈیٹا کا تما م ڈیٹا استعمال کر چکے ہیں ۔ لینٹرن کو تیز ترین رفتار پر استعمال کرتے رہنے کے لئے پرو پر اَپ گریڈ کیجئے۔ </string>
+  <string name="data_cap_reset">آپ کا ماہانہ لینٹرن تیز رفتار ڈیٹا دوبارہ سیٹ کیا گیا ہے۔ بلاک سائٹس اور سروسز کو اب براؤز کرنے کا آغاز کیجئے!</string>
+  <string name="select">منتخب کیجئے</string>
+  <string name="special_launch">خاص لانچ قیمت!</string>
+  <string name="best_value">بہترین قدر!</string>
+  <string name="referral_code_opt">ریفرل کوڈ (آپسشنل)</string>
+  <string name="total">کُل:</string>
+  <string name="pro_account_header">پرو اکاؤنٹ مینجمنٹ</string>
+  <string name="pro_account_month_text">ابھی آپ کا ماہانہ لینٹرن پرو اکاؤنٹ ہے۔آپ کے اکاؤنٹ سے  بلنگ سائیکل کے اختتام پر اگلے ماہ کے لئے ادائیگی حاصل کر لی جائے گی۔ </string>
+  <string name="pro_account_year_text">ابھی آپ کا سالانہ لینٹرن پرو اکاؤنٹ ہے۔آپ کے اکاؤنٹ سے  بلنگ سائیکل کے اختتام پر اگلےسال کے لئے ادائیگی حاصل کر لی جائے گی۔ </string>
+  <string name="cancel_pro_account">پرو اکاؤنٹ منسوخ کر دیجئے</string>
+  <string name="account_verification">اکاؤنٹ کی تصدیق</string>
+  <string name="enter_verification_code">تصدیقی کوڈ کا اندارج کیجئے</string>
+  <string name="referral_code">ریفرل کوڈ</string>
+  <string name="get_lantern_pro">لینٹرن پرو حاصل کیجئے</string>
+  <string name="upgrade_to_lantern_pro">لینٹرن پرو پر اَپ گریڈ کیجئے</string>
+  <string name="pro_available_for">ونڈوز، اینڈروائڈ، میک اور اَن بنٹو کے لئے۔ آئی او ایس جلد آ رہا ہے</string>
+  <string name="data_remaining">آپ کے ماہانہ تیز رفتار ڈیٹا %1$sکا %% رہ گیا ہے</string>
+  <string name="data_used">آپ کی ماہانہ تیر رفتار ڈیٹا %1$s کا %% استعمال ہو چکا ہے</string>
+  <string name="upgrade">اَپ گریڈ</string>
+  <string name="upgrade_pro">پرو پر اَپ گریڈ کیجئے</string>
+  <string name="upgrade_now">ابھی اَپ گریڈ کیجئے</string>
+  <string name="next">اگلا</string>
+  <string name="become_reseller">پیسے کمائیے! لینٹرن پرو ری سیلر بن جائیے۔ یہاں کلک کیجئے۔</string>
+  <string name="faster_stronger">ذیاہ تیز۔ ذیادہ مضبوط۔ لامحدود۔۔ محفوظ</string>
+  <string name="reseller_email_subject">لینٹرن ری سیلر پروگرام کے متعلق مجھے بتائیے!</string>
+  <string name="reseller_email_message">جب آپ لینٹرن ریسیلر بن جائیں گے تولینٹرن ہر پرو سبسکرپشن فروخت  پر آپ کے پاس 25 فیصد کمانے کا موقع ہوگا۔ نیچے ہمیں مختصراً بتائیے کہ آپ ری سیلر کیوں بننا چاہتے ہیں </string>
+  <string name="no_email_client">یہاں کوئی ای میل کلائنٹس انسٹال نہیں ہوئے ہیں۔ </string>
+  <string name="no_wall_at_all">کوئی دیوار نہیں ۔ </string>
+  <string name="buy_pro_now">ابھی پرو خریدیے</string>
+  <string name="update_billing_info">بلنگ معلومات اَپ ڈیٹ کیجئے</string>
+  <string name="pro_credits_text">دوستوں کو مدعو کیجئے اور مزید پرو حاصل کیجئے</string>
+  <string name="could_not_complete_purchase">اس وقت پرو خریدار ی مکمل نہیں ہو سکی۔ کچھ دیر بعد دوبارہ کوشش کیجئے!</string>
+  <string name="invalid_verification_code">غیر درست تصدیقی کوڈ</string>
+  <string name="invalid_payment_method">رقم ادائیگی کا غیردرست طریقہ</string>
+  <string name="unable_to_cancel_account">پرو اکاؤنٹ منسوخ کرنے سے قاصر ہیں ! برائے مہربانی  contact team@getlantern.org پر رابطہ کیجئے </string>
+  <string name="earn_free_month">ہر ایک دوست کے سائن اَپ کرنے پر ایک مفت ماہ حاصل کیجئے </string>
+  <string name="credits_applied">اگلے بلنگ سائیکل پر آپ کے کریڈٹس آپ کے اکاؤنٹ پر لاگو کر دیے جائیں گے۔ </string>
+  <string name="pro_invitation_subject">لینٹرن پرو جوائن کرنے کی دعوت</string>
+  <string name="receive_free_month">لینٹرن پرو کےایک  مفت ماہ کے لئےاس ریفرل کوڈ کا استعمال کیجئے:%1$s؛ آپ اسے یہاں سے بھی ڈاؤن لوڈ کر سکتے ہیں : https://bit.ly/1M8x04u</string>
+  <string name="share_feed_item">میں لینٹرن کے ذریعے%1$s پر %2$s کے متعلق پڑھ رہا/رہی ہوں۔بلاک سائٹس اور سروس تک رسائی کے لئے لینٹرن کا استعمال کیجئے۔ آپ اسے اینڈروائڈ کے لئے یہاں سے ڈاؤن لوڈ کر سکتے ہیں : https://bit.ly/lanternapk</string>
+  <string name="cancel_pro_confirmation">کیا آپ پُر یقین ہیں؟ یہ عمل واپس نہیں ہو سکے گا! آپ دوبارہ پرو کے لئے کسی بھی وقت سائن اَپ کر سکتے ہیں ۔ </string>
+  <string name="unauthorize_confirmation">کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟</string>
+  <string name="yes">جی ہاں</string>
+  <string name="no">نہیں</string>
+  <string name="item_image_contentDescription">ملکی جھنڈا</string>
+  <string name="item_preview_country">امریکہ</string>
+  <string name="item_preview_dialCode">+1</string>
+  <string name="refresh">ریفریش</string>
+  <string name="find">تلاش کریں</string>
+  <string name="share_via">کے ذریعے شیئر کیجئے</string>
+  <string name="copy_link">لنک کاپی کیجئے</string>
+  <string name="open_with">کے ساتھ کھولئے</string>
+  <string name="copied_to_clipboard">کلپ بورڈ پر کاپی ہو چکا ہے</string>
+  <string name="welcome_to_new">نئے اور بہتر لینٹرن پر خوش آمدید!</string>
+  <string name="now_using">اب آپ اب تک کا مستحکم اور تیز ترین لینٹرن استعمال کر رہےہیں ۔ </string>
+  <string name="get_unlimited_data">لامحدود ڈیٹا ، تیز ترین رفتار اور ذیادہ مضبوط بلاکنگ رززسٹنس حاصل کرنے کے لئے\nپرو پر اَپ گریڈ کیجئے!</string>
+  <string name="start_using">لینٹرن استعمال کرنا شروع کیجئے</string>
+  <string name="device_already_registered">یہ ای میل ایڈریس پہلے سے ہی پرو سبسکرائیبر ہے۔ اس ڈیوائس کو یہاں منظور کرائیے۔ </string>
+  <string name="email_in_use">یہ ای میل ابھی کسی اور یوزر کے استعمال میں ہے۔ </string>
+  <string name="congratulations">مبارک ہو!</string>
+  <string name="referral_code_used">آپ کے ریفر کردہ ایک دوست نے لینٹرن پرو کی خریداری کی ہے۔ پرو کے%dمفت ماہ آپ کے اکاؤنٹ پر لاگو کر دیے گئے ہیں ۔  </string>
+  <string name="enter_email">ای میل ایڈریس کا اندراج کیجئے</string>
+  <string name="confirm_email">ای میل کی تصدیق کیجئے</string>
+  <string name="confirm_email_address">ای میل ایڈریس کی تصدیق کیجئے</string>
+  <string name="register_pro_account">پرو اکاؤنٹ پر ریجسٹر کیجئے</string>
+  <string name="renew_now">ابھی تجدید کیجئے اور حاصل کیجئے\n 3 مفت ماہ</string>
+  <string name="renew_ends_tomorrow">تجدید کا ڈسکاؤنٹ کل ختم ہو رہا ہے!</string>
+  <string name="renew_ends_today">مفت 3 ماہ حاصل کرنے کا آخری موقع!</string>
+  <string name="renew_after">ابھی تجدید کیجے اور 45 اضافی دن مفت حاصل کیجئے!</string>
+  <string name="renew_sub">نوٹ : آپ کا خریدا ہوا نئے منصوبے کا n\ وقت آپ کے حالیہ منصوبے کے n\وقت میں شامل کر دیا جائے گا۔ </string>
+  <string name="offer_ends_tomorrow">پیشکش کل ختم ہو رہی ہے.</string>
+  <string name="offer_ends_today">پیشکش آج ختم ہو رہی ہے۔</string>
+  <string name="limited_time_offer">پیشکش محدود وقت کے لئے ہے۔ </string>
+  <string name="months_free">مفت ماہ</string>
+  <string name="month_free">مفت ماہ</string>
+  <string name="days_free">مفت دن</string>
+  <string name="enter_pro_activation_code">برائے مہربانی اپنا 25 ہندسوں پر مبنی ایکٹیویشن کوڈاوپر داخل کیجئے۔ اگر آپ کو کوڈ موصول نہیں ہواتو برائے مہربانی اس ری سیلر سے رابطہ کیجئے جس سے آ پ نے خریداری کی۔ </string>
+  <string name="no_title">کوئی عنوان نہیں  </string>
+  <string name="current_location_desc">لینٹرن آپ کو ہمارے بہترین ڈیٹا سنٹرز سے جوڑنے کے لئے سمارٹ سرور سلیکشن کا استعمال کرتا ہے۔ ہمارے مخصوص لینٹرن ڈیٹا پرو سنٹرز سے اوپٹمائزسرور سلیکشن کے ساتھ مزید تیز رفتار کے لئےلینٹرن پرو پر اَپ گریڈ کیجئے۔  </string>
+  <string name="ad_blocking_desc">لینٹرن مداخلت کرنے والے اشتہاروں کو بلاک کرتا ہےتاکہ ویب پیج لوڈ ٹائم تیز ہو سکے، بینڈ وڈتھ بچےاور آپ کو ایک بہتر براؤزنگ کا تجربہ حاصل ہو۔ </string>
+  <string name="https_upgrade_desc">لینٹرن خود سے ہی  غیر محفوظ ایچ ٹی ٹی پی کنکشنز کو اینکریٹڈایچ ٹی ٹی پی کنکشنز میںاَپ گریڈ کر دیتا ہےتاکہ ویب سرفنگ کے دوران آپ کی معلومات محفوظ رہیں ۔ </string>
+  <string name="data_usage_desc">آپ اپنے ماہانہ تیز رفتار ڈیٹا%1$sکا %2$s ایم بی استعمال کر چکے ہیں </string>
+  <string name="account_left_desc">آپ کے اکاؤنٹ میں لینٹرن پرو کے %1$dماہ باقی  رہ  گئے ہیں </string>
+  <string name="optimized_location">اوپٹمائزڈ سرور لوکیشن</string>
+  <string name="current_location">حالیہ لوکیشن:</string>
+  <string name="disconnected">منقطع</string>
+  <string name="https_upgrades">HTTPS اَپ گریڈز</string>
+  <string name="data_usage">ڈیٹا کا استعمال</string>
+  <string name="pro_account">پرو اکاؤنٹ</string>
+  <string name="blocked_ads">بلاک اشتہار</string>
+  <string name="upgrade_now_data">لامحدود تیز رفتار سروس کے لئے ابھی اَپ گریڈ کیجئے!</string>
+  <string name="renew_your_account">مزید وقت حاصل کرنے ے لئےاپنے اکاؤنٹ کی تجدید کیجئے</string>
+  <string name="turn_on_lantern">بلاک سائٹس اور سروسز تک تیز اور محفوظ رسائی کے لئے لینٹرن کو آن کیجئے۔</string>
+  <string name="lantern_on_text">آپ تیز ترین لینٹرن سرور سے جڑے ہوئے ہیں ۔ براؤزنگ کا آغاز کیجئے!</string>
+  <string name="lantern_notification">لینٹرن نوٹیفیکیشن</string>
+  <string name="apply_referral_code">ریفرل کوڈ  لاگو کیجئے</string>
+  <string name="terms_of_service">سروس کی شرائط</string>
+</resources>
