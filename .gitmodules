@@ -1,0 +1,3 @@
+[submodule "app/src/main/java/org/getlantern/mobilesdk"]
+	path = app/src/main/java/org/getlantern/mobilesdk
+	url = git@github.com:getlantern/android-sdk.git
