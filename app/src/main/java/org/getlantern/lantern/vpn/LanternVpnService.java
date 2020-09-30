@@ -145,7 +145,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         }
       }, dns);
 
-      getOrInitProvider().run(this, new Builder(), session.getSOCKS5Addr());
+      getOrInitProvider().run(this, new Builder(), session.getSOCKS5Addr(), session.getDNSGrabAddr());
     } catch (Exception e) {
       e.printStackTrace();
       Logger.error(TAG, "Error running VPN", e);

@@ -22,7 +22,6 @@ public class GoTun2SocksProvider implements Provider {
   private final static String gwAddress = "10.0.0.1";
   private final static String dnsIP = "8.8.8.8";
   private final static String dnsAddr = dnsIP + ":53";
-  private final static String dnsGrabAddr = privateAddress + ":8153";
 
   private final static int VPN_MTU = 1500;
 
@@ -55,7 +54,7 @@ public class GoTun2SocksProvider implements Provider {
     return mInterface;
   }
 
-  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr)
+  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr)
       throws Exception {
     Logger.d(TAG, "run");
 
