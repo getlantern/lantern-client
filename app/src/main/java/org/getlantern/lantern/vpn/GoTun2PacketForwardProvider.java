@@ -54,7 +54,7 @@ public class GoTun2PacketForwardProvider implements Provider {
     return mInterface;
   }
 
-  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr)
+  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr)
       throws Exception {
     Logger.d(TAG, "run");
 
