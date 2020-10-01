@@ -21,7 +21,6 @@ public class Tun2SocksProvider implements Provider {
 
   private final static String privateAddress = "10.0.0.1";
   private final static String router = "10.0.0.2";
-  private final static String dnsGw = "10.0.0.1:8153";
 
   private final static int VPN_MTU = 1500;
 
@@ -54,14 +53,14 @@ public class Tun2SocksProvider implements Provider {
     return mInterface;
   }
 
-  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr)
+  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr)
       throws Exception {
     Logger.d(TAG, "Configuring");
 
     final Locale defaultLocale = Locale.getDefault();
     try {
       ParcelFileDescriptor intf = createBuilder(vpnService, builder);
-      Tun2Socks.Start(intf, VPN_MTU, router, netMask, socksAddr, dnsGw);
+      Tun2Socks.Start(intf, VPN_MTU, router, netMask, socksAddr, dnsGrabAddr);
     } finally {
       Locale.setDefault(defaultLocale);
     }

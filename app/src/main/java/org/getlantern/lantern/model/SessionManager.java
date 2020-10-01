@@ -184,14 +184,21 @@ public class SessionManager implements Session {
         if (startResult == null) {
             return "";
         }
-        return startResult.getHTTPAddr();
+        return startResult.getHttpAddr();
     }
 
     public String getSOCKS5Addr() {
         if (startResult == null) {
             return "";
         }
-        return startResult.getSOCKS5Addr();
+        return startResult.getSocks5Addr();
+    }
+
+    public String getDNSGrabAddr() {
+        if (startResult == null) {
+            return "";
+        }
+        return startResult.getDnsGrabAddr();
     }
 
     /**
