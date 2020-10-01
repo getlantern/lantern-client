@@ -2,34 +2,20 @@
 
 ## Overview
 
-<img src="screenshots/home1.png" height="330px" width="200px">
-
 Lantern Android is an app that uses the Android [VpnService][4] API to
 intercept and reroute all device traffic to the Lantern
 circumvention tool.
 
-## Building Lantern Android
+## Submodules
+This project uses some shared code from a submodule that needs to be initialized with
 
-Download the most recent copy of the Lantern Android source code using `git`:
+`git submodule update --init`
 
-```
-git clone https://github.com/getlantern/lantern-build.git
-```
+## Building from Command Line
 
-Then run the following to create a debug build:
+See https://github.com/getlantern/lantern-build for instructions on how to build from the command line
 
-```
-cd $GOPATH/src/github.com/getlantern/lantern-build
-make android-debug
-```
-
-To build for staging:
-
-```
-STAGING="true" make android-debug
-```
-
-### Building from Android Studio
+## Building from Android Studio
 
 #### Prerequisites
 
@@ -38,142 +24,12 @@ STAGING="true" make android-debug
 * [Android NDK][2]
 
 In the welcome screen choose the "Open an existing Android Studio" option and
-select the `android-lantern` folder inside the lantern-build project you
-downloaded via git.
+select the folder containing this README.
 
-### Building from the Command Line
+You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. You can build that by running
+`ANDROID_ARCH=all make dockerandroid-android-lib` inside a local clone of https://github.com/getlantern/lantern-build.
 
-#### Prerequisites
-
-* Java 8
-* [Android NDK][2]
-* [Android SDK Tools][4] (if not using Android Studio)
-* Go 
-* [Gomobile][8]
-
-On Mac, you can install Java 8 and the Android development tools via Homebrew:
-
-```
-brew cask install caskroom/versions/java8
-brew install ant
-brew install maven
-brew install gradle
-brew cask install android-sdk
-brew cask install android-platform-tools
-brew cask install android-ndk
-```
-
-Install the latest platform tools (which includes `adb`) and the SDK tools via `sdkmanager`:
-
-```
-sdkmanager "platforms;android-26" "build-tools;27.0.3" "extras;google;m2repository" "extras;android;m2repository"
-```
-
-And add the following paths:
-
-```bash
-export ANT_HOME=/usr/local/opt/ant
-export MAVEN_HOME=/usr/local/opt/maven
-export GRADLE_HOME=/usr/local/opt/gradle
-export ANDROID_HOME=/usr/local/opt/android-sdk
-export ANDROID_NDK_HOME=/usr/local/share/android-ndk
-export PATH=$PATH:$ANDROID_HOME/tools
-```
-
-#### Building `tun2socks`
-
-Lantern Android uses [tun2socks][3] to route intercepted VPN traffic through a
-local SOCKS server.
-
-```
-make build-tun2socks
-```
-
-#### Installing and Running
-
-```
-make debug-install
-```
-
-Run the app on the device from the command line:
-
-```
-adb shell am start -n org.getlantern.lantern/org.getlantern.lantern.activity.LanternMainActivity
-```
-
-Note - if you want to test with an emulator, run `android` and then choose
-Tools -> Manage AVDs.  Create an AVD (e.g. Nexus_4) and then run the emulator
-from the command line like so:
-
-```
-emulator -avd Nexus_4
-```
-
-The following settings seem to work well enough performance wise:
-
-```
-Device: 3.4" WQVGA 240x432
-Target: Android 5.1.1 - API Level 22
-CPU/ABI: ARM (armeabi-v7a)
-Keyboard: x Hardware keyboard present
-Skin: Skin with dynamic hardware controls
-Front Camera: None
-Back Camera: None
-Memory RAM: 2048
-VM Heap: 128
-Internal Storage: 200
-SD Card: 4GiB (probably more than necessary)
-Emulation Options: x Use Host GPU
-```
-
-#### Testing the app
-
-#### Testing Locally
-
-##### UI Tests
-
-`ANDROID_ARCH=all make android-test`
-
-##### Unit Tests
-
-`cd android-lantern && ./gradlew testAutoTestDebugUnitTest`
-
-#### Testing UI on GenyMotion Cloud
-
-Genymotion Cloud allows us to spin up temporary Android Emulator instances, run our tests on those via adb, and then shut them off.
-
-You need to have gmsaas installed and you need to be authenticated.
-
-`pip3 install gmsaas`
-
-You need to configure it to point to your Android SDK:
-
-`gmsaas config set android-sdk-path $ANDROID_HOME`
-
-Lastly you need to log in with the [credentials in 1Password](https://start.1password.com/open/i?a=HHU7O6L7H5E33C6UDFD6Q3SYH4&v=dfgpblv7fxwdwf5dkzo6ourkfy&i=zwy7gowshbfwrkhgytwp7kkwku&h=lantern.1password.com)
-
-`gmsaas auth login accounts@getlantern.org`
-
-Then you can run the tests on Genymotion using:
-
-`make android-cloud-test`
-
-#### Debugging
-
-First, make sure to install [Pidcat][9] (a tool to filter and colorize logcat entries for a
-specific application package):
-
-```
-brew install pidcat
-```
-
-Then with Lantern running:
-
-```
-pidcat org.getlantern.lantern
-```
-
-#### Testing Google Play Payments
+## Testing Google Play Payments
 
 If you're trying to test Google Play Payments with a sideloaded build, you will need to satisfy one of the following conditions, otherwise you'll get an error saying "the item you requested is not available for purchase"
 when trying to purchase in-app.
