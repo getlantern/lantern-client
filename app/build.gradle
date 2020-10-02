@@ -23,7 +23,7 @@ android {
     useLibrary 'android.test.runner'
 
     dexOptions {
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "8g"
         preDexLibraries true
     }
 
