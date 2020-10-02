@@ -23,7 +23,7 @@ android {
     useLibrary 'android.test.runner'
 
     dexOptions {
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "8g"
         preDexLibraries true
     }
 
@@ -233,7 +233,7 @@ repositories {
 }
 
 dependencies {
-    implementation(name:"liblantern-${androidArch()}", ext:'aar')
+    implementation fileTree(dir: "libs", include:"liblantern-${androidArch()}.aar")
 
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
     implementation(name:'paymentwall-android-sdk', ext: 'aar')
@@ -345,3 +345,23 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+task buildLibLantern(type: Exec, description: 'Build Go library') {
+    environment "ANDROID_ARCH", "all"
+    workingDir '../../'
+    commandLine 'make', 'android-lib'
+}
+
+task cleanLibLantern(type: Exec, description: 'Clean Go library') {
+    environment "ANDROID_ARCH", "all"
+    workingDir '../../'
+    commandLine 'make', 'clean-android'
+}
+
+clean.dependsOn 'cleanLibLantern'
+
+tasks.whenTaskAdded { task ->
+    if (!task.name.contains("assemble")) {
+        task.dependsOn buildLibLantern
+    }
+}

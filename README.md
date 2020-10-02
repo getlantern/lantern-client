@@ -6,6 +6,8 @@ Lantern Android is an app that uses the Android [VpnService][4] API to
 intercept and reroute all device traffic to the Lantern
 circumvention tool.
 
+This project is meant to be used inside of the context of a local clone of https://github.com/getlantern/lantern-build.
+
 ## Submodules
 This project uses some shared code from a submodule that needs to be initialized with
 
@@ -26,8 +28,7 @@ See https://github.com/getlantern/lantern-build for instructions on how to build
 In the welcome screen choose the "Open an existing Android Studio" option and
 select the folder containing this README.
 
-You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. You can build that by running
-`ANDROID_ARCH=all make dockerandroid-android-lib` inside a local clone of https://github.com/getlantern/lantern-build.
+You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. That file is built automatically.
 
 ## Testing Google Play Payments
 
