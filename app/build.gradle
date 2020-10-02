@@ -347,13 +347,13 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 
 task buildLibLantern(type: Exec, description: 'Build Go library') {
-    environment "ANDROID_ARCH", "all"
+    environment "ANDROID_ARCH", androidArch()
     workingDir '../../'
     commandLine 'make', 'android-lib'
 }
 
 task cleanLibLantern(type: Exec, description: 'Clean Go library') {
-    environment "ANDROID_ARCH", "all"
+    environment "ANDROID_ARCH", androidArch()
     workingDir '../../'
     commandLine 'make', 'clean-android'
 }
