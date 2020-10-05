@@ -669,6 +669,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... v) {
             try {
+                Logger.debug(TAG, "Checking for updates");
                 return Android.checkForUpdates();
             } catch (Exception e) {
                 Logger.error(TAG, "Error checking for update", e);
@@ -686,6 +687,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
             if (url.equals("")) {
                 noUpdateAvailable(userInitiated);
+                Logger.debug(TAG, "No update available");
                 return;
             }
             Logger.debug(TAG, "Update available at " + url);
