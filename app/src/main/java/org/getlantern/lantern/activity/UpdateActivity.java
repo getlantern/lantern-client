@@ -65,7 +65,6 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
         final Context context = getApplicationContext();
         final String[] permissions = {
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.REQUEST_INSTALL_PACKAGES
         };
 
@@ -102,12 +101,13 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
         private final UpdateActivity activity;
         private final Context context;
+        private final File apkDir;
         private final File apkPath;
 
         public UpdaterTask(final UpdateActivity activity) {
             context = activity.getApplicationContext();
-            apkPath = new File(context.getExternalFilesDir(null),
-                    "Lantern.apk");
+            apkDir = new File(context.getCacheDir(), "updates");
+            apkPath = new File(apkDir,"Lantern.apk");
             this.activity = activity;
         }
 
@@ -151,6 +151,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                     }
                 };
 
+                apkDir.mkdirs();
                 Android.downloadUpdate(updateUrl,
                         apkPath.getAbsolutePath(), updater);
 
