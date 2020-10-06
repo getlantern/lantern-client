@@ -233,7 +233,7 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include:"liblantern-${androidArch()}.aar")
+    implementation fileTree(dir: "libs", include:"libbeam-${androidArch()}.aar")
 
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
     implementation(name:'paymentwall-android-sdk', ext: 'aar')
