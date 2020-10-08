@@ -80,6 +80,7 @@ import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.activity.SettingsActivity_;
 
 import java.util.ArrayList;
 import java.util.List;
