@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
 
@@ -325,9 +326,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.0-beta03'
 
-    annotationProcessor 'org.androidannotations:androidannotations:' + androidAnnotationsVersion
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation("org.androidannotations:androidannotations-api:" + androidAnnotationsVersion)
+    annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
+    kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
 
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'

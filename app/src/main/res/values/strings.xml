@@ -4,8 +4,8 @@
     <string name="proxy_all_setting">Proxy all traffic</string>
     <string name="proxy_all_on_header">ON (Most secure option)</string>
     <string name="proxy_all_off_header">OFF (Fastest option)</string>
-    <string name="proxy_all_on">With this option, all of your device traffic will be sent through Lantern</string>
-    <string name="proxy_all_off">With this option off, only traffic to blocked sites will be sent through Lantern</string>
+    <string name="proxy_all_on">With this option, all of your device traffic will be sent through %1$s</string>
+    <string name="proxy_all_off">With this option off, only traffic to blocked sites will be sent through %1$s</string>
     <string name="button_text">Start</string>
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Close</string>
