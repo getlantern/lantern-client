@@ -10,7 +10,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:fontFamily="sans-serif"
         android:layout_weight="1"
         android:textStyle="normal"
         android:textColor="@color/light_gray_yinbi"
@@ -20,7 +19,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:layout_weight="1"
         android:text="XXXXXXX"
@@ -38,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="@color/light_gray_yinbi"
             />

@@ -23,7 +23,7 @@
         android:id="@+id/statusText"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:fontFamily="sans-serif-medium" 
+        android:textAppearance="@style/MediumText"
         android:textColor="@color/accent_white"
         android:layout_centerInParent="true"
         android:gravity="left"

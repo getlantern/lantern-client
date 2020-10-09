@@ -9,6 +9,6 @@
     android:lineSpacingMultiplier="1.1"
     android:layout_gravity="left"
     android:gravity="left|center_vertical"
-    android:fontFamily="sans-serif-light"
+    android:textAppearance="@style/LightText"
     android:text=""
     android:textColor="@color/black"/>

@@ -37,7 +37,7 @@
                     android:layout_gravity="center"
                     android:lineSpacingMultiplier="1.1"
                     android:textColor="@color/black"
-                    android:fontFamily="sans-serif-light"
+                    android:textAppearance="@style/LightText"
                     android:alpha="0.75"
                     android:text="@string/turn_on_lantern"
                     android:textSize="13sp"
