@@ -19,7 +19,7 @@
         android:paddingTop="24dp"
         android:paddingBottom="32dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
@@ -28,7 +28,7 @@
             android:text="@string/privacy_disclosure_title"
             android:textColor="@color/black" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

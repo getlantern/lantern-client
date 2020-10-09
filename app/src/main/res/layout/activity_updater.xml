@@ -44,7 +44,7 @@
                 android:src="@drawable/lantern_icon"
                 android:scaleType="centerInside"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/update_available"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

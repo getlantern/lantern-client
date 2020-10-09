@@ -60,7 +60,7 @@
             />
     </LinearLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/emailWithRecoveryCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         android:textSize="14sp"
         android:textColor="@color/black"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/checkSpam"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

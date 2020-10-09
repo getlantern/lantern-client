@@ -21,7 +21,7 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/enter_lantern_pro_codes"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -70,7 +70,7 @@
             android:gravity="bottom|center"
             android:layout_gravity="center">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/errorMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                 android:text="@string/bulk_codes_error"
                 />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/termsOfServiceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

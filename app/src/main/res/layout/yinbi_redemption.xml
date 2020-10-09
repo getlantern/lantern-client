@@ -40,7 +40,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -53,7 +53,7 @@
                 android:gravity="left"
                 android:text="@string/how_yinbis_distributed"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/okDistributionBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -103,7 +103,7 @@
                             android:lineSpacingExtra="2sp"
                             android:text="@string/date"/>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -113,7 +113,7 @@
                             android:lineSpacingExtra="2sp"
                             android:text="@string/redemption_code"
                             />
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
@@ -184,7 +184,7 @@
                     android:onClick="enterBulkProCodes" />
 
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/visitYinbi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

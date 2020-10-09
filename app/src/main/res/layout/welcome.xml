@@ -24,7 +24,7 @@
         android:src="@drawable/wall"/>
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/welcome_to_lantern"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:textStyle="bold"
         android:text="@string/welcome_to_lantern"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/now_using"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         android:textColor="@color/black"
         android:text="@string/now_using"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/unlimited_data"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

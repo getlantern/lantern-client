@@ -5,7 +5,7 @@
     android:paddingTop="15dp"
     android:orientation="horizontal">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/deviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:text=""
         android:textColor="@color/black"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/unauthorize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

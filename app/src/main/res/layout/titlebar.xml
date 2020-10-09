@@ -37,7 +37,7 @@
                 app:srcCompat="@drawable/abc_ic_ab_back_material"/>
 
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -19,7 +19,7 @@
         android:layout_toLeftOf="@+id/status_text"
         android:src="@drawable/status_off_white">
     </ImageView>
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/statusText"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -29,5 +29,5 @@
         android:gravity="left"
         android:textSize="12sp"
         android:text="@string/lantern_off">
-    </TextView>                      
+    </androidx.appcompat.widget.AppCompatTextView>                      
 </LinearLayout>

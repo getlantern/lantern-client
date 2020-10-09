@@ -59,7 +59,7 @@
                 android:layout_alignParentTop="true"
                 />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/formDetails"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/makeSureUpdated"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
