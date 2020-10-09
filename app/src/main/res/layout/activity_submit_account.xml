@@ -20,7 +20,7 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/account_recovery"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/recoveryMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
         android:weightSum="2"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/purchaseDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

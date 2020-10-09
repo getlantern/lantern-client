@@ -36,7 +36,7 @@
             android:paddingBottom="38dp"
             android:src="@drawable/account_management"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/deviceCodeText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:gravity="center"
             android:textColor="@color/gray_device_link"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/deviceLinkingCode"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:textStyle="bold"
             android:textColor="@color/buy_pro"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/linkThisDevice"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/linkThisDevice1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/linkThisDevice2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/black"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/makeSureUpdated"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

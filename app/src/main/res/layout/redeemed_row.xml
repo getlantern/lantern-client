@@ -5,7 +5,7 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:layout_height="wrap_content">
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:textStyle="normal"
         android:textColor="@color/light_gray_yinbi"
         />
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/code"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_weight="1"
         android:layout_gravity="right"
         android:orientation="horizontal">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/status"
             android:gravity="right"
             android:layout_width="wrap_content"

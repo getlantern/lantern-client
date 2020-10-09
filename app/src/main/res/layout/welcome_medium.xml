@@ -18,7 +18,7 @@
         android:adjustViewBounds="true"
         android:src="@drawable/welcome_logo"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgrade_for"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:lineSpacingMultiplier="1.2"
         android:textColor="#000000"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/lantern_pro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         android:background="@color/pink"
         android:onClick="upgradeNow" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/continueBasic"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

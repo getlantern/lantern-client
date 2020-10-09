@@ -37,7 +37,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/yinbi_logo_large"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/yinbiDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/visitYinbi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

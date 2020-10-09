@@ -48,7 +48,7 @@
             android:paddingRight="10dp"
             android:src="@drawable/time_icon" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/headerText"
@@ -62,7 +62,7 @@
 </RelativeLayout>
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         android:text="@string/pro_account"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tabText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
         android:textSize="18sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgradeNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

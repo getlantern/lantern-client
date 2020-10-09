@@ -41,18 +41,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/verifiedEmailAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textAppearance="@style/MediumText"
                 android:text="@string/email_address"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/emailAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,7 +62,7 @@
 
         </RelativeLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/devicesAuthorized"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +84,7 @@
             android:layout_gravity="right"
             android:orientation="vertical" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/proAccountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +95,7 @@
             android:paddingBottom="20dp"
             android:textColor="@color/black"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/freeMonthsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

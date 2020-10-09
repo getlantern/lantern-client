@@ -81,7 +81,7 @@
         android:layout_alignParentTop="true"
         />                            
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/enterMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
         android:layout_alignParentTop="true"
         /> 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/activationCodeMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
