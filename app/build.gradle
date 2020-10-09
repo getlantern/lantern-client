@@ -45,6 +45,10 @@ android {
         exclude 'README.txt'
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
 
