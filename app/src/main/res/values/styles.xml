@@ -253,14 +253,14 @@
     </style>
 
     <style name="DefaultTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="fontFamily">@font/ibmplexmono_regular</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="BoldLabel" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/ibmplexmono_medium</item>
+        <item name="fontFamily">@font/ibmplexmono_medium</item>
         <item name="fontWeight">500</item>
     </style>
 
