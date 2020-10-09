@@ -27,8 +27,8 @@ ext {
     compileSdkVersion = 30
     targetSdkVersion = 30
     minSdkVersion = 19
-    androidAnnotationsVersion = '4.6.0'
-    androidAnnotationsAPIVersion = '4.6.0'
+    androidAnnotationsVersion = '4.7.0'
+    androidAnnotationsAPIVersion = '4.7.0'
     buildToolsVersion = '30.0.2'
     buildNumber = 'dev'
     espressoVersion = '3.0.0'
