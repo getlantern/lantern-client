@@ -45,7 +45,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:text=""
                 android:textSize="20sp"
                 android:textColor="@color/black"/>

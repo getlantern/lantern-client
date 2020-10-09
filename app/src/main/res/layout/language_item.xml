@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:paddingLeft="10dp"
         android:layout_alignParentTop="true"/>
 

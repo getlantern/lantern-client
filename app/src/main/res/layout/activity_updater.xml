@@ -50,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:fontFamily="sans-serif" 
                 android:singleLine="false"
                 android:layout_marginTop="10dp"  
                 android:layout_marginBottom="10dp"

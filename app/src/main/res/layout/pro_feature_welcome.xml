@@ -10,7 +10,6 @@
         android:textSize="18sp"
         android:alpha=".87"
         android:layout_centerInParent="true"
-        android:fontFamily="sans-serif"
         android:text=""
         android:textColor="@color/black"/>
 </RelativeLayout>

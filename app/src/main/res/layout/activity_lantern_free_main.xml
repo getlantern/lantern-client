@@ -196,7 +196,6 @@
                 android:id="@+id/versionNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="Roboto Regular"
                 android:gravity="bottom|center_horizontal"
                 android:text=""
                 android:textSize="10sp"
@@ -211,7 +210,6 @@
                     android:id="@+id/privacyPolicyLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="Roboto Regular"
                     android:paddingRight="5dp"
                     android:text="@string/privacy_policy"
                     android:textSize="10sp"
@@ -219,7 +217,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="Roboto Regular"
                     android:paddingRight="5dp"
                     android:text="|"
                     android:textSize="10sp"
@@ -228,7 +225,6 @@
                     android:id="@+id/termsOfServiceLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="Roboto Regular"
                     android:text="@string/terms_of_service"
                     android:textSize="10sp"
                     android:textColor="#007a7c" />

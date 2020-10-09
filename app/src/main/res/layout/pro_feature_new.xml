@@ -19,7 +19,6 @@
             android:gravity="center"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#7c7c7c"
             android:letterSpacing="0.01"

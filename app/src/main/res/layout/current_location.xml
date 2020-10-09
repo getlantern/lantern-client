@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/headerText"
                 android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
+                android:textAppearance="@style/LightText"
                 android:text=""
                 android:textSize="58sp"
                 />
@@ -66,7 +66,6 @@
         android:layout_gravity="center"
         android:paddingTop="5dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:text="@string/optimized_location"
         />
@@ -79,7 +78,6 @@
         android:layout_gravity="center"
         android:paddingTop="8dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:text="@string/current_location"
         />
 
@@ -92,7 +90,7 @@
         android:layout_gravity="center"
         android:paddingTop="10dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:text="@string/current_location_desc"
         android:textSize="16sp"
