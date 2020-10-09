@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/headerText"
                 android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
+                android:textAppearance="@style/LightText"
                 android:text=""
                 android:textSize="58sp"
                 />
@@ -64,7 +64,6 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         />
 
@@ -75,7 +74,7 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:textSize="13sp"
         android:paddingBottom="5dp"
         android:text="@string/time_left_giveaway"
@@ -91,7 +90,6 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         />
 
     <TextView
@@ -103,7 +101,7 @@
         android:layout_gravity="center"
         android:paddingTop="5dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:text="@string/yinbi_distribution_details"
         android:textSize="16sp"
@@ -115,7 +113,6 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:paddingTop="15dp"
-        android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:textColor="@color/black"
         android:lineSpacingExtra="3.3sp"

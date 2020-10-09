@@ -28,7 +28,7 @@
         android:gravity="left"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingExtra="6sp"
         android:textSize="10sp"
         />
@@ -41,7 +41,7 @@
         android:textColorLink="@color/yinbi_red"
         android:gravity="right"
         android:layout_gravity="right|center_vertical"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:text="@string/visit_yinbi_website"
         android:textSize="14sp"
         android:paddingLeft="10dp"

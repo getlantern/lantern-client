@@ -26,7 +26,6 @@
         android:textSize="15sp"
         android:gravity="left"
         android:textColor="#000000"
-        android:fontFamily="sans-serif"
         android:paddingLeft="10dp"
         android:text="Line 1"
         android:layout_alignParentTop="true"

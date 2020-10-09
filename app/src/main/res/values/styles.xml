@@ -9,7 +9,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:textViewStyle">@style/DefaultTextView</item>
+        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
     </style>
 
     <style name="AppTheme.AdAttribution">
@@ -252,16 +252,25 @@
         <item name="android:background">#bfbfbf</item>
     </style>
 
-    <style name="DefaultTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
-        <item name="fontFamily">@font/ibmplexmono_regular</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/ibmplexmono_thin</item>
+        <item name="fontFamily">@font/ibmplexmono_thin</item>
     </style>
 
-    <style name="BoldLabel" parent="android:Widget.TextView">
+    <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/ibmplexmono_light</item>
+        <item name="fontFamily">@font/ibmplexmono_light</item>
+    </style>
+
+    <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
         <item name="android:fontFamily">@font/ibmplexmono_medium</item>
         <item name="fontFamily">@font/ibmplexmono_medium</item>
-        <item name="fontWeight">500</item>
+    </style>
+
+    <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/ibmplexmono_medium</item>
+        <item name="fontFamily">@font/ibmplexmono_medium</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>

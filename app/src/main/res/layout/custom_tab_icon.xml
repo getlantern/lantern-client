@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:textSize="16sp"
         />
 </RelativeLayout>
