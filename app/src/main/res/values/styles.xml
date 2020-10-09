@@ -253,12 +253,12 @@
     </style>
 
     <style name="DefaultTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">monospace</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="BoldLabel" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">monospace</item>
         <item name="fontWeight">500</item>
     </style>
 
