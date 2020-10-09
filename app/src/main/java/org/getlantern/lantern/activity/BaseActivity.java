@@ -1,6 +1,5 @@
 package org.getlantern.lantern.activity;
 
-import android.AdProvider;
 import android.Android;
 import android.Manifest;
 import android.app.Activity;
@@ -80,7 +79,7 @@ import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.activity.SettingsActivity_;
+import org.getlantern.mobilesdk.activity.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -464,7 +463,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 itemClass = DesktopActivity_.class;
                 break;
             case R.id.action_settings:
-                itemClass = SettingsActivity_.class;
+                itemClass = SettingsActivity.class;
                 break;
             case R.id.report_an_issue:
                 itemClass = ReportIssueActivity_.class;
