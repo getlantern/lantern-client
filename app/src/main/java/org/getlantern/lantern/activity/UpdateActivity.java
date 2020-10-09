@@ -63,16 +63,22 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     @Click(R.id.installUpdate)
     void installUpdateClicked() {
 
+        Logger.debug(TAG, "Install Update clicked");
         final Context context = getApplicationContext();
         final String[] permissions = {
             android.Manifest.permission.REQUEST_INSTALL_PACKAGES
         };
 
-        for (String permission: permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                // Android is smart enough to only prompt users the lacked permissions
-                ActivityCompat.requestPermissions(this, permissions, 1);
-                return;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            // Newer Android versions can request permissions at runtime. Older Android versions
+            // do the permission check at install time.
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    Logger.debug(TAG, "Requesting permission %1$s", permission);
+                    // Android is smart enough to only prompt users the lacked permissions
+                    ActivityCompat.requestPermissions(this, permissions, 1);
+                    return;
+                }
             }
         }
 
@@ -80,6 +86,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     }
 
     private void installUpdate() {
+        Logger.debug(TAG, "Installing update");
         this.fileDownloading = true;
 
         final String[] updaterParams = {updateUrl};
