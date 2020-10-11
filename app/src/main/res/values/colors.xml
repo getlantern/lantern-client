@@ -89,5 +89,5 @@
 
     <color name="material_button">#db0a5b</color>
 
-    <color name="selected_item">@color/pink</color>
+    <color name="selected_item">#042cfb</color>
 </resources>

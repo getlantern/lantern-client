@@ -22,6 +22,8 @@
         android:layout_below="@+id/titlebar_fragment"
         android:background="@color/card_bg"
         android:layout_weight="1"
+        android:divider="@color/black"
+        android:dividerHeight="2dp"
         android:drawSelectorOnTop="false"/>
 
 </LinearLayout>
