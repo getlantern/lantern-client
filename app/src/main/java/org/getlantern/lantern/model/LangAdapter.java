@@ -36,7 +36,7 @@ public class LangAdapter extends ArrayAdapter<String> {
 			Locale entry = localeMap.get(lang);
 			if (entry != null && entry.toString().equals(current)) {
 				// the current locale should be highlighted the selected color
-				color = getContext().getResources().getColor(R.color.pink);
+				color = getContext().getResources().getColor(R.color.selected_item);
 			}
 		}
 
