@@ -19,7 +19,7 @@
         android:layout_gravity="right|top"
         android:src="@drawable/close_off" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/happy_anniversary"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:adjustViewBounds="true"
         android:src="@drawable/renewal"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/renewalHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         android:lineSpacingMultiplier="1.2"
         android:textColor="@color/black"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/renewalSubHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:layout_height="100dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/best_value"
                 android:layout_height="40dp"
                 android:layout_width="104dp"
@@ -101,7 +101,7 @@
                 android:background="@android:color/transparent"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/twoYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/twoYearDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
             android:layout_height="85dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/oneYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/oneYearDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

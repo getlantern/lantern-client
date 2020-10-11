@@ -19,7 +19,7 @@
         android:layout_gravity="right|top"
         android:src="@drawable/close_off" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/welcome_to_lantern"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:adjustViewBounds="true"
         android:src="@drawable/welcome_logo"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgrade_for"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:lineSpacingMultiplier="1.1"
         android:orientation="vertical" >
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lanternPro"
             android:layout_gravity="left"
             android:gravity="left|center_vertical"
@@ -96,7 +96,7 @@
             android:layout_height="100dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/best_value"
                 android:layout_height="40dp"
                 android:layout_width="104dp"
@@ -112,7 +112,7 @@
                 android:background="@android:color/transparent"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/twoYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/twoYearCost"
@@ -162,7 +162,7 @@
             android:layout_height="90dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/oneYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/oneYearCost"

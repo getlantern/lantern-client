@@ -52,7 +52,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/share_with_friends"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:textColor="@color/black"/>
 
 
-         <TextView
+         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/invite_friends_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             android:gravity="center"
             android:textColor="@color/black"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/your_referral_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:gravity="center"
             android:textColor="@color/black"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/referralCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,12 +111,11 @@
                 android:layout_height="36dp"
                 android:layout_width="216dp"
                 android:text="@string/text_invite"
-                android:textAppearance="@style/MediumText"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="14sp"
                 android:minHeight="48dp"
                 android:textAllCaps="true"
                 android:textColor="@color/pink"
-                android:textStyle="bold"
                 android:clickable = "true"
                 android:background="@drawable/text_invite"
                 android:layout_centerInParent="true"
@@ -127,13 +126,12 @@
                 android:layout_height="36dp"
                 android:layout_width="216dp"
                 android:text="@string/email_invite"
-                android:textAppearance="@style/MediumText"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="48dp"
                 android:textAllCaps="true"
                 android:textColor="@color/accent_white"
-                android:textStyle="bold"
                 android:clickable = "true"
                 android:layout_marginTop="10dp"
                 android:background="@color/pink"

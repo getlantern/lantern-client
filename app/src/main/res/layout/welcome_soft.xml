@@ -18,7 +18,7 @@
         android:adjustViewBounds="true"
         android:src="@drawable/welcome_logo"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/what_kind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

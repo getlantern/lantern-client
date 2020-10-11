@@ -45,7 +45,7 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/yinbi_icon" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/headerText"
@@ -57,7 +57,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/timeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:textSize="13sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/timeLeftGiveaway"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         android:text="@string/time_left_giveaway"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tokensReleased"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         android:textColor="@color/black"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tabText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         android:textSize="16sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/totalReleased"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

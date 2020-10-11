@@ -18,7 +18,7 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/authorize_device_pro"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/haveAnotherDevice"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         android:onClick="linkDevice" /> 
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/orText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         android:gravity="center"
         android:textColor="@color/black"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/needToRecover"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
         android:background="@drawable/send_btn"
         android:onClick="linkDevice" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dontRemember"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

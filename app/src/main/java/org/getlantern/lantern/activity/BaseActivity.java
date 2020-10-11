@@ -321,7 +321,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final BaseActivity activity = this;
         final Resources resources = getResources();
         final ArrayList<NavItem> navItems = new ArrayList<NavItem>();
-        final ListAdapter listAdapter = new ListAdapter(getApplicationContext(), navItems);
+        final ListAdapter listAdapter = new ListAdapter(this, navItems);
 
         final TypedArray icons;
         final TypedArray ids;

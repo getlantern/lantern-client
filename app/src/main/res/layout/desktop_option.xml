@@ -40,7 +40,7 @@
                     android:src="@drawable/laptop"
                     />                                  
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/receive_lantern"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
