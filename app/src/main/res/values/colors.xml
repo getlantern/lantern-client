@@ -88,4 +88,6 @@
     <color name="error">#f44336</color>
 
     <color name="material_button">#db0a5b</color>
+
+    <color name="selected_item">@color/pink</color>
 </resources>
