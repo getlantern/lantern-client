@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
@@ -79,10 +80,12 @@ import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.activity.LanguageActivity;
 import org.getlantern.mobilesdk.activity.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -207,6 +210,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Logger.debug(TAG, "Default Locale is %1$s", Locale.getDefault());
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -457,7 +461,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 itemClass = YinbiLauncher.class;
                 break;
             case R.id.language:
-                itemClass = LanguageActivity_.class;
+                itemClass = LanguageActivity.class;
                 break;
             case R.id.desktop_option:
                 itemClass = DesktopActivity_.class;
@@ -1053,6 +1057,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    // Recreate the activity when the language changes
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void languageChanged(final Locale locale) {
+        recreate();
     }
 
     /**
