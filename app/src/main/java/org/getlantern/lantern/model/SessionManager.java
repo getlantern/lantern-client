@@ -1,16 +1,36 @@
 package org.getlantern.lantern.model;
 
+import android.AdSettings;
+import android.Session;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.provider.Settings.Secure;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.getlantern.lantern.BuildConfig;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.AddDeviceActivity;
+import org.getlantern.lantern.activity.LanternPlansActivity;
+import org.getlantern.lantern.activity.WelcomeActivity_;
+import org.getlantern.lantern.activity.yinbi.YinbiPlansActivity;
+import org.getlantern.lantern.activity.yinbi.YinbiRenewActivity;
+import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_;
+import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.Settings;
+import org.getlantern.mobilesdk.StartResult;
+import org.getlantern.mobilesdk.model.LocaleInfo;
 import org.greenrobot.eventbus.EventBus;
+import org.joda.time.LocalDateTime;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -20,25 +40,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import org.getlantern.lantern.activity.AddDeviceActivity;
-import org.getlantern.lantern.activity.LanternPlansActivity;
-import org.getlantern.lantern.activity.yinbi.YinbiPlansActivity;
-import org.getlantern.lantern.activity.yinbi.YinbiRenewActivity;
-import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_;
-import org.getlantern.lantern.activity.WelcomeActivity_;
-import org.getlantern.lantern.BuildConfig;
-import org.getlantern.mobilesdk.Settings;
-import org.getlantern.mobilesdk.StartResult;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.R;
-
-import android.AdSettings;
-import android.Session;
-
-import org.joda.time.LocalDateTime;
-
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class SessionManager implements Session {
 
@@ -156,12 +157,18 @@ public class SessionManager implements Session {
         this.settings = Settings.init(context);
 
         final Resources resources = context.getResources();
-        if (resources != null && resources.getConfiguration() != null) {
-            this.locale = resources.getConfiguration().locale;
+        String configuredLocale = prefs.getString(LANG, null);
+        if (!TextUtils.isEmpty(configuredLocale)) {
+            Logger.debug(TAG, "Configured locale was %1$s, setting as default locale", configuredLocale);
+            this.locale = new LocaleInfo(context, configuredLocale).getLocale();
+            updateLocale(locale);
         } else {
-            this.locale = Locale.getDefault();
-        }
-        if (prefs.getString(LANG, null) == null) {
+            if (resources != null && resources.getConfiguration() != null) {
+                this.locale = resources.getConfiguration().locale;
+            } else {
+                this.locale = Locale.getDefault();
+            }
+            Logger.debug(TAG, "Configured language was empty, using %1$s", locale);
             setLanguage(locale);
         }
     }
@@ -231,8 +238,21 @@ public class SessionManager implements Session {
 
     public void setLanguage(final Locale locale) {
         if (locale != null) {
+            String oldLocale = prefs.getString(LANG, "");
             editor.putString(LANG, locale.toString()).commit();
+            updateLocale(locale);
+            if (!locale.equals(oldLocale)) {
+                EventBus.getDefault().post(locale);
+            }
         }
+    }
+
+    private void updateLocale(final Locale locale) {
+        Logger.debug(TAG, "Updating locale to %1$s", locale);
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        Locale.setDefault(locale);
+        config.setLocale(locale);
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     public boolean hasAcceptedTerms() {
