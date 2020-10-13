@@ -44,7 +44,7 @@ import org.getlantern.lantern.model.MaterialUtil;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.widget.TextInputLayout;
 import org.getlantern.mobilesdk.Logger;

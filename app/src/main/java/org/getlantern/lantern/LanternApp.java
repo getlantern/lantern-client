@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +30,7 @@ import org.getlantern.lantern.activity.BaseActivity;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
@@ -47,6 +49,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
   private static SessionManager session;
   private static InAppBilling inAppBilling;
   private static boolean isForeground;
+  private static boolean supportsPro;
   private FirebaseRemoteConfig firebaseRemoteConfig;
 
   private static final String FIREBASE_BACKEND_HEADER_PREFIX = "x_lantern_";
@@ -87,7 +90,14 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     appContext = getApplicationContext();
-    session = new SessionManager(appContext);
+    try {
+      ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+      supportsPro = ai.metaData.getBoolean("supportsPro");
+    } catch (Exception e) {
+      Logger.error(TAG, "Unable to get supportsPro metadata", e);
+    }
+    Logger.debug(TAG, "Supports pro? %1$s", supportsPro);
+    session = new SessionManager(appContext, supportsPro);
     if (Utils.isPlayVersion(this)) {
       inAppBilling = new InAppBilling(this);
     }
@@ -193,6 +203,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
   public static boolean isForeground() {
     return isForeground;
+  }
+
+  public static boolean supportsPro() {
+    return supportsPro;
   }
 
   @Override
