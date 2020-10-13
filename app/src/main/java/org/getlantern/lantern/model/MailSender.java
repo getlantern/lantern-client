@@ -1,28 +1,25 @@
 package org.getlantern.lantern.model;
 
+import android.EmailMessage;
+import android.EmailResponseHandler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import androidx.annotation.NonNull;
 
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.SessionManager;
 
-import android.EmailMessage;
-import android.EmailResponseHandler;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MailSender extends AsyncTask<String, Void, Boolean> implements EmailResponseHandler {
     private static final String TAG = MailSender.class.getName();
     private ProgressDialog dialog;
     private String template;
-    private SessionManager session;
     private Context context;
     private String userEmail;
     private String appVersion;
@@ -34,10 +31,9 @@ public class MailSender extends AsyncTask<String, Void, Boolean> implements Emai
     public MailSender(@NonNull Context context, @NonNull String template, boolean showProgress) {
         this.context = context;
         this.template = template;
-        this.session = LanternApp.getSession();
         this.showProgress = showProgress;
         this.appVersion = Utils.appVersion(context);
-        this.userEmail = session.email();
+        this.userEmail = LanternApp.getSession().email();
 
         this.sendLogs = template != null && template.equals("user-send-logs");
 
@@ -77,24 +73,24 @@ public class MailSender extends AsyncTask<String, Void, Boolean> implements Emai
             msg.setSubject(params[0]);
             msg.setFrom(this.userEmail);
             msg.setMaxLogSize("10MB");
-            msg.putInt("userid", session.getUserID());
-            msg.putString("protoken", session.getToken());
-            msg.putString("deviceid", session.getDeviceID());
+            msg.putInt("userid", LanternApp.getSession().getUserID());
+            msg.putString("protoken", LanternApp.getSession().getToken());
+            msg.putString("deviceid", LanternApp.getSession().getDeviceID());
             msg.putString("emailaddress", this.userEmail);
             msg.putString("appversion", this.appVersion);
-            msg.putString("prouser", String.valueOf(session.isProUser()));
+            msg.putString("prouser", String.valueOf(LanternApp.getSession().isProUser()));
             msg.putString("androiddevice", android.os.Build.DEVICE);
             msg.putString("androidmodel", android.os.Build.MODEL);
             msg.putString("androidversion", "" + android.os.Build.VERSION.SDK_INT + " (" + android.os.Build.VERSION.RELEASE + ")");
         } else {
             msg.setTo(params[0]);
             if (this.template.equals("manual-recover-account")) {
-                msg.putInt("userid", session.getUserID());
-                msg.putString("usertoken", session.getToken());
-                msg.putString("deviceid", session.getDeviceID());
-                msg.putString("deviceName", session.deviceName());
+                msg.putInt("userid", LanternApp.getSession().getUserID());
+                msg.putString("usertoken", LanternApp.getSession().getToken());
+                msg.putString("deviceid", LanternApp.getSession().getDeviceID());
+                msg.putString("deviceName", LanternApp.getSession().deviceName());
                 msg.putString("email", this.userEmail);
-                msg.putString("referralCode", session.code());
+                msg.putString("referralCode", LanternApp.getSession().code());
             }
         }
         for (Map.Entry<String, String> entry : this.mergeValues.entrySet()) {

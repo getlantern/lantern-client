@@ -1,36 +1,33 @@
  package org.getlantern.lantern.activity;
 
-import android.graphics.Bitmap;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+ import android.graphics.Bitmap;
+ import android.webkit.WebView;
+ import android.webkit.WebViewClient;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
+ import org.androidannotations.annotations.AfterViews;
+ import org.androidannotations.annotations.EActivity;
+ import org.getlantern.lantern.LanternApp;
+ import org.getlantern.lantern.R;
+ import org.getlantern.lantern.model.LanternHttpClient;
+ import org.getlantern.lantern.model.PaymentHandler;
+ import org.getlantern.lantern.model.ProPlan;
+ import org.getlantern.mobilesdk.Logger;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.R;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
+ import java.util.HashMap;
+ import java.util.Locale;
+ import java.util.Map;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
-
-import okhttp3.HttpUrl;
+ import okhttp3.HttpUrl;
 
 @EActivity(R.layout.webview)
 public class Gate2ShopActivity extends WebViewActivity {
     private static final String TAG = Gate2ShopActivity.class.getName();
     private static final String PROVIDER = "Gate2Shop";
-    private static final SessionManager session = LanternApp.getSession();
-
+    
     private PaymentHandler paymentHandler;
 
     private HttpUrl buildUrl() {
-        final ProPlan proPlan = session.getSelectedPlan();
+        final ProPlan proPlan = LanternApp.getSession().getSelectedPlan();
         if (proPlan == null) {
             Logger.error(TAG, "Could not find selected pro plan");
             return null;
@@ -38,19 +35,19 @@ public class Gate2ShopActivity extends WebViewActivity {
 
         final String planId = proPlan.getId();
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("email", session.email());
+        params.put("email", LanternApp.getSession().email());
         params.put("widgetKey", "m2_1");
-        params.put("deviceName", session.deviceName());
+        params.put("deviceName", LanternApp.getSession().deviceName());
         params.put("forcePaymentProvider", "gate2shop");
         params.put("platform", "android");
         params.put("locale", lang());
-        params.put("currency", session.getSelectedPlanCurrency().toLowerCase());
+        params.put("currency", LanternApp.getSession().getSelectedPlanCurrency().toLowerCase());
         params.put("plan", planId);
         return LanternHttpClient.createProUrl("/payment-gateway-widget", params);
     }
 
     private String lang() {
-        final Locale locale = new Locale(session.getLanguage());
+        final Locale locale = new Locale(LanternApp.getSession().getLanguage());
         final String locLang = locale.getLanguage();
         final String country = locale.getCountry();
         if (locLang.equalsIgnoreCase("zh")) {

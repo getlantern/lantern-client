@@ -1,32 +1,27 @@
 package org.getlantern.lantern.activity;
 
 import android.app.ProgressDialog;
-import androidx.fragment.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.fragment.app.FragmentActivity;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProxySettings;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.webview)
 public class WebViewActivity extends FragmentActivity {
 
     private static final String TAG = WebViewActivity.class.getName();
-
-    private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
 
     private ProgressDialog dialog;
 
@@ -80,7 +75,7 @@ public class WebViewActivity extends FragmentActivity {
 
 
     protected void openWebview(final String url) {
-        final String proxyAddr = session.getHTTPAddr();
+        final String proxyAddr = LanternApp.getSession().getHTTPAddr();
         final String[] parts = proxyAddr.split(":");
         if (parts.length > 0) {
             final String proxyHost = parts[0];

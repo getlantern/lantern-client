@@ -23,7 +23,6 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.MailSender;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.mobilesdk.Logger;
@@ -37,8 +36,7 @@ import java.util.Date;
 public class SubmitAccountActivity extends FragmentActivity {
 
     private static final String TAG = SubmitAccountActivity.class.getName();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private ArrayAdapter<String> methodAdapter;
     private String selectedPaymentMethod;
 
@@ -68,7 +66,7 @@ public class SubmitAccountActivity extends FragmentActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        emailInput.setText(session.email());
+        emailInput.setText(LanternApp.getSession().email());
 
         methodAdapter = new ArrayAdapter<String>(this, R.layout.issue_row, paymentList);
         list.setAdapter(methodAdapter);
@@ -114,7 +112,7 @@ public class SubmitAccountActivity extends FragmentActivity {
         DateFormat df = new SimpleDateFormat("EEE MMM d yyyy");
         String purchaseDate = df.format(date);
 
-        session.setEmail(email);
+        LanternApp.getSession().setEmail(email);
         MailSender mailSender = new MailSender(this, "manual-recover-account", false);
         mailSender.addMergeVar("paymentMethod", selectedPaymentMethod);
         mailSender.addMergeVar("paymentAccount", paymentAccount.getText().toString());

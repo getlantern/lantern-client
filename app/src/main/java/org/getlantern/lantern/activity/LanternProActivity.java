@@ -7,12 +7,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.ProUser;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.UserStatus;
-import org.getlantern.lantern.R;
-
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -33,18 +33,18 @@ public class LanternProActivity extends BaseActivity {
         renewBtn = (Button)findViewById(R.id.renewBtn);
         renewBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final Class activity = session.plansActivity();
+                final Class activity = LanternApp.getSession().plansActivity();
                 startActivity(new Intent(LanternProActivity.this, activity));
             }
         });
 
-        setHeaderLogo(session.useVpn());
+        setHeaderLogo(LanternApp.getSession().useVpn());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (session.yinbiEnabled()) {
+        if (LanternApp.getSession().yinbiEnabled()) {
             renewProSection.setVisibility(View.VISIBLE);
         }
     }
@@ -54,7 +54,7 @@ public class LanternProActivity extends BaseActivity {
         final View tab = (View)viewPagerTab.getTabAt(Constants.PRO_USER_TAB);
         if (tab != null) {
             final TextView title = (TextView)tab.findViewById(R.id.tabText);
-            title.setText(session.getProTimeLeft());
+            title.setText(LanternApp.getSession().getProTimeLeft());
         }
     }
 

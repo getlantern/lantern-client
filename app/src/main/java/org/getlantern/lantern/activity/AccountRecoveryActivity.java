@@ -5,21 +5,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.fragment.app.FragmentActivity;
+
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
-
-import com.google.gson.JsonObject;
+import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -29,7 +28,6 @@ import okhttp3.Response;
 public class AccountRecoveryActivity extends FragmentActivity implements LanternHttpClient.ProCallback {
 
     private static final String TAG = AccountRecoveryActivity.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
 
     @ViewById
@@ -58,9 +56,9 @@ public class AccountRecoveryActivity extends FragmentActivity implements Lantern
         if (result.get("token") != null && result.get("userID") != null) {
             Logger.debug(TAG, "Successfully recovered account");
             // update token and user ID with those returned by the pro server
-            session.setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
-            session.linkDevice();
-            session.setIsProUser(true);
+            LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
+            LanternApp.getSession().linkDevice();
+            LanternApp.getSession().setIsProUser(true);
             intent = new Intent(this, LanternProActivity.class);
             intent.putExtra("snackbarMsg", getResources().getString(R.string.device_now_linked));
         } else {
@@ -110,10 +108,10 @@ public class AccountRecoveryActivity extends FragmentActivity implements Lantern
         Logger.debug(TAG, "Start Account recovery with account id " + accountId);
 
         if (Utils.isEmailValid(accountId)) {
-            session.setEmail(accountId);
+            LanternApp.getSession().setEmail(accountId);
         }
 
-        session.setAccountId(accountId);
+        LanternApp.getSession().setAccountId(accountId);
 
         final RequestBody formBody = new FormBody.Builder()
             .add("email", accountId)

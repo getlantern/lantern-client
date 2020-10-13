@@ -2,26 +2,24 @@ package org.getlantern.lantern.activity.yinbi;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 
+import androidx.viewpager.widget.ViewPager;
+
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
-import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.PlansActivity;
 import org.getlantern.lantern.model.DynamicViewPager;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 public class YinbiPlansActivity extends PlansActivity {
 
     private static final String TAG = YinbiPlansActivity.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
 
     private ConcurrentHashMap<String, ProPlan> plans = new ConcurrentHashMap<String, ProPlan>();
 

@@ -48,9 +48,6 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
@@ -71,7 +68,6 @@ import org.getlantern.lantern.model.NavItem;
 import org.getlantern.lantern.model.PopUpAd;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Survey;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
@@ -81,6 +77,9 @@ import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.activity.LanguageActivity;
 import org.getlantern.mobilesdk.activity.SettingsActivity;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String PERMISSIONS_TAG = TAG + ".permissions";
 
     protected static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    protected static final SessionManager session = LanternApp.getSession();
-
+    
     private static final int REQUEST_VPN = 7777;
 
     private static final int FULL_PERMISSIONS_REQUEST = 8888;
@@ -242,7 +240,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (session.yinbiEnabled()) {
+        if (LanternApp.getSession().yinbiEnabled()) {
             bulkRenewSection.setVisibility(View.VISIBLE);
         } else {
             final View tab = (View)viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB);
@@ -251,7 +249,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
 
-        if (session.lanternDidStart()) {
+        if (LanternApp.getSession().lanternDidStart()) {
             fetchLoConf();
         }
         setupTabs();
@@ -259,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         updateUserData();
 
         if (Utils.isPlayVersion(this)) {
-            if (!session.hasAcceptedTerms()) {
+            if (!LanternApp.getSession().hasAcceptedTerms()) {
                 startActivity(new Intent(this, PrivacyDisclosureActivity_.class));
             }
         }
@@ -329,7 +327,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final TypedArray icons;
         final TypedArray ids;
         final String[] titles;
-        if (session.isProUser()) {
+        if (LanternApp.getSession().isProUser()) {
             ids = getResources().obtainTypedArray(R.array.pro_side_menu_ids);
             icons = getResources().obtainTypedArray(R.array.pro_side_menu_icons);
             titles = getResources().getStringArray(R.array.pro_side_menu_options);
@@ -342,7 +340,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         for (int i = 0; i < titles.length; i++) {
             final int id = ids.getResourceId(i, 0);
             final int icon = icons.getResourceId(i, 0);
-            if (id == R.id.yinbi_redemption && !session.yinbiEnabled()) {
+            if (id == R.id.yinbi_redemption && !LanternApp.getSession().yinbiEnabled()) {
                 continue;
             }
             if (BuildConfig.PLAY_VERSION) {
@@ -439,7 +437,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         Class itemClass = null;
         switch (navItem.getId()) {
             case R.id.get_lantern_pro:
-                itemClass = session.plansActivity();
+                itemClass = LanternApp.getSession().plansActivity();
                 break;
             case R.id.invite_friends:
                 itemClass = InviteActivity_.class;
@@ -485,7 +483,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         final String url = survey.getUrl();
         if (url != null && !url.equals("")) {
-            if (session.surveyLinkOpened(url)) {
+            if (LanternApp.getSession().surveyLinkOpened(url)) {
                 Logger.debug(TAG, "User already opened link to survey; not displaying snackbar");
                 return;
             }
@@ -494,14 +492,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         final View.OnClickListener surveyListener = new View.OnClickListener() {
             public void onClick(View v) {
                 if (survey.getShowPlansScreen()) {
-                    startActivity(new Intent(BaseActivity.this, session.plansActivity()));
+                    startActivity(new Intent(BaseActivity.this, LanternApp.getSession().plansActivity()));
                     return;
                 }
 
-                session.setSurveyLinkOpened(survey.getUrl());
+                LanternApp.getSession().setSurveyLinkOpened(survey.getUrl());
 
                 new FinestWebView.Builder(BaseActivity.this)
-                        .webViewLoadWithProxy(session.getHTTPAddr())
+                        .webViewLoadWithProxy(LanternApp.getSession().getHTTPAddr())
                         .webViewSupportMultipleWindows(true)
                         .webViewJavaScriptEnabled(true)
                         .swipeRefreshColorRes(R.color.black)
@@ -535,8 +533,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void processLoconf(final LoConf loconf) {
-        final String locale = session.getLanguage();
-        final String countryCode = session.getCountryCode();
+        final String locale = LanternApp.getSession().getLanguage();
+        final String countryCode = LanternApp.getSession().getCountryCode();
         Logger.debug(SURVEY_TAG, "Processing loconf; country code is " + countryCode);
         if (loconf.getAds() != null) {
             handleBannerAd(loconf.getAds());
@@ -571,10 +569,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             Logger.debug(SURVEY_TAG, "Deciding whether to show survey for '%s' at %s", key, survey.getUrl());
             final String userType = survey.getUserType();
             if (userType != null) {
-                if (userType.equals("free") && session.isProUser()) {
+                if (userType.equals("free") && LanternApp.getSession().isProUser()) {
                     Logger.debug(SURVEY_TAG, "Not showing messages targetted to free users to Pro users");
                     return;
-                } else if (userType.equals("pro") && !session.isProUser()) {
+                } else if (userType.equals("pro") && !LanternApp.getSession().isProUser()) {
                     Logger.debug(SURVEY_TAG, "Not showing messages targetted to free users to Pro users");
                     return;
                 }
@@ -589,20 +587,20 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param popUpAds the popUpAds as defined in loconf
      */
     private void handlePopUpAd(final Map<String, PopUpAd> popUpAds) {
-        PopUpAd popUpAd = popUpAds.get(session.getCountryCode());
+        PopUpAd popUpAd = popUpAds.get(LanternApp.getSession().getCountryCode());
         if (popUpAd == null) {
-            popUpAd = popUpAds.get(session.getLanguage());
+            popUpAd = popUpAds.get(LanternApp.getSession().getLanguage());
         }
         if (popUpAd == null || !popUpAd.getEnabled()) {
             return;
         }
-        if (!session.hasPrefExpired("popUpAd")) {
+        if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
             Logger.debug(TAG, "Not showing popup ad: not enough time has elapsed since it was last shown to the user");
             return;
         }
         Logger.debug(TAG, "Displaying popup ad..");
         final Integer numSeconds = popUpAd.getDisplayFrequency();
-        session.saveExpiringPref("popUpAd", numSeconds);
+        LanternApp.getSession().saveExpiringPref("popUpAd", numSeconds);
         final Intent intent = new Intent(this, PopUpAdActivity_.class);
         intent.putExtra("popUpAdStr", new Gson().toJson(popUpAd));
         startActivity(intent);
@@ -615,9 +613,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param ads the ads as defined in loconf
      */
     private boolean handleBannerAd(final Map<String, BannerAd> ads) {
-        BannerAd ad = ads.get(session.getCountryCode());
+        BannerAd ad = ads.get(LanternApp.getSession().getCountryCode());
         if (ad == null) {
-            ad = ads.get(session.getLanguage());
+            ad = ads.get(LanternApp.getSession().getLanguage());
         }
         if (ad != null && ad.getEnabled()) {
             final String adUrl = ad.getUrl();
@@ -846,8 +844,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void updateStatus(boolean useVpn) {
         displayStatus(useVpn);
         EventBus.getDefault().post(new VpnState(useVpn));
-        session.updateVpnPreference(useVpn);
-        session.updateBootUpVpnPreference(useVpn);
+        LanternApp.getSession().updateVpnPreference(useVpn);
+        LanternApp.getSession().updateBootUpVpnPreference(useVpn);
     }
 
     private void setYinbiAuctionInfo() {
@@ -886,17 +884,17 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             case Constants.LOCATION_TAB:
                 icon.setImageDrawable(res.getDrawable(R.drawable.location_icon));
-                title.setText(session.getServerCountryCode());
+                title.setText(LanternApp.getSession().getServerCountryCode());
                 break;
             case Constants.YINBI_AUCTION_TAB:
                 icon.setImageDrawable(res.getDrawable(R.drawable.yinbi_icon_small));
                 break;
             case Constants.DATA_USAGE_TAB:
-                if (session.isProUser()) {
-                    title.setText(session.getProTimeLeft());
+                if (LanternApp.getSession().isProUser()) {
+                    title.setText(LanternApp.getSession().getProTimeLeft());
                     icon.setImageDrawable(res.getDrawable(R.drawable.time_small_icon));
                 } else {
-                    title.setText(session.savedBandwidth());
+                    title.setText(LanternApp.getSession().savedBandwidth());
                     icon.setImageDrawable(res.getDrawable(R.drawable.data_usage_off_icon));
                 }
                 break;
@@ -906,7 +904,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void setupTabs() {
         final LayoutInflater inflater = getLayoutInflater();
         final Resources res = getResources();
-        final boolean useVpn = session.useVpn();
+        final boolean useVpn = LanternApp.getSession().useVpn();
 
         viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider() {
             @Override
@@ -955,9 +953,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     // getTabLayout gets the layout that showed be displayed
     // for the given tab position
     private int getTabLayout(final int position) {
-        final boolean useVpn = session.useVpn();
+        final boolean useVpn = LanternApp.getSession().useVpn();
         if (position == Constants.YINBI_AUCTION_TAB &&
-                session.yinbiEnabled()) {
+                LanternApp.getSession().yinbiEnabled()) {
             return R.layout.custom_tab_auction;
         }
         if (useVpn) {
@@ -1049,7 +1047,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                             if (yinbiEnabled) {
                                 setYinbiAuctionInfo();
                             }
-                            session.setYinbiEnabled(yinbiEnabled);
+                            LanternApp.getSession().setYinbiEnabled(yinbiEnabled);
                             onUserDataUpdate(user);
                         }
                     }

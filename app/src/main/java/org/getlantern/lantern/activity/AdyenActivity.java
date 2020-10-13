@@ -3,6 +3,7 @@ package org.getlantern.lantern.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
@@ -11,27 +12,25 @@ import com.adyen.core.interfaces.PaymentDataCallback;
 import com.adyen.core.interfaces.PaymentRequestListener;
 import com.adyen.core.models.Payment;
 import com.adyen.core.models.PaymentRequestResult;
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.getlantern.lantern.BuildConfig;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.LanternHttpClient;
+import org.getlantern.lantern.model.PaymentHandler;
+import org.getlantern.lantern.model.ProError;
+import org.getlantern.lantern.model.ProPlan;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 import java.util.Currency;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.getlantern.lantern.BuildConfig;
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
-
-import com.google.gson.JsonObject;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
@@ -40,7 +39,6 @@ public class AdyenActivity extends FragmentActivity implements PaymentRequestLis
 
     private static final String TAG = AdyenActivity.class.getSimpleName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
     public static final String PROVIDER = "Adyen";
 
     private final AtomicReference<String> setupRef = new AtomicReference<>();
@@ -74,15 +72,15 @@ public class AdyenActivity extends FragmentActivity implements PaymentRequestLis
             @NonNull PaymentDataCallback paymentDataCallback, @NonNull String token) {
         final HttpUrl url = LanternHttpClient.createProUrl("/adyen-setup");
         final JsonObject json = new JsonObject();
-        final ProPlan plan = session.getSelectedPlan();
-        final String locale = session.getLanguage();
+        final ProPlan plan = LanternApp.getSession().getSelectedPlan();
+        final String locale = LanternApp.getSession().getLanguage();
         final Currency currency = Currency.getInstance(new Locale(locale));
         json.addProperty("token", token);
         json.addProperty("plan", plan.getId());
         json.addProperty("channel", "Android");
         json.addProperty("locale", locale);
         json.addProperty("currency", currency.toString());
-        json.addProperty("deviceName", session.deviceName());
+        json.addProperty("deviceName", LanternApp.getSession().deviceName());
         json.addProperty("email", userEmail);
         json.addProperty("platform", "android");
         json.addProperty("appVersion", Utils.appVersion(this));
@@ -91,7 +89,7 @@ public class AdyenActivity extends FragmentActivity implements PaymentRequestLis
         if (!BuildConfig.COUNTRY.equals("")) {
             country = BuildConfig.COUNTRY;
         } else {
-            country = session.getCountryCode();
+            country = LanternApp.getSession().getCountryCode();
         }
         Logger.debug(TAG, "User country code: " + country + " currency: " + currency + " locale " + locale);
         json.addProperty("countryCode", country);

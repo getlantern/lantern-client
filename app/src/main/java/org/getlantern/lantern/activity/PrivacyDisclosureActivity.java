@@ -5,10 +5,9 @@ import android.view.View;
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.EActivity;
-
-import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.privacy_disclosure)
 public class PrivacyDisclosureActivity extends FragmentActivity {

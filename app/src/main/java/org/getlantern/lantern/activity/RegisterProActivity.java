@@ -13,7 +13,6 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.mobilesdk.Logger;
@@ -24,8 +23,6 @@ public class RegisterProActivity extends FragmentActivity {
     private static final String TAG = RegisterProActivity.class.getName();
     private static final int RESELLER_CODE_LEN = 29;
     private static final String PROVIDER = "reseller-code";
-
-    private final SessionManager session = LanternApp.getSession();
 
     private PaymentHandler paymentHandler;
 
@@ -100,9 +97,9 @@ public class RegisterProActivity extends FragmentActivity {
 
         Logger.debug(TAG, "User entered a valid reseller code " + resellerCode + " -- submitting purchase request");
 
-        session.setEmail(email);
-        session.setResellerCode(resellerCode);
-        session.setProvider("reseller-code");
+        LanternApp.getSession().setEmail(email);
+        LanternApp.getSession().setResellerCode(resellerCode);
+        LanternApp.getSession().setProvider("reseller-code");
         paymentHandler.sendPurchaseRequest();
     }
 }

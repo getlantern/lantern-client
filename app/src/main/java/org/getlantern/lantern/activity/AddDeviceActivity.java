@@ -3,22 +3,22 @@ package org.getlantern.lantern.activity;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.fragment.UserForm;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.fragment.UserForm;
+import org.getlantern.lantern.model.LanternHttpClient;
+import org.getlantern.lantern.model.ProError;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
-import com.google.gson.JsonObject;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -28,7 +28,6 @@ public class AddDeviceActivity extends FragmentActivity {
 
     private static final String TAG = AddDeviceActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
 
     @FragmentById(R.id.user_form_fragment)
     UserForm fragment;

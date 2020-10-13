@@ -1,35 +1,33 @@
 package org.getlantern.lantern.test;
 
+import android.content.Intent;
+import android.os.SystemClock;
+import android.util.Log;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiSelector;
+
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.LanternFreeActivity;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.content.Intent;
-import android.os.SystemClock;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
-import androidx.test.uiautomator.*;
-import android.util.Log;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
-
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import androidx.test.espresso.NoMatchingViewException;
-
-import org.getlantern.lantern.R;
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.activity.LanternFreeActivity;
-import org.getlantern.lantern.model.SessionManager;
 
 @RunWith(AndroidJUnit4.class)
 public class RenewalsTest {
@@ -37,7 +35,6 @@ public class RenewalsTest {
     private static final String TAG = RenewalsTest.class.getName();
     private UiDevice device;
 
-    private static final SessionManager session = LanternApp.getSession();
     private String minDatafile = "{\"groups\": [], \"projectId\": \"8504447126\", \"variables\": [{\"defaultValue\": \"true\", \"type\": \"boolean\", \"id\": \"8516291943\", \"key\": \"test_variable\"}], \"version\": \"3\", \"experiments\": [{\"status\": \"Running\", \"key\": \"android_experiment_key\", \"layerId\": \"8499056327\", \"trafficAllocation\": [{\"entityId\": \"8509854340\", \"endOfRange\": 5000}, {\"entityId\": \"8505434669\", \"endOfRange\": 10000}], \"audienceIds\": [], \"variations\": [{\"variables\": [], \"id\": \"8509854340\", \"key\": \"var_1\"}, {\"variables\": [], \"id\": \"8505434669\", \"key\": \"var_2\"}], \"forcedVariations\": {}, \"id\": \"8509139139\"}], \"audiences\": [], \"anonymizeIP\": true, \"attributes\": [], \"revision\": \"7\", \"events\": [{\"experimentIds\": [\"8509139139\"], \"id\": \"8505434668\", \"key\": \"test_event\"}], \"accountId\": \"8362480420\"}";
 
     @Rule
