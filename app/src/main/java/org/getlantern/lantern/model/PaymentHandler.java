@@ -22,7 +22,7 @@ import okhttp3.Response;
 
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 
 /**
  * PaymentHandler is a class for sending purchase requests to the pro server.

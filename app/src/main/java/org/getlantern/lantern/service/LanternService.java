@@ -21,7 +21,7 @@ import org.getlantern.lantern.model.LanternStatus.Status;
 import org.getlantern.lantern.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.Logger;

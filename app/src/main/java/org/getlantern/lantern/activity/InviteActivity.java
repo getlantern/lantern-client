@@ -3,22 +3,21 @@ package org.getlantern.lantern.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import androidx.fragment.app.FragmentActivity;
-
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.fragment.ProgressDialogFragment;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.fragment.ProgressDialogFragment;
+import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.invite_friends)
 public class InviteActivity extends FragmentActivity {
