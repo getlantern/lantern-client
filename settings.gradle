@@ -1,2 +1,1 @@
 include ':app', ':alipaySdk-15.6.5-20190718211148'
-include ':sdk'

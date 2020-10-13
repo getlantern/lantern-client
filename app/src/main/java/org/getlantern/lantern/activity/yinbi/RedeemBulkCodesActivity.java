@@ -26,7 +26,6 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
@@ -48,8 +47,7 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
     private static final String PROVIDER = "reseller-code";
 
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private PaymentHandler paymentHandler;
     private ProgressDialog dialog;
 
@@ -171,7 +169,7 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
             public void run() {
                 closeDialog();
                 Logger.debug(TAG, "Successful bulk codes request");
-                session.setShowRedemptionTable(true);
+                LanternApp.getSession().setShowRedemptionTable(true);
                 paymentHandler.convertToPro();
             }
         });
@@ -183,8 +181,8 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
             .add("idempotencyKey", Long.toString(System.currentTimeMillis()))
             .add("provider", "reseller-code")
             .add("email", userEmail)
-            .add("currency", session.currency().toLowerCase())
-            .add("deviceName", session.deviceName());
+            .add("currency", LanternApp.getSession().currency().toLowerCase())
+            .add("deviceName", LanternApp.getSession().deviceName());
         formBody.add("resellerCodes", TextUtils.join(",", codes));
 
         dialog = new ProgressDialog(this);

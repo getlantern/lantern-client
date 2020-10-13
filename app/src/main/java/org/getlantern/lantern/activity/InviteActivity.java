@@ -15,7 +15,6 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ProgressDialogFragment;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.mobilesdk.Logger;
 
@@ -23,8 +22,7 @@ import org.getlantern.mobilesdk.Logger;
 public class InviteActivity extends FragmentActivity {
 
     private static final String TAG = InviteActivity.class.getName();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private ProgressDialogFragment progressFragment;
     private Resources resources;
     private String code;
@@ -44,7 +42,7 @@ public class InviteActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        this.code = session.code();
+        this.code = LanternApp.getSession().code();
         Logger.debug(TAG, "referral code is " + this.code);
         referralCode.setText(this.code);
     }

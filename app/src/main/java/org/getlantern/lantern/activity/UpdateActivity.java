@@ -1,5 +1,7 @@
 package org.getlantern.lantern.activity;
 
+import android.Android;
+import android.Updater;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,26 +15,19 @@ import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import androidx.core.content.FileProvider;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
-
-import android.Android;
-import android.Updater;
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.R;
+import org.getlantern.mobilesdk.Logger;
 
 import java.io.File;
 
 @EActivity(R.layout.activity_updater)
 public class UpdateActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = UpdateActivity.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
 
     private UpdaterTask updaterTask;
     private ProgressDialog progressBar;

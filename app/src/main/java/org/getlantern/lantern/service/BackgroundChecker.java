@@ -3,26 +3,26 @@ package org.getlantern.lantern.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Handler;
+import android.os.IBinder;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import org.androidannotations.annotations.EService;
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.Logger;
 
-import org.androidannotations.annotations.EService;
 import java.lang.ref.WeakReference;
+
 import okhttp3.Response;
 
 @EService
 public class BackgroundChecker extends Service implements LanternHttpClient.ProUserCallback {
 
     private static final String TAG = BackgroundChecker.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     private final Handler handler = new Handler();
 

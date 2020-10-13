@@ -14,7 +14,6 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.PopUpAd;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
 
@@ -31,8 +30,7 @@ import com.bumptech.glide.Glide;
 @EActivity(R.layout.popupad_layout)
 public class PopUpAdActivity extends FragmentActivity {
     private static final String TAG = PopUpAdActivity.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
-
+    
     @Extra
     String popUpAdStr;
 
@@ -103,7 +101,7 @@ public class PopUpAdActivity extends FragmentActivity {
      * the corresponding popup ad found in loconf
      */
     private void updateLayout(final PopUpAd popUpAd) {
-        if (session.isProUser()) {
+        if (LanternApp.getSession().isProUser()) {
             renewProNow.setText(popUpAd.getRenewalButtonText());
             desc.setText(popUpAd.getContentMainScreenPro());
             details.setText(popUpAd.getContentMainScreenProDetails());
@@ -175,6 +173,6 @@ public class PopUpAdActivity extends FragmentActivity {
 
     @Click(R.id.renewProNow)
     void renewProNow(View view) {
-        startActivity(new Intent(this, session.plansActivity()));
+        startActivity(new Intent(this, LanternApp.getSession().plansActivity()));
     }
 }

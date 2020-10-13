@@ -5,22 +5,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.fragment.app.FragmentActivity;
+
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
-
-import com.google.gson.JsonObject;
+import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -31,8 +30,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
 
     private static final String TAG = RecoveryCodeActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
-
+    
     @ViewById
     EditText codeInput;
 
@@ -44,12 +42,12 @@ public class RecoveryCodeActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        emailWithRecoveryCode.setText(String.format(getResources().getString(R.string.email_recovery_code), session.email()));
+        emailWithRecoveryCode.setText(String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email()));
     }
 
     private void showLinkRequestSentAlert() {
         final String title = getResources().getString(R.string.account_recovery);
-        final String msg = String.format(getResources().getString(R.string.email_recovery_code), session.email());
+        final String msg = String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email());
         Utils.showAlertDialog(this, title, msg, false);
     }
 
@@ -101,9 +99,9 @@ public class RecoveryCodeActivity extends FragmentActivity {
     private void linkDevice(final JsonObject result) {
         Logger.debug(TAG, "Successfully validated recovery code");
         // update token and user ID with those returned by the pro server
-        session.setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
-        session.linkDevice();
-        session.setIsProUser(true);
+        LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
+        LanternApp.getSession().linkDevice();
+        LanternApp.getSession().setIsProUser(true);
         Intent intent = new Intent(this, LanternProActivity.class);
         intent.putExtra("snackbarMsg", getResources().getString(R.string.device_now_linked));
         startActivity(intent);

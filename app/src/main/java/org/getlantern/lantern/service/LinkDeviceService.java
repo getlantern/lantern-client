@@ -11,7 +11,6 @@ import org.getlantern.lantern.activity.LanternProActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.R;
 
 import okhttp3.FormBody;
@@ -29,8 +28,7 @@ public class LinkDeviceService extends Service implements LanternHttpClient.ProC
 
     private static final String TAG = LinkDeviceService.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
-
+    
     private final Handler linkDeviceHandler = new Handler();
     private int redeemCalls = 0;
     private int maxRedeemCalls = 20;
@@ -47,8 +45,8 @@ public class LinkDeviceService extends Service implements LanternHttpClient.ProC
             final LinkDeviceService s = service.get();
             if (s != null) {
                 final RequestBody formBody = new FormBody.Builder()
-                    .add("code", session.deviceCode())
-                    .add("deviceName", session.deviceName())
+                    .add("code", LanternApp.getSession().deviceCode())
+                    .add("deviceName", LanternApp.getSession().deviceName())
                     .build();
 
                 lanternClient.post(LanternHttpClient.createProUrl("/link-code-redeem"),
@@ -101,11 +99,11 @@ public class LinkDeviceService extends Service implements LanternHttpClient.ProC
         Logger.debug(TAG, "Successfully redeemed link code");
         final Integer userID = result.get("userID").getAsInt();
         final String token = result.get("token").getAsString();
-        session.setUserIdAndToken(userID, token);
+        LanternApp.getSession().setUserIdAndToken(userID, token);
         Logger.debug(TAG, "Linked device to user " + userID + " whose token is " + token);
 
-        session.linkDevice();
-        session.setIsProUser(true);
+        LanternApp.getSession().linkDevice();
+        LanternApp.getSession().setIsProUser(true);
 
         try {
             final Context context = getApplicationContext();
