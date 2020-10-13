@@ -1,28 +1,27 @@
 package org.getlantern.lantern.model;
 
 import android.app.Activity;
-import android.content.Context;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonObject;
+
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.service.BackgroundChecker_;
 import org.getlantern.lantern.activity.WelcomeActivity_;
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_;
+import org.getlantern.lantern.service.BackgroundChecker_;
+import org.getlantern.mobilesdk.Lantern;
+import org.getlantern.mobilesdk.Logger;
 
-import com.google.gson.JsonObject;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
-
-import org.getlantern.mobilesdk.Lantern;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.SessionManager;
 
 /**
  * PaymentHandler is a class for sending purchase requests to the pro server.
@@ -31,7 +30,6 @@ public class PaymentHandler {
 
     private static final String TAG = PaymentHandler.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
     private static final Integer MAX_TRIES_CHECK_PRO = 40;
 
     private final Activity activity;
@@ -70,12 +68,12 @@ public class PaymentHandler {
         }
 
         final Intent checkerIntent = new Intent(activity, BackgroundChecker_.class);
-        checkerIntent.putExtra("renewal", session.isProUser());
-        checkerIntent.putExtra("numProMonths", session.numProMonths());
+        checkerIntent.putExtra("renewal", LanternApp.getSession().isProUser());
+        checkerIntent.putExtra("numProMonths", LanternApp.getSession().numProMonths());
         checkerIntent.putExtra("maxCalls", MAX_TRIES_CHECK_PRO);
         checkerIntent.putExtra("asBroadcast", asBroadcast);
         checkerIntent.putExtra("provider", provider);
-        if (session.yinbiEnabled()) {
+        if (LanternApp.getSession().yinbiEnabled()) {
             checkerIntent.putExtra("nextActivity", "org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_");
         } else {
             checkerIntent.putExtra("nextActivity", "org.getlantern.lantern.activity.WelcomeActivity_");
@@ -85,14 +83,14 @@ public class PaymentHandler {
 
     public void convertToPro() {
         final Intent intent;
-        if (session.yinbiEnabled()) {
-            session.setShowRedemptionTable(true);
+        if (LanternApp.getSession().yinbiEnabled()) {
+            LanternApp.getSession().setShowRedemptionTable(true);
             intent = new Intent(activity, YinbiWelcomeActivity_.class);
         } else {
             intent = new Intent(activity, WelcomeActivity_.class);
         }
-        session.linkDevice();
-        session.setIsProUser(true);
+        LanternApp.getSession().linkDevice();
+        LanternApp.getSession().setIsProUser(true);
 
         intent.putExtra("provider", provider);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -123,18 +121,18 @@ public class PaymentHandler {
     public void sendPurchaseRequest() {
         final HttpUrl url = LanternHttpClient.createProUrl("/purchase");
         final JsonObject json = new JsonObject();
-        final ProPlan plan = session.getSelectedPlan();
+        final ProPlan plan = LanternApp.getSession().getSelectedPlan();
         Logger.debug(TAG, "Sending purchase request with provider: " + provider);
         FormBody.Builder formBody = new FormBody.Builder()
-            .add("resellerCode", session.resellerCode())
-            .add("stripeEmail", session.email())
-            .add("stripePublicKey", session.stripePubKey())
-            .add("stripeToken", session.stripeToken())
+            .add("resellerCode", LanternApp.getSession().resellerCode())
+            .add("stripeEmail", LanternApp.getSession().email())
+            .add("stripePublicKey", LanternApp.getSession().stripePubKey())
+            .add("stripeToken", LanternApp.getSession().stripeToken())
             .add("idempotencyKey", Long.toString(System.currentTimeMillis()))
             .add("provider", provider)
-            .add("email", session.email())
-            .add("currency", session.currency().toLowerCase())
-            .add("deviceName", session.deviceName());
+            .add("email", LanternApp.getSession().email())
+            .add("currency", LanternApp.getSession().currency().toLowerCase())
+            .add("deviceName", LanternApp.getSession().deviceName());
 
         if (!TextUtils.isEmpty(token)) {
             formBody.add("token", token);
@@ -171,7 +169,7 @@ public class PaymentHandler {
 
     public static void sendPurchaseEvent(final Context context,
             final String provider, final String error) {
-        final ProPlan plan = session.getSelectedPlan();
+        final ProPlan plan = LanternApp.getSession().getSelectedPlan();
         if (plan == null) {
             Logger.error(TAG, "No plan specified. Not logging purchase event");
             return;
@@ -192,11 +190,11 @@ public class PaymentHandler {
         }
 
         // original_currency/value indicate the true amount paid by the user
-        params.putFloat("original_value", (float) (session.getSelectedPlanCost() / 100.0));
-        params.putString("original_currency", session.getSelectedPlanCurrency());
+        params.putFloat("original_value", (float) (LanternApp.getSession().getSelectedPlanCost() / 100.0));
+        params.putString("original_currency", LanternApp.getSession().getSelectedPlanCurrency());
         params.putString("plan", plan.getId());
         params.putString("provider", provider);
-        params.putString("country", session.getCountryCode());
+        params.putString("country", LanternApp.getSession().getCountryCode());
 
         if (error == null) {
             // The 'ecommerce_purchase' event type is a specific event type

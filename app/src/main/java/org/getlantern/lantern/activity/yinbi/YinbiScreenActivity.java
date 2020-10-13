@@ -1,11 +1,12 @@
 package org.getlantern.lantern.activity.yinbi;
 
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
 
+import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.activity.WebViewActivity_;
+import org.getlantern.lantern.fragment.ClickSpan;
 
 public class YinbiScreenActivity extends YinbiActivity {
     private static final String TAG = YinbiScreenActivity.class.getName();
@@ -26,7 +27,7 @@ public class YinbiScreenActivity extends YinbiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!session.isProUser()) {
+        if (!LanternApp.getSession().isProUser()) {
             renewPro.setText(getResources().getString(R.string.buy_pro_get_yinbi));
             yinbiDesc.setText(getResources().getString(R.string.lantern_partnered_yinbi_free));
         } else {

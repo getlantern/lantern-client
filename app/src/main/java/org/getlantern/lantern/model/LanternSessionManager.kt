@@ -18,7 +18,7 @@ import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SessionManager(context: Context) : SessionManager(context) {
+class LanternSessionManager(context: Context) : SessionManager(context) {
     private var selectedPlan: ProPlan? = null
 
     // the devices associated with a user's Pro account
@@ -394,7 +394,7 @@ class SessionManager(context: Context) : SessionManager(context) {
         return referral
     }
 
-    fun unlinkDevice(newUser: Boolean) {
+    fun unlinkDevice() {
         devices.clear()
         setIsProUser(false)
         editor.putBoolean(PRO_USER, false)
@@ -464,7 +464,6 @@ class SessionManager(context: Context) : SessionManager(context) {
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"
         private const val DEVICE_CODE_EXP = "devicecodeexp"
         private const val YINBI_ENABLED = "yinbienabled"
-        private const val YINBI_USER_ID = "yinbiuserid"
         private const val YINBI_THANKS_PURCHASE = "showyinbithankspurchase"
         private const val SHOW_YINBI_REDEMPTION = "showyinbiredemption"
         private const val REMOTE_CONFIG_PAYMENT_PROVIDER = "remoteConfigPaymentProvider"

@@ -12,23 +12,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
-import java.util.Map;
+
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Device;
 import org.getlantern.lantern.model.DeviceView;
-import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
+import org.getlantern.mobilesdk.Logger;
 
-import com.google.gson.JsonObject;
+import java.util.Map;
+
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -38,8 +38,7 @@ public class ProAccountActivity extends FragmentActivity {
 
     private static final String TAG = ProAccountActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
-
+    
     @ViewById
     TextView proAccountText, freeMonthsText, emailAddress;
 
@@ -56,25 +55,25 @@ public class ProAccountActivity extends FragmentActivity {
     @AfterViews
     void afterViews() {
         dialog = new ProgressDialog(ProAccountActivity.this);
-        if (!session.deviceLinked()) {
+        if (!LanternApp.getSession().deviceLinked()) {
             finish();
             return;
         }
 
         proAccountText.setText(String.format(
                     getResources().getString(R.string.pro_account_expires),
-                    session.getExpirationStr()));
+                    LanternApp.getSession().getExpirationStr()));
 
         updateDeviceList();
 
-        emailAddress.setText(session.email());
+        emailAddress.setText(LanternApp.getSession().email());
     }
 
     public void updateDeviceList() {
         if (deviceList != null && deviceList.getChildCount() > 0)
             deviceList.removeAllViews();
 
-        Map<String, Device> devices = session.getDevices();
+        Map<String, Device> devices = LanternApp.getSession().getDevices();
         if (devices.size() == 1) {
             onlyOneDevice = true;
         }
@@ -129,7 +128,7 @@ public class ProAccountActivity extends FragmentActivity {
                     @Override
                     public void run() {
                         removeDeviceView(deviceId);
-                        if (deviceId.equals(session.getDeviceID())) {
+                        if (deviceId.equals(LanternApp.getSession().getDeviceID())) {
                             // if one of the devices we removed is the current device
                             // make sure to logout
                             logout(null);
@@ -149,13 +148,13 @@ public class ProAccountActivity extends FragmentActivity {
 
     public void logout(View view) {
         Logger.debug(TAG, "Logout button clicked.");
-        session.unlinkDevice(true);
+        LanternApp.getSession().unlinkDevice();
         startActivity(new Intent(this, LanternFreeActivity.class));
     }
 
     public void renewPro(View view) {
         Logger.debug(TAG, "Renew Pro button clicked.");
-        startActivity(new Intent(this, session.plansActivity()));
+        startActivity(new Intent(this, LanternApp.getSession().plansActivity()));
     }
 
     public void unauthorizeDevice(View view) {

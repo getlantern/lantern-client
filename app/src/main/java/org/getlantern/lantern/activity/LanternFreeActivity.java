@@ -7,15 +7,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Bandwidth;
 import org.getlantern.lantern.model.Constants;
-import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.ProUser;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.UserStatus;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
-
+import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -48,7 +48,7 @@ public class LanternFreeActivity extends BaseActivity {
             snackbarMsg = getIntent().getStringExtra("snackbarMsg");
         }
 
-        setHeaderLogo(session.useVpn());
+        setHeaderLogo(LanternApp.getSession().useVpn());
 
         Utils.showPlainSnackbar(coordinatorLayout, snackbarMsg);
     }
@@ -56,7 +56,7 @@ public class LanternFreeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (session.yinbiEnabled()) {
+        if (LanternApp.getSession().yinbiEnabled()) {
             upgradeToPro.setText(getResources().getString(R.string.upgrade_to_pro_yinbi));
         }
     }
@@ -66,7 +66,7 @@ public class LanternFreeActivity extends BaseActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     startActivity(new Intent(LanternFreeActivity.this,
-                                session.plansActivity()));
+                                LanternApp.getSession().plansActivity()));
                 }
             });
         }

@@ -10,8 +10,8 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import org.androidannotations.annotations.EService;
-import org.greenrobot.eventbus.EventBus;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.model.CheckUpdate;
@@ -21,12 +21,12 @@ import org.getlantern.lantern.model.LanternStatus.Status;
 import org.getlantern.lantern.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
 
@@ -40,7 +40,6 @@ public class LanternService extends Service implements Runnable {
 
   private static final String TAG = LanternService.class.getName();
   private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-  private static final SessionManager session = LanternApp.getSession();
   private Thread thread = null;
 
   private final Handler createUserHandler = new Handler(Looper.getMainLooper());
@@ -59,7 +58,7 @@ public class LanternService extends Service implements Runnable {
   @Override
   public IBinder onBind(Intent intent) {
     Logger.d(TAG, "onBind");
-    synchronized (session) {
+    synchronized (LanternApp.getSession()) {
       if (thread == null) {
         Logger.d(TAG, "starting Lantern service thread");
         thread = new Thread(this, "LanternService");
@@ -76,26 +75,26 @@ public class LanternService extends Service implements Runnable {
     // move the current thread of the service to the background
     android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-    final String locale = session.getLanguage();
-    final Settings settings = session.getSettings();
+    final String locale = LanternApp.getSession().getLanguage();
+    final Settings settings = LanternApp.getSession().getSettings();
     try {
       Logger.debug(TAG, "Successfully loaded config: " + settings.toString());
-      final StartResult result = Lantern.enable(this, locale, session.getSettings(), session);
-      session.setStartResult(result);
+      final StartResult result = Lantern.enable(this, locale, LanternApp.getSession().getSettings(), LanternApp.getSession());
+      LanternApp.getSession().setStartResult(result);
       afterStart();
 
     } catch (LanternNotRunningException lnre) {
       Logger.e(TAG, "Unable to start LanternService", lnre);
       throw new RuntimeException("Could not start Lantern", lnre);
     } finally {
-      synchronized (session) {
+      synchronized (LanternApp.getSession()) {
         doStop();
       }
     }
   }
 
   private void afterStart() {
-    if (session.userId() == 0) {
+    if (LanternApp.getSession().userId() == 0) {
       // create a user if no user id is stored
       createUser(0);
     }
@@ -136,7 +135,7 @@ public class LanternService extends Service implements Runnable {
     public void run() {
       final HttpUrl url = LanternHttpClient.createProUrl("/user-create");
       final JsonObject json = new JsonObject();
-      json.addProperty("locale", session.getLanguage());
+      json.addProperty("locale", LanternApp.getSession().getLanguage());
       lanternClient.post(url, LanternHttpClient.createJsonBody(json), this);
     }
 
@@ -163,10 +162,10 @@ public class LanternService extends Service implements Runnable {
       }
       createUserHandler.removeCallbacks(createUserRunnable);
       Logger.debug(TAG, "Created new Lantern user: " + user.newUserDetails());
-      session.setUserIdAndToken(user.getUserId(), user.getToken());
+      LanternApp.getSession().setUserIdAndToken(user.getUserId(), user.getToken());
       final String referral = user.getReferral();
       if (!TextUtils.isEmpty(referral)) {
-        session.setCode(referral);
+        LanternApp.getSession().setCode(referral);
       }
       EventBus.getDefault().post(new LanternStatus(Status.ON));
     }
@@ -186,7 +185,7 @@ public class LanternService extends Service implements Runnable {
   }
 
   private void stop() {
-    synchronized (session) {
+    synchronized (LanternApp.getSession()) {
       if (thread != null) {
         thread.interrupt();
       } else {
