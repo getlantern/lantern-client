@@ -17,7 +17,7 @@ import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 
 import com.google.gson.JsonObject;

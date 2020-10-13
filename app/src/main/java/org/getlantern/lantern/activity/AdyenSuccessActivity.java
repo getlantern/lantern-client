@@ -10,7 +10,7 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.R;
 
 @EActivity(R.layout.adyen_success_layout)

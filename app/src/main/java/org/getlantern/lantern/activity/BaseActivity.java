@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
@@ -72,7 +71,7 @@ import org.getlantern.lantern.model.NavItem;
 import org.getlantern.lantern.model.PopUpAd;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Survey;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
@@ -1034,29 +1033,31 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void updateUserData() {
-        lanternClient.userData(new LanternHttpClient.ProUserCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch user data", throwable);
-            }
+        if (LanternApp.supportsPro()) {
+            lanternClient.userData(new LanternHttpClient.ProUserCallback() {
+                @Override
+                public void onFailure(final Throwable throwable, final ProError error) {
+                    Logger.error(TAG, "Unable to fetch user data", throwable);
+                }
 
-            @Override
-            public void onSuccess(final Response response, final ProUser user) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (user != null) {
-                            final boolean yinbiEnabled = user.getYinbiEnabled();
-                            if (yinbiEnabled) {
-                                setYinbiAuctionInfo();
+                @Override
+                public void onSuccess(final Response response, final ProUser user) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (user != null) {
+                                final boolean yinbiEnabled = user.getYinbiEnabled();
+                                if (yinbiEnabled) {
+                                    setYinbiAuctionInfo();
+                                }
+                                session.setYinbiEnabled(yinbiEnabled);
+                                onUserDataUpdate(user);
                             }
-                            session.setYinbiEnabled(yinbiEnabled);
-                            onUserDataUpdate(user);
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     // Recreate the activity when the language changes

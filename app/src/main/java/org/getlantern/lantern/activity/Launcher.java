@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 
 public class Launcher extends Activity {
 

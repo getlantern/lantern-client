@@ -37,6 +37,7 @@ import org.androidannotations.annotations.ViewById;
 import androidx.annotation.NonNull;
 
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.SessionManager;
 
 @EFragment
 public class WelcomeDialog extends DialogFragment {

@@ -11,7 +11,7 @@ import org.getlantern.lantern.activity.LanternProActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.R;
 
 import okhttp3.FormBody;

@@ -25,7 +25,7 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.Launcher;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.mobilesdk.Logger;

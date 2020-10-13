@@ -30,7 +30,7 @@ import org.getlantern.lantern.model.AuctionInfo;
 import org.getlantern.lantern.model.Bandwidth;
 import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.UserStatus;
 import org.getlantern.lantern.model.Utils;
