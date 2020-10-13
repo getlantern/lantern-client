@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

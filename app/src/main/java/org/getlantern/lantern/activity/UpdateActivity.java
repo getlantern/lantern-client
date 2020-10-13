@@ -24,7 +24,7 @@ import android.Android;
 import android.Updater;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.R;
 
 import java.io.File;

@@ -13,7 +13,7 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 
 import android.EmailMessage;
 import android.EmailResponseHandler;

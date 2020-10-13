@@ -1,22 +1,22 @@
 package org.getlantern.lantern.activity;
 
-import androidx.fragment.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
-import org.getlantern.mobilesdk.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
+import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.lantern.model.PaymentHandler;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.reseller_register_pro)
 public class RegisterProActivity extends FragmentActivity {
