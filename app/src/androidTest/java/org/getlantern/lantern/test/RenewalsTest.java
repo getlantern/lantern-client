@@ -29,7 +29,7 @@ import androidx.test.espresso.NoMatchingViewException;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.activity.LanternFreeActivity;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 
 @RunWith(AndroidJUnit4.class)
 public class RenewalsTest {

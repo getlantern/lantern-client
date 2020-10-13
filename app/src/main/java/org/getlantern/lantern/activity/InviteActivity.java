@@ -16,7 +16,7 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.fragment.ProgressDialogFragment;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
 

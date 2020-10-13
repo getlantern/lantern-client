@@ -18,7 +18,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProxySettings;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.mobilesdk.model.SessionManager;
 
 @EActivity(R.layout.webview)
 public class WebViewActivity extends FragmentActivity {
