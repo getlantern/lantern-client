@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import org.getlantern.lantern.activity.LanternProActivity;
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.R;
 
 import org.androidannotations.annotations.AfterViews;

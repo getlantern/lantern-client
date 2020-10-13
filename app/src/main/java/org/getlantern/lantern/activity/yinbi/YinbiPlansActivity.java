@@ -14,7 +14,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.PlansActivity;
 import org.getlantern.lantern.model.DynamicViewPager;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.model.SessionManager;
+import org.getlantern.lantern.model.SessionManager;
 
 public class YinbiLauncher extends Activity {
 

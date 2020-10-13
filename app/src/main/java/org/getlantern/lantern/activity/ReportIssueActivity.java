@@ -2,12 +2,13 @@ package org.getlantern.lantern.activity;
 
 import android.os.AsyncTask;
 import android.os.Build;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -15,13 +16,12 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.MailSender;
-import org.getlantern.mobilesdk.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.lantern.model.MailSender;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.activity_report_issue)
 public class ReportIssueActivity extends FragmentActivity {
