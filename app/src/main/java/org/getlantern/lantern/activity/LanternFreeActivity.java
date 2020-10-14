@@ -41,29 +41,6 @@ public class LanternFreeActivity extends BaseActivity {
         return R.layout.activity_lantern_free_main;
     }
 
-    private void updateTabText(final int pos, final String newText) {
-        final View tab = viewPagerTab.getTabAt(pos);
-        if (tab == null) {
-            return;
-        }
-        final TextView title = tab.findViewById(R.id.tabText);
-        if (title != null) {
-            title.setText(newText);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(final Stats st) {
-        if (st != null) {
-            updateTabText(Constants.LOCATION_TAB,
-                    st.getCountryCode());
-        }
-    }
-
-    public void close(View view) {
-        viewPager.setCurrentItem(0);
-    }
-
     private void setHeaderLogo(boolean useVpn) {
         if (useVpn) {
             headerLogo.setImageResource(R.drawable.lantern_logo_white);

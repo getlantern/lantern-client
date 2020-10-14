@@ -64,50 +64,10 @@
             android:paddingBottom="80dp"
             tools:context=".LanternMainActivity">
 
-            <com.ogaclejapan.smarttablayout.SmartTabLayout
-                android:id="@+id/viewPagerTab"
+            <fragment android:name="org.getlantern.mobilesdk.fragment.MainSwitch"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="25dp"
-                android:background="@color/custom_tab_icon"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                app:stl_indicatorAlwaysInCenter="false"
-                app:stl_indicatorWithoutPadding="false"
-                app:stl_indicatorInFront="false"
-                app:stl_indicatorInterpolation="smart"
-                app:stl_indicatorGravity="bottom"
-                app:stl_indicatorColor="@android:color/transparent"
-                app:stl_indicatorThickness="0dp"
-                app:stl_indicatorWidth="auto"
-                app:stl_indicatorCornerRadius="2dp"
-                app:stl_overlineColor="@android:color/transparent"
-                app:stl_overlineThickness="0dp"
-                app:stl_underlineColor="@android:color/transparent"
-                app:stl_underlineThickness="0dp"
-                app:stl_dividerColor="@android:color/transparent"
-                app:stl_dividerThickness="0dp"
-                app:stl_defaultTabTextMinWidth="20dp"
-                app:stl_defaultTabBackground="@android:color/transparent"
-                app:stl_defaultTabTextAllCaps="true"
-                app:stl_defaultTabTextColor="@color/black"
-                app:stl_defaultTabTextSize="12sp"
-                app:stl_defaultTabTextHorizontalPadding="10dp"
-                app:stl_distributeEvenly="true"
-                app:stl_clickable="true"
-                app:stl_drawDecorationAfterTab="false"
-                />
+                android:layout_height="match_parent" />
 
-            <org.getlantern.lantern.model.DynamicViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="10dp"
-                android:layout_below="@+id/viewPagerTab"
-                />
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

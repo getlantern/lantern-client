@@ -32,7 +32,7 @@ class LoConf {
     var popUpAds: Map<String, PopUpAd>? = null
 
     companion object {
-        private val TAG = LoConf.javaClass.name;
+        private val TAG = LoConf::class.java.name
         private const val LOCONF_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"
         private const val LOCONF_STAGING_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"
 
@@ -52,7 +52,7 @@ class LoConf {
             fetch(cb, loconfUrl)
         }
 
-        private fun fetch(cb: LoConfCallback, loconfUrl: String?) {
+        private fun fetch(cb: LoConfCallback, loconfUrl: String) {
             val builder = HttpUrl.parse(loconfUrl)!!.newBuilder()
             LanternApp.getHttpClient().request("GET", builder.build(), object : HttpCallback {
                 override fun onFailure(throwable: Throwable?) {
