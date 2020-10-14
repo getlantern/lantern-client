@@ -12,11 +12,7 @@ public class Launcher extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Intent intent;
-        if (LanternApp.getSession().isProUser()) {
-            intent = new Intent(this, LanternProActivity.class);
-        } else {
-            intent = new Intent(this, LanternFreeActivity.class);
-        }
+        intent = new Intent(this, LanternFreeActivity.class);
         startActivity(intent);
         finish();
     }

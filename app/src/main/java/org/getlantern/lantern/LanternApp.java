@@ -21,20 +21,16 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.getlantern.lantern.activity.BaseActivity;
+import org.getlantern.lantern.model.BeamSessionManager;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.model.VpnState;
+import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.ProdLogger;
+import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.getlantern.lantern.activity.BaseActivity;
-import org.getlantern.lantern.model.InAppBilling;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.LanternSessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.model.VpnState;
-import org.getlantern.lantern.model.WelcomeDialog;
-import org.getlantern.lantern.model.WelcomeDialog_;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.ProdLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,15 +39,12 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
   private static final String TAG = LanternApp.class.getName();
   private static Context appContext;
-  private static LanternHttpClient lanternHttpClient;
-  private static LanternSessionManager session;
-  private static InAppBilling inAppBilling;
+  private static HttpClient httpClient;
+  private static BeamSessionManager session;
   private static boolean isForeground;
-  private static boolean supportsPro;
   private FirebaseRemoteConfig firebaseRemoteConfig;
 
   private static final String FIREBASE_BACKEND_HEADER_PREFIX = "x_lantern_";
-  private static final String FIREBASE_PAYMENT_PROVIDER_KEY = "payment_provider";
   private static final String FIREBASE_WELCOME_SCREEN_KEY = "welcome_screen";
   private static final String FIREBASE_WELCOME_SCREEN_NONE = "do_not_show";
   private static final String FIREBASE_RECENT_INSTALL_USER_PROPERTY = "recent_first_install";
@@ -61,7 +54,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
       FIREBASE_WELCOME_SCREEN_NONE);
 
   private Activity currentActivity;
-  private WelcomeDialog welcome;
 
   @Override
   public void onCreate() {
@@ -88,12 +80,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     appContext = getApplicationContext();
-    session = new LanternSessionManager(appContext);
-    if (Utils.isPlayVersion(this)) {
-      inAppBilling = new InAppBilling(this);
-    }
-    lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
-        (int) session.getSettings().getHttpProxyPort());
+    session = new BeamSessionManager(appContext);
+    httpClient = new HttpClient(
+            session.getSettings().getHttpProxyHost(),
+            (int) session.getSettings().getHttpProxyPort());
     initFirebase();
     updateFirebaseConfig();
 
@@ -150,18 +140,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
       }
     }
     session.setInternalHeaders(headers);
-
-    final String paymentProvider = firebaseRemoteConfig.getString(FIREBASE_PAYMENT_PROVIDER_KEY);
-    if (!paymentProvider.equals("")) {
-      Logger.debug(TAG, "Setting remote config payment provider to " + paymentProvider);
-      session.setRemoteConfigPaymentProvider(paymentProvider);
-    }
-    if (session.showWelcomeScreen()) {
-      Logger.debug(TAG, "Show welcome screen.");
-      showWelcomeScreen();
-    } else {
-      Logger.debug(TAG, "Skipping welcome screen.");
-    }
   }
 
   @Override
@@ -192,6 +170,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
   }
 
+  public static HttpClient getHttpClient() {
+    return httpClient;
+  }
+
   public static boolean isForeground() {
     return isForeground;
   }
@@ -213,40 +195,8 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     return this.currentActivity;
   }
 
-  private void showWelcomeScreen() {
-    if (getCurrentActivity() == null) {
-      return;
-    }
-
-    String experiment;
-    if (session.isProUser() || session.isExpired()) {
-      return; // experiment = WelcomeDialog.LAYOUT_RENEWAL;
-    } else {
-      experiment = firebaseRemoteConfig.getString(FIREBASE_WELCOME_SCREEN_KEY);
-      Logger.debug(TAG, String.format("welcome_screen = `%s`", experiment));
-    }
-
-    if (!WelcomeDialog.isSupportedLayout(experiment)) {
-      Logger.debug(TAG, String.format("No supported welcome screen configured (`%s`), skipping.", experiment));
-      return;
-    }
-
-    welcome = WelcomeDialog_.builder().layout(experiment).build();
-    if (welcome == null) {
-      Logger.error(TAG, "Could not create welcome screen dialog");
-      return;
-    }
-
-    session.setWelcomeLastSeen();
-    welcome.show(getCurrentActivity().getFragmentManager(), "dialog");
-  }
-
   public static Context getAppContext() {
     return appContext;
-  }
-
-  public static LanternHttpClient getLanternHttpClient() {
-    return lanternHttpClient;
   }
 
   @Override
@@ -269,20 +219,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
   }
 
-  public static LanternSessionManager getSession() {
+  public static BeamSessionManager getSession() {
     return session;
-  }
-
-  public static InAppBilling getInAppBilling() {
-    return inAppBilling;
-  }
-
-  public static void getPlans(LanternHttpClient.PlansCallback cb) {
-    if (Utils.isPlayVersion(appContext)) {
-      Map<String, ProPlan> plans = inAppBilling.getPlans();
-      cb.onSuccess(plans);
-    } else {
-      lanternHttpClient.getPlans(cb);
-    }
   }
 }

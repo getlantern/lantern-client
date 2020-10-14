@@ -81,6 +81,8 @@
     <color name="reportIssueHintText">#bebdbd</color>
     <color name="alipayEditText">#bebdbc</color>
 
+    <color name="white">#FFFFFF</color>
+
     <color name="material_link">#0095a8</color>
     <color name="material_button_text">#ffffff</color>
     <color name="money">#e23872</color>

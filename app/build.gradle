@@ -241,17 +241,6 @@ dependencies {
     implementation fileTree(dir: "libs", include:"libbeam-${androidArch()}.aar")
 
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
-    implementation(name:'paymentwall-android-sdk', ext: 'aar')
-
-    implementation 'com.adyen.checkout:core:1.14.1'
-    implementation 'com.adyen.checkout:utils:1.14.1'
-    implementation 'com.adyen.checkout:ui:1.14.1'
-    implementation 'com.adyen.checkout:cardscan:1.14.1'
-
-    implementation project(':alipaySdk-15.6.5-20190718211148')
-    implementation(name:'alipayadapter-release', ext: 'aar') {
-        transitive = true
-    }
 
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
     implementation 'io.github.inflationx:viewpump:2.0.2'

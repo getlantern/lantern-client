@@ -11,15 +11,6 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.bind" />
 
-    <permission
-        android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
-        android:label="Request for sending mobiamobroadcast to Mobiamo"
-        android:protectionLevel="signature" />
-
-    <uses-permission
-        android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
         android:name="org.getlantern.lantern.LanternApp"
         android:hardwareAccelerated="true"
@@ -30,11 +21,6 @@
         android:icon="@drawable/lantern_icon"
         android:theme="@style/AppTheme"
         android:label="@string/app_name">
-
-        <activity
-            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
 
         <service
             android:enabled="true"
@@ -85,138 +71,15 @@
         </activity>
 
         <activity
-            android:name="org.getlantern.lantern.activity.LanternProActivity"
-            android:configChanges="layoutDirection|locale"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="optly7925850924" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.AddDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name=".activity.LinkDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.AccountRecoveryActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.RecoveryCodeActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.SubmitAccountActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.AdyenActivity_"
-            android:configChanges="locale|layoutDirection"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
-
-        <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-        </activity>
-
-
-        <activity
-            android:name=".activity.AdyenSuccessActivity_"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
-
-
-        <activity
-            android:name=".activity.WelcomeActivity_"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
-
-        <activity
-            android:name=".activity.InviteActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".activity.DesktopActivity_"
-            android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.ReportIssueActivity_"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="org.getlantern.lantern.activity.LanternPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiRenewActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiScreenActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiRedemptionActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.TestPaymentActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.YinbiWelcomeActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.RegisterProActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.Gate2ShopActivity_"
             android:screenOrientation="portrait"
             />
 
@@ -226,29 +89,9 @@
             />
 
         <activity
-            android:name=".activity.FwpTutorialActivity_"
-            android:screenOrientation="portrait"
-            />
+            android:name=".activity.DesktopActivity_"
+            android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".activity.CheckoutActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.YinbiRedemptionActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.RedeemBulkCodesActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.ProAccountActivity_"
-            android:screenOrientation="portrait"
-            />
         <activity
             android:name="org.getlantern.mobilesdk.activity.LanguageActivity"
             android:screenOrientation="portrait"
@@ -284,9 +127,6 @@
                 <action android:name="android.net.VpnService"/>
             </intent-filter>
         </service>
-
-        <service android:enabled="true" android:name=".service.LinkDeviceService_"/>
-        <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
 
         <receiver android:name="org.getlantern.lantern.model.Notify">
             <intent-filter>

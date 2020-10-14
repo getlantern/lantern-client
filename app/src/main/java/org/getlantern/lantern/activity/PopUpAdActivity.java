@@ -170,9 +170,4 @@ public class PopUpAdActivity extends FragmentActivity {
         moreInfo.setVisibility(View.VISIBLE);
         findOutMore.setVisibility(View.VISIBLE);
     }
-
-    @Click(R.id.renewProNow)
-    void renewProNow(View view) {
-        startActivity(new Intent(this, LanternApp.getSession().plansActivity()));
-    }
 }
