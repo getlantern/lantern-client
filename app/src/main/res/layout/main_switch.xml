@@ -1,47 +1,134 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainSwitchLayout"
-    android:background="@color/custom_tab_icon"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <data>
+                <import type="android.view.View"/>
+                <variable name="location" type="String" />
+                <variable name="on" type="Boolean" />
+        </data>
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/mainSwitchChildLayout"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
+        <RelativeLayout
+            android:id="@+id/mainSwitchLayout"
+            android:background="@color/custom_tab_icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-                <com.kyleduo.switchbutton.SwitchButton
-                    android:id="@+id/powerLantern"
-                    style="@style/SwitchButtonMainStyle"
-                    android:adjustViewBounds="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingBottom="20dp"
-                    android:layout_width="104dp"
+                <LinearLayout
+                    android:id="@+id/mainSwitchChildLayout"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                        <com.kyleduo.switchbutton.SwitchButton
+                            android:id="@+id/powerLantern"
+                            style="@style/SwitchButtonMainStyle"
+                            android:adjustViewBounds="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/ibmplexmono_regular"
+                            android:gravity="center"
+                            android:paddingBottom="20dp"
+                            android:layout_width="104dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{on}" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/statusOff"
+                    android:visibility='@{on ? View.GONE : View.VISIBLE}'
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="@{@string/app_name + ' ' + @string/is}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+
+                                <TextView
+                                    android:text="@{@string/off_text + ':'}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textAppearance="@style/MediumText"
+                                    android:layout_marginLeft="6sp"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:text="Flip the switch to access blocked sites"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="6sp"
+                            android:textSize="12sp"
+                            android:lineHeight="19sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/statusOn"
+                    android:visibility="@{on ? View.VISIBLE : View.GONE}"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/underSwitchText"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:gravity="center"
-                    android:layout_below="@+id/powerLantern"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:lineSpacingMultiplier="1.1"
-                    android:textColor="@color/black"
-                    android:textAppearance="@style/LightText"
-                    android:alpha="0.75"
-                    android:text="@string/turn_on_lantern"
-                    android:textSize="13sp"
-                    />
-        </LinearLayout>
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center">
 
-</RelativeLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="@{@string/app_name + ' ' + @string/is}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+
+                                <TextView
+                                    android:text="@{@string/on_text + ':'}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textAppearance="@style/MediumText"
+                                    android:layout_marginLeft="6sp"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10sp">
+
+                                <TextView
+                                    android:text='@string/server_location'
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+
+                                <TextView
+                                    android:text="@{location}"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textAppearance="@style/MediumText"
+                                    android:layout_marginLeft="6sp"
+                                    android:textSize="12sp"
+                                    android:lineHeight="19sp" />
+                        </LinearLayout>
+
+
+                </LinearLayout>
+
+        </RelativeLayout>
+</layout>

@@ -48,10 +48,4 @@ public class LanternFreeActivity extends BaseActivity {
             headerLogo.setImageResource(R.drawable.lantern_logo);
         }
     }
-
-    @Override
-    public void updateTheme(boolean useVpn) {
-        super.updateTheme(useVpn);
-        setHeaderLogo(useVpn);
-    }
 }

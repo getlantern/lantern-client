@@ -41,8 +41,8 @@
     <string name="submit_code">Confirm Code</string>
     <string name="on_text">ON</string>
     <string name="off_text">OFF</string>
-    <string name="lantern_off">Lantern is Off. Flip the switch to access blocked sites and services!</string>
-    <string name="lantern_on">Lantern is On. You can now access blocked sites and services!</string>
+    <string name="is">is</string>
+    <string name="flip_switch">Flip the switch to access blocked sites and services!</string>
     <string name="on_desc">You can now access\r\nblocked sites and services</string>
     <string name="off_desc">Click the button to access blocked sites and services</string>
     <string name="service_connected">Lantern connected</string>
@@ -367,6 +367,7 @@
     <string name="account_left_desc">You have %1$d months of Lantern Pro left in your account</string>
     <string name="optimized_location">Optimized server location</string>
     <string name="current_location">Current Location: </string>
+    <string name="server_location">Server Location</string>
     <string name="disconnected">Disconnected</string>
     <string name="https_upgrades">HTTPS Upgrades</string>
     <string name="data_usage">Data Usage</string>

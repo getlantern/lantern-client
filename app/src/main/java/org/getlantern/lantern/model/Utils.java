@@ -81,22 +81,6 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
     }
 
-    public static void showToastMessage(LayoutInflater inflater, Activity activity, Context context, String message) {
-        View statusLayout = inflater.inflate(R.layout.status_layout,
-                (ViewGroup)activity.findViewById(R.id.status_layout_root));
-        TextView statusText  = (TextView)statusLayout.findViewById(R.id.statusText);
-        ImageView statusImage = (ImageView)statusLayout.findViewById(R.id.statusImage);
-        statusImage.setImageResource(R.drawable.status_on_white);
-        statusText.setText(context.getResources().getString(R.string.referral_copied_to_clipboard));
-        Toast toast = new Toast(context);
-        toast.setGravity(Gravity.BOTTOM|Gravity.FILL_HORIZONTAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(statusLayout);
-        if (!activity.isFinishing()) {
-            toast.show();
-        }
-    }
-
     // isPlayVersion checks whether or not the user installed Lantern via
     // the Google Play store
     public static boolean isPlayVersion(Context context) {
