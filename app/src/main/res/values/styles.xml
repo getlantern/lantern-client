@@ -9,7 +9,11 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:textAppearance">@style/RegularText</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/AlertButtonPositive</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButtonPositive</item>
     </style>
 
     <style name="AppTheme.AdAttribution">
@@ -67,7 +71,9 @@
         <item name="kswBackColor">@color/black</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:textAppearance">@style/RegularText</item>
     </style>
 
     <style name="SwitchButtonSettingStyle">
@@ -76,7 +82,8 @@
         <item name="kswTextMarginH">0dp</item>
         <item name="kswThumbColor">@color/accent_white</item>
         <item name="kswBackColor">@color/setting_off</item>
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
     </style>
 
 
@@ -149,8 +156,6 @@
         <item name="android:layout_weight">0.8</item>
     </style>
 
-
-
     <style name="FinestWebViewTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/webview_header</item>
         <item name="colorPrimaryDark">@color/black</item>
@@ -218,7 +223,8 @@
         <item name="boxCornerRadiusTopEnd">4dp</item>
         <item name="boxCornerRadiusBottomStart">4dp</item>
         <item name="boxCornerRadiusBottomEnd">4dp</item>
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
     </style>
 
     <style name="MaterialField" parent="@android:style/Widget.EditText">
@@ -226,7 +232,8 @@
         <item name="android:layout_height">48dp</item>
         <item name="android:drawablePadding">10dp</item>
         <item name="android:background">@null</item>
-        <item name="android:fontFamily">@font/ibmplexmono_regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:autoText">false</item>
@@ -236,7 +243,8 @@
     <style name="MaterialButton" parent="@style/TextAppearance.MaterialComponents.Button">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:fontFamily">@font/ibmplexmono_medium</item>
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="fontFamily">@font/medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14sp</item>
         <item name="android:lineSpacingExtra">5sp</item>
@@ -252,24 +260,33 @@
         <item name="android:background">#bfbfbf</item>
     </style>
 
+    <style name="AlertButtonPositive" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/selected_item</item>
+    </style>
+
     <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/ibmplexmono_thin</item>
-        <item name="fontFamily">@font/ibmplexmono_thin</item>
+        <item name="android:fontFamily">@font/thin</item>
+        <item name="fontFamily">@font/thin</item>
     </style>
 
     <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/ibmplexmono_light</item>
-        <item name="fontFamily">@font/ibmplexmono_light</item>
+        <item name="android:fontFamily">@font/light</item>
+        <item name="fontFamily">@font/light</item>
+    </style>
+
+    <style name="RegularText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
     </style>
 
     <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/ibmplexmono_medium</item>
-        <item name="fontFamily">@font/ibmplexmono_medium</item>
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="fontFamily">@font/medium</item>
     </style>
 
     <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/ibmplexmono_medium</item>
-        <item name="fontFamily">@font/ibmplexmono_medium</item>
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="fontFamily">@font/medium</item>
         <item name="android:textColor">@color/black</item>
     </style>
 

@@ -8,3 +8,4 @@ libs/
 obj/
 lantern-mobile.iml
 app.iml
+.DS_Store

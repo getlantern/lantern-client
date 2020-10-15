@@ -3,7 +3,6 @@ package org.getlantern.lantern.activity;
 import android.Android;
 import android.Updater;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -173,7 +173,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
             alertDialog.setTitle(context.getString(R.string.error_update));
             alertDialog.setMessage(context.getString(R.string.manual_update));
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

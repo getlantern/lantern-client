@@ -25,7 +25,6 @@
                             android:adjustViewBounds="true"
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center"
-                            android:fontFamily="@font/ibmplexmono_regular"
                             android:gravity="center"
                             android:paddingBottom="20dp"
                             android:layout_width="104dp"

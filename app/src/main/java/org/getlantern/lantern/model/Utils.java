@@ -3,7 +3,6 @@ package org.getlantern.lantern.model;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -26,16 +25,13 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.util.Patterns;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
@@ -254,7 +250,7 @@ public class Utils {
                 AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
                 alertDialog.setTitle(title);
                 alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, okLabel,
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, okLabel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
