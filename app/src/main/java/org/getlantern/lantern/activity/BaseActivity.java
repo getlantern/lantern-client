@@ -188,6 +188,21 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
         updateUserData();
     }
 
+    @Override
+    protected int getSideMenuIDs() {
+        return LanternApp.getSession().isProUser() ? R.array.pro_side_menu_ids : R.array.free_side_menu_ids;
+    }
+
+    @Override
+    protected int getSideMenuIconIDs() {
+        return LanternApp.getSession().isProUser() ? R.array.pro_side_menu_icons : R.array.free_side_menu_icons;
+    }
+
+    @Override
+    protected int getSideMenuOptions() {
+        return LanternApp.getSession().isProUser() ? R.array.pro_side_menu_options : R.array.free_side_menu_options;
+    }
+
     /**
      * drawerItemClicked is called whenever an item in the
      * navigation menu is clicked on
