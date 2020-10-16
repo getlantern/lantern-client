@@ -261,26 +261,6 @@ class LanternSessionManager(context: Context) : SessionManager(context) {
         return prefs.getString(EXPIRY_DATE_STR, "")
     }
 
-    /**
-     * hasPrefExpired checks whether or not a particular
-     * shared preference has expired (assuming its stored value
-     * is a date in milliseconds plus numDays). If the pref hasn't been seen
-     * before, false is returned.
-     */
-    fun hasPrefExpired(name: String?): Boolean {
-        val expires = prefs.getLong(name, 0)
-        return System.currentTimeMillis() >= expires
-    }
-
-    /**
-     * saveExpiringPref is used to store a preference with the given name that
-     * expires after numSeconds
-     */
-    fun saveExpiringPref(name: String?, numSeconds: Int) {
-        val currentMilliseconds = System.currentTimeMillis()
-        editor.putLong(name, currentMilliseconds + numSeconds * 1000).commit()
-    }
-
     fun showWelcomeScreen(): Boolean {
         if (isExpired()) {
             return showRenewalPref()
@@ -340,10 +320,6 @@ class LanternSessionManager(context: Context) : SessionManager(context) {
 
     fun setExpired(expired: Boolean) {
         editor.putBoolean(PRO_EXPIRED, expired).commit()
-    }
-
-    fun setEmail(email: String?) {
-        editor.putString(EMAIL_ADDRESS, email).commit()
     }
 
     fun setResellerCode(code: String?) {
@@ -413,9 +389,7 @@ class LanternSessionManager(context: Context) : SessionManager(context) {
         editor.commit()
     }
 
-    override fun storeUserData(user: ProUser?) {
-        super.storeUserData(user)
-
+    fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user!!.email != "") {
             setEmail(user!!.email)
         }

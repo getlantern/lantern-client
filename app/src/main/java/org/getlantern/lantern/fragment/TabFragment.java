@@ -49,25 +49,20 @@ public class TabFragment extends Fragment {
   // Always operated from main thread as one subscriber of EventBus.
   private HashSet<Long> notifiedBWPercents = new HashSet<>();
 
-  private CompoundButton.OnCheckedChangeListener switchListener;
-
   private int position;
 
   private AuctionCountDown countDown;
 
   private ProgressBar progressBar;
 
-  private SwitchButton powerLantern;
-
-  private RelativeLayout mainSwitchLayout;
   private ViewGroup tabLayout;
 
   private ImageView closeBtn, tabIcon;
 
   private TextView currentLoc, headerText, subtitle, tabText, tokensReleased, totalReleased, timeLeft, timeLeftGiveaway,
-      upgradeNow, underSwitchText;
+      upgradeNow;
 
-  final static int[] layouts = new int[] { R.layout.main_switch, R.layout.current_location, R.layout.yinbi_auction_info,
+  final static int[] layouts = new int[] { R.layout.main_switch_wrapper, R.layout.current_location, R.layout.yinbi_auction_info,
       R.layout.data_usage };
 
   @Override
@@ -100,20 +95,6 @@ public class TabFragment extends Fragment {
     EventBus.getDefault().unregister(this);
   }
 
-  private void configureSwitchView(View view) {
-    powerLantern = (SwitchButton) view.findViewById(R.id.powerLantern);
-    mainSwitchLayout = (RelativeLayout) view.findViewById(R.id.mainSwitchLayout);
-    underSwitchText = (TextView) view.findViewById(R.id.underSwitchText);
-
-    switchListener = new CompoundButton.OnCheckedChangeListener() {
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Logger.debug(TAG, "Calling switch lantern (switch button clicked)");
-        switchLantern(isChecked);
-      }
-    };
-    powerLantern.setOnCheckedChangeListener(switchListener);
-  }
-
   private void configureTabViews(View view) {
     // common text among tabs that changes color depending on if
     // there's an active VPN connection or not
@@ -139,39 +120,6 @@ public class TabFragment extends Fragment {
     }
 
     return inflater.inflate(layouts[position], container, false);
-  }
-
-  private void updateSwitchLayout(final boolean on) {
-    final Resources r = getResources();
-
-    powerLantern.setBackColorRes(on ? R.color.on_color : R.color.black);
-    powerLantern.setOnCheckedChangeListener(null);
-    powerLantern.setChecked(on);
-    powerLantern.setOnCheckedChangeListener(switchListener);
-
-    mainSwitchLayout.setBackgroundColor(r.getColor(on ? R.color.pro_blue_color : R.color.custom_tab_icon));
-    underSwitchText.setText(on ? r.getString(R.string.lantern_on_text) : r.getString(R.string.turn_on_lantern));
-    underSwitchText.setTextColor(r.getColor(on ? R.color.accent_white : R.color.black));
-  }
-
-  private void switchLantern(final boolean isChecked) {
-    try {
-      // temporary disable to prevent repeated toggling
-      powerLantern.setEnabled(false);
-      ((BaseActivity) getActivity()).switchLantern(isChecked);
-      new Handler(getActivity().getMainLooper()).postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          // re-enable after 2000ms
-          powerLantern.setEnabled(true);
-        }
-      }, 2000);
-    } catch (Exception e) {
-      Logger.error(TAG, "Could not establish VPN connection: ", e);
-      powerLantern.setOnCheckedChangeListener(null);
-      powerLantern.setChecked(false);
-      powerLantern.setOnCheckedChangeListener(switchListener);
-    }
   }
 
   private void setBandwidthUpdate(final Bandwidth update) {
@@ -327,7 +275,6 @@ public class TabFragment extends Fragment {
 
   private void updateLayout(final Resources r, final boolean on) {
     if (tabLayout == null) {
-      updateSwitchLayout(on);
       ((BaseActivity) getActivity()).updateTheme(on);
       return;
     }
@@ -422,9 +369,7 @@ public class TabFragment extends Fragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    if (position == Constants.MAIN_SWITCH_TAB) {
-      configureSwitchView(view);
-    } else {
+    if (position != Constants.MAIN_SWITCH_TAB) {
       configureTabViews(view);
     }
 

@@ -18,7 +18,7 @@ import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
 import org.getlantern.lantern.model.LanternStatus.Status;
-import org.getlantern.lantern.model.LoConf;
+import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
 import org.getlantern.mobilesdk.Lantern;
@@ -26,6 +26,7 @@ import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
+import org.getlantern.mobilesdk.model.LoConfCallback;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
@@ -107,7 +108,7 @@ public class LanternService extends Service implements Runnable {
     EventBus.getDefault().post(new LanternStatus(Status.ON));
 
     // fetch latest loconf
-    lanternClient.fetchLoConf(new LanternHttpClient.LoConfCallback() {
+    LoConf.Companion.fetch(new LoConfCallback() {
       @Override
       public void onSuccess(final LoConf loconf) {
         EventBus.getDefault().post(loconf);
