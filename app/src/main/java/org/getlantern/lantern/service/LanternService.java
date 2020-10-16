@@ -13,12 +13,12 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.LanternStatus;
 import org.getlantern.lantern.model.LanternStatus.Status;
-import org.getlantern.lantern.model.LoConf;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
+import org.getlantern.mobilesdk.model.LoConf;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
