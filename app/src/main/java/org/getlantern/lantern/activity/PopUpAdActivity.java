@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PopUpAd;
+import org.getlantern.mobilesdk.model.PopUpAd;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
 

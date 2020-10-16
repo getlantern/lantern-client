@@ -21,6 +21,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -248,6 +249,8 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
   public static LanternHttpClient getLanternHttpClient() {
     return lanternHttpClient;
   }
+
+  public static HttpClient getHttpClient() { return lanternHttpClient; }
 
   @Override
   protected void attachBaseContext(Context base) {

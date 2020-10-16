@@ -1,11 +1,12 @@
 package org.getlantern.lantern.fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import org.getlantern.lantern.R;
 

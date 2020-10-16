@@ -14,6 +14,7 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.util.HttpClient;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -41,13 +42,9 @@ import okio.Buffer;
 /**
  * An OkHttp-based HTTP client.
 */
-public class LanternHttpClient {
+public class LanternHttpClient extends HttpClient {
     private static final String TAG = LanternHttpClient.class.getName();
     private static final String API_ADDR = getApiAddr();
-
-    // The primary OkHttpClient instance that gets reused for all of our HTTP
-    // calls
-    private final OkHttpClient httpClient;
 
     private static final String LOCONF_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json";
     private static final String LOCONF_STAGING_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json";
@@ -64,23 +61,13 @@ public class LanternHttpClient {
         = MediaType.parse("application/json; charset=utf-8");
 
     /**
-     * Creates a new HTTP client using the specified {@link LanternApp.getSession().Manager}.
+     * Creates a new HTTP client
      *
      * @param proxyHost The host of the local proxy.
      * @param proxyPort The port of the local proxy.
      */
     public LanternHttpClient(final String proxyHost, final int proxyPort) {
-        // This is expected to be the address where the Lantern HTTP proxy
-        // is running at and will be used for connections created by this client
-        // currently set to the httpProxyHost and httpProxyPort in
-        // settings.yaml
-        this(new OkHttpClient.Builder()
-                .retryOnConnectionFailure(true)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-                .build());
-        Logger.debug(TAG, "Pro server address is " + API_ADDR);
+        super(proxyHost, proxyPort);
     }
 
     /**
@@ -89,7 +76,7 @@ public class LanternHttpClient {
      * @param httpClient The HTTP client to use.
      */
     public LanternHttpClient(final OkHttpClient httpClient) {
-        this.httpClient = httpClient;
+        super(httpClient);
     }
 
     /**
@@ -278,43 +265,6 @@ public class LanternHttpClient {
                 }
                 if (cb != null) {
                     cb.onSuccess(response, result);
-                }
-            }
-        });
-    }
-
-    /**
-     * Fetches the loconf config stored at
-     * https://raw.githubusercontent.com/getlantern/loconf/master/messages.json
-     *
-     * @param cb the callback to execute after the config is fetched
-    */
-    public void fetchLoConf(final LoConfCallback cb) {
-        Logger.debug(TAG, "Fetching loconf");
-        final String loconfUrl;
-        if (LanternApp.getSession().useStaging()) {
-            loconfUrl = LOCONF_STAGING_URL;
-        } else {
-            loconfUrl = LOCONF_URL;
-        }
-        fetchLoConf(cb, loconfUrl);
-    }
-
-    void fetchLoConf(final LoConfCallback cb, final String loconfUrl) {
-        final HttpUrl.Builder builder = HttpUrl.parse(loconfUrl).newBuilder();
-        request("GET", builder.build(), new ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch surveys", throwable);
-            }
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                try {
-                    Logger.debug(TAG, "JSON response" + result.toString());
-                    final LoConf loconf = new Gson().fromJson(result, LoConf.class);
-                    cb.onSuccess(loconf);
-                } catch (Exception e) {
-                    Logger.error(TAG, "Unable to parse surveys: " + e.getMessage(), e);
                 }
             }
         });
@@ -540,9 +490,5 @@ public class LanternHttpClient {
     public interface PlansCallback {
         public void onFailure(Throwable throwable, final ProError error);
         public void onSuccess(Map<String, ProPlan> plans);
-    }
-
-    public interface LoConfCallback {
-        public void onSuccess(LoConf loconf);
     }
 }
