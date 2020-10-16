@@ -1,5 +1,4 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
         <data>
                 <import type="android.view.View"/>
                 <variable name="location" type="String" />
@@ -125,8 +124,6 @@
                                     android:textSize="12sp"
                                     android:lineHeight="19sp" />
                         </LinearLayout>
-
-
                 </LinearLayout>
 
         </RelativeLayout>

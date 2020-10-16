@@ -170,10 +170,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
   }
 
-  public static HttpClient getHttpClient() {
-    return httpClient;
-  }
-
   public static boolean isForeground() {
     return isForeground;
   }
@@ -197,6 +193,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
   public static Context getAppContext() {
     return appContext;
+  }
+
+  public static HttpClient getHttpClient() {
+    return httpClient;
   }
 
   @Override
