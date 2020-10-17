@@ -17,9 +17,9 @@ android {
         }
     }
 
-    /*buildFeatures {
-        dataBinding = true
-    }*/
+    buildFeatures {
+        viewBinding true
+    }
 
     flavorDimensions "versionCode"
 
