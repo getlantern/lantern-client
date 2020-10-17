@@ -38,7 +38,7 @@ public class LanternProActivity extends BaseActivity {
             }
         });
 
-        setHeaderLogo(session.useVpn());
+        //setHeaderLogo(session.useVpn());
     }
 
     @Override
@@ -92,19 +92,19 @@ public class LanternProActivity extends BaseActivity {
         viewPager.setCurrentItem(0);
     }
 
-    private void setHeaderLogo(boolean useVpn) {
+    /*private void setHeaderLogo(boolean useVpn) {
         if (useVpn) {
             headerLogo.setImageResource(R.drawable.lantern_pro_logo_white);
         } else {
             headerLogo.setImageResource(R.drawable.lantern_pro_logo);
         }
 
-    }
+    }*/
 
     @Override
     public void updateTheme(boolean useVpn) {
         super.updateTheme(useVpn);
-        setHeaderLogo(useVpn);
+        //setHeaderLogo(useVpn);
         updateTabIcon(Constants.PRO_USER_TAB,
                 R.drawable.time_small_icon);
     }

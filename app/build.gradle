@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 
 android {
 
@@ -17,9 +17,9 @@ android {
         }
     }
 
-    buildFeatures {
-        dataBinding true
-    }
+    /*buildFeatures {
+        dataBinding = true
+    }*/
 
     flavorDimensions "versionCode"
 
@@ -330,7 +330,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.0-beta03'
 
-    kapt "com.android.databinding:compiler:3.0.0-beta6"
+    //kapt "com.android.databinding:compiler:3.0.0-beta6"
 
     annotationProcessor 'org.androidannotations:androidannotations:' + androidAnnotationsVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'

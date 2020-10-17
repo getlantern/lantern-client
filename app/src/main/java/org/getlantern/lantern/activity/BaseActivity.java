@@ -217,7 +217,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutId());
 
-        supportFragmentManager.beginTransaction().add(R.id.topBar, TopBarFragment()).commit();
+        //activity.getFragmentManager().beginTransaction().add(R.id.topBar, TopBarFragment()).commit();
 
         initViews();
 

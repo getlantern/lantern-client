@@ -48,7 +48,7 @@ public class LanternFreeActivity extends BaseActivity {
             snackbarMsg = getIntent().getStringExtra("snackbarMsg");
         }
 
-        setHeaderLogo(session.useVpn());
+        //setHeaderLogo(session.useVpn());
 
         Utils.showPlainSnackbar(coordinatorLayout, snackbarMsg);
     }
@@ -141,18 +141,18 @@ public class LanternFreeActivity extends BaseActivity {
         viewPager.setCurrentItem(0);
     }
 
-    private void setHeaderLogo(boolean useVpn) {
+    /*private void setHeaderLogo(boolean useVpn) {
         if (useVpn) {
             headerLogo.setImageResource(R.drawable.lantern_logo_white);
         } else {
             headerLogo.setImageResource(R.drawable.lantern_logo);
         }
-    }
+    }*/
 
     @Override
     public void updateTheme(boolean useVpn) {
         super.updateTheme(useVpn);
-        setHeaderLogo(useVpn);
+        //setHeaderLogo(useVpn);
         updateTabIcon(Constants.DATA_USAGE_TAB,
                 R.drawable.data_usage_off_icon);
     }
