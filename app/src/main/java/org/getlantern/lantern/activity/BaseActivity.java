@@ -217,9 +217,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutId());
 
-        //activity.getFragmentManager().beginTransaction().add(R.id.topBar, TopBarFragment()).commit();
-
         initViews();
+
+        TopBarFragment fragment = TopBarFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.topBar,
+            fragment).commit();
 
         statusSnackbar = Utils.formatSnackbar(
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.lantern_off), Snackbar.LENGTH_LONG));
