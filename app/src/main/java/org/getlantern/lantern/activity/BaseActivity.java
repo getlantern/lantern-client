@@ -58,6 +58,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.fragment.TabFragment;
+import org.getlantern.lantern.fragment.TopBarFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
 import org.getlantern.lantern.model.AuctionInfo;
 import org.getlantern.lantern.model.BannerAd;
@@ -111,6 +112,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected RelativeLayout drawerPane;
 
+    protected LinearLayout topBar;
+
     protected LinearLayout yinbiAdLayout;
 
     protected LinearLayout bulkRenewSection;
@@ -119,9 +122,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected DynamicViewPager viewPager;
 
-    protected ImageView menuIcon;
+    //protected ImageView menuIcon;
 
-    protected ImageView headerLogo;
+    //protected ImageView headerLogo;
 
     private TextView bulkRenew;
     protected TextView versionNum;
@@ -159,10 +162,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         bulkRenewSection = (LinearLayout) findViewById(R.id.bulkRenewSection);
 
-        headerLogo = (ImageView) findViewById(R.id.headerLogo);
+        //headerLogo = (ImageView) findViewById(R.id.headerLogo);
         viewPager = (DynamicViewPager) findViewById(R.id.viewPager);
         viewPagerTab = (SmartTabLayout) findViewById(R.id.viewPagerTab);
-        menuIcon = (ImageView) findViewById(R.id.menuIcon);
+        topBar = (LinearLayout) findViewById(R.id.topBar);
+        //menuIcon = (ImageView) findViewById(R.id.menuIcon);
         drawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerList = (ListView) findViewById(R.id.drawerList);
@@ -181,11 +185,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
 
-        menuIcon.setOnClickListener(new View.OnClickListener() {
+        /*menuIcon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
-        });
+        });*/
 
         privacyPolicyLink = (TextView) findViewById(R.id.privacyPolicyLink);
         termsOfServiceLink = (TextView) findViewById(R.id.termsOfServiceLink);
@@ -212,6 +216,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         setContentView(getLayoutId());
+
+        supportFragmentManager.beginTransaction().add(R.id.topBar, TopBarFragment()).commit();
 
         initViews();
 
@@ -1009,11 +1015,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             //colorFadeIn.start();
             viewPagerTab.setBackgroundColor(proBlueColor);
             coordinatorLayout.setBackgroundColor(proBlueColor);
-            menuIcon.setImageResource(R.drawable.menu_white);
+            //menuIcon.setImageResource(R.drawable.menu_white);
         } else {
             viewPagerTab.setBackgroundColor(customTabColor);
             coordinatorLayout.setBackgroundColor(customTabColor);
-            menuIcon.setImageResource(R.drawable.menu);
+            //menuIcon.setImageResource(R.drawable.menu);
         }
 
         for (int i = 1; i < Constants.NUM_HOME_TABS; i++) {
