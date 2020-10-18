@@ -54,7 +54,6 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.SideBarFragment;
 import org.getlantern.lantern.fragment.TabFragment;
 import org.getlantern.lantern.fragment.TopBarFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
@@ -169,7 +168,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
 
-        privacyPolicyLink = (TextView) findViewById(R.id.privacyPolicyLink);
+        /*privacyPolicyLink = (TextView) findViewById(R.id.privacyPolicyLink);
         termsOfServiceLink = (TextView) findViewById(R.id.termsOfServiceLink);
 
         privacyPolicyLink.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +181,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Utils.openTermsOfService(BaseActivity.this);
             }
-        });
+        });*/
     }
 
     @Override
@@ -197,15 +196,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         initViews();
 
-        SideBarFragment sideBar = SideBarFragment.newInstance();
         TopBarFragment fragment = TopBarFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction().add(R.id.topBar,
             fragment).commit();
-
-        getSupportFragmentManager().beginTransaction().add(R.id.sideBar,
-            sideBar).commit();
-
 
         statusSnackbar = Utils.formatSnackbar(
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.lantern_off), Snackbar.LENGTH_LONG));

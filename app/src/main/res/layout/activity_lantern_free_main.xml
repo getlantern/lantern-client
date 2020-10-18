@@ -9,15 +9,6 @@
     android:fitsSystemWindows="true">
 
 
-    <fragment
-        android:id="@+id/sideBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="org.getlantern.lantern.fragment.SideBarFragment"
-        android:layout_gravity="start"
-        tools:layout="@layout/side_bar"/>
-
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

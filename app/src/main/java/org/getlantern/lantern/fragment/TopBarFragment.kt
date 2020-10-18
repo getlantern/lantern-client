@@ -1,5 +1,6 @@
 package org.getlantern.lantern.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 
+import org.getlantern.lantern.activity.SidebarActivity
 import org.getlantern.lantern.R
 
 private const val TAG = "TopBarFragment"
@@ -40,11 +42,8 @@ class TopBarFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     menuIcon.setOnClickListener {
       Log.d(TAG, "Menu icon clicked")
-      val drawerLayout:DrawerLayout = requireActivity().findViewById<DrawerLayout>(
-        R.id.sideBar
-      )
-      Log.d(TAG, "drawer layout is " +  drawerLayout)
-      drawerLayout.openDrawer(GravityCompat.START)
+      val intent = Intent(getActivity(), SidebarActivity::class.java)
+      getActivity()?.startActivity(intent)
     }
   }
 

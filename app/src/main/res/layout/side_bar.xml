@@ -7,17 +7,17 @@
     android:background="@color/custom_tab_icon"
     tools:openDrawer="start"
     tools:context=".activity.BaseActivity"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
-      android:layout_width="250dp"
+      android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:elevation="7.5dp"
       android:background="@drawable/nav_background_white"
@@ -32,7 +32,7 @@
             android:layout_marginTop="10dp"
             android:padding="8dp" >
             <ImageView
-                android:id="@+id/backBtn"
+                android:id="@+id/menuIcon"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/backBtn"
+                android:layout_toRightOf="@+id/menuIcon"
                 android:orientation="vertical" >
 
                 <ImageView
