@@ -32,13 +32,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -55,8 +53,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.yinbi.YinbiLauncher;
 import org.getlantern.lantern.fragment.ClickSpan;
+import org.getlantern.lantern.fragment.SideBarFragment;
 import org.getlantern.lantern.fragment.TabFragment;
 import org.getlantern.lantern.fragment.TopBarFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
@@ -67,9 +65,7 @@ import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.DynamicViewPager;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
-import org.getlantern.lantern.model.ListAdapter;
 import org.getlantern.lantern.model.LoConf;
-import org.getlantern.lantern.model.NavItem;
 import org.getlantern.lantern.model.PopUpAd;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
@@ -105,12 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private String appVersion;
 
-    protected DrawerLayout drawerLayout;
-    private ListView drawerList;
-
     protected CoordinatorLayout coordinatorLayout;
-
-    protected RelativeLayout drawerPane;
 
     protected LinearLayout topBar;
 
@@ -134,8 +125,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected TextView privacyPolicyLink;
     protected TextView termsOfServiceLink;
     protected Snackbar statusSnackbar;
-
-    private ActionBarDrawerToggle drawerToggle;
 
     protected int white, cardBlueColor, proBlueColor, black, customTabColor;
 
@@ -162,14 +151,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         bulkRenewSection = (LinearLayout) findViewById(R.id.bulkRenewSection);
 
-        //headerLogo = (ImageView) findViewById(R.id.headerLogo);
         viewPager = (DynamicViewPager) findViewById(R.id.viewPager);
         viewPagerTab = (SmartTabLayout) findViewById(R.id.viewPagerTab);
         topBar = (LinearLayout) findViewById(R.id.topBar);
-        //menuIcon = (ImageView) findViewById(R.id.menuIcon);
-        drawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        drawerList = (ListView) findViewById(R.id.drawerList);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
@@ -184,12 +168,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 lanternClient.openBulkProCodes(BaseActivity.this);
             }
         });
-
-        /*menuIcon.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });*/
 
         privacyPolicyLink = (TextView) findViewById(R.id.privacyPolicyLink);
         termsOfServiceLink = (TextView) findViewById(R.id.termsOfServiceLink);
@@ -219,10 +197,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         initViews();
 
+        SideBarFragment sideBar = SideBarFragment.newInstance();
         TopBarFragment fragment = TopBarFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction().add(R.id.topBar,
             fragment).commit();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.sideBar,
+            sideBar).commit();
+
 
         statusSnackbar = Utils.formatSnackbar(
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.lantern_off), Snackbar.LENGTH_LONG));
@@ -261,7 +244,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             fetchLoConf();
         }
         setupTabs();
-        setupSideMenu();
+        //setupSideMenu();
         updateUserData();
 
         if (Utils.isPlayVersion(this)) {
@@ -318,81 +301,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void setupSideMenu() {
-        final BaseActivity activity = this;
-        final Resources resources = getResources();
-        final ArrayList<NavItem> navItems = new ArrayList<NavItem>();
-        final ListAdapter listAdapter = new ListAdapter(getApplicationContext(), navItems);
-
-        final TypedArray icons;
-        final TypedArray ids;
-        final String[] titles;
-        if (session.isProUser()) {
-            ids = getResources().obtainTypedArray(R.array.pro_side_menu_ids);
-            icons = getResources().obtainTypedArray(R.array.pro_side_menu_icons);
-            titles = getResources().getStringArray(R.array.pro_side_menu_options);
-        } else {
-            ids = getResources().obtainTypedArray(R.array.free_side_menu_ids);
-            icons = getResources().obtainTypedArray(R.array.free_side_menu_icons);
-            titles = getResources().getStringArray(R.array.free_side_menu_options);
-        }
-
-        for (int i = 0; i < titles.length; i++) {
-            final int id = ids.getResourceId(i, 0);
-            final int icon = icons.getResourceId(i, 0);
-            if (id == R.id.yinbi_redemption && !session.yinbiEnabled()) {
-                continue;
-            }
-            if (BuildConfig.PLAY_VERSION) {
-                if (id == R.id.check_for_update || id == R.id.get_lantern_pro) {
-                    continue;
-                }
-            }
-            navItems.add(new NavItem(id, titles[i], icon));
-        }
-
-        // Populate the Navigtion Drawer with options
-        drawerList.setAdapter(listAdapter);
-
-        // remove ListView border
-        drawerList.setDivider(null);
-
-        // Drawer Item click listeners
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final NavItem navItem = (NavItem) parent.getAdapter().getItem(position);
-                if (navItem != null) {
-                    drawerItemClicked(navItem, position);
-                }
-            }
-        });
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-
-        drawerLayout.setDrawerListener(drawerToggle);
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void lanternStarted(final LanternStatus status) {
         updateUserData();
@@ -428,19 +336,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
-    }
-
     /**
      * drawerItemClicked is called whenever an item in the
      * navigation menu is clicked on
      *
-     */
+     *
     private void drawerItemClicked(final NavItem navItem, final int position) {
         Class itemClass = null;
         switch (navItem.getId()) {
@@ -485,7 +385,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerPane);
-    }
+    }*/
 
     public void showSurvey(final Survey survey) {
 

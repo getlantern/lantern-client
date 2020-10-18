@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 
 import org.getlantern.lantern.R
-import org.getlantern.lantern.fragment.TopBarFragment as TopBarFragment
 
 private const val TAG = "TopBarFragment"
 
@@ -41,7 +40,10 @@ class TopBarFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     menuIcon.setOnClickListener {
       Log.d(TAG, "Menu icon clicked")
-      var drawerLayout = requireActivity().findViewById(R.id.drawerLayout)
+      val drawerLayout:DrawerLayout = requireActivity().findViewById<DrawerLayout>(
+        R.id.sideBar
+      )
+      Log.d(TAG, "drawer layout is " +  drawerLayout)
       drawerLayout.openDrawer(GravityCompat.START)
     }
   }
