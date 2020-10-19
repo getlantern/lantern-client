@@ -234,11 +234,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void openSidebar() {
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        /*SidebarFragment fragment = SidebarFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().add(R.id.sideBar,
-            fragment).commit();*/
-        drawerLayout.openDrawer(Gravity.START);
+        drawerLayout.openDrawer(Gravity.LEFT);
     }
 
     @Override

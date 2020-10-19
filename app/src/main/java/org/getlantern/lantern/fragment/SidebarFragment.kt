@@ -1,7 +1,8 @@
-package org.getlantern.lantern.activity
+package org.getlantern.lantern.fragment
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import android.content.res.TypedArray
 import android.os.Bundle
 import android.util.Log
@@ -22,37 +23,36 @@ import org.getlantern.lantern.model.NavItem
 import org.getlantern.lantern.model.SessionManager
 import org.getlantern.lantern.R
 
-private const val TAG = "SideBarFragment"
+private const val TAG = "SidebarFragment"
 
-class SidebarActivity : AppCompatActivity() {
+class SidebarFragment : Fragment() {
 
+  companion object {
+    @JvmStatic
+    fun newInstance(): SidebarFragment {
+      return SidebarFragment()
+    }
+    val session: SessionManager = LanternApp.getSession()
+  }
 
   private lateinit var drawerLayout: DrawerLayout
   private lateinit var drawerList: ListView
   private lateinit var drawerToggle: ActionBarDrawerToggle
   private lateinit var menuIcon: ImageView
 
-  companion object {
-    val session: SessionManager = LanternApp.getSession()
-  }
+  private val actionBar: ActionBar?
+        get() = (activity as AppCompatActivity).supportActionBar
 
   // Called when the fragment instantiates its UI view
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.side_bar)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
     
-    drawerLayout = findViewById(R.id.sideBar)
-    drawerList   = findViewById(R.id.drawerList)
-    menuIcon = findViewById(R.id.menuIcon)
-    menuIcon.setOnClickListener {
-      Log.d(TAG, "Menu icon clicked")
-      finish()
-    }
+    val view = inflater.inflate(R.layout.side_bar, container, false)
+    
+    drawerList   = view.findViewById(R.id.drawerList)
+    menuIcon = view.findViewById(R.id.menuIcon)
 
-    initSideMenu()
-    if (drawerToggle != null) {
-      drawerToggle.syncState()
-    }
+    return view
   }
 
   /**
@@ -64,10 +64,26 @@ class SidebarActivity : AppCompatActivity() {
     Log.d(TAG, "onDrawerOpened")
   }
 
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    val main = getActivity() as AppCompatActivity
+    drawerLayout = main.findViewById(R.id.drawerLayout)
+    
+    setHasOptionsMenu(true)
+    initSideMenu()
+
+    if (drawerToggle != null) {
+      drawerToggle.syncState()
+    }
+  }
+
+
   private fun initSideMenu() {
-     Log.d(TAG, "setupSideMenu")
+    Log.d(TAG, "setupSideMenu")
+
+
     val navItems: ArrayList<NavItem>? = ArrayList<NavItem>()
-    val listAdapter: ListAdapter = ListAdapter(getApplicationContext(), navItems)
+    val listAdapter: ListAdapter = ListAdapter(requireActivity().getApplicationContext(), navItems)
     val icons:TypedArray
     val ids:TypedArray
     val titles:Array<String>
@@ -96,7 +112,7 @@ class SidebarActivity : AppCompatActivity() {
     drawerList.setDivider(null)
 
     drawerToggle = object : ActionBarDrawerToggle(
-      this,
+      requireActivity(),
       drawerLayout,
       R.string.drawer_open, R.string.drawer_close,
     ) {
@@ -110,7 +126,7 @@ class SidebarActivity : AppCompatActivity() {
           Log.d(TAG, "onDrawerClosed")
         }
     }
-    drawerLayout.addDrawerListener(drawerToggle)
+    drawerLayout.setDrawerListener(drawerToggle)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
