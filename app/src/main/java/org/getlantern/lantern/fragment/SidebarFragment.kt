@@ -40,9 +40,6 @@ class SidebarFragment : Fragment() {
   private lateinit var drawerToggle: ActionBarDrawerToggle
   private lateinit var menuIcon: ImageView
 
-  private val actionBar: ActionBar?
-        get() = (activity as AppCompatActivity).supportActionBar
-
   // Called when the fragment instantiates its UI view
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
