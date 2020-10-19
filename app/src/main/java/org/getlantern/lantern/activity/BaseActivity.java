@@ -32,11 +32,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import android.view.Gravity;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -54,6 +57,7 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
+import org.getlantern.lantern.fragment.SidebarFragment;
 import org.getlantern.lantern.fragment.TabFragment;
 import org.getlantern.lantern.fragment.TopBarFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
@@ -112,6 +116,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected DynamicViewPager viewPager;
 
+    private DrawerLayout drawerLayout;
+
     //protected ImageView menuIcon;
 
     //protected ImageView headerLogo;
@@ -150,6 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         bulkRenewSection = (LinearLayout) findViewById(R.id.bulkRenewSection);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         viewPager = (DynamicViewPager) findViewById(R.id.viewPager);
         viewPagerTab = (SmartTabLayout) findViewById(R.id.viewPagerTab);
         topBar = (LinearLayout) findViewById(R.id.topBar);
@@ -201,6 +208,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.topBar,
             fragment).commit();
 
+        getSupportFragmentManager().beginTransaction().add(R.id.sideBar,
+            SidebarFragment.newInstance()).commit();
+
+
         statusSnackbar = Utils.formatSnackbar(
                 Snackbar.make(coordinatorLayout, getResources().getString(R.string.lantern_off), Snackbar.LENGTH_LONG));
 
@@ -211,7 +222,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         // support library, but with our custom design
         // we hide the default action bar
         if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
+            //getSupportActionBar().hide();
         }
 
         // make sure to show status bar
@@ -220,6 +231,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         setVersionNum();
+    }
+
+    public void openSidebar() {
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /*SidebarFragment fragment = SidebarFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.sideBar,
+            fragment).commit();*/
+        drawerLayout.openDrawer(Gravity.START);
     }
 
     @Override

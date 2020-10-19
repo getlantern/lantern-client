@@ -97,9 +97,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SidebarActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.AddDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>

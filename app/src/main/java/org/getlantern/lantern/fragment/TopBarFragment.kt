@@ -11,7 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 
-import org.getlantern.lantern.activity.SidebarActivity
+import org.getlantern.lantern.activity.BaseActivity
 import org.getlantern.lantern.R
 
 private const val TAG = "TopBarFragment"
@@ -42,8 +42,8 @@ class TopBarFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     menuIcon.setOnClickListener {
       Log.d(TAG, "Menu icon clicked")
-      val intent = Intent(getActivity(), SidebarActivity::class.java)
-      getActivity()?.startActivity(intent)
+      val activity = requireActivity() as BaseActivity
+      activity.openSidebar()
     }
   }
 
