@@ -67,5 +67,12 @@
           android:background="#ffffffff" />
 
     </RelativeLayout>
-    </LinearLayout>
+
+    <include
+      android:id="@+id/versionNumberLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      layout="@layout/version_number"/>
+
+  </LinearLayout>
 </FrameLayout>

@@ -72,7 +72,6 @@ class SidebarFragment : Fragment() {
   private fun initSideMenu() {
     Log.d(TAG, "setupSideMenu")
 
-
     val navItems: ArrayList<NavItem>? = ArrayList<NavItem>()
     val listAdapter: ListAdapter = ListAdapter(requireActivity().getApplicationContext(), navItems)
     val icons:TypedArray
