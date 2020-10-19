@@ -55,15 +55,6 @@ class SidebarFragment : Fragment() {
     return view
   }
 
-  /**
-     * drawerItemClicked is called whenever an item in the
-     * navigation menu is clicked on
-     *
-     */
-  private fun drawerItemClicked(item: NavItem, position: Int) {
-    Log.d(TAG, "onDrawerOpened")
-  }
-
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     val main = getActivity() as AppCompatActivity
