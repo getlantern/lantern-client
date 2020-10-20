@@ -57,9 +57,7 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.SidebarFragment;
 import org.getlantern.lantern.fragment.TabFragment;
-import org.getlantern.lantern.fragment.TopBarFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
 import org.getlantern.lantern.model.AuctionInfo;
 import org.getlantern.lantern.model.BannerAd;
@@ -80,6 +78,8 @@ import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.fragment.SidebarFragment;
+import org.getlantern.mobilesdk.fragment.TopBarFragment;
 
 import java.util.ArrayList;
 import java.util.List;

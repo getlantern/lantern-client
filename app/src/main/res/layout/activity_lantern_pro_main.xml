@@ -14,7 +14,7 @@
         android:layout_gravity="start"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="org.getlantern.lantern.fragment.SidebarFragment"
+        android:name="org.getlantern.mobilesdk.fragment.SidebarFragment"
         tools:layout="@layout/side_bar"/>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -29,7 +29,7 @@
             android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="org.getlantern.lantern.fragment.TopBarFragment"
+            android:name="org.getlantern.mobilesdk.fragment.TopBarFragment"
             tools:layout="@layout/top_bar"/>
 
         <!-- The main content view -->
