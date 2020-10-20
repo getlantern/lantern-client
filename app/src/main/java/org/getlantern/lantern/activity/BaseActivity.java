@@ -1,54 +1,29 @@
 package org.getlantern.lantern.activity;
 
-import android.Android;
-import android.Manifest;
-import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.net.VpnService;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.Html;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher;
@@ -56,34 +31,23 @@ import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.fragment.TabFragment;
 import org.getlantern.lantern.model.AuctionCountDown;
 import org.getlantern.lantern.model.AuctionInfo;
-import org.getlantern.mobilesdk.model.BannerAd;
-import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.DynamicViewPager;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
-import org.getlantern.lantern.model.ListAdapter;
-import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.lantern.model.NavItem;
-import org.getlantern.mobilesdk.model.PopUpAd;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
-import org.getlantern.mobilesdk.model.Survey;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.model.VpnState;
-import org.getlantern.lantern.service.LanternService_;
-import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.activity.LanguageActivity;
-import org.getlantern.mobilesdk.activity.SettingsActivity;
+import org.getlantern.mobilesdk.model.BannerAd;
+import org.getlantern.mobilesdk.model.LoConf;
+import org.getlantern.mobilesdk.model.Survey;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.Response;
@@ -94,10 +58,6 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
 
     protected static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     
-    private static final int REQUEST_VPN = 7777;
-
-    private static final int FULL_PERMISSIONS_REQUEST = 8888;
-
     private AuctionCountDown countDown;
 
     protected LinearLayout yinbiAdLayout;

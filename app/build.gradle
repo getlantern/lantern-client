@@ -21,7 +21,7 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
-    useLibrary 'android.test.runner'
+//    useLibrary 'android.test.runner'
 
     dexOptions {
         javaMaxHeapSize "8g"

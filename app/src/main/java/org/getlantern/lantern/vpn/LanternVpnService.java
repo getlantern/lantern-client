@@ -72,6 +72,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
   @Override
   public void onDestroy() {
+    Logger.d(TAG, "destroyed");
     doStop();
     super.onDestroy();
     unbindService(lanternServiceConnection);
@@ -79,7 +80,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
   @Override
   public void onRevoke() {
-    Logger.d(TAG, "revoke");
+    Logger.d(TAG, "revoked");
     stop();
   }
 
@@ -147,7 +148,7 @@ public class LanternVpnService extends VpnService implements Runnable {
       e.printStackTrace();
       Logger.error(TAG, "Error running VPN", e);
     } finally {
-      Logger.error(TAG, "Lantern terminated.");
+      Logger.debug(TAG, "Lantern terminated.");
       stop();
     }
   }
