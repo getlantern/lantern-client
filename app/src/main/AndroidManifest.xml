@@ -56,7 +56,7 @@
         </activity>
 
         <activity
-            android:name="org.getlantern.lantern.activity.LanternFreeActivity"
+            android:name="org.getlantern.lantern.activity.BeamFreeActivity"
             android:launchMode="singleTop"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"
