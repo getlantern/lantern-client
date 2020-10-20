@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.bind" />
 
     <application
-        android:name="org.getlantern.lantern.LanternApp"
+        android:name="org.getlantern.lantern.BeamApp"
         android:hardwareAccelerated="true"
         tools:replace="allowBackup, label"
         android:allowBackup="false"
