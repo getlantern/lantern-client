@@ -17,9 +17,9 @@ import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class LanternFreeActivity extends BaseActivity {
+public class BeamFreeActivity extends BaseActivity {
 
-    private static final String TAG = LanternFreeActivity.class.getName();
+    private static final String TAG = BeamFreeActivity.class.getName();
 
     private String snackbarMsg;
 
@@ -42,10 +42,6 @@ public class LanternFreeActivity extends BaseActivity {
     }
 
     private void setHeaderLogo(boolean useVpn) {
-        if (useVpn) {
-            headerLogo.setImageResource(R.drawable.lantern_logo_white);
-        } else {
-            headerLogo.setImageResource(R.drawable.lantern_logo);
-        }
+        headerLogo.setImageResource(R.drawable.beam_logo);
     }
 }
