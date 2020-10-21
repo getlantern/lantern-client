@@ -2,11 +2,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:background="@color/custom_tab_icon"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
+    <fragment
+        android:id="@+id/sideBar"
+        android:layout_gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="org.getlantern.mobilesdk.fragment.SideMenuFragment"
+        tools:layout="@layout/side_menu"/>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,42 +25,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <LinearLayout
-            android:id="@+id/topSection"
+        <fragment
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/menuIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|left"
-                    android:clickable="true"
-                    android:adjustViewBounds="true"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="15dp"
-                    android:src="@drawable/menu" />
-
-                <ImageView
-                    android:id="@+id/headerLogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:adjustViewBounds="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/beam_logo" />
-
-            </RelativeLayout>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:name="org.getlantern.mobilesdk.fragment.TopBarFragment"
+            tools:layout="@layout/top_bar"/>
 
         <!-- The main content view -->
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -112,59 +91,5 @@
 
             </LinearLayout>
         </RelativeLayout>
-        <!-- List of Actions (pages) -->
-        <ListView
-            android:id="@+id/drawerList"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profileBox"
-            android:choiceMode="singleChoice"
-            android:background="#ffffffff" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="16dp"                
-            android:orientation="vertical"
-            android:gravity="center" >
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/versionNum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|center_horizontal"
-                android:text=""
-                android:textSize="10sp"
-                android:textColor="#767676"
-                android:textStyle="bold" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal" >
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/privacyPolicyLink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/privacy_policy"
-                    android:textSize="10sp"
-                    android:textColor="#007a7c" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="|"
-                    android:textSize="10sp"
-                    android:textColor="#007a7c" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/termsOfServiceLink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/terms_of_service"
-                    android:textSize="10sp"
-                    android:textColor="#007a7c" />
-            </LinearLayout>
-        </LinearLayout>
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
