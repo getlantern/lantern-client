@@ -36,21 +36,20 @@
             android:paddingBottom="38dp"
             android:src="@drawable/account_management"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/deviceCodeText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:text="@string/device_code"
             android:textSize="14sp"
             android:gravity="center"
             android:textColor="@color/gray_device_link"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/deviceLinkingCode"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text=""
@@ -58,11 +57,11 @@
             android:textStyle="bold"
             android:textColor="@color/buy_pro"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/linkThisDevice"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:text="@string/link_this_device_0"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="28dp"
@@ -72,11 +71,10 @@
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/linkThisDevice1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:text="@string/link_this_device_1"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -87,11 +85,10 @@
                 android:textSize="14sp"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/linkThisDevice2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:text="@string/link_this_device_2"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -101,11 +98,10 @@
                 android:textSize="14sp"
                 android:textColor="@color/black"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/makeSureUpdated"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:text="@string/make_sure_updated"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"

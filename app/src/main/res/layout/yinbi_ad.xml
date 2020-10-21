@@ -21,19 +21,19 @@
         android:src="@drawable/yinbi_logo_black" />
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="163dp"
         android:layout_height="wrap_content"
         android:id="@+id/yinbiAdText"
         android:gravity="left"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingExtra="6sp"
         android:textSize="10sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/yinbiWebsite"
@@ -41,7 +41,7 @@
         android:textColorLink="@color/yinbi_red"
         android:gravity="right"
         android:layout_gravity="right|center_vertical"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:text="@string/visit_yinbi_website"
         android:textSize="14sp"
         android:paddingLeft="10dp"

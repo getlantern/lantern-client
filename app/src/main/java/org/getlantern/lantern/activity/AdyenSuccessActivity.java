@@ -1,17 +1,16 @@
 package org.getlantern.lantern.activity;
 
 import android.app.ProgressDialog;
+
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.LanternHttpClient;
+import org.getlantern.lantern.model.PaymentHandler;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.adyen_success_layout)
 public class AdyenSuccessActivity extends FragmentActivity {
@@ -19,7 +18,6 @@ public class AdyenSuccessActivity extends FragmentActivity {
     private static final String PROVIDER = "Adyen";
 
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
 
     private PaymentHandler paymentHandler;
 

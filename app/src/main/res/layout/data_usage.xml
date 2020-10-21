@@ -49,27 +49,26 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/data_usage_off" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/headerText"
                 android:layout_toRightOf="@+id/tabIcon"
                 android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
+                android:textAppearance="@style/LightText"
                 android:text=""
                 android:textSize="58sp"
                 />
         </LinearLayout>
 
     </RelativeLayout>
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:text="@string/data_usage"
         />
@@ -91,7 +90,7 @@
         />
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tabText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -101,14 +100,14 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:visibility="invisible"
         android:text="@string/data_usage_desc"
         android:textSize="18sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgradeNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,7 +116,6 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:lineSpacingMultiplier="1.1"
         android:text="@string/upgrade_now_data"
         android:textSize="18sp"

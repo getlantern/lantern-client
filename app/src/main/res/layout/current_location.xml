@@ -45,12 +45,12 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/location" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/headerText"
                 android:textColor="@color/black"
-                android:fontFamily="sans-serif-light"
+                android:textAppearance="@style/LightText"
                 android:text=""
                 android:textSize="58sp"
                 />
@@ -58,7 +58,7 @@
     </RelativeLayout>
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,12 +66,11 @@
         android:layout_gravity="center"
         android:paddingTop="5dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:text="@string/optimized_location"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/currentLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,11 +78,10 @@
         android:layout_gravity="center"
         android:paddingTop="8dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:text="@string/current_location"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tabText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +90,7 @@
         android:layout_gravity="center"
         android:paddingTop="10dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:text="@string/current_location_desc"
         android:textSize="16sp"

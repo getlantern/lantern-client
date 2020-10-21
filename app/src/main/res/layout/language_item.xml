@@ -6,16 +6,16 @@
     android:paddingBottom="15dp">
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textSize="14sp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:paddingLeft="10dp"
         android:layout_alignParentTop="true"/>
 

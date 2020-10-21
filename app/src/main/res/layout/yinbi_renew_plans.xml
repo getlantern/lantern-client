@@ -87,22 +87,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textStyle="normal"
                 android:textColor="#7c7c7c"
                 android:lineSpacingExtra="5sp"
                 android:text="@string/one_year_yinbi"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/oneYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:paddingLeft="5dp"
                 android:textStyle="normal"
                 android:textColor="@color/black"
@@ -115,7 +115,7 @@
             android:layout_width="216dp"
             android:text="@string/purchase"
             android:stateListAnimator="@null"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:textSize="14sp"
             android:minHeight="48dp"
             android:textAllCaps="true"
@@ -131,23 +131,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textStyle="normal"
                 android:textColor="#7c7c7c"
                 android:lineSpacingExtra="5sp"
                 android:text="@string/two_years_yinbi"
                 />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/twoYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:paddingLeft="5dp"
                 android:textStyle="normal"
                 android:textColor="@color/black"
@@ -166,7 +166,7 @@
                 android:layout_height="36dp"
                 android:layout_width="216dp"
                 android:text="@string/purchase"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="48dp"
@@ -195,7 +195,7 @@
             android:clickable="true"
             android:background="@drawable/reseller_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/resellerText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -204,7 +204,6 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:singleLine="true"
-                android:fontFamily="sans-serif"
                 android:clickable="true"
                 android:text="@string/get_bulk_yinbi"
                 android:textSize="12sp"

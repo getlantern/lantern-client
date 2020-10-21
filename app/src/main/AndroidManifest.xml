@@ -101,7 +101,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="org.getlantern.mobilesdk.activity.SettingsActivity_"
+            android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -249,7 +249,7 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".activity.LanguageActivity_"
+            android:name="org.getlantern.mobilesdk.activity.LanguageActivity"
             android:screenOrientation="portrait"
             />
         <activity

@@ -9,7 +9,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:textViewStyle">@style/DefaultTextView</item>
+        <item name="android:fontFamily">@font/regular</item>
     </style>
 
     <style name="AppTheme.AdAttribution">
@@ -147,7 +147,7 @@
         <item name="android:entries">@array/latest_year_array</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">0.8</item>
-    </style>      
+    </style>
 
 
 
@@ -173,7 +173,7 @@
         <item name="android:textColor">@color/blue_color</item>
     </style>
 
-     <style name="FinestWebViewTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="FinestWebViewTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/finestWhite</item>
         <item name="colorPrimaryDark">@color/finestGray</item>
         <item name="colorAccent">@color/finestBlack</item>
@@ -252,13 +252,29 @@
         <item name="android:background">#bfbfbf</item>
     </style>
 
-    <style name="DefaultTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="RegularText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
     </style>
 
-    <style name="BoldLabel" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif-medium</item>
+    <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/thin</item>
+        <item name="fontFamily">@font/thin</item>
+    </style>
+
+    <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/light</item>
+        <item name="fontFamily">@font/light</item>
+    </style>
+
+    <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="fontFamily">@font/medium</item>
+    </style>
+
+    <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/black</item>
+        <item name="fontFamily">@font/black</item>
     </style>
 
 </resources>

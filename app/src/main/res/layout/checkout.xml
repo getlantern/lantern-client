@@ -102,7 +102,7 @@
             android:gravity="bottom|center"
             android:layout_gravity="center">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/togglePaymentMethod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +112,6 @@
                 android:text="@string/switch_to_alipay"
                 android:textSize="10sp"
                 android:lineSpacingExtra="1sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="@color/material_link"
                 android:maxLines="1"
@@ -124,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp">
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/productText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +131,7 @@
                     android:textSize="10sp"
                     android:lineSpacingExtra="3sp"
                     android:textColor="@color/black" />
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/priceWithoutTax"
                     android:visibility="gone"
                     android:layout_width="wrap_content"
@@ -151,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp">
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -159,7 +158,7 @@
                     android:textSize="10sp"
                     android:lineSpacingExtra="3sp"
                     android:textColor="@color/black" />
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,7 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp">
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -183,7 +182,7 @@
                     android:textSize="14sp"
                     android:lineSpacingExtra="9sp"
                     android:textColor="@color/black" />
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -197,14 +196,13 @@
 
             <View style="@style/Divider" android:layout_marginTop="12dp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/termsOfServiceText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:textSize="8sp"
                 android:lineSpacingExtra="2sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="@color/faded"
                 android:maxLines="1"

@@ -18,12 +18,12 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/authorize_device_pro"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/haveAnotherDevice"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:text="@string/i_have_another"
         android:textSize="16sp"
         android:gravity="center"
@@ -35,7 +35,7 @@
         android:layout_width="216dp"
         android:layout_marginTop="20dp"
         android:text="@string/link_this_device"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="14sp"
         android:elevation="2dp"
         android:minHeight="48dp"
@@ -48,11 +48,11 @@
         android:onClick="linkDevice" /> 
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/orText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:text="@string/or"
         android:textSize="38sp"
         android:paddingTop="30dp"
@@ -60,11 +60,11 @@
         android:gravity="center"
         android:textColor="@color/black"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/needToRecover"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:text="@string/need_to_recover"
         android:textSize="16sp"
         android:gravity="center"
@@ -87,7 +87,6 @@
             android:id="@+id/accountInput"
             android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:background="@null"
             android:drawableLeft="@drawable/person"
             android:drawablePadding="10dip"
@@ -120,7 +119,7 @@
         android:layout_width="216dp"
         android:layout_marginTop="20dp"
         android:text="@string/start_recovery"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="14sp"
         android:elevation="2dp"
         android:minHeight="48dp"
@@ -132,12 +131,12 @@
         android:background="@drawable/send_btn"
         android:onClick="linkDevice" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dontRemember"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:layout_marginTop="10dp"
         android:text="@string/dont_remember"
         android:textSize="14sp"

@@ -24,35 +24,33 @@
         android:src="@drawable/wall"/>
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/welcome_to_lantern"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="22dp"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="20sp"
         android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:text="@string/welcome_to_lantern"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/now_using"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="18dp"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:gravity="center"
         android:textColor="@color/black"
         android:text="@string/now_using"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/unlimited_data"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="6dp"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:gravity="center"
         android:textColor="@color/black"
@@ -66,7 +64,7 @@
         android:gravity="center"
         android:layout_marginTop="16dp"
         android:text="@string/start_using"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textSize="14sp"

@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.kyleduo.switchbutton.SwitchButton;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.BaseActivity;
@@ -30,13 +28,15 @@ import org.getlantern.lantern.model.AuctionInfo;
 import org.getlantern.lantern.model.Bandwidth;
 import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.UserStatus;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Logger;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashSet;
 
@@ -45,12 +45,9 @@ public class TabFragment extends Fragment {
   private static final String TAG = TabFragment.class.getName();
 
   private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-  private static final SessionManager session = LanternApp.getSession();
 
   // Always operated from main thread as one subscriber of EventBus.
   private HashSet<Long> notifiedBWPercents = new HashSet<>();
-
-  private CompoundButton.OnCheckedChangeListener switchListener;
 
   private int position;
 
@@ -58,17 +55,14 @@ public class TabFragment extends Fragment {
 
   private ProgressBar progressBar;
 
-  private SwitchButton powerLantern;
-
-  private RelativeLayout mainSwitchLayout;
   private ViewGroup tabLayout;
 
   private ImageView closeBtn, tabIcon;
 
   private TextView currentLoc, headerText, subtitle, tabText, tokensReleased, totalReleased, timeLeft, timeLeftGiveaway,
-      upgradeNow, underSwitchText;
+      upgradeNow;
 
-  final static int[] layouts = new int[] { R.layout.main_switch, R.layout.current_location, R.layout.yinbi_auction_info,
+  final static int[] layouts = new int[] { R.layout.main_switch_wrapper, R.layout.current_location, R.layout.yinbi_auction_info,
       R.layout.data_usage };
 
   @Override
@@ -88,31 +82,17 @@ public class TabFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
-    if (session.useVpn() && !Utils.isServiceRunning(getActivity(), LanternVpnService.class)) {
+    if (LanternApp.getSession().useVpn() && !Utils.isServiceRunning(getActivity(), LanternVpnService.class)) {
       Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference");
-      session.clearVpnPreference();
+      LanternApp.getSession().clearVpnPreference();
     }
-    updateLayout(getResources(), session.useVpn());
+    updateLayout(getResources(), LanternApp.getSession().useVpn());
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
     EventBus.getDefault().unregister(this);
-  }
-
-  private void configureSwitchView(View view) {
-    powerLantern = (SwitchButton) view.findViewById(R.id.powerLantern);
-    mainSwitchLayout = (RelativeLayout) view.findViewById(R.id.mainSwitchLayout);
-    underSwitchText = (TextView) view.findViewById(R.id.underSwitchText);
-
-    switchListener = new CompoundButton.OnCheckedChangeListener() {
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Logger.debug(TAG, "Calling switch lantern (switch button clicked)");
-        switchLantern(isChecked);
-      }
-    };
-    powerLantern.setOnCheckedChangeListener(switchListener);
   }
 
   private void configureTabViews(View view) {
@@ -135,44 +115,11 @@ public class TabFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
     int position = FragmentPagerItem.getPosition(getArguments());
 
-    if (position == 3 && session.isProUser()) {
+    if (position == 3 && LanternApp.getSession().isProUser()) {
       return inflater.inflate(R.layout.account_time_left, container, false);
     }
 
     return inflater.inflate(layouts[position], container, false);
-  }
-
-  private void updateSwitchLayout(final boolean on) {
-    final Resources r = getResources();
-
-    powerLantern.setBackColorRes(on ? R.color.on_color : R.color.black);
-    powerLantern.setOnCheckedChangeListener(null);
-    powerLantern.setChecked(on);
-    powerLantern.setOnCheckedChangeListener(switchListener);
-
-    mainSwitchLayout.setBackgroundColor(r.getColor(on ? R.color.pro_blue_color : R.color.custom_tab_icon));
-    underSwitchText.setText(on ? r.getString(R.string.lantern_on_text) : r.getString(R.string.turn_on_lantern));
-    underSwitchText.setTextColor(r.getColor(on ? R.color.accent_white : R.color.black));
-  }
-
-  private void switchLantern(final boolean isChecked) {
-    try {
-      // temporary disable to prevent repeated toggling
-      powerLantern.setEnabled(false);
-      ((BaseActivity) getActivity()).switchLantern(isChecked);
-      new Handler(getActivity().getMainLooper()).postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          // re-enable after 2000ms
-          powerLantern.setEnabled(true);
-        }
-      }, 2000);
-    } catch (Exception e) {
-      Logger.error(TAG, "Could not establish VPN connection: ", e);
-      powerLantern.setOnCheckedChangeListener(null);
-      powerLantern.setChecked(false);
-      powerLantern.setOnCheckedChangeListener(switchListener);
-    }
   }
 
   private void setBandwidthUpdate(final Bandwidth update) {
@@ -201,18 +148,18 @@ public class TabFragment extends Fragment {
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEventMainThread(final UserStatus status) {
-    if (status == null || position != Constants.DATA_USAGE_TAB || !session.isProUser()) {
+    if (status == null || position != Constants.DATA_USAGE_TAB || !LanternApp.getSession().isProUser()) {
       return;
     }
 
-    tabText.setText(String.format(getResources().getString(R.string.account_left_desc, session.numProMonths())));
+    tabText.setText(String.format(getResources().getString(R.string.account_left_desc, LanternApp.getSession().numProMonths())));
 
     headerText.setText(status.monthsLeft());
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onEventMainThread(Bandwidth update) {
-    if (update != null && !session.isProUser()) {
+    if (update != null && !LanternApp.getSession().isProUser()) {
       // ignore data usage updates if the user is Pro
       Logger.debug(TAG, "Received bandwidth data update");
       setBandwidthUpdate(update);
@@ -258,7 +205,7 @@ public class TabFragment extends Fragment {
 
   private void setProxyLocationHeader(final Stats st) {
 
-    final String countryCode = (st != null) ? st.getCountryCode() : session.getServerCountryCode();
+    final String countryCode = (st != null) ? st.getCountryCode() : LanternApp.getSession().getServerCountryCode();
     if (headerText != null && !countryCode.equals("")) {
       Logger.debug(TAG, "Setting location tab country to " + countryCode);
       headerText.setText(countryCode);
@@ -268,7 +215,7 @@ public class TabFragment extends Fragment {
   private void updateLocation(final Stats st) {
     setProxyLocationHeader(st);
 
-    if (session.useVpn() && currentLoc != null) {
+    if (LanternApp.getSession().useVpn() && currentLoc != null) {
       final String current = String.format("%s, %s", st.getCity(), st.getCountry());
       Logger.debug(TAG, "Setting current server location to " + current);
 
@@ -290,7 +237,7 @@ public class TabFragment extends Fragment {
     }
 
     final Integer tabIconDrawable;
-    if (session.isProUser()) {
+    if (LanternApp.getSession().isProUser()) {
       tabIconDrawable = R.drawable.time_icon;
     } else {
       tabIconDrawable = on ? R.drawable.data_usage_on : R.drawable.data_usage_off;
@@ -328,7 +275,6 @@ public class TabFragment extends Fragment {
 
   private void updateLayout(final Resources r, final boolean on) {
     if (tabLayout == null) {
-      updateSwitchLayout(on);
       ((BaseActivity) getActivity()).updateTheme(on);
       return;
     }
@@ -344,7 +290,7 @@ public class TabFragment extends Fragment {
     }
 
     if (on) {
-      final String current = String.format("%s, %s", session.getServerCity(), session.getServerCountry());
+      final String current = String.format("%s, %s", LanternApp.getSession().getServerCity(), LanternApp.getSession().getServerCountry());
 
       currentLoc.setText(String.format("%s %s", r.getString(R.string.current_location), current));
     } else {
@@ -423,9 +369,7 @@ public class TabFragment extends Fragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    if (position == Constants.MAIN_SWITCH_TAB) {
-      configureSwitchView(view);
-    } else {
+    if (position != Constants.MAIN_SWITCH_TAB) {
       configureTabViews(view);
     }
 
@@ -439,9 +383,9 @@ public class TabFragment extends Fragment {
       break;
     case Constants.DATA_USAGE_TAB:
       upgradeNow = (TextView) view.findViewById(R.id.upgradeNow);
-      if (session.isProUser()) {
-        tabText.setText(String.format(res.getString(R.string.account_left_desc, session.numProMonths())));
-        headerText.setText(session.getProTimeLeft());
+      if (LanternApp.getSession().isProUser()) {
+        tabText.setText(String.format(res.getString(R.string.account_left_desc, LanternApp.getSession().numProMonths())));
+        headerText.setText(LanternApp.getSession().getProTimeLeft());
       } else {
         progressBar = (ProgressBar) view.findViewById(R.id.dataProgressBar);
       }
@@ -450,7 +394,7 @@ public class TabFragment extends Fragment {
       break;
     }
 
-    updateLayout(getResources(), session.useVpn());
+    updateLayout(getResources(), LanternApp.getSession().useVpn());
   }
 
 }

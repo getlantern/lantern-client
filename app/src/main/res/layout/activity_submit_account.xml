@@ -20,12 +20,11 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/account_recovery"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/recoveryMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif"
         android:text="@string/oops_having_trouble"
         android:textSize="14sp"
         android:gravity="left"
@@ -38,7 +37,6 @@
         android:id="@+id/emailInput"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:background="@null"
         android:drawableLeft="@drawable/email_active"
         android:drawablePadding="10dip"
@@ -78,7 +76,6 @@
         android:id="@+id/paymentMethod"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:background="@null"
         android:layout_marginTop="25dp"
         android:drawableLeft="@drawable/ic_cc"
@@ -129,7 +126,6 @@
         android:id="@+id/paymentAccount"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:background="@null"
         android:layout_marginTop="25dp"
         android:clickable="true" 
@@ -171,11 +167,10 @@
         android:weightSum="2"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/purchaseDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:layout_marginLeft="27dp"
             android:text="@string/purchase_date"
             android:textColor="@color/reportIssueHintText"
@@ -226,7 +221,6 @@
         android:layout_marginTop="35dp"
         android:layout_width="310dp"
         android:layout_height="96dp"
-        android:fontFamily="sans-serif"
         android:background="@drawable/report_issue"
         android:inputType="textMultiLine"
         android:textColorHint="@color/reportIssueHintText"
@@ -249,7 +243,7 @@
         android:layout_width="216dp"
         android:layout_marginTop="20dp"
         android:text="@string/submit"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="14sp"
         android:elevation="2dp"
         android:minHeight="48dp"

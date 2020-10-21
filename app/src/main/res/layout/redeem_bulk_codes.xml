@@ -21,11 +21,10 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/enter_lantern_pro_codes"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#7c7c7c"
             android:letterSpacing="0.01"
@@ -44,7 +43,6 @@
             android:layout_height="300dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:fontFamily="sans-serif"
             android:background="@drawable/report_issue"
             android:textColorHint="@color/reportIssueHintText"
             android:layout_centerHorizontal="true"
@@ -72,12 +70,11 @@
             android:gravity="bottom|center"
             android:layout_gravity="center">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/errorMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif"
                 android:paddingBottom="10dp"
                 android:visibility="gone"
                 android:textStyle="normal"
@@ -87,13 +84,12 @@
                 android:text="@string/bulk_codes_error"
                 />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/termsOfServiceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:textSize="12sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="@color/black"
                 android:lineSpacingExtra="4sp"
@@ -106,7 +102,7 @@
                 android:layout_width="216dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/submit"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="48dp"

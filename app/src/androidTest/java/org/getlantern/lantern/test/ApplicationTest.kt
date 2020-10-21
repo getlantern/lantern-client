@@ -18,6 +18,8 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
+import com.kyleduo.switchbutton.SwitchButton
+import kotlinx.android.synthetic.main.toolbar_content.view.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -134,15 +136,15 @@ class ApplicationTest {
 
     private fun verifyVPNOn() {
         SystemClock.sleep(1000)
-        Espresso.onView(ViewMatchers.withId(R.id.coordinatorLayout)).check(
-                ViewAssertions.matches(withBackgroundColor(R.color.pro_blue_color)))
+        Espresso.onView(ViewMatchers.withId(R.id.powerLantern)).check(
+                ViewAssertions.matches(withChecked(true)))
         Assert.assertTrue("System VPN should be on", isSystemVPNConnected)
     }
 
     private fun verifyVPNOff() {
         SystemClock.sleep(1000)
-        Espresso.onView(ViewMatchers.withId(R.id.coordinatorLayout)).check(
-                ViewAssertions.matches(withBackgroundColor(R.color.custom_tab_icon)))
+        Espresso.onView(ViewMatchers.withId(R.id.powerLantern)).check(
+                ViewAssertions.matches(withChecked(false)))
         Assert.assertFalse("System VPN should be off", isSystemVPNConnected)
     }
 
@@ -196,13 +198,11 @@ class ApplicationTest {
     companion object {
         private const val TAG = "ApplicationTest"
         private const val url = "https://ifconfig.co/json"
-        private fun withBackgroundColor(colorId: Int): Matcher<View> {
+        private fun withChecked(checked: Boolean): Matcher<View> {
             return object : TypeSafeMatcher<View>() {
                 public override fun matchesSafely(v: View): Boolean {
-                    val color = v.resources.getColor(colorId)
-                    val cd = v.background as ColorDrawable
-                    Log.d(TAG, String.format("expected background color: %x, got: %x", color, cd.color))
-                    return color == cd.color
+                    val button = v as SwitchButton
+                    return button.isChecked == checked
                 }
 
                 override fun describeTo(description: Description) {

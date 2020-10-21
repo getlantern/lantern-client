@@ -23,11 +23,10 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:src="@drawable/lantern_yinbi_logo"/>
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:fontFamily="sans-serif"
         android:textStyle="bold"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
@@ -56,11 +55,10 @@
         android:gravity="bottom|center"
         android:layout_gravity="center">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#707070"
             android:lineSpacingExtra="8sp"

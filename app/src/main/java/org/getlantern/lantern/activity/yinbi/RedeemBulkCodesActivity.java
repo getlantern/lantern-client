@@ -2,8 +2,6 @@ package org.getlantern.lantern.activity.yinbi;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,37 +9,36 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import okhttp3.FormBody;
-import okhttp3.HttpUrl;
-import okhttp3.Response;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.gson.reflect.TypeToken;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.fragment.ClickSpan;
+import org.getlantern.lantern.model.LanternHttpClient;
+import org.getlantern.lantern.model.PaymentHandler;
+import org.getlantern.lantern.model.ProError;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 import java.lang.reflect.Type;
-import java.lang.StringBuilder;
-import com.google.gson.reflect.TypeToken;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
 
 @EActivity(R.layout.redeem_bulk_codes)
 public class RedeemBulkCodesActivity extends FragmentActivity implements LanternHttpClient.ProCallback {
@@ -50,8 +47,7 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
     private static final String PROVIDER = "reseller-code";
 
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private PaymentHandler paymentHandler;
     private ProgressDialog dialog;
 
@@ -173,7 +169,7 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
             public void run() {
                 closeDialog();
                 Logger.debug(TAG, "Successful bulk codes request");
-                session.setShowRedemptionTable(true);
+                LanternApp.getSession().setShowRedemptionTable(true);
                 paymentHandler.convertToPro();
             }
         });
@@ -185,8 +181,8 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
             .add("idempotencyKey", Long.toString(System.currentTimeMillis()))
             .add("provider", "reseller-code")
             .add("email", userEmail)
-            .add("currency", session.currency().toLowerCase())
-            .add("deviceName", session.deviceName());
+            .add("currency", LanternApp.getSession().currency().toLowerCase())
+            .add("deviceName", LanternApp.getSession().deviceName());
         formBody.add("resellerCodes", TextUtils.join(",", codes));
 
         dialog = new ProgressDialog(this);

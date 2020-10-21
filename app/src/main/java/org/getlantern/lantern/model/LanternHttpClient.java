@@ -11,8 +11,10 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import org.getlantern.lantern.BuildConfig;
+import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.util.HttpClient;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -40,15 +42,9 @@ import okio.Buffer;
 /**
  * An OkHttp-based HTTP client.
 */
-public class LanternHttpClient {
+public class LanternHttpClient extends HttpClient {
     private static final String TAG = LanternHttpClient.class.getName();
     private static final String API_ADDR = getApiAddr();
-
-    // The primary OkHttpClient instance that gets reused for all of our HTTP
-    // calls
-    private final OkHttpClient httpClient;
-
-    private final SessionManager session;
 
     private static final String LOCONF_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json";
     private static final String LOCONF_STAGING_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json";
@@ -65,36 +61,22 @@ public class LanternHttpClient {
         = MediaType.parse("application/json; charset=utf-8");
 
     /**
-     * Creates a new HTTP client using the specified {@link SessionManager}.
+     * Creates a new HTTP client
      *
-     * @param sessionManager The {@link SessionManager} storing data about this session.
      * @param proxyHost The host of the local proxy.
      * @param proxyPort The port of the local proxy.
      */
-    public LanternHttpClient(final SessionManager sessionManager, final String proxyHost,
-                             final int proxyPort) {
-        // This is expected to be the address where the Lantern HTTP proxy
-        // is running at and will be used for connections created by this client
-        // currently set to the httpProxyHost and httpProxyPort in
-        // settings.yaml
-        this(sessionManager, new OkHttpClient.Builder()
-                .retryOnConnectionFailure(true)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-                .build());
-        Logger.debug(TAG, "Pro server address is " + API_ADDR);
+    public LanternHttpClient(final String proxyHost, final int proxyPort) {
+        super(proxyHost, proxyPort);
     }
 
     /**
-     * Creates a new HTTP client using the specified {@link SessionManager}.
+     * Creates a new HTTP client
      *
-     * @param sessionManager The {@link SessionManager} storing data about this session.
      * @param httpClient The HTTP client to use.
      */
-    public LanternHttpClient(final SessionManager sessionManager, final OkHttpClient httpClient) {
-        this.session = sessionManager;
-        this.httpClient = httpClient;
+    public LanternHttpClient(final OkHttpClient httpClient) {
+        super(httpClient);
     }
 
     /**
@@ -138,10 +120,10 @@ public class LanternHttpClient {
      */
     private Map<String, String> userHeaders(final Map<String, String> extra) {
         final Map<String, String> headers = new HashMap<String, String>();
-        headers.put(DEVICE_ID_HEADER, session.getDeviceID());
-        headers.put(PRO_TOKEN_HEADER, session.getToken());
-        headers.put(USER_ID_HEADER, String.valueOf(session.getUserID()));
-        headers.putAll(session.getInternalHeaders());
+        headers.put(DEVICE_ID_HEADER, LanternApp.getSession().getDeviceID());
+        headers.put(PRO_TOKEN_HEADER, LanternApp.getSession().getToken());
+        headers.put(USER_ID_HEADER, String.valueOf(LanternApp.getSession().getUserID()));
+        headers.putAll(LanternApp.getSession().getInternalHeaders());
         if (extra != null) {
             headers.putAll(extra);
         }
@@ -203,7 +185,7 @@ public class LanternHttpClient {
         final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
         final Gson gson = new Gson();
         String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
-        session.setStripePubKey(stripePubKey);
+        LanternApp.getSession().setStripePubKey(stripePubKey);
         Type listType = new TypeToken<List<ProPlan>>(){}.getType();
         Logger.debug(TAG, "Plans: " + result.get("plans"));
         final List<ProPlan> fetched = (List<ProPlan>)gson.fromJson(result.get("plans"), listType);
@@ -220,8 +202,8 @@ public class LanternHttpClient {
 
     public void getPlans(final PlansCallback cb) {
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("locale", session.getLanguage());
-        params.put("countrycode", session.getCountryCode());
+        params.put("locale", LanternApp.getSession().getLanguage());
+        params.put("countrycode", LanternApp.getSession().getCountryCode());
         final HttpUrl url = createProUrl("/plans", params);
         final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
         get(url, new ProCallback() {
@@ -263,8 +245,8 @@ public class LanternHttpClient {
     public void sendLinkRequest(final ProCallback cb) {
         final HttpUrl url = createProUrl("/user-link-request");
         final RequestBody formBody = new FormBody.Builder()
-            .add("email", session.email())
-            .add("deviceName", session.deviceName())
+            .add("email", LanternApp.getSession().email())
+            .add("deviceName", LanternApp.getSession().deviceName())
             .build();
 
         Logger.debug(TAG, "Sending link request...");
@@ -288,47 +270,10 @@ public class LanternHttpClient {
         });
     }
 
-    /**
-     * Fetches the loconf config stored at
-     * https://raw.githubusercontent.com/getlantern/loconf/master/messages.json
-     *
-     * @param cb the callback to execute after the config is fetched
-    */
-    public void fetchLoConf(final LoConfCallback cb) {
-        Logger.debug(TAG, "Fetching loconf");
-        final String loconfUrl;
-        if (session.useStaging()) {
-            loconfUrl = LOCONF_STAGING_URL;
-        } else {
-            loconfUrl = LOCONF_URL;
-        }
-        fetchLoConf(cb, loconfUrl);
-    }
-
-    void fetchLoConf(final LoConfCallback cb, final String loconfUrl) {
-        final HttpUrl.Builder builder = HttpUrl.parse(loconfUrl).newBuilder();
-        request("GET", builder.build(), new ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch surveys", throwable);
-            }
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                try {
-                    Logger.debug(TAG, "JSON response" + result.toString());
-                    final LoConf loconf = new Gson().fromJson(result, LoConf.class);
-                    cb.onSuccess(loconf);
-                } catch (Exception e) {
-                    Logger.error(TAG, "Unable to parse surveys: " + e.getMessage(), e);
-                }
-            }
-        });
-    }
-
     public void openBulkProCodes(final Context context) {
         final Intent intent;
         intent = new Intent(context, RedeemBulkCodesActivity_.class);
-        intent.putExtra("userEmail", session.email());
+        intent.putExtra("userEmail", LanternApp.getSession().email());
         context.startActivity(intent);
     }
 
@@ -340,7 +285,7 @@ public class LanternHttpClient {
      */
     public void userData(final ProUserCallback cb) {
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("locale", session.getLanguage());
+        params.put("locale", LanternApp.getSession().getLanguage());
         final HttpUrl url = createProUrl("/user-data", params);
         get(url, new ProCallback() {
             @Override
@@ -357,9 +302,9 @@ public class LanternHttpClient {
                     final ProUser user = new Gson().fromJson(result, ProUser.class);
                     if (user != null) {
                         Logger.debug(TAG, "User ID is " + user.getUserId());
-                        session.storeUserData(user);
+                        LanternApp.getSession().storeUserData(user);
                         for (Device device: user.getDevices()) {
-                            session.addDevice(device);
+                            LanternApp.getSession().addDevice(device);
                         }
                     }
                     if (cb != null) {
@@ -545,9 +490,5 @@ public class LanternHttpClient {
     public interface PlansCallback {
         public void onFailure(Throwable throwable, final ProError error);
         public void onSuccess(Map<String, ProPlan> plans);
-    }
-
-    public interface LoConfCallback {
-        public void onSuccess(LoConf loconf);
     }
 }
