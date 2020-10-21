@@ -19,12 +19,12 @@
         android:layout_gravity="right|top"
         android:src="@drawable/close_off" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/welcome_to_lantern"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingTop="23dp"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="15sp"
         android:gravity="center"
         android:alpha="0.5"
@@ -43,11 +43,10 @@
         android:adjustViewBounds="true"
         android:src="@drawable/welcome_logo"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgrade_for"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="@string/upgrade_for"
         android:textSize="25sp"
         android:layout_centerHorizontal="true"
@@ -69,13 +68,13 @@
         android:lineSpacingMultiplier="1.1"
         android:orientation="vertical" >
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lanternPro"
             android:layout_gravity="left"
             android:gravity="left|center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:paddingTop="11dp"
             android:layout_centerHorizontal="true"
             android:text="@string/lantern_pro_header"
@@ -97,14 +96,14 @@
             android:layout_height="100dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/best_value"
                 android:layout_height="40dp"
                 android:layout_width="104dp"
                 android:gravity="center"
                 android:layout_gravity="right"
                 android:layout_alignParentRight="true"
-                android:fontFamily="sans-serif-black"
+                android:textAppearance="@style/BlackText"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:paddingBottom="5dp"
@@ -113,12 +112,12 @@
                 android:background="@android:color/transparent"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/twoYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -126,10 +125,9 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:layout_below="@+id/twoYearCost"
                 android:paddingLeft="16dp"
                 android:text="@string/two_years"
@@ -142,7 +140,7 @@
                 android:layout_height="33dp"
                 android:layout_width="88dp"
                 android:text="@string/select"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="40dp"
@@ -164,11 +162,11 @@
             android:layout_height="90dp"
             android:background="@drawable/two_year_bg">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/oneYearCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:paddingLeft="16dp"
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
@@ -177,10 +175,9 @@
                 android:alpha=".87"
                 android:textColor="@color/black"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:layout_below="@+id/oneYearCost"
                 android:paddingLeft="16dp"
                 android:textSize="12sp"
@@ -194,7 +191,7 @@
                 android:layout_height="33dp"
                 android:layout_width="88dp"
                 android:text="@string/select"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="40dp"

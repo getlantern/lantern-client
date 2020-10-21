@@ -11,7 +11,7 @@
         android:paddingRight="5dp"
         android:src="@drawable/checkmark"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/feature_text"
         android:layout_width="fill_parent"
         android:layout_height="23dp"
@@ -20,7 +20,6 @@
         android:alpha=".87"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:fontFamily="sans-serif"
         android:paddingLeft="5dp"
         android:text=""
         android:textColor="@color/black"/>

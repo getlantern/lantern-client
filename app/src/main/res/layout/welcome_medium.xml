@@ -18,11 +18,10 @@
         android:adjustViewBounds="true"
         android:src="@drawable/welcome_logo"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgrade_for"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
         android:text="@string/upgrade_for"
         android:textSize="25sp"
         android:layout_centerHorizontal="true"
@@ -31,11 +30,11 @@
         android:lineSpacingMultiplier="1.2"
         android:textColor="#000000"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/lantern_pro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:paddingTop="31dp"
         android:text="@string/lantern_pro_header"
         android:textSize="24sp"
@@ -64,7 +63,7 @@
         android:layout_width="216dp"
         android:layout_marginTop="20dp"
         android:text="@string/upgrade_now"
-        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/MediumText"
         android:textSize="14sp"
         android:elevation="2dp"
         android:minHeight="48dp"
@@ -76,12 +75,12 @@
         android:background="@color/pink"
         android:onClick="upgradeNow" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/continueBasic"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
-        android:fontFamily="sans-serif-thin"
+        android:textAppearance="@style/ThinText"
         android:textSize="12sp"
         android:gravity="center"
         android:onClick="onClick"

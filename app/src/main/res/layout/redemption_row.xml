@@ -5,22 +5,20 @@
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
     android:layout_height="wrap_content">
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:layout_weight="1"
-        android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:textColor="@color/black"
         />
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/code"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="13sp"
-        android:fontFamily="sans-serif"
         android:textStyle="normal"
         android:layout_weight="1"
         android:text="XXXXXXX"
@@ -33,13 +31,12 @@
         android:gravity="right"
         android:layout_gravity="right"
         android:orientation="horizontal">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/status"
             android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="@color/black"
             />

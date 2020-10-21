@@ -40,13 +40,12 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="20dp"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="@color/black"
                 android:lineSpacingExtra="8sp"
@@ -54,14 +53,14 @@
                 android:gravity="left"
                 android:text="@string/how_yinbis_distributed"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/okDistributionBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
                 android:lineSpacingExtra="10sp"
                 android:textSize="16sp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textColor="@color/pink"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="40dp"
@@ -94,34 +93,31 @@
                     <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:fontFamily="sans-serif"
                             android:textStyle="bold"
                             android:layout_weight="1"
                             android:textColor="#000000"
                             android:lineSpacingExtra="2sp"
                             android:text="@string/date"/>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="14sp"
-                            android:fontFamily="sans-serif"
                             android:textStyle="bold"
                             android:textColor="#000000"
                             android:lineSpacingExtra="2sp"
                             android:text="@string/redemption_code"
                             />
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif"
                             android:textStyle="bold"
                             android:textColor="#000000"
                             android:gravity="right"
@@ -177,7 +173,7 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/copy_all_codes"
-                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/MediumText"
                     android:textSize="10sp"
                     android:elevation="2dp"
                     android:minHeight="48dp"
@@ -188,7 +184,7 @@
                     android:onClick="enterBulkProCodes" />
 
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/visitYinbi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -196,7 +192,6 @@
                     android:lineSpacingExtra="12sp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
-                    android:fontFamily="sans-serif"
                     android:textStyle="normal"
                     android:textColor="#7c7c7c"
                     android:letterSpacing="0.01"
@@ -224,7 +219,7 @@
                     android:text="@string/enter_bulk_pro_codes"
                     android:stateListAnimator="@null"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/MediumText"
                     android:textSize="14sp"
                     android:minHeight="48dp"
                     android:textAllCaps="true"
@@ -241,7 +236,7 @@
                     android:layout_width="216dp"
                     android:text="@string/renew_pro_get_yinbi"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/MediumText"
                     android:textSize="14sp"
                     android:minHeight="48dp"
                     android:textAllCaps="true"

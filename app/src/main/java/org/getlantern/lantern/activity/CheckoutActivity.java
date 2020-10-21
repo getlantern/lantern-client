@@ -44,7 +44,6 @@ import org.getlantern.lantern.model.MaterialUtil;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.widget.TextInputLayout;
 import org.getlantern.mobilesdk.Logger;
@@ -65,8 +64,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     private static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private ProgressDialog dialog;
 
     @ViewById
@@ -121,10 +119,10 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     @AfterViews
     void afterViews() {
         boolean isPlayVersion = Utils.isPlayVersion(this);
-        useStripe = !isPlayVersion && !session.defaultToAlipay();
-        ProPlan plan = session.getSelectedPlan();
+        useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
+        ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
-        if (session.getSelectedPlan().numYears() == 2) {
+        if (LanternApp.getSession().getSelectedPlan().numYears() == 2) {
             productText.setText(getResources().getText(R.string.two_years_lantern_pro));
         } else {
             productText.setText(getResources().getText(R.string.one_year_lantern_pro));
@@ -181,14 +179,14 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
             }
         };
 
-        String email = session.email();
+        String email = LanternApp.getSession().email();
         if (!"".equals(email)) {
             emailInput.setText(email);
         } else {
             emailInput.requestFocus();
         }
 
-        boolean isRenewal = session.isProUser();
+        boolean isRenewal = LanternApp.getSession().isProUser();
         if (isRenewal) {
             // Don't allow changing email of existing pro user
             emailInput.setEnabled(false);
@@ -309,8 +307,8 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         final String email = emailInput.getText().toString().trim();
         final String referral = referralCodeInput.getText().toString().trim().toUpperCase();
 
-        if (referral.equals("") || referral.equals(session.referral())) {
-            if (!email.equals(session.email())) {
+        if (referral.equals("") || referral.equals(LanternApp.getSession().referral())) {
+            if (!email.equals(LanternApp.getSession().email())) {
                 checkEmailExistence(email);
             } else {
                 submit(email);
@@ -342,7 +340,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                     @Override
                     public void onSuccess(final Response response, final JsonObject result) {
                         Logger.debug(TAG, "Successfully redeemed referral code" + referral);
-                        session.setReferral(referral);
+                        LanternApp.getSession().setReferral(referral);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -375,7 +373,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                     public void onSuccess(final Response response, final JsonObject result) {
                         Logger.debug(TAG, "Email successfully validated " + email);
                         closeDialog();
-                        session.setEmail(email);
+                        LanternApp.getSession().setEmail(email);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -402,16 +400,16 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                     getResources().getString(R.string.processing_payment),
                     "",
                     true, false);
-            Logger.debug(STRIPE_TAG, "Stripe publishable key is '%s'", session.stripePubKey());
+            Logger.debug(STRIPE_TAG, "Stripe publishable key is '%s'", LanternApp.getSession().stripePubKey());
             final Stripe stripe = new Stripe(
                     this,
-                    session.stripePubKey()
+                    LanternApp.getSession().stripePubKey()
             );
             stripe.createToken(
                     card,
                     new ApiResultCallback<Token>() {
                         public void onSuccess(@NonNull Token token) {
-                            session.setStripeToken(token.getId());
+                            LanternApp.getSession().setStripeToken(token.getId());
                             closeDialog();
                             PaymentHandler paymentHandler = new PaymentHandler(CheckoutActivity.this, "stripe");
                             paymentHandler.sendPurchaseRequest();
@@ -455,19 +453,19 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
      *              gateway
      */
     private void openPaymentProvider(final String email, final boolean bulkCodes) {
-        String provider = session.getPaymentProvider();
+        String provider = LanternApp.getSession().getPaymentProvider();
         if (!BuildConfig.PAYMENT_PROVIDER.equals("")) {
             // for debug builds, allow overriding default payment provider
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
         } else {
             if (Utils.isPlayVersion(this)) {
-                if (!LanternApp.getInAppBilling().startPurchase(this, session.getSelectedPlan().getId(), this)) {
+                if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
                     Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
                 }
                 return;
             }
-            provider = session.getPaymentProvider();
+            provider = LanternApp.getSession().getPaymentProvider();
         }
 
         if (bulkCodes) {

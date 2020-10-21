@@ -21,6 +21,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,7 +29,7 @@ import org.getlantern.lantern.activity.BaseActivity;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
+import org.getlantern.lantern.model.LanternSessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
@@ -44,9 +45,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
   private static final String TAG = LanternApp.class.getName();
   private static Context appContext;
   private static LanternHttpClient lanternHttpClient;
-  private static SessionManager session;
+  private static LanternSessionManager session;
   private static InAppBilling inAppBilling;
   private static boolean isForeground;
+  private static boolean supportsPro;
   private FirebaseRemoteConfig firebaseRemoteConfig;
 
   private static final String FIREBASE_BACKEND_HEADER_PREFIX = "x_lantern_";
@@ -87,11 +89,11 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     appContext = getApplicationContext();
-    session = new SessionManager(appContext);
+    session = new LanternSessionManager(appContext);
     if (Utils.isPlayVersion(this)) {
       inAppBilling = new InAppBilling(this);
     }
-    lanternHttpClient = new LanternHttpClient(session, session.getSettings().getHttpProxyHost(),
+    lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
         (int) session.getSettings().getHttpProxyPort());
     initFirebase();
     updateFirebaseConfig();
@@ -248,6 +250,8 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     return lanternHttpClient;
   }
 
+  public static HttpClient getHttpClient() { return lanternHttpClient; }
+
   @Override
   protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
@@ -268,7 +272,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
   }
 
-  public static SessionManager getSession() {
+  public static LanternSessionManager getSession() {
     return session;
   }
 

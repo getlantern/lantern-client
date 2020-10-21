@@ -2,23 +2,23 @@ package org.getlantern.lantern.activity;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import androidx.fragment.app.FragmentActivity;
 import android.widget.TextView;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.service.LinkDeviceService_;
-import org.getlantern.lantern.R;
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.LanternHttpClient;
+import org.getlantern.lantern.model.ProError;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.service.LinkDeviceService_;
+import org.getlantern.mobilesdk.Logger;
 
-import com.google.gson.JsonObject;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -27,7 +27,6 @@ import okhttp3.Response;
 public class LinkDeviceActivity extends FragmentActivity {
 
     private static final String TAG = LinkDeviceActivity.class.getName();
-    private static final SessionManager session = LanternApp.getSession();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
 
     @ViewById
@@ -35,7 +34,7 @@ public class LinkDeviceActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        setDeviceCode(session.deviceCode());
+        setDeviceCode(LanternApp.getSession().deviceCode());
         startService(new Intent(this, LinkDeviceService_.class));
     }
 
@@ -43,7 +42,7 @@ public class LinkDeviceActivity extends FragmentActivity {
         final Resources res = getResources();
         final LinkDeviceActivity activity = this;
         final RequestBody formBody = new FormBody.Builder()
-            .add("deviceName", session.deviceName())
+            .add("deviceName", LanternApp.getSession().deviceName())
             .build();
         lanternClient.post(LanternHttpClient.createProUrl("/link-code-request"), formBody,
                 new LanternHttpClient.ProCallback() {
@@ -59,7 +58,7 @@ public class LinkDeviceActivity extends FragmentActivity {
                 if (result.get("code") != null) {
                     final String code = result.get("code").getAsString();
                     final Long expireAt = result.get("expireAt").getAsLong();
-                    session.setDeviceCode(code, expireAt);
+                    LanternApp.getSession().setDeviceCode(code, expireAt);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -74,7 +73,7 @@ public class LinkDeviceActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Long codeExp = session.getDeviceExp();
+        Long codeExp = LanternApp.getSession().getDeviceExp();
         if (codeExp == null || ((codeExp.longValue() - System.currentTimeMillis()) < 60*1000)) {
             requestLinkCode();
         }

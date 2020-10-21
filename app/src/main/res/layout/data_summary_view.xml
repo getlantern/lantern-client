@@ -52,24 +52,23 @@
             android:layout_toLeftOf="@+id/upgradeBtn"
             android:orientation="vertical" >
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/dataRemaining"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="@color/accent_white"
                 android:textSize="10sp"
                 android:visibility="gone" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/upgradeToPro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="false"
-                android:fontFamily="sans-serif"
                 android:clickable="false"
                 android:paddingLeft="7dp"
                 android:paddingRight="7dp"
@@ -88,7 +87,7 @@
             android:layout_below="@+id/progressBarView"
             android:layout_alignParentRight="true"
             android:text="@string/upgrade"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:textSize="14sp"
             android:textAllCaps="true"
             android:textColor="@color/accent_white"
@@ -106,23 +105,21 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="@color/accent_white"
             android:lineSpacingExtra="2sp"
             android:gravity="center_horizontal"
             android:text="@string/purchased_pro_activation_codes"
             />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/bulkRenew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="@color/accent_white"
             android:lineSpacingExtra="2sp"

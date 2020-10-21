@@ -3,29 +3,26 @@ package org.getlantern.lantern.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import androidx.fragment.app.FragmentActivity;
-
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.fragment.ProgressDialogFragment;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.fragment.ProgressDialogFragment;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.invite_friends)
 public class InviteActivity extends FragmentActivity {
 
     private static final String TAG = InviteActivity.class.getName();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private ProgressDialogFragment progressFragment;
     private Resources resources;
     private String code;
@@ -45,7 +42,7 @@ public class InviteActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        this.code = session.code();
+        this.code = LanternApp.getSession().code();
         Logger.debug(TAG, "referral code is " + this.code);
         referralCode.setText(this.code);
     }

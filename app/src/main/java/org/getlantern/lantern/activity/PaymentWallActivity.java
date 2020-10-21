@@ -22,7 +22,6 @@ import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.mobilesdk.Logger;
 
@@ -39,8 +38,6 @@ public class PaymentWallActivity extends FragmentActivity {
     private static final String TAG = PaymentWallActivity.class.getName();
     private static final String PROVIDER = "PW";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    private static final SessionManager session = LanternApp.getSession();
-    public static final int ENTER_EMAIL_REQUEST = 1;
     private PaymentHandler paymentHandler;
 
     @Extra
@@ -54,7 +51,7 @@ public class PaymentWallActivity extends FragmentActivity {
 
     public void open() {
         final Resources res = getResources();
-        final ProPlan plan = session.getSelectedPlan();
+        final ProPlan plan = LanternApp.getSession().getSelectedPlan();
         if (plan == null) {
             Logger.error(TAG, "No plan selected");
             return;
@@ -63,15 +60,15 @@ public class PaymentWallActivity extends FragmentActivity {
         // Use a fake email address for privacy reasons
         final String transactionID = UUID.randomUUID().toString();
 
-        final String currency = session.currency();
+        final String currency = LanternApp.getSession().currency();
         Logger.debug(TAG, "Selected plan ID " + plan.getId() + " " + currency);
         final Map<String, String> params = new HashMap<String, String>();
         params.put("plan", plan.getId());
         params.put("email", userEmail);
-        params.put("locale", session.getLanguage());
+        params.put("locale", LanternApp.getSession().getLanguage());
         params.put("userCurrency", currency.toLowerCase());
-        params.put("deviceName", session.deviceName());
-        params.put("countryCode", session.getCountryCode());
+        params.put("deviceName", LanternApp.getSession().deviceName());
+        params.put("countryCode", LanternApp.getSession().getCountryCode());
         params.put("transactionID", transactionID);
 
         lanternClient.get(LanternHttpClient.createProUrl("/paymentwall-mobile-signature", params),
@@ -97,15 +94,15 @@ public class PaymentWallActivity extends FragmentActivity {
     }
 
     public static UnifiedRequest createUnifiedPWRequest(final Resources res, final String transactionID, final String sig) {
-        final ProPlan proPlan = session.getSelectedPlan();
-        final Double chargeAmount = new BigDecimal(session.getSelectedPlanCost()).divide(
+        final ProPlan proPlan = LanternApp.getSession().getSelectedPlan();
+        final Double chargeAmount = new BigDecimal(LanternApp.getSession().getSelectedPlanCost()).divide(
                 new BigDecimal("100")).doubleValue();
         final UnifiedRequest request =  new  UnifiedRequest();
-        final String projectKey = res.getString(session.useStaging() ? R.string.pw_staging_project_key : R.string.pw_project_key);
+        final String projectKey = res.getString(LanternApp.getSession().useStaging() ? R.string.pw_staging_project_key : R.string.pw_project_key);
 
         request.setPwProjectKey(projectKey);
         request.setAmount(chargeAmount);
-        request.setCurrency(session.getSelectedPlanCurrency().toUpperCase());
+        request.setCurrency(LanternApp.getSession().getSelectedPlanCurrency().toUpperCase());
         request.setItemName(proPlan.getDescription());
         request.setItemId(proPlan.getId());
         request.setUserId(transactionID);

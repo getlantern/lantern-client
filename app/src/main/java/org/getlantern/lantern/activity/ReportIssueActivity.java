@@ -2,12 +2,13 @@ package org.getlantern.lantern.activity;
 
 import android.os.AsyncTask;
 import android.os.Build;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -15,20 +16,17 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
-
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.MailSender;
-import org.getlantern.lantern.model.SessionManager;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.MailSender;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.activity_report_issue)
 public class ReportIssueActivity extends FragmentActivity {
 
     private static final String TAG = ReportIssueActivity.class.getName();
-    private final SessionManager session = LanternApp.getSession();
-
+    
     private ArrayAdapter<String> issueAdapter;
     private String selectedIssue;
 
@@ -49,7 +47,7 @@ public class ReportIssueActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        final String email = session.email();
+        final String email = LanternApp.getSession().email();
         if (email != null && !"".equals(email)) {
             emailInput.setText(email);
         }
@@ -103,7 +101,7 @@ public class ReportIssueActivity extends FragmentActivity {
 
         Logger.debug(TAG, "Reporting " + issue + " issue on behalf of " + email);
 
-        session.setEmail(email);
+        LanternApp.getSession().setEmail(email);
 
         final MailSender mailSender = new MailSender(this, "user-send-logs", true);
         String report = description.getText().toString();

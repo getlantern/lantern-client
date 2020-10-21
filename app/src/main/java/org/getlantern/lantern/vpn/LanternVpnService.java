@@ -18,17 +18,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
+
 import androidx.core.app.NotificationCompat;
 
-import org.greenrobot.eventbus.EventBus;
-import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.Launcher;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.mobilesdk.Logger;
+import org.greenrobot.eventbus.EventBus;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
@@ -37,7 +36,6 @@ public class LanternVpnService extends VpnService implements Runnable {
 
   private static final String TAG = "VpnService";
   
-  private volatile SessionManager session;
   private Provider mProvider = null;
 
   private PendingIntent mConfigureIntent;
@@ -67,7 +65,6 @@ public class LanternVpnService extends VpnService implements Runnable {
   public void onCreate() {
     super.onCreate();
     Logger.d(TAG, "VpnService created");
-    session = LanternApp.getSession();
     mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, Launcher.class),
         PendingIntent.FLAG_UPDATE_CURRENT);
     bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
@@ -75,6 +72,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
   @Override
   public void onDestroy() {
+    Logger.d(TAG, "destroyed");
     doStop();
     super.onDestroy();
     unbindService(lanternServiceConnection);
@@ -82,7 +80,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
   @Override
   public void onRevoke() {
-    Logger.d(TAG, "revoke");
+    Logger.d(TAG, "revoked");
     stop();
   }
 
@@ -131,7 +129,7 @@ public class LanternVpnService extends VpnService implements Runnable {
   @Override
   public void run() {
     try {
-      final String dns = session.getDNSServer();
+      final String dns = LanternApp.getSession().getDNSServer();
       Logger.d(TAG, "Loading Lantern library with DNS server " + dns);
       Android.protectConnections(new SocketProtector() {
         // Protect is used to exclude a socket specified by fileDescriptor
@@ -145,12 +143,12 @@ public class LanternVpnService extends VpnService implements Runnable {
         }
       }, dns);
 
-      getOrInitProvider().run(this, new Builder(), session.getSOCKS5Addr(), session.getDNSGrabAddr());
+      getOrInitProvider().run(this, new Builder(), LanternApp.getSession().getSOCKS5Addr(), LanternApp.getSession().getDNSGrabAddr());
     } catch (Exception e) {
       e.printStackTrace();
       Logger.error(TAG, "Error running VPN", e);
     } finally {
-      Logger.error(TAG, "Lantern terminated.");
+      Logger.debug(TAG, "Lantern terminated.");
       stop();
     }
   }
@@ -173,7 +171,7 @@ public class LanternVpnService extends VpnService implements Runnable {
     }
     try {
       Logger.d(TAG, "updating vpn preference");
-      session.updateVpnPreference(false);
+      LanternApp.getSession().updateVpnPreference(false);
     } catch (Throwable t) {
       Logger.e(TAG, "error updating vpn preference", t);
     }

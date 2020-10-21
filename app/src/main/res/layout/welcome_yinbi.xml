@@ -54,26 +54,24 @@
                 android:layout_centerVertical ="true"
                 android:layout_alignParentTop="true"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
                 android:textSize="23sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:lineSpacingExtra="7sp"
                 android:text="@string/pro_welcome_text"
                 />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/thanksMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:layout_marginTop="15dp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="#7c7c7c"
                 android:letterSpacing="0.01"
@@ -81,11 +79,10 @@
                 android:gravity="center_horizontal"
                 android:text="@string/thank_you_purchasing_pro"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="#7c7c7c"
                 android:letterSpacing="0.01"
@@ -112,7 +109,7 @@
                 android:layout_width="216dp"
                 android:text="@string/yinbi_redemption_code"
                 android:layout_marginTop="20dp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="48dp"
@@ -129,7 +126,7 @@
                 android:layout_width="216dp"
                 android:text="@string/continue_to_lantern_pro"
                 android:layout_marginTop="20dp"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/MediumText"
                 android:textSize="14sp"
                 android:minHeight="48dp"
                 android:textAllCaps="true"

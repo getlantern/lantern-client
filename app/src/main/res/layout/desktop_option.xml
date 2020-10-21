@@ -40,12 +40,11 @@
                     android:src="@drawable/laptop"
                     />                                  
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/receive_lantern"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:fontFamily="sans-serif" 
                     android:textSize="16sp"
                     android:gravity="center"
                     android:singleLine="true"
@@ -57,7 +56,6 @@
                     android:id="@+id/emailInput"
                     android:layout_width="270dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif" 
                     android:background="@null"
                     android:hint="@string/email_hint"
                     android:ems="10"
@@ -93,7 +91,7 @@
                     android:layout_width="250dp"
                     android:layout_marginTop="40dp"
                     android:text="@string/send_desktop"
-                    android:fontFamily="sans-serif-medium" 
+                    android:textAppearance="@style/MediumText" 
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textAllCaps="true"

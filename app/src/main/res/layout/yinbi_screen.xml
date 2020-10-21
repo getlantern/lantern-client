@@ -37,14 +37,13 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/yinbi_logo_large"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/yinbiDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/yinbiLogo"
             android:paddingTop="30dp"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#7c7c7c"
             android:letterSpacing="0.01"
@@ -70,14 +69,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/visitYinbi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:visibility="gone"
             android:paddingBottom="15dp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#7c7c7c"
             android:letterSpacing="0.01"
@@ -103,7 +101,7 @@
             android:layout_width="216dp"
             android:text="@string/enter_bulk_pro_codes"
             android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:textSize="14sp"
             android:minHeight="48dp"
             android:textAllCaps="true"
@@ -120,7 +118,7 @@
             android:layout_width="216dp"
             android:text="@string/renew_pro_get_yinbi"
             android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:textSize="14sp"
             android:minHeight="48dp"
             android:textAllCaps="true"

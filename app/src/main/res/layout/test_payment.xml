@@ -43,12 +43,11 @@
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textSize="23sp"
-            android:fontFamily="sans-serif"
             android:gravity="center"
             android:paddingTop="20dp"
             android:textStyle="bold"
@@ -72,7 +71,7 @@
             android:layout_height="36dp"
             android:layout_width="216dp"
             android:text="@string/pay_now"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/MediumText"
             android:textSize="14sp"
             android:elevation="2dp"
             android:minHeight="48dp"

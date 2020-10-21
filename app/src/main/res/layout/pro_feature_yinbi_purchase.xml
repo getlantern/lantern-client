@@ -12,14 +12,13 @@
         android:paddingRight="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/featureText"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#7c7c7c"
             android:letterSpacing="0.01"

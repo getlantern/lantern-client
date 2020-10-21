@@ -4,18 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.R;
 
 public abstract class YinbiActivity extends FragmentActivity {
     private static final String TAG = YinbiActivity.class.getName();
@@ -33,8 +33,7 @@ public abstract class YinbiActivity extends FragmentActivity {
     protected TextView visitYinbi;
 
     protected static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    protected static final SessionManager session = LanternApp.getSession();
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +49,7 @@ public abstract class YinbiActivity extends FragmentActivity {
 
         renewPro.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(YinbiActivity.this, session.plansActivity()));
+                startActivity(new Intent(YinbiActivity.this, LanternApp.getSession().plansActivity()));
             }
         });
         enterProCodes.setOnClickListener(new View.OnClickListener() {

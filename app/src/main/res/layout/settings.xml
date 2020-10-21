@@ -6,7 +6,7 @@
     android:baselineAligned="false"
     android:background="@color/accent_white"
     android:id="@+id/settingsView"
-    tools:context=".SettingsActivity">
+    tools:context="org.getlantern.mobilesdk.activity.SettingsActivity">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
@@ -26,12 +26,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/proxyAllText"
-            style="@style/BoldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:textAppearance="@style/MediumText"
             android:text="@string/proxy_all_setting"
             android:textSize="16sp" />
 
@@ -53,7 +53,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/proxyAllDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

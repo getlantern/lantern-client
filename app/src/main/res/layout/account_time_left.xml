@@ -48,12 +48,12 @@
             android:paddingRight="10dp"
             android:src="@drawable/time_icon" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/headerText"
             android:textColor="@color/black"
-            android:fontFamily="sans-serif-light"
+            android:textAppearance="@style/LightText"
             android:text=""
             android:textSize="58sp"
             />
@@ -62,19 +62,18 @@
 </RelativeLayout>
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:textSize="13sp"
         android:text="@string/pro_account"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tabText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,20 +81,19 @@
         android:gravity="center"
         android:paddingTop="18dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif-light"
+        android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:text=""
         android:textSize="18sp"
         />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/upgradeNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="10dp"
         android:textColor="@color/black"
-        android:fontFamily="sans-serif"
         android:lineSpacingMultiplier="1.1"
         android:text="@string/renew_your_account"
         android:textSize="18sp"

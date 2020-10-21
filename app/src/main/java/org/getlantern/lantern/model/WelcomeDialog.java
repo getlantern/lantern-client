@@ -6,46 +6,43 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.widget.AppCompatRadioButton;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.activity.CheckoutActivity_;
-import org.getlantern.lantern.R;
-
-;
-
-import java.util.HashMap;
-import java.util.Map;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 import com.google.common.collect.ImmutableMap;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.res.StringArrayRes;
 import org.androidannotations.annotations.ViewById;
-import androidx.annotation.NonNull;
-
+import org.androidannotations.annotations.res.StringArrayRes;
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.CheckoutActivity_;
 import org.getlantern.mobilesdk.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
+
+;
 
 @EFragment
 public class WelcomeDialog extends DialogFragment {
 
     private static final String TAG = WelcomeDialog.class.getName();
     private static final int ENTER_EMAIL_REQUEST = 1;
-    private static final SessionManager session = LanternApp.getSession();
-    private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-
+    
     @FragmentArg("layout")
     String layout;
 
@@ -91,7 +88,7 @@ public class WelcomeDialog extends DialogFragment {
         }
         String subText = "";
         String headerText = null;
-        final Integer daysLeft = session.getProDaysLeft();
+        final Integer daysLeft = LanternApp.getSession().getProDaysLeft();
         if (daysLeft == null || daysLeft < 0) {
             // after expiration
             subText = getString(R.string.limited_time_offer);
@@ -207,7 +204,7 @@ public class WelcomeDialog extends DialogFragment {
     private void setPriceDetail(final TextView detail, final long numYears) {
         final Integer timeFree;
         final String subText;
-        final Integer daysLeft = session.getProDaysLeft();
+        final Integer daysLeft = LanternApp.getSession().getProDaysLeft();
         if (daysLeft == null || daysLeft < 0) {
             timeFree = numYears == 1 ? 15 : 45;
             subText = getString(R.string.days_free);
@@ -242,7 +239,7 @@ public class WelcomeDialog extends DialogFragment {
         cost.setText(plan.getCostStr());
         btn.setTag(plan.getId());
 
-        if (!session.isProUser()) {
+        if (!LanternApp.getSession().isProUser()) {
             return;
         }
 
@@ -258,7 +255,7 @@ public class WelcomeDialog extends DialogFragment {
         }
 
         startActivity(new Intent(getActivity(),
-                    session.plansActivity()));
+                    LanternApp.getSession().plansActivity()));
         return;
     }
 
@@ -274,7 +271,7 @@ public class WelcomeDialog extends DialogFragment {
             return;
         }
 
-        session.setProPlan(plans.get(planId));
+        LanternApp.getSession().setProPlan(plans.get(planId));
         final Intent emailIntent = new Intent(getActivity(),
                 CheckoutActivity_.class);
         getActivity().startActivityForResult(emailIntent, ENTER_EMAIL_REQUEST);
@@ -283,7 +280,7 @@ public class WelcomeDialog extends DialogFragment {
     @Click({R.id.close})
     public void close() {
         Logger.debug(TAG, "Close button clicked");
-        if (session.isProUser() || session.isExpired()) {
+        if (LanternApp.getSession().isProUser() || LanternApp.getSession().isExpired()) {
             showConfirmDialog();
         } else {
             dismiss();
@@ -298,7 +295,7 @@ public class WelcomeDialog extends DialogFragment {
                 .OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
 
-                        session.setRenewalPref(item == 0);
+                        LanternApp.getSession().setRenewalPref(item == 0);
                         dialog.dismiss();
                         dismiss();
                     }

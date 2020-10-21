@@ -4,43 +4,38 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.gson.JsonObject;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
+
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.CardFragment;
-import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.SessionManager;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Lantern;
+import org.getlantern.mobilesdk.Logger;
 
-import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.HttpUrl;
 import okhttp3.Response;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.getlantern.mobilesdk.Lantern;
-
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 public abstract class PlansActivity extends FragmentActivity {
 
     private static final String TAG = PlansActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    protected static final SessionManager session = LanternApp.getSession();
-
-    private static final String RESELLER_PORTAL = "https://reseller.lantern.io";
-
+    
     private ConcurrentHashMap<String, ProPlan> plans = new ConcurrentHashMap<String, ProPlan>();
 
     protected TextView oneYearCost, twoYearCost, resellerText;
@@ -102,12 +97,12 @@ public abstract class PlansActivity extends FragmentActivity {
 
     protected void setPaymentGateway() {
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("appVersion", session.appVersion());
-        params.put("country", session.getCountryCode());
+        params.put("appVersion", LanternApp.getSession().appVersion());
+        params.put("country", LanternApp.getSession().getCountryCode());
         // send any payment provider we get back from Firebase to the pro
         // server
-        params.put("remoteConfigPaymentProvider", session.getRemoteConfigPaymentProvider());
-        params.put("deviceOS", session.deviceOS());
+        params.put("remoteConfigPaymentProvider", LanternApp.getSession().getRemoteConfigPaymentProvider());
+        params.put("deviceOS", LanternApp.getSession().deviceOS());
         final HttpUrl url = LanternHttpClient.createProUrl("/user-payment-gateway", params);
         lanternClient.get(url, new LanternHttpClient.ProCallback() {
             @Override
@@ -124,7 +119,7 @@ public abstract class PlansActivity extends FragmentActivity {
                     final String provider = result.get("provider").getAsString();
                     if (provider != null) {
                         Logger.debug(TAG, "Payment provider is " + provider);
-                        session.setPaymentProvider(provider);
+                        LanternApp.getSession().setPaymentProvider(provider);
                     }
                 } catch (Exception e) {
                     Logger.error(TAG, "Unable to fetch plans", e);
@@ -187,7 +182,7 @@ public abstract class PlansActivity extends FragmentActivity {
         params.putString("app_version", Utils.appVersion(this));
         Lantern.sendEvent(this, "plan_selected", params);
 
-        session.setProPlan(plans.get(planId));
+        LanternApp.getSession().setProPlan(plans.get(planId));
         startActivity(new Intent(this, CheckoutActivity_.class));
     }
 
