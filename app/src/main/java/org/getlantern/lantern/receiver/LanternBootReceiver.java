@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 
-import org.getlantern.lantern.activity.LanternFreeActivity;
+import org.getlantern.lantern.activity.BeamFreeActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.service.LanternService_;
 
@@ -18,7 +18,7 @@ public class LanternBootReceiver extends BroadcastReceiver{
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
             Logger.debug(TAG, "RECEIVED BOOT COMPLETED");
 
-            Intent i = new Intent(context, LanternFreeActivity.class);
+            Intent i = new Intent(context, BeamFreeActivity.class);
             Bundle b = new Bundle();
             b.putInt("isBootUp", 1);
             i.putExtras(b);

@@ -12,7 +12,7 @@ public class Launcher extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Intent intent;
-        intent = new Intent(this, LanternFreeActivity.class);
+        intent = new Intent(this, BeamFreeActivity.class);
         startActivity(intent);
         finish();
     }

@@ -13,7 +13,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.app.NotificationCompat;
 
-import org.getlantern.lantern.activity.LanternFreeActivity;
+import org.getlantern.lantern.activity.BeamFreeActivity;
 import org.getlantern.lantern.R;
 
 import org.getlantern.mobilesdk.Logger;
@@ -48,7 +48,7 @@ public class Notify extends BroadcastReceiver {
         }
 
         final Intent resultIntent = new Intent(context,
-                LanternFreeActivity.class);
+                BeamFreeActivity.class);
         // For unknown reason, passing this (instead of zero) resumes the
         // existing activity if possible, instead of creating a new one.
         int requestCode = (int)System.currentTimeMillis();
