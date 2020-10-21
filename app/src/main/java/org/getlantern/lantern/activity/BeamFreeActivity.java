@@ -38,7 +38,7 @@ public class BeamFreeActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_lantern_free_main;
+        return R.layout.activity_beam_free_main;
     }
 
     private void setHeaderLogo(boolean useVpn) {

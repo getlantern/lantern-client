@@ -35,9 +35,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeamApp extends Application implements ActivityLifecycleCallbacks {
+public class LanternApp extends Application implements ActivityLifecycleCallbacks {
 
-  private static final String TAG = BeamApp.class.getName();
+  private static final String TAG = LanternApp.class.getName();
   private static Context appContext;
   private static HttpClient httpClient;
   private static BeamSessionManager session;
@@ -206,7 +206,7 @@ public class BeamApp extends Application implements ActivityLifecycleCallbacks {
     // multidex support has to be added manually
     // in addition to being enabled in the app build.gradle
     // See http://stackoverflow.com/questions/36907916/java-lang-noclassdeffounderror-while-registering-eventbus-in-onstart-method-for
-    MultiDex.install(BeamApp.this);
+    MultiDex.install(LanternApp.this);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
