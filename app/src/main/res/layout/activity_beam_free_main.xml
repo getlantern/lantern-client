@@ -7,13 +7,15 @@
     android:background="@color/custom_tab_icon"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
     <fragment
         android:id="@+id/sideBar"
-        android:layout_gravity="start"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         android:name="org.getlantern.mobilesdk.fragment.SideMenuFragment"
         tools:layout="@layout/side_menu"/>
 
@@ -49,47 +51,4 @@
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- The navigation drawer -->
-    <RelativeLayout
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:elevation="7.5dp"
-        android:background="@drawable/nav_background_white"
-        android:id="@+id/drawerPane"
-        android:layout_gravity="start">
-
-        <!-- Profile Box -->
-        <RelativeLayout
-            android:id="@+id/profileBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="8dp" >
-            <ImageView
-                android:id="@+id/backBtn"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/menu"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/backBtn"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/logoText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:paddingBottom="22dp"
-                    android:src="@drawable/logo_text"/>
-
-            </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

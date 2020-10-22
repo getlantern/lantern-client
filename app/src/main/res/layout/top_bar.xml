@@ -27,11 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingTop="10dp"
             android:gravity="center"
             android:adjustViewBounds="true"
-            android:paddingBottom="10dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/lantern_logo" />
+            android:src="@drawable/beam_logo" />
 
     </RelativeLayout>
 </LinearLayout>
