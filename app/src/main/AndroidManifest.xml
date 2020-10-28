@@ -161,7 +161,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.ReportIssueActivity_"
+            android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
             android:screenOrientation="portrait"/>
 
         <activity
