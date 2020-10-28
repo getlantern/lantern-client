@@ -19,7 +19,7 @@
         lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/report_an_issue"/>
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/emailInput"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
@@ -30,12 +30,11 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="14dp"
-        android:autoText="false"
         android:paddingTop="20dp"
         android:paddingBottom="5dp"
         android:layout_gravity="center"
         android:gravity="left"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="@style/MediumText"
         android:inputType="textEmailAddress" />
 
     <View
@@ -51,7 +50,7 @@
         />
 
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/issue"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
@@ -64,13 +63,12 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="14dp"
-        android:autoText="false"
         android:paddingTop="20dp"
         android:paddingBottom="5dp"
         android:layout_gravity="center"
         android:gravity="left"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:inputType="textEmailAddress" />
+        android:textAppearance="@style/MediumText"
+        android:inputType="text" />
 
     <View
         android:id="@+id/issueSeparator"
@@ -90,38 +88,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-     <EditText
-        android:id="@+id/description"
-        android:layout_marginTop="43.5dp"
-        android:layout_width="310dp"
-        android:layout_height="302dp"
-        android:background="@drawable/report_issue"
-        android:textColorHint="@color/reportIssueHintText"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:drawablePadding="10dip"
-        android:hint="@string/select_issue_desc"
-        android:textColor="@color/black"
-        android:textSize="12dp"
-        android:autoText="false"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:ems="10"
-        android:gravity="left"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:inputType="textEmailAddress" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/description"
+            android:layout_marginTop="43.5dp"
+            android:layout_width="310dp"
+            android:layout_height="302dp"
+            android:background="@drawable/report_issue"
+            android:textColorHint="@color/reportIssueHintText"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:drawablePadding="10dip"
+            android:hint="@string/select_issue_desc"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:gravity="left"
+            android:textAppearance="@style/MediumText"
+            android:inputType="textMultiLine" />
 
-    <ListView android:id="@+id/list"
-        android:layout_width="302dp"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:background="@color/accent_white"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:drawSelectorOnTop="false"/>
+        <ListView android:id="@+id/list"
+            android:layout_width="302dp"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:background="@color/accent_white"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:drawSelectorOnTop="false"/>
 
     </RelativeLayout>
 
