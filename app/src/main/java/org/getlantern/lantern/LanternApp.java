@@ -21,21 +21,21 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.leakcanary.LeakCanary;
 
-import org.getlantern.mobilesdk.util.HttpClient;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.getlantern.lantern.activity.BaseActivity;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.LanternSessionManager;
+import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
+import org.getlantern.mobilesdk.activity.BaseActivity;
+import org.getlantern.mobilesdk.util.HttpClient;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
