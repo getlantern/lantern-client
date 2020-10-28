@@ -48,7 +48,7 @@
                     android:adjustViewBounds="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/lantern_logo" />
+                    android:src="@drawable/logo" />
 
             </RelativeLayout>
 
