@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.collect.ImmutableMap;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.leakcanary.LeakCanary;
@@ -89,7 +89,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     appContext = getApplicationContext();
-    session = new LanternSessionManager(appContext);
+    session = new LanternSessionManager(this);
     if (Utils.isPlayVersion(this)) {
       inAppBilling = new InAppBilling(this);
     }
@@ -110,10 +110,13 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     firebaseAnalytics.setUserProperty(FIREBASE_RECENT_INSTALL_USER_PROPERTY, String.valueOf(session.isRecentInstall()));
 
     firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-    FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-        .setDeveloperModeEnabled(Utils.isDebuggable(context)).build();
-    firebaseRemoteConfig.setConfigSettings(configSettings);
-    firebaseRemoteConfig.setDefaults(firebaseDefaults);
+    FirebaseRemoteConfigSettings.Builder builder = new FirebaseRemoteConfigSettings.Builder();
+    if (Utils.isDebuggable(context)) {
+      builder.setMinimumFetchIntervalInSeconds(3600L).build();
+    }
+    FirebaseRemoteConfigSettings configSettings = builder.build();
+    firebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+    firebaseRemoteConfig.setDefaultsAsync(firebaseDefaults);
   }
 
   private Task<Void> updateFirebaseConfig() {
@@ -128,9 +131,9 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
       public void onComplete(@NonNull Task<Void> task) {
         if (task.isSuccessful()) {
           Logger.debug(TAG, "Successfully fetched firebase configuration.");
-          firebaseRemoteConfig.activateFetched();
+          firebaseRemoteConfig.activate();
           onFirebaseConfigUpdated();
-          Logger.debug(TAG, "Firebase IID_TOKEN: " + FirebaseInstanceId.getInstance().getToken());
+          Logger.debug(TAG, "Firebase IID_TOKEN: " + FirebaseInstallations.getInstance().getToken(false));
         } else {
           Logger.debug(TAG, "Failed to fetch firebase configuration.");
         }
