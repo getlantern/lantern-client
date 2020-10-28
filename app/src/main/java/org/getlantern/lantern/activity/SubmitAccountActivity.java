@@ -23,9 +23,9 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.MailSender;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.MailSender;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -113,7 +113,7 @@ public class SubmitAccountActivity extends FragmentActivity {
         String purchaseDate = df.format(date);
 
         LanternApp.getSession().setEmail(email);
-        MailSender mailSender = new MailSender(this, "manual-recover-account", false);
+        MailSender mailSender = new MailSender(this, "manual-recover-account", false, false);
         mailSender.addMergeVar("paymentMethod", selectedPaymentMethod);
         mailSender.addMergeVar("paymentAccount", paymentAccount.getText().toString());
         mailSender.addMergeVar("note", description.getText().toString());
