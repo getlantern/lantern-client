@@ -11,7 +11,7 @@
     android:focusableInTouchMode="true"
     android:baselineAligned="false"
     android:id="@+id/reportIssueView"
-    tools:context=".ReportIssueActivity">
+    tools:context=".activity.yinbi.RedeemBulkCodesActivity">
 
     <fragment
         android:id="@+id/titlebar_fragment"
