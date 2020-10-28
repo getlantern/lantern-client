@@ -34,7 +34,7 @@
         android:paddingBottom="5dp"
         android:layout_gravity="center"
         android:gravity="left"
-        android:textAppearance="@style/MediumText"
+        android:textAppearance="@style/RegularText"
         android:inputType="textEmailAddress" />
 
     <View
@@ -67,7 +67,7 @@
         android:paddingBottom="5dp"
         android:layout_gravity="center"
         android:gravity="left"
-        android:textAppearance="@style/MediumText"
+        android:textAppearance="@style/RegularText"
         android:inputType="text" />
 
     <View
@@ -100,12 +100,12 @@
             android:drawablePadding="10dip"
             android:hint="@string/select_issue_desc"
             android:textColor="@color/black"
-            android:textSize="12dp"
+            android:textSize="14sp"
             android:padding="10dp"
             android:layout_gravity="center"
             android:ems="10"
             android:gravity="left"
-            android:textAppearance="@style/MediumText"
+            android:textAppearance="@style/RegularText"
             android:inputType="textMultiLine" />
 
         <ListView android:id="@+id/list"
