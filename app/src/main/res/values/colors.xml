@@ -90,4 +90,6 @@
     <color name="material_button">#db0a5b</color>
 
     <color name="selected_item">@color/pink</color>
+
+    <color name="fine_print_link">#007a7c</color>
 </resources>

@@ -192,9 +192,6 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
             case R.id.desktop_option:
                 itemClass = DesktopActivity_.class;
                 break;
-            case R.id.report_an_issue:
-                itemClass = ReportIssueActivity_.class;
-                break;
         }
 
         if (itemClass != null) {

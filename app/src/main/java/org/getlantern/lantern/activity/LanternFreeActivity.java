@@ -143,9 +143,9 @@ public class LanternFreeActivity extends BaseActivity {
 
     private void setHeaderLogo(boolean useVpn) {
         if (useVpn) {
-            headerLogo.setImageResource(R.drawable.lantern_logo_white);
+            headerLogo.setImageResource(R.drawable.logo_white);
         } else {
-            headerLogo.setImageResource(R.drawable.lantern_logo);
+            headerLogo.setImageResource(R.drawable.logo);
         }
     }
 

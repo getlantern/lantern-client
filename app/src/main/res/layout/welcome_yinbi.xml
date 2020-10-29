@@ -42,7 +42,7 @@
                 android:layout_marginTop="5dp"
                 android:paddingBottom="5dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/lantern_logo_star"/>
+                android:src="@drawable/logo_star"/>
 
             <View android:id="@+id/separator"
                 android:background="@color/black"
