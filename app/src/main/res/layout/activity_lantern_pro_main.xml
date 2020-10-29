@@ -48,7 +48,7 @@
                     android:adjustViewBounds="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/lantern_logo" />
+                    android:src="@drawable/logo" />
 
             </RelativeLayout>
 
@@ -209,21 +209,21 @@
                     android:paddingRight="5dp"
                     android:text="@string/privacy_policy"
                     android:textSize="10sp"
-                    android:textColor="#007a7c" />
+                    android:textColor="@color/fine_print_link" />
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
                     android:text="|"
                     android:textSize="10sp"
-                    android:textColor="#007a7c" />
+                    android:textColor="@color/fine_print_link" />
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/termsOfServiceLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/terms_of_service"
                     android:textSize="10sp"
-                    android:textColor="#007a7c" />
+                    android:textColor="@color/fine_print_link" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

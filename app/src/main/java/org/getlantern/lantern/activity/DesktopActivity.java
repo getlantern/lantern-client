@@ -5,15 +5,15 @@ import android.os.Build;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
-import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.MailSender;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.MailSender;
 
 @EActivity(R.layout.desktop_option)
 public class DesktopActivity extends FragmentActivity {
@@ -48,7 +48,7 @@ public class DesktopActivity extends FragmentActivity {
         final DesktopActivity activity = this;
 
         Logger.debug(TAG, "Sending Lantern Desktop to " + email);
-        MailSender mailSender = new MailSender(DesktopActivity.this, "download-link-from-lantern-website", true);
+        MailSender mailSender = new MailSender(DesktopActivity.this, "download-link-from-lantern-website", true, false);
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB)
             mailSender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, email);
         else

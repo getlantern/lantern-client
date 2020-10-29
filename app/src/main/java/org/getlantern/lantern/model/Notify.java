@@ -29,7 +29,7 @@ public class Notify extends BroadcastReceiver {
 
         final int notificationId = 100;
         final Resources resources = context.getResources();
-        Bitmap largeIcon = getBitmap(resources, R.drawable.lantern_icon);
+        Bitmap largeIcon = getBitmap(resources, R.drawable.app_icon);
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
         NotificationCompat.Builder mBuilder =

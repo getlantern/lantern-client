@@ -1,6 +1,6 @@
 package org.getlantern.lantern.model
 
-import android.content.Context
+import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
 import org.getlantern.lantern.BuildConfig
@@ -18,7 +18,7 @@ import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
-class LanternSessionManager(context: Context) : SessionManager(context) {
+class LanternSessionManager(application: Application) : SessionManager(application) {
     private var selectedPlan: ProPlan? = null
 
     // the devices associated with a user's Pro account

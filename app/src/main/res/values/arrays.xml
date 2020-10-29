@@ -118,7 +118,7 @@
         <item>ar_EG</item>
         <item>fa_IR</item>
         <item>zh_CN</item>
-        <item>zh_TW</item>
+        <item>zh_HK</item>
     </string-array>
 
     <string-array translatable="false" name="special_locale_names">
@@ -139,7 +139,7 @@
         <item>ru_RU</item>
         <item>ur_IN</item>
         <item>zh-CN</item>
-        <item>zh-TW</item>
+        <item>zh-HK</item>
         <item>es_ES</item>
         <item>tr_TR</item>
         <item>vi_VN</item>
