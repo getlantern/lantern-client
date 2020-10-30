@@ -78,7 +78,7 @@
     <color name="finestBlack">#000000</color>
     <color name="finestSilver">#A5A5A5</color>
     <color name="finestGray">#E7E7E7</color>
-    <color name="reportIssueHintText">#bebdbd</color>
+    <color name="hintText">#bebdbd</color>
     <color name="alipayEditText">#bebdbc</color>
 
     <color name="material_link">#0095a8</color>

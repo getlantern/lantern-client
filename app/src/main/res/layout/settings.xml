@@ -22,8 +22,10 @@
         android:layout_gravity="center"
         android:paddingTop="44dp"
         android:paddingBottom="35dp"
-        android:layout_width="290dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -48,8 +50,10 @@
     <LinearLayout
         android:id="@+id/proxyAllInfoSection"
         android:layout_gravity="center"
-        android:layout_width="290dp"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -58,7 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:alpha="0.87"
             android:adjustViewBounds="true"
             android:textSize="14sp"
             android:layout_gravity="left"

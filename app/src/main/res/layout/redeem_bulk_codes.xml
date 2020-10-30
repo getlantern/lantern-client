@@ -44,7 +44,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/report_issue"
-            android:textColorHint="@color/reportIssueHintText"
+            android:textColorHint="@color/hintText"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:drawablePadding="10dip"
