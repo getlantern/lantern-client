@@ -58,7 +58,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:alpha="0.87"
             android:adjustViewBounds="true"
             android:textSize="14sp"
             android:layout_gravity="left"
