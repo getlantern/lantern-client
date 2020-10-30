@@ -122,6 +122,10 @@ android {
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
+            buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
+            buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
+            buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
+
 //            buildConfigField "String", "FORCE_COUNTRY", '"CN"' // we can force the build to act as if it's in a specific country like '"CN"' or '"IR"'
             buildConfigField "String", "FORCE_COUNTRY", '""'
         }
@@ -137,6 +141,10 @@ android {
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
+            buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"'
+            buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
+            buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
+
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "FORCE_COUNTRY", '""'

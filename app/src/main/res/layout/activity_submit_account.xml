@@ -173,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp"
             android:text="@string/purchase_date"
-            android:textColor="@color/reportIssueHintText"
+            android:textColor="@color/hintText"
             android:textSize="12sp"
             android:gravity="left"/>
 
@@ -223,7 +223,7 @@
         android:layout_height="96dp"
         android:background="@drawable/report_issue"
         android:inputType="textMultiLine"
-        android:textColorHint="@color/reportIssueHintText"
+        android:textColorHint="@color/hintText"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:drawablePadding="10dip"
