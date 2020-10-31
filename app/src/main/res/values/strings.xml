@@ -75,13 +75,13 @@
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="success_email">Lantern Desktop has been e-mailed to you!</string>
-    <string name="error_email">There was a problem sending you Lantern Desktop. Please try again later.</string>
+    <string name="error_email">There was a problem sending you %1$s Desktop. Please try again later.</string>
     <string name="send_logs">Send Logs</string>
     <string name="help_survey">Help make Lantern better, take this one question survey now!</string>
     <string name="take_survey">Take Survey!</string>
     <string name="thanks_survey">Thanks for taking our survey!\n</string>
-    <string name="success_log_email">Logs submitted successfully to Lantern!</string>
-    <string name="error_log_email">Error sending logs to Lantern. Please try again later.</string>
+    <string name="success_log_email">Logs submitted successfully to %1$s!</string>
+    <string name="error_log_email">Error sending logs to %1$s. Please try again later.</string>
     <string name="invalid_email">Invalid e-mail address</string>
     <string name="error_payment_gateway">Error contacting payment gateway</string>
     <string name="emails_do_not_match">Email fields do not match</string>
