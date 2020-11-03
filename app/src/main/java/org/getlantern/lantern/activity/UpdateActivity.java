@@ -139,7 +139,8 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             super.onPreExecute();
 
             progressBar = new ProgressDialog(activity);
-            progressBar.setMessage(getResources().getString(R.string.updating_lantern));
+            String appName = getString(R.string.app_name);
+            progressBar.setMessage(String.format(getString(R.string.updating_lantern), appName));
             progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressBar.setIndeterminate(false);
             progressBar.setCancelable(true);
