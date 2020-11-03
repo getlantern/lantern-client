@@ -11,15 +11,18 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
@@ -37,6 +40,16 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
     @Extra("updateUrl")
     String updateUrl;
+
+    @ViewById
+    TextView updateAvailable;
+
+    @AfterViews
+    void afterViews() {
+        String appName = getResources().getString(R.string.app_name);
+        String message = String.format(getResources().getString(R.string.update_available), appName);
+        updateAvailable.setText(message);
+    }
 
     @Override
     protected void onStart() {
