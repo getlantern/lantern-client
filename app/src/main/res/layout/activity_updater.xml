@@ -45,7 +45,7 @@
                 android:scaleType="centerInside"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/update_available"
+                android:id="@+id/updateAvailable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="10dp"  
                 android:layout_marginBottom="10dp"
                 android:textColor="#000000"
-                android:text="@string/update_available"
+                android:text=""
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <LinearLayout
@@ -76,7 +76,7 @@
                     android:minHeight="48dp"
                     android:onClick="onClick"
                     android:textSize="20sp"
-                    android:textColor="@color/pro_blue_color"
+                    android:textColor="@color/update_dialog_accent_color"
                     android:background="@drawable/not_now_btn"
                     android:text="@string/not_now"/>
 

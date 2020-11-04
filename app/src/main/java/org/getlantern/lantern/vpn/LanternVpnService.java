@@ -113,7 +113,7 @@ public class LanternVpnService extends VpnService implements Runnable {
     }
     Notification notification = new NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.status_on)
         .setLargeIcon(((BitmapDrawable) getResources().getDrawable(R.drawable.app_icon)).getBitmap())
-        .setContentTitle("Lantern").setContentText("Connected to VPN").setContentIntent(mConfigureIntent).build();
+        .setContentTitle(getText(R.string.app_name)).setContentText(getText(R.string.service_connected)).setContentIntent(mConfigureIntent).build();
     startForeground(1, notification);
   }
 

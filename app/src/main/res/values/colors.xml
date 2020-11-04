@@ -92,4 +92,6 @@
     <color name="selected_item">@color/pink</color>
 
     <color name="fine_print_link">#007a7c</color>
+
+    <color name="update_dialog_accent_color">@color/pro_blue_color</color>
 </resources>
