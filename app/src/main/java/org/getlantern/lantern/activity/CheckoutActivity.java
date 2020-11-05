@@ -188,8 +188,6 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
         boolean isRenewal = LanternApp.getSession().isProUser();
         if (isRenewal) {
-            // Don't allow changing email of existing pro user
-            emailInput.setEnabled(false);
             // Don't allow entering a referral code
             referralCodeInput.setVisibility(View.GONE);
         } else {
@@ -308,11 +306,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         final String referral = referralCodeInput.getText().toString().trim().toUpperCase();
 
         if (referral.equals("") || referral.equals(LanternApp.getSession().referral())) {
-            if (!email.equals(LanternApp.getSession().email())) {
-                checkEmailExistence(email);
-            } else {
-                submit(email);
-            }
+            checkEmailExistence(email);
         } else {
             handleReferral(referral, email);
         }
