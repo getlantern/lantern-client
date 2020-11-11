@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">I-proxy lahat ng traffic</string>
   <string name="proxy_all_on_header">BUKAS (Pinakaligtas na opsyon)</string>
   <string name="proxy_all_off_header">SARADO (Pinakamabilis na opsyon)</string>
-  <string name="proxy_all_on">Sa opsyon na ito, lahat ng traffic ng iyong device ay ipapadala gamit ang Lantern</string>
-  <string name="proxy_all_off">Sa naka-off na opsyong ito, lahat ng traffic sa mga naka-block na site ay ipapadala gamit ang Lantern</string>
   <string name="button_text">Magsimula</string>
   <string name="drawer_open">Bukas ang Drawer</string>
   <string name="drawer_close">Nakasara ang Drawer</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Ang Lantern ay Nakabukas. Makakapasok ka na ngayon sa mga naka-block na site at serbisyo!</string>
   <string name="on_desc">Maaari ka na ngayong makapasok sa\r\nmga naka-block na site at serbisyo</string>
   <string name="off_desc">Pindutin ang button upang makapasok sa mga naka-block na site at serbisyo!</string>
-  <string name="service_connected">Nakakonekta ang Lantern</string>
   <string name="desktop_option">Bersyon ng Desktop</string>
   <string name="contact_option">Makipag-ugnayan</string>
   <string name="check_for_update">Tumingin ng Update</string>
   <string name="no_update_available">Ikaw ay up to date!</string>
-  <string name="error_checking_for_update">Nagkaroon ng problema sa pagtingin ng bagong bersyon ng Lantern</string>
   <string name="error_making_purchase">May problema sa pagbili</string>
-  <string name="have_latest_version">Ang Lantern %1$s ang pinakabagong bersyon na magagamit.</string>
-  <string name="updating_lantern">Nag-a-update ng Lantern</string>
   <string name="cancel">Kanselahin</string>
   <string name="newsfeed_option">Subukan ang Lantern Feed</string>
   <string name="newsfeed_off_option">Ihinto ang Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Buwan</string>
   <string name="year">Taon</string>
   <string name="success_email">Ang Lantern Desktop ay in-email sa iyo!</string>
-  <string name="error_email">Mayroong problema sa pagpapadala sa iyo ng Lantern Desktop. Pakisubukang muli mamaya.</string>
   <string name="send_logs">Ipadala ang mga Log</string>
   <string name="help_survey">Tumulong na maging mas maganda ang Lantern, sagutan ang isang tanong na survey ngayon!</string>
   <string name="take_survey">Sagutan ang Survey!</string>
   <string name="thanks_survey">Salamat sa pagsagot sa aming survey!\n</string>
-  <string name="success_log_email">Matagumpay na naisumite ang mga log sa Lantern!</string>
-  <string name="error_log_email">Nagkaroon ng problema sa pagpadala ng mga log sa Lantern. Pakisubukang muli mamaya.</string>
   <string name="invalid_email">Hindi wastong email address</string>
   <string name="error_payment_gateway">Nagkaroon ng problema sa pakikipag-ugnayan sa gateway ng pagbabayad</string>
   <string name="emails_do_not_match">Hindi magkapareho ang mga email field</string>
@@ -95,7 +86,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Tulungan Ako</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Mayroong bagong bersyon ng Lantern na magagamit! Nais mo bang mag-upgrade ngayon?</string>
   <string name="not_now">Hindi Ngayon</string>
   <string name="install_update">Update</string>
   <string name="error_update">Nagkaproblema sa Pag-download ng Update</string>
@@ -170,7 +160,6 @@
   <string name="start_recovery">Simulan ang Pagrecover</string>
   <string name="account_recovery">Account Recovery</string>
   <string name="account_recovery_code">Account Recovery Code</string>
-  <string name="email_recovery_code">Isang email na may recovery code ang ipinadala sa %1$s. Ilagay ang code na nagmula sa email sa itaas. Maaaring abutin ng ilang oras bago dumating ang email.</string>
   <string name="thanks_report">Salamat, makikipag-ugnayan ang Lantern Customer support sa loob ng 48 oras.</string>
   <string name="enter_valid_code">Pakilagay ang wastong recovery code.</string>
   <string name="too_many_devices">Ang limitasyon ng device na maaaring i-link sa iyong Pro account ay naabot na.</string>
@@ -335,7 +324,7 @@
   <string name="data_usage">Paggamit ng Data</string>
   <string name="pro_account">Pro Account</string>
   <string name="blocked_ads">Naka-block na Ads</string>
-  <string name="upgrade_now_data">Mag-upgrade ngayon para sa walang limitasyong mabilis na serbisyo</string>
+  <string name="upgrade_now_data">Mag-upgrade ngayon para sa walang limitasyong mabilis na serbisyo!</string>
   <string name="renew_your_account">I-renew ang iyong account upang magdagdag ng mas maraming oras</string>
   <string name="turn_on_lantern">Buksan ang Lantern para sa mas mabilis at ligtas na pagpasok sa mga naka-block na site at serbisyo.</string>
   <string name="lantern_on_text">Ikaw ay nakakonekta sa pinakamabilis na Lantern server, Magsimula ng Mag-browse!</string>

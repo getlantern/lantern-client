@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">لانترن </string>
+  <string name="app_name">لانترن</string>
   <string name="action_settings">الاعدادات</string>
   <string name="proxy_all_setting">معالجة كل المواقع</string>
   <string name="proxy_all_on_header">لا (الخيار الأكثر أماناً)</string>
   <string name="proxy_all_off_header">ايقاف (الخيار الأسرع)</string>
-  <string name="proxy_all_on">مع هذا الخيار، سيتم ارسال جميع زيارات جهازك عبر تطبيف لانترن</string>
-  <string name="proxy_all_off">مع ايقاف هذا الخيار، سيتم فقط ارسال الزيارات للمواقع المحظورة عبر تطبيق لانترن</string>
   <string name="button_text">إبدأ</string>
   <string name="drawer_open">فتح الدرج</string>
   <string name="drawer_close">غلق الدرج</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">لانترن يعمل. يمكنك الآن النفاذ الى المواقع و الخدمات المحجوبة</string>
   <string name="on_desc">يمكنك الآن الوصول\r\nالمواقع و الخدمات المحجوبة</string>
   <string name="off_desc">اضغط الزر للوصول الى المواقع و الخدمات المحجوبة</string>
-  <string name="service_connected">لانترن متصل</string>
   <string name="desktop_option">نسخة سطح المكتب</string>
   <string name="contact_option">إتصال</string>
   <string name="check_for_update">تحقق من وجود تحديثات</string>
   <string name="no_update_available">لديك آخر التحديثات! </string>
-  <string name="error_checking_for_update">خطأ في التحقق من آخر نسخة من لانترن</string>
   <string name="error_making_purchase">خطأ في اجراء الشراء</string>
-  <string name="have_latest_version">لانترن %1$s هي أحدث نسخة متوفرة.</string>
-  <string name="updating_lantern">جار تحديث لانترن</string>
   <string name="cancel">إلغاء</string>
   <string name="newsfeed_option">جرب التزود بمقتطفات أخبار لانترن </string>
   <string name="newsfeed_off_option">ايقاف التزويد</string>
@@ -76,13 +70,10 @@
   <string name="month">شهر</string>
   <string name="year">سنة</string>
   <string name="success_email">تم ارسال لانترن لسطح المكتب على بريدك الالكتروني!</string>
-  <string name="error_email">واجهنا خطأ عند بعثنا لك نسخة سطح المكتب، الرجاء المحاولة لاحقا.</string>
   <string name="send_logs">أرسل السجلات</string>
   <string name="help_survey">ساعدنا على تحسين لانترن، الرجاء المشاركة في هذا الاستطلاع ذو السؤال الواحد الآن!</string>
   <string name="take_survey">شارك في استطلاع الرأي!</string>
   <string name="thanks_survey">شكرا لمشاركتك في استطلاع الرأي!\n</string>
-  <string name="success_log_email">تم إرسال السجلات بنجاح إلى لانترن!</string>
-  <string name="error_log_email">خطأ عند محاولة إرسال السجلات إلى لانترن، الرجاء المحاولة لاحقا.</string>
   <string name="invalid_email">عنوان البريد الإلكتروني غير صالح</string>
   <string name="error_payment_gateway">خطأ في الاتصال ببوابة الدفع</string>
   <string name="emails_do_not_match">حقول البريد الالكتروني غير متطابقة</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">ساعدني</string>
   <string name="contact_subject">لانترن اندرويد</string>
-  <string name="update_available">هناك تسخة جديدة متوفرة من لانترن! هل تريد التحديث الآن؟</string>
   <string name="not_now">ليس الآن</string>
   <string name="install_update">تحديث</string>
   <string name="error_update">خطأ في تنزيل التحديث</string>
@@ -360,7 +350,7 @@
   <string name="creditcard_alipay">بطاقة ائتمانية/Alipay</string>
   <string name="fastworldpay">فاست ورلد باي (شيتاب)</string>
   <string name="blocked_ads">الاعلانات المحظورة</string>
-  <string name="upgrade_now_data">الترقية الى خدمة السرعة الفائقة اللامحدودة</string>
+  <string name="upgrade_now_data">قم بالترقية الآن لخدمة سرعة عالية غير محدودة!</string>
   <string name="renew_your_account">جدد حسابك لاضافة المزيد من الوقت</string>
   <string name="turn_on_lantern">قم بتشغيل لانترن من أجل تمكين الوصول الآمن والسريع الى الخدمات والمواقع المحظورة.</string>
   <string name="lantern_on_text">أنت متصل على أسرع خادم لتطبيق لانترن. ابداأ بالتصفح!</string>
@@ -464,5 +454,4 @@
   <string name="android.permission.ACCESS_NETWORK_STATE">معالجة حركة بياناتك</string>
   <string name="privacy_disclosure_title">الكشف عن خصوصية لانترن</string>
   <string name="privacy_disclosure_accept">موافق</string>
-  <string name="privacy_disclosure_body">تلتزم لانترن بحماية خصوصيتك. نوَّد أن تفهم نوع المعلومات التي لا نجمعها، ونوع المعلومات التي نجمعها، وكيف نستخدمها، وكيف نخزنها. \n\nإننا لا نجمع سجلات نشاطك، أي لا يتم إنشاء سجلات عن سجل تصفحك، أو وجهة البيانات، أو محتوى البيانات، أو استعلامات نظام أسماء النطاقات (DNS). كما أننا لا نخزن مطلقًا سجلات الاتصال، أي لا يتم إنشاء أي سجلات عن عنوان بروتوكول الإنترنت (IP) الخاص بك، أو عنوان بروتوكول الإنترنت لخادم لانترن الصادر المرتبط بالطابع الزمني للاتصال، أو مدة الجلسة. \n\nبالنسبة لمستخدمي لانترن المجانيين، فنحن نجمع بروتوكولات الإنترنت للمستخدمين للحد من الإساءات. ومع ذلك، لا يمكننا ربط بروتوكول الإنترنت لخادم لانترن بعنوان بروتوكول الإنترنت الخاص بالمستخدم حتى باستخدام الطابع الزمني الدقيق. إننا نجمع عنوان بريدك الإلكتروني ومعلومات الدفع إذا اشتريت حساب لانترن الاحترافي. \n\nونجمع معلومات تشخيصية حول أداء التطبيق، بما فيها تقارير التعطل ومعلومات حول الحزم المثبتة.</string>
 </resources>

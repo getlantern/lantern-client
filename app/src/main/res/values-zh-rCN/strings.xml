@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">代理全部流量</string>
   <string name="proxy_all_on_header">开启(更安全)</string>
   <string name="proxy_all_off_header">关闭(更快速)</string>
-  <string name="proxy_all_on">开启后蓝灯会代理所有流量</string>
-  <string name="proxy_all_off">关闭后蓝灯只会代理被墙的网站</string>
   <string name="button_text">启动</string>
   <string name="drawer_open">打开抽屉</string>
   <string name="drawer_close">关上抽屉</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">蓝灯已开启。您现在可以访问被屏蔽的网站和服务！</string>
   <string name="on_desc">您现在可以访问\r\n被屏蔽的网站和服务</string>
   <string name="off_desc">点击按钮以访问被屏蔽的网站和服务</string>
-  <string name="service_connected">蓝灯已连接</string>
   <string name="desktop_option">桌面版</string>
   <string name="contact_option">联系</string>
   <string name="check_for_update">检查更新</string>
   <string name="no_update_available">您已在使用最新版！</string>
-  <string name="error_checking_for_update">检查新版本发生错误</string>
   <string name="error_making_purchase">购买出现错误</string>
-  <string name="have_latest_version">新版本蓝灯 %1$s 可用。</string>
-  <string name="updating_lantern">正在更新蓝灯</string>
   <string name="cancel">取消</string>
   <string name="newsfeed_option">打开新闻流</string>
   <string name="newsfeed_off_option">关闭新闻流</string>
@@ -76,13 +70,10 @@
   <string name="month">月</string>
   <string name="year">年</string>
   <string name="success_email">蓝灯桌面版已通过电子邮件发给你！</string>
-  <string name="error_email">向你发送蓝灯桌面版时遇到问题，请稍后再试。</string>
   <string name="send_logs">发送日志</string>
   <string name="help_survey">帮助蓝灯变得更好，请参与用户问卷！</string>
   <string name="take_survey">参与用户问卷！</string>
   <string name="thanks_survey">感谢你回答问题!\n</string>
-  <string name="success_log_email">日志已成功提交给蓝灯！</string>
-  <string name="error_log_email">发送日志到蓝灯失败。请稍后再试。</string>
   <string name="invalid_email">无效的邮箱地址</string>
   <string name="error_payment_gateway">联系支付网关时出错</string>
   <string name="emails_do_not_match">电子邮件地址不相符</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">帮助我</string>
   <string name="contact_subject">蓝灯安卓版</string>
-  <string name="update_available">蓝灯有新版本可用！您想升级它吗？</string>
   <string name="not_now">暂不</string>
   <string name="install_update">更新</string>
   <string name="error_update">下载更新时出错</string>
@@ -371,7 +361,7 @@
   <string name="creditcard_alipay">信用卡/支付宝</string>
   <string name="fastworldpay">快速全球支付（Shetab）</string>
   <string name="blocked_ads">已拦截的广告</string>
-  <string name="upgrade_now_data">升级到专业版，享受无限的高速流量！</string>
+  <string name="upgrade_now_data">升级到专业版可无限量的高速浏览！</string>
   <string name="renew_your_account">续订专业版帐户，以增加更多使用时间</string>
   <string name="turn_on_lantern">打开蓝灯，快速安全地访问被屏蔽的网站和服务。</string>
   <string name="lantern_on_text">您已经连接到最快的蓝灯服务器。享受吧！</string>

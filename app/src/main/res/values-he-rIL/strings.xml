@@ -19,13 +19,11 @@
   <string name="purchase_date">תאריך רכישה</string>
   <string name="on_text">פועל</string>
   <string name="off_text">כבוי</string>
-  <string name="service_connected">Lantern מחובר</string>
   <string name="desktop_option">גרסת שולחן עבודה</string>
   <string name="contact_option">צור קשר</string>
   <string name="check_for_update">בדוק אחר עדכון</string>
   <string name="no_update_available">אתה מעודכן!</string>
   <string name="error_making_purchase">שגיאה בניסיון לבצע רכישה</string>
-  <string name="updating_lantern">מעדכן את Lantern</string>
   <string name="cancel">לבטל</string>
   <string name="newsfeed_option">נסה הזנת Lantern</string>
   <string name="newsfeed_off_option">כבה הזנה</string>
@@ -47,7 +45,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">עזור לי</string>
   <string name="contact_subject">Lantern עבור Android</string>
-  <string name="update_available">גרסה חדשה של Lantern זמינה! האם אתה רוצה לשדרג כעת?</string>
   <string name="not_now">לא עכשיו</string>
   <string name="install_update">לעדכן</string>
   <string name="error_update">שגיאה בהורדת עדכון</string>

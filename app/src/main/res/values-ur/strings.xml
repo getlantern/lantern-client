@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">تمام ٹریفک پراکسی کریں</string>
   <string name="proxy_all_on_header">آن (سب سے ذیادہ محفوظ انتخاب)</string>
   <string name="proxy_all_off_header">آف ( تیز ترین انتخاب)</string>
-  <string name="proxy_all_on">اس انتخاب کی صورت میں آپ کی تمام ٹریفک لینٹرن کے ذریعے بھیجی جائے گی۔ </string>
-  <string name="proxy_all_off">اگر یہ انتخاب آف ہو تو صرف بلاک سائٹس  کی طرف جاننے والی ٹریفک لینٹرن کے ذریعے بھیجی جائے گی ۔ </string>
   <string name="button_text">شرو ع کیجئے</string>
   <string name="drawer_open">دراز کھلی ہے</string>
   <string name="drawer_close">درازبند</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">لینٹرن آن ہے ۔ اب آپ بلاک سائٹس اور سروسز تک رسائی حاصل کر سکتے ۔ </string>
   <string name="on_desc">  اب آپ r\n\بلاک سائٹس اور سروس تک رسائی  حاصل کر سکتےہیں</string>
   <string name="off_desc">بلاک سائٹس اور سروسز تک رسائی  کےلئے بٹن پر کلک کیجئے</string>
-  <string name="service_connected">لینٹرن کنیکٹ ہو گئی ہے</string>
   <string name="desktop_option">ڈیسک ٹاپ ورژن</string>
   <string name="contact_option">رابطہ کیجئے</string>
   <string name="check_for_update">اپ ڈیٹ کے لئے چیک کیجئے</string>
   <string name="no_update_available">آپ اَپ ٹو ڈیٹ ہیں !</string>
-  <string name="error_checking_for_update">لینٹرن کے نئے ورژن کو چیک کرنے میں دشواری</string>
   <string name="error_making_purchase">خریداری کرنے میں دشواری</string>
-  <string name="have_latest_version">لینٹرن %1$s سب سے نیا ورژن ہے</string>
-  <string name="updating_lantern">لینٹرن کو اپ ڈیٹ کیا جا رہا ہے</string>
   <string name="cancel">منسوخ</string>
   <string name="newsfeed_option">لینٹرن فیڈ کو آزمائیے</string>
   <string name="newsfeed_off_option">فیڈ کو بند کر دیں</string>
@@ -76,13 +70,10 @@
   <string name="month">ماہ</string>
   <string name="year">سال</string>
   <string name="success_email">لینٹرن ڈیسک ٹاپ آپ کو ای میل کر دیا گیا ہے!</string>
-  <string name="error_email">آپ کو لینٹرن ڈیسک ٹاپ بھیجتے ہوئے کوئی مسئلہ درپیش آ گیا ہے۔ برائے مہر بانی دوبارہ کو شش کیجئے۔ </string>
   <string name="send_logs">لاگز بھیجئے</string>
   <string name="help_survey">لینٹرن کو بہتر بنانے میں ہماری مدد کیجئے۔ ابھی ایک سوال پر مشتمل سروے کیجئے!</string>
   <string name="take_survey">سروے کیجئے!</string>
   <string name="thanks_survey">ہمارا سروے کرنے کا شکریہ!</string>
-  <string name="success_log_email">لیٹرن کو کامیابی کے ساتھ لاگز جمع کروا دیے گئے ہیں !</string>
-  <string name="error_log_email">لینٹرن کو لاگز بھیجتے ہوئے کوئی مسئلہ پیش آ گیا ہے۔ برائے مہربانی دوبارہ کوشش کیجئے۔ </string>
   <string name="invalid_email">غیر تصدیق شدہ ای میل ایڈریس</string>
   <string name="error_payment_gateway">رقم ادائیگی گیٹ وے سے رابطہ کرنے میں دشواری</string>
   <string name="emails_do_not_match">ای میل  فیلڈز یکساں نہیں ہیں </string>
@@ -95,7 +86,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">میری مدد کریں</string>
   <string name="contact_subject">لینٹرن اینڈروائڈ</string>
-  <string name="update_available">لینٹرن کا نیا ورژن دستیاب ہے! کیا آپ ابھی اَپ گریڈ کرنا چاہیں گے؟</string>
   <string name="not_now">ابھی نہیں </string>
   <string name="install_update">اَپ ڈیٹ</string>
   <string name="error_update">اَپ ڈیٹ ڈاؤن لوڈ کرنے میں دشواری</string>
@@ -170,7 +160,6 @@
   <string name="start_recovery">بحالی کا آغاز</string>
   <string name="account_recovery">اکاؤنٹ کی بحالی</string>
   <string name="account_recovery_code">اکاؤنٹ بحالی کا کوڈ</string>
-  <string name="email_recovery_code">%1$sپر بحالی کے ساتھ ای میل بھیج دی گئی ہے۔ اس ای میل میں سے کوڈ لیکر اس کا اوپر اندراج کیجئے۔ یہ ای میل ملنے میں کئی گھنٹے لگ سکتے ہیں ۔ </string>
   <string name="thanks_report">شکریہ۔ لینٹرن کسٹمر سپورٹ 48 گھنٹوں کے دوران آپ سے رابطہ کرے گی۔ </string>
   <string name="enter_valid_code">برائےمہربانی درست بحالی کوڈ کا اندارج کیجئے۔ </string>
   <string name="too_many_devices">آپ کے پرو اکاؤنٹ سے منسلک کی جانے والی ڈیوائسز کی حد ختم ہو چکی ہے۔ </string>

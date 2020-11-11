@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">پراکسی کردن تمام ترافیک رد و بدل شده</string>
   <string name="proxy_all_on_header">روشن(امن ترین روش)</string>
   <string name="proxy_all_off_header">خاموش (سریع ترین روش)</string>
-  <string name="proxy_all_on">با این روش تمام ترافیک دستگاه شما از طریق فانوس ارسال خواهد شد.</string>
-  <string name="proxy_all_off">اگر این روش خاموش باشد  فقط ترافیک هاس سایت های بلوک شده از طریق فانوس ارسال خواهد شد.</string>
   <string name="button_text">شروع</string>
   <string name="drawer_open">کشو باز</string>
   <string name="drawer_close">کشو بسته</string>
@@ -47,15 +45,11 @@
   <string name="lantern_on">فانوس روشن است. اکنون شما می توانید به سایت ها و خدمات بسته شده دسترسی پیدا کنید!</string>
   <string name="on_desc">اکنون شما می توانید/n/r به سایت ها و خدمات بسته شده دسترسی پیدا کنید</string>
   <string name="off_desc">دکمه را کلیک نموده تا به سایت ها و خدمات بسته شده دسترسی یابید</string>
-  <string name="service_connected">فانوس متصل شد</string>
   <string name="desktop_option">نسخه ویندوز</string>
   <string name="contact_option">‫تماس‬</string>
   <string name="check_for_update">چک کردن برای به روز رسانی</string>
   <string name="no_update_available">شما به روز هستید!</string>
-  <string name="error_checking_for_update">خطا در استعلام نسخه جدید فانوس</string>
   <string name="error_making_purchase">خطا در تلاش برای ایجاد خرید</string>
-  <string name="have_latest_version">فانوس %1$s آخرین نسخه موجود می باشد.</string>
-  <string name="updating_lantern">به روزرسانی فانوس</string>
   <string name="cancel">انصراف</string>
   <string name="newsfeed_option">سرعنوان فانوس را امتحان کنید</string>
   <string name="newsfeed_off_option">سرعنوان را خاموش کن</string>
@@ -77,13 +71,10 @@
   <string name="month">ماه</string>
   <string name="year">سال</string>
   <string name="success_email"> فانوس برای کامپیوتر رومیزی برای شما ایمیل شده است!</string>
-  <string name="error_email">مشکلی در ارسال فانوس برای کامپیوتر رومیزی وجود داشت. لطفاً بعداً تلاش کنید.</string>
   <string name="send_logs">ارسال گزارش وقایع</string>
   <string name="help_survey">برای بهتر کردن فانوس کمک کنید، این نظرسنجی تک سوالی را اکنون انجام دهید!</string>
   <string name="take_survey">نظرسنجی را پر کنید!</string>
   <string name="thanks_survey">از این که در نظر سنجی ما شرکت کردید تشکر می کنیم.</string>
-  <string name="success_log_email">ورود ها به سیستم با موفقیت به فانوس ارسال شد.</string>
-  <string name="error_log_email">ورودتان به فانوس با خطا مواجه شد. لطفا دوباره امتحان کنید.</string>
   <string name="invalid_email">آدرس ایمیل نامعتبر</string>
   <string name="error_payment_gateway">ارتباط با سیستم پرداخت با خطا مواجه شد. </string>
   <string name="emails_do_not_match">ایمیل وارد شده یکسان نمی باشد</string>
@@ -97,7 +88,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">کمکم کنید</string>
   <string name="contact_subject">فانوس آندروید</string>
-  <string name="update_available">نسخه جدیدی از فانوس موجودست آیا اکنون مایل به ارتقاء هستید؟ </string>
   <string name="not_now">الان نه</string>
   <string name="install_update">به روز رسانی</string>
   <string name="error_update">ایراد در دانلود به روز رسانی</string>
@@ -375,8 +365,7 @@ https://bit.ly/lanternapk</string>
   <string name="creditcard_alipay">کارت اعتباری / Alipay</string>
   <string name="fastworldpay"> پرداخت جهانی سریع (شتاب)</string>
   <string name="blocked_ads">تبلیغات مسدود شده</string>
-  <string name="upgrade_now_data">هم اکنون برای خدمات نامحدود با سرعت بالا  ارتقا دهید !
-</string>
+  <string name="upgrade_now_data"> برای خدمات با سرعت بالا ی نامحدود همین حالا آپدیت شوید</string>
   <string name="renew_your_account">حساب کاربری خود را تجدید کنید تا زمان بیشتری را اضافه کنید</string>
   <string name="turn_on_lantern">  برای دسترسی سریع و امن به سایت ها و خدمات مسدود شده فانوس راروشن کنید.</string>
   <string name="lantern_on_text">شما به سریعترین سرور فانوس متصل هستید.  مرور را شروع کنید!</string>
@@ -480,5 +469,4 @@ https://bit.ly/lanternapk</string>
   <string name="android.permission.ACCESS_NETWORK_STATE">در حال پراکسی کردن ترافیک شما</string>
   <string name="privacy_disclosure_title">اعلامیه حریم خصوصی Lantern</string>
   <string name="privacy_disclosure_accept">می‌پذیرم</string>
-  <string name="privacy_disclosure_body">Lantern متعهد است از حریم خصوصی شما حفاظت کند. از شما می‌خواهیم که بدانید چه اطلاعاتی را جمع‌آوری می‌کنیم، و چه اطلاعاتی را جمع‌آوری نمی‌کنیم، و چگونه اطلاعات را استفاده و ذخیره می‌کنیم. \n\nما گزارش فعالیت‌های شما، اعم از تاریخچه مرور وب‌سایت‌ها، مقصد ترافیک، محتوای داده‌ها، یا جستارهای DNS را جمع‌آوری نمی‌کنیم. همچنین هرگز گزارش اتصال‌ها را ذخیره نمی‌کنیم، یعنی هیچ گزارشی از آدرس IP شما، آدرس IP سرور Lantern خروجی مرتبط با مهر زمانی اتصال، یا مدت جلسه را ذخیره نمی‌کنیم. /n/nبرای کاربران Lantern Free، ما IP کاربر را برای محدود کردن سوء ‌‌‌استفاده جمع‌آوری می‌کنیم. اما نمی‌توانیم IP سرور Lantern را به آدرس IP کاربر مرتبط کنیم، حتی با مهر زمانی دقیق. اگر یک حساب Lantern Pro بخرید، ما آدرس ایمیل و اطلاعات پرداخت شما را جمع‌آوری می‌کنیم./n/nما اطلاعات تشخیصی در مورد عملکرد برنامه کاربردی، از جمله گزارش‌های خرابی و اطلاعات پیرامون بسته‌های نصب‌شده را جمع‌آوری می‌کنیم.</string>
 </resources>

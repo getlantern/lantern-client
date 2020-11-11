@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proxyficar todo el tráfico</string>
   <string name="proxy_all_on_header">ACTIVO (Opción más segura)</string>
   <string name="proxy_all_off_header">INACTIVO (Opción más rápida)</string>
-  <string name="proxy_all_on">Con esta opción, todo el tráfico de su dispositivo se pasará a través de Lantern</string>
-  <string name="proxy_all_off">Con esta opción inactiva, sólo el tráfico con sitios bloqueados se pasará a través de Lantern.</string>
   <string name="button_text">Iniciar</string>
   <string name="drawer_open">Panel deslizante abierto</string>
   <string name="drawer_close">Panel deslizante cerrado</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern está encendido. ¡Ahora puede acceder a sitios y servicios bloqueados!</string>
   <string name="on_desc">Ahora puede acceder a\r\nsitios bloqueados y servicios</string>
   <string name="off_desc">Haga clic en el botón para acceder a sitios bloqueados y servicios</string>
-  <string name="service_connected">Conectado a Lantern</string>
   <string name="desktop_option">Versión de escritorio</string>
   <string name="contact_option">Contacto</string>
   <string name="check_for_update">Buscar actualización</string>
   <string name="no_update_available">¡Está actualizado!</string>
-  <string name="error_checking_for_update">Error al buscar una nueva versión de Lantern</string>
   <string name="error_making_purchase">Error al tratar de realizar la compra</string>
-  <string name="have_latest_version">Lantern %1$s es la versión disponible más reciente.</string>
-  <string name="updating_lantern">Actualizando Lantern</string>
   <string name="cancel">Cancelar</string>
   <string name="newsfeed_option">Pruebe la suscripción (feed) de Lantern</string>
   <string name="newsfeed_off_option">Desactivar la suscripción (feed)</string>
@@ -76,13 +70,10 @@
   <string name="month">Mes</string>
   <string name="year">Año</string>
   <string name="success_email">¡Se le ha enviado Lantern de Escritorio por correo electrónico!</string>
-  <string name="error_email">Hubo un problema al enviarle Lantern de Escritorio. Por favor, inténtelo de nuevo.</string>
   <string name="send_logs">Enviar registros (logs)</string>
   <string name="help_survey">¡Ayude a mejorar Lantern, responda a esta única pregunta para nuestro sondeo!</string>
   <string name="take_survey">¡Participe en nuestro sondeo!</string>
   <string name="thanks_survey">¡Gracias por participar en nuestro sondeo!\n</string>
-  <string name="success_log_email">¡Se han enviado con éxito los registros (logs) a Lantern!</string>
-  <string name="error_log_email">Error al enviar los registros (logs) a Lantern. Por favor, inténtelo de nuevo más tarde.</string>
   <string name="invalid_email">Dirección de correo no válida</string>
   <string name="error_payment_gateway">Error al contactar con la pasarela de pago</string>
   <string name="emails_do_not_match">Los campos de correo electrónico no coinciden</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Ayúdeme</string>
   <string name="contact_subject">Lantern para Android</string>
-  <string name="update_available">¡Hay una nueva versión de Lantern disponible! ¿Desea actualizar ahora?</string>
   <string name="not_now">Ahora no</string>
   <string name="install_update">Actualizar</string>
   <string name="error_update">Error al descargar actualización</string>
@@ -172,7 +162,6 @@
   <string name="start_recovery">Iniciar recuperación</string>
   <string name="account_recovery">Recuperación de cuenta</string>
   <string name="account_recovery_code">Código de recuperación de cuenta</string>
-  <string name="email_recovery_code">Se ha enviado un correo electrónico con un código de recuperación a %1$s. Puede tardar varias horas en llegar. Introduzca el código de ese correo arriba.</string>
   <string name="thanks_report">Gracias, el soporte de Cliente de Lantern se pondrá en contacto en las próximas 48 horas.</string>
   <string name="enter_valid_code">Por favor, introduzca un código de recuperación válido.</string>
   <string name="too_many_devices">Se ha alcanzado el límite de dispositivos que se pueden vincular a su cuenta Pro.</string>
@@ -340,7 +329,7 @@ iOS.</string>
   <string name="creditcard_alipay">Tarjeta de crédito/Alipay</string>
   <string name="fastworldpay">Fast World Pay (Shetab)</string>
   <string name="blocked_ads">Publicidad bloqueada</string>
-  <string name="upgrade_now_data">¡Actualice ahora para un servicio de alta velocidad no limitado!</string>
+  <string name="upgrade_now_data">¡Actualice ahora para un servicio de alta velocidad ilimitado!</string>
   <string name="renew_your_account">Renueve su cuenta para añadir más tiempo</string>
   <string name="turn_on_lantern">Active Lantern para habilitar acceso rápido y seguro a sitios y servicios bloqueados.</string>
   <string name="lantern_on_text">Está conectado al servidor más rápido de Lantern. ¡Comience a navegar!</string>

@@ -20,7 +20,6 @@
   <string name="desktop_option">Versione desktop</string>
   <string name="contact_option">Contatti</string>
   <string name="check_for_update">Cerca aggiornamenti</string>
-  <string name="updating_lantern">Aggiornamento di Lantern</string>
   <string name="cancel">Annulla</string>
   <string name="privacy_policy">Politica sulla privacy</string>
   <string name="share_option">Condividi</string>
@@ -38,7 +37,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Aiutam</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Nuova versione disponibile! Vuoi aggiornare?</string>
   <string name="not_now">Non ora</string>
   <string name="install_update">Aggiorna</string>
   <string name="pro_welcome_text">Benvenuto in Lantern Pro!</string>

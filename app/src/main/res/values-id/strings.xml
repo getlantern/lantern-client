@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proxy all traffic</string>
   <string name="proxy_all_on_header">ON (pilihan paling aman)</string>
   <string name="proxy_all_off_header">OFF (pilihan tercepat)</string>
-  <string name="proxy_all_on">Dengan opsi ini, semua lalu lintas perangkat anda akan dikirim melalui Lantern</string>
-  <string name="proxy_all_off">Dengan pilihan ini, hanya lalu lintas ke situs yang diblokir yang akan dikirim melalui Lantern</string>
   <string name="button_text">Mulai</string>
   <string name="drawer_open">Buka Laci</string>
   <string name="drawer_close">Tutup Laci</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern aktif. Anda dapat mengakses situs dan layanan yang diblokir sekarang!</string>
   <string name="on_desc">Anda sekarang dapat mengakses situs dan layanan\r\nyang diblokir</string>
   <string name="off_desc">Klik tombol untuk mengakses situs dan layanan yang diblokir</string>
-  <string name="service_connected">Lantern tersambung</string>
   <string name="desktop_option">Versi Desktop</string>
   <string name="contact_option">Kontak</string>
   <string name="check_for_update">Memeriksa pembaruan</string>
   <string name="no_update_available">Anda sudah up to date!</string>
-  <string name="error_checking_for_update">Kesalahan saat memeriksa versi baru dari Lantern</string>
   <string name="error_making_purchase">Kesalahan saat mencoba melakukan pembelian</string>
-  <string name="have_latest_version">Lantern %1$s adalah versi terbaru yang tersedia.</string>
-  <string name="updating_lantern">Memperbarui Lantern</string>
   <string name="cancel">Batalkan</string>
   <string name="newsfeed_option">Coba feed Lantern</string>
   <string name="newsfeed_off_option">Nonaktifkan feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Bulan</string>
   <string name="year">Tahun</string>
   <string name="success_email">Lantern Desktop telah dikirim ke anda lewat email!</string>
-  <string name="error_email">Terdapat masalah ketika mengirimkan Lantern Desktop kepada anda. Harap coba lagi nanti.</string>
   <string name="send_logs">Kirim log</string>
   <string name="help_survey">Bantu Lantern agar lebih baik, ambil survei satu pertanyaan ini sekarang juga!</string>
   <string name="take_survey">Ambil survei!</string>
   <string name="thanks_survey">Terima kasih telah mengikuti survei kami!\n</string>
-  <string name="success_log_email">Log berhasil dikirim ke Lantern!</string>
-  <string name="error_log_email">Kesalahan pengiriman log ke Lantern. Silakan coba lagi nanti.</string>
   <string name="invalid_email">Alamat email salah</string>
   <string name="error_payment_gateway">Kesalahan saat menghubungi gateway pembayaran</string>
   <string name="emails_do_not_match">Kolom email tidak sama</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Bantu Saya</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Versi baru Lantern tersedia! Apakah anda ingin meng-upgrade sekarang?</string>
   <string name="not_now">Tidak sekarang</string>
   <string name="install_update">Update</string>
   <string name="error_update">Kesalahan Mendownload Update</string>
@@ -174,7 +164,6 @@
   <string name="start_recovery">Mulai Pemulihan</string>
   <string name="account_recovery">Pemulihan Akun</string>
   <string name="account_recovery_code">Kode Pemulihan Akun</string>
-  <string name="email_recovery_code">Email dengan kode pemulihan telah dikirim ke%1$s. Masukan kode dari email di atas. Email ini mungkin memakan waktu beberapa jam untuk sampai.</string>
   <string name="thanks_report">Terimakasih, Customer Support Lantern akan bisa dihubungkan dalam waktu 48 jam.</string>
   <string name="enter_valid_code">Harap masukkan kode pemulihan yang valid.</string>
   <string name="too_many_devices">Batas perangkat yang dapat ditautkan ke akun Pro anda telah tercapai.</string>

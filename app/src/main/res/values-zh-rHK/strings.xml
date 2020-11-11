@@ -110,6 +110,7 @@
   <string name="checkout">結帳</string>
   <string name="cvc">CVC</string>
   <string name="card_number">卡片號碼</string>
+  <string name="card_expiration">月／年</string>
   <string name="validation_errors">有效日期錯誤</string>
   <string name="ok">確定</string>
   <string name="progressMessage">請求處理中.....</string>
@@ -122,6 +123,9 @@
   <string name="feed.error.error_fetching_feed">抓取消息來源時出錯</string>
   <string name="feed.error.try_again">請重試一次</string>
   <string name="authorize_device_pro">授權付費版的設備</string>
+  <string name="i_have_another">我有另一部 Lantern 專業版裝置</string>
+  <string name="need_to_recover">我需要復原我的 Lantern 專業版帳戶</string>
+  <string name="locate_account">請注意其他協助我們尋找您的帳戶的資訊。</string>
   <string-array name="enter_code_steps_referral">
     <item>輸入你收到電子郵件裏的認證碼以繼續使用專業版!</item>
     <item>沒收到認證碼信件? 請先檢查垃圾信件箱並確認寫入了正確的電子郵件地址。.</item>
@@ -156,6 +160,8 @@
   <string name="upgrade_to_lantern_pro">昇級到付費版</string>
   <string name="pro_available_for"> Windows, Android, Mac, Ubuntu. iOS等版本即將發佈　　</string>
   <string name="upgrade">㫒級　</string>
+  <string name="become_reseller">賺錢！成為 Lantern 專業版經銷商。點擊此處</string>
+  <string name="reseller_email_message">成為 Lantern 經銷商後，您將有機會從 Lantern 專業版訂閱的每次銷售中獲得 25% 的收益。在下面告訴我們您要成為經銷商的理由。</string>
   <string name="no_wall_at_all">無牆可擋</string>
   <string name="buy_pro_now">購買付費版</string>
   <string name="update_billing_info">更新支付資料</string>
@@ -191,9 +197,15 @@
   <string name="congratulations">恭喜！</string>
   <string name="enter_email">輸入電子郵件地址</string>
   <string name="confirm_email">確認電子郵件</string>
+  <string name="https_upgrade_desc">Lantern 會在可能的情況下自動將不安全的 HTTP 連線升級為加密的 HTTPS 連線，以讓您的資訊在網上瀏覽時保持隱私。</string>
+  <string name="creditcard_alipay">信用卡／Alipay</string>
+  <string name="upgrade_now_data">立即升級以獲得無限的高速服務！</string>
+  <string name="to_purchase_pro">購買 Lantern 專業版</string>
+  <string name="input_activation_code">輸入啟用代碼</string>
   <string name="apply_referral_code">使用邀請碼</string>
   <string name="terms_of_service">服務條款</string>
   <string name="enter_lantern_pro_codes">輸入 Lantern Pro 優惠碼</string>
+  <string name="yinbi_redemption">贖回隱幣</string>
   <string name="enter_bulk_pro_codes">輸入 Lantern Pro 優惠碼</string>
   <string name="purchase">購買</string>
   <string name="status">狀態</string>

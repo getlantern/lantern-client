@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Kjør all trafikk gjennom proxy</string>
   <string name="proxy_all_on_header">PÅ (sikreste valg)</string>
   <string name="proxy_all_off_header">AV (raskeste valg)</string>
-  <string name="proxy_all_on">Med dette valget, vil all trafikk på enheten din bli sendt gjennom Lantern</string>
-  <string name="proxy_all_off">Med dette valget avslått, vil bare trafikk til blokkerte sider bli sendt gjennom Lantern</string>
   <string name="button_text">Start</string>
   <string name="drawer_open">Skuff åpen</string>
   <string name="drawer_close">Skuff lukket</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern er PÅ. Du kan nå bruke blokkerte sider og tjenester.</string>
   <string name="on_desc">Du kan nå bruke\r\nblokkerte sider og tjenester</string>
   <string name="off_desc">Klikk på knappen for å bruke blokkerte sider og tjenester</string>
-  <string name="service_connected">Lantern tilkoblet</string>
   <string name="desktop_option">Skrivebordsversjon</string>
   <string name="contact_option">Kontakt</string>
   <string name="check_for_update">Se etter oppdateringer</string>
   <string name="no_update_available">Du er oppdatert!</string>
-  <string name="error_checking_for_update">Feil ved oppdateringssjekk for Lantern</string>
   <string name="error_making_purchase">Feil under kjøp</string>
-  <string name="have_latest_version">Lantern %1$s er nyest tilgjengelige versjon.</string>
-  <string name="updating_lantern">Oppdatering av Lantern</string>
   <string name="cancel">Avbryt</string>
   <string name="newsfeed_option">Prøv Lantern-strømmen</string>
   <string name="newsfeed_off_option">Skru av Lantern-strømmen</string>
@@ -76,13 +70,10 @@
   <string name="month">Måned</string>
   <string name="year">År</string>
   <string name="success_email">Skrivebordsversjonen av Lantern har blitt sendt på e-post til deg!</string>
-  <string name="error_email">Forsendelse av skrivebordsversjon av Lantern viste seg problematisk. Prøv igjen senere.</string>
   <string name="send_logs">Send loggføring</string>
   <string name="help_survey">Hjelp til å gjøre Lantern bedre, svar på denne ett-spørsmåls- spørreundersøkelsen nå.</string>
   <string name="take_survey">Ta spørreundersøkelsen.</string>
   <string name="thanks_survey">Takk fur at du deltar i spørreundersøkelsen.\n</string>
-  <string name="success_log_email">Logger sendt til Lantern!</string>
-  <string name="error_log_email">Feil ved forsendelse av logger til Lantern. Prøv igjen senere.</string>
   <string name="invalid_email">Ugyldig e-postadresse</string>
   <string name="error_payment_gateway">Feil ved tilkobling til betalingsportner</string>
   <string name="emails_do_not_match">E-postfeltene samsvarer ikke</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Hjelp meg</string>
   <string name="contact_subject">Lantern for Android</string>
-  <string name="update_available">En ny versjon av Lantern er tilgjengelig. Ønsker du å oppgradere nå?</string>
   <string name="not_now">Ikke nå</string>
   <string name="install_update">Oppdater</string>
   <string name="error_update">Feil under nedlasting av oppdatering</string>
@@ -172,7 +162,6 @@
   <string name="start_recovery">Start gjenoppretting</string>
   <string name="account_recovery">Kontogjenoppretting</string>
   <string name="account_recovery_code">Kontogjenopprettingskode</string>
-  <string name="email_recovery_code">En e-post med gjenopprettelseskoden har blitt sendt til %1$s. Skriv inn koden fra den e-posten ovenfor. Det kan ta timer før den ankommer.</string>
   <string name="thanks_report">Takk. Lantern brukerstøtte vil ta kontakt med deg i løpet av de neste 48 timene.</string>
   <string name="enter_valid_code">Skriv inn en gyldig bekreftelseskode.</string>
   <string name="too_many_devices">Grensen for hvor mange enheter som kan lenkes til din Pro-konto har blitt nådd.</string>
