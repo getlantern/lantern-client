@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Dùng proxy cho tất cả lưu lượng mạng</string>
   <string name="proxy_all_on_header">BẬT (Tùy chọn an toàn nhất)</string>
   <string name="proxy_all_off_header">TẮT (Tùy chọn lẹ nhất)</string>
-  <string name="proxy_all_on">Với tùy chọn này tất cả lưu lượng thông tin từ máy bạn sẽ đi ngang qua Lantern</string>
-  <string name="proxy_all_off">Với tùy chọn này, chỉ có lưu lượng thông tin đến các trang bị chặn là đi ngang qua Lantern</string>
   <string name="button_text">Bắt đầu</string>
   <string name="drawer_open">Ngăn kéo Mở</string>
   <string name="drawer_close">Ngăn kéo Đóng</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern đang BẬT. Bạn có thể truy cập các trang và dịch vụ bị chặn.</string>
   <string name="on_desc">Bạn có thể truy cập\r\ncác trang và dịch vụ bị chặn</string>
   <string name="off_desc">Bấm nút để truy cập các trang và dịch vụ bị chặn</string>
-  <string name="service_connected">Lantern đã kết nối</string>
   <string name="desktop_option">Phiên bản Để Bàn</string>
   <string name="contact_option">Liên lạc</string>
   <string name="check_for_update">Kiểm xem có Cập Nhật </string>
   <string name="no_update_available">Bạn có phiên bản mới nhất!</string>
-  <string name="error_checking_for_update">Có lỗi khi kiểm xem có phiên bản Lantern mới</string>
   <string name="error_making_purchase">Lỗi khi đặt mua</string>
-  <string name="have_latest_version">Lantern %1$s là phiên bản mới nhất hiện nay.</string>
-  <string name="updating_lantern">Cập nhật Lantern</string>
   <string name="cancel">Hủy bỏ</string>
   <string name="newsfeed_option">Thử Lantern Feed</string>
   <string name="newsfeed_off_option">Tắt Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Tháng</string>
   <string name="year">Năm</string>
   <string name="success_email">Lantern Để Bàn đã được email đến cho bạn!</string>
-  <string name="error_email">Có lỗi gửi Lantern Để Bàn cho bạn. Xin thử lại sau.</string>
   <string name="send_logs">Gửi Logs</string>
   <string name="help_survey">Giúp cải thiện Lantern, trả lời một câu thăm dò bây giờ!</string>
   <string name="take_survey">Thăm Dò!</string>
   <string name="thanks_survey">Cám ơn bạn đã trả lời thăm dò!\n</string>
-  <string name="success_log_email">Tập tin Logs đã được gửi đến Lantern!</string>
-  <string name="error_log_email">Có lỗi gửi logs đến Lantern. Xin thử lại sau. </string>
   <string name="invalid_email">Điạ chỉ email không hợp lệ</string>
   <string name="error_payment_gateway">Lỗi liên hệ với cổng thanh toán</string>
   <string name="emails_do_not_match">Địa chỉ email không giống</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Giúp Tôi</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Có phiên bản Lantern mới! Bạn muốn cập nhật bây giờ không?</string>
   <string name="not_now">Chưa muốn</string>
   <string name="install_update">Cập nhật</string>
   <string name="error_update">Có lỗi tải phiên bản cập nhật</string>
@@ -174,7 +164,6 @@
   <string name="start_recovery">Bắt đầu Phục hồi</string>
   <string name="account_recovery">Phục Hồi Tài Khoản</string>
   <string name="account_recovery_code">Mã Số Phục Hồi Tài Khoản</string>
-  <string name="email_recovery_code">Đã gửi email có chứa mã số phục hồi đến %1$s. Điền mã số đó vào bên trên. Email đó có thể mất vài giờ để đến.</string>
   <string name="thanks_report">Cám ơn, bộ phận hỗ trợ khách hàng của Lantern sẽ liên lạc trong vòng 48 tiếng.</string>
   <string name="enter_valid_code">Xin điền vào mã số phục hồi hợp lệ.</string>
   <string name="too_many_devices">Số lượng máy được phép nối kết vào tài khoản Pro đã hết.</string>

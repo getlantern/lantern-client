@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Lantern</string>
+  <string name="app_name">藍燈</string>
   <string name="action_settings">設定</string>
   <string name="proxy_all_setting">代理所有流量</string>
   <string name="button_text">開始</string>
@@ -28,14 +28,10 @@
   <string name="lantern_on">Lantern 開啟中.你現在可連上被封鎖的網址與服務！</string>
   <string name="on_desc">現在可連上被封鎖的網址與服務。</string>
   <string name="off_desc">點擊按鈕以連上被封鎖的網址與服務。</string>
-  <string name="service_connected">Lantern 已連線</string>
   <string name="desktop_option">桌面版本</string>
   <string name="contact_option">聯絡</string>
   <string name="check_for_update">檢查更新</string>
   <string name="no_update_available">已更新為最新狀態！</string>
-  <string name="error_checking_for_update">檢查是否有更新版 Lantern時出問題</string>
-  <string name="have_latest_version">Lantern %1$s 是目前最新版</string>
-  <string name="updating_lantern">正在更新 Lantern</string>
   <string name="cancel">取消</string>
   <string name="newsfeed_option">試試 Lanten消息訂閱</string>
   <string name="newsfeed_off_option">關閉消息訂閱</string>
@@ -55,10 +51,7 @@
   <string name="month">月</string>
   <string name="year">年</string>
   <string name="success_email">Lantern電腦安裝檔已郵寄給你了！</string>
-  <string name="error_email">傳送電腦Latern電腦安裝版的郵件出了點問題，請稍後再試。</string>
   <string name="send_logs">送出活動記錄　</string>
-  <string name="success_log_email">活動記錄成功地傳送到Latern!</string>
-  <string name="error_log_email">要傳送給Latern的活動記錄出了點問題，請稍後再試。</string>
   <string name="invalid_email">無效的電子信箱位址</string>
   <string name="invalid_referral_code">邀請碼無效</string>
   <string name="cannot_use_own_referral_code">你自己的邀請碼無法使用來作促鎖</string>
@@ -67,7 +60,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">請求幫助</string>
   <string name="contact_subject">安卓手機版Lantern</string>
-  <string name="update_available">有新版本 Lantern 可用！請問是否立即更新?</string>
   <string name="not_now">下次</string>
   <string name="install_update">更新</string>
   <string name="error_update">下載更新時錯誤</string>

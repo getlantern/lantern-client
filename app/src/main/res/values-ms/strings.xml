@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proksi semua trafik</string>
   <string name="proxy_all_on_header">BUKA (Pilihan paling selamat)</string>
   <string name="proxy_all_off_header">TUTUP (Pilihan terpantas)</string>
-  <string name="proxy_all_on">Dengan pilihan ini, semua trafik peranti anda akan dihantar melalui Lantern</string>
-  <string name="proxy_all_off">Dengan penutupan pilihan ini, hanya trafik ke laman yang disekat akan dihantar melalui Lantern</string>
   <string name="button_text">Mula</string>
   <string name="drawer_open">Buka Drawer</string>
   <string name="drawer_close">Tutup Drawer</string>
@@ -39,15 +37,11 @@
   <string name="lantern_on">Lantern Buka.  Anda boleh akses laman-laman dan perkhidmatan!</string>
   <string name="on_desc">Anda kini boleh akses\r\nlaman-laman dan perkhidmatan yang disekat</string>
   <string name="off_desc">Klik butang untuk akses laman-laman dan perkhidmatan yang disekat</string>
-  <string name="service_connected">Lantern bersambung</string>
   <string name="desktop_option">Versi Desktop</string>
   <string name="contact_option">Kontact</string>
   <string name="check_for_update">Semak untuk Kemas Kini</string>
   <string name="no_update_available">Anda mengikut masa terkini!</string>
-  <string name="error_checking_for_update">Kesalahan semasa semakan untuk versi baru Lantern</string>
   <string name="error_making_purchase">Kesalahan semasa cuba membuat pembelian</string>
-  <string name="have_latest_version">Lantern %1$s adalah versi terbaru yang sedia ada.</string>
-  <string name="updating_lantern">Kemas kini Lantern</string>
   <string name="cancel">Batal</string>
   <string name="newsfeed_option">Cuba Feed Lantern</string>
   <string name="newsfeed_off_option">Tutup Feed</string>
@@ -69,13 +63,10 @@
   <string name="month">Bulan</string>
   <string name="year">Tahun</string>
   <string name="success_email">Desktop Lantern telah diemel kepada anda!</string>
-  <string name="error_email">Terdapat masalah menghantar Desktop Lantern kepada anda.  Sila cuba lagi kemudian.</string>
   <string name="send_logs">Hantar Log</string>
   <string name="help_survey">Tolong membuat Latern lebih baik, jawab satu soalan dari soal selidik ini sekarang!</string>
   <string name="take_survey">Jawab Soal Selidik!</string>
   <string name="thanks_survey">Terima kasih kerana menjawah soal selidik kami!</string>
-  <string name="success_log_email">Log berjaya dihantar ke Lantern!</string>
-  <string name="error_log_email">Ralat menghantar log ke Lantern.  Sila cuba lagi kemudian.</string>
   <string name="invalid_email">Alamat emel tidak sah</string>
   <string name="error_payment_gateway">Ralat menghubungi pintu masuk pembayaran</string>
   <string name="emails_do_not_match">Emel tidak sepadan</string>
@@ -88,7 +79,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Bantu Saya</string>
   <string name="contact_subject">Android Lantern</string>
-  <string name="update_available">Satu versi baru Lantern didapati!  Adakah anda ingin upgrade sekarang?</string>
   <string name="not_now">Bukan sekarang</string>
   <string name="install_update">Update</string>
   <string name="error_update">Ralat Muat Turun Update</string>
@@ -165,7 +155,6 @@
   <string name="start_recovery">Pemulihan Bermula</string>
   <string name="account_recovery">Pemulihan Akaun</string>
   <string name="account_recovery_code">Kod Pemulihan Akaun</string>
-  <string name="email_recovery_code">Satu emel dengan kod pemulihan telah dihantar kepada %1$s. Input kod dari emel di atas.  Emel ini mungkin mengambil beberapa jam untuk sampai.</string>
   <string name="thanks_report">Terima Kasih, sokongan Pelanggan Lantern akan berhubung dengan anda dalam massa 48 jam.</string>
   <string name="enter_valid_code">Sila masukkan kod pemulihan sah.</string>
   <string name="too_many_devices">Had peranti yang boleh dipautkan ke akaun Pro anda telah dicapai.</string>
@@ -326,7 +315,7 @@
   <string name="data_usage">Penggunaan Data</string>
   <string name="pro_account">Akaun Pro</string>
   <string name="blocked_ads">Iklan-iklan yang Disekat</string>
-  <string name="upgrade_now_data">Upgrade sekarang bagi pekhidmatan kelajuan tinggi tidak terbatas!</string>
+  <string name="upgrade_now_data">Upgrade sekarang untuk mendapatkan perkhidmatan kelajuan tinggi tidak terbatas!</string>
   <string name="renew_your_account">Memperbaharui akaun anda untuk menambahkan masa</string>
   <string name="turn_on_lantern">Buka Lantern untuk membolehkan akses ke laman-laman dan perkhidmatan yang disekat dengan cepat dan selamat. </string>
   <string name="lantern_on_text">Anda dihubungkan kepada server Lantern yang paling cepat.  Mula Melayar!</string>

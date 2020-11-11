@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proxy todo o tráfego</string>
   <string name="proxy_all_on_header">LIG. (opção mais segura)</string>
   <string name="proxy_all_off_header">DESL. (opção mais rápida)</string>
-  <string name="proxy_all_on">Com esta opção, todo o tráfego do seu dispositivo será enviado via Lantern</string>
-  <string name="proxy_all_off">Com esta opção desativada, só tráfego a páginas bloqueadas será enviado via Lantern</string>
   <string name="button_text">Início</string>
   <string name="drawer_open">Abrir Menu</string>
   <string name="drawer_close">Fechar Menu</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lanter está ativo. Pode agora aceder a sites e serviços bloqueados!</string>
   <string name="on_desc">Agora pode aceder\n a sites e serviços bloqueados!</string>
   <string name="off_desc">Cliqque no botão para aceder aos sites e serviços bloqueados</string>
-  <string name="service_connected">Lantern interligado</string>
   <string name="desktop_option">Versão de PC</string>
   <string name="contact_option">Contacto</string>
   <string name="check_for_update">Atualizar Programa</string>
   <string name="no_update_available">Está atualizado!</string>
-  <string name="error_checking_for_update">Erro ao pesquisar por nova versão do Lantern</string>
   <string name="error_making_purchase">Erro a tentar completar compra</string>
-  <string name="have_latest_version">Lantern %1$s é a versão mais recente disponível.</string>
-  <string name="updating_lantern">Atualização do Lantern</string>
   <string name="cancel">Cancelar</string>
   <string name="newsfeed_option">Teste Feed do Lantern</string>
   <string name="newsfeed_off_option">Desativar Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Mês</string>
   <string name="year">Ano</string>
   <string name="success_email">Lantern para PC foi-lhe enviado por correio eletrónico!</string>
-  <string name="error_email">Ocorreu um problema ao enviar-lhe o Lantern para PC. Por favor, tente de novo mais tarde.</string>
   <string name="send_logs">Enviar Registos</string>
   <string name="help_survey">Ajude Lantern a ser melhor, responda a este inquérito de uma questão agora!</string>
   <string name="take_survey">Responda ao Inquérito!</string>
   <string name="thanks_survey">Obrigado por responder ao nosso inquérito!\n</string>
-  <string name="success_log_email">Registos submetidos com sucesso para Lantern!</string>
-  <string name="error_log_email">Ocorreu um erro a enviar logs de Lantern. Por favor tente mais tarde.</string>
   <string name="invalid_email">Endereço de e-mail inválido</string>
   <string name="error_payment_gateway">Ocorreu um erro a contactar a gateway de pagamento</string>
   <string name="emails_do_not_match">Os campos de e-mail não coincidem</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Ajudem-me</string>
   <string name="contact_subject">Lantern para Android</string>
-  <string name="update_available">Está disponível uma nova versão do Lantern! Deseja atualizar agora?</string>
   <string name="not_now">Agora Não</string>
   <string name="install_update">Atualizar</string>
   <string name="error_update">Erro ao Transferir a Atualização</string>
@@ -266,7 +256,6 @@
   <string name="creditcard_alipay">Cartão de Crédito/AliPay</string>
   <string name="fastworldpay">Fast World Pay (Shetab)</string>
   <string name="blocked_ads">Anúncios Bloqueados</string>
-  <string name="upgrade_now_data">Atualize agora para serviço de alta velocidade ilimitada</string>
   <string name="renew_your_account">Renove a sua conta para adicionar mais tempo</string>
   <string name="turn_on_lantern">Ative o Lantern para ativar o acesso rápido e seguro aos sites e serviços bloqueados.</string>
   <string name="lantern_on_text">Está ligado ao servidor Lantern mais rápido. Comece a Navegar!</string>

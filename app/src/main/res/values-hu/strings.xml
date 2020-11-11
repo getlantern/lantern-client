@@ -31,14 +31,10 @@
   <string name="lantern_on">A Lantern bekapcsolva. Most már eléri a blokkolt oldalakat és szolgáltatásokat.</string>
   <string name="on_desc">Most már eléri a blokkolt\noldalakat és szolgáltatásokat.</string>
   <string name="off_desc">Kattintson a gombra a blokkolt oldalak és szolgáltatások eléréséhez</string>
-  <string name="service_connected">Lantern csatlakozva</string>
   <string name="desktop_option">Asztali Verzió</string>
   <string name="contact_option">Kapcsolat</string>
   <string name="check_for_update">Frissítések ellenőrzése</string>
   <string name="no_update_available">A legfrissebb verziót használja!</string>
-  <string name="error_checking_for_update">Az új Lantern verzió hiba ellenőrzése</string>
-  <string name="have_latest_version">Lantern %1$s a legfrissebb elérhető verzió.</string>
-  <string name="updating_lantern">Lantern frissítése</string>
   <string name="cancel">Mégsem</string>
   <string name="newsfeed_option">Lantern Feed kipróbálása</string>
   <string name="newsfeed_off_option">Feed kikapcsolása</string>
@@ -60,13 +56,10 @@
   <string name="month">Hónap</string>
   <string name="year">Év</string>
   <string name="success_email">A Lantern Desktop el lett emailezve neked!</string>
-  <string name="error_email">Probléma volt neked elküldeni a Lantern Desktop-ot. Kérlek próbáld újra később.</string>
   <string name="send_logs">Logok elküldése</string>
   <string name="help_survey">Segítsen a Lanternt jobbá tenni, töltse ki ezt az egy kérdőívet most!</string>
   <string name="take_survey">Kérdőív kitöltése</string>
   <string name="thanks_survey">Köszönjük, hogy kitöltötte a kérdőívet!\n</string>
-  <string name="success_log_email">A logok sikeresen elküldésre kerülten a Lantern részére!</string>
-  <string name="error_log_email">Hiba a logok Lantern-hez küldése során. Kérjük próbálja újra később.</string>
   <string name="invalid_email">Érvénytelen email cím</string>
   <string name="invalid_referral_code">Érvénytelen ajánló kód</string>
   <string name="cannot_use_own_referral_code">Nem használhatja a saját ajánló kódját akciókhoz</string>
@@ -76,7 +69,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Segítség kérése</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Egy új Lantern verzió érhető el. Szeretné most frissíteni?</string>
   <string name="not_now">Nem most</string>
   <string name="install_update">Frissítés</string>
   <string name="error_update">Hiba a frissítés letöltésekor</string>
@@ -141,7 +133,6 @@
   <string name="start_recovery">Helyreállítás indítása</string>
   <string name="account_recovery">Fiók helyreállítás</string>
   <string name="account_recovery_code">Fiók helyreállító kód</string>
-  <string name="email_recovery_code">Egy email került elküldésre a %1$s címre, a helyreállító kóddal. Adja meg a kódot fent. Ez az email akár órák múlva is érkezhet. </string>
   <string name="thanks_report">Köszönjük. A Lantern vevőszolgálat felveszi Önnel a kapcsolatot 48 órán belül.</string>
   <string name="enter_valid_code">Adjon meg egy érvényes helyreállító kódot.</string>
   <string name="too_many_devices">A Pro fiókhoz köthető maximális eszközök száma elérve.</string>

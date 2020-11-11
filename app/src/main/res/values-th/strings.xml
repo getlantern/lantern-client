@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">พร็อกซีการรับส่งข้อมูลทั้งหมด</string>
   <string name="proxy_all_on_header">เปิด (ตัวเลือกที่ปลอดภัยที่สุด)</string>
   <string name="proxy_all_off_header">ปิด (ตัวเลือกที่เร็วที่สุด)</string>
-  <string name="proxy_all_on">ด้วยตัวเลือกนี้ การรับส่งข้อมูลจากทุกอุปกรณ์ของคุณจะถูกส่งผ่าน Lantern</string>
-  <string name="proxy_all_off">เมื่อปิดตัวเลือกนี้ เฉพาะการรับส่งข้อมูลจากเว็บไซต์ที่ถูกบล็อกเท่านั้นที่จะถูกส่งผ่าน Lantern</string>
   <string name="button_text">เริ่ม</string>
   <string name="drawer_open">ช่องทางเปิด</string>
   <string name="drawer_close">ช่องทางปิด</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern เปิดอยู่ คุณสามารคเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
   <string name="on_desc">ตอนนี้คุณสามารถเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
   <string name="off_desc">คลิกที่ปุ่มเพื่อเข้าถึงเว็บไซต์และบริการที่ถูกบล็อก</string>
-  <string name="service_connected">เชื่อมต่อ Lantern แล้ว</string>
   <string name="desktop_option">เวอร์ชันเดสก์ท็อป</string>
   <string name="contact_option">ติดต่อ</string>
   <string name="check_for_update">ตรวจสอบการอัพเดต</string>
   <string name="no_update_available">คุณมีการอัปเดตล่าสุดแล้ว</string>
-  <string name="error_checking_for_update">เกิดข้อผิดพลาดในการตรวจสอบ Lantern เวอร์ชันใหม่</string>
   <string name="error_making_purchase">การสั่งซื้อล้มเหลว</string>
-  <string name="have_latest_version">Lantern %1$s คือเวอร์ชันใหม่ล่าสุด</string>
-  <string name="updating_lantern">กำลังอัปเดต Lantern</string>
   <string name="cancel">ยกเลิก</string>
   <string name="newsfeed_option">ทดลอง Lantern Feed</string>
   <string name="newsfeed_off_option">ปิดหน้าฟีด</string>
@@ -76,13 +70,10 @@
   <string name="month">เดือน</string>
   <string name="year">ปี</string>
   <string name="success_email">Lantern Desktop ได้ส่งอีเมลถึงคุณแล้ว!</string>
-  <string name="error_email">เกิดปัญหาในการส่ง Lantern Desktop ให้คุณ โปรดลองอีกครั้งในภายหลัง</string>
   <string name="send_logs">ส่งบันทึก</string>
   <string name="help_survey">เพื่อช่วยทำให้ Lantern ทำงานดีขึ้น โปรดตอบแบบสอบถามตอนนี้</string>
   <string name="take_survey">ทำแบบสำรวจ!</string>
   <string name="thanks_survey">ขอบคุณสำหรับการทำแบบสำรวจของเรา!\n</string>
-  <string name="success_log_email">การเข้าใช้ Lantern สำเร็็จ</string>
-  <string name="error_log_email">เกิดข้อผิดพลาดในการส่งบันทึกไปยัง Lantern กรุณาลองใหม่อีกครั้งในภายหลัง.</string>
   <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง</string>
   <string name="error_payment_gateway">การเชื่อมต่อช่องทางจ่ายเงินล้มเหลว</string>
   <string name="emails_do_not_match">ช่องอีเมลไม่ตรงกัน</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">ช่วยเหลือฉัน</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">มี Lantern เวอร์ชั่นใหม่! คุณต้องการอัปเกรดตอนนี้หรือไม่</string>
   <string name="not_now">ไม่ใช่ตอนนี้</string>
   <string name="install_update">อัพเดต</string>
   <string name="error_update">เกิดข้อผิดพลาดในการดาวน์โหลดอัพเดต</string>
@@ -173,7 +163,6 @@
   <string name="start_recovery">เริ่มการกู้คืน</string>
   <string name="account_recovery">การกู้คืนบัญชี</string>
   <string name="account_recovery_code">รหัสกู้คืนบัญชี</string>
-  <string name="email_recovery_code">อีเมลที่มีรหัสกู้คืนได้ถูกส่งไปยัง %1$s แล้ว ใส่รหัสที่ได้รับจากอีเมลข้างต้น อาจจะใช้เวลาหลายชั่วโมงกว่าคุณจะได้รับอีเมลนี้</string>
   <string name="thanks_report">ขอขอบคุณ Lantern Customer Support จะติดต่อกลับภายใน 48 ชั่วโมง</string>
   <string name="enter_valid_code">โปรดป้อนรหัสกู้คืนที่ถูกต้อง</string>
   <string name="too_many_devices">ครบจำนวนสูงสุดของอุปกรณ์ที่สามารถเชื่อมโยงบัญชี Pro ของคุณแล้ว</string>
@@ -340,7 +329,7 @@
   <string name="creditcard_alipay">บัตรเครดิต/Alipay</string>
   <string name="fastworldpay">Fast World Pay (Shetab)</string>
   <string name="blocked_ads">บล็อกโฆษณา</string>
-  <string name="upgrade_now_data">อัปเกรดเดี๋ยวนี้เพื่อใช้บริการความเร็วสูงแบบไม่จำกัด!</string>
+  <string name="upgrade_now_data">อัปเกรดเดี๋ยวนี้เพื่อบริการความเร็วสูงแบบไม่จำกัด !</string>
   <string name="renew_your_account">สร้างบัญชีผู้ใช้ใหม่เพื่อขยายเวลา</string>
   <string name="turn_on_lantern">เปิด Lantern เพื่อให้สามารถเข้าถึงเว็บไซต์และบริการที่ถูกบล็อกได้อย่างรวดเร็วและปลอดภัย</string>
   <string name="lantern_on_text">คุณได้เชื่อมต่อกับเซิร์ฟเวอร์ Lantern ที่เร็วที่สุดแล้ว เริ่มท่องเว็บได้เลย!</string>

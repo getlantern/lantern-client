@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Проксировать весь трафик</string>
   <string name="proxy_all_on_header">ВКЛ (Самый безопасный вариант)</string>
   <string name="proxy_all_off_header">ВЫКЛ (самый быстрый вариант)</string>
-  <string name="proxy_all_on">С помощью этой опции весь трафик вашего устройства будет отправлен через Lantern</string>
-  <string name="proxy_all_off">Если этот параметр выключен, только трафик на заблокированные сайты будет отправлен через Lantern</string>
   <string name="button_text">Старт</string>
   <string name="drawer_open">Открыть Drawer</string>
   <string name="drawer_close">Закрыть Drawer</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern включен. Теперь вы можете получить доступ к заблокированным сайтам и сервисам!</string>
   <string name="on_desc">Теперь вы можете получить доступ\r\nк заблокированным сайтам и сервисам</string>
   <string name="off_desc">Нажмите кнопку для получения доступа к заблокированным сайтам и сервисам</string>
-  <string name="service_connected">Lantern подключен</string>
   <string name="desktop_option">Версия для ПК</string>
   <string name="contact_option">Контактная информация</string>
   <string name="check_for_update">Проверить обновления</string>
   <string name="no_update_available">Нет новых обновлений!</string>
-  <string name="error_checking_for_update">Ошибка проверки наличия новой версии Lantern</string>
   <string name="error_making_purchase">Ошибка при попытке совершить покупку</string>
-  <string name="have_latest_version">Lantern %1$s - последняя доступная версия.</string>
-  <string name="updating_lantern">Обновление Lantern</string>
   <string name="cancel">Отмена</string>
   <string name="newsfeed_option">Попробуйте Lantern Feed</string>
   <string name="newsfeed_off_option">Отключить Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Месяц</string>
   <string name="year">Год</string>
   <string name="success_email">Lantern Desktop был отправлен по электронной почте!</string>
-  <string name="error_email">Возникла проблема отправки вам Lantern Desktop. Пожалуйста, повторите попытку позже.</string>
   <string name="send_logs">Отправить логи</string>
   <string name="help_survey">Помогите сделать Lantern лучше, примите участие в опросе!</string>
   <string name="take_survey">Примите участие в опросе!</string>
   <string name="thanks_survey">Спасибо за участие в опросе!\n</string>
-  <string name="success_log_email">Логи успешно отправлены в Lantern!</string>
-  <string name="error_log_email">Ошибка при отправке логов в Lantern. Пожалуйста, повторите попытку позже.</string>
   <string name="invalid_email">Неверный электронный адрес </string>
   <string name="error_payment_gateway">Ошибка при обращении к платежному шлюзу</string>
   <string name="emails_do_not_match">Поля электронной почты не совпадают</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Помощь</string>
   <string name="contact_subject">Lantern Андроид</string>
-  <string name="update_available">Доступна новая версия Lantern! Желаете обновить приложение?</string>
   <string name="not_now">Не сейчас</string>
   <string name="install_update">Обновить</string>
   <string name="error_update">Ошибка в скачивании обновления</string>
@@ -373,7 +363,7 @@
   <string name="creditcard_alipay">Кредитная карточка/Alipay</string>
   <string name="fastworldpay">Fast World Pay (Shetab)</string>
   <string name="blocked_ads">Заблокированная реклама</string>
-  <string name="upgrade_now_data">Обновить сейчас для получения безлимитного высокоскоростного обслуживания!</string>
+  <string name="upgrade_now_data">Обновите сейчас для неограниченного высокоскоростного сервиса!</string>
   <string name="renew_your_account">Обновите свою учетную запись, чтобы добавить больше времени</string>
   <string name="turn_on_lantern">Включите Lantern, чтобы обеспечить быстрый и безопасный доступ к заблокированным сайтам и службам.</string>
   <string name="lantern_on_text">Вы подключены к самому быстрому серверу Lantern. Начать просмотр!</string>
@@ -477,5 +467,4 @@
   <string name="android.permission.ACCESS_NETWORK_STATE">проксирование вашего трафика</string>
   <string name="privacy_disclosure_title">Политика конфиденциальности Lantern</string>
   <string name="privacy_disclosure_accept">Я принимаю</string>
-  <string name="privacy_disclosure_body">Lantern серьезно относится к защите вашей конфиденциальности. Для нас важно, чтобы вы понимали, какую информацию мы собираем (и не собираем), как мы ее используем и храним.\n\nМы не собираем зарегистрированные данные о вашей активности (в том числе историю браузера, адресаты трафика, содержание данных или DNS-запросы). Мы никогда не храним журналы соединений, то есть ваши зарегистрированные IP-адреса, IP-адрес исходящего сервера Lantern, связанный с временной меткой подключения, а также продолжительность сеансов.\n\nМы собираем IP-адреса пользователей бесплатной версии Lantern, чтобы свести к минимуму неправомерное использование. Однако мы не можем связать IP-адрес сервера Lantern с IP-адресом пользователя даже при наличии точной временной метки. Мы собираем ваш адрес электронной почты и платежные данные, если вы покупаете аккаунт Lantern Pro.\n\nМы собираем диагностическую информацию о работе приложения, в том числе отчеты о сбоях и данные об установленных пакетах.</string>
 </resources>

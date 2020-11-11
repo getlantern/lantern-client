@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Διαμεσολάβηση όλης της κίνησης</string>
   <string name="proxy_all_on_header">ON (Πιο ασφαλής επιλογή)</string>
   <string name="proxy_all_off_header">OFF (Ταχύτερη επιλογή)</string>
-  <string name="proxy_all_on">Με αυτήν την επιλογή, όλη η κίνηση της συσκευής σας θα αποστέλλεται μέσω του Lantern</string>
-  <string name="proxy_all_off">Με αυτήν την επιλογή απενεργοποιημένη, μόνο η κίνηση σε αποκλεισμένες ιστοσελιδες θα σταλεί μέσω του Lantern</string>
   <string name="button_text">Αρχή</string>
   <string name="drawer_open">Συρτάρι Ανοιχτό</string>
   <string name="drawer_close">Συρτάρι Κλειστό</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Το Lantern είναι Ανοιχτο. Τώρα έχετε πρόσβαση σε αποκλεισμένες ιστοσελίδες και υπηρεσίες!</string>
   <string name="on_desc">Τώρα έχετε πρόσβαση σε\r\n αποκλεισμένες ιστοσελίδες και υπηρεσίες</string>
   <string name="off_desc">Πατήστε το κουμπί για να αποκτήσετε πρόσβαση σε αποκλεισμένες ιστοσελίδες και υπηρεσίες</string>
-  <string name="service_connected">Το Lantern είναι συνδεδεμένο</string>
   <string name="desktop_option">Έκδοση Desktop</string>
   <string name="contact_option">Επικοινωνία</string>
   <string name="check_for_update">Ελεγχος για Ενημερώσεις</string>
   <string name="no_update_available">Είναι ενημερωμένο!</string>
-  <string name="error_checking_for_update">Σφάλμα κατά τον έλεγχο για νέα έκδοση του Lantern</string>
   <string name="error_making_purchase">Σφάλμα κατά την προσπάθεια αγοράς</string>
-  <string name="have_latest_version">Η εκδοση %1$s του Lantern είναι η νεότερη διαθέσιμη έκδοση.</string>
-  <string name="updating_lantern">Γίνεται αναβάθμιση του Lantern</string>
   <string name="cancel">Ακύρωση</string>
   <string name="newsfeed_option">Δοκιμάστε το fee του Lantern</string>
   <string name="newsfeed_off_option">Απενεργοποίηση του Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Μήνας</string>
   <string name="year">Έτος</string>
   <string name="success_email">Το Lantern Desktop σας έχει σταλεί μέσω email!</string>
-  <string name="error_email">Παρουσιάστηκε ένα πρόβλημα κατά την αποστολή του Desktop Lantern. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
   <string name="send_logs">Αποστολή Αρχείων Καταγραφής</string>
   <string name="help_survey">Βοηθήστε να κάνουμε το Lantern καλύτερο, απαντήστε στην έρευνα τώρα!</string>
   <string name="take_survey">Απαντήστε στην έρευνα!</string>
   <string name="thanks_survey">Σας ευχαριστούμε που απαντήσατε στην έρευνα μας!\n</string>
-  <string name="success_log_email">Τα αρχεία καταγραφής αποσφαλμάτωσης υποβλήθηκαν με επιτυχία στο Lantern!</string>
-  <string name="error_log_email">Σφάλμα κατά την αποστολή των αρχείων καταγραφής αποσφαλμάτωσης στο Lantern. Παρακαλώ προσπαθήστε ξανά αργότερα.</string>
   <string name="invalid_email">Μη έγκυρη διεύθυνση email</string>
   <string name="error_payment_gateway">Σφάλμα κατά την επικοινωνία με την πύλη πληρωμής</string>
   <string name="emails_do_not_match">Τα πεδία email δεν ταιριάζουν</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Βοήθεια</string>
   <string name="contact_subject">Lantern Android </string>
-  <string name="update_available">Μια νέα έκδοση του Lantern είναι διαθέσιμη! Θέλετε να κάνετε αναβάθμιση τώρα;</string>
   <string name="not_now">Όχι τώρα</string>
   <string name="install_update">Ενημέρωση</string>
   <string name="error_update">Παρουσιάστηκε σφάλμα κατά τη λήψη της ενημέρωσης</string>
@@ -176,7 +166,6 @@
   <string name="start_recovery">Έναρξη Ανάκτησης</string>
   <string name="account_recovery">Ανάκτηση Λογαριασμού</string>
   <string name="account_recovery_code">Κωδικός Ανάκτησης Λογαριασμού</string>
-  <string name="email_recovery_code">Ένα email με έναν κωδικό ανάκτησης έχει σταλεί στο %1$s. Εισάγετε τον κωδικό από αυτό το email παραπάνω. Αυτό το email ενδέχεται να πάρει αρκετές ώρες μέχρι να φτάσει.</string>
   <string name="thanks_report">Σας ευχαριστούμε, η Υποστήριξη Πελατών του Lantern θα επικοινωνήσει μαζί σας εντός 48 ωρών.</string>
   <string name="enter_valid_code">Εισάγετε έναν έγκυρο κωδικό ανάκτησης..</string>
   <string name="too_many_devices">Έχετε φτάσει το μέγιστο αριθμό συσκευών που μπορούν να συνδεθούν στον Pro λογαριασμό σας.</string>

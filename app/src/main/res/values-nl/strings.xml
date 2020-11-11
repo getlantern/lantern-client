@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proxy al het verkeer</string>
   <string name="proxy_all_on_header">AAN (Veiligste optie)</string>
   <string name="proxy_all_off_header">UIT (Snelste optie)</string>
-  <string name="proxy_all_on">Met deze optie wordt uw gehele toestelverkeer verstuurd middels Lantern</string>
-  <string name="proxy_all_off">Met deze optie uit wordt alleen verkeer naar geblokkeerde sites verstuurd middels Lantern</string>
   <string name="button_text">Begin</string>
   <string name="drawer_open">Drawer Open</string>
   <string name="drawer_close">Drawer Gesloten</string>
@@ -46,14 +44,10 @@
   <string name="lantern_on">Lantern is ingeschakeld. U kunt nu alle geblokkeerde sites en services zien!</string>
   <string name="on_desc">U heeft nu toegang tot \r\nblocked sites en services</string>
   <string name="off_desc">Klik op de knop om toegang te krijgen tot geblokkeerde sites en diensten</string>
-  <string name="service_connected">Verbonden met Lantern</string>
   <string name="desktop_option">Desktop Versie</string>
   <string name="contact_option">Contact</string>
   <string name="check_for_update">Controleer op update</string>
   <string name="no_update_available">U heeft de laatste versie!</string>
-  <string name="error_checking_for_update">Checken naar nieuwe Lantern versie ging fout</string>
-  <string name="have_latest_version">Lantern %1$s is de laatste versie.</string>
-  <string name="updating_lantern">Lantern bijwerken</string>
   <string name="cancel">Annuleren</string>
   <string name="newsfeed_option">Probeer Lanten Feed</string>
   <string name="newsfeed_off_option">Feed uitzetten</string>
@@ -75,13 +69,10 @@
   <string name="month">Maand</string>
   <string name="year">Jaar</string>
   <string name="success_email">Lantern Desktop is naar u toe gemaild! </string>
-  <string name="error_email">Een fout ondervonden tijdens het verzenden van Lantern Desktop. Probeer later opnieuw.</string>
   <string name="send_logs">Logs versturen</string>
   <string name="help_survey">Help ons Lantern te verbeteren. Vul deze rondvraag nu in!</string>
   <string name="take_survey">Rondvraag!</string>
   <string name="thanks_survey">Bedankt voor het invullen van onze rondvraag!\n</string>
-  <string name="success_log_email">Logs succesvol verstuurd naar Lantern!</string>
-  <string name="error_log_email">Fout tijdens het versturen van logs naar Lantern. Probeer opnieuw.</string>
   <string name="invalid_email">Ongeldig e-mailadres</string>
   <string name="emails_do_not_match">E-mailvelden stemmen niet overeen</string>
   <string name="invalid_reseller_code">De ingevulde reseller code is ongeldig</string>
@@ -93,7 +84,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Hulp</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Een recentere versie van Lantern is beschikbaar! Wilt u deze nu bijwerken?</string>
   <string name="not_now">Niet nu</string>
   <string name="install_update">Update</string>
   <string name="error_update">Fout Downloaden Update</string>
@@ -162,7 +152,6 @@
   <string name="start_recovery">Begin herstel</string>
   <string name="account_recovery">Account-herstel</string>
   <string name="account_recovery_code">Account-herstel code</string>
-  <string name="email_recovery_code">Een e-mail met een herstelcode is verzonden naar %1$s. Gebruik de code die vermeld is hierboven. Het kan enkele uren duren voordat u de e-mail ontvangt.</string>
   <string name="thanks_report">Bedankt. Lantern klantenservice neemt contact met u op binnen 48 uur.</string>
   <string name="enter_valid_code">Vul AUB een geldige herstelcode in.</string>
   <string name="too_many_devices">De grens van het maximaal aantal apparaten die via je Pro-account kunt linken is bereikt.</string>

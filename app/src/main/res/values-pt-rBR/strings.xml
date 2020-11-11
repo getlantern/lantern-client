@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Proxy todo o tráfego</string>
   <string name="proxy_all_on_header">Ligado (Opção mais segura)</string>
   <string name="proxy_all_off_header">Desligado (Opção mais rápida)</string>
-  <string name="proxy_all_on">Com esta opção, todo o tráfego do seu dispositivo será enviado através do Lantern.</string>
-  <string name="proxy_all_off">Com esta opção desligada, somente tráfego para sites bloqueados será enviado através do Lantern.</string>
   <string name="button_text">Iniciar</string>
   <string name="drawer_open">Gaveta aberta</string>
   <string name="drawer_close">Gaveta fechada</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern está ligado. Você agora pode acessar sites e serviços bloqueados!</string>
   <string name="on_desc">Você agora pode acessar sites e serviços bloqueados</string>
   <string name="off_desc">Clique no botão para acessar sites e serviços bloqueados</string>
-  <string name="service_connected">Lantern conectado</string>
   <string name="desktop_option">Versão Desktop</string>
   <string name="contact_option">Contato</string>
   <string name="check_for_update">Verificar atualizações</string>
   <string name="no_update_available">Você está atualizado!</string>
-  <string name="error_checking_for_update">Erro ao verificar a nova versão do Lantern</string>
   <string name="error_making_purchase">Erro ao tentar fazer a compra</string>
-  <string name="have_latest_version">Lantern %1$s é a mais nova versão disponível.</string>
-  <string name="updating_lantern">Atualizando Lantern</string>
   <string name="cancel">Cancela</string>
   <string name="newsfeed_option">Experimente o Feed do Lantern</string>
   <string name="newsfeed_off_option">Desligar Feed</string>
@@ -76,13 +70,10 @@
   <string name="month">Mês</string>
   <string name="year">Ano</string>
   <string name="success_email">Lantern Desktop foi enviado por email para você!</string>
-  <string name="error_email">Ocorreu um problema ao enviar o Lantern Desktop para você. Por favor tente mais tarde.</string>
   <string name="send_logs">Enviar registros</string>
   <string name="help_survey">Ajude a tornar o Lantern melhor, faça uma pergunta da pesquisa agora!</string>
   <string name="take_survey">Responder à pesquisa!</string>
   <string name="thanks_survey">Obrigado por responder nossa pesquisa!\n</string>
-  <string name="success_log_email">Registros submetidos com sucesso para o Lantern!</string>
-  <string name="error_log_email">Erro ao enviar registros para o Lantern. Por favor tente novamente mais tarde.</string>
   <string name="invalid_email">Endereço de e-mail inválido</string>
   <string name="error_payment_gateway">Erro ao entrar em contato com o gateway de pagamento</string>
   <string name="emails_do_not_match">Campos de email não coincidem</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Ajude-me</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Uma nova versão do Lantern está disponível! Você gostaria de atualizar agora?</string>
   <string name="not_now">Agora não</string>
   <string name="install_update">Atualizar</string>
   <string name="error_update">Erro ao baixar atualização</string>
@@ -175,7 +165,6 @@
   <string name="start_recovery">Iniciar recuperação</string>
   <string name="account_recovery">Recuperação de conta</string>
   <string name="account_recovery_code">Código de recuperação da conta</string>
-  <string name="email_recovery_code">Um email com um código de recuperação foi enviado para %1$s. Digite o código desse email acima. Este email pode levar várias horas para chegar.</string>
   <string name="thanks_report">Obrigado, o suporte ao cliente Lantern estará em contato dentro de 48 horas.</string>
   <string name="enter_valid_code">Por favor digite um código de recuperação válido.</string>
   <string name="too_many_devices">O limite de dispositivos que pode ser vinculado a sua conta Pro foi alcançado.</string>

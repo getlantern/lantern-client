@@ -42,14 +42,10 @@
   <string name="lantern_on">랜턴이 켜져 있습니다. 이제 차단된 사이트에 접속할 수 있습니다.</string>
   <string name="on_desc">이제 차단된 사이트에\r\n접속할 수 있습니다.</string>
   <string name="off_desc">차단된 사이트에 접속하기 위해 버튼을 눌러 주세요.</string>
-  <string name="service_connected">랜턴 연결됨</string>
   <string name="desktop_option">데스크탑 버전</string>
   <string name="contact_option">연락처</string>
   <string name="check_for_update">업데이트 확인</string>
   <string name="no_update_available">최신 버전입니다.</string>
-  <string name="error_checking_for_update">새 버전 확인 오류</string>
-  <string name="have_latest_version">랜턴 %1$s가 현재 최신 버전입니다.</string>
-  <string name="updating_lantern">랜턴 업데이트 중</string>
   <string name="cancel">취소</string>
   <string name="newsfeed_option">랜턴 피드 써보기</string>
   <string name="newsfeed_off_option">피드 끄기</string>
@@ -71,13 +67,10 @@
   <string name="month">월</string>
   <string name="year">년</string>
   <string name="success_email">데스크탑용 랜턴이 이메일로 전송되었습니다.</string>
-  <string name="error_email">문제가 발생하여 데스크탑용 랜턴을 보낼 수 없습니다. 잠시 후 다시 시도해주세요.</string>
   <string name="send_logs">로그 보내기</string>
   <string name="help_survey">랜턴을 개선하는 데 도움을 주세요. 이 설문에 참여해주시길 부탁드립니다.</string>
   <string name="take_survey">조사 참여</string>
   <string name="thanks_survey">설문에 참여해 주셔서 감사합니다.\n</string>
-  <string name="success_log_email">로그가 성공적으로 전송되었습니다.</string>
-  <string name="error_log_email">로그를 보낼 수 없습니다. 잠시 후 다시 시도해 주세요.</string>
   <string name="invalid_email">잘못된 이메일 주소</string>
   <string name="emails_do_not_match">이메일 정보가 일치하지 않습니다</string>
   <string name="invalid_reseller_code">입력하신 리셀러 코드가 유효하지 않습니다</string>
@@ -89,7 +82,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">도움말</string>
   <string name="contact_subject">랜턴 안드로이드</string>
-  <string name="update_available">랜턴의 최신 버전이 있습니다. 지금 업그레이드할까요?</string>
   <string name="not_now">나중에</string>
   <string name="install_update">업데이트</string>
   <string name="error_update">다운로드 오류</string>
@@ -156,7 +148,6 @@
   <string name="start_recovery">복구 시작</string>
   <string name="account_recovery">계정 복구</string>
   <string name="account_recovery_code">기기 복구 코드</string>
-  <string name="email_recovery_code">복구 코드를 이메일로 %1$s에 보냈습니다. 해당 이메일로 온 코드를 입력해 주세요. 도착까지 몇 시간이 걸릴 수 있습니다.</string>
   <string name="thanks_report">감사합니다. 랜턴 고객 지원 팀이 48시간 이내에 연락 드리겠습니다.</string>
   <string name="enter_valid_code">유효한 복구 코드를 입력해 주세요.</string>
   <string name="too_many_devices">프로 계정에 연결할 수 있는 기기 수 제한에 도달했습니다.</string>

@@ -5,8 +5,6 @@
   <string name="proxy_all_setting">Tüm trafiği proxyle</string>
   <string name="proxy_all_on_header">AÇ (en güvenli seçenek)</string>
   <string name="proxy_all_off_header">KAPAT (en hızlı seçenek)</string>
-  <string name="proxy_all_on">Bu seçenekle, tüm cihaz trafiğiniz Lantern üzerinden sağlanır.</string>
-  <string name="proxy_all_off">Bu seçenek kapalıyken, yalnızca engellenen sitelerle trafik Lantern üzerinden sağlanacak.</string>
   <string name="button_text">Başlat</string>
   <string name="drawer_open">Çekmeceyi Aç</string>
   <string name="drawer_close">Çekmeceyi Kapat</string>
@@ -46,15 +44,11 @@
   <string name="lantern_on">Lantern Açık. Şimdi engelli sitelere ve hizmetlere ulaşabilirsiniz!</string>
   <string name="on_desc">Şimdi engelli\r\nsitelere ve hizmetlere ulaşabilirsiniz.</string>
   <string name="off_desc">Engelli sitelere ve hizmetlere ulaşmak için düğmeye basınız</string>
-  <string name="service_connected">Lantern bağlı</string>
   <string name="desktop_option">Masaüstü Versiyonu</string>
   <string name="contact_option">İletişim</string>
   <string name="check_for_update">Güncelle</string>
   <string name="no_update_available">En güncel sürümü kullanıyorsunuz!</string>
-  <string name="error_checking_for_update">Lantern\'in yeni sürümlerini kontrol ederken bir hata oluştu</string>
   <string name="error_making_purchase">Satın alma işleminde hata oluştu</string>
-  <string name="have_latest_version">Lantern %1$s sürümü mevcut.</string>
-  <string name="updating_lantern">Lantern Güncelleniyor</string>
   <string name="cancel">İptal</string>
   <string name="newsfeed_option">Lantern Yayınını Dene</string>
   <string name="newsfeed_off_option">Yayını Kapat</string>
@@ -76,13 +70,10 @@
   <string name="month">Ay</string>
   <string name="year">Yıl</string>
   <string name="success_email">Lantern Masaüstü size e-posta ile gönderildi!</string>
-  <string name="error_email">Lantern Masaüstü\'nün gönderiminde bir sorun çıktı. Lütfen daha sonra tekrar deneyin.</string>
   <string name="send_logs">Kayıtları Gönder</string>
   <string name="help_survey">Lantern\'i iyileştirebilmek için,şimdi bu tek soruluk anketi doldurun!</string>
   <string name="take_survey">Anket Doldur!</string>
   <string name="thanks_survey">Anketi doldurduğunuz için teşekkürler!\n</string>
-  <string name="success_log_email">Kayıtlar başarıyla Lantern\'e gönderildi!</string>
-  <string name="error_log_email">Kayıtların Lantern\'e gönderiminde bir sorun çıktı. Lütfen daha sonra tekrar deneyin.</string>
   <string name="invalid_email">Geçersiz e-posta adresi</string>
   <string name="error_payment_gateway">Ödeme ağ geçidi ile iletişim kurulurken hata oluştu</string>
   <string name="emails_do_not_match">E-posta alanları eşleşmiyor</string>
@@ -96,7 +87,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Yardım</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Lantern\'in yeni bir sürümü mevcut. Şimdi güncellemek ister misiniz?</string>
   <string name="not_now">Şimdi Değil</string>
   <string name="install_update">Güncelle</string>
   <string name="error_update">Güncelleme İndirilirken Hata Oluştu</string>
@@ -373,7 +363,7 @@
   <string name="creditcard_alipay">Kredi Kartı/Alipay</string>
   <string name="fastworldpay">Fast World Pay (Shetab)</string>
   <string name="blocked_ads">Engellenen Reklamlar</string>
-  <string name="upgrade_now_data">Sınırsız yüksek hızlı servis için şimdi yükseltin!</string>
+  <string name="upgrade_now_data">Sınırsız yüksek hızlı servis için şimdi yükseltin</string>
   <string name="renew_your_account">Daha fazla zaman eklemek için hesabınızı yenileyin</string>
   <string name="turn_on_lantern">Engellenen sitelere ve hizmetlere hızlı ve güvenli bir erişim sağlamak için Lantern\'i etkinleştirin.</string>
   <string name="lantern_on_text">Şu anda en hızlı Lantern sunucusuna bağlısınız. Taramaya Başlayın!</string>
@@ -477,5 +467,4 @@
   <string name="android.permission.ACCESS_NETWORK_STATE">trafiğiniz proxyleniyor</string>
   <string name="privacy_disclosure_title">Lantern Gizlilik Anlaşması</string>
   <string name="privacy_disclosure_accept">Kabul Ediyorum</string>
-  <string name="privacy_disclosure_body">Lantern gizliliğinizi korumayı taahhüt eder. Hangi bilgileri topladığımızı, hangilerini toplamadığımızı, bunları nasıl kullandığımızı ve bilgileri nasıl depoladığımızı anlamanızı istiyoruz. \n\nAktivitenizin kaydını toplamıyoruz; örneğin tarama geçmişinizin, trafik hedefinizin, veri içeriğinizin veya DNS sorgularınızın kaydını tutmuyoruz. Ayrıca bağlantı kayıtlarını hiçbir zaman depolamıyoruz; yani IP adresinizin, bağlantı zaman damgasıyla ilişkili giden Lantern sunucu IP adresinizin veya oturum sürenizin kaydını tutmuyoruz. \n\nLantern Free kullanıcıları için, kötüye kullanımı sınırlamak adına kullanıcı IP\'lerini topluyoruz. Ancak Lantern sunucu IP\'sini kesin bir zaman damgasıyla bile kullanıcı IP adresiyle ilişkilendirmemiz mümkün değildir. Lantern Pro hesabı satın alırsanız e-posta adresinizi ve ödeme bilgilerinizi topluyoruz.\n\nKilitlenme raporları ve yüklenmiş paketler hakkında bilgi gibi uygulamanın işleyişiyle ilgili tanısal bilgileri topluyoruz.</string>
 </resources>

@@ -42,14 +42,10 @@
   <string name="lantern_on">Lantern açıqdır. İndi blokanmış sayt və xidmətlərdən istifadə edə bilərsiniz!</string>
   <string name="on_desc">İndi bloklanan sayt və xidmətlərə daxil\r\nola bilərsiniz.</string>
   <string name="off_desc">Bloklanan xidmət və saytlara girmək üçün düyməni basın</string>
-  <string name="service_connected">Lanern qoşulub</string>
   <string name="desktop_option">Desktop Versiyası</string>
   <string name="contact_option">Contact</string>
   <string name="check_for_update">Yeniləməni yoxlayın</string>
   <string name="no_update_available">Yeniləndi!</string>
-  <string name="error_checking_for_update">Lanternin yeni versiyasını yoxlayanda xəta oldu</string>
-  <string name="have_latest_version">Lantern %1$s üçün son versiya</string>
-  <string name="updating_lantern">Lantern yenilənir</string>
   <string name="cancel">Cancel</string>
   <string name="newsfeed_option">Lantern axını</string>
   <string name="newsfeed_off_option">Axını söndür</string>
@@ -71,13 +67,10 @@
   <string name="month">Ay</string>
   <string name="year">İl</string>
   <string name="success_email">Lantern Desktop sənə emaillə göndərilib!</string>
-  <string name="error_email">Lantern Desktopu sənə göndərən zaman problem yarandı. Lütfən, birazdan yenidən sına.</string>
   <string name="send_logs">Girişləri göndər</string>
   <string name="help_survey">Lanterni daha yaxşı etmək üçün kömək et və sorğuda iştirak et!</string>
   <string name="take_survey">Sorğuda iştirak et!</string>
   <string name="thanks_survey">Sorğudan iştiraka görə minnətdarıq!\n</string>
-  <string name="success_log_email">Lanternə daxil omalar uğurla qeyd olundu!</string>
-  <string name="error_log_email">Daxilolmaların Lanternə göndərilməsində xəta oldu. Bir daha sınayın.</string>
   <string name="invalid_email">Səhv email ünvan</string>
   <string name="emails_do_not_match">Email sahələri uyğun gəlmir</string>
   <string name="invalid_reseller_code">Satıcı kodu səhvdir</string>
@@ -89,7 +82,6 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">Mənə Kömək Et</string>
   <string name="contact_subject">Lantern Android</string>
-  <string name="update_available">Lanternin yeni versiyası çıxıb! Yeniləmək istəyirsiniz?</string>
   <string name="not_now">İndi Yox</string>
   <string name="install_update">Yenilə</string>
   <string name="error_update">Yenilənmənin Yüklənməsində Xəta</string>
@@ -156,7 +148,6 @@
   <string name="start_recovery">Düzəltməyə başla</string>
   <string name="account_recovery">Hesabın yadasalınması</string>
   <string name="account_recovery_code">Hesab yadasalma kodu</string>
-  <string name="email_recovery_code">Yenilənmə kodlu email %1$s göndərildi. Emaildəki kodu yuxarı yapışdırın. Bu emailin gəlməsi bir neçə saat çəkə bilər.</string>
   <string name="thanks_report">Çox sağ olun, Lantern Müştəri xidmətləri 48 saat ərzində əlaqə saxlayacaq.</string>
   <string name="enter_valid_code">Zəhmət olmasa düzgün kodu daxil edin.</string>
   <string name="too_many_devices">Pro hesabına qoşula biləcək alətlərin sayı limiti keçib.</string>
