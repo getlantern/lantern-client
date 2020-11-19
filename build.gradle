@@ -24,8 +24,10 @@ ext {
 
     enableTestCodeCoverage = true
 
-    compileSdkVersion = 30
-    targetSdkVersion = 30
+    // WARNING! compileSdkVersion and targetSdkVersion must not be set to 30
+    // see https://github.com/getlantern/lantern-internal/issues/4497
+    compileSdkVersion = 29
+    targetSdkVersion = 29
     minSdkVersion = 19
     androidAnnotationsVersion = '4.7.0'
     androidAnnotationsAPIVersion = '4.7.0'
