@@ -43,7 +43,7 @@ public class TabFragment extends Fragment {
   private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
 
   // Always operated from main thread as one subscriber of EventBus.
-  private HashSet<Long> notifiedBWPercents = new HashSet<>();
+  private static final HashSet<Long> notifiedBWPercents = new HashSet<>();
 
   private int position;
 
