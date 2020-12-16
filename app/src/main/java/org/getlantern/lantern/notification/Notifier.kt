@@ -41,8 +41,11 @@ class Notifier : BroadcastReceiver() {
 
             ACTION_DATA_USAGE -> {
                 notificationId = NOTIFICATION_ID_DATA_USAGE
+                val text = intent.getStringExtra(EXTRA_TEXT)
+
                 builder.setChannelId(CHANNEL_DATA_USAGE)
-                builder.setContentText(intent.getStringExtra(EXTRA_TEXT))
+                builder.setContentText(text)
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(text))
             }
 
             else -> {
