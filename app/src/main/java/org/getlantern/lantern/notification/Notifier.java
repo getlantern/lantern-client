@@ -1,4 +1,4 @@
-package org.getlantern.lantern.model;
+package org.getlantern.lantern.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,16 +13,16 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.app.NotificationCompat;
 
-import org.getlantern.lantern.activity.LanternFreeActivity;
 import org.getlantern.lantern.R;
-
+import org.getlantern.lantern.activity.LanternFreeActivity;
 import org.getlantern.mobilesdk.Logger;
 
 /**
  * Handles notifications.
  */
-public class Notify extends BroadcastReceiver {
-    private static final String TAG = "Notify";
+public class Notifier extends BroadcastReceiver {
+
+    private static final String TAG = "Notifier";
 
     public void onReceive(Context context, Intent intent) {
         Logger.i(TAG, "Notifying" + intent.getAction());
@@ -33,10 +33,10 @@ public class Notify extends BroadcastReceiver {
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
         NotificationCompat.Builder mBuilder =
-            new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle(resources.getString(R.string.lantern_notification))
-            .setAutoCancel(true);
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContentTitle(resources.getString(R.string.lantern_notification))
+                        .setAutoCancel(true);
 
         switch (intent.getAction()) {
             case "org.getlantern.lantern.intent.DATA_USAGE":
@@ -51,14 +51,14 @@ public class Notify extends BroadcastReceiver {
                 LanternFreeActivity.class);
         // For unknown reason, passing this (instead of zero) resumes the
         // existing activity if possible, instead of creating a new one.
-        int requestCode = (int)System.currentTimeMillis();
+        int requestCode = (int) System.currentTimeMillis();
         PendingIntent resultPendingIntent =
-            PendingIntent.getActivity(context, requestCode,
-                    resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getActivity(context, requestCode,
+                        resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager =
-            (NotificationManager)context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
         Notification notification = mBuilder.build();
         mNotificationManager.notify(notificationId, notification);
     }

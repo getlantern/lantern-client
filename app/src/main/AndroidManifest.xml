@@ -287,7 +287,7 @@
         <service android:enabled="true" android:name=".service.LinkDeviceService_"/>
         <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
 
-        <receiver android:name="org.getlantern.lantern.model.Notify">
+        <receiver android:name="org.getlantern.lantern.notification.Notifier">
             <intent-filter>
                 <action android:name="org.getlantern.lantern.intent.DATA_USAGE" />
             </intent-filter>
