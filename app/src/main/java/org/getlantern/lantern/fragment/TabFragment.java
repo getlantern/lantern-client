@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
+import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.BaseActivity;
@@ -170,6 +171,7 @@ public class TabFragment extends Fragment {
     if (s != null) {
       Intent intent = new Intent();
       intent.setAction("org.getlantern.lantern.intent.DATA_USAGE");
+      intent.setPackage(BuildConfig.APPLICATION_ID);
       intent.putExtra("text", s);
       getActivity().sendBroadcast(intent);
       notifiedBWPercents.add(percent);
