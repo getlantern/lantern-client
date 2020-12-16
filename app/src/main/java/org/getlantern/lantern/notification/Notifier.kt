@@ -33,9 +33,14 @@ class Notifier : BroadcastReceiver() {
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
         val builder = NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle(resources.getString(R.string.lantern_notification))
                 .setAutoCancel(true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setSmallIcon(R.drawable.icon_alert_white)
+        } else {
+            builder.setSmallIcon(R.drawable.notification_icon)
+        }
 
         when (intent.action) {
 
