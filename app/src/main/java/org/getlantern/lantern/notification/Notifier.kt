@@ -1,5 +1,7 @@
 package org.getlantern.lantern.notification
 
+import android.annotation.TargetApi
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -8,8 +10,10 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.mobilesdk.Logger
@@ -23,19 +27,23 @@ class Notifier : BroadcastReceiver() {
 
         Logger.i(TAG, "Notifying" + intent.action)
 
-        val notificationId = 100
+        val notificationId: Int
         val resources = context.resources
         val largeIcon = getBitmap(resources, R.drawable.app_icon)
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
-        val mBuilder = NotificationCompat.Builder(context)
+        val builder = NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentTitle(resources.getString(R.string.lantern_notification))
                 .setAutoCancel(true)
 
         when (intent.action) {
 
-            ACTION_DATA_USAGE -> mBuilder.setContentText(intent.getStringExtra("text"))
+            ACTION_DATA_USAGE -> {
+                notificationId = NOTIFICATION_ID_DATA_USAGE
+                builder.setChannelId(CHANNEL_DATA_USAGE)
+                builder.setContentText(intent.getStringExtra(EXTRA_TEXT))
+            }
 
             else -> {
                 Logger.debug(TAG, "Got invalid broadcast " + intent.action)
@@ -53,11 +61,11 @@ class Notifier : BroadcastReceiver() {
                 requestCode,
                 resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
-        mBuilder.setContentIntent(resultPendingIntent)
-        val notification = mBuilder.build()
+        builder.setContentIntent(resultPendingIntent)
+        val notification = builder.build()
 
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(notificationId, notification)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notificationId, notification)
     }
 
     /**
@@ -77,6 +85,29 @@ class Notifier : BroadcastReceiver() {
     companion object {
         private const val TAG = "Notifier"
 
+        const val CHANNEL_DATA_USAGE = "Data Usage"
+
         const val ACTION_DATA_USAGE = BuildConfig.APPLICATION_ID + ".intent.DATA_USAGE"
+
+        const val NOTIFICATION_ID_DATA_USAGE = 100
+
+        const val EXTRA_TEXT = "text"
+
+        init {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannels()
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.O)
+        private fun createNotificationChannels() {
+            val notificationManager = LanternApp.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // create a channel for data usage notifications
+            notificationManager.createNotificationChannel(
+                    NotificationChannel(CHANNEL_DATA_USAGE, CHANNEL_DATA_USAGE, NotificationManager.IMPORTANCE_DEFAULT))
+
+            // create other notification channels
+        }
     }
 }
