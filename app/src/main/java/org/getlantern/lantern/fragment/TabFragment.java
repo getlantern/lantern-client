@@ -173,7 +173,7 @@ public class TabFragment extends Fragment {
       Intent intent = new Intent();
       intent.setPackage(BuildConfig.APPLICATION_ID);
       intent.setAction(Notifier.ACTION_DATA_USAGE);
-      intent.putExtra("text", s);
+      intent.putExtra(Notifier.EXTRA_TEXT, s);
       getActivity().sendBroadcast(intent);
       notifiedBWPercents.add(percent);
     }
