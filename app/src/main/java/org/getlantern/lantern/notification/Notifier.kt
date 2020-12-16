@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.app.NotificationCompat
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.mobilesdk.Logger
@@ -34,7 +35,7 @@ class Notifier : BroadcastReceiver() {
 
         when (intent.action) {
 
-            "org.getlantern.lantern.intent.DATA_USAGE" -> mBuilder.setContentText(intent.getStringExtra("text"))
+            ACTION_DATA_USAGE -> mBuilder.setContentText(intent.getStringExtra("text"))
 
             else -> {
                 Logger.debug(TAG, "Got invalid broadcast " + intent.action)
@@ -75,5 +76,7 @@ class Notifier : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "Notifier"
+
+        const val ACTION_DATA_USAGE = BuildConfig.APPLICATION_ID + ".intent.DATA_USAGE"
     }
 }
