@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,6 +32,7 @@ import java.io.File;
 @EActivity(R.layout.activity_updater)
 public class UpdateActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = UpdateActivity.class.getName();
+    private static final int REQUEST_CODE_REQUEST_INSTALL_PACKAGES = 1252;
 
     private UpdaterTask updaterTask;
     private ProgressDialog progressBar;
@@ -72,20 +74,30 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     void installUpdateClicked() {
 
         Logger.debug(TAG, "Install Update clicked");
-        final Context context = getApplicationContext();
-        final String[] permissions = {
-            android.Manifest.permission.REQUEST_INSTALL_PACKAGES
-        };
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            // Newer Android versions can request permissions at runtime. Older Android versions
-            // do the permission check at install time.
-            for (String permission : permissions) {
-                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    Logger.debug(TAG, "Requesting permission %1$s", permission);
-                    // Android is smart enough to only prompt users the lacked permissions
-                    ActivityCompat.requestPermissions(this, permissions, 1);
+
+            final String[] permissions = {
+                    android.Manifest.permission.REQUEST_INSTALL_PACKAGES
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!getPackageManager().canRequestPackageInstalls()) {
+                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                                    .setData(Uri.parse(String.format("package:%s", getPackageName()))),
+                            REQUEST_CODE_REQUEST_INSTALL_PACKAGES);
                     return;
+                }
+
+            } else {
+
+                for (String permission : permissions) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                        Logger.debug(TAG, "Requesting permission %1$s", permission);
+                        // Android is smart enough to only prompt users the lacked permissions
+                        ActivityCompat.requestPermissions(this, permissions, 1);
+                        return;
+                    }
                 }
             }
         }
@@ -102,12 +114,26 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         updaterTask.execute(updaterParams);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_REQUEST_INSTALL_PACKAGES && resultCode == Activity.RESULT_OK) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (getPackageManager().canRequestPackageInstalls()) {
+                    installUpdate();
+                }
+            }
+        } else {
+            // user didn't give the Install Apps From Unknown Sources permission
+            // show error message or just do nothing
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Logger.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+            Logger.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
             installUpdate();
         }
     }
@@ -122,7 +148,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         public UpdaterTask(final UpdateActivity activity) {
             context = activity.getApplicationContext();
             apkDir = new File(context.getCacheDir(), "updates");
-            apkPath = new File(apkDir,"Lantern.apk");
+            apkPath = new File(apkDir, "Lantern.apk");
             this.activity = activity;
         }
 
@@ -239,13 +265,14 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             i.setAction(Intent.ACTION_VIEW);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Uri apkURI = Uri.fromFile(apkPath);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-              i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-              apkURI = FileProvider.getUriForFile(
-                  this.context,
-                  "org.getlantern.lantern.fileProvider",
-                  apkPath);
-            };
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                apkURI = FileProvider.getUriForFile(
+                        this.context,
+                        "org.getlantern.lantern.fileProvider",
+                        apkPath);
+            }
+            ;
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
 
             this.context.startActivity(i);
