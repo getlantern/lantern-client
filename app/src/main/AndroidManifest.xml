@@ -17,7 +17,6 @@
 
     <uses-permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="org.getlantern.lantern.LanternApp"
@@ -42,15 +41,6 @@
             android:name=".service.LanternService_">
 
         </service>
-
-        <receiver
-            android:name="org.getlantern.lantern.receiver.LanternBootReceiver"
-            android:enabled="true"
-            android:exported="true" >
-          <intent-filter android:priority="500" >
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-          </intent-filter>
-        </receiver>
 
         <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
