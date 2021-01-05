@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
+import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.BaseActivity;
@@ -28,6 +29,7 @@ import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.UserStatus;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
+import org.getlantern.lantern.notification.Notifier;
 import org.getlantern.lantern.vpn.LanternVpnService;
 import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.EventBus;
@@ -43,7 +45,7 @@ public class TabFragment extends Fragment {
   private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
 
   // Always operated from main thread as one subscriber of EventBus.
-  private HashSet<Long> notifiedBWPercents = new HashSet<>();
+  private static final HashSet<Long> notifiedBWPercents = new HashSet<>();
 
   private int position;
 
@@ -169,8 +171,9 @@ public class TabFragment extends Fragment {
     String s = getNotificationText(percent, remaining);
     if (s != null) {
       Intent intent = new Intent();
-      intent.setAction("org.getlantern.lantern.intent.DATA_USAGE");
-      intent.putExtra("text", s);
+      intent.setPackage(BuildConfig.APPLICATION_ID);
+      intent.setAction(Notifier.ACTION_DATA_USAGE);
+      intent.putExtra(Notifier.EXTRA_TEXT, s);
       getActivity().sendBroadcast(intent);
       notifiedBWPercents.add(percent);
     }
