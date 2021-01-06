@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -102,11 +103,10 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         updaterTask.execute(updaterParams);
     }
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Logger.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             installUpdate();
         }
