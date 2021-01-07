@@ -56,10 +56,15 @@ android {
     // Use now as the user-visible version
     def now = new Date()
 
-    // Calculate the versionCode as the number of seconds from a fixed start
-    // point so that it's always increasing.
-    def start = new Date(2015, 1, 1).getTime()
-    def code = (int) ((now.getTime() - start) / 1000)
+    // Use configured versionCode if available
+    def code = getInt("versionCode")
+
+    if (code == 0) {
+        // Calculate the versionCode as the number of seconds from a fixed start
+        // point so that it's always increasing.
+        def start = new Date(2015, 1, 1).getTime()
+        code = (int) ((now.getTime() - start) / 1000)
+    }
 
     defaultConfig {
 
@@ -212,6 +217,14 @@ def getBoolean(name) {
         return "false"
     }
     return value
+}
+
+def getInt(name) {
+    def value = project.getProperties().get(name)
+    if (value == null || !value?.trim()) {
+        return 0
+    }
+    return value.toInteger()
 }
 
 def userCountry() {
