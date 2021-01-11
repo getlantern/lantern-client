@@ -250,9 +250,6 @@
   <string name="free_month">إحصل على شهر من لانترن برو مع كل إشتراك</string>
   <string name="get_pro_now">إحصل على برو الآن</string>
   <string name="inviting_friends">إحصل على رصيد برو عبر دعوة أصدقاءك</string>
-  <string name="data_cap_percent">لقد استخدمت %1$s%%من بيانات السرعة الفائقة الخاصة بحسابك غلى لانترن هذا الشهر. قم بالترقية الى حساب برو للحصول على بيانات فائقة السرعة ولا محدودة.</string>
-  <string name="data_cap">لقد استخدمت جميع بيانات السرعة الفائقة الخاصة بحسابك غلى لانترن هذا الشهر. قم بالترقية الى حساب برو لمواصلة استخدام لانترن بكامل سرعته.</string>
-  <string name="data_cap_reset">لقد تم اعادة تعيين بيانات السرعة الفائقة المجانية لحساب لانترن لهذا الشهر. ابدأ تصفح المواقع المحظورة والخدمات الآن!</string>
   <string name="select">إختر</string>
   <string name="one_year">لعامٍ واحد (دون تجديد)</string>
   <string name="two_years">لعامين (دون تجديد)</string>
@@ -275,7 +272,6 @@
   <string name="upgrade_to_pro">قم بالترقية إلى برو للحصول على بيانات غير محدودة، وسرعة\n أكبر، ومقاومة حجب أكبر!</string>
   <string name="upgrade_to_pro_yinbi">بادر بالترقية إلى برو للحصول على بيانات غير محدودة، وسرعة أكبر، ومقاومة\n حجب أكبر وعملة Yinbi المشفرة بالمجان!</string>
   <string name="data_remaining">%1$s%%متبقي من بيانات السرعة العالية الشهرية المجانية الخاصة بك</string>
-  <string name="data_used">لقد تم استخدام %1$s%%من بيانات السرعة الفائقة الشهرية المجانية</string>
   <string name="upgrade">إشترك</string>
   <string name="upgrade_pro">الترقية الى برو</string>
   <string name="upgrade_now">الترقية الآن</string>
@@ -339,7 +335,6 @@
   <string name="current_location_desc">يستخدم لانترن مجموعة من الخوادم الذكية لربطك بأفضل مراكز البيانات لدينا. قم بالترقية الى لانترن برو للحصول على سرعة فائقة مع مجموعة من الخوادم الذكية من مراكز بيانات لانترن برو الحصرية.</string>
   <string name="ad_blocking_desc">يقوم لانترن بحظر الاعلانات المتطفلة لتسريع وقت تحميل صفحة الويب، وحفظ النطاق الترددي، وتزويدك بتجربة تصفح أكثر سلاسة.</string>
   <string name="https_upgrade_desc">يقوم تطبيق لانترن تلقائياً بالترقية الى اتصالات HTTP غير آمنة الى اتصالات HTTP مشفرة عندما يكون ذلك ممكنا للحفاظ على المعلومات الخاصة بك أثناء تصفح الإنترنت.</string>
-  <string name="data_usage_desc">لقد استخدمت %1$s/%2$s ميجابيت من بيانات السرعة الفائقة الشهرية الخاصة بك.</string>
   <string name="account_left_desc">لديك %1$dشهور متبقية من حساب لانترن برو في حسابك</string>
   <string name="optimized_location">مواقع خوادم محسّنة</string>
   <string name="current_location">الموقع الحالي:</string>

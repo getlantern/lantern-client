@@ -262,9 +262,6 @@
   <string name="free_month">برای هر ثبت نام یک ماه رایگان pro  دریافت کنید</string>
   <string name="get_pro_now">گرفتن نسخه حرفه ای حالا</string>
   <string name="inviting_friends">با دعوت از دوستان خود از اعتبار pro استفاده کنید</string>
-  <string name="data_cap_percent">شما از  %1$s  %%   داده های با سرعت بالای  فانوس خود برای یک ماه استفاده کرده اید.  برای سرعت بالای نا محدود به فانوس Pro ارتقا یابید.  </string>
-  <string name="data_cap">شما از تمام داده های با سرعت بالا فانوس خود برای  یک ماه استفاده کرده اید. به فانوس Pro ارتقا یابید تا  استفاده از فانوس را با سرعت کامل ادامه دهید.</string>
-  <string name="data_cap_reset">برای یک ماه دیتای رایگان  فانوس با سرعت بالای برای شما تنظیم مجدد شده است. در حال حاضر  میتوانید سایت ها و خدمات مسدود شده را مرور کنید!</string>
   <string name="select">انتخاب</string>
   <string name="one_year">یک (1)ساله ( بدون تمدید)</string>
   <string name="two_years">2 ساله ( بدون تمدید)</string>
@@ -287,7 +284,6 @@
   <string name="upgrade_to_pro">برای بهره‌مندی از داده نامحدود، سرعت و مقاومت بیشتر در برابر سانسور به نسخه حرفه‌ای ارتقا دهید!</string>
   <string name="upgrade_to_pro_yinbi">برای بهره‌مندی از داده نامحدود، سرعت و مقاومت بیشتر در برابر سانسور و رمزارز Yinbi به نسخه حرفه‌ای ارتقا دهید!</string>
   <string name="data_remaining">%1$s %% از دیتای با سرعت بالای شما باقی مانذه است</string>
-  <string name="data_used">%1$s%% از داده های سریع ماهانه با سرعت بالا استفاده کنید</string>
   <string name="upgrade">ارتقا‌‌ء </string>
   <string name="upgrade_pro">ارتقاء بهpro</string>
   <string name="upgrade_now">همین حالاارتقا بدهید</string>
@@ -354,7 +350,6 @@ https://bit.ly/lanternapk</string>
 فانوس از  سرورهای انتخابی  هوشمند استفاده می کندتا شما را  به بهترین مراکز داده متصل کند. برای سرعت بیشتر با انتخاب سرور بهینه از مراکز داده های منحصر به فرد فانوس خود را به فانوسpro ارتقا دهید.</string>
   <string name="ad_blocking_desc">فانوس تبلیغات مزاحم را برای سرعت بخشیدن به زمان بارگذاری صفحه وب، صرفه جویی در پهنای باند، و  برای داشتن تجربه مرور راحت تر  متوقف می کند.</string>
   <string name="https_upgrade_desc">فانوس به طور خودکار ارتباطات HTTP غیر امن را به اتصالات HTTPS رمزگذاری شده ارتقا می دهد تا بتواند اطلاعات خود را در حین گشت و گذار در وب حفظ کند.</string>
-  <string name="data_usage_desc">شما %1$s مگابایت از حجم ماهانه‌ی %2$s مگابایتی‌تان را استفاده کرد‌ه‌اید.</string>
   <string name="account_left_desc">%1$d ماه از حساب لنترن پروی‌ اکانت شما مانده است.</string>
   <string name="optimized_location">بهینه سازی موقعیت سرور</string>
   <string name="current_location">موقعیت فعلی:</string>

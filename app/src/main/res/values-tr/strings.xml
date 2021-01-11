@@ -263,9 +263,6 @@
   <string name="free_month">Her bir yeni kayıt için bir ay ücretsiz Pro kazanın</string>
   <string name="get_pro_now">Şimdi Pro\'ya Geçin</string>
   <string name="inviting_friends">Arkadaşlarınızı davet ederek Pro kredisi kazanın</string>
-  <string name="data_cap_percent">Bu ay için Lantern yüksek hızlı trafiğinizin%1$s%% kadarını kullandınız. Yüksek hızlı sınırsız veri için Pro sürümüne yükseltin.</string>
-  <string name="data_cap">Bu ay için Lantern yüksek hızlı trafiğinizin tamamını kullandınız. Lantern\'i tam hızda kullanmaya devam etmek için Lantern Pro sürümüne geçin.</string>
-  <string name="data_cap_reset">Lantern yüksek hızlı aylık verileriniz sıfırlandı. Engellenen siteleri ve hizmetleri şimdi taramaya başlayın!</string>
   <string name="select">Seç</string>
   <string name="one_year">1 yıllık (tek seferlik)</string>
   <string name="two_years">2 yıllık (tek seferlik)</string>
@@ -288,7 +285,6 @@
   <string name="upgrade_to_pro">Sınırsız veri, daha yüksek hız ve engellemeye\nkarşı daha fazla dayanıklılık için Pro\'ya yükseltin!</string>
   <string name="upgrade_to_pro_yinbi">Sınırsız veri, daha yüksek hız, engellemeye karşı daha fazla\ndayanıklılık ve ücretsiz Yinbi kripto para için Pro\'ya yükseltin!</string>
   <string name="data_remaining">Aylık ücretsiz yüksek hızlı trafiğinizin %1$s%%\'lik kısmı kaldı.</string>
-  <string name="data_used">Aylık ücretsiz yüksek hızlı trafiğinizin%1$s%%\'lik kısmı kullanıldı.</string>
   <string name="upgrade">Yükselt</string>
   <string name="upgrade_pro">Pro\'ya Yükselt</string>
   <string name="upgrade_now">Şimdi Yükselt</string>
@@ -352,7 +348,6 @@
   <string name="current_location_desc">Lantern, sizi en iyi veri merkezlerimize bağlamak için akıllı sunucu seçimini kullanır. Özel Lantern Pro veri merkezlerimizden optimize edilmiş sunucu seçimi ile daha hızlı bağlantı için Lantern Pro sürümüne geçiniz.</string>
   <string name="ad_blocking_desc">Lantern, web sayfalarının yüklenme sürecini hızlandırmak, bant genişliğinden tasarruf etmek ve size daha sorunsuz bir gezinme deneyimi sağlamak için araya giren reklamları engeller.</string>
   <string name="https_upgrade_desc">Lantern, internette gezinirken bilgilerinizi gizli tutmak için mümkün olunca güvenli olmayan HTTP bağlantılarını otomatik olarak şifreli HTTPS bağlantılarına yükseltir.</string>
-  <string name="data_usage_desc">Aylık yüksek hızlı trafiğinizin %1$s/%2$s\'lik kısmını kullandınız.</string>
   <string name="account_left_desc">Hesabınızda %1$daylık Lantern Pro kaldı</string>
   <string name="optimized_location">Optimize edilmiş sunucu konumu</string>
   <string name="current_location">Mevcut Konum:</string>

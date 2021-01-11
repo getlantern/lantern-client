@@ -270,9 +270,6 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="free_month">Obtenez un mois gratuit de la version Pro pour chaque inscription</string>
   <string name="get_pro_now">Passez Pro maintenant</string>
   <string name="inviting_friends">Obtenir des crédits Pro en invitant des amis</string>
-  <string name="data_cap_percent">Vous avez utilisé %1$s %% de vos données Lantern à grande vitesse pour le mois. Passez à la version Pro et obtenez des données  illimitées à grande vitesse.</string>
-  <string name="data_cap">Vous avez épuisé vos données Lantern à grande vitesse pour le mois. Passez à la version Pro maintenant pour continuer à utiliser Lantern à pleine vitesse.</string>
-  <string name="data_cap_reset">Vos données Lantern gratuites à grande vitesse ont été réinitialisées pour le mois. Commencez maintenant à naviguer sur les sites et services bloqués.</string>
   <string name="select">Choisir</string>
   <string name="one_year">pour 1  an (non périodique)</string>
   <string name="two_years">pour 2 ans (non périodique)</string>
@@ -297,7 +294,6 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
 une vitesse accrue et une plus grande résistance au blocage.</string>
   <string name="upgrade_to_pro_yinbi">Passez à la version Pro et obtenez des données illimitées,\nune vitesse accrue, une plus grande résistance aux\nblocages et de la cryptomonnaie Yinbi gratuite.</string>
   <string name="data_remaining">Il reste %1$s %% de vos données mensuelles gratuites à grande vitesse</string>
-  <string name="data_used">%1$s %% utilisés de vos données mensuelles gratuites à grande vitesse</string>
   <string name="upgrade">Passer à la version Pro</string>
   <string name="upgrade_pro">Passer à Lantern Pro</string>
   <string name="upgrade_now">Passer à la version Pro maintenant</string>
@@ -361,7 +357,6 @@ une vitesse accrue et une plus grande résistance au blocage.</string>
   <string name="current_location_desc">Lantern utilise une sélection intelligente des serveurs pour vous connecter à nos meilleurs centres de traitement de données. Passez à Lantern Pro et obtenez une vitesse supérieure ainsi qu’une sélection optimisée des serveurs à partir de nos centres de traitement de données exclusifs à Lantern Pro. </string>
   <string name="ad_blocking_desc">Lantern bloque les publicités envahissantes afin d’accélérer le temps de chargement des pages Web, d’économiser la bande passante et de vous offrir une expérience de navigation plus fluide.</string>
   <string name="https_upgrade_desc">Quand cela est possible, Lantern met automatiquement à niveau les connexions HTTP non sécurisées vers des connexions HTTPS chiffrées afin de préserver la confidentialité de vos renseignements alors que vous naviguez sur le Web.</string>
-  <string name="data_usage_desc">Vous avez utilisé %1$s/%2$s Mo de vos données mensuelles à grande vitesse.</string>
   <string name="account_left_desc">Il vous reste %1$d de Lantern Pro dans votre compte.</string>
   <string name="optimized_location">Emplacement optimisé des serveurs</string>
   <string name="current_location">Emplacement actuel :</string>

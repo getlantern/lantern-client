@@ -234,9 +234,6 @@
   <string name="free_month">Obtenga un mes gratis de pro por cada registro</string>
   <string name="get_pro_now">Adquirir Pro ahora</string>
   <string name="inviting_friends">Consiga créditos Pro invitando a amigos</string>
-  <string name="data_cap_percent">Ha usado el %1$s%% de sus datos de alta velocidad de Lantern para el mes. Actualice a Pro para datos de alta-velocidad ilimitados.</string>
-  <string name="data_cap">Ha usado todos sus datos de alta velocidad de Lantern para el mes. Actualice a Lantern Pro para continuar usando Lantern a velocidad completa.</string>
-  <string name="data_cap_reset">Sus datos de alta-velocidad de Lantern se han restablecido para el mes. ¡Comience ahora a navegar por sitios y servicios bloqueados!</string>
   <string name="select">Seleccionar</string>
   <string name="special_launch">¡Precio especial de lanzamiento!</string>
   <string name="best_value">¡Mejor valorado!</string>
@@ -254,7 +251,6 @@
   <string name="pro_available_for">Para Windows, Android, Mac y Ubuntu. Próximamente para 
 iOS.</string>
   <string name="data_remaining">%1$s%% restantes de sus datos de alta velocidad gratuitos mensuales</string>
-  <string name="data_used">%1$s%% usados de sus datos de alta velocidad mensuales</string>
   <string name="upgrade">Actualizar</string>
   <string name="upgrade_pro">Actualizar a Pro</string>
   <string name="upgrade_now">Actualizar ahora</string>
@@ -318,7 +314,6 @@ iOS.</string>
   <string name="current_location_desc">Lantern usa selección inteligente de servidor para conectarle a nuestros mejores centros de datos. Actualice a Lantern Pro para una velocidad más rápida con selección de servidor entre nuestros exclusivos centros de datos de Lantern Pro.</string>
   <string name="ad_blocking_desc">Lantern bloquea publicidad intrusiva para acortar el tiempo de carga de la web, ahorrar ancho de banda, y darle una experiencia de navegación más suave.</string>
   <string name="https_upgrade_desc">Lantern actualiza automáticamente las conexiones HTTP no seguras a conexiones HTTPS cifradas cuando sea posible para mantener privada su información mientras navega por la web.</string>
-  <string name="data_usage_desc">Ha usado %1$s/%2$sMB de sus datos de alta velocidad mensuales.</string>
   <string name="account_left_desc">Aún tiene %1$d meses de Lantern Pro en su cuenta.</string>
   <string name="optimized_location">Ubicación optimizada de servidor</string>
   <string name="current_location">Ubicación actual:</string>
