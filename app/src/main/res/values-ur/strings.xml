@@ -232,9 +232,6 @@
   <string name="free_month">ہر سائن اَپ پر پرو کا ایک مفت ماہ حاصل کیجئے</string>
   <string name="get_pro_now">ابھی پرو حاصل کیجئے</string>
   <string name="inviting_friends">دوستوں کو مدعو کریں اور پرو کریڈٹس حاصل کیجئے</string>
-  <string name="data_cap_percent">آپ اپنے ماہانہ لیٹرن تیز رفتار ڈیٹا کا %1$s%% استعمال  کر چکے ہیں ۔ لامحدود تیز رفتارڈیٹا کے لئے پرو پر اَپ گریڈ کیجئے۔ </string>
-  <string name="data_cap">آپ اپنے ماہانہ لینٹرن تیز رفتا ڈیٹا کا تما م ڈیٹا استعمال کر چکے ہیں ۔ لینٹرن کو تیز ترین رفتار پر استعمال کرتے رہنے کے لئے پرو پر اَپ گریڈ کیجئے۔ </string>
-  <string name="data_cap_reset">آپ کا ماہانہ لینٹرن تیز رفتار ڈیٹا دوبارہ سیٹ کیا گیا ہے۔ بلاک سائٹس اور سروسز کو اب براؤز کرنے کا آغاز کیجئے!</string>
   <string name="select">منتخب کیجئے</string>
   <string name="special_launch">خاص لانچ قیمت!</string>
   <string name="best_value">بہترین قدر!</string>
@@ -251,7 +248,6 @@
   <string name="upgrade_to_lantern_pro">لینٹرن پرو پر اَپ گریڈ کیجئے</string>
   <string name="pro_available_for">ونڈوز، اینڈروائڈ، میک اور اَن بنٹو کے لئے۔ آئی او ایس جلد آ رہا ہے</string>
   <string name="data_remaining">آپ کے ماہانہ تیز رفتار ڈیٹا %1$sکا %% رہ گیا ہے</string>
-  <string name="data_used">آپ کی ماہانہ تیر رفتار ڈیٹا %1$s کا %% استعمال ہو چکا ہے</string>
   <string name="upgrade">اَپ گریڈ</string>
   <string name="upgrade_pro">پرو پر اَپ گریڈ کیجئے</string>
   <string name="upgrade_now">ابھی اَپ گریڈ کیجئے</string>
@@ -315,7 +311,6 @@
   <string name="current_location_desc">لینٹرن آپ کو ہمارے بہترین ڈیٹا سنٹرز سے جوڑنے کے لئے سمارٹ سرور سلیکشن کا استعمال کرتا ہے۔ ہمارے مخصوص لینٹرن ڈیٹا پرو سنٹرز سے اوپٹمائزسرور سلیکشن کے ساتھ مزید تیز رفتار کے لئےلینٹرن پرو پر اَپ گریڈ کیجئے۔  </string>
   <string name="ad_blocking_desc">لینٹرن مداخلت کرنے والے اشتہاروں کو بلاک کرتا ہےتاکہ ویب پیج لوڈ ٹائم تیز ہو سکے، بینڈ وڈتھ بچےاور آپ کو ایک بہتر براؤزنگ کا تجربہ حاصل ہو۔ </string>
   <string name="https_upgrade_desc">لینٹرن خود سے ہی  غیر محفوظ ایچ ٹی ٹی پی کنکشنز کو اینکریٹڈایچ ٹی ٹی پی کنکشنز میںاَپ گریڈ کر دیتا ہےتاکہ ویب سرفنگ کے دوران آپ کی معلومات محفوظ رہیں ۔ </string>
-  <string name="data_usage_desc">آپ اپنے ماہانہ تیز رفتار ڈیٹا%1$sکا %2$s ایم بی استعمال کر چکے ہیں </string>
   <string name="account_left_desc">آپ کے اکاؤنٹ میں لینٹرن پرو کے %1$dماہ باقی  رہ  گئے ہیں </string>
   <string name="optimized_location">اوپٹمائزڈ سرور لوکیشن</string>
   <string name="current_location">حالیہ لوکیشن:</string>

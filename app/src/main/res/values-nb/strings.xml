@@ -234,9 +234,6 @@
   <string name="free_month">Få en gratis måned med Pro for hver påmelding</string>
   <string name="get_pro_now">Få Pro nå</string>
   <string name="inviting_friends">Få Pro-kreditter ved å invitere venner</string>
-  <string name="data_cap_percent">Du har brukt %1$s%% av din Lantern høyhastighetsdata for denne måneden. Oppgrader til Pro for ubegrenset høyhastighetsdata.</string>
-  <string name="data_cap">Du har bruk all din Lantern høyhastighetsdata for denne måneden. Oppgrader til Lantern Pro for å fortsette å bruke Lantern i full hastighet.</string>
-  <string name="data_cap_reset">Din gratis Lantern høyhastighetsdata har blit tilbakestilt for denne månede. Start surfing av blokkerte sider og tjenester nå!</string>
   <string name="select">Velg</string>
   <string name="special_launch">Spesiell introduksjonspris.</string>
   <string name="best_value">Det beste kjøpet.</string>
@@ -253,7 +250,6 @@
   <string name="upgrade_to_lantern_pro">Oppgrader til Lantern Pro</string>
   <string name="pro_available_for">For Windows, Android, Mac og Ubuntu. iOS kommer snart</string>
   <string name="data_remaining">%1$s%% gjenstående av din månedlige gratishøyhastighetsdata</string>
-  <string name="data_used">%1$s%% brukt av din månedlige gratishøyhastighetsdata</string>
   <string name="upgrade">Oppgrader</string>
   <string name="upgrade_pro">Oppgrader til Pro</string>
   <string name="upgrade_now">Oppgrader nå</string>
@@ -317,7 +313,6 @@
   <string name="current_location_desc">Lantern bruker smart tjenerutvelgelse for å koble deg til våre beste datasentre. Oppgrader til Lantern pro for raskere hastighet med optimisert tjenerutvelgelse fra våre eksklusive Lantern Pro-datasentre.</string>
   <string name="ad_blocking_desc">Lantern blokkerer pågående reklame for å forbedre sidelastingstid, spare båndbredde, og for å gi deg en bedre nettlesningsopplevelse.</string>
   <string name="https_upgrade_desc">Lantern oppgraderer automatisk usikrede HTTP-tilkoblinger til krypterte HTTPS-tilkoblinger når mulig for å holde informasjonen din privat når du surfer på nettet.</string>
-  <string name="data_usage_desc">Du har brukt %1$s%2$sMB av din månedlige høyhastighetsdata.</string>
   <string name="account_left_desc">Du har %1$d av Lantern Pro igjen i ditt abonnement.</string>
   <string name="optimized_location">Optimisert tjenerplassering</string>
   <string name="current_location">Nåværende plassering:</string>

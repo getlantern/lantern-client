@@ -103,7 +103,7 @@
         android:textAppearance="@style/LightText"
         android:lineSpacingMultiplier="1.1"
         android:visibility="invisible"
-        android:text="@string/data_usage_desc"
+        android:text="@string/data_used"
         android:textSize="18sp"
         />
 

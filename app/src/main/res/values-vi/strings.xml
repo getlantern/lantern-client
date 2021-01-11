@@ -236,9 +236,6 @@
   <string name="free_month">Được một tháng Pro miễn phí cho mỗi đăng ký</string>
   <string name="get_pro_now">Lấy Bản Pro Ngay</string>
   <string name="inviting_friends">Lấy điểm Pro bằng cách mời bạn bè</string>
-  <string name="data_cap_percent">Bạn đã dùng hết %1$s%% dung lượng Lantern tốc độ cao trong tháng. Hãy nâng cấp lên Pro để có dung lượng tốc độ cao không giới hạn.</string>
-  <string name="data_cap">Bạn đã dùng hết dung lượng Lantern tốc độ cao trong tháng. Hãy nâng cấp lên Pro để có thể dùng Lantern tốc độ cao không giới hạn.</string>
-  <string name="data_cap_reset">Dữ liệu tốc độ cao Lantern miễn phí đã được reset cho tháng. Hãy bắt đầu truy cập các trang và dịch vụ bị chặn ngay!</string>
   <string name="select">Chọn</string>
   <string name="special_launch">Giá Mở Hàng Đặc Biệt!</string>
   <string name="best_value">Giá Lợi Nhất!</string>
@@ -255,7 +252,6 @@
   <string name="upgrade_to_lantern_pro">Nâng Cấp lên Lantern Pro</string>
   <string name="pro_available_for">Cho Windows, Android, Mac, Ubuntu. Sắp có cho iOS.</string>
   <string name="data_remaining">%1$s%% còn lại của dung lượng miễn phí mỗi tháng</string>
-  <string name="data_used">Đã sử dụng %1$s%% trong số dữ liệu tốc độ cao hàng tháng</string>
   <string name="upgrade">Nâng Cấp</string>
   <string name="upgrade_pro">Nâng cấp lên Pro</string>
   <string name="upgrade_now">Nâng cấp ngay</string>
@@ -319,7 +315,6 @@
   <string name="current_location_desc">Lantern lựa chọn server một cách thông minh để kết nối bạn với các trung tâm dữ liệu tốt nhất của chúng tôi. Nâng cấp lên Lantern Pro để có tốc độ cao hơn, lựa chọn server tối ưu từ các trung tâm dữ liệu Lantern Pro riêng biệt.</string>
   <string name="ad_blocking_desc">Lantern chặn các quảng cáo khó chịu để tăng tốc thời gian tải trang, tiết kiệm băng thông, và đem lại cho bạn trải nghiệm lướt web mượt mà hơn.</string>
   <string name="https_upgrade_desc">Khi có thể, Lantern tự động nâng cấp các kết nối HTTP thiếu bảo mật lên các kết nối HTTPS được mã hóa, để bảo đảm tính riêng tư cho thông tin của bạn khi lướt web.</string>
-  <string name="data_usage_desc">Bạn đã dùng %1$s/%2$sMB trong số dung lượng tốc độ cao hàng tháng.</string>
   <string name="account_left_desc">Bạn còn %1$d tháng Lantern Pro trong tài khoản của mình</string>
   <string name="optimized_location">Địa chỉ server tối ưu</string>
   <string name="current_location">Địa chỉ hiện tại:</string>

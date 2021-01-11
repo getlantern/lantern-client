@@ -273,9 +273,9 @@
     <string name="free_month">Get a free month of pro for each sign up</string>
     <string name="get_pro_now">Get Pro Now</string>
     <string name="inviting_friends">Get Pro credits by inviting friends</string>
-    <string name="data_cap_percent">You have used %1$s%% of your Lantern high speed data for the month. Upgrade to Pro for unlimited high-speed data.</string>
-    <string name="data_cap">You have used all of your Lantern high speed data for the month. Upgrade to Lantern Pro to continue using Lantern at full speed.</string>
-    <string name="data_cap_reset">Your free Lantern high-speed data has reset for the month. Start browsing blocked sites and services now!</string>
+    <string name="data_cap_percent">%1$s MB Of Free Data Remaining. Resets At %2$s. Upgrade to Pro for unlimited high-speed data.</string>
+    <string name="data_cap">You have used all of your Lantern high speed data. Resets At %1$s. Upgrade to Lantern Pro to continue using Lantern at full speed.</string>
+    <string name="data_cap_reset">Your free Lantern high-speed data has reset. Start browsing blocked sites and services now!</string>
     <string name="select">Select</string>
     <string name="one_year">for 1 year (non recurring)</string>
     <string name="two_years">for 2 years (non recurring)</string>
@@ -299,7 +299,7 @@
     <string name="upgrade_to_pro">Upgrade to Pro for unlimited data, faster\n speed, and greater blocking resistance!</string>
     <string name="upgrade_to_pro_yinbi">Upgrade to Pro for unlimited data, faster speed, greater\nblocking resistance and free Yinbi cryptocurrency!</string>
     <string name="data_remaining">%1$s%% left of your free monthly high speed data</string>
-    <string name="data_used">%1$s%% used of your free monthly high speed data</string>
+    <string name="data_used">%1$s MB Of Free Data Remaining. Resets At %2$s</string>
     <string name="upgrade">Upgrade</string>
     <string name="upgrade_pro">Upgrade To Pro</string>
     <string name="upgrade_now">Upgrade Now</string>
@@ -363,7 +363,6 @@
     <string name="current_location_desc">Lantern uses smart server selection to connect you to our best data centers. Upgrade to Lantern Pro for faster speed with optimized server selection from our exclusive Lantern Pro data centers.</string>
     <string name="ad_blocking_desc">Lantern blocks intrusive ads to speed up web page loading time, save bandwidth, and to give you a smoother browsing experience.</string>
     <string name="https_upgrade_desc">Lantern automatically upgrades unsecure HTTP connections to encrypted HTTPS connections when possible to keep your information private while surfing the web.</string>
-    <string name="data_usage_desc">You have used %1$s/%2$sMB of your monthly high speed data.</string>
     <string name="account_left_desc">You have %1$d months of Lantern Pro left in your account</string>
     <string name="optimized_location">Optimized server location</string>
     <string name="current_location">Current Location: </string>

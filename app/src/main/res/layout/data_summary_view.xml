@@ -58,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:textAppearance="@style/MediumText"
-                android:singleLine="true"
                 android:text=""
                 android:textColor="@color/accent_white"
                 android:textSize="10sp"

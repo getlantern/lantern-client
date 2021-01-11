@@ -126,8 +126,9 @@ public class TabFragment extends Fragment {
       return;
     }
 
-    tabText.setText(
-        String.format(getResources().getString(R.string.data_usage_desc), update.getUsed(), update.getAllowed()));
+    tabText.setText(getResources().getString(R.string.data_used,
+            String.valueOf(update.getRemaining()),
+            org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(update.getTtlSeconds())));
 
     if (tabText.getVisibility() == View.INVISIBLE) {
       tabText.setVisibility(View.VISIBLE);
@@ -166,20 +167,21 @@ public class TabFragment extends Fragment {
   }
 
   private void sendBandwidthNotification(final Bandwidth update) {
-    final long percent = update.getPercent();
-    final long remaining = update.getRemaining();
-    String s = getNotificationText(percent, remaining);
+    String s = getNotificationText(update);
     if (s != null) {
       Intent intent = new Intent();
       intent.setPackage(BuildConfig.APPLICATION_ID);
       intent.setAction(Notifier.ACTION_DATA_USAGE);
       intent.putExtra(Notifier.EXTRA_TEXT, s);
       getActivity().sendBroadcast(intent);
-      notifiedBWPercents.add(percent);
+      notifiedBWPercents.add(update.getPercent());
     }
   }
 
-  private String getNotificationText(long percent, long remaining) {
+  private String getNotificationText(Bandwidth bandwidth) {
+    long percent = bandwidth.getPercent();
+    long remaining = bandwidth.getRemaining();
+
     if (percent == 0 && remaining == 0) {
       // error condition, see flashlight/android.go
       return null;
@@ -192,9 +194,12 @@ public class TabFragment extends Fragment {
     switch ((int) percent) {
     case 50:
     case 80:
-      return String.format(res.getString(R.string.data_cap_percent), percent);
+      return res.getString(R.string.data_cap_percent,
+              String.valueOf(remaining),
+              org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(bandwidth.getTtlSeconds()));
     case 100:
-      return res.getString(R.string.data_cap);
+      return res.getString(R.string.data_cap,
+              org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(bandwidth.getTtlSeconds()));
     case 0:
       return res.getString(R.string.data_cap_reset);
     default:
