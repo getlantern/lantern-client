@@ -14,6 +14,7 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.mobilesdk.model.SessionManager
+import org.getlantern.mobilesdk.model.Utils
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -43,31 +44,36 @@ class DataUsageTests {
 
     @Test
     fun WhenDataCapIsHit_AppShouldShowNotification() {
-        val bandwidth = Bandwidth(100, 0, 1000)
+        val bandwidth = Bandwidth(100, 0, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap)
+        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap,
+                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds));
         testDataUsageNotification(bandwidth, title, content)
     }
 
     @Test
     fun WhenDataUsageIs50_AppShouldShowNotification() {
-        val bandwidth = Bandwidth(50, 500, 1000)
+        val bandwidth = Bandwidth(50, 500, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent, bandwidth.percent)
+        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
+                bandwidth.remaining,
+                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds))
         testDataUsageNotification(bandwidth, title, content)
     }
 
     @Test
     fun WhenDataUsageIs80_AppShouldShowNotification() {
-        val bandwidth = Bandwidth(80, 200, 1000)
+        val bandwidth = Bandwidth(80, 200, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent, bandwidth.percent)
+        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
+                bandwidth.remaining,
+                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds))
         testDataUsageNotification(bandwidth, title, content)
     }
 
     @Test
     fun WhenDataUsageIsReset_AppShouldShowNotification() {
-        val bandwidth = Bandwidth(0, 1000, 1000)
+        val bandwidth = Bandwidth(0, 1000, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
         val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_reset)
         testDataUsageNotification(bandwidth, title, content)
@@ -82,8 +88,8 @@ class DataUsageTests {
         device.openNotification()
 
         // send data usage update
-        val bandwidth = Bandwidth(25, 750, 1000)
-        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed)
+        val bandwidth = Bandwidth(25, 750, 1000, 3600)
+        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed, bandwidth.ttlSeconds)
 
         // then the user should NOT see a push notification
         device.wait(Until.hasObject(By.text(notExpectedTitle)), TIMEOUT)
@@ -100,7 +106,7 @@ class DataUsageTests {
         device.openNotification()
 
         // send data usage update
-        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed)
+        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed, bandwidth.ttlSeconds)
 
         // then the user should see a push notification
         device.wait(Until.hasObject(By.text(expectedTitle)), TIMEOUT)
