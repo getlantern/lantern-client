@@ -128,7 +128,7 @@ public class TabFragment extends Fragment {
 
     tabText.setText(getResources().getString(R.string.data_used,
             String.valueOf(update.getRemaining()),
-            org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(update.getTtlSeconds())));
+            update.getExpiresAtString()));
 
     if (tabText.getVisibility() == View.INVISIBLE) {
       tabText.setVisibility(View.VISIBLE);
@@ -196,10 +196,10 @@ public class TabFragment extends Fragment {
     case 80:
       return res.getString(R.string.data_cap_percent,
               String.valueOf(remaining),
-              org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(bandwidth.getTtlSeconds()));
+              bandwidth.getExpiresAtString());
     case 100:
       return res.getString(R.string.data_cap,
-              org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(bandwidth.getTtlSeconds()));
+              bandwidth.getExpiresAtString());
     case 0:
       return res.getString(R.string.data_cap_reset);
     default:
