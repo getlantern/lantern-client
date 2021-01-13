@@ -296,10 +296,10 @@
     <string name="get_lantern_pro">Get Lantern Pro</string>
     <string name="upgrade_to_lantern_pro">Upgrade to Lantern Pro</string>
     <string name="pro_available_for">For Windows, Android, Mac and Ubuntu. iOS coming soon</string>
-    <string name="upgrade_to_pro">Upgrade to Pro for unlimited data, faster\n speed, and greater blocking resistance!</string>
+    <string name="upgrade_to_pro">Upgrade to Pro for unlimited data, faster speed, and greater blocking resistance!</string>
     <string name="upgrade_to_pro_yinbi">Upgrade to Pro for unlimited data, faster speed, greater\nblocking resistance and free Yinbi cryptocurrency!</string>
     <string name="data_remaining">%1$s%% left of your free monthly high speed data</string>
-    <string name="data_used">%1$s MB Of Free Data Remaining. Resets At %2$s</string>
+    <string name="data_used">%1$s MB Of Free Data Remaining.\nResets At %2$s</string>
     <string name="upgrade">Upgrade</string>
     <string name="upgrade_pro">Upgrade To Pro</string>
     <string name="upgrade_now">Upgrade Now</string>
