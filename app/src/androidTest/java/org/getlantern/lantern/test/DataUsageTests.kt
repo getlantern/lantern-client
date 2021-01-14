@@ -14,7 +14,6 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.mobilesdk.model.SessionManager
-import org.getlantern.mobilesdk.model.Utils
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -47,7 +46,7 @@ class DataUsageTests {
         val bandwidth = Bandwidth(100, 0, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
         val content = LanternApp.getAppContext().resources.getString(R.string.data_cap,
-                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds));
+                bandwidth.expiresAtString);
         testDataUsageNotification(bandwidth, title, content)
     }
 
@@ -57,7 +56,7 @@ class DataUsageTests {
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
         val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
                 bandwidth.remaining,
-                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds))
+                bandwidth.expiresAtString)
         testDataUsageNotification(bandwidth, title, content)
     }
 
@@ -67,7 +66,7 @@ class DataUsageTests {
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
         val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
                 bandwidth.remaining,
-                Utils.convertTTSToDateTimeString(bandwidth.ttlSeconds))
+                bandwidth.expiresAtString)
         testDataUsageNotification(bandwidth, title, content)
     }
 
