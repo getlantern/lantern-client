@@ -263,9 +263,6 @@
   <string name="free_month">Получите бесплатный месяц Pro при каждой регистрации</string>
   <string name="get_pro_now">Получить Pro сейчас</string>
   <string name="inviting_friends">Получить кредиты Pro, пригласив друзей</string>
-  <string name="data_cap_percent">Вы использовали %1$s%% ваших высокоскоростных данных Lantern за месяц. Обновите до Pro для безлимитных высокоскоростных данных.</string>
-  <string name="data_cap">Вы использовали все ваши высокоскоростные данные Lantern за месяц. Обновитесь до Lantern Pro, чтобы продолжить использование Lantern на полной скорости.</string>
-  <string name="data_cap_reset">Ваши бесплатные скоростные данные Lantern сброшены за месяц. Начните просматривать заблокированные сайты и службы прямо сейчас!</string>
   <string name="select">Выбрать</string>
   <string name="one_year">на 1 год (единовременный платеж)</string>
   <string name="two_years">на 2 года (единовременный платеж)</string>
@@ -288,7 +285,6 @@
   <string name="upgrade_to_pro">Lantern Pro — это неограниченный трафик, более\nвысокая скорость и улучшенный обход блокировок.</string>
   <string name="upgrade_to_pro_yinbi">Lantern Pro — это неограниченный трафик, более\nвысокая скорость, улучшенный обход блокировок\nи криптовалюта Yinbi в подарок!</string>
   <string name="data_remaining">%1$s%% осталось бесплатных ежемесячных высокоскоростных данных</string>
-  <string name="data_used">%1$s%% использовано бесплатных ежемесячных высокоскоростных данных</string>
   <string name="upgrade">Обновить</string>
   <string name="upgrade_pro">Обновить до версии Pro</string>
   <string name="upgrade_now">Обновить сейчас</string>
@@ -352,7 +348,6 @@
   <string name="current_location_desc">Lantern использует интеллектуальный выбор сервера для подключения к нашим лучшим центрам обработки данных. Обновитесь до версии Lantern Pro для ускорения работы с оптимизированным выбором сервера из наших эксклюзивных центров обработки данных Lantern Pro.</string>
   <string name="ad_blocking_desc">Lantern блокирует навязчивую рекламу, чтобы ускорить время загрузки веб-страницы, сохранить пропускную способность и дать вам более плавный просмотр.</string>
   <string name="https_upgrade_desc">Lantern автоматически обновляет незащищенные HTTP-соединения с зашифрованными соединениями HTTPS, когда это возможно, чтобы ваша информация была конфиденциальной во время серфинга в Интернете.</string>
-  <string name="data_usage_desc">Вы использовали %1$s/%2$sМБ вашего ежемесячного высокоскоростного трафика</string>
   <string name="account_left_desc">У вас осталось %1$dмесяцев работы с версией Lantern Pro в вашей учетной записи</string>
   <string name="optimized_location">Оптимизированное местоположение сервера</string>
   <string name="current_location">Текущее местоположение:</string>

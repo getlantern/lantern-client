@@ -255,9 +255,6 @@
   <string name="free_month">प्रत्येक साइन अप के लिए प्रो का एक नि:शुल्क महीना प्राप्त करें</string>
   <string name="get_pro_now">अब Pro में चलाएँ</string>
   <string name="inviting_friends">दोस्तों को आमंत्रित करके Pro क्रेडिट प्राप्त करें</string>
-  <string name="data_cap_percent">आपने महीने का Lantern के उच्च गति डेटा का %1$s%% उपयोग कर लिया है। असीमित उच्च गति डेटा के लिए Pro में अपग्रेड करें।</string>
-  <string name="data_cap">आपने महीने का Lantern के उच्च गति डेटा का पूरा उपयोग कर लिया है। पूर्ण गति से लालटेन का उपयोग जारी रखने के लिए Lantern Pro में अपग्रेड करें।</string>
-  <string name="data_cap_reset">आपके Lantern का मुफ्त हाई-स्पीड डेटा महीने भर के लिए रीसेट हो गया है। अवरुद्ध साइटों और सेवाओं को ब्राउज़ करना अभी शुरू करें!</string>
   <string name="select">चुनते हैं</string>
   <string name="one_year">1 वर्ष के लिए (गैर आवर्ती)</string>
   <string name="two_years">2 वर्षों के लिए (गैर आवर्ती)</string>
@@ -281,7 +278,6 @@
   <string name="upgrade_to_pro">असीमित डेटा, तेज़\n गति और अधिक अवरोधक प्रतिरोध के लिए Pro पर अपग्रेड करें!</string>
   <string name="upgrade_to_pro_yinbi">असीमित डेटा, अधिक तेज गति, अधिक\nअवरोधित प्रतिरोध और निःशुल्क यिनबी क्रिप्टोकरेंसी के लिए Pro में अपग्रेड करें!</string>
   <string name="data_remaining">आपके निःशुल्क मासिक उच्च गति डेटा का %1$s%% शेष है</string>
-  <string name="data_used">आपके निःशुल्क मासिक हाई-स्पीड डेटा का %1$s%% उपयोग हो चुका है</string>
   <string name="upgrade">अपग्रेड</string>
   <string name="upgrade_pro">Pro में अपग्रेड करें</string>
   <string name="upgrade_now">अभी अपग्रेड करें</string>
@@ -345,7 +341,6 @@
   <string name="current_location_desc">Lantern आपको हमारे सर्वश्रेष्ठ डेटा केंद्रों से जोड़ने के लिए स्मार्ट सर्वर चयन का उपयोग करता है। हमारे विशेष Lantern Pro डेटा केंद्रों से अनुकूलित सर्वर चयन के साथ तेज गति के लिए Lantern Pro में अपग्रेड करें।</string>
   <string name="ad_blocking_desc">वेब पेज लोडिंग समय को गति देने, बैंडविड्थ को बचाने और आपको एक आरामदायक ब्राउज़िंग अनुभव देने के लिए Lantern, अनुचित विज्ञापनों को अवरुद्ध करता है।</string>
   <string name="https_upgrade_desc">वेब पर सर्फिंग करते समय आपकी जानकारी को निजी रखने के लिए Lantern, स्वचालित रूप से जब संभव हो असुरक्षित HTTP कनेक्शन को एन्क्रिप्ट किए गए HTTPS कनेक्शनों में अपग्रेड करता है।</string>
-  <string name="data_usage_desc">आपने अपने मासिक हाई स्पीड डेटा का %1$s/%2$sMB उपयोग कर लिया है।</string>
   <string name="account_left_desc">आपके खाते में Lantern Pro के %1$d महीने शेष हैं</string>
   <string name="optimized_location">अनुकूलित सर्वर स्थान</string>
   <string name="current_location">वर्तमान स्थान:</string>

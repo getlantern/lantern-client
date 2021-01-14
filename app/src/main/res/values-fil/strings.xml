@@ -232,9 +232,6 @@
   <string name="free_month">Magkaroon ng libreng buwan sa pro sa bawat sign up</string>
   <string name="get_pro_now">Kumuha ng Pro Ngayon</string>
   <string name="inviting_friends">Magkaroon ng Pro credit sa pag-imbita ng iyong mga kaibigan</string>
-  <string name="data_cap_percent">Nagamit mo na ang %1$s%% sa iyong mabilis na data sa Lantern para sa buwang ito. Mag-upgrade sa Pro upang mawalan ng limitasyon.</string>
-  <string name="data_cap">Nagamit mo na ang lahat ng iyong mabilis na data sa Lantern para sa buwang ito. Mag-upgrade sa Pro upang patuloy na magamit ang Lantern ng buong bilis.</string>
-  <string name="data_cap_reset">Ang iyong libreng mabilis na data sa Lantern ay nag-reset na para sa buwang ito. Magsimulang mag-browse ng mga naka-block na site at serbisyo ngayon!</string>
   <string name="select">Pumili</string>
   <string name="special_launch">Espesyal na Inilunsad na Presyo!</string>
   <string name="best_value">Pinakamagandang Halaga!</string>
@@ -251,7 +248,6 @@
   <string name="upgrade_to_lantern_pro">Mag-upgrade sa Lantern Pro</string>
   <string name="pro_available_for">Para sa Windows, Android, Mac at Ubuntu. Parating na sa iOS</string>
   <string name="data_remaining">%1$s%% na natitira mula sa iyong libreng buwanang mabilis na data</string>
-  <string name="data_used">%1$s%% ang nagamit mula sa iyong libreng buwanang mabilis na data</string>
   <string name="upgrade">Upgrade</string>
   <string name="upgrade_pro">Mag-upgrade sa Pro</string>
   <string name="upgrade_now">Mag-upgrade Ngayon</string>
@@ -315,7 +311,6 @@
   <string name="current_location_desc">Gumagamit ang Lantern ng matalinong pagpili ng server upang ikonekta ka sa aming pinakamagandang data center. Mag-upgrade sa Lantern Pro para sa mabilis at pinagandang pagpili ng server mula sa aming eksklusibong mga Lantern Pro data center.</string>
   <string name="ad_blocking_desc">Bina-block ng Lantern ang mga nakakainis na ad upang pabilisin ang pag-load ng web page, makatipid sa bandwidth, at bigyan ka ng mas magandang karanasan sa pag-browse.</string>
   <string name="https_upgrade_desc">Awtomatikong ina-upgrade ng Lantern ang hindi ligtas na HTTP connection sa encrypted na HTTPS connection kapag posible upang mapanatiling pribado ang iyong impormasyon habang nagsu-surf sa web.</string>
-  <string name="data_usage_desc">Nagamit mo na ang %1$s/%2$sMB sa iyong buwanang mabilis na data.</string>
   <string name="account_left_desc">Mayroon kang %1$d buwang natitira sa iyong Lantern Pro account</string>
   <string name="optimized_location">Pinagandang lokasyon ng server</string>
   <string name="current_location">Kasalukuyang Lokasyon:</string>

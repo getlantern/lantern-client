@@ -273,9 +273,6 @@
   <string name="free_month">รับ Pro ฟรี 1 เดือนสำหรับการสมัครแต่ละครั้ง</string>
   <string name="get_pro_now">รับ Pro ตอนนี้</string>
   <string name="inviting_friends">รับเครดิต Pro โดยการเชิญเพื่อน</string>
-  <string name="data_cap_percent">คุณได้ใช้ข้อมูลความเร็วสูงของ Lantern ไปแล้ว %1$s %% สำหรับเดือนนี้ อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงแบบไม่จำกัด</string>
-  <string name="data_cap">คุณใช้ข้อมูลความเร็วสูงของ Lantern สำหรับเดือนนี้หมดแล้ว อัปเกรดเป็น Lantern Pro เพื่อใช้ Lantern ต่อไปด้วยความเร็วเต็มที่</string>
-  <string name="data_cap_reset">ข้อมูลความเร็วสูงของแลนเทิร์นของคุณมีการตั้งค่าใหม่ในแต่ละเดือน เริ่มเรียกดูเว็บไซต์และบริการที่ถูกบล็อกได้ทันที!</string>
   <string name="select">เลือก</string>
   <string name="one_year">เป็นเวลา 1 ปี (ไม่ซ้ำ)</string>
   <string name="two_years">เป็นเวลา 2 ปี (ไม่ซ้ำ)</string>
@@ -299,7 +296,6 @@
   <string name="upgrade_to_pro">อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงกว่าเดิมแบบไม่จำกัด\nและต้านทานต่อการปิดกั้นได้ดียิ่งขึ้น!</string>
   <string name="upgrade_to_pro_yinbi">อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงกว่าเดิมแบบไม่จำกัด\nต้านทานต่อการปิดกั้นได้ดียิ่งขึ้น และรับเงินดิจิทัล Yinbi ฟรี!</string>
   <string name="data_remaining">การใช้งานข้อมูลความเร็วสูงรายเดือนฟรีของคุณเหลืออยู่ %1$s %%</string>
-  <string name="data_used">คุณใช้งานข้อมูลความเร็วสูงรายเดือนฟรีไปแล้ว %1$s%%</string>
   <string name="upgrade">อัปเกรด</string>
   <string name="upgrade_pro">อัปเกรดเป็น Pro</string>
   <string name="upgrade_now">อัปเกรดเดี๋ยวนี้</string>
@@ -363,7 +359,6 @@
   <string name="current_location_desc">Lantern ใช้การเลือกเซิร์ฟเวอร์อัจฉริยะเพื่อเชื่อมต่อคุณกับศูนย์ข้อมูลที่ดีที่สุดของเรา อัปเกรดเป็น Lantern Pro เพื่อเพิ่มความเร็วยิ่งขึ้นในการเลือกเซิร์ฟเวอร์ที่มีประสิทธิภาพสูงสุดจากศูนย์ข้อมูล Lantern Pro ของเรา</string>
   <string name="ad_blocking_desc">Lantern บล็อกโฆษณาที่ล่วงล้ำเพื่อเพิ่มความเร็วในการโหลดหน้าเว็บ ประหยัดแบนด์วิดท์ และเพื่อให้คุณได้รับประสบการณ์การท่องเว็บที่ราบรื่น</string>
   <string name="https_upgrade_desc">Lantern อัปเกรดการเชื่อมต่อ HTTP ที่ไม่ปลอดภัยไปยังการเชื่อมต่อ HTTPS ที่เข้ารหัสเมื่อเป็นไปได้เพื่อให้ข้อมูลของคุณเป็นส่วนตัวขณะที่ท่องเว็บ</string>
-  <string name="data_usage_desc">คุณได้ใช้ข้อมูลความเร็วสูงรายเดือนของคุณไปแล้ว %1$s/%2$s MB </string>
   <string name="account_left_desc">บัญชีของคุณมี Lantern Pro เหลือ %1$d เดือน</string>
   <string name="optimized_location">ตำแหน่งที่ตั้งของเซิร์ฟเวอร์ที่ดีที่สุด</string>
   <string name="current_location">ที่อยู่ปัจจุบัน</string>

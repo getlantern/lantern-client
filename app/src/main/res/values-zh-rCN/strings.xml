@@ -260,9 +260,6 @@
   <string name="free_month">每次注册获得免费一个月的 Pro 版</string>
   <string name="get_pro_now">立即获取专业版</string>
   <string name="inviting_friends">邀请朋友获取 Pro 积分</string>
-  <string name="data_cap_percent">您本月已经使用了%1$s%%蓝灯高速流量。升级到专业版获取无限高速数据。</string>
-  <string name="data_cap">您的每月免费高速流量已经用尽。升级到蓝灯专业版来获取更高的速度。</string>
-  <string name="data_cap_reset">您的免费蓝灯高速流量本月已经重置。现在开始浏览被封锁网站和服务！</string>
   <string name="select">选择</string>
   <string name="one_year">购买一年（非自动续费）</string>
   <string name="two_years">购买两年（非自动续费）</string>
@@ -286,7 +283,6 @@
   <string name="upgrade_to_pro">升级到专业版，速度更快，流量无限，更抗封锁！</string>
   <string name="upgrade_to_pro_yinbi">升级专业版，即可享有无限高速流量，更快速度，更抗封锁，免费隐币！</string>
   <string name="data_remaining">每月免费高速流量剩余%1$s%%，用完后会被限速。</string>
-  <string name="data_used">你本月高速流量已经使用了%1$s%%</string>
   <string name="upgrade">升级</string>
   <string name="upgrade_pro">升级到蓝灯专业版</string>
   <string name="upgrade_now">现在升级</string>
@@ -350,7 +346,6 @@
   <string name="current_location_desc">蓝灯根据独创的算法智能选择最好的线路。升级到蓝灯专业版可以获得更快的上网速度，因为专业版有专供的服务器和优化的访问线路。</string>
   <string name="ad_blocking_desc">蓝灯会阻止侵入式广告，加快网页加载速度，节省带宽，为您提供更为流畅的浏览体验。</string>
   <string name="https_upgrade_desc">蓝灯会自动将不安全的HTTP链接升级成为加密的HTTPS链接以保证您在访问网站时的信息安全。蓝灯的服务器也无法知道HTTPS链接的内容。</string>
-  <string name="data_usage_desc">你已经使用了%1$s%2$sMB的本月的高速流量</string>
   <string name="account_left_desc">你还有 %1$d 个月的蓝灯专业版使用时间</string>
   <string name="optimized_location">最快的服务器位置</string>
   <string name="current_location">当前位置</string>

@@ -37,13 +37,13 @@ public class LanternFreeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dataRemaining = (TextView)findViewById(R.id.dataRemaining);
-        dataProgressBar = (ProgressBar)findViewById(R.id.dataProgressBar);
-        upgradeBtn = (Button)findViewById(R.id.upgradeBtn);
-        upgradeToPro = (TextView)findViewById(R.id.upgradeToPro);
+        dataRemaining = (TextView) findViewById(R.id.dataRemaining);
+        dataProgressBar = (ProgressBar) findViewById(R.id.dataProgressBar);
+        upgradeBtn = (Button) findViewById(R.id.upgradeBtn);
+        upgradeToPro = (TextView) findViewById(R.id.upgradeToPro);
         dataUsageContainer = findViewById(R.id.dataUsageContainer);
         addUpgradeToProClickListener(new View[]{upgradeBtn, upgradeToPro});
-        
+
         if (getIntent() != null) {
             snackbarMsg = getIntent().getStringExtra("snackbarMsg");
         }
@@ -66,7 +66,7 @@ public class LanternFreeActivity extends BaseActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     startActivity(new Intent(LanternFreeActivity.this,
-                                LanternApp.getSession().plansActivity()));
+                            LanternApp.getSession().plansActivity()));
                 }
             });
         }
@@ -119,16 +119,15 @@ public class LanternFreeActivity extends BaseActivity {
         String amount = String.format("%s%%", update.getPercent());
         updateTabText(Constants.DATA_USAGE_TAB, amount);
 
-        long percent = update.getPercent();
-        final String text = String.format(
-                getResources().getString(R.string.data_used),
-                String.valueOf(percent));
+        final String text = getString(R.string.data_used,
+                String.valueOf(update.getRemaining()),
+                update.getExpiresAtString());
 
         dataUsageContainer.setVisibility(View.VISIBLE);
         dataProgressBar.setVisibility(View.VISIBLE);
         dataRemaining.setVisibility(View.VISIBLE);
         dataRemaining.setText(text);
-        dataProgressBar.setProgress((int)percent);
+        dataProgressBar.setProgress((int) update.getPercent());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
