@@ -121,7 +121,7 @@ public class LanternFreeActivity extends BaseActivity {
 
         final String text = getString(R.string.data_used,
                 String.valueOf(update.getRemaining()),
-                org.getlantern.mobilesdk.model.Utils.convertTTSToDateTimeString(update.getTtlSeconds()));
+                update.getExpiresAtString());
 
         dataUsageContainer.setVisibility(View.VISIBLE);
         dataProgressBar.setVisibility(View.VISIBLE);
