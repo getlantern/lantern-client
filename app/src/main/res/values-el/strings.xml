@@ -238,9 +238,6 @@
   <string name="free_month">Πάρτε ένα δωρεάν μήνα χρήσης του pro για κάθε εγγραφή</string>
   <string name="get_pro_now">Αποκτήστε το Pro τώρα</string>
   <string name="inviting_friends">Αποκτήστε μονάδες Pro προσκαλώντας φίλους</string>
-  <string name="data_cap_percent">Έχετε χρησιμοποιήσει %1$s%% από τα δεδομένα υψηλής ταχύτητας του Lantern για αυτό το μήνα. Κάντε αναβάθμιση σε Pro για απεριόριστα δεδομένα υψηλής ταχύτητας.</string>
-  <string name="data_cap">Έχετε χρησιμοποιήσει όλα τα δεδομένα υψηλής ταχύτητας του Lantern για αυτό το μήνα. Κάντε αναβάθμιση σε Lantern Pro για να συνεχίσετε να χρησιμοποιείτε το Lantern σε μέγιστη ταχύτητα.</string>
-  <string name="data_cap_reset">Τα δωρεάν δεδομένα υψηλής ταχύτητας του Lantern έχουν ανανεωθεί για το μήνα. Αρχίστε την περιήγηση σε αποκλεισμένες ιστοσελίδες και υπηρεσίες τώρα!</string>
   <string name="select">Επιλογή</string>
   <string name="special_launch">Ειδική τιμή προσφοράς!</string>
   <string name="best_value">Καλύτερη τιμή!</string>
@@ -257,7 +254,6 @@
   <string name="upgrade_to_lantern_pro">Αναβαθμίστε σε Lantern Pro</string>
   <string name="pro_available_for">Για Windows, Android, Mac και Ubuntu. Για iOS έρχεται σύντομα</string>
   <string name="data_remaining">%1$s%% απομένουν από τα δωρεάν μηνιαία δεδομένα υψηλής ταχύτητας</string>
-  <string name="data_used">%1$s%% έχουν χρησιμοποιηθεί από τα δωρεάν μηνιαία δεδομένα υψηλής ταχύτητας</string>
   <string name="upgrade">Αναβάθμιση</string>
   <string name="upgrade_pro">Αναβάθμιση σε Pro</string>
   <string name="upgrade_now">Αναβάθμιση τώρα</string>
@@ -321,7 +317,6 @@
   <string name="current_location_desc">Το Lantern χρησιμοποιεί έξυπνη επιλογή διακομιστή για να σας συνδέσει στα καλύτερα κέντρα δεδομένων μας. Κάντε αναβάθμιση σε Lantern Pro για μεγαλύτερη ταχύτητα με βελτιστοποιημένη επιλογή διακομιστή από τα αποκλειστικά κέντρα δεδομένων του Lantern Pro.</string>
   <string name="ad_blocking_desc">Το Lantern μπλοκάρει τις ενοχλητικές διαφημίσεις για να επιταχύνει τον χρόνο φόρτωσης των ιστοσελίδων, να εξοικονομήσει bandwidth και να σας δώσει μια πιο ομαλή εμπειρία περιήγησης.</string>
   <string name="https_upgrade_desc">Το Lantern αναβαθμίζει αυτόματα τις μη ασφαλείς συνδέσεις HTTP σε κρυπτογραφημένες συνδέσεις HTTPS, όταν είναι δυνατόν, για να διατηρήσετε τις πληροφορίες σας ιδιωτικές κατά την περιήγηση σας στο διαδίκτυο.</string>
-  <string name="data_usage_desc">Έχετε χρησιμοποιήσει %1$s/%2$sMB από τα μηνιαία σας δεδομένων υψηλής ταχύτητας.</string>
   <string name="account_left_desc">Απομένουν %1$d μήνας/ες του Lantern Pro στον λογαριασμό σας</string>
   <string name="optimized_location">Βελτιστοποιημένη τοποθεσία διακομιστή</string>
   <string name="current_location">Τρέχουσα τοποθεσία:</string>
