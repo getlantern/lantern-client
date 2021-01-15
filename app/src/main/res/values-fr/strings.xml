@@ -270,6 +270,9 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="free_month">Obtenez un mois gratuit de la version Pro pour chaque inscription</string>
   <string name="get_pro_now">Passez Pro maintenant</string>
   <string name="inviting_friends">Obtenir des crédits Pro en invitant des amis</string>
+  <string name="data_cap_percent">Il reste %1$s Mo de données gratuites. Réinitialisation à %2$s. Passez à la version Pro pour des données à vitesse grande illimitées.</string>
+  <string name="data_cap">Vous avez épuisé vos données Lantern à grande vitesse. Réinitialisation à %1$s. Passez à Lantern Pro pour continuer à utiliser Lantern à pleine vitesse.</string>
+  <string name="data_cap_reset">Vos données Lantern gratuites à grande vitesse ont été réinitialisées. Commencez maintenant à naviguer sur les sites et services bloqués.</string>
   <string name="select">Choisir</string>
   <string name="one_year">pour 1  an (non périodique)</string>
   <string name="two_years">pour 2 ans (non périodique)</string>
@@ -290,10 +293,10 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="get_lantern_pro">Obtenir Lantern Pro</string>
   <string name="upgrade_to_lantern_pro">Passez à Lantern Pro</string>
   <string name="pro_available_for">Pour Windows, Android, Mac et Ubuntu. iOS est pour bientôt</string>
-  <string name="upgrade_to_pro">Passez à la version Pro pour des données illimitées\n
-une vitesse accrue et une plus grande résistance au blocage.</string>
+  <string name="upgrade_to_pro">Passez à la version Pro pour des données illimitées, une vitesse accrue et une plus grande résistance au blocage.</string>
   <string name="upgrade_to_pro_yinbi">Passez à la version Pro et obtenez des données illimitées,\nune vitesse accrue, une plus grande résistance aux\nblocages et de la cryptomonnaie Yinbi gratuite.</string>
   <string name="data_remaining">Il reste %1$s %% de vos données mensuelles gratuites à grande vitesse</string>
+  <string name="data_used">Il reste %1$s Mo de données gratuites.\nRéinitialisation à %2$s</string>
   <string name="upgrade">Passer à la version Pro</string>
   <string name="upgrade_pro">Passer à Lantern Pro</string>
   <string name="upgrade_now">Passer à la version Pro maintenant</string>
