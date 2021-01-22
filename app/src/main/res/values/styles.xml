@@ -9,7 +9,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:fontFamily">@font/regular</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
@@ -229,28 +229,28 @@
     </style>
 
     <style name="RegularText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
 
     <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/thin</item>
-        <item name="fontFamily">@font/thin</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="fontFamily">sans-serif-thin</item>
     </style>
 
     <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/light</item>
-        <item name="fontFamily">@font/light</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="fontFamily">sans-serif-light</item>
     </style>
 
     <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/medium</item>
-        <item name="fontFamily">@font/medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@font/black</item>
-        <item name="fontFamily">@font/black</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="fontFamily">sans-serif-black</item>
     </style>
 
 </resources>
