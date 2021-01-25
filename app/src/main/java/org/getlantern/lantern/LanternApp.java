@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
-import com.github.piasy.biv.BigImageViewer;
-import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.collect.ImmutableMap;
@@ -75,7 +73,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
     ProdLogger.enable(getApplicationContext());
 
-    BigImageViewer.initialize(GlideImageLoader.with(getApplicationContext()));
     registerActivityLifecycleCallbacks(this);
 
     // Necessary to locate a back arrow resource we use from the
