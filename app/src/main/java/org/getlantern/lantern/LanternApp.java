@@ -12,7 +12,6 @@ import androidx.multidex.MultiDex;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.collect.ImmutableMap;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -35,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +56,9 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
   private static final String FIREBASE_RECENT_INSTALL_USER_PROPERTY = "recent_first_install";
   private static final long FIREBASE_CACHE_EXPIRATION = 3600; // 1 hour
 
-  private static final Map<String, Object> firebaseDefaults = ImmutableMap.of(FIREBASE_WELCOME_SCREEN_KEY,
-      FIREBASE_WELCOME_SCREEN_NONE);
+  private static final Map<String, Object> firebaseDefaults = Collections.unmodifiableMap(new HashMap<String, Object>() {{
+      put(FIREBASE_WELCOME_SCREEN_KEY, FIREBASE_WELCOME_SCREEN_NONE);
+  }});
 
   private Activity currentActivity;
   private WelcomeDialog welcome;
