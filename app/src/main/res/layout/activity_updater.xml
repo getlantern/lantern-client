@@ -67,7 +67,7 @@
                 android:padding="8dp">
 
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/notNow"
                     style="?android:buttonStyleSmall"
                     android:layout_width="match_parent"
@@ -80,7 +80,7 @@
                     android:background="@drawable/not_now_btn"
                     android:text="@string/not_now"/>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/installUpdate"
                     style="?android:buttonStyleSmall"
                     android:layout_width="match_parent"

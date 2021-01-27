@@ -126,7 +126,7 @@
                 android:alpha=".54"
                 android:textColor="@color/black"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/twoYearBtn"
                 android:layout_height="33dp"
                 android:layout_width="88dp"
@@ -180,7 +180,7 @@
                 android:textColor="@color/black"/>
 
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/oneYearBtn"
                 android:layout_height="33dp"
                 android:layout_width="88dp"

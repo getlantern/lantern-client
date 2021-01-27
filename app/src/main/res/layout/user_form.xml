@@ -90,7 +90,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/sendBtn"
         android:layout_height="36dp"
         android:layout_width="216dp"
@@ -107,7 +107,7 @@
         android:layout_gravity="center"
         android:background="@drawable/send_btn"
         android:onClick="sendResult" />
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/continueBtn"
         android:visibility="gone"
         android:layout_height="36dp"
