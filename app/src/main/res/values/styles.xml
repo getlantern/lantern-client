@@ -9,8 +9,8 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@string/sans_serif</item>
+        <item name="fontFamily">@string/sans_serif</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
@@ -44,7 +44,7 @@
         <item name="kswBackColor">@color/black</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/ksw_md_back_color</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@string/sans_serif_medium</item>
     </style>
 
     <style name="SwitchButtonSettingStyle">
@@ -53,7 +53,7 @@
         <item name="kswTextMarginH">0dp</item>
         <item name="kswThumbColor">@color/accent_white</item>
         <item name="kswBackColor">@color/setting_off</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@string/sans_serif_medium</item>
     </style>
 
 
@@ -195,7 +195,7 @@
         <item name="boxCornerRadiusTopEnd">4dp</item>
         <item name="boxCornerRadiusBottomStart">4dp</item>
         <item name="boxCornerRadiusBottomEnd">4dp</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@string/sans_serif</item>
     </style>
 
     <style name="MaterialField" parent="@android:style/Widget.EditText">
@@ -203,7 +203,7 @@
         <item name="android:layout_height">48dp</item>
         <item name="android:drawablePadding">10dp</item>
         <item name="android:background">@null</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@string/sans_serif</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:autoText">false</item>
@@ -213,7 +213,7 @@
     <style name="MaterialButton" parent="@style/TextAppearance.MaterialComponents.Button">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@string/sans_serif_medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14sp</item>
         <item name="android:lineSpacingExtra">5sp</item>
@@ -230,28 +230,28 @@
     </style>
 
     <style name="RegularText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@string/sans_serif</item>
+        <item name="fontFamily">@string/sans_serif</item>
     </style>
 
     <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">sans-serif-thin</item>
-        <item name="fontFamily">sans-serif-thin</item>
+        <item name="android:fontFamily">@string/sans_serif_thin</item>
+        <item name="fontFamily">@string/sans_serif_thin</item>
     </style>
 
     <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">@string/sans_serif_light</item>
+        <item name="fontFamily">@string/sans_serif_light</item>
     </style>
 
     <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@string/sans_serif_medium</item>
+        <item name="fontFamily">@string/sans_serif_medium</item>
     </style>
 
     <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">sans-serif-black</item>
-        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:fontFamily">@string/sans_serif_black</item>
+        <item name="fontFamily">@string/sans_serif_black</item>
     </style>
 
 </resources>
