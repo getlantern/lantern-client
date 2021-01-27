@@ -10,6 +10,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">

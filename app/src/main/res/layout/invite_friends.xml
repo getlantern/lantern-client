@@ -106,7 +106,7 @@
             android:textColor="@color/pro_blue_color"
             />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/textInviteBtn"
                 android:layout_height="36dp"
                 android:layout_width="216dp"
@@ -121,7 +121,7 @@
                 android:layout_centerInParent="true"
                 android:onClick="textInvite" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/emailInviteBtn"
                 android:layout_height="36dp"
                 android:layout_width="216dp"

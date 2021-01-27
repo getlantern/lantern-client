@@ -73,7 +73,7 @@
                 android:textSize="10sp"
                 android:textColor="@color/accent_white"/>
         </LinearLayout>
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/upgradeBtn"
             android:layout_height="36dp"
             android:layout_width="88dp"

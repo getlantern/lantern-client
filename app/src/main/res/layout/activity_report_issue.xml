@@ -120,7 +120,7 @@
             android:visibility="gone"
             android:drawSelectorOnTop="false"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sendBtn"
             android:layout_below="@id/description"
             android:layout_centerHorizontal="true"
