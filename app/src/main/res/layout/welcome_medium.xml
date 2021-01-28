@@ -57,7 +57,7 @@
         android:paddingBottom="30dp"
         android:layout_gravity="center"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/upgradeNow"
         android:layout_height="36dp"
         android:layout_width="216dp"

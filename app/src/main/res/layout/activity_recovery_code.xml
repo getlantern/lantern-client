@@ -87,7 +87,7 @@
         android:gravity="left"
         android:textColor="@color/black"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submit"
         android:layout_height="36dp"
         android:layout_width="216dp"
@@ -105,7 +105,7 @@
         android:layout_centerInParent="true"
         android:onClick="verifyCode" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/resendEmail"
         android:layout_height="36dp"
         android:layout_width="216dp"

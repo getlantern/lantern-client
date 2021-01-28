@@ -2,7 +2,6 @@ package org.getlantern.lantern.test
 
 import android.Manifest
 import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.os.AsyncTask
 import android.os.SystemClock
 import android.util.Log
@@ -19,7 +18,6 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
 import com.kyleduo.switchbutton.SwitchButton
-import kotlinx.android.synthetic.main.toolbar_content.view.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
