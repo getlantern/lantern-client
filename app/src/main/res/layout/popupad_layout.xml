@@ -202,7 +202,7 @@
             android:paddingBottom="20dp"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical">
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/renewProNow"
                 android:layout_height="36dp"
                 android:layout_width="216dp"

@@ -20,8 +20,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
@@ -32,6 +30,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.CheckoutActivity_;
 import org.getlantern.mobilesdk.Logger;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,13 +67,13 @@ public class WelcomeDialog extends DialogFragment {
     public static final String LAYOUT_RENEWAL = "renewal";
     public static final String LAYOUT_DEFAULT = "default";
 
-    private static final Map<String, Integer> layouts = ImmutableMap.of(
-        LAYOUT_SOFT, R.layout.welcome_soft,
-        LAYOUT_MEDIUM, R.layout.welcome_medium,
-        LAYOUT_HARD, R.layout.welcome_hard,
-        LAYOUT_RENEWAL, R.layout.renewal,
-        LAYOUT_DEFAULT, R.layout.welcome
-    );
+    private static final Map<String, Integer> layouts = Collections.unmodifiableMap(new HashMap<String, Integer>() {{
+        put(LAYOUT_SOFT, R.layout.welcome_soft);
+        put(LAYOUT_MEDIUM, R.layout.welcome_medium);
+        put(LAYOUT_HARD, R.layout.welcome_hard);
+        put(LAYOUT_RENEWAL, R.layout.renewal);
+        put(LAYOUT_DEFAULT, R.layout.welcome);
+    }});
 
     private Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
 

@@ -37,7 +37,7 @@
             android:text="@string/privacy_disclosure_body"
             android:textColor="@color/black"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_height="48dp"
             android:minHeight="48dp"
             android:layout_width="200dp"

@@ -85,7 +85,7 @@
                     android:layout_alignParentTop="true"
                     />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sendBtn"
                     android:layout_height="41.5dp"
                     android:layout_width="250dp"
