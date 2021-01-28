@@ -121,7 +121,7 @@
   <string name="devices_authorized">Appareils autorisés à utiliser votre compte Pro</string>
   <string name="send_us_your_logs">Envoyez-nous vos journaux</string>
   <string name="thanks_purchase">Nous nous remercions d’avoir acheté Lantern Pro.</string>
-  <string name="start_inviting">\r\nLancez les invitations !</string>
+  <string name="start_inviting">\r\nLancez les invitations</string>
   <string name="sending_request">Traitement de la demande</string>
   <string name="invite_friends">Saisissez votre adresse courriel pour recevoir un code à partager avec vos amis et pour obtenir gratuitement un mois de la version Pro s’ils s’inscrivent.</string>
   <string name="invite_friends_welcome">Si vos amis achètent le forfait de deux ans, ils obtiendront trois mois gratuits et vous aussi. Le forfait d’un an fera gagner un mois gratuit à vous et à vos amis</string>
@@ -279,7 +279,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="one_year_lantern_pro">Un an de Lantern Pro</string>
   <string name="two_years_lantern_pro">Deux ans de Lantern Pro</string>
   <string name="special_launch">Prix spécial de lancement.</string>
-  <string name="best_value">Valeur optimale !</string>
+  <string name="best_value">Le meilleur rapport service/prix</string>
   <string name="referral_code_opt">Code de parrainage (facultatif)</string>
   <string name="tax">Taxe :</string>
   <string name="total">Total :</string>
@@ -301,7 +301,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="upgrade_pro">Passer à Lantern Pro</string>
   <string name="upgrade_now">Passer à la version Pro maintenant</string>
   <string name="next">Suivant</string>
-  <string name="become_reseller">Gagnez de l’argent ! Devenez revendeur Lantern Pro. Touchez ici</string>
+  <string name="become_reseller">Gagnez de l’argent. Devenez revendeur Lantern Pro. Touchez ici</string>
   <string name="faster_stronger">Plus rapide. Plus robuste. Illimité. Sécurisé</string>
   <string name="reseller_email_subject">Informez-moi sur le programme pour revendeur Lantern.</string>
   <string name="reseller_email_message">En devenant revendeur Lantern, vous aurez la possibilité de gagner jusqu’à 25 % sur chaque vente d’abonnement Lantern Pro. Expliquez-nous ci-dessous pourquoi vous souhaitez devenir revendeur ?</string>
@@ -345,7 +345,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="confirm_email_address">Confirmer l’adresse courriel</string>
   <string name="register_pro_account">Créer un compte Pro</string>
   <string name="renew_now">Renouvelez-le maintenant et\n obtenez trois mois gratuits</string>
-  <string name="renew_ends_tomorrow">Le rabais de renouvellement se termine demain !</string>
+  <string name="renew_ends_tomorrow">Le rabais de renouvellement se termine demain</string>
   <string name="renew_ends_today">Dernière chance d’obtenir trois mois gratuits.</string>
   <string name="renew_after">Renouvelez-le maintenant et obtenez 45 jours supplémentaires gratuits.</string>
   <string name="renew_sub">NOTE : La durée du forfait que\nvous venez\n d’acheter sera ajoutée\nà la durée de votre\n forfait actuel.</string>
@@ -395,11 +395,11 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="now_converting_to_pro">Nous vous convertissons à Pro. Veuillez patienter…</string>
   <string name="have_an_activation_code">Avez-vous un code d’activation ? Touchez ici</string>
   <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
-  <string name="test_payment_page">Test Payment Page</string>
+  <string name="test_payment_page">Page d’essai de paiement</string>
   <string name="pay_now">Payer maintenant</string>
   <string name="error_bulk_codes">Erreur d’envoi de codes en bloc de compte Pro</string>
   <string name="invalid_bulk_codes">Les codes de compte PRO que vous avez saisis sont invalides</string>
-  <string name="renew_today">RENOUVELEZ VOTRE COMPTE AUJOURD’HUI !</string>
+  <string name="renew_today">RENOUVELEZ VOTRE COMPTE AUJOURD’HUI </string>
   <string name="receive_free_yinbi">Recevez gratuitement de la cryptomonnaie Yinbi.</string>
   <string name="purchased_pro_activation_codes">Avez-vous acheté des codes d’activation Lantern Pro en ligne ?</string>
   <string name="renew_grab_free_yinbi"><u>Renouvelez votre compte en utilisant des codes d’activation Pro pour obtenir des yinbis gratuitement</u></string>
@@ -427,7 +427,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="redeem_bulk_codes">Encaisser des codes en bloc</string>
   <string name="paste_pro_account_codes">Collez vos codes en bloc de compte Pro\nci-dessous pour obtenir Lantern Pro ou prolonger\nla durée de votre compte Lantern Pro.</string>
   <string name="special_offer">OFFRE SPÉCIALE !</string>
-  <string name="cryptocurrency_giveaway">Distribution promotionnelle de cryptomonnaie !</string>
+  <string name="cryptocurrency_giveaway">Distribution promotionnelle de cryptomonnaie</string>
   <string name="lantern_partnered_renew_now">Lantern s’est associée avec Yinbi (YNB) pour\ndonner des yinbis à quiconque renouvelle\nLantern Pro. Renouvelez-la maintenant pour\navoir accès à la distribution promotionnelle du jour.</string>
   <string name="what_is_yinbi">Qu’est-ce que Yinbi ?</string>
   <string name="renew_now_get_yinbi">Renouvelez maintenant, obtenez des yinbis</string>
@@ -458,7 +458,7 @@ distribués à la fin de chaque jour,\nd’après le nombre de personnes qui\npa
   <string name="get_bulk_yinbi"><u>Achetez des comptes Pro en quantité, obtenez des yinbis en quantité.</u></string>
   <string name="loading_yinbi_account_info">Chargement des renseignements du compte Yinbi</string>
   <string name="free_yinbi_with_purchase">Des yinbis gratuits à l’achat.</string>
-  <string name="renew_now_get_more">Renouvelez maintenant et obtenez davantage !</string>
+  <string name="renew_now_get_more">Renouvelez maintenant et obtenez davantage</string>
   <string name="buy_pro_get_yinbi">Achetez la version Pro, obtenez des yinbis</string>
   <string name="renewal_note">NOTE : La durée du forfait que vous venez d\'acheter sera ajoutée à la\ndurée de votre forfait actuel.</string>
   <string name="bulk_codes_error">Erreur. Veuillez vérifier les codes en surbrillance.</string>
