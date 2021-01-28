@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="excluded_apps">
-        <item>org.getlantern.lantern</item>
-        <item>com.sec.android.app.launcher</item>
-        <item>com.android.systemui</item>
-        <item>com.domobile.applock</item>
-        <item>com.gamebench.profilerhelper</item>
-        <item>com.dewmobile.kuaiya.play</item>
-    </string-array>
-
     <string-array name="free_side_menu_options">
         <item>@string/get_lantern_pro</item>
         <item>@string/invite_friends_btn</item>

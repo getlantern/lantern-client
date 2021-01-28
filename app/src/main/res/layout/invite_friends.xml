@@ -106,12 +106,12 @@
             android:textColor="@color/pro_blue_color"
             />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/textInviteBtn"
                 android:layout_height="36dp"
                 android:layout_width="216dp"
                 android:text="@string/text_invite"
-                android:fontFamily="@font/medium"
+                android:fontFamily="sans-serif-medium"
                 android:textSize="14sp"
                 android:minHeight="48dp"
                 android:textAllCaps="true"
@@ -121,12 +121,12 @@
                 android:layout_centerInParent="true"
                 android:onClick="textInvite" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/emailInviteBtn"
                 android:layout_height="36dp"
                 android:layout_width="216dp"
                 android:text="@string/email_invite"
-                android:fontFamily="@font/medium"
+                android:fontFamily="sans-serif-medium"
                 android:textSize="14sp"
                 android:elevation="2dp"
                 android:minHeight="48dp"
