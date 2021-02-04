@@ -18,6 +18,7 @@ import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
 import org.getlantern.lantern.model.LanternStatus.Status;
+import org.getlantern.lantern.model.AccountInitializationStatus;
 import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
@@ -97,6 +98,7 @@ public class LanternService extends Service implements Runnable {
   private void afterStart() {
     if (LanternApp.getSession().userId() == 0) {
       // create a user if no user id is stored
+      EventBus.getDefault().post(new AccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING));
       createUser(0);
     }
 
@@ -122,7 +124,7 @@ public class LanternService extends Service implements Runnable {
     createUserHandler.postDelayed(createUserRunnable, timeOut);
   }
 
-  private class InvalidUserException extends RuntimeException {
+  private static class InvalidUserException extends RuntimeException {
     public InvalidUserException(String message) {
       super(message);
     }
@@ -150,7 +152,7 @@ public class LanternService extends Service implements Runnable {
         final String errorMsg = "Max. number of tries made to create Pro user";
         final InvalidUserException e = new InvalidUserException(errorMsg);
         Logger.error(TAG, errorMsg, e);
-        throw e;
+        EventBus.getDefault().postSticky(new AccountInitializationStatus(AccountInitializationStatus.Status.FAILURE));
       }
     }
 
@@ -169,6 +171,7 @@ public class LanternService extends Service implements Runnable {
         LanternApp.getSession().setCode(referral);
       }
       EventBus.getDefault().post(new LanternStatus(Status.ON));
+      EventBus.getDefault().postSticky(new AccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS));
     }
   }
 

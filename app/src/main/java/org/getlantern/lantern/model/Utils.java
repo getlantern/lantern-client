@@ -253,7 +253,13 @@ public class Utils {
     public static void showAlertDialog(final Activity activity,
             CharSequence title, CharSequence msg,
             final boolean finish) {
-        Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, true);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title, CharSequence msg,
+                                       final boolean finish, Boolean cancelable) {
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, cancelable);
     }
 
     public static void showAlertDialog(final Activity activity,
@@ -261,7 +267,8 @@ public class Utils {
                                        CharSequence msg,
                                        CharSequence okLabel,
                                        final boolean finish,
-                                       Runnable onClick) {
+                                       Runnable onClick,
+                                       Boolean cancelable) {
         Logger.debug(TAG, "Showing alert dialog...");
 
         activity.runOnUiThread(new Runnable() {
@@ -285,6 +292,7 @@ public class Utils {
                 if (!activity.isFinishing()) {
                     alertDialog.show();
                 }
+                alertDialog.setCancelable(cancelable);
             }
         });
     }
