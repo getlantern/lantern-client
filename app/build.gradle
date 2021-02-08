@@ -336,6 +336,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
 
+    implementation 'org.whispersystems:signal-protocol-android:2.3.0'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
