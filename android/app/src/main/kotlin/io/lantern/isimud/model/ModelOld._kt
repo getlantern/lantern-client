@@ -1,0 +1,84 @@
+package io.lantern.isimud.model
+
+import kotlinx.collections.immutable.persistentListOf
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentNavigableMap
+import java.util.concurrent.ConcurrentSkipListMap
+import kotlin.math.min
+
+typealias KeyPath = Array<String>
+
+fun String.toKeyPath(): KeyPath = this.split("/").toTypedArray()
+
+fun KeyPath.toString(): String = this.joinToString("/")
+
+fun KeyPath.forAllPrefixes(cb: (KeyPath) -> Unit) {
+    val list = this.asList()
+    for (i in 0..this.size-1) {
+        cb(list.subList(0, i).toTypedArray())
+    }
+}
+
+fun KeyPath.parentOf(child: KeyPath): Boolean {
+    if (child.size < this.size) {
+        return false
+    }
+    for (i in 0..child.size-1) {
+        if (this[i] != child[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+class Model {
+    private val data = ConcurrentSkipListMap<KeyPath, Any>(KeyPathComparator())
+    private val keyPathSubscribers = ConcurrentHashMap<String, List<(String, Any) -> Unit>>()
+
+    fun subscribe(path: String, onUpdate: (String, Any) -> Unit) {
+        synchronized(this) {
+            keyPathSubscribers[path] = keyPathSubscribers[path]?.let { it + onUpdate } ?: persistentListOf(onUpdate)
+        }
+
+        data[path.toKeyPath()] ?.let {
+            onUpdate(path, it)
+        }
+    }
+
+    fun get(path: String): Any {
+        val keyPath = path.toKeyPath()
+        val it = data.tailMap(keyPath).iterator()
+        while (it.hasNext()) {
+            val entry = it.next()
+            if (!keyPath.parentOf(entry.key)) {
+                break;
+            }
+            println(entry.value);
+        }
+
+        return "blah";
+    }
+
+    fun update(path: String, value: Any) {
+        data[path.toKeyPath()] = value
+
+
+
+        keyPathSubscribers[path]?.forEach { it(path, value) }
+    }
+}
+
+class KeyPathComparator: Comparator<Array<String>> {
+    override fun compare(a: Array<String>, b: Array<String>): Int {
+        for (i in 0..min(a.size, b.size)-1) {
+            if (a[i] < b[i]) {
+                return -1
+            }
+            if (a[i] > b[i]) {
+                return 1
+            }
+        }
+
+        return 0
+    }
+}
