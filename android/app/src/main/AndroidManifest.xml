@@ -1,9 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="auto"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.getlantern.lantern">
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <permission
+        android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
+        android:label="Request for sending mobiamobroadcast to Mobiamo"
+        android:protectionLevel="signature" />
+
+    <uses-permission
+        android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"/>
+
     <application
-        android:label="lantern"
-        android:icon="@mipmap/ic_launcher">
+        android:name="org.getlantern.lantern.LanternApp"
+        android:hardwareAccelerated="true"
+        tools:replace="allowBackup, label"
+        android:allowBackup="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:persistent="true"
+        android:icon="@drawable/app_icon"
+        android:theme="@style/AppTheme"
+        android:label="@string/app_name">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -33,6 +56,227 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
+
+        <service
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false"
+            android:name=".service.LanternService_">
+
+        </service>
+
+        <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:hardwareAccelerated="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/FinestWebViewTheme.Light" />
+
+        <activity
+            android:name=".activity.AddDeviceActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.LinkDeviceActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.AccountRecoveryActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.RecoveryCodeActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.SubmitAccountActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.AdyenActivity_"
+            android:configChanges="locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:noHistory="true">
+        </activity>
+
+        <activity
+            android:name=".activity.PaymentWallActivity_"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="locale|layoutDirection"
+            android:noHistory="true">
+        </activity>
+
+
+        <activity
+            android:name=".activity.AdyenSuccessActivity_"
+            android:screenOrientation="portrait"
+            android:noHistory="true">
+        </activity>
+
+
+        <activity
+            android:name=".activity.WelcomeActivity_"
+            android:screenOrientation="portrait"
+            android:noHistory="true">
+        </activity>
+
+        <activity
+            android:name=".activity.InviteActivity_"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.DesktopActivity_"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="org.getlantern.lantern.activity.LanternPlansActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiPlansActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiRenewActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiScreenActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name="org.getlantern.lantern.activity.yinbi.YinbiRedemptionActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.TestPaymentActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.yinbi.YinbiWelcomeActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.WebViewActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.RegisterProActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.Gate2ShopActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.PopUpAdActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.CheckoutActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.yinbi.YinbiRedemptionActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.yinbi.RedeemBulkCodesActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.ProAccountActivity_"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name="org.getlantern.mobilesdk.activity.LanguageActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.UpdateActivity_"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Blank.Dialog">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.PrivacyDisclosureActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <!-- It's required to update Lantern on API 24+ -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="org.getlantern.lantern.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+        </service>
+
+        <service android:enabled="true" android:name=".service.LinkDeviceService_"/>
+        <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
+
+        <receiver android:name=".notification.Notifier"
+            android:exported="false"> <!-- since we do specify an intent filter, this receiver will
+            be available to other apps by default, which is not what we want. We have to explicitly state that it's private within our app -->
+            <intent-filter>
+                <action android:name="${applicationId}.intent.DATA_USAGE" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="true" />
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <meta-data android:name="google_analytics_ssaid_collection_enabled" android:value="false" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
