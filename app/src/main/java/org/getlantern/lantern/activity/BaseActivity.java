@@ -1,6 +1,7 @@
 package org.getlantern.lantern.activity;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
@@ -14,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.kyleduo.switchbutton.SwitchButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -29,6 +30,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.fragment.TabFragment;
+import org.getlantern.lantern.model.AccountInitializationStatus;
 import org.getlantern.lantern.model.AuctionCountDown;
 import org.getlantern.lantern.model.AuctionInfo;
 import org.getlantern.lantern.model.Constants;
@@ -73,6 +75,7 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
     protected TextView yinbiAdText;
 
     protected Snackbar statusSnackbar;
+    private AlertDialog accountInitDialog;
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override
@@ -140,6 +143,48 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
         if (countDown != null) {
             countDown.cancel();
             countDown = null;
+        }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onInitializingAccount(final AccountInitializationStatus status) {
+        switch (status.getStatus()) {
+            case PROCESSING:
+                accountInitDialog = new AlertDialog.Builder(this).create();
+                accountInitDialog.setCancelable(false);
+                LayoutInflater inflater = this.getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.init_account_dialog, null);
+                accountInitDialog.setView(dialogView);
+                final TextView tvMessage = dialogView.findViewById(R.id.tvMessage);
+                tvMessage.setText(getString(R.string.init_account, getAppName()));
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EventBus.getDefault().removeStickyEvent(status);
+                        accountInitDialog.dismiss();
+                        finish();
+                    }
+                });
+                accountInitDialog.show();
+                break;
+
+            case SUCCESS:
+                EventBus.getDefault().removeStickyEvent(status);
+                if (accountInitDialog != null) {
+                    accountInitDialog.dismiss();
+                }
+                break;
+
+            case FAILURE:
+                EventBus.getDefault().removeStickyEvent(status);
+                if (accountInitDialog != null) {
+                    accountInitDialog.dismiss();
+                }
+                Utils.showAlertDialog(
+                    this, getString(R.string.connection_error),
+                    getString(R.string.reopen_to_try, getAppName()),
+                    getString(R.string.ok), true, null, false);
+                break;
         }
     }
 
@@ -509,5 +554,9 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
      * user data response
      */
     protected abstract void onUserDataUpdate(final ProUser user);
+
+    protected String getAppName() {
+      return getString(R.string.app_name);
+    }
 
 }
