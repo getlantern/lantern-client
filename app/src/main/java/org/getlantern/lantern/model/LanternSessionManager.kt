@@ -28,21 +28,21 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     private var verifyCode: String? = null
 
     override fun isProUser(): Boolean {
-        return prefs.getBoolean(PRO_USER, false)
+        return getPrefs().isProUser
     }
 
     private fun isDeviceLinked(): Boolean {
-        return prefs.getBoolean(DEVICE_LINKED, false)
+        return getPrefs().isDeviceLinked
     }
 
     fun isExpired(): Boolean {
-        return prefs.getBoolean(PRO_EXPIRED, false)
+        return getPrefs().isProExpired
     }
 
     fun getCurrency(): Currency? {
         try {
             val lang = language
-            val parts = lang.split("_".toRegex()).toTypedArray()
+            val parts = lang!!.split("_".toRegex()).toTypedArray()
             return if (parts.size > 0) {
                 Currency.getInstance(Locale(parts[0], parts[1]))
             } else Currency.getInstance(Locale.getDefault())
@@ -117,27 +117,27 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
-        editor.putString(REMOTE_CONFIG_PAYMENT_PROVIDER, provider).commit()
+        updatePrefs { prefs -> prefs.remoteConfigPaymentProvider = provider }
     }
 
     fun getRemoteConfigPaymentProvider(): String? {
-        return prefs.getString(REMOTE_CONFIG_PAYMENT_PROVIDER, "")
+        return getPrefs().remoteConfigPaymentProvider ?: ""
     }
 
     fun setPaymentProvider(provider: String?) {
-        editor.putString(USER_PAYMENT_GATEWAY, provider).commit()
+        updatePrefs { prefs -> prefs.userPaymentGateway = provider }
     }
 
     fun getPaymentProvider(): String? {
-        return prefs.getString(USER_PAYMENT_GATEWAY, "paymentwall")
+        return getPrefs().userPaymentGateway ?: "paymentwall"
     }
 
     fun setSignature(sig: String?) {
-        editor.putString(PW_SIGNATURE, sig).commit()
+        updatePrefs { prefs -> prefs.pwSignature = sig }
     }
 
     fun getPwSignature(): String? {
-        return prefs.getString(PW_SIGNATURE, "")
+        return getPrefs().pwSignature ?: ""
     }
 
     fun addDevice(device: Device) {
@@ -153,11 +153,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setStripePubKey(key: String?) {
-        editor.putString(STRIPE_API_KEY, key).commit()
+        updatePrefs { prefs -> prefs.stripeApiKey = key }
     }
 
     fun stripePubKey(): String? {
-        return prefs.getString(STRIPE_API_KEY, "")
+        return getPrefs().stripeApiKey ?: ""
     }
 
     fun plansActivity(): Class<*>? {
@@ -198,44 +198,46 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setDeviceCode(code: String?, expiration: Long) {
-        editor.putLong(DEVICE_CODE_EXP, expiration * 1000).commit()
-        editor.putString(DEVICE_LINKING_CODE, code).commit()
+        updatePrefs { prefs ->
+            prefs.deviceCodeExpiration = expiration * 1000
+            prefs.deviceLinkingCode = code
+        }
     }
 
     fun deviceCode(): String? {
-        return prefs.getString(DEVICE_LINKING_CODE, "")
+        return getPrefs().deviceLinkingCode
     }
 
     fun getDeviceExp(): Long? {
-        return prefs.getLong(DEVICE_CODE_EXP, 0)
+        return getPrefs().deviceCodeExpiration
     }
 
     fun yinbiEnabled(): Boolean {
-        return BuildConfig.YINBI_ENABLED || prefs.getBoolean(YINBI_ENABLED, false)
+        return BuildConfig.YINBI_ENABLED || getPrefs().yinbiEnabled
     }
 
     fun setYinbiEnabled(enabled: Boolean) {
-        editor.putBoolean(YINBI_ENABLED, enabled).commit()
+        updatePrefs { prefs -> prefs.yinbiEnabled = enabled }
     }
 
     fun showYinbiThanksPurchase(): Boolean {
-        return prefs.getBoolean(YINBI_THANKS_PURCHASE, false)
+        return getPrefs().yinbiThanksPurchase
     }
 
     fun setThanksPurchase(v: Boolean) {
-        editor.putBoolean(YINBI_THANKS_PURCHASE, v).commit()
+        updatePrefs { prefs -> prefs.yinbiThanksPurchase = v }
     }
 
     fun showYinbiRedemptionTable(): Boolean {
-        return prefs.getBoolean(SHOW_YINBI_REDEMPTION, false)
+        return getPrefs().yinbiShowRedemption
     }
 
     fun setShowRedemptionTable(v: Boolean) {
-        editor.putBoolean(SHOW_YINBI_REDEMPTION, v).commit()
+        updatePrefs { prefs -> prefs.yinbiShowRedemption = v }
     }
 
     fun getProDaysLeft(): Int? {
-        return getInt(PRO_DAYS_LEFT, 0)
+        return getPrefs().proDaysLeft
     }
 
     private fun setExpiration(expiration: Long?) {
@@ -246,19 +248,21 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val dateFormat = SimpleDateFormat("MM/dd/yyyy")
         val dateToStr = dateFormat.format(expiry)
         Logger.debug(TAG, "Lantern pro expiration date: $dateToStr")
-        editor.putLong(EXPIRY_DATE, expiration)
-        editor.putString(EXPIRY_DATE_STR, dateToStr).commit()
+        updatePrefs { prefs ->
+            prefs.expirationDate = expiration
+            prefs.expirationString = dateToStr
+        }
     }
 
     fun getExpiration(): LocalDateTime? {
-        val expiration = prefs.getLong(EXPIRY_DATE, 0L)
+        val expiration = getPrefs().expirationDate
         return if (expiration == 0L) {
             null
         } else LocalDateTime(expiration * 1000)
     }
 
     fun getExpirationStr(): String? {
-        return prefs.getString(EXPIRY_DATE_STR, "")
+        return getPrefs().expirationString
     }
 
     fun showWelcomeScreen(): Boolean {
@@ -272,13 +276,13 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // Show only once to free users. (If set, don't show)
         // Also, if the install isn't new-ish, we won't start showing them a welcome.
-        return isRecentInstall && prefs.getLong(WELCOME_LAST_SEEN, 0) == 0L
+        return isRecentInstall && getPrefs().welcomeLastSeen == 0L
     }
 
     fun getProTimeLeft(): String? {
         val numMonths = numProMonths()
         if (numMonths < 1) {
-            val numDays = getInt(PRO_DAYS_LEFT, 0)
+            val numDays = getPrefs().proDaysLeft
             return if (numDays == 0) {
                 ""
             } else String.format("%dD", numDays)
@@ -288,25 +292,31 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun numProMonths(): Int {
-        return getInt(PRO_MONTHS_LEFT, 0)
+        return getPrefs().proMonthsLeft
     }
 
     fun setWelcomeLastSeen() {
-        val name = if (isProUser) RENEWAL_LAST_SEEN else WELCOME_LAST_SEEN
-        editor.putLong(name, System.currentTimeMillis()).commit()
+        val now = System.currentTimeMillis()
+        updatePrefs { prefs ->
+            if (isProUser) {
+                prefs.renewalLastSeen = now
+            } else {
+                prefs.welcomeLastSeen = now
+            }
+        }
     }
 
     fun setRenewalPref(dontShow: Boolean) {
-        editor.putBoolean(SHOW_RENEWAL_PREF, dontShow).commit()
+        updatePrefs { prefs -> prefs.showRenewal = !dontShow }
     }
 
     fun showRenewalPref(): Boolean {
-        return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
+        return getPrefs().showRenewal
     }
 
     fun proUserStatus(status: String) {
         if (status == "active") {
-            editor.putBoolean(PRO_USER, true).commit()
+            updatePrefs { prefs -> prefs.isProUser = true }
         }
     }
 
@@ -315,51 +325,51 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setIsProUser(isProUser: Boolean) {
-        editor.putBoolean(PRO_USER, isProUser).commit()
+        updatePrefs { prefs -> prefs.isProUser = isProUser }
     }
 
     fun setExpired(expired: Boolean) {
-        editor.putBoolean(PRO_EXPIRED, expired).commit()
+        updatePrefs { prefs -> prefs.isProExpired = expired }
     }
 
     fun setResellerCode(code: String?) {
-        editor.putString(RESELLER_CODE, code).commit()
+        updatePrefs { prefs -> prefs.resellerCode = code }
     }
 
     fun setProvider(provider: String?) {
-        editor.putString(PROVIDER, provider).commit()
+        updatePrefs { prefs -> prefs.provider = provider }
     }
 
     fun setAccountId(accountId: String?) {
-        editor.putString(ACCOUNT_ID, accountId).commit()
+        updatePrefs { prefs -> prefs.accountId = accountId }
     }
 
     fun accountId(): String? {
-        return prefs.getString(ACCOUNT_ID, "")
+        return getPrefs().accountId
     }
 
     override fun code(): String? {
-        return prefs.getString(REFERRAL_CODE, "")
+        return getPrefs().referralCode ?: ""
     }
 
     override fun setCode(referral: String?) {
-        editor.putString(REFERRAL_CODE, referral).commit()
+        updatePrefs { prefs -> prefs.referralCode = referral }
     }
 
     fun setStripeToken(token: String?) {
-        editor.putString(STRIPE_TOKEN, token).commit()
+        updatePrefs { prefs -> prefs.stripeToken = token }
     }
 
     fun stripeToken(): String? {
-        return prefs.getString(STRIPE_TOKEN, "")
+        return getPrefs().stripeToken ?: ""
     }
 
     fun resellerCode(): String? {
-        return prefs.getString(RESELLER_CODE, "")
+        return getPrefs().resellerCode ?: ""
     }
 
     override fun provider(): String? {
-        return prefs.getString(PROVIDER, "")
+        return getPrefs().provider ?: ""
     }
 
     fun setReferral(referralCode: String?) {
@@ -372,80 +382,55 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun unlinkDevice() {
         devices.clear()
-        setIsProUser(false)
-        editor.putBoolean(PRO_USER, false)
-        editor.putBoolean(DEVICE_LINKED, false)
-        editor.remove(TOKEN)
-        editor.remove(EMAIL_ADDRESS)
-        editor.remove(USER_ID)
-        editor.remove(DEVICE_CODE_EXP)
-        editor.remove(DEVICE_LINKING_CODE)
-        editor.remove(PRO_PLAN)
-        editor.commit()
+        updatePrefs { prefs ->
+            prefs.isProUser = false
+            prefs.isDeviceLinked = false
+            prefs.proToken = null
+            prefs.emailAddress = null
+            prefs.userId = 0
+            prefs.deviceCodeExpiration = 0
+            prefs.deviceLinkingCode = null
+        }
     }
 
     fun linkDevice() {
-        editor.putBoolean(DEVICE_LINKED, true)
-        editor.commit()
+        updatePrefs { prefs -> prefs.isDeviceLinked = true }
     }
 
     fun storeUserData(user: ProUser?) {
-        if (user!!.email != null && user!!.email != "") {
-            setEmail(user!!.email)
+        if (user!!.email != null && user.email != "") {
+            setEmail(user.email)
         }
 
-        setYinbiEnabled(user!!.yinbiEnabled)
+        setYinbiEnabled(user.yinbiEnabled)
 
-        if (!TextUtils.isEmpty(user!!.code)) {
-            setCode(user!!.code)
+        if (!TextUtils.isEmpty(user.code)) {
+            setCode(user.code)
         }
 
-        if (user!!.isActive) {
+        if (user.isActive) {
             linkDevice()
             setShowRedemptionTable(true)
         } else if (isProUser) {
             setShowRedemptionTable(true)
         }
 
-        setExpiration(user!!.expiration)
-        setExpired(user!!.isExpired)
-        setIsProUser(user!!.isProUser)
+        setExpiration(user.expiration)
+        setExpired(user.isExpired)
+        setIsProUser(user.isProUser)
 
-        if (user!!.isProUser) {
-            EventBus.getDefault().post(UserStatus(user!!.isActive, user!!.monthsLeft().toLong()))
-            editor.putInt(PRO_MONTHS_LEFT, user!!.monthsLeft()).commit()
-            editor.putInt(PRO_DAYS_LEFT, user!!.daysLeft()).commit()
+        if (user.isProUser) {
+            EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
+            updatePrefs { prefs ->
+                prefs.proMonthsLeft = user.monthsLeft()
+                prefs.proDaysLeft = user.daysLeft()
+            }
         }
     }
 
     companion object {
         // shared preferences
-        private const val PRO_USER = "prouser"
-        private const val PRO_EXPIRED = "proexpired"
-        private const val PRO_PLAN = "proplan"
-        private const val SHOW_RENEWAL_PREF = "renewalpref"
-        private const val ACCOUNT_ID = "accountid"
-        private const val EXPIRY_DATE = "expirydate"
-        private const val PRO_MONTHS_LEFT = "promonthsleft"
-        private const val PRO_DAYS_LEFT = "prodaysleft"
-        private const val EXPIRY_DATE_STR = "expirydatestr"
-        private const val STRIPE_TOKEN = "stripe_token"
-        private const val STRIPE_API_KEY = "stripe_api_key"
         private const val DEFAULT_CURRENCY_CODE = "usd"
-        private const val DEVICE_LINKED = "DeviceLinked"
-        private const val REFERRAL_CODE = "referral"
-        private const val PW_SIGNATURE = "pwsignature"
-        private const val DEVICE_LINKING_CODE = "devicelinkingcode"
-        private const val DEVICE_CODE_EXP = "devicecodeexp"
-        private const val YINBI_ENABLED = "yinbienabled"
-        private const val YINBI_THANKS_PURCHASE = "showyinbithankspurchase"
-        private const val SHOW_YINBI_REDEMPTION = "showyinbiredemption"
-        private const val REMOTE_CONFIG_PAYMENT_PROVIDER = "remoteConfigPaymentProvider"
-        private const val USER_PAYMENT_GATEWAY = "userPaymentGateway"
-        private const val WELCOME_LAST_SEEN = "welcomeseen"
-        private const val RENEWAL_LAST_SEEN = "renewalseen"
-        private const val PROVIDER = "provider"
-        private const val RESELLER_CODE = "resellercode"
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200

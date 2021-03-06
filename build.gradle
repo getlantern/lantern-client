@@ -8,6 +8,7 @@ buildscript {
         jcenter()
         google()
         maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -15,6 +16,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.15'
     }
 }
 

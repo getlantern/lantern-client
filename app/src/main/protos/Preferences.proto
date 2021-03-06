@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package Model;
+
+option java_package = "org.getlantern.mobilesdk.model";
+
+message Preferences {
+  string deviceId = 1;
+  int32 userId = 2;
+  string proToken = 3;
+  string emailAddress = 4;
+  string lang = 5;
+  bool proxyAll = 6;
+  bool useVpn = 7;
+  bool bootupVpn = 8;
+  int32 currentTermsVersion = 9;
+  int32 acceptedTermsVersion = 10;
+  int64 showAdsAfterDays = 11;
+  string latestBandwidth = 12;
+  string serverCountryCode = 13;
+  string serverCountry = 14;
+  string serverCity = 15;
+  string geoCountryCode = 16;
+  map<string, bool> surveyLinksOpened = 17;
+  bool isProUser = 18;
+  bool isDeviceLinked = 19;
+  bool isProExpired = 20;
+  string remoteConfigPaymentProvider = 21;
+  string userPaymentGateway = 22;
+  string pwSignature = 23;
+  string stripeApiKey = 24;
+  string deviceLinkingCode = 25;
+  int64 deviceCodeExpiration = 26;
+  bool yinbiEnabled = 27;
+  bool yinbiThanksPurchase = 28;
+  bool yinbiShowRedemption = 29;
+  int32 proDaysLeft = 30;
+  int32 proMonthsLeft = 31;
+  int64 expirationDate = 32;
+  string expirationString = 33;
+  int64 welcomeLastSeen = 34;
+  int64 renewalLastSeen = 35;
+  bool showRenewal = 36;
+  string resellerCode = 37;
+  string provider = 38;
+  string accountId = 39;
+  string referralCode = 40;
+  string stripeToken = 41;
+  int64 popupAdExpiration = 42;
+}
