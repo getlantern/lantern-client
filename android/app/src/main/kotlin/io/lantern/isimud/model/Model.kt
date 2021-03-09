@@ -1,58 +1,112 @@
 package io.lantern.isimud.model
 
-import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentHashMapOf
-import kotlinx.collections.immutable.persistentListOf
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentNavigableMap
-import java.util.concurrent.ConcurrentSkipListMap
-import kotlin.math.min
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.*
+import io.lantern.observablemodel.ObservableModel
+import io.lantern.observablemodel.Subscriber
 
-class Model {
-    val data = ConcurrentHashMap<String, Any>()
-    val keyPathSubscribers = ConcurrentHashMap<String, PersistentMap<Int, (String, Any) -> Unit>?>()
+open class Model(
+    flutterEngine: FlutterEngine,
 
-    inline fun <reified T> subscribe(subscriberID: Int, path: String, noinline onUpdate: (String, T?) -> Unit) {
-        val actualOnUpdate = { key: String, value: Any ->
-            onUpdate(key, value?.let { it as T } ?: null)
+    eventChannelName: String,
+    eventChannelCodec: MethodCodec? = StandardMethodCodec(ProtobufMessageCodec()),
+
+    methodChannelName: String,
+    methodChannelCodec: MethodCodec? = StandardMethodCodec(ProtobufMessageCodec()),
+
+    val observableModel: ObservableModel
+
+) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
+
+    init {
+        EventChannel(
+            flutterEngine.dartExecutor,
+            eventChannelName,
+            eventChannelCodec
+        ).setStreamHandler(this)
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            methodChannelName,
+            methodChannelCodec
+        ).setMethodCallHandler(this)
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "get" -> {
+                val path = call.arguments<String>()
+                result.success(observableModel.get(path))
+            }
+            "getRange" -> {
+                val path = call.argument<String>("path")
+                val start = call.argument<Int>("start")!!
+                val count = call.argument<Int>("count")!!
+                if (path == "/conversationsByRecentActivity") { // TODO: temporary fix due to our current way of saving conversationsByRecentActivity
+                    result.success(
+                        observableModel.list<List<Any>>(path, 0, 1).map { it.value }[0].subList(start, start + count)
+                    )
+                } else {
+                    result.success(
+                        observableModel.list<Any>(path!!, start, count).map { it.value })
+                }
+            }
+            "getRangeDetails" -> {
+                val path = call.argument<String>("path")
+                val detailsPrefix = call.argument<String>("detailsPrefix")
+                val start = call.argument<Int>("start")
+                val count = call.argument<Int>("count")
+                result.success(
+                    observableModel.listDetails<Any>(path!!, start!!, count!!).map { it.value })
+            }
+            "put" -> {
+                val path = call.argument<String>("path")!!
+                val value = call.argument<Any>("value")
+                observableModel.mutate { tx ->
+                    tx.put(path, value)
+                }
+                result.success(null)
+            }
+            else -> result.notImplemented()
         }
+    }
 
-        synchronized(this) {
-            keyPathSubscribers[path] = keyPathSubscribers[path]?.let { it.put(subscriberID, actualOnUpdate) } ?: persistentHashMapOf(subscriberID to actualOnUpdate)
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        val args = arguments as Map<String, String>
+        val subscriberID = args["subscriberID"] as Int
+        val path = args["path"] as String
+        val detailsPrefix = args["detailsPrefix"]
+        if (detailsPrefix != null) {
+            observableModel.subscribeDetails(object :
+                Subscriber<Any>(subscriberID.toString(), path) {
+                override fun onUpdate(path: String, value: Any) {
+                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                }
+
+                override fun onDelete(path: String) {
+                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                }
+            })
+        } else {
+            observableModel.subscribe(object : Subscriber<Any>(subscriberID.toString(), path) {
+                override fun onUpdate(path: String, value: Any) {
+                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                }
+
+                override fun onDelete(path: String) {
+                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                }
+            })
         }
+    }
 
-        get<T>(path)?.let {
-            onUpdate(path, it)
+    override fun onCancel(arguments: Any?) {
+        if (arguments == null) {
+            return;
         }
-    }
-
-    inline fun <reified T> subscribeDetails(subscriberID: Int, path: String, detailsPrefix: String, noinline onUpdate: (String, List<T?>) -> Unit) {
-        subscribe<List<Any>>(subscriberID, path) { path: String, ids: List<Any>? ->
-            onUpdate(path, ids?.let { it.map { get<T>("$detailsPrefix/$it") } } ?: emptyList())
-        }
-    }
-
-    fun unsubscribe(subscriberID: Int, path: String) {
-        synchronized(this) {
-            keyPathSubscribers[path] = keyPathSubscribers[path]?.remove(subscriberID)
-        }
-    }
-
-    inline fun <reified T> get(path: String): T? {
-        return data[path]?.let { it as T } ?: null
-    }
-
-    inline fun <reified T> getRange(path: String, start: Int, count: Int): List<T> {
-        return get<List<T>>(path)?.let { it.subList(start, min(start + count, it.size)) } ?: emptyList()
-    }
-
-    inline fun <reified T> getRangeDetails(path: String, detailsPrefix: String, start: Int, count: Int): List<T?> {
-        val ids = getRange<Any>(path, start, count)
-        return ids.map { get<T>("$detailsPrefix/$it") }
-    }
-
-    fun put(path: String, value: Any) {
-        data[path] = value
-        keyPathSubscribers[path]?.forEach { it.value(path, value) }
+        val args = arguments as Map<String, String>
+        val subscriberID = args["subscriberID"] as Int
+        val path = args["path"] as String
+        observableModel.unsubscribe(subscriberID.toString())
     }
 }
