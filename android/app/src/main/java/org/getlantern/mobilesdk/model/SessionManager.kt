@@ -13,6 +13,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import io.lantern.observablemodel.ObservableModel
+import io.lantern.secrets.Secrets
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -33,7 +34,10 @@ abstract class SessionManager(application: Application) : Session {
     private var staging = false
     val settings: Settings
     protected val context: Context
-    protected val prefs = ObservableModel.build(application, File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath, "password") // TODO: make the password random and save it as an encrypted preference
+    protected val secrets: Secrets
+    protected val prefs: SharedPreferences
+    protected val editor: SharedPreferences.Editor
+    protected val prefsModel: ObservableModel
 
     // dynamic settings passed to internal services
     private val internalHeaders: SharedPreferences
@@ -86,7 +90,7 @@ abstract class SessionManager(application: Application) : Session {
     val isIranianUser: Boolean
         get() = isFrom("IR", iranLocale)
     val language: String
-        get() = prefs.get<String>(LANG) ?:  locale.toString()
+        get() = prefs.getString(LANG, locale.toString())!!
 
     override fun getTimeZone(): String {
         return DateFormat.getDateTimeInstance().timeZone.id
@@ -101,24 +105,20 @@ abstract class SessionManager(application: Application) : Session {
 
     private fun doSetLanguage(locale: Locale?) {
         if (locale != null) {
-            val oldLocale = prefs.get<String>(LANG) ?:  ""
-            prefs.mutate { tx ->
-                tx.put(LANG, locale.toString())
-            }
-            if (locale.toString() != oldLocale) {
+            val oldLocale = prefs.getString(LANG, "")
+            editor.putString(LANG, locale.toString()).commit()
+            if (locale.language != oldLocale) {
                 EventBus.getDefault().post(locale)
             }
         }
     }
 
     fun hasAcceptedTerms(): Boolean {
-        return prefs.get<Int>(ACCEPTED_TERMS_VERSION) ?:  0 >= CURRENT_TERMS_VERSION
+        return prefs.getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
     }
 
     fun acceptTerms() {
-        prefs.mutate { tx ->
-            tx.put(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION)
-        }
+        editor.putInt(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION).commit()
     }
 
     override fun deviceOS(): String {
@@ -138,11 +138,9 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     var showAdsAfterDays: Long
-        get() = prefs.get<Long>(SHOW_ADS_AFTER_DAYS) ?:  0L
+        get() = prefs.getLong(SHOW_ADS_AFTER_DAYS, 0L)
         set(days) {
-            prefs.mutate { tx ->
-                tx.put(SHOW_ADS_AFTER_DAYS, days)
-            }
+            editor.putLong(SHOW_ADS_AFTER_DAYS, days).commit()
         }
 
     /**
@@ -187,27 +185,25 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun proxyAll(): Boolean {
-        return prefs.get<Boolean>(PROXY_ALL) ?:  false
+        return prefs.getBoolean(PROXY_ALL, false)
     }
 
     fun setProxyAll(proxyAll: Boolean) {
-        prefs.mutate { tx ->
-            tx.put(PROXY_ALL, proxyAll)
-        }
+        editor.putBoolean(PROXY_ALL, proxyAll).commit()
     }
 
     val serverCountryCode: String?
-        get() = prefs.get<String>(SERVER_COUNTRY_CODE) ?:  "N/A"
+        get() = prefs.getString(SERVER_COUNTRY_CODE, "N/A")
     val serverCountry: String?
-        get() = prefs.get<String>(SERVER_COUNTRY) ?:  ""
+        get() = prefs.getString(SERVER_COUNTRY, "")
     val serverCity: String?
-        get() = prefs.get<String>(SERVER_CITY) ?:  ""
+        get() = prefs.getString(SERVER_CITY, "")
 
     override fun getCountryCode(): String {
         val forceCountry = forcedCountryCode
         return if (!forceCountry.isEmpty()) {
             forceCountry
-        } else prefs.get<String>(GEO_COUNTRY_CODE) ?:  ""!!
+        } else prefs.getString(GEO_COUNTRY_CODE, "")!!
     }
 
     override fun getForcedCountryCode(): String {
@@ -219,13 +215,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun email(): String {
-        return prefs.get<String>(EMAIL_ADDRESS) ?:  ""!!
+        return prefs.getString(EMAIL_ADDRESS, "")!!
     }
 
     fun setEmail(email: String?) {
-        prefs.mutate { tx ->
-            tx.put(EMAIL_ADDRESS, email)
-        }
+        editor.putString(EMAIL_ADDRESS, email).commit()
     }
 
     fun setUserIdAndToken(userId: Int, token: String) {
@@ -234,21 +228,16 @@ abstract class SessionManager(application: Application) : Session {
             return
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        prefs.mutate { tx ->
-            tx.put(USER_ID, userId)
-            tx.put(TOKEN, token)
-        }
+        editor.putInt(USER_ID, userId).putString(TOKEN, token).commit()
         FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
     private fun setDeviceId(deviceId: String?) {
-        prefs.mutate { tx ->
-            tx.put(DEVICE_ID, deviceId)
-        }
+        editor.putString(DEVICE_ID, deviceId).commit()
     }
 
     override fun getDeviceID(): String {
-        var deviceId = prefs.get<String>(DEVICE_ID) ?:  null
+        var deviceId = prefs.getString(DEVICE_ID, null)
         if (deviceId == null) {
             deviceId = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
             setDeviceId(deviceId)
@@ -277,7 +266,7 @@ abstract class SessionManager(application: Application) : Session {
         return if (isPaymentTestMode) {
             // Auth token corresponding to the specific test user ID
             "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA"
-        } else prefs.get<String>(TOKEN) ?:  ""!!
+        } else prefs.getString(TOKEN, "")!!
     }
 
     val isPaymentTestMode: Boolean
@@ -286,29 +275,23 @@ abstract class SessionManager(application: Application) : Session {
         } else BuildConfig.PAYMENT_TEST_MODE
 
     fun useVpn(): Boolean {
-        return prefs.get<Boolean>(PREF_USE_VPN) ?:  false
+        return prefs.getBoolean(PREF_USE_VPN, false)
     }
 
     fun updateVpnPreference(useVpn: Boolean) {
-        prefs.mutate { tx ->
-            tx.put(PREF_USE_VPN, useVpn)
-        }
+        editor.putBoolean(PREF_USE_VPN, useVpn).commit()
     }
 
     fun clearVpnPreference() {
-        prefs.mutate { tx ->
-            tx.put(PREF_USE_VPN, false)
-        }
+        editor.putBoolean(PREF_USE_VPN, false).commit()
     }
 
     fun bootUpVpn(): Boolean {
-        return prefs.get<Boolean>(PREF_BOOTUP_VPN) ?:  false
+        return prefs.getBoolean(PREF_BOOTUP_VPN, false)
     }
 
     fun updateBootUpVpnPreference(boot: Boolean) {
-        prefs.mutate { tx ->
-            tx.put(PREF_BOOTUP_VPN, boot)
-        }
+        editor.putBoolean(PREF_BOOTUP_VPN, boot).commit()
     }
 
     override fun locale(): String {
@@ -317,13 +300,11 @@ abstract class SessionManager(application: Application) : Session {
 
     fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
-        prefs.mutate { tx ->
-            tx.put(LATEST_BANDWIDTH, amount)
-        }
+        editor.putString(LATEST_BANDWIDTH, amount).commit()
     }
 
     fun savedBandwidth(): String? {
-        return prefs.get<String>(LATEST_BANDWIDTH) ?:  "0%"
+        return prefs.getString(LATEST_BANDWIDTH, "0%")
     }
 
     override fun bandwidthUpdate(percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long) {
@@ -333,13 +314,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setSurveyLinkOpened(url: String?) {
-        prefs.mutate { tx ->
-            tx.put("/surveysopened/${url}", true)
-        }
+        editor.putBoolean(url, true).commit()
     }
 
     fun surveyLinkOpened(url: String?): Boolean {
-        return prefs.get<Boolean>("/surveysopened/${url}") ?:  false
+        return prefs.getBoolean(url, false)
     }
 
     override fun setStaging(staging: Boolean) {
@@ -351,36 +330,32 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun setCountry(country: String) {
-        prefs.mutate { tx ->
-            tx.put(GEO_COUNTRY_CODE, country)
-        }
+        editor.putString(GEO_COUNTRY_CODE, country).commit()
     }
 
     override fun updateStats(
             city: String, country: String,
-            countryCode: String, httpsUpgrades: Long, adsBlocked: Long
+            countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
     ) {
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
         EventBus.getDefault().post(st)
 
         // save last location received
-        prefs.mutate { tx ->
-            tx.put(SERVER_COUNTRY, country)
-            tx.put(SERVER_CITY, city)
-            tx.put(SERVER_COUNTRY_CODE, countryCode)
-        }
+        editor.putString(SERVER_COUNTRY, country).commit()
+        editor.putString(SERVER_CITY, city).commit()
+        editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
     }
 
-    protected fun getInt(name: String, defaultValue: Int): Int {
+    protected fun getInt(name: String?, defaultValue: Int): Int {
         return try {
-            prefs.get(name) ?:  defaultValue
+            prefs.getInt(name, defaultValue)
         } catch (e: ClassCastException) {
             Logger.error(TAG, e.message)
             try {
-                prefs.get<Long>(name)?.toInt() ?: defaultValue
+                prefs.getLong(name, defaultValue.toLong()).toInt()
             } catch (e2: ClassCastException) {
                 Logger.error(TAG, e2.message)
-                Integer.valueOf(prefs.get<String>(name) ?:  defaultValue.toString()!!)
+                Integer.valueOf(prefs.getString(name, defaultValue.toString())!!)
             }
         }
     }
@@ -391,8 +366,8 @@ abstract class SessionManager(application: Application) : Session {
      * is a date in milliseconds plus numDays). If the pref hasn't been seen
      * before, false is returned.
      */
-    fun hasPrefExpired(name: String): Boolean {
-        val expires = prefs.get<Long>(name) ?:  0
+    fun hasPrefExpired(name: String?): Boolean {
+        val expires = prefs.getLong(name, 0)
         return System.currentTimeMillis() >= expires
     }
 
@@ -400,11 +375,9 @@ abstract class SessionManager(application: Application) : Session {
      * saveExpiringPref is used to store a preference with the given name that
      * expires after numSeconds
      */
-    fun saveExpiringPref(name: String, numSeconds: Int) {
+    fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
-        prefs.mutate { tx ->
-            tx.put(name, currentMilliseconds + numSeconds * 1000)
-        }
+        editor.putLong(name, currentMilliseconds + numSeconds * 1000).commit()
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -444,13 +417,16 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val DEVICE_ID = "deviceid"
+
         @JvmStatic
         protected val USER_ID = "userid"
+
         @JvmStatic
         protected val TOKEN = "token"
         protected const val PROXY_ALL = "proxyAll"
         protected const val LANG = "lang"
         protected const val SHOW_ADS_AFTER_DAYS = "showadsafterdays"
+
         @JvmStatic
         protected val EMAIL_ADDRESS = "emailAddress"
         protected const val PREF_USE_VPN = "pref_vpn"
@@ -476,11 +452,17 @@ abstract class SessionManager(application: Application) : Session {
     init {
         appVersion = Utils.appVersion(application)
         context = application
+        val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+        secrets = Secrets("lanternMasterKey", secretsPreferences)
+        val prefsDBLocation = File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath
+        val prefsDBPassword = secrets.get("prefsPassword", 16)!!
+        prefsModel = ObservableModel.build(application, prefsDBLocation, prefsDBPassword)
+        prefs = prefsModel.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
+        editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(INTERNAL_HEADERS_PREF_NAME,
                 Context.MODE_PRIVATE)
         settings = Settings.init(context)
-        val resources = context.resources
-        val configuredLocale = prefs.get<String>(LANG) ?:  null
+        val configuredLocale = prefs.getString(LANG, null)
         if (!TextUtils.isEmpty(configuredLocale)) {
             Logger.debug(TAG, "Configured locale was %1\$s, setting as default locale", configuredLocale)
             locale = LocaleInfo(context, configuredLocale!!).locale
