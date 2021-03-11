@@ -14,7 +14,9 @@ open class Model(
     methodChannelName: String,
     methodChannelCodec: MethodCodec? = StandardMethodCodec(ProtobufMessageCodec()),
 
-    val observableModel: ObservableModel
+    val observableModel: ObservableModel,
+
+    var onMethodCall: ((call: MethodCall, result: MethodChannel.Result) -> Unit)? = null
 
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
 
@@ -33,6 +35,7 @@ open class Model(
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        onMethodCall?.invoke(call, result)
         when (call.method) {
             "get" -> {
                 val path = call.arguments<String>()
