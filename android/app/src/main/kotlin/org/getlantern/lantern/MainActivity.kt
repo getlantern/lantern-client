@@ -15,8 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.isimud.model.MessagingModel
-import io.lantern.isimud.model.VpnModel
+import io.lantern.isimud.model.MessagingViewModel
+import io.lantern.isimud.model.VpnViewModel
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -27,14 +27,14 @@ import java.util.*
 
 class MainActivity : FlutterActivity() {
 
-    private lateinit var messagingModel: MessagingModel
-    private lateinit var vpnModel: VpnModel
+    private lateinit var messagingViewModel: MessagingViewModel
+    private lateinit var vpnViewModel: VpnViewModel
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(flutterEngine)
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        messagingViewModel = MessagingViewModel(flutterEngine)
+        vpnViewModel = VpnViewModel(flutterEngine, ::switchLantern)
 
 //        val handler = Handler(Looper.getMainLooper())
 //        handler.postDelayed({
@@ -283,7 +283,7 @@ class MainActivity : FlutterActivity() {
         EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        vpnModel.setVpnOn(useVpn)
+        vpnViewModel.setVpnOn(useVpn)
     }
 
     companion object {
