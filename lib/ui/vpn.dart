@@ -52,14 +52,19 @@ class VPNTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Transform.scale(
-                    scale: 2,
-                    child: Switch(
-                      value: model.vpnOn,
+                  scale: 2,
+                  child: observableModel
+                      .subscribedBuilder("/vpnOn", defaultValue: false, builder:
+                          (BuildContext context, bool vpnOn, Widget child) {
+                    return Switch(
+                      value: vpnOn,
                       onChanged: (bool newValue) {
                         model.toggle();
-                        observableModel.put("/vpnOn", model.vpnOn);
+                        observableModel.put("/vpnOn", newValue);
                       },
-                    )),
+                    );
+                  }),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
