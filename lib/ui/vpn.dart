@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lantern/model/model.dart';
 import 'package:provider/provider.dart';
 
 import '../i18n/i18n.dart';
@@ -8,6 +9,7 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VPNModel>();
+    var observableModel = context.watch<Model>();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,6 +57,7 @@ class VPNTab extends StatelessWidget {
                       value: model.vpnOn,
                       onChanged: (bool newValue) {
                         model.toggle();
+                        observableModel.put("/vpnOn", model.vpnOn);
                       },
                     )),
                 Padding(
