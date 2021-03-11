@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.text.Html
-import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -80,7 +79,6 @@ class MainActivity : FlutterActivity() {
 
     @Throws(Exception::class)
     private fun switchLantern(on: Boolean) {
-        Toast.makeText(this, "switchLantern = $on", Toast.LENGTH_LONG).show()
         Logger.d(TAG, "switchLantern to %1\$s", on)
 
         // disable the on/off switch while the VpnService
