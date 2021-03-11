@@ -14,8 +14,8 @@ class MessagingViewModel(flutterEngine: FlutterEngine) {
 
     private val messagingModel = Model(
         flutterEngine = flutterEngine,
-        eventChannelName = "updatesChannel", // TODO: use different channels for different models
-        methodChannelName = "methodChannel", // TODO: use different channels for different models
+        eventChannelName = "messaging_event_channel",
+        methodChannelName = "messaging_method_channel",
         observableModel = ObservableModel.build(
             ctx = LanternApp.getAppContext(),
             filePath = File(

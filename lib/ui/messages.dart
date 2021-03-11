@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lantern/model/messaging_model.dart';
 import 'package:provider/provider.dart';
 
+import '../extension/date_time_extensions.dart';
 import '../i18n/i18n.dart';
-import '../model/model.dart';
 import '../model/protos/messaging.pb.dart';
 
 class MessagesTab extends StatefulWidget {
@@ -15,7 +15,7 @@ class MessagesTab extends StatefulWidget {
 class _MessagesTabState extends State<MessagesTab> {
   static const int pageLength = 25;
 
-  Model model;
+  MessagingModel model;
 
   final PagingController<int, String> _conversationsPagingController =
       PagingController(firstPageKey: 0);
@@ -91,7 +91,7 @@ class _MessagesTabState extends State<MessagesTab> {
   @override
   Widget build(BuildContext context) {
     if (model == null) {
-      model = context.watch<Model>();
+      model = context.watch<MessagingModel>();
     }
 
     return Scaffold(

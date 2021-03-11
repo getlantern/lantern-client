@@ -17,8 +17,8 @@ class VpnViewModel(
 
     private val vpnModel = Model(
         flutterEngine = flutterEngine,
-        eventChannelName = "updatesChannel", // TODO: use different channels for different models
-        methodChannelName = "methodChannel", // TODO: use different channels for different models
+        eventChannelName = "vpn_event_channel",
+        methodChannelName = "vpn_method_channel",
         observableModel = ObservableModel.build(
             ctx = LanternApp.getAppContext(),
             filePath = File(
