@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/model/model.dart';
+import 'package:lantern/model/vpn_model.dart';
 import 'package:provider/provider.dart';
 
 import '../i18n/i18n.dart';
@@ -9,7 +10,7 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VPNModel>();
-    var observableModel = context.watch<Model>();
+    var observableModel = context.watch<VpnModel>();
 
     return Scaffold(
       appBar: AppBar(

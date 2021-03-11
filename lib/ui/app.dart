@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:i18n_extension/i18n_widget.dart';
+import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/model/vpn_model.dart';
 import 'package:provider/provider.dart';
 
 import '../model/model.dart';
@@ -12,7 +14,8 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => Model()),
+        Provider(create: (context) => MessagingModel()),
+        Provider(create: (context) => VpnModel()),
         ChangeNotifierProvider(create: (context) => VPNModel()),
       ],
       child: MaterialApp(
