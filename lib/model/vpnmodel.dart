@@ -5,9 +5,12 @@ class VPNModel extends ChangeNotifier {
   var _serverLocation = "TW";
   var _bandwidthUsed = 300;
   var _dataCap = 500;
+  var _isLoading = false;
   DateTime _capResetsAt;
 
   bool get vpnOn => _vpnOn;
+
+  bool get isLoading => _isLoading;
 
   String get serverLocation => _serverLocation;
 
@@ -21,8 +24,13 @@ class VPNModel extends ChangeNotifier {
   DateTime get capResetsAt => _capResetsAt;
 
   void toggle() {
-    _vpnOn = !_vpnOn;
+    _isLoading = true;
     notifyListeners();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _isLoading = false;
+      _vpnOn = !_vpnOn;
+      notifyListeners();
+    });
   }
 
   void updateBandwidthUsage(
