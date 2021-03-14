@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:i18n_extension/i18n_widget.dart';
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
-import 'package:provider/provider.dart';
+import 'package:lantern/package_store.dart';
 
-import '../model/model.dart';
 import '../model/vpnmodel.dart';
 import 'home.dart';
 
-class LanternApp extends StatelessWidget {
+class LanternApp extends StatefulWidget {
+  LanternApp({Key key}) : super(key: key);
+
+  @override
+  _LanternAppState createState() => _LanternAppState();
+}
+
+class _LanternAppState extends State<LanternApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -19,6 +22,7 @@ class LanternApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => VPNModel()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Lantern Messenger',
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -28,65 +32,33 @@ class LanternApp extends StatelessWidget {
           const Locale('en', "US"),
           const Locale('es'),
         ],
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.grey,
-          // This makes the visual density adapt to the platform that you run
-          // the app on. For desktop platforms, the controls will be smaller and
-          // closer together (more dense) than on mobile platforms.
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: I18n(child: HomePage(), initialLocale: Locale("es", "ES")),
+        theme: buildTheme(),
+        home: I18n(child: HomePage(), initialLocale: Locale("en", "US")),
       ),
     );
   }
-}
 
-class FirstRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('First Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: Text('Open route'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute()),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
-        ),
-      ),
+  ThemeData buildTheme() {
+    return ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.grey,
+      appBarTheme: AppBarTheme(brightness: Brightness.light),
+      accentColor: Colors.black,
+      textTheme: Theme.of(context).textTheme.copyWith(
+            headline1: Theme.of(context).textTheme.headline1.copyWith(color: Colors.black),
+            headline2: Theme.of(context).textTheme.headline2.copyWith(color: Colors.black),
+            headline3: Theme.of(context).textTheme.headline3.copyWith(color: Colors.black),
+            headline4: Theme.of(context).textTheme.headline4.copyWith(color: Colors.black),
+            headline5: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black),
+            headline6: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),
+            subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black),
+            subtitle2: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.black),
+            bodyText1: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
+            bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.black),
+            button: Theme.of(context).textTheme.button.copyWith(color: Colors.black),
+            caption: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
+            overline: Theme.of(context).textTheme.overline.copyWith(color: Colors.black),
+          ),
     );
   }
 }

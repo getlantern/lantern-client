@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/model/messaging_model.dart';
-import 'package:provider/provider.dart';
+import 'package:lantern/package_store.dart';
 
 import '../extension/date_time_extensions.dart';
-import '../i18n/i18n.dart';
 import '../model/protos/messaging.pb.dart';
 
 class MessagesTab extends StatefulWidget {
@@ -88,25 +86,34 @@ class _MessagesTabState extends State<MessagesTab> {
     });
   }
 
+  onSearch() {}
+
+  onScanQR() {}
+
   @override
   Widget build(BuildContext context) {
     if (model == null) {
       model = context.watch<MessagingModel>();
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Messages'.i18n),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        actions: [
-          Icon(Icons.search),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            child: Icon(Icons.qr_code),
+    return BaseScreen(
+      title: 'Messages'.i18n,
+      actions: [
+        IconButton(
+          onPressed: onSearch,
+          icon: Icon(
+            Icons.search,
+            color: Colors.black,
           ),
-        ],
-      ),
+        ),
+        IconButton(
+          onPressed: onScanQR,
+          icon: Icon(
+            Icons.qr_code,
+            color: Colors.black,
+          ),
+        ),
+      ],
       body: Column(
         children: [
           Expanded(

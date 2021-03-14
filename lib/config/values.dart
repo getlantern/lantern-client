@@ -1,0 +1,1 @@
+enum TAB_ENUM { MESSAGES, VPN, ACCOUNT }
