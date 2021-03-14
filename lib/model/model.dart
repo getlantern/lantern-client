@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import '../i18n/i18n.dart';
 import '../model/protobuf_message_codec.dart';
 import 'model_event_channel.dart';
-import 'protos/messaging.pb.dart';
 
 class Model {
-
   MethodChannel _methodChannel;
   ModelEventChannel _updatesChannel;
 
@@ -79,7 +75,9 @@ class Model {
 class SubscribedValueNotifier<T> extends ValueNotifier<T> {
   void Function() cancel;
 
-  SubscribedValueNotifier(String path, T defaultValue, ModelEventChannel channel): super(defaultValue) {
+  SubscribedValueNotifier(
+      String path, T defaultValue, ModelEventChannel channel)
+      : super(defaultValue) {
     cancel = channel.subscribe(
         path: path,
         defaultValue: defaultValue,
@@ -93,18 +91,17 @@ class SubscribedBuilder<T> extends ValueListenableBuilder<T> {
   final SubscribedValueNotifier<T> _notifier;
   final String _path;
 
-  SubscribedBuilder(
-      this._path, this._notifier, ValueWidgetBuilder<T> builder)
+  SubscribedBuilder(this._path, this._notifier, ValueWidgetBuilder<T> builder)
       : super(valueListenable: _notifier, builder: builder);
 
   @override
   _SubscribedBuilderState createState() => _SubscribedBuilderState<T>();
 
-  // @override
-  // void dispose() {
-  //   // TODO: unsubscribe listener
-  //   super.dispose();
-  // }
+// @override
+// void dispose() {
+//   // TODO: unsubscribe listener
+//   super.dispose();
+// }
 }
 
 class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
@@ -135,7 +132,9 @@ class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
   }
 
   void _valueChanged() {
-    setState(() { value = widget.valueListenable.value; });
+    setState(() {
+      value = widget.valueListenable.value;
+    });
   }
 
   @override

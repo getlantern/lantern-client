@@ -1,4 +1,4 @@
-import 'package:lantern/model/vpnmodel.dart';
+import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
 
@@ -133,25 +133,29 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<VPNModel>();
+    var vpnModel = context.watch<VpnModel>();
     return Container(
       height: 68,
-      child: Row(
-        children: TAB_ENUM.values
-            .asMap()
-            .map(
-              (index, tabEnum) => MapEntry(
-                index,
-                renderBottomTabItem(
-                  index: index,
-                  tabEnum: tabEnum,
-                  isActive: model.vpnOn,
+      child: vpnModel
+          .subscribedBuilder("/vpn_status", defaultValue: "disconnected",
+              builder: (BuildContext context, String vpnStatus, Widget child) {
+        return Row(
+          children: TAB_ENUM.values
+              .asMap()
+              .map(
+                (index, tabEnum) => MapEntry(
+                  index,
+                  renderBottomTabItem(
+                    index: index,
+                    tabEnum: tabEnum,
+                    isActive: (vpnStatus == "connected" || vpnStatus == "disconnecting"),
+                  ),
                 ),
-              ),
-            )
-            .values
-            .toList(),
-      ),
+              )
+              .values
+              .toList(),
+        );
+      }),
     );
   }
 }
