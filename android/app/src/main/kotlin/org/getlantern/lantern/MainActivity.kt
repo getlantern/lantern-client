@@ -6,9 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.VpnService
-import android.os.Build
-import android.os.Bundle
-import android.os.IBinder
+import android.os.*
 import android.text.Html
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
@@ -283,7 +281,11 @@ class MainActivity : FlutterActivity() {
         EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        vpnViewModel.setVpnOn(useVpn)
+        val handler = Handler(Looper.getMainLooper())
+        // Force a delay to test the support for connecting/disconnecting state
+        handler.postDelayed({
+            vpnViewModel.setVpnOn(useVpn)
+        }, 500)
     }
 
     companion object {

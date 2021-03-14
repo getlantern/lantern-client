@@ -35,7 +35,6 @@ open class Model(
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        onMethodCall?.invoke(call, result)
         when (call.method) {
             "get" -> {
                 val path = call.arguments<String>()
@@ -72,6 +71,7 @@ open class Model(
             }
             else -> result.notImplemented()
         }
+        onMethodCall?.invoke(call, result)
     }
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
