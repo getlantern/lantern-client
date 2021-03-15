@@ -19,26 +19,29 @@ class VpnViewModel(
         flutterEngine = flutterEngine,
         eventChannelName = "vpn_event_channel",
         methodChannelName = "vpn_method_channel",
-        observableModel = ObservableModel.build(
+        observableModel = vpnObservableModel,
+        onMethodCall = ::onMethodCall
+    )
+
+    companion object {
+        const val PATH_VPN_STATUS = "/vpn_status"
+        const val PATH_SERVER_INFO = "/server_info"
+
+        val vpnObservableModel = ObservableModel.build(
             ctx = LanternApp.getAppContext(),
             filePath = File(
                 File(LanternApp.getAppContext().filesDir, ".lantern"),
                 "vpn_db"
             ).absolutePath,
             password = "password" // TODO: make the password random and save it as an encrypted preference
-        ),
-        onMethodCall = ::onMethodCall
-    )
-
-    companion object {
-        const val VPN_STATUS_PATH = "/vpn_status"
+        )
     }
 
     private fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "put" -> {
                 val path = call.argument<String>("path")!!
-                if (path.startsWith(VPN_STATUS_PATH)) {
+                if (path.startsWith(PATH_VPN_STATUS)) {
                     val value = call.argument<String>("value")!!
                     when (value) {
                         "connecting" -> switchLantern(true)
@@ -56,12 +59,12 @@ class VpnViewModel(
     fun setVpnOn(vpnOn: Boolean) {
         val vpnStatus = if (vpnOn) "connected" else "disconnected"
         vpnModel.observableModel.mutate { tx ->
-            tx.put(VPN_STATUS_PATH, vpnStatus)
+            tx.put(PATH_VPN_STATUS, vpnStatus)
         }
     }
 
     fun vpnStatus(): String {
-        return vpnModel.observableModel.get(VPN_STATUS_PATH) ?: ""
+        return vpnModel.observableModel.get(PATH_VPN_STATUS) ?: ""
     }
 
     fun isConnectedToVpn(): Boolean {

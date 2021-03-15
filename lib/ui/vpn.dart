@@ -5,6 +5,8 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
 
+import '../model/protos/vpn.pb.dart';
+
 class VPNTab extends StatefulWidget {
   VPNTab({Key key}) : super(key: key);
 
@@ -156,14 +158,13 @@ class _VPNTabState extends State<VPNTab> {
               Transform.scale(
                 scale: 2,
                 child: FlutterSwitch(
-                  value: vpnStatus == "connected" || vpnStatus == "disconnecting",
+                  value:
+                      vpnStatus == "connected" || vpnStatus == "disconnecting",
                   activeColor: HexColor(onSwitchColor),
                   inactiveColor: HexColor(offSwitchColor),
                   onToggle: (bool newValue) {
                     if (vpnStatus != "connecting" ||
                         vpnStatus != "disconnecting") {
-                      //prevent to spam
-                      // model.toggle();
                       String newVpnStatus;
                       if (newValue) {
                         newVpnStatus = "connecting";
@@ -260,13 +261,18 @@ class _VPNTabState extends State<VPNTab> {
                             ),
                           ],
                         ),
-                        Text(
-                            (vpnStatus == "connected" ||
-                                    vpnStatus == "disconnecting")
-                                ? model.serverLocation
-                                : 'N/A',
-                            style: tsSubTitle(context)
-                                .copyWith(fontWeight: FontWeight.bold)),
+                        vpnModel.subscribedBuilder("/server_info",
+                            defaultValue: ServerInfo(), builder:
+                                (BuildContext context, ServerInfo serverInfo,
+                                    Widget child) {
+                          return Text(
+                              (vpnStatus == "connected" ||
+                                      vpnStatus == "disconnecting")
+                                  ? '${serverInfo.city}, ${serverInfo.country}'
+                                  : 'N/A',
+                              style: tsSubTitle(context)
+                                  .copyWith(fontWeight: FontWeight.bold));
+                        }),
                       ],
                     ),
                     model.dataCap > 0

@@ -19,6 +19,7 @@ class ProtobufMessageCodec: StandardMessageCodec() {
             is Messaging.Contact -> CONTACT
             is Messaging.Message -> MESSAGE
             is Messaging.Conversation -> CONVERSATION
+            is Vpn.ServerInfo -> SERVER_INFO
             else -> 0
         }
 
@@ -45,6 +46,7 @@ class ProtobufMessageCodec: StandardMessageCodec() {
             CONTACT -> Messaging.Contact.parseFrom(serialized)
             MESSAGE -> Messaging.Message.parseFrom(serialized)
             CONVERSATION -> Messaging.Conversation.parseFrom(serialized)
+            SERVER_INFO -> Vpn.ServerInfo.parseFrom(serialized)
             else -> throw FormatException("Unknown data type: $type")
         }
     }
@@ -54,5 +56,6 @@ class ProtobufMessageCodec: StandardMessageCodec() {
         const val CONTACT:Byte = 31
         const val MESSAGE:Byte = 32
         const val CONVERSATION:Byte = 33
+        const val SERVER_INFO:Byte = 34
     }
 }

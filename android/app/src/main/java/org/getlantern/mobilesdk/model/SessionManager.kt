@@ -12,9 +12,12 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
+import io.lantern.isimud.model.Vpn
+import io.lantern.isimud.model.VpnViewModel
 import io.lantern.observablemodel.ObservableModel
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.mobilesdk.Logger
@@ -38,6 +41,7 @@ abstract class SessionManager(application: Application) : Session {
     protected val prefs: SharedPreferences
     protected val editor: SharedPreferences.Editor
     protected val prefsModel: ObservableModel
+    protected val vpnModel: ObservableModel
 
     // dynamic settings passed to internal services
     private val internalHeaders: SharedPreferences
@@ -344,6 +348,13 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(SERVER_COUNTRY, country).commit()
         editor.putString(SERVER_CITY, city).commit()
         editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
+        vpnModel.mutate { tx ->
+            tx.put(VpnViewModel.PATH_SERVER_INFO, Vpn.ServerInfo.newBuilder()
+                .setCity(city)
+                .setCountry(country)
+                .setCountryCode(countryCode)
+                .build())
+        }
     }
 
     protected fun getInt(name: String?, defaultValue: Int): Int {
@@ -458,6 +469,7 @@ abstract class SessionManager(application: Application) : Session {
         val prefsDBPassword = secrets.get("prefsPassword", 16)!!
         prefsModel = ObservableModel.build(application, prefsDBLocation, prefsDBPassword)
         prefs = prefsModel.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
+        vpnModel = VpnViewModel.vpnObservableModel
         editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(INTERNAL_HEADERS_PREF_NAME,
                 Context.MODE_PRIVATE)
