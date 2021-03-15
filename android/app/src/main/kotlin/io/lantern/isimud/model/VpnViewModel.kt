@@ -31,16 +31,16 @@ class VpnViewModel(
     )
 
     companion object {
-        const val VPN_ON_PATH = "/vpn_status"
+        const val VPN_STATUS_PATH = "/vpn_status"
     }
 
     private fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "put" -> {
                 val path = call.argument<String>("path")!!
-                if (path.startsWith(VPN_ON_PATH)) {
+                if (path.startsWith(VPN_STATUS_PATH)) {
                     val value = call.argument<String>("value")!!
-                    when(value) {
+                    when (value) {
                         "connecting" -> switchLantern(true)
                         "disconnecting" -> switchLantern(false)
                     }
@@ -54,9 +54,18 @@ class VpnViewModel(
     }
 
     fun setVpnOn(vpnOn: Boolean) {
-        val vpnStatus = if(vpnOn) "connected" else "disconnected"
+        val vpnStatus = if (vpnOn) "connected" else "disconnected"
         vpnModel.observableModel.mutate { tx ->
-            tx.put(VPN_ON_PATH, vpnStatus)
+            tx.put(VPN_STATUS_PATH, vpnStatus)
         }
+    }
+
+    fun vpnStatus(): String {
+        return vpnModel.observableModel.get(VPN_STATUS_PATH) ?: ""
+    }
+
+    fun isConnectedToVpn(): Boolean {
+        val vpnStatus = vpnStatus()
+        return vpnStatus == "connected" || vpnStatus == "disconnecting"
     }
 }
