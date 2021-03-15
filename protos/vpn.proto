@@ -1,0 +1,8 @@
+syntax = "proto3";
+option java_package = "io.lantern.isimud.model";
+
+message ServerInfo {
+  string city = 1;
+  string country = 2;
+  string countryCode = 3;
+}

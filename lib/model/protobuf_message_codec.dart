@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:protobuf/protobuf.dart';
 
 import 'protos/messaging.pb.dart';
+import 'protos/vpn.pb.dart';
 
 class ProtobufMessageCodec extends StandardMessageCodec {
   static const int _valueTimestamp = 30;
   static const int _valueContact = 31;
   static const int _valueMessage = 32;
   static const int _valueConversation = 33;
+  static const int _valueServerInfo = 34;
 
   void writeValue(WriteBuffer buffer, dynamic value) {
     if (value == null) {
@@ -29,6 +31,9 @@ class ProtobufMessageCodec extends StandardMessageCodec {
         break;
       case Conversation:
         type = _valueConversation;
+        break;
+      case ServerInfo:
+        type = _valueServerInfo;
         break;
     }
 
@@ -59,6 +64,8 @@ class ProtobufMessageCodec extends StandardMessageCodec {
         return Message.fromBuffer(serialized);
       case _valueConversation:
         return Conversation.fromBuffer(serialized);
+      case _valueServerInfo:
+        return ServerInfo.fromBuffer(serialized);
       default:
         throw FormatException("Unknown data type $type");
     }
