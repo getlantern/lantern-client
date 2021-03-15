@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/model/vpnmodel.dart';
 import 'package:lantern/package_store.dart';
@@ -26,55 +25,57 @@ class _VPNTabState extends State<VPNTab> {
                 Radius.circular(8.0),
               ),
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  FontAwesomeIcons.mapMarkerAlt,
-                  size: 20,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  "Server Location".i18n,
-                  style:
-                      tsSubHead(context).copyWith(fontWeight: FontWeight.w500),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 16,
-                      bottom: 24,
-                    ),
-                    child: Text(
-                      "Server Location Info".i18n,
-                      style: tsSubTitle(context).copyWith(
-                        color: HexColor(unselectedTabLabelColor),
-                      ),
-                    ),
+            content: Container(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.mapMarkerAlt,
+                    size: 20,
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Ink(
-                      padding: EdgeInsets.all(8),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Server Location".i18n,
+                    style: tsSubHead(context).copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 16,
+                        bottom: 24,
+                      ),
                       child: Text(
-                        "OK".i18n,
-                        style: tsSubHead(context).copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.pink,
+                        "Server Location Info".i18n,
+                        style: tsSubTitle(context).copyWith(
+                          color: HexColor(unselectedTabLabelColor),
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Ink(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          "OK".i18n,
+                          style: tsSubHead(context).copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -275,6 +276,9 @@ class _VPNTabState extends State<VPNTab> {
                         }),
                       ],
                     ),
+    vpnModel
+        .subscribedBuilder("/vpn_status", defaultValue: "disconnected",
+    builder: (BuildContext context, String vpnStatus, Widget child) {
                     model.dataCap > 0
                         ? Column(
                             children: [
