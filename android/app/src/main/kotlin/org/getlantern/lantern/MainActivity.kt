@@ -55,6 +55,14 @@ class MainActivity : FlutterActivity() {
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (vpnViewModel.isConnectedToVpn() && !Utils.isServiceRunning(activity, LanternVpnService::class.java)) {
+            Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
+            vpnViewModel.setVpnOn(false)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         try {
