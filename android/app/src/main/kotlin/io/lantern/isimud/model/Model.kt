@@ -1,9 +1,12 @@
 package io.lantern.isimud.model
 
+import android.os.Handler
+import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
 import io.lantern.observablemodel.ObservableModel
 import io.lantern.observablemodel.Subscriber
+import java.util.concurrent.atomic.AtomicReference
 
 open class Model(
     flutterEngine: FlutterEngine,
@@ -74,7 +77,11 @@ open class Model(
         onMethodCall?.invoke(call, result)
     }
 
+    private val activeSink = AtomicReference<EventChannel.EventSink?>()
+
+    @Synchronized
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        activeSink.set(events)
         val args = arguments as Map<String, String>
         val subscriberID = args["subscriberID"] as Int
         val path = args["path"] as String
@@ -83,21 +90,37 @@ open class Model(
             observableModel.subscribeDetails(object :
                 Subscriber<Any>(subscriberID.toString(), path) {
                 override fun onUpdate(path: String, value: Any) {
-                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@Model) {
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                        }
+                    }
                 }
 
                 override fun onDelete(path: String) {
-                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@Model) {
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                        }
+                    }
                 }
             })
         } else {
             observableModel.subscribe(object : Subscriber<Any>(subscriberID.toString(), path) {
                 override fun onUpdate(path: String, value: Any) {
-                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@Model) {
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
+                        }
+                    }
                 }
 
                 override fun onDelete(path: String) {
-                    events?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@Model) {
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                        }
+                    }
                 }
             })
         }
