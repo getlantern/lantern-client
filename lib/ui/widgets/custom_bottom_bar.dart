@@ -15,6 +15,9 @@ class CustomBottomBar extends StatefulWidget {
 }
 
 class _CustomBottomBarState extends State<CustomBottomBar> {
+
+  String latestVpnStatus = "disconnected";
+
   Widget activeIcon({bool isActive = false}) {
     return Container(
       margin: EdgeInsets.only(left: 4),
@@ -137,8 +140,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     return Container(
       height: 68,
       child: vpnModel
-          .subscribedBuilder("/vpn_status", defaultValue: "disconnected",
+          .subscribedBuilder("/vpn_status", defaultValue: latestVpnStatus,
               builder: (BuildContext context, String vpnStatus, Widget child) {
+        latestVpnStatus = vpnStatus;
         return Row(
           children: TAB_ENUM.values
               .asMap()
