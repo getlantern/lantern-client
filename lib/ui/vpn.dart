@@ -39,7 +39,8 @@ class _VPNTabState extends State<VPNTab> {
                   ),
                   Text(
                     "Server Location".i18n,
-                    style: tsSubHead(context).copyWith(fontWeight: FontWeight.w500),
+                    style: tsSubHead(context)
+                        .copyWith(fontWeight: FontWeight.w500),
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -194,7 +195,7 @@ class _VPNTabState extends State<VPNTab> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Lantern".i18n + " " + "is".i18n + ": ",
+                          "VPN Status".i18n + ": ",
                           style: tsSubTitle(context).copyWith(
                             color: HexColor(unselectedTabLabelColor),
                           ),
@@ -276,71 +277,76 @@ class _VPNTabState extends State<VPNTab> {
                         }),
                       ],
                     ),
-    vpnModel
-        .subscribedBuilder("/vpn_status", defaultValue: "disconnected",
-    builder: (BuildContext context, String vpnStatus, Widget child) {
-                    model.dataCap > 0
-                        ? Column(
-                            children: [
-                              customDivider(marginTop: 4.0),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Daily Data Usage".i18n + ": ",
-                                    style: tsSubTitle(context).copyWith(
-                                      color: HexColor(unselectedTabLabelColor),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "${model.bandwidthUsed}/${model.dataCap}MB",
-                                      textAlign: TextAlign.end,
-                                      style: tsSubTitle(context).copyWith(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Container(
-                                height: 12,
-                                decoration: BoxDecoration(
-                                  color: HexColor(unselectedTabColor),
-                                  border: Border.all(
-                                    color: HexColor(borderColor),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(borderRadius),
-                                  ),
-                                ),
-                                child: Row(
+                    vpnModel.subscribedBuilder("/bandwidth",
+                        defaultValue: Bandwidth(), builder:
+                            (BuildContext context, Bandwidth bandwidth,
+                                Widget child) {
+                      return bandwidth.allowed > 0
+                          ? Column(
+                              children: [
+                                customDivider(marginTop: 4.0),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Expanded(
-                                      flex: model.bandwidthUsed ?? 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: HexColor(usedDataBarColor),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(borderRadius),
-                                          ),
-                                        ),
+                                    Text(
+                                      "Daily Data Usage".i18n + ": ",
+                                      style: tsSubTitle(context).copyWith(
+                                        color:
+                                            HexColor(unselectedTabLabelColor),
                                       ),
                                     ),
                                     Expanded(
-                                      flex: model.dataCap - model.bandwidthUsed,
-                                      child: Container(),
+                                      child: Text(
+                                        "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
+                                        textAlign: TextAlign.end,
+                                        style: tsSubTitle(context).copyWith(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          )
-                        : Container(),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    color: HexColor(unselectedTabColor),
+                                    border: Border.all(
+                                      color: HexColor(borderColor),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(borderRadius),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: (bandwidth.allowed -
+                                                bandwidth.remaining).toInt() ??
+                                            0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: HexColor(usedDataBarColor),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(borderRadius),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: bandwidth.remaining.toInt(),
+                                        child: Container(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container();
+                    }),
                   ],
                 ),
               ),

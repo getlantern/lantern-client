@@ -14,3 +14,13 @@ const ServerInfo$json = const {
   ],
 };
 
+const Bandwidth$json = const {
+  '1': 'Bandwidth',
+  '2': const [
+    const {'1': 'percent', '3': 1, '4': 1, '5': 3, '10': 'percent'},
+    const {'1': 'remaining', '3': 2, '4': 1, '5': 3, '10': 'remaining'},
+    const {'1': 'allowed', '3': 3, '4': 1, '5': 3, '10': 'allowed'},
+    const {'1': 'ttlSeconds', '3': 4, '4': 1, '5': 3, '10': 'ttlSeconds'},
+  ],
+};
+

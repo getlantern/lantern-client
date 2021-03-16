@@ -305,6 +305,14 @@ abstract class SessionManager(application: Application) : Session {
     fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
         editor.putString(LATEST_BANDWIDTH, amount).commit()
+        vpnModel.mutate { tx ->
+            tx.put(VpnViewModel.PATH_BANDWIDTH, Vpn.Bandwidth.newBuilder()
+                .setPercent(update.percent)
+                .setRemaining(update.remaining)
+                .setAllowed(update.allowed)
+                .setTtlSeconds(update.ttlSeconds)
+                .build())
+        }
     }
 
     fun savedBandwidth(): String? {
