@@ -11,6 +11,7 @@ class ProtobufMessageCodec extends StandardMessageCodec {
   static const int _valueMessage = 32;
   static const int _valueConversation = 33;
   static const int _valueServerInfo = 34;
+  static const int _valueBandwidth = 35;
 
   void writeValue(WriteBuffer buffer, dynamic value) {
     if (value == null) {
@@ -34,6 +35,9 @@ class ProtobufMessageCodec extends StandardMessageCodec {
         break;
       case ServerInfo:
         type = _valueServerInfo;
+        break;
+      case Bandwidth:
+        type = _valueBandwidth;
         break;
     }
 
@@ -66,6 +70,8 @@ class ProtobufMessageCodec extends StandardMessageCodec {
         return Conversation.fromBuffer(serialized);
       case _valueServerInfo:
         return ServerInfo.fromBuffer(serialized);
+      case _valueBandwidth:
+        return Bandwidth.fromBuffer(serialized);
       default:
         throw FormatException("Unknown data type $type");
     }

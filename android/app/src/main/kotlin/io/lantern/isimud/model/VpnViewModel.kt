@@ -26,6 +26,7 @@ class VpnViewModel(
     companion object {
         const val PATH_VPN_STATUS = "/vpn_status"
         const val PATH_SERVER_INFO = "/server_info"
+        const val PATH_BANDWIDTH = "/bandwidth"
 
         val vpnObservableModel = ObservableModel.build(
             ctx = LanternApp.getAppContext(),
