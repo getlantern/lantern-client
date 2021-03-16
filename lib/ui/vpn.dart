@@ -14,6 +14,11 @@ class VPNTab extends StatefulWidget {
 }
 
 class _VPNTabState extends State<VPNTab> {
+
+  String latestVpnStatus = "disconnected";
+  ServerInfo latestServerInfo = ServerInfo();
+  Bandwidth latestBandwidth = Bandwidth();
+
   openInfoServerLocation() {
     showDialog(
         context: context,
@@ -95,11 +100,13 @@ class _VPNTabState extends State<VPNTab> {
   Widget build(BuildContext context) {
     var model = context.watch<VPNModel>();
     var vpnModel = context.watch<VpnModel>();
+
     return BaseScreen(
       title: 'LANTERN'.i18n,
       body: vpnModel
-          .subscribedBuilder("/vpn_status", defaultValue: "disconnected",
+          .subscribedBuilder("/vpn_status", defaultValue: latestVpnStatus,
               builder: (BuildContext context, String vpnStatus, Widget child) {
+        latestVpnStatus = vpnStatus;
         return Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -264,9 +271,10 @@ class _VPNTabState extends State<VPNTab> {
                           ],
                         ),
                         vpnModel.subscribedBuilder("/server_info",
-                            defaultValue: ServerInfo(), builder:
+                            defaultValue: latestServerInfo, builder:
                                 (BuildContext context, ServerInfo serverInfo,
                                     Widget child) {
+                          latestServerInfo = serverInfo;
                           return Text(
                               (vpnStatus == "connected" ||
                                       vpnStatus == "disconnecting")
@@ -278,9 +286,10 @@ class _VPNTabState extends State<VPNTab> {
                       ],
                     ),
                     vpnModel.subscribedBuilder("/bandwidth",
-                        defaultValue: Bandwidth(), builder:
+                        defaultValue: latestBandwidth, builder:
                             (BuildContext context, Bandwidth bandwidth,
                                 Widget child) {
+                      latestBandwidth = bandwidth;
                       return bandwidth.allowed > 0
                           ? Column(
                               children: [
