@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'model_event_channel.dart';
 abstract class Model {
   MethodChannel methodChannel;
   ModelEventChannel _updatesChannel;
+  Map<String, SubscribedValueNotifier> _subscribedValueNotifiers = HashMap();
 
   Model(String name) {
     methodChannel = MethodChannel(
@@ -61,7 +63,12 @@ abstract class Model {
   }
 
   ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue) {
-    return SubscribedValueNotifier(path, defaultValue, _updatesChannel);
+    SubscribedValueNotifier<T> result = _subscribedValueNotifiers[path];
+    if (result == null) {
+      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel);
+      _subscribedValueNotifiers[path] = result;
+    }
+    return result;
   }
 
   ValueListenableBuilder<T> subscribedBuilder<T>(String path,
@@ -120,7 +127,8 @@ class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
   @override
   void dispose() {
     widget.valueListenable.removeListener(_valueChanged);
-    (widget.valueListenable as SubscribedValueNotifier).cancel();
+    // TODO: we should only cancel if we're the last one
+    // (widget.valueListenable as SubscribedValueNotifier).cancel();
     super.dispose();
   }
 
