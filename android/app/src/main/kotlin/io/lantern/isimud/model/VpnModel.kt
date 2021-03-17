@@ -28,6 +28,13 @@ class VpnModel(
                 ).absolutePath,
                 password = "password" // TODO: make the password random and save it as an encrypted preference
         )
+
+        init {
+            vpnObservableModel.mutate { tx ->
+                // initialize vpn status for fresh install
+                tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
+            }
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
