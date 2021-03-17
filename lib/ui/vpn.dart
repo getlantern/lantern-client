@@ -14,11 +14,6 @@ class VPNTab extends StatefulWidget {
 }
 
 class _VPNTabState extends State<VPNTab> {
-
-  String latestVpnStatus = "disconnected";
-  ServerInfo latestServerInfo = ServerInfo();
-  Bandwidth latestBandwidth = Bandwidth();
-
   openInfoServerLocation() {
     showDialog(
         context: context,
@@ -103,10 +98,8 @@ class _VPNTabState extends State<VPNTab> {
 
     return BaseScreen(
       title: 'LANTERN'.i18n,
-      body: vpnModel
-          .subscribedBuilder("/vpn_status", defaultValue: latestVpnStatus,
-              builder: (BuildContext context, String vpnStatus, Widget child) {
-        latestVpnStatus = vpnStatus;
+      body: vpnModel.subscribedBuilder("/vpn_status",
+          builder: (BuildContext context, String vpnStatus, Widget child) {
         return Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -174,13 +167,7 @@ class _VPNTabState extends State<VPNTab> {
                   onToggle: (bool newValue) {
                     if (vpnStatus != "connecting" ||
                         vpnStatus != "disconnecting") {
-                      String newVpnStatus;
-                      if (newValue) {
-                        newVpnStatus = "connecting";
-                      } else {
-                        newVpnStatus = "disconnecting";
-                      }
-                      vpnModel.put("/vpn_status", newVpnStatus);
+                      vpnModel.switchVPN("/vpn_status", newValue);
                     }
                   },
                 ),
@@ -270,11 +257,9 @@ class _VPNTabState extends State<VPNTab> {
                             ),
                           ],
                         ),
-                        vpnModel.subscribedBuilder("/server_info",
-                            defaultValue: latestServerInfo, builder:
-                                (BuildContext context, ServerInfo serverInfo,
-                                    Widget child) {
-                          latestServerInfo = serverInfo;
+                        vpnModel.subscribedBuilder("/server_info", builder:
+                            (BuildContext context, ServerInfo serverInfo,
+                                Widget child) {
                           return Text(
                               (vpnStatus == "connected" ||
                                       vpnStatus == "disconnecting")
@@ -285,11 +270,9 @@ class _VPNTabState extends State<VPNTab> {
                         }),
                       ],
                     ),
-                    vpnModel.subscribedBuilder("/bandwidth",
-                        defaultValue: latestBandwidth, builder:
-                            (BuildContext context, Bandwidth bandwidth,
-                                Widget child) {
-                      latestBandwidth = bandwidth;
+                    vpnModel.subscribedBuilder("/bandwidth", builder:
+                        (BuildContext context, Bandwidth bandwidth,
+                            Widget child) {
                       return bandwidth.allowed > 0
                           ? Column(
                               children: [
@@ -334,7 +317,8 @@ class _VPNTabState extends State<VPNTab> {
                                     children: [
                                       Expanded(
                                         flex: (bandwidth.allowed -
-                                                bandwidth.remaining).toInt() ??
+                                                    bandwidth.remaining)
+                                                .toInt() ??
                                             0,
                                         child: Container(
                                           decoration: BoxDecoration(

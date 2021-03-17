@@ -6,34 +6,27 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
 import io.lantern.observablemodel.ObservableModel
 import io.lantern.observablemodel.Subscriber
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
-open class Model(
-    flutterEngine: FlutterEngine,
-
-    eventChannelName: String,
-    eventChannelCodec: MethodCodec? = StandardMethodCodec(ProtobufMessageCodec()),
-
-    methodChannelName: String,
-    methodChannelCodec: MethodCodec? = StandardMethodCodec(ProtobufMessageCodec()),
-
-    val observableModel: ObservableModel,
-
-    var onMethodCall: ((call: MethodCall, result: MethodChannel.Result) -> Unit)? = null
-
+abstract class Model(
+        private val name: String,
+        flutterEngine: FlutterEngine,
+        protected val observableModel: ObservableModel
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
+    private val activeSubscribers = ConcurrentSkipListSet<Int>()
 
     init {
         EventChannel(
-            flutterEngine.dartExecutor,
-            eventChannelName,
-            eventChannelCodec
+                flutterEngine.dartExecutor,
+                "${name}_event_channel",
+                StandardMethodCodec(ProtobufMessageCodec())
         ).setStreamHandler(this)
 
         MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            methodChannelName,
-            methodChannelCodec
+                flutterEngine.dartExecutor.binaryMessenger,
+                "${name}_method_channel",
+                StandardMethodCodec(ProtobufMessageCodec())
         ).setMethodCallHandler(this)
     }
 
@@ -49,11 +42,11 @@ open class Model(
                 val count = call.argument<Int>("count")!!
                 if (path == "/conversationsByRecentActivity") { // TODO: temporary fix due to our current way of saving conversationsByRecentActivity
                     result.success(
-                        observableModel.list<List<Any>>(path, 0, 1).map { it.value }[0].subList(start, start + count)
+                            observableModel.list<List<Any>>(path, 0, 1).map { it.value }[0].subList(start, start + count)
                     )
                 } else {
                     result.success(
-                        observableModel.list<Any>(path!!, start, count).map { it.value })
+                            observableModel.list<Any>(path!!, start, count).map { it.value })
                 }
             }
             "getRangeDetails" -> {
@@ -62,7 +55,7 @@ open class Model(
                 val start = call.argument<Int>("start")
                 val count = call.argument<Int>("count")
                 result.success(
-                    observableModel.listDetails<Any>(path!!, start!!, count!!).map { it.value })
+                        observableModel.listDetails<Any>(path!!, start!!, count!!).map { it.value })
             }
             "put" -> {
                 val path = call.argument<String>("path")!!
@@ -74,7 +67,6 @@ open class Model(
             }
             else -> result.notImplemented()
         }
-        onMethodCall?.invoke(call, result)
     }
 
     private val activeSink = AtomicReference<EventChannel.EventSink?>()
@@ -86,9 +78,10 @@ open class Model(
         val subscriberID = args["subscriberID"] as Int
         val path = args["path"] as String
         val detailsPrefix = args["detailsPrefix"]
+        activeSubscribers.add(subscriberID)
         if (detailsPrefix != null) {
             observableModel.subscribeDetails(object :
-                Subscriber<Any>(subscriberID.toString(), path) {
+                    Subscriber<Any>(namespacedSubscriberId(subscriberID), path) {
                 override fun onUpdate(path: String, value: Any) {
                     Handler(Looper.getMainLooper()).post {
                         synchronized(this@Model) {
@@ -106,7 +99,7 @@ open class Model(
                 }
             })
         } else {
-            observableModel.subscribe(object : Subscriber<Any>(subscriberID.toString(), path) {
+            observableModel.subscribe(object : Subscriber<Any>(namespacedSubscriberId(subscriberID), path) {
                 override fun onUpdate(path: String, value: Any) {
                     Handler(Looper.getMainLooper()).post {
                         synchronized(this@Model) {
@@ -132,7 +125,17 @@ open class Model(
         }
         val args = arguments as Map<String, String>
         val subscriberID = args["subscriberID"] as Int
-        val path = args["path"] as String
-        observableModel.unsubscribe(subscriberID.toString())
+        observableModel.unsubscribe(namespacedSubscriberId(subscriberID))
+        activeSubscribers.remove(subscriberID)
+    }
+
+    fun namespacedSubscriberId(id: Int): String {
+        return "${name}_model_${id}"
+    }
+
+    fun destroy() {
+        activeSubscribers.forEach {
+            observableModel.unsubscribe(namespacedSubscriberId(it))
+        }
     }
 }

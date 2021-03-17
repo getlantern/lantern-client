@@ -8,18 +8,18 @@ import 'package:meta/meta.dart';
 import '../model/protobuf_message_codec.dart';
 import 'model_event_channel.dart';
 
-class Model {
-  MethodChannel _methodChannel;
+abstract class Model {
+  MethodChannel methodChannel;
   ModelEventChannel _updatesChannel;
 
-  Model(String methodChannelName, String eventChannelName) {
-    _methodChannel = MethodChannel(
-        methodChannelName, StandardMethodCodec(ProtobufMessageCodec()));
-    _updatesChannel = ModelEventChannel(eventChannelName);
+  Model(String name) {
+    methodChannel = MethodChannel(
+        "${name}_method_channel", StandardMethodCodec(ProtobufMessageCodec()));
+    _updatesChannel = ModelEventChannel("${name}_event_channel");
   }
 
   Future<void> put<T>(String path, T value) async {
-    _methodChannel.invokeMethod('put', <String, dynamic>{
+    methodChannel.invokeMethod('put', <String, dynamic>{
       "path": path,
       "value": value,
     });
@@ -27,7 +27,7 @@ class Model {
 
   Future<List<T>> getRange<T>(String path, int start, int count) async {
     var intermediate =
-        await _methodChannel.invokeMethod('getRange', <String, dynamic>{
+        await methodChannel.invokeMethod('getRange', <String, dynamic>{
       "path": path,
       "start": start,
       "count": count,
@@ -40,7 +40,7 @@ class Model {
   Future<List<T>> getRangeDetails<T>(
       String path, String detailsPrefix, int start, int count) async {
     var intermediate =
-        await _methodChannel.invokeMethod('getRangeDetails', <String, dynamic>{
+        await methodChannel.invokeMethod('getRangeDetails', <String, dynamic>{
       "path": path,
       "detailsPrefix": detailsPrefix,
       "start": start,
@@ -80,7 +80,6 @@ class SubscribedValueNotifier<T> extends ValueNotifier<T> {
       : super(defaultValue) {
     cancel = channel.subscribe(
         path: path,
-        defaultValue: defaultValue,
         onNewValue: (dynamic newValue) {
           value = newValue as T;
         });
@@ -96,12 +95,6 @@ class SubscribedBuilder<T> extends ValueListenableBuilder<T> {
 
   @override
   _SubscribedBuilderState createState() => _SubscribedBuilderState<T>();
-
-// @override
-// void dispose() {
-//   // TODO: unsubscribe listener
-//   super.dispose();
-// }
 }
 
 class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
@@ -139,6 +132,9 @@ class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
 
   @override
   Widget build(BuildContext context) {
+    if (value == null) {
+      return Container();
+    }
     return widget.builder(context, value, widget.child);
   }
 }

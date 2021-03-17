@@ -1,10 +1,11 @@
 import 'package:lantern/model/model.dart';
 
 class VpnModel extends Model {
-  VpnModel(
-      {String methodChannelName = 'vpn_method_channel',
-      String eventChannelName = 'vpn_event_channel'})
-      : super(methodChannelName, eventChannelName) {
-    // do something here
+  VpnModel() : super("vpn") {}
+
+  Future<void> switchVPN<T>(String path, bool on) async {
+    methodChannel.invokeMethod('switchVPN', <String, dynamic>{
+      "on": on,
+    });
   }
 }

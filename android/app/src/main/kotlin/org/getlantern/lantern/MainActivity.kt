@@ -13,8 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.isimud.model.MessagingViewModel
-import io.lantern.isimud.model.VpnViewModel
+import io.lantern.isimud.model.MessagingModel
+import io.lantern.isimud.model.VpnModel
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -25,27 +25,14 @@ import java.util.*
 
 class MainActivity : FlutterActivity() {
 
-    private lateinit var messagingViewModel: MessagingViewModel
-    private lateinit var vpnViewModel: VpnViewModel
+    private lateinit var messagingModel: MessagingModel
+    private lateinit var vpnModel: VpnModel
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        messagingViewModel = MessagingViewModel(flutterEngine)
-        vpnViewModel = VpnViewModel(flutterEngine, ::switchLantern)
-
-//        val handler = Handler(Looper.getMainLooper())
-//        handler.postDelayed({
-//            messagingModel.observableModel.mutate { tx ->
-//                tx.put(
-//                    "/contact/0",
-//                    Messaging.Contact.newBuilder()
-//                        .setUserID("0")
-//                        .setName("This is a new name")
-//                        .build()
-//                )
-//            }
-//        }, 3000)
+        messagingModel = MessagingModel(flutterEngine)
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,14 +44,16 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (vpnViewModel.isConnectedToVpn() && !Utils.isServiceRunning(activity, LanternVpnService::class.java)) {
+        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(activity, LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
-            vpnViewModel.setVpnOn(false)
+            vpnModel.setVpnOn(false)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        messagingModel.destroy()
+        vpnModel.destroy()
         try {
             unbindService(lanternServiceConnection)
         } catch (t: Throwable) {
@@ -292,7 +281,7 @@ class MainActivity : FlutterActivity() {
         val handler = Handler(Looper.getMainLooper())
         // Force a delay to test the support for connecting/disconnecting state
         handler.postDelayed({
-            vpnViewModel.setVpnOn(useVpn)
+            vpnModel.setVpnOn(useVpn)
         }, 500)
     }
 
