@@ -140,7 +140,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     return Container(
       height: 68,
       child: vpnModel
-          .subscribedBuilder("/vpn_status", defaultValue: latestVpnStatus,
+          .subscribedBuilder(VpnModel.PATH_VPN_STATUS, defaultValue: latestVpnStatus,
               builder: (BuildContext context, String vpnStatus, Widget child) {
         latestVpnStatus = vpnStatus;
         return Row(

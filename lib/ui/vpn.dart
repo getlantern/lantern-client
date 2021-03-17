@@ -98,7 +98,7 @@ class _VPNTabState extends State<VPNTab> {
 
     return BaseScreen(
       title: 'LANTERN'.i18n,
-      body: vpnModel.subscribedBuilder("/vpn_status",
+      body: vpnModel.subscribedBuilder(VpnModel.PATH_VPN_STATUS,
           builder: (BuildContext context, String vpnStatus, Widget child) {
         return Padding(
           padding: EdgeInsets.all(16),
@@ -167,7 +167,7 @@ class _VPNTabState extends State<VPNTab> {
                   onToggle: (bool newValue) {
                     if (vpnStatus != "connecting" ||
                         vpnStatus != "disconnecting") {
-                      vpnModel.switchVPN("/vpn_status", newValue);
+                      vpnModel.switchVPN(newValue);
                     }
                   },
                 ),
@@ -257,7 +257,7 @@ class _VPNTabState extends State<VPNTab> {
                             ),
                           ],
                         ),
-                        vpnModel.subscribedBuilder("/server_info", builder:
+                        vpnModel.subscribedBuilder(VpnModel.PATH_SERVER_INFO, builder:
                             (BuildContext context, ServerInfo serverInfo,
                                 Widget child) {
                           return Text(
@@ -270,7 +270,7 @@ class _VPNTabState extends State<VPNTab> {
                         }),
                       ],
                     ),
-                    vpnModel.subscribedBuilder("/bandwidth", builder:
+                    vpnModel.subscribedBuilder(VpnModel.PATH_BANDWIDTH, builder:
                         (BuildContext context, Bandwidth bandwidth,
                             Widget child) {
                       return bandwidth.allowed > 0
