@@ -40,7 +40,9 @@ class VpnModel(
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "switchVPN" -> {
-                switchLantern(call.argument<Boolean>("on") ?: false)
+                val on = call.argument<Boolean>("on") ?: false
+                saveVpnStatus(if(on) "connecting" else "disconnecting")
+                switchLantern(on)
             }
             else -> super.onMethodCall(call, result)
         }
