@@ -18,7 +18,6 @@ class ModelEventChannel extends EventChannel {
   void Function() subscribe<T>(
       {@required String path,
         String prefixPath,
-        @required T defaultValue,
         void onNewValue(T newValue)}) {
     var subscriberID = nextSubscriberID++;
     subscribers[subscriberID] = onNewValue;

@@ -4,10 +4,7 @@ import '../extension/date_time_extensions.dart';
 import 'protos/messaging.pb.dart';
 
 class MessagingModel extends Model {
-  MessagingModel(
-      {String methodChannelName = 'messaging_method_channel',
-      String eventChannelName = 'messaging_event_channel'})
-      : super(methodChannelName, eventChannelName) {
+  MessagingModel(): super("messaging") {
     // Use static list of conversations for now
     var conversationIDs = List<String>();
     for (var i = 0; i < 100; i++) {
