@@ -11,23 +11,25 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class Model(
         private val name: String,
-        flutterEngine: FlutterEngine,
+        flutterEngine: FlutterEngine? = null,
         protected val observableModel: ObservableModel
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<Int>()
 
     init {
-        EventChannel(
+        flutterEngine?.let {
+            EventChannel(
                 flutterEngine.dartExecutor,
                 "${name}_event_channel",
                 StandardMethodCodec(ProtobufMessageCodec())
-        ).setStreamHandler(this)
+            ).setStreamHandler(this)
 
-        MethodChannel(
+            MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
                 "${name}_method_channel",
                 StandardMethodCodec(ProtobufMessageCodec())
-        ).setMethodCallHandler(this)
+            ).setMethodCallHandler(this)
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
