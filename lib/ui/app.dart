@@ -2,7 +2,6 @@ import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 
-import '../model/vpnmodel.dart';
 import 'home.dart';
 
 class LanternApp extends StatefulWidget {
@@ -19,7 +18,6 @@ class _LanternAppState extends State<LanternApp> {
       providers: [
         Provider(create: (context) => MessagingModel()),
         Provider(create: (context) => VpnModel()),
-        ChangeNotifierProvider(create: (context) => VPNModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -45,19 +43,58 @@ class _LanternAppState extends State<LanternApp> {
       appBarTheme: AppBarTheme(brightness: Brightness.light),
       accentColor: Colors.black,
       textTheme: Theme.of(context).textTheme.copyWith(
-            headline1: Theme.of(context).textTheme.headline1.copyWith(color: Colors.black),
-            headline2: Theme.of(context).textTheme.headline2.copyWith(color: Colors.black),
-            headline3: Theme.of(context).textTheme.headline3.copyWith(color: Colors.black),
-            headline4: Theme.of(context).textTheme.headline4.copyWith(color: Colors.black),
-            headline5: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black),
-            headline6: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),
-            subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black),
-            subtitle2: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.black),
-            bodyText1: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black),
-            bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.black),
-            button: Theme.of(context).textTheme.button.copyWith(color: Colors.black),
-            caption: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
-            overline: Theme.of(context).textTheme.overline.copyWith(color: Colors.black),
+            headline1: Theme.of(context)
+                .textTheme
+                .headline1
+                .copyWith(color: Colors.black),
+            headline2: Theme.of(context)
+                .textTheme
+                .headline2
+                .copyWith(color: Colors.black),
+            headline3: Theme.of(context)
+                .textTheme
+                .headline3
+                .copyWith(color: Colors.black),
+            headline4: Theme.of(context)
+                .textTheme
+                .headline4
+                .copyWith(color: Colors.black),
+            headline5: Theme.of(context)
+                .textTheme
+                .headline5
+                .copyWith(color: Colors.black),
+            headline6: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.black),
+            subtitle1: Theme.of(context)
+                .textTheme
+                .subtitle1
+                .copyWith(color: Colors.black),
+            subtitle2: Theme.of(context)
+                .textTheme
+                .subtitle2
+                .copyWith(color: Colors.black),
+            bodyText1: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(color: Colors.black),
+            bodyText2: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: Colors.black),
+            button: Theme.of(context)
+                .textTheme
+                .button
+                .copyWith(color: Colors.black),
+            caption: Theme.of(context)
+                .textTheme
+                .caption
+                .copyWith(color: Colors.black),
+            overline: Theme.of(context)
+                .textTheme
+                .overline
+                .copyWith(color: Colors.black),
           ),
     );
   }
