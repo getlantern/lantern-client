@@ -41,6 +41,8 @@ dependencies:
 
   flutter_switch: ^0.2.0
 
+  flag: ^3.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
