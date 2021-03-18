@@ -7,7 +7,7 @@ class CustomBottomBar extends StatefulWidget {
   final Function updateCurrentIndexPageView;
 
   CustomBottomBar(
-      {this.currentIndex = 1, this.updateCurrentIndexPageView, Key key})
+      {this.currentIndex = 0, this.updateCurrentIndexPageView, Key key})
       : super(key: key);
 
   @override
