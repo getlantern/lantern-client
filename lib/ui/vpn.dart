@@ -1,3 +1,4 @@
+import 'package:flag/flag.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -312,16 +313,27 @@ class VPNTab extends StatelessWidget {
           ),
           vpnModel.vpnStatus(
               (BuildContext context, String vpnStatus, Widget child) {
-            var result = vpnModel.serverInfo(
+            return vpnModel.serverInfo(
                 (BuildContext context, ServerInfo serverInfo, Widget child) {
-              return Text(
-                  (vpnStatus == "connected" || vpnStatus == "disconnecting")
-                      ? '${serverInfo.city}, ${serverInfo.country}'
-                      : 'N/A',
-                  style: tsSubTitle(context)
-                      .copyWith(fontWeight: FontWeight.bold));
+              if (vpnStatus == "connected" || vpnStatus == "disconnecting") {
+                return Row(
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        child: Flag(serverInfo.countryCode,
+                            height: 24, width: 36)),
+                    SizedBox(width: 12),
+                    Text(serverInfo.city,
+                        style: tsSubTitle(context)
+                            .copyWith(fontWeight: FontWeight.bold))
+                  ],
+                );
+              } else {
+                return Text('N/A',
+                    style: tsSubTitle(context)
+                        .copyWith(fontWeight: FontWeight.bold));
+              }
             });
-            return result;
           }),
         ],
       );
