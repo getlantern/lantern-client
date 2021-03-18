@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:lantern/model/vpn_model.dart';
-import 'package:lantern/model/vpnmodel.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +10,6 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<VPNModel>();
     var vpnModel = context.watch<VpnModel>();
 
     void openInfoServerLocation() {
@@ -94,65 +90,68 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget proBanner() {
-      return Opacity(
-        opacity: model.dataCap != null && model.dataCap > 0 ? 1 : 0,
-        child: Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: HexColor(unselectedTabColor),
-            border: Border.all(
-              color: HexColor(borderColor),
-              width: 1,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(borderRadius),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                FontAwesomeIcons.crown,
-                color: Colors.orange[300],
+      return vpnModel
+          .bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
+        return Opacity(
+          opacity: bandwidth.allowed > 0 ? 1 : 0,
+          child: Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: HexColor(unselectedTabColor),
+              border: Border.all(
+                color: HexColor(borderColor),
+                width: 1,
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Go Pro Title".i18n,
-                        style: tsSubHead(context).copyWith(
-                          fontWeight: FontWeight.bold,
+              borderRadius: BorderRadius.all(
+                Radius.circular(borderRadius),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  FontAwesomeIcons.crown,
+                  color: Colors.orange[300],
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Go Pro Title".i18n,
+                          style: tsSubHead(context).copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "Go Pro Description".i18n,
-                        style: tsCaption(context),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "Go Pro Description".i18n,
+                          style: tsCaption(context),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Icon(
-                FontAwesomeIcons.chevronRight,
-                size: 16,
-              ),
-            ],
+                Icon(
+                  FontAwesomeIcons.chevronRight,
+                  size: 16,
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      });
     }
 
     Widget vpnSwitch() {
       return Transform.scale(
         scale: 2,
-        child: vpnModel.subscribedBuilder(VpnModel.PATH_VPN_STATUS,
-            builder: (BuildContext context, String vpnStatus, Widget child) {
+        child: vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
           return FlutterSwitch(
             value: vpnStatus == "connected" || vpnStatus == "disconnecting",
             activeColor: HexColor(onSwitchColor),
@@ -164,6 +163,166 @@ class VPNTab extends StatelessWidget {
             },
           );
         }),
+      );
+    }
+
+    Widget vpnStatus() {
+      return vpnModel
+          .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "VPN Status".i18n + ": ",
+              style: tsSubTitle(context).copyWith(
+                color: HexColor(unselectedTabLabelColor),
+              ),
+            ),
+            (vpnStatus == "connecting" || vpnStatus == "disconnecting")
+                ? Row(
+                    children: [
+                      Text(
+                        (vpnStatus == "connecting")
+                            ? "Connecting".i18n
+                            : "Disconnecting".i18n,
+                        style: tsSubTitle(context)
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 12),
+                        child: SizedBox(
+                          height: 14,
+                          width: 14,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    (vpnStatus == "connected") ? "on".i18n : "off".i18n,
+                    style: tsSubTitle(context)
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+          ],
+        );
+      });
+    }
+
+    Widget bandwidth() {
+      return vpnModel
+          .bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
+        return bandwidth.allowed > 0
+            ? Column(
+                children: [
+                  customDivider(marginTop: 4.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Daily Data Usage".i18n + ": ",
+                        style: tsSubTitle(context).copyWith(
+                          color: HexColor(unselectedTabLabelColor),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
+                          textAlign: TextAlign.end,
+                          style: tsSubTitle(context)
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: HexColor(unselectedTabColor),
+                      border: Border.all(
+                        color: HexColor(borderColor),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(borderRadius),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: (bandwidth.allowed - bandwidth.remaining)
+                                  .toInt() ??
+                              0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: HexColor(usedDataBarColor),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(borderRadius),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: bandwidth.remaining.toInt(),
+                          child: Container(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Container();
+      });
+    }
+
+    Widget serverLocation() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Server Location".i18n + ": ",
+                style: tsSubTitle(context).copyWith(
+                  color: HexColor(unselectedTabLabelColor),
+                ),
+              ),
+              Container(
+                transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
+                child: InkWell(
+                  child: Container(
+                    height: 48,
+                    width: 48,
+                    child: Icon(
+                      Icons.info_outline_rounded,
+                      color: HexColor(unselectedTabLabelColor),
+                      size: 16,
+                    ),
+                  ),
+                  onTap: openInfoServerLocation,
+                ),
+              ),
+            ],
+          ),
+          vpnModel.vpnStatus(
+              (BuildContext context, String vpnStatus, Widget child) {
+            var result = vpnModel.serverInfo(
+                (BuildContext context, ServerInfo serverInfo, Widget child) {
+              return Text(
+                  (vpnStatus == "connected" || vpnStatus == "disconnecting")
+                      ? '${serverInfo.city}, ${serverInfo.country}'
+                      : 'N/A',
+                  style: tsSubTitle(context)
+                      .copyWith(fontWeight: FontWeight.bold));
+            });
+            return result;
+          }),
+        ],
       );
     }
 
@@ -189,169 +348,10 @@ class VPNTab extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  vpnModel.subscribedBuilder(VpnModel.PATH_VPN_STATUS, builder:
-                      (BuildContext context, String vpnStatus, Widget child) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "VPN Status".i18n + ": ",
-                          style: tsSubTitle(context).copyWith(
-                            color: HexColor(unselectedTabLabelColor),
-                          ),
-                        ),
-                        (vpnStatus == "connecting" ||
-                                vpnStatus == "disconnecting")
-                            ? Row(
-                                children: [
-                                  Text(
-                                    (vpnStatus == "connecting")
-                                        ? "Connecting".i18n
-                                        : "Disconnecting".i18n,
-                                    style: tsSubTitle(context)
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 12),
-                                    child: SizedBox(
-                                      height: 14,
-                                      width: 14,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                (vpnStatus == "connected")
-                                    ? "on".i18n
-                                    : "off".i18n,
-                                style: tsSubTitle(context)
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                      ],
-                    );
-                  }),
+                  vpnStatus(),
                   customDivider(marginBottom: 4.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Server Location".i18n + ": ",
-                            style: tsSubTitle(context).copyWith(
-                              color: HexColor(unselectedTabLabelColor),
-                            ),
-                          ),
-                          Container(
-                            transform:
-                                Matrix4.translationValues(-16.0, 0.0, 0.0),
-                            child: InkWell(
-                              child: Container(
-                                height: 48,
-                                width: 48,
-                                child: Icon(
-                                  Icons.info_outline_rounded,
-                                  color: HexColor(unselectedTabLabelColor),
-                                  size: 16,
-                                ),
-                              ),
-                              onTap: openInfoServerLocation,
-                            ),
-                          ),
-                        ],
-                      ),
-                      vpnModel.subscribedBuilder(VpnModel.PATH_VPN_STATUS,
-                          builder: (BuildContext context, String vpnStatus,
-                              Widget child) {
-                        var result = vpnModel
-                            .subscribedBuilder(VpnModel.PATH_SERVER_INFO,
-                                builder: (BuildContext context,
-                                    ServerInfo serverInfo, Widget child) {
-                          return Text(
-                              (vpnStatus == "connected" ||
-                                      vpnStatus == "disconnecting")
-                                  ? '${serverInfo.city}, ${serverInfo.country}'
-                                  : 'N/A',
-                              style: tsSubTitle(context)
-                                  .copyWith(fontWeight: FontWeight.bold));
-                        });
-                        return result;
-                      }),
-                    ],
-                  ),
-                  vpnModel.subscribedBuilder(VpnModel.PATH_BANDWIDTH, builder:
-                      (BuildContext context, Bandwidth bandwidth,
-                          Widget child) {
-                    return bandwidth.allowed > 0
-                        ? Column(
-                            children: [
-                              customDivider(marginTop: 4.0),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Daily Data Usage".i18n + ": ",
-                                    style: tsSubTitle(context).copyWith(
-                                      color: HexColor(unselectedTabLabelColor),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
-                                      textAlign: TextAlign.end,
-                                      style: tsSubTitle(context).copyWith(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Container(
-                                height: 12,
-                                decoration: BoxDecoration(
-                                  color: HexColor(unselectedTabColor),
-                                  border: Border.all(
-                                    color: HexColor(borderColor),
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(borderRadius),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: (bandwidth.allowed -
-                                                  bandwidth.remaining)
-                                              .toInt() ??
-                                          0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: HexColor(usedDataBarColor),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(borderRadius),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: bandwidth.remaining.toInt(),
-                                      child: Container(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : Container();
-                  }),
+                  serverLocation(),
+                  bandwidth(),
                 ],
               ),
             ),

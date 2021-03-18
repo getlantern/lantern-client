@@ -1,6 +1,5 @@
 import 'package:lantern/package_store.dart';
 
-import 'messages.dart';
 import 'vpn.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,7 +43,6 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: onPageChange,
         controller: _pageController,
         children: [
-          MessagesTab(),
           VPNTab(),
           Center(child: Text("Need to build this")),
         ],

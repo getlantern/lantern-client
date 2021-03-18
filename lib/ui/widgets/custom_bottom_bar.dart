@@ -15,9 +15,6 @@ class CustomBottomBar extends StatefulWidget {
 }
 
 class _CustomBottomBarState extends State<CustomBottomBar> {
-
-  String latestVpnStatus = "disconnected";
-
   Widget activeIcon({bool isActive = false}) {
     return Container(
       margin: EdgeInsets.only(left: 4),
@@ -48,10 +45,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     IconData icon;
 
     switch (tabEnum) {
-      case TAB_ENUM.MESSAGES:
-        text = 'Messages'.i18n;
-        icon = Icons.mail_rounded;
-        break;
       case TAB_ENUM.VPN:
         text = 'VPN'.i18n;
         icon = Icons.vpn_key;
@@ -140,9 +133,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     return Container(
       height: 68,
       child: vpnModel
-          .subscribedBuilder(VpnModel.PATH_VPN_STATUS, defaultValue: latestVpnStatus,
-              builder: (BuildContext context, String vpnStatus, Widget child) {
-        latestVpnStatus = vpnStatus;
+          .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
         return Row(
           children: TAB_ENUM.values
               .asMap()
@@ -152,7 +143,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   renderBottomTabItem(
                     index: index,
                     tabEnum: tabEnum,
-                    isActive: (vpnStatus == "connected" || vpnStatus == "disconnecting"),
+                    isActive: (vpnStatus == "connected" ||
+                        vpnStatus == "disconnecting"),
                   ),
                 ),
               )
