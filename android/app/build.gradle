@@ -113,6 +113,13 @@ android {
             versionName "3.0.0"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // include only 32 bit ABIs to keep size down and work around Flutter's lack of 64 bit arm support at the moment
+        // See https://medium.com/codechai/flutter-app-couldnt-find-libflutter-so-c95ad81cbccd
+        // more information here - https://github.com/azihsoyn/flutter_mlkit/issues/36
+//        ndk {
+//            abiFilters 'armeabi-v7a';'x86'
+//        }
     }
 
     compileOptions {
@@ -412,7 +419,7 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:326d1f7'
-    implementation 'com.github.getlantern:observablemodel-android:ec269cf'
+    implementation 'com.github.getlantern:observablemodel-android:42c4633'
 }
 
 apply plugin: 'com.google.gms.google-services'
