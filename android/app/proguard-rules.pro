@@ -184,3 +184,8 @@
    public static final ** CREATOR;
 }
 ##---------------End: proguard configuration for admob  ----------
+
+##---------------Begin: proguard configuration for sqlcipher  ----------
+-keep class net.sqlcipher.** { *; }
+-keep class net.sqlcipher.database.* { *; }
+##---------------End: proguard configuration for sqlcipher  ----------
