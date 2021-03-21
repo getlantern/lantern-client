@@ -3,37 +3,25 @@ package io.lantern.isimud.model
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.observablemodel.ObservableModel
-import org.getlantern.lantern.LanternApp
-import java.io.File
 
-/**
- * Created by DoNguyen on 10/3/21.
- */
 class VpnModel(
     flutterEngine: FlutterEngine? = null,
     private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
-) : Model("vpn", flutterEngine, vpnObservableModel) {
+) : Model("vpn", flutterEngine) {
 
     companion object {
         const val PATH_VPN_STATUS = "/vpn_status"
         const val PATH_SERVER_INFO = "/server_info"
         const val PATH_BANDWIDTH = "/bandwidth"
+    }
 
-        val vpnObservableModel = ObservableModel.build(
-            ctx = LanternApp.getAppContext(),
-            filePath = File(
-                File(LanternApp.getAppContext().filesDir, ".lantern"),
-                "vpn_db"
-            ).absolutePath,
-            password = "password" // TODO: make the password random and save it as an encrypted preference
-        )
-
-        init {
-            vpnObservableModel.mutate { tx ->
-                // initialize vpn status for fresh install
-                tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
-            }
+    init {
+        observableModel.mutate { tx ->
+            // initialize vpn status for fresh install
+            tx.put(
+                namespacedPath(PATH_VPN_STATUS),
+                tx.get<String>(namespacedPath(PATH_VPN_STATUS)) ?: "disconnected"
+            )
         }
     }
 
@@ -41,7 +29,7 @@ class VpnModel(
         when (call.method) {
             "switchVPN" -> {
                 val on = call.argument<Boolean>("on") ?: false
-                saveVpnStatus(if(on) "connecting" else "disconnecting")
+                saveVpnStatus(if (on) "connecting" else "disconnecting")
                 switchLantern(on)
             }
             else -> super.onMethodCall(call, result)
@@ -54,7 +42,7 @@ class VpnModel(
     }
 
     private fun vpnStatus(): String {
-        return observableModel.get(PATH_VPN_STATUS) ?: ""
+        return observableModel.get(namespacedPath(PATH_VPN_STATUS)) ?: ""
     }
 
     private fun switchLantern(value: Boolean) {
@@ -68,19 +56,19 @@ class VpnModel(
 
     fun saveVpnStatus(vpnStatus: String) {
         observableModel.mutate { tx ->
-            tx.put(PATH_VPN_STATUS, vpnStatus)
+            tx.put(namespacedPath(PATH_VPN_STATUS), vpnStatus)
         }
     }
 
     fun saveServerInfo(serverInfo: Vpn.ServerInfo) {
         observableModel.mutate { tx ->
-            tx.put(PATH_SERVER_INFO, serverInfo)
+            tx.put(namespacedPath(PATH_SERVER_INFO), serverInfo)
         }
     }
 
     fun saveBandwidth(bandwidth: Vpn.Bandwidth) {
         observableModel.mutate { tx ->
-            tx.put(PATH_BANDWIDTH, bandwidth)
+            tx.put(namespacedPath(PATH_BANDWIDTH), bandwidth)
         }
     }
 }
