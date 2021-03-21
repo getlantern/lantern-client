@@ -22,9 +22,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 
-/**
- * Created by DoNguyen on 28/12/20.
- */
 @RunWith(AndroidJUnit4::class)
 class DataUsageTests {
 
