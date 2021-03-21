@@ -12,6 +12,7 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
+import io.lantern.isimud.model.Model
 import io.lantern.isimud.model.Vpn
 import io.lantern.isimud.model.VpnModel
 import io.lantern.observablemodel.ObservableModel
@@ -36,10 +37,8 @@ abstract class SessionManager(application: Application) : Session {
     private var staging = false
     val settings: Settings
     protected val context: Context
-    protected val secrets: Secrets
     protected val prefs: SharedPreferences
     protected val editor: SharedPreferences.Editor
-    protected val prefsModel: ObservableModel
     protected val vpnModel: VpnModel
 
     // dynamic settings passed to internal services
@@ -466,13 +465,8 @@ abstract class SessionManager(application: Application) : Session {
     init {
         appVersion = Utils.appVersion(application)
         context = application
-        val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
-        secrets = Secrets("lanternMasterKey", secretsPreferences)
-        val prefsDBLocation = File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath
-        val prefsDBPassword = secrets.get("prefsPassword", 16)!!
-        prefsModel = ObservableModel.build(application, prefsDBLocation, prefsDBPassword)
-        prefs = prefsModel.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
         vpnModel = VpnModel()
+        prefs = Model.observableModel.asSharedPreferences("session/", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
         editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(INTERNAL_HEADERS_PREF_NAME,
                 Context.MODE_PRIVATE)
