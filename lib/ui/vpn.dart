@@ -1,4 +1,5 @@
 import 'package:flag/flag.dart';
+import 'package:lantern/model/session.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -12,6 +13,7 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var vpnModel = context.watch<VpnModel>();
+    var sessionModel = context.watch<SessionModel>();
 
     void openInfoServerLocation() {
       showDialog(
@@ -91,61 +93,55 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget proBanner() {
-      return vpnModel
-          .bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
-        return Opacity(
-          opacity: bandwidth.allowed > 0 ? 1 : 0,
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: HexColor(unselectedTabColor),
-              border: Border.all(
-                color: HexColor(borderColor),
-                width: 1,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(borderRadius),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  FontAwesomeIcons.crown,
-                  color: Colors.orange[300],
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Go Pro Title".i18n,
-                          style: tsSubHead(context).copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "Go Pro Description".i18n,
-                          style: tsCaption(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(
-                  FontAwesomeIcons.chevronRight,
-                  size: 16,
-                ),
-              ],
-            ),
+      return Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: HexColor(unselectedTabColor),
+          border: Border.all(
+            color: HexColor(borderColor),
+            width: 1,
           ),
-        );
-      });
+          borderRadius: BorderRadius.all(
+            Radius.circular(borderRadius),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              FontAwesomeIcons.crown,
+              color: Colors.orange[300],
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Go Pro Title".i18n,
+                      style: tsSubHead(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      "Go Pro Description".i18n,
+                      style: tsCaption(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Icon(
+              FontAwesomeIcons.chevronRight,
+              size: 16,
+            ),
+          ],
+        ),
+      );
     }
 
     Widget vpnSwitch() {
@@ -157,7 +153,6 @@ class VPNTab extends StatelessWidget {
             value: vpnStatus == "connected" || vpnStatus == "disconnecting",
             activeColor: HexColor(onSwitchColor),
             inactiveColor: HexColor(offSwitchColor),
-
             onToggle: (bool newValue) {
               if (vpnStatus != "connecting" || vpnStatus != "disconnecting") {
                 vpnModel.switchVPN(newValue);
@@ -339,38 +334,41 @@ class VPNTab extends StatelessWidget {
       );
     }
 
-    return BaseScreen(
-      title: 'LANTERN'.i18n,
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            proBanner(),
-            vpnSwitch(),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: HexColor(borderColor),
-                  width: 1,
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget child) {
+      return BaseScreen(
+        title: proUser ? 'LANTERN PRO' : 'LANTERN',
+        body: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              proUser ? Container() : proBanner(),
+              vpnSwitch(),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: HexColor(borderColor),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(borderRadius),
+                  ),
                 ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius),
+                child: Column(
+                  children: [
+                    vpnStatus(),
+                    customDivider(marginBottom: 4.0),
+                    serverLocation(),
+                    bandwidth(),
+                  ],
                 ),
               ),
-              child: Column(
-                children: [
-                  vpnStatus(),
-                  customDivider(marginBottom: 4.0),
-                  serverLocation(),
-                  bandwidth(),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
