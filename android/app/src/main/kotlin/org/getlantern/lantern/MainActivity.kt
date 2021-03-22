@@ -270,7 +270,7 @@ class MainActivity : FlutterActivity() {
         )
     }
 
-    protected open fun stopVpnService() {
+    private fun stopVpnService() {
         startService(
                 Intent(
                         this,

@@ -170,7 +170,7 @@ abstract class SessionManager(application: Application) : Session {
             val method = SystemProperties.getMethod("get", String::class.java)
             for (name in arrayOf("net.dns1", "net.dns2", "net.dns3", "net.dns4")) {
                 val value = method.invoke(null, name) as String
-                if (value != null && "" != value) {
+                if ("" != value) {
                     return "[$value]"
                 }
             }
@@ -469,7 +469,7 @@ abstract class SessionManager(application: Application) : Session {
         val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
         secrets = Secrets("lanternMasterKey", secretsPreferences)
         val prefsDBLocation = File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath
-        val prefsDBPassword = secrets.get("prefsPassword", 16)!!
+        val prefsDBPassword = secrets.get("prefsPassword", 32)
         prefsDb = DB.createOrOpen(application, prefsDBLocation, prefsDBPassword)
         prefs = prefsDb.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
         vpnModel = VpnModel()
