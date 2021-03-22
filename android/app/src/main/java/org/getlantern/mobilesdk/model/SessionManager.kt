@@ -12,9 +12,9 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
-import io.lantern.isimud.model.Vpn
-import io.lantern.isimud.model.VpnModel
-import io.lantern.observablemodel.ObservableModel
+import io.lantern.db.DB
+import io.lantern.android.model.Vpn
+import io.lantern.android.model.VpnModel
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
@@ -39,7 +39,7 @@ abstract class SessionManager(application: Application) : Session {
     protected val secrets: Secrets
     protected val prefs: SharedPreferences
     protected val editor: SharedPreferences.Editor
-    protected val prefsModel: ObservableModel
+    protected val prefsDb: DB
     protected val vpnModel: VpnModel
 
     // dynamic settings passed to internal services
@@ -305,11 +305,11 @@ abstract class SessionManager(application: Application) : Session {
         val amount = String.format("%s", update.percent)
         editor.putString(LATEST_BANDWIDTH, amount).commit()
         vpnModel.saveBandwidth(Vpn.Bandwidth.newBuilder()
-            .setPercent(update.percent)
-            .setRemaining(update.remaining)
-            .setAllowed(update.allowed)
-            .setTtlSeconds(update.ttlSeconds)
-            .build())
+                .setPercent(update.percent)
+                .setRemaining(update.remaining)
+                .setAllowed(update.allowed)
+                .setTtlSeconds(update.ttlSeconds)
+                .build())
     }
 
     fun savedBandwidth(): String? {
@@ -354,10 +354,10 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(SERVER_CITY, city).commit()
         editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
         vpnModel.saveServerInfo(Vpn.ServerInfo.newBuilder()
-            .setCity(city)
-            .setCountry(country)
-            .setCountryCode(countryCode)
-            .build())
+                .setCity(city)
+                .setCountry(country)
+                .setCountryCode(countryCode)
+                .build())
     }
 
     protected fun getInt(name: String?, defaultValue: Int): Int {
@@ -470,8 +470,8 @@ abstract class SessionManager(application: Application) : Session {
         secrets = Secrets("lanternMasterKey", secretsPreferences)
         val prefsDBLocation = File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath
         val prefsDBPassword = secrets.get("prefsPassword", 16)!!
-        prefsModel = ObservableModel.build(application, prefsDBLocation, prefsDBPassword)
-        prefs = prefsModel.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
+        prefsDb = DB.createOrOpen(application, prefsDBLocation, prefsDBPassword)
+        prefs = prefsDb.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
         vpnModel = VpnModel()
         editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(INTERNAL_HEADERS_PREF_NAME,

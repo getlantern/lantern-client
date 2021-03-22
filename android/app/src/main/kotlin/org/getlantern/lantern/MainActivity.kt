@@ -13,14 +13,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.isimud.model.MessagingModel
-import io.lantern.isimud.model.VpnModel
+import io.lantern.android.model.MessagingModel
+import io.lantern.android.model.VpnModel
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.store.MessagingStore
+import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
+import java.io.File
 import java.util.*
 
 class MainActivity : FlutterActivity() {
@@ -31,7 +35,9 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(flutterEngine)
+        messagingModel = MessagingModel(flutterEngine, Messaging(
+                MessagingStore(context, File(File(application.filesDir, ".lantern"), "messagingdb").absolutePath),
+                WebSocketTransportFactory("wss://tassis.lantern.io/api")))
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
     }
 
@@ -89,15 +95,15 @@ class MainActivity : FlutterActivity() {
                         val pm = packageManager
                         try {
                             val info =
-                                pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
+                                    pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
                             val label = info.loadLabel(pm)
                             msg.append(label)
                         } catch (nmfe: PackageManager.NameNotFoundException) {
                             Logger.error(
-                                PERMISSIONS_TAG,
-                                "Unexpected exception loading label for permission %s: %s",
-                                permission,
-                                nmfe
+                                    PERMISSIONS_TAG,
+                                    "Unexpected exception loading label for permission %s: %s",
+                                    permission,
+                                    nmfe
                             )
                             msg.append(permission)
                         }
@@ -107,18 +113,18 @@ class MainActivity : FlutterActivity() {
                         var description = "..."
                         try {
                             description = getString(
-                                resources.getIdentifier(
-                                    permission,
-                                    "string",
-                                    "org.getlantern.lantern"
-                                )
+                                    resources.getIdentifier(
+                                            permission,
+                                            "string",
+                                            "org.getlantern.lantern"
+                                    )
                             )
                         } catch (t: Throwable) {
                             Logger.warn(
-                                PERMISSIONS_TAG,
-                                "Couldn't get permission description for %s: %s",
-                                permission,
-                                t
+                                    PERMISSIONS_TAG,
+                                    "Couldn't get permission description for %s: %s",
+                                    permission,
+                                    t
                             )
                         }
                         msg.append(description)
@@ -126,21 +132,21 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    msg.toString()
+                        PERMISSIONS_TAG,
+                        msg.toString()
                 )
                 Utils.showAlertDialog(this,
-                    getString(R.string.please_allow_lantern_to),
-                    Html.fromHtml(msg.toString()),
-                    getString(R.string.continue_),
-                    false,
-                    Runnable {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            neededPermissions,
-                            FULL_PERMISSIONS_REQUEST
-                        )
-                    })
+                        getString(R.string.please_allow_lantern_to),
+                        Html.fromHtml(msg.toString()),
+                        getString(R.string.continue_),
+                        false,
+                        Runnable {
+                            ActivityCompat.requestPermissions(
+                                    this,
+                                    neededPermissions,
+                                    FULL_PERMISSIONS_REQUEST
+                            )
+                        })
                 return
             }
 
@@ -148,23 +154,23 @@ class MainActivity : FlutterActivity() {
             // Prompt the user to enable full-device VPN mode
             // Make a VPN connection from the client
             Logger.debug(
-                TAG,
-                "Load VPN configuration"
+                    TAG,
+                    "Load VPN configuration"
             )
             val intent = VpnService.prepare(this)
             if (intent != null) {
                 Logger.warn(
-                    TAG,
-                    "Requesting VPN connection"
+                        TAG,
+                        "Requesting VPN connection"
                 )
                 startActivityForResult(
-                    intent.setAction(LanternVpnService.ACTION_CONNECT),
-                    REQUEST_VPN
+                        intent.setAction(LanternVpnService.ACTION_CONNECT),
+                        REQUEST_VPN
                 )
             } else {
                 Logger.debug(
-                    TAG,
-                    "VPN enabled, starting Lantern..."
+                        TAG,
+                        "VPN enabled, starting Lantern..."
                 )
                 updateStatus(true)
                 startVpnService()
@@ -179,9 +185,9 @@ class MainActivity : FlutterActivity() {
     granted based on being included in Manifest and will show as denied even if we're eligible
     to get it.*/
     private val allRequiredPermissions = arrayOf(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.ACCESS_NETWORK_STATE
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.ACCESS_NETWORK_STATE
     )
 
     private fun missingPermissions(): Array<String> {
@@ -196,25 +202,25 @@ class MainActivity : FlutterActivity() {
 
     private fun hasPermission(permission: String): Boolean {
         val result = ContextCompat.checkSelfPermission(
-            applicationContext,
-            permission
+                applicationContext,
+                permission
         ) == PackageManager.PERMISSION_GRANTED
         Logger.debug(PERMISSIONS_TAG, "has permission %s: %s", permission, result)
         return result
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray,
     ) {
         when (requestCode) {
             FULL_PERMISSIONS_REQUEST -> {
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "Got result for %s: %s",
-                    permissions.size,
-                    grantResults.size
+                        PERMISSIONS_TAG,
+                        "Got result for %s: %s",
+                        permissions.size,
+                        grantResults.size
                 )
                 var i = 0
                 while (i < permissions.size) {
@@ -222,17 +228,17 @@ class MainActivity : FlutterActivity() {
                     val result = grantResults[i]
                     if (result == PackageManager.PERMISSION_DENIED) {
                         Logger.debug(
-                            PERMISSIONS_TAG,
-                            "User denied permission %s",
-                            permission
+                                PERMISSIONS_TAG,
+                                "User denied permission %s",
+                                permission
                         )
                         return
                     }
                     i++
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "User granted requested permissions, attempt to switch on Lantern"
+                        PERMISSIONS_TAG,
+                        "User granted requested permissions, attempt to switch on Lantern"
                 )
                 try {
                     switchLantern(true)
@@ -257,19 +263,19 @@ class MainActivity : FlutterActivity() {
 
     private fun startVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_CONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_CONNECT)
         )
     }
 
     protected open fun stopVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_DISCONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_DISCONNECT)
         )
     }
 

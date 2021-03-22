@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import '../model/protobuf_message_codec.dart';
 import 'model_event_channel.dart';
 
 abstract class Model {
@@ -15,8 +15,7 @@ abstract class Model {
   Map<String, SubscribedValueNotifier> _subscribedValueNotifiers = HashMap();
 
   Model(String name) {
-    methodChannel = MethodChannel(
-        "${name}_method_channel", StandardMethodCodec(ProtobufMessageCodec()));
+    methodChannel = MethodChannel("${name}_method_channel");
     _updatesChannel = ModelEventChannel("${name}_event_channel");
   }
 
@@ -62,18 +61,18 @@ abstract class Model {
     }).toList());
   }
 
-  ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue) {
+  ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue, {T deserialize(Uint8List serialized)}) {
     SubscribedValueNotifier<T> result = _subscribedValueNotifiers[path];
     if (result == null) {
-      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel);
+      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel, deserialize: deserialize);
       _subscribedValueNotifiers[path] = result;
     }
     return result;
   }
 
   ValueListenableBuilder<T> subscribedBuilder<T>(String path,
-      {@required T defaultValue, @required ValueWidgetBuilder<T> builder}) {
-    var notifier = buildValueNotifier(path, defaultValue);
+      {@required T defaultValue, @required ValueWidgetBuilder<T> builder, T deserialize(Uint8List serialized)}) {
+    var notifier = buildValueNotifier(path, defaultValue, deserialize: deserialize);
     return SubscribedBuilder<T>(path, notifier, builder);
     // TODO: provide a mechanism for canceling subscriptions
   }
@@ -83,13 +82,12 @@ class SubscribedValueNotifier<T> extends ValueNotifier<T> {
   void Function() cancel;
 
   SubscribedValueNotifier(
-      String path, T defaultValue, ModelEventChannel channel)
+      String path, T defaultValue, ModelEventChannel channel,
+      {T deserialize(Uint8List serialized)})
       : super(defaultValue) {
-    cancel = channel.subscribe(
-        path: path,
-        onNewValue: (dynamic newValue) {
-          value = newValue as T;
-        });
+    cancel = channel.subscribe(path, onNewValue: (dynamic newValue) {
+      value = newValue as T;
+    }, deserialize: deserialize);
   }
 }
 

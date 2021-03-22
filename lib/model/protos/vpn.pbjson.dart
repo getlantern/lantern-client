@@ -2,9 +2,13 @@
 //  Generated code. Do not modify.
 //  source: protos/vpn.proto
 //
-// @dart = 2.3
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// @dart = 2.7
+// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields,deprecated_member_use_from_same_package
 
+import 'dart:core' as $core;
+import 'dart:convert' as $convert;
+import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use serverInfoDescriptor instead')
 const ServerInfo$json = const {
   '1': 'ServerInfo',
   '2': const [
@@ -14,6 +18,9 @@ const ServerInfo$json = const {
   ],
 };
 
+/// Descriptor for `ServerInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List serverInfoDescriptor = $convert.base64Decode('CgpTZXJ2ZXJJbmZvEhIKBGNpdHkYASABKAlSBGNpdHkSGAoHY291bnRyeRgCIAEoCVIHY291bnRyeRIgCgtjb3VudHJ5Q29kZRgDIAEoCVILY291bnRyeUNvZGU=');
+@$core.Deprecated('Use bandwidthDescriptor instead')
 const Bandwidth$json = const {
   '1': 'Bandwidth',
   '2': const [
@@ -24,3 +31,5 @@ const Bandwidth$json = const {
   ],
 };
 
+/// Descriptor for `Bandwidth`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List bandwidthDescriptor = $convert.base64Decode('CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIcCglyZW1haW5pbmcYAiABKANSCXJlbWFpbmluZxIYCgdhbGxvd2VkGAMgASgDUgdhbGxvd2VkEh4KCnR0bFNlY29uZHMYBCABKANSCnR0bFNlY29uZHM=');
