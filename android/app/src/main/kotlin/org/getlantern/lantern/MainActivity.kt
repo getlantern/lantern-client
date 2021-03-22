@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.lantern.isimud.model.MessagingModel
+import io.lantern.isimud.model.SessionModel
 import io.lantern.isimud.model.VpnModel
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
@@ -27,12 +28,14 @@ class MainActivity : FlutterActivity() {
 
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
+    private lateinit var sessionModel: SessionModel
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         messagingModel = MessagingModel(flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        sessionModel = SessionModel(flutterEngine)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +57,7 @@ class MainActivity : FlutterActivity() {
         super.onDestroy()
         messagingModel.destroy()
         vpnModel.destroy()
+        sessionModel.destroy()
         try {
             unbindService(lanternServiceConnection)
         } catch (t: Throwable) {
