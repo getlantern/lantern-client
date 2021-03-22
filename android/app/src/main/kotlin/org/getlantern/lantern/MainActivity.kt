@@ -13,11 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.android.model.MessagingModel
 import io.lantern.android.model.VpnModel
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.store.MessagingStore
-import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -29,15 +25,11 @@ import java.util.*
 
 class MainActivity : FlutterActivity() {
 
-    private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(flutterEngine, Messaging(
-                MessagingStore(context, File(File(application.filesDir, ".lantern"), "messagingdb").absolutePath),
-                WebSocketTransportFactory("wss://tassis.lantern.io/api")))
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
     }
 
@@ -58,7 +50,6 @@ class MainActivity : FlutterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        messagingModel.destroy()
         vpnModel.destroy()
         try {
             unbindService(lanternServiceConnection)
