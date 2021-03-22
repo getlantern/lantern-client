@@ -1,6 +1,8 @@
 package org.getlantern.lantern
 
+import android.Android
 import android.Manifest
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -21,12 +23,15 @@ import io.lantern.isimud.model.SessionModel
 import io.lantern.isimud.model.VpnModel
 import okhttp3.Response
 import org.getlantern.lantern.activity.PopUpAdActivity_
+import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.*
+import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -44,6 +49,8 @@ class MainActivity : FlutterActivity() {
 
     private var countDown: AuctionCountDown? = null
 
+    private lateinit var appVersion: String
+
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
@@ -56,12 +63,47 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+
         val intent = Intent(this, LanternService_::class.java)
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
+
+        appVersion = Utils.appVersion(this)
     }
 
     override fun onResume() {
+        // TODO [issue42] migrate to MainActivity
+//        if (LanternApp.getSession().yinbiEnabled()) {
+//            bulkRenewSection.setVisibility(View.VISIBLE)
+//        } else {
+//            val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB)
+//            if (tab != null) {
+//                tab.visibility = View.GONE
+//            }
+//        }
+
+        updateUserData()
+
         super.onResume()
+
+        if (LanternApp.getSession().lanternDidStart()) {
+            fetchLoConf()
+        }
+
+        if (Utils.isPlayVersion(this)) {
+            if (!LanternApp.getSession().hasAcceptedTerms()) {
+                startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
+            }
+        }
+
+        // TODO [issue42] migrate to MainActivity
+//        if (LanternApp.getSession().yinbiEnabled()) {
+//            upgradeToPro.setText(resources.getString(R.string.upgrade_to_pro_yinbi))
+//        }
+
         if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
                 activity,
                 LanternVpnService::class.java
@@ -70,7 +112,6 @@ class MainActivity : FlutterActivity() {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
         }
-        updateUserData()
     }
 
     override fun onPause() {
@@ -85,6 +126,7 @@ class MainActivity : FlutterActivity() {
         messagingModel.destroy()
         vpnModel.destroy()
         sessionModel.destroy()
+        EventBus.getDefault().unregister(this)
         try {
             unbindService(lanternServiceConnection)
         } catch (t: Throwable) {
@@ -101,6 +143,14 @@ class MainActivity : FlutterActivity() {
         }
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {}
+    }
+
+    /**
+     * Fetch the latest loconf config and update the UI based on those
+     * settings
+     */
+    private fun fetchLoConf() {
+        fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -316,6 +366,89 @@ class MainActivity : FlutterActivity() {
         return false
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun runCheckUpdate(checkUpdate: CheckUpdate) {
+        val userInitiated = checkUpdate.userInitiated
+        if (Utils.isPlayVersion(this)) {
+            Logger.debug(TAG, "App installed via Play; not checking for update")
+            if (userInitiated) {
+                // If the user installed the app via Google Play,
+                // we just open the Play store
+                // because self-updating will not work:
+                // "An app downloaded from Google Play may not modify,
+                // replace, or update itself
+                // using any method other than Google Play's update mechanism"
+                // https://play.google.com/about/privacy-and-security.html#malicious-behavior
+                Utils.openPlayStore(this)
+            }
+            return
+        }
+        UpdateTask(this, userInitiated).execute()
+    }
+
+    /**
+     * UpdateTask compares the current app version with the latest available
+     * If an update is available, we start the Update activity
+     * and prompt the user to download it
+     * - If no update is available, an alert dialog is displayed
+     * - userInitiated is a boolean used to indicate whether the udpate was
+     * triggered from the side-menu or is an automatic check
+     */
+    private inner class UpdateTask(
+        private val activity: Activity,
+        private val userInitiated: Boolean
+    ) :
+        AsyncTask<Void, Void, String?>() {
+
+        override fun doInBackground(vararg v: Void): String? {
+            try {
+                Logger.debug(TAG, "Checking for updates")
+                return Android.checkForUpdates()
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, "Error checking for update", e)
+            }
+            return null
+        }
+
+        override fun onPostExecute(url: String?) {
+            // No error occurred but the returned url is empty which
+            // means no update is available
+            if (url == null) {
+                val appName: String = resources.getString(R.string.app_name)
+                val message: String = String.format(
+                    resources.getString(R.string.error_checking_for_update),
+                    appName
+                )
+                Utils.showAlertDialog(activity, appName, message, false)
+                return
+            }
+            if (url == "") {
+                noUpdateAvailable(userInitiated)
+                Logger.debug(TAG, "No update available")
+                return
+            }
+            Logger.debug(
+                TAG,
+                "Update available at $url"
+            )
+            // an updated version of Lantern is available at the given url
+            val intent = Intent(activity, UpdateActivity_::class.java)
+            intent.putExtra("updateUrl", url)
+            startActivity(intent)
+        }
+    }
+
+    private fun noUpdateAvailable(showAlert: Boolean) {
+        if (!showAlert) {
+            return
+        }
+        val appName = resources.getString(R.string.app_name)
+        val noUpdateTitle = resources.getString(R.string.no_update_available)
+        val noUpdateMsg =
+            String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
+        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
+    }
+
     @Throws(Exception::class)
     private fun switchLantern(on: Boolean) {
         Logger.d(TAG, "switchLantern to %1\$s", on)
@@ -508,7 +641,7 @@ class MainActivity : FlutterActivity() {
         )
     }
 
-    protected open fun stopVpnService() {
+    private fun stopVpnService() {
         startService(
             Intent(
                 this,
@@ -527,6 +660,12 @@ class MainActivity : FlutterActivity() {
         handler.postDelayed({
             vpnModel.setVpnOn(useVpn)
         }, 500)
+    }
+
+    // Recreate the activity when the language changes
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun languageChanged(locale: Locale) {
+        recreate()
     }
 
     companion object {

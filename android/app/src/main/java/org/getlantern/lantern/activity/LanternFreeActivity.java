@@ -57,7 +57,6 @@ public class LanternFreeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO [issue42] migrate to MainActivity
         if (LanternApp.getSession().yinbiEnabled()) {
             upgradeToPro.setText(getResources().getString(R.string.upgrade_to_pro_yinbi));
         }

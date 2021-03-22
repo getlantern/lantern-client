@@ -118,7 +118,6 @@ public abstract class BaseActivity extends org.getlantern.mobilesdk.activity.Bas
 
     @Override
     protected void onResume() {
-        // TODO [issue42] migrate to MainActivity
         if (LanternApp.getSession().yinbiEnabled()) {
             bulkRenewSection.setVisibility(View.VISIBLE);
         } else {
