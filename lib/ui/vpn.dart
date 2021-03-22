@@ -1,10 +1,9 @@
 import 'package:flag/flag.dart';
+import 'package:lantern/model/protos_shared/vpn.pb.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
-
-import '../model/protos/vpn.pb.dart';
 
 class VPNTab extends StatelessWidget {
   VPNTab({Key key}) : super(key: key);
@@ -340,7 +339,7 @@ class VPNTab extends StatelessWidget {
     }
 
     return BaseScreen(
-      title: 'LANTERN'.i18n,
+      title: 'VPN'.i18n,
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(

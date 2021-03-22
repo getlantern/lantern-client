@@ -78,7 +78,7 @@ abstract class Model(
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as Int
         val path = args["path"] as String
-        val detailsPrefix = args["detailsPrefix"]
+        val details = args["details"]?.let { it as Boolean} ?: false
         val raw = args["raw"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
         val subscriber: RawSubscriber<Any> = if (raw) {
@@ -120,7 +120,7 @@ abstract class Model(
                 }
             }
         }
-        if (detailsPrefix != null) {
+        if (details) {
             db.subscribeDetails(subscriber)
         } else {
             db.subscribe(subscriber)

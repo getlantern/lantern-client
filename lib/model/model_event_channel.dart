@@ -14,14 +14,12 @@ class ModelEventChannel extends EventChannel {
   ModelEventChannel(String name) : super(name);
 
   void Function() subscribe<T>(String path,
-      {String prefixPath,
-      @required void onNewValue(T newValue),
-      T deserialize(Uint8List serialized)}) {
+      {bool details,
+        @required void onNewValue(T newValue),
+        T deserialize(Uint8List serialized)}) {
     var subscriberID = nextSubscriberID++;
     var arguments = {"subscriberID": subscriberID, "path": path};
-    if (prefixPath != null) {
-      arguments["prefixPath"] = prefixPath;
-    }
+    arguments["details"] = details;
     if (deserialize != null) {
       arguments["raw"] = true;
       subscribers[subscriberID] = (Uint8List serialized) {

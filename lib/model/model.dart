@@ -52,27 +52,24 @@ abstract class Model {
     return result;
   }
 
-  Future<List<ValueNotifier<T>>> getRangeDetailNotifiers<T>(String path,
-      String detailsPrefix, int start, int count, T defaultValue) async {
-    var list = await getRange(path, start, count);
-    return Future.value(list.map((e) {
-      var detailsPath = "$detailsPrefix/$e";
-      return buildValueNotifier(detailsPath, defaultValue);
-    }).toList());
-  }
-
-  ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue, {T deserialize(Uint8List serialized)}) {
+  ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue,
+      {bool details, T deserialize(Uint8List serialized)}) {
     SubscribedValueNotifier<T> result = _subscribedValueNotifiers[path];
     if (result == null) {
-      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel, deserialize: deserialize);
+      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel,
+          details: details, deserialize: deserialize);
       _subscribedValueNotifiers[path] = result;
     }
     return result;
   }
 
   ValueListenableBuilder<T> subscribedBuilder<T>(String path,
-      {@required T defaultValue, @required ValueWidgetBuilder<T> builder, T deserialize(Uint8List serialized)}) {
-    var notifier = buildValueNotifier(path, defaultValue, deserialize: deserialize);
+      {T defaultValue,
+      @required ValueWidgetBuilder<T> builder,
+      bool details,
+      T deserialize(Uint8List serialized)}) {
+    var notifier = buildValueNotifier(path, defaultValue,
+        details: details, deserialize: deserialize);
     return SubscribedBuilder<T>(path, notifier, builder);
     // TODO: provide a mechanism for canceling subscriptions
   }
@@ -83,9 +80,9 @@ class SubscribedValueNotifier<T> extends ValueNotifier<T> {
 
   SubscribedValueNotifier(
       String path, T defaultValue, ModelEventChannel channel,
-      {T deserialize(Uint8List serialized)})
+      {bool details, T deserialize(Uint8List serialized)})
       : super(defaultValue) {
-    cancel = channel.subscribe(path, onNewValue: (dynamic newValue) {
+    cancel = channel.subscribe(path, details: details, onNewValue: (dynamic newValue) {
       value = newValue as T;
     }, deserialize: deserialize);
   }

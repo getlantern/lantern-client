@@ -233,7 +233,6 @@ android {
         prod {
         }
         autoTest {
-            minSdkVersion 19 // required by Stripe.
             versionCode 1 // so we can always test auto-update.
         }
     }
@@ -443,6 +442,9 @@ dependencies {
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:3ac588e'
     implementation 'com.github.getlantern:db-android:bcca0c2'
+    implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
+    implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
+    implementation 'com.github.getlantern:messaging-android:32a759f'
 }
 
 apply plugin: 'com.google.gms.google-services'

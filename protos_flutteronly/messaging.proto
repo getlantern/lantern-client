@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package model;
+
+option java_package = "io.lantern.messaging";
+
+// A contact in the address book
+message Contact {
+  string id = 1; // the public IdentityKey identifying this Contact, base32 encoded
+  string displayName = 2; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
+}
+
+// A group
+message Group {
+  string id = 1; // a globally unique identifier for the group (type 4 UUID), base32 encoded
+  repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded
+  string displayName = 3; // the display name shown for this Group
+
+}
+
+// A conversation (
+message Conversation {
+  // Who this Conversation pertains to, either a single Contact or a Group
+  oneof party {
+    string contactId = 1;
+    string groupId = 2;
+  }
+  int64 mostRecentMessageTime = 3; // the sent unix timestamp of the most recent message in this conversation
+  string mostRecentMessageText = 4; // the text of the most recent message in this conversation
+}
+
+// A short message, the primary type of message exchanged by users. It's either text or ogg encoded
+// voice data.
+message ShortMessage {
+  bytes id = 1; // the id of the message, unique under the given sender
+  int64 sent = 2; // The unix timestamp in nanoseconds for when the message was sent
+  oneof body {
+    string text = 3;
+    bytes oggVoice = 4;
+  }
+}
+
+// A record of a ShortMessage either sent or received
+message ShortMessageRecord {
+  enum Direction {
+    OUT = 0;
+    IN = 1;
+  }
+
+  enum DeliveryStatus {
+    UNSENT = 0;
+    FAILING = 1; // message is currently failing to send but we'll try again
+    PARTIALLY_FAILED = 2; // message failed to send to a subset of recipients, will not retry
+    COMPLETELY_FAILED = 3; // message failed to send to any recipients, will not retry
+    SENT = 4; // message has been successfully sent
+  }
+
+  string senderId = 1; // the id of who sent this message
+  string id = 2; // the id of the message (same as on ShortMessage), encoded in base32
+  int64 sent = 3; // The unix timestamp in nanoseconds for when the message was sent
+  Direction direction = 4; // direction in which the message is going/came
+  DeliveryStatus status = 5; // for outgoing messages, the status of its sending and delivery
+  bytes message = 6; // the serialized ShortMessage
+}
+
+message OutgoingShortMessage {
+  // Whom this Conversation pertains to, either a single Contact or a Group
+  oneof recipient {
+    string contactId = 1;
+    string groupId = 2;
+  }
+  repeated string remainingRecipients = 3; // identityKeys of recipients who still need to be sent the message, base32 encoded
+  ShortMessage message = 4;
+  int64 lastFailed = 5; // Time of last failure (nanoseconds since epoch)
+}
+
+message TransferMessage {
+  oneof content {
+    ShortMessage shortMessage = 1;
+  }
+}
