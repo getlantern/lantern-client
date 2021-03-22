@@ -8,20 +8,29 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.*
 import android.text.Html
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
+import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.lantern.isimud.model.MessagingModel
 import io.lantern.isimud.model.SessionModel
 import io.lantern.isimud.model.VpnModel
-import org.getlantern.lantern.model.VpnState
+import okhttp3.Response
+import org.getlantern.lantern.activity.PopUpAdActivity_
+import org.getlantern.lantern.model.*
+import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.*
 import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 class MainActivity : FlutterActivity() {
@@ -30,6 +39,10 @@ class MainActivity : FlutterActivity() {
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
+
+    private val lanternClient = LanternApp.getLanternHttpClient()
+
+    private var countDown: AuctionCountDown? = null
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -49,10 +62,22 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(activity, LanternVpnService::class.java)) {
+        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
+                activity,
+                LanternVpnService::class.java
+            )
+        ) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
         }
+        updateUserData()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // stop auction countdown
+        countDown?.cancel()
+        countDown = null
     }
 
     override fun onDestroy() {
@@ -76,6 +101,219 @@ class MainActivity : FlutterActivity() {
         }
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {}
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun lanternStarted(status: LanternStatus) {
+        updateUserData()
+    }
+
+    private fun updateUserData() {
+        lanternClient.userData(object : ProUserCallback {
+
+            override fun onFailure(throwable: Throwable, error: ProError) {
+                Logger.error(TAG, "Unable to fetch user data", throwable)
+            }
+
+            override fun onSuccess(response: Response, user: ProUser?) {
+                runOnUiThread {
+                    user?.let {
+                        val yinbiEnabled = user.yinbiEnabled
+                        if (yinbiEnabled) {
+                            setYinbiAuctionInfo()
+                        }
+                        LanternApp.getSession().setYinbiEnabled(yinbiEnabled)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setYinbiAuctionInfo() {
+        // TODO [issue42] migrate to MainActivity
+//        val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB) as View
+//            ?: return
+//        val title = tab.findViewById<View>(R.id.tabText) as TextView
+//        if (countDown != null && countDown!!.isRunning) {
+//            return
+//        }
+//        lanternClient.getYinbiAuctionInfo(
+//            AuctionInfoCallback { info ->
+//                if (info == null || info.timeLeft == null) {
+//                    return@AuctionInfoCallback
+//                }
+//                EventBus.getDefault().post(info)
+//                runOnUiThread {
+//                    countDown = AuctionCountDown(info, title)
+//                    countDown!!.start()
+//                }
+//            })
+    }
+
+    fun showSurvey(survey: Survey) {
+        val url = survey.url
+        if (url != null && url != "") {
+            if (LanternApp.getSession().surveyLinkOpened(url)) {
+                Logger.debug(
+                    TAG,
+                    "User already opened link to survey; not displaying snackbar"
+                )
+                return
+            }
+        }
+        val surveyListener = View.OnClickListener {
+            if (survey.showPlansScreen) {
+                startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
+                return@OnClickListener
+            }
+            LanternApp.getSession().setSurveyLinkOpened(survey.url)
+            FinestWebView.Builder(this@MainActivity)
+                .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+                .webViewSupportMultipleWindows(true)
+                .webViewJavaScriptEnabled(true)
+                .swipeRefreshColorRes(R.color.black)
+                .webViewAllowFileAccessFromFileURLs(true)
+                .webViewJavaScriptCanOpenWindowsAutomatically(true)
+                .show(survey.url!!)
+        }
+        Logger.debug(TAG, "Showing user survey snackbar")
+        // TODO [issue42] migrate to MainActivity
+//        org.getlantern.lantern.model.Utils.showSnackbar(
+//            coordinatorLayout, survey.message, survey.button,
+//            resources.getColor(R.color.pink), Snackbar.LENGTH_INDEFINITE, surveyListener
+//        )
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun processLoconf(loconf: LoConf) {
+        doProcessLoconf(loconf)
+        if (loconf.ads != null) {
+            handleBannerAd(loconf.ads!!)
+        }
+    }
+
+    private fun doProcessLoconf(loconf: LoConf) {
+        val locale = LanternApp.getSession().language
+        val countryCode = LanternApp.getSession().countryCode
+        Logger.debug(
+            SURVEY_TAG,
+            "Processing loconf; country code is $countryCode"
+        )
+        if (loconf.popUpAds != null) {
+            handlePopUpAd(loconf.popUpAds!!)
+        }
+        if (loconf.surveys == null) {
+            Logger.debug(SURVEY_TAG, "No survey config")
+            return
+        }
+        for (key in loconf.surveys!!.keys) {
+            Logger.debug(SURVEY_TAG, "Survey: " + loconf.surveys!![key])
+        }
+        var key = countryCode
+        var survey = loconf.surveys!![key]
+        if (survey == null) {
+            key = countryCode.toLowerCase()
+            survey = loconf.surveys!![key]
+        }
+        if (survey == null || !survey.enabled) {
+            key = locale
+            survey = loconf.surveys!![key]
+        }
+        if (survey == null) {
+            Logger.debug(SURVEY_TAG, "No survey found")
+        } else if (!survey.enabled) {
+            Logger.debug(SURVEY_TAG, "Survey disabled")
+        } else if (Math.random() > survey.probability) {
+            Logger.debug(SURVEY_TAG, "Not showing survey this time")
+        } else {
+            Logger.debug(
+                SURVEY_TAG,
+                "Deciding whether to show survey for '%s' at %s",
+                key,
+                survey.url
+            )
+            val userType = survey.userType
+            if (userType != null) {
+                if (userType == "free" && LanternApp.getSession().isProUser) {
+                    Logger.debug(
+                        SURVEY_TAG,
+                        "Not showing messages targetted to free users to Pro users"
+                    )
+                    return
+                } else if (userType == "pro" && !LanternApp.getSession().isProUser) {
+                    Logger.debug(
+                        SURVEY_TAG,
+                        "Not showing messages targetted to free users to Pro users"
+                    )
+                    return
+                }
+            }
+            showSurvey(survey)
+        }
+    }
+
+    /**
+     * Check if a popup ad is enabled for the current region or language
+     * and display the corresponding ad to the user if so
+     * @param popUpAds the popUpAds as defined in loconf
+     */
+    private fun handlePopUpAd(popUpAds: Map<String, PopUpAd>) {
+        var popUpAd = popUpAds[LanternApp.getSession().countryCode]
+        if (popUpAd == null) {
+            popUpAd = popUpAds[LanternApp.getSession().language]
+        }
+        if (popUpAd == null || !popUpAd.enabled) {
+            return
+        }
+        if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
+            Logger.debug(
+                TAG,
+                "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
+            )
+            return
+        }
+        Logger.debug(TAG, "Displaying popup ad..")
+        val numSeconds = popUpAd.displayFrequency
+        LanternApp.getSession().saveExpiringPref("popUpAd", numSeconds!!)
+        val intent = Intent(this, PopUpAdActivity_::class.java)
+        intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
+        startActivity(intent)
+    }
+
+    /**
+     * Check if the banner ad for our region or language is enabled and display. Returns true if ad
+     * was displayed.
+     *
+     * @param ads the ads as defined in loconf
+     */
+    private fun handleBannerAd(ads: Map<String, BannerAd>): Boolean {
+        // TODO [issue42] migrate to MainActivity
+//        var ad = ads[LanternApp.getSession().countryCode]
+//        if (ad == null) {
+//            ad = ads[LanternApp.getSession().language]
+//        }
+//        if (ad != null && ad.enabled) {
+//            val adUrl = ad.url
+//            Logger.debug(
+//                TAG,
+//                "Displaying banner ad with url " + adUrl + " " + ad.text
+//            )
+//            yinbiAdText.setText(ad.text)
+//            //Utils.setMargins(viewPagerTab, 125, 450, 0, 0);
+//            org.getlantern.lantern.model.Utils.clickify(
+//                yinbiWebsite, getString(R.string.visit_yinbi_website)
+//            ) {
+//                val intent = Intent(this@MainActivity, WebViewActivity_::class.java)
+//                intent.putExtra("url", adUrl)
+//                startActivity(intent)
+//                Lantern.sendEvent(this@MainActivity, "yinbi_link_clicked_on")
+//            }
+//            yinbiWebsite.setPaintFlags(0)
+//            Lantern.sendEvent(this, "yinbi_ad_shown")
+//            yinbiAdLayout.setVisibility(View.VISIBLE)
+//            return true
+//        }
+        return false
     }
 
     @Throws(Exception::class)
@@ -293,6 +531,7 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
+        private val SURVEY_TAG = "$TAG.survey"
         private val PERMISSIONS_TAG = "$TAG.permissions"
         private val FULL_PERMISSIONS_REQUEST = 8888
         private val REQUEST_VPN = 7777
