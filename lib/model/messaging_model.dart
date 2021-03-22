@@ -8,6 +8,10 @@ import '../package_store.dart';
 class MessagingModel extends Model {
   MessagingModel() : super("messaging");
 
+  Future<List<Conversation>> recentConversations({int count = 2 ^ 32}) {
+    return list<Conversation>("/cbt/%", count: count, reverseSort: true);
+  }
+
   ValueListenableBuilder<Conversation> conversation(
       Conversation conversation, ValueWidgetBuilder<Conversation> builder) {
     return subscribedBuilder<Conversation>("/con/${_partyPath(conversation)}",
@@ -27,6 +31,14 @@ class MessagingModel extends Model {
         return Group.fromBuffer(serialized);
       }
     });
+  }
+
+  ValueListenableBuilder<String> myContactId(
+      ValueWidgetBuilder<String> builder) {
+    return subscribedBuilder<String>(
+        "/signalProtocolStore/identityKeyPair/publicBase32",
+        defaultValue: "Bob",
+        builder: builder);
   }
 
   String _partyPath(Conversation conversation) {

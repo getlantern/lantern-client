@@ -15,37 +15,28 @@ abstract class Model {
   Map<String, SubscribedValueNotifier> _subscribedValueNotifiers = HashMap();
 
   Model(String name) {
-    methodChannel = MethodChannel("${name}_method_channel");
-    _updatesChannel = ModelEventChannel("${name}_event_channel");
+    methodChannel = MethodChannel('${name}_method_channel');
+    _updatesChannel = ModelEventChannel('${name}_event_channel');
   }
 
-  Future<void> put<T>(String path, T value) async {
-    methodChannel.invokeMethod('put', <String, dynamic>{
-      "path": path,
-      "value": value,
+  Future<T> get<T>(String path) async {
+    return methodChannel.invokeMethod('get', <String, dynamic>{
+      'path': path,
     });
   }
 
-  Future<List<T>> getRange<T>(String path, int start, int count) async {
+  Future<List<T>> list<T>(String path,
+      {int start,
+      int count = 2 ^ 32,
+      String fullTextSearch,
+      bool reverseSort}) async {
     var intermediate =
-        await methodChannel.invokeMethod('getRange', <String, dynamic>{
-      "path": path,
-      "start": start,
-      "count": count,
-    });
-    var result = List<T>();
-    intermediate.forEach((element) => result.add(element as T));
-    return result;
-  }
-
-  Future<List<T>> getRangeDetails<T>(
-      String path, String detailsPrefix, int start, int count) async {
-    var intermediate =
-        await methodChannel.invokeMethod('getRangeDetails', <String, dynamic>{
-      "path": path,
-      "detailsPrefix": detailsPrefix,
-      "start": start,
-      "count": count,
+        await methodChannel.invokeMethod('list', <String, dynamic>{
+      'path': path,
+      'start': start,
+      'count': count,
+      'fullTextSearch': fullTextSearch,
+      'reverseSort': reverseSort,
     });
     var result = List<T>();
     intermediate.forEach((element) => result.add(element as T));
@@ -82,7 +73,8 @@ class SubscribedValueNotifier<T> extends ValueNotifier<T> {
       String path, T defaultValue, ModelEventChannel channel,
       {bool details, T deserialize(Uint8List serialized)})
       : super(defaultValue) {
-    cancel = channel.subscribe(path, details: details, onNewValue: (dynamic newValue) {
+    cancel = channel.subscribe(path, details: details,
+        onNewValue: (dynamic newValue) {
       value = newValue as T;
     }, deserialize: deserialize);
   }

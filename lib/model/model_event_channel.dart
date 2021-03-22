@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class ModelEventChannel extends EventChannel {
-  var nextSubscriberID = 0;
+  var nextSubscriberID = new Random().nextInt(2^32); // Start with a random value to work well with hot restart in dev
   final subscribers = Map<int, Function>();
   final subscriptions = Map<int, StreamSubscription>();
 

@@ -5,8 +5,9 @@ class BaseScreen extends StatefulWidget {
   final String title;
   final List<Widget> actions;
   final Widget body;
+  final FloatingActionButton actionButton;
 
-  BaseScreen({this.title, this.actions, this.body, Key key}) : super(key: key);
+  BaseScreen({this.title, this.actions, this.body, this.actionButton, Key key}) : super(key: key);
 
   @override
   _BaseScreenState createState() => _BaseScreenState();
@@ -23,6 +24,7 @@ class _BaseScreenState extends State<BaseScreen>
         actions: widget.actions,
       ),
       body: widget.body,
+      floatingActionButton: widget.actionButton,
     );
   }
 

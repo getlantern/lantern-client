@@ -14,20 +14,20 @@ import java.util.concurrent.atomic.AtomicReference
 abstract class Model(
         private val name: String,
         flutterEngine: FlutterEngine? = null,
-        protected val db: DB
+        protected val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<Int>()
 
     init {
         flutterEngine?.let {
             EventChannel(
-                flutterEngine.dartExecutor,
-                "${name}_event_channel"
+                    flutterEngine.dartExecutor,
+                    "${name}_event_channel"
             ).setStreamHandler(this)
 
             MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "${name}_method_channel"
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "${name}_method_channel"
             ).setMethodCallHandler(this)
         }
     }
@@ -38,33 +38,14 @@ abstract class Model(
                 val path = call.arguments<String>()
                 result.success(db.get(path))
             }
-            "getRange" -> {
+            "list" -> {
                 val path = call.argument<String>("path")
-                val start = call.argument<Int>("start")!!
-                val count = call.argument<Int>("count")!!
-                if (path == "/conversationsByRecentActivity") { // TODO: temporary fix due to our current way of saving conversationsByRecentActivity
-                    result.success(
-                            db.list<List<Any>>(path, 0, 1).map { it.value }[0].subList(start, start + count)
-                    )
-                } else {
-                    result.success(
-                            db.list<Any>(path!!, start, count).map { it.value })
-                }
-            }
-            "getRangeDetails" -> {
-                val path = call.argument<String>("path")
-                val start = call.argument<Int>("start")
-                val count = call.argument<Int>("count")
+                val start = call.argument<Int?>("start") ?: 0
+                val count = call.argument<Int?>("count") ?: Int.MAX_VALUE
+                val fullTextSearch = call.argument<String?>("fullTextSearch")
+                val reverseSort = call.argument<Boolean?>("reverseSort") ?: false
                 result.success(
-                        db.listDetails<Any>(path!!, start!!, count!!).map { it.value })
-            }
-            "put" -> {
-                val path = call.argument<String>("path")!!
-                val value = call.argument<Any>("value")
-                db.mutate { tx ->
-                    tx.put(path, value)
-                }
-                result.success(null)
+                        db.list<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value })
             }
             else -> result.notImplemented()
         }
@@ -78,7 +59,7 @@ abstract class Model(
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as Int
         val path = args["path"] as String
-        val details = args["details"]?.let { it as Boolean} ?: false
+        val details = args["details"]?.let { it as Boolean } ?: false
         val raw = args["raw"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
         val subscriber: RawSubscriber<Any> = if (raw) {
