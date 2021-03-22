@@ -29,6 +29,7 @@ class MainActivity : FlutterActivity() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
+    private lateinit var navigator: Navigator
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -36,6 +37,7 @@ class MainActivity : FlutterActivity() {
         messagingModel = MessagingModel(flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
+        navigator = Navigator(this, flutterEngine)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

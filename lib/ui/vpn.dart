@@ -1,4 +1,5 @@
 import 'package:flag/flag.dart';
+import 'package:lantern/lantern_navigator.dart';
 import 'package:lantern/model/session.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
@@ -93,53 +94,58 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget proBanner() {
-      return Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: HexColor(unselectedTabColor),
-          border: Border.all(
-            color: HexColor(borderColor),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(borderRadius),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              FontAwesomeIcons.crown,
-              color: Colors.orange[300],
+      return InkWell( // TODO make InkWell ripple effect works with BoxDecoration
+        onTap: () {
+          LanternNavigator.startActivity(LanternNavigator.ACTIVITY_PLANS);
+        }, // Handle your callback
+        child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: HexColor(unselectedTabColor),
+            border: Border.all(
+              color: HexColor(borderColor),
+              width: 1,
             ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Go Pro Title".i18n,
-                      style: tsSubHead(context).copyWith(
-                        fontWeight: FontWeight.bold,
+            borderRadius: BorderRadius.all(
+              Radius.circular(borderRadius),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                FontAwesomeIcons.crown,
+                color: Colors.orange[300],
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Go Pro Title".i18n,
+                        style: tsSubHead(context).copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      "Go Pro Description".i18n,
-                      style: tsCaption(context),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "Go Pro Description".i18n,
+                        style: tsCaption(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Icon(
-              FontAwesomeIcons.chevronRight,
-              size: 16,
-            ),
-          ],
+              Icon(
+                FontAwesomeIcons.chevronRight,
+                size: 16,
+              ),
+            ],
+          ),
         ),
       );
     }
