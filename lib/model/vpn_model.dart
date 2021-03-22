@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos/vpn.pb.dart';
+import 'package:lantern/model/protos_shared/vpn.pb.dart';
 
 import '../package_store.dart';
 

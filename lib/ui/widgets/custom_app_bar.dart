@@ -20,7 +20,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       centerTitle: true,
       title: Text(
-        (widget.title ?? '').toUpperCase(),
+        (widget.title ?? ''),
         style: tsHeadline6(context).copyWith(fontWeight: FontWeight.bold),
       ),
       actions: widget.actions ?? [],

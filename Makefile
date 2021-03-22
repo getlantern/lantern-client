@@ -1,2 +1,2 @@
-lib/model/protos/*: protos/*.proto
-	protoc --dart_out=./lib/model --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart ./protos/*.proto
+lib/model/protos/*: protos_shared/*.proto protos_flutteronly/*.proto
+	protoc --dart_out=./lib/model --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/*.proto protos_flutteronly/*.proto

@@ -45,6 +45,10 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     IconData icon;
 
     switch (tabEnum) {
+      case TAB_ENUM.MESSAGING:
+        text = 'Messaging'.i18n;
+        icon = Icons.message;
+        break;
       case TAB_ENUM.VPN:
         text = 'VPN'.i18n;
         icon = Icons.vpn_key;

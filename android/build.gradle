@@ -31,7 +31,7 @@ ext {
     // see https://github.com/getlantern/lantern-internal/issues/4497
     compileSdkVersion = 29
     targetSdkVersion = 29
-    minSdkVersion = 19
+    minSdkVersion = 20 // required by qr_code_scanner
     androidAnnotationsVersion = '4.7.0'
     androidAnnotationsAPIVersion = '4.7.0'
     buildToolsVersion = '30.0.2'

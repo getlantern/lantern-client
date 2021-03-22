@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: onPageChange,
         controller: _pageController,
         children: [
+          MessagesTab(),
           VPNTab(),
           Center(child: Text("Need to build this")),
         ],
