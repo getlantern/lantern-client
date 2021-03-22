@@ -1,6 +1,8 @@
 import 'package:lantern/model/messaging_model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+
+import 'add_contact_by_id.dart';
+import 'add_contact_by_qr_code.dart';
 
 class AddContact extends StatelessWidget {
   @override
@@ -8,39 +10,21 @@ class AddContact extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'New Message'.i18n,
-      body: Scaffold(
-        
-        body: Container(),
-      )Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        ListTile(
-          leading: Icon(Icons.person_add),
-          title: Text('Add Contact'.i18n),
-        ),
-        Divider(thickness: 1),
-        ListTile(
-          leading: Icon(Icons.group_add),
-          title: Text('New Group Message'.i18n),
-        ),
-        Expanded(
-          child: FutureBuilder<List<Conversation>>(
-              future: model.recentConversations(count: 10),
-              builder: (context, AsyncSnapshot<List<Conversation>> snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-                var recentConversations = snapshot.data;
-                return ListView.builder(
-                  itemCount: recentConversations.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('${recentConversations[index]}'),
-                    );
-                  },
-                );
-              }),
-        )
-      ]),
+      title: 'Add Contact'.i18n,
+      body: DefaultTabController(
+        length: 2,
+        child: new Scaffold(
+            appBar: TabBar(
+              tabs: [
+                Tab(text: 'Scan QR Code'.i18n.toUpperCase()),
+                Tab(text: 'Enter Messenger ID'.i18n.toUpperCase()),
+              ],
+            ),
+            body: TabBarView(children: [
+              AddContactByQrCode(),
+              AddContactById(),
+            ])),
+      ),
     );
   }
 }

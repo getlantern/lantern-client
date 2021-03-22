@@ -1,16 +1,18 @@
-import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/messaging/new_message.dart';
 import 'package:lantern/ui/messaging/your_contact_info.dart';
 
+import 'add_contact.dart';
 import 'conversations.dart';
 
-class MessagesTab extends StatelessWidget {
+class MessagesTab extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    var messagingModel = context.watch<MessagingModel>();
+  _MessagesTabState createState() => _MessagesTabState();
+}
 
-    return Navigator(
+class _MessagesTabState extends State<MessagesTab>
+    with AutomaticKeepAliveClientMixin {
+  var navigator = Navigator(
       initialRoute: 'conversations',
       onGenerateRoute: (RouteSettings settings) {
         WidgetBuilder builder;
@@ -31,7 +33,13 @@ class MessagesTab extends StatelessWidget {
             throw Exception('Invalid route: ${settings.name}');
         }
         return MaterialPageRoute(builder: builder, settings: settings);
-      },
-    );
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return navigator;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,4 +1,5 @@
 import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/services.dart';
@@ -10,13 +11,13 @@ class YourContactInfo extends StatelessWidget {
 
     return BaseScreen(
       title: 'Your Contact Info'.i18n,
-      body: model.myContactId(
-          (BuildContext context, String myContactId, Widget child) {
+      body: model.me(
+          (BuildContext context, Contact me, Widget child) {
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: EdgeInsets.only(left: 64, right: 64, top: 32, bottom: 32),
             child: QrImage(
-              data: myContactId,
+              data: "$me.id|$me.displayName",
               errorCorrectionLevel: QrErrorCorrectLevel.H,
               version: QrVersions.auto,
             ),
@@ -31,7 +32,7 @@ class YourContactInfo extends StatelessWidget {
                   style: tsSubTitle(context).copyWith(fontSize: 12))),
           ListTile(
             leading: Icon(Icons.perm_identity),
-            title: Text("My Display Name Here TBD"),
+            title: Text(me.displayName),
             trailing: TextButton(child: Text("Change".i18n)),
             tileColor: Colors.black12,
           ),
@@ -43,12 +44,12 @@ class YourContactInfo extends StatelessWidget {
                   style: tsSubTitle(context).copyWith(fontSize: 12))),
           ListTile(
             leading: Icon(Icons.vpn_key_rounded),
-            title: Text(myContactId),
+            title: Text(me.id),
             tileColor: Colors.black12,
             onTap: () {
-              Clipboard.setData(new ClipboardData(text: myContactId));
+              Clipboard.setData(new ClipboardData(text: me.id));
               Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('contact id copied to clipboard'.i18n)));
+                  content: Text('Messenger ID copied to clipboard'.i18n)));
             },
           )
         ]);

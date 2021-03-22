@@ -75,14 +75,14 @@ class _ConversationsState extends State<Conversations> {
               icon: Icon(Icons.qr_code),
               tooltip: "Your Contact Info".i18n,
               onPressed: () {
-                Navigator.pushNamed(context, 'your_contact_info');
+                Navigator.restorablePushNamed(context, 'your_contact_info');
               }),
         ],
         body: Container(),
         actionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.pushNamed(context, 'new_message');
+            Navigator.restorablePushNamed(context, 'new_message');
           },
         ));
   }

@@ -13,6 +13,9 @@ class NewMessage extends StatelessWidget {
         ListTile(
           leading: Icon(Icons.person_add),
           title: Text('Add Contact'.i18n),
+          onTap: () {
+            Navigator.restorablePushNamed(context, 'add_contact');
+          },
         ),
         Divider(thickness: 1),
         ListTile(
@@ -32,6 +35,24 @@ class NewMessage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text('${recentConversations[index]}'),
+                    );
+                  },
+                );
+              }),
+        ),
+        Expanded(
+          child: FutureBuilder<List<Contact>>(
+              future: model.contactsSortedAlphabetically(),
+              builder: (context, AsyncSnapshot<List<Contact>> snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                var contacts = snapshot.data;
+                return ListView.builder(
+                  itemCount: contacts.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('${contacts[index].id}'),
                     );
                   },
                 );

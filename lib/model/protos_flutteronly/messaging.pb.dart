@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: protos_flutteronly/messaging.proto
 //
-// @dart = 2.7
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 import 'dart:core' as $core;
@@ -23,8 +23,8 @@ class Contact extends $pb.GeneratedMessage {
 
   Contact._() : super();
   factory Contact({
-    $core.String id,
-    $core.String displayName,
+    $core.String? id,
+    $core.String? displayName,
   }) {
     final _result = create();
     if (id != null) {
@@ -54,7 +54,7 @@ class Contact extends $pb.GeneratedMessage {
   static $pb.PbList<Contact> createRepeated() => $pb.PbList<Contact>();
   @$core.pragma('dart2js:noInline')
   static Contact getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Contact>(create);
-  static Contact _defaultInstance;
+  static Contact? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -85,9 +85,9 @@ class Group extends $pb.GeneratedMessage {
 
   Group._() : super();
   factory Group({
-    $core.String id,
-    $core.Iterable<$core.String> memberIds,
-    $core.String displayName,
+    $core.String? id,
+    $core.Iterable<$core.String>? memberIds,
+    $core.String? displayName,
   }) {
     final _result = create();
     if (id != null) {
@@ -120,7 +120,7 @@ class Group extends $pb.GeneratedMessage {
   static $pb.PbList<Group> createRepeated() => $pb.PbList<Group>();
   @$core.pragma('dart2js:noInline')
   static Group getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Group>(create);
-  static Group _defaultInstance;
+  static Group? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
@@ -167,10 +167,10 @@ class Conversation extends $pb.GeneratedMessage {
 
   Conversation._() : super();
   factory Conversation({
-    $core.String contactId,
-    $core.String groupId,
-    $fixnum.Int64 mostRecentMessageTime,
-    $core.String mostRecentMessageText,
+    $core.String? contactId,
+    $core.String? groupId,
+    $fixnum.Int64? mostRecentMessageTime,
+    $core.String? mostRecentMessageText,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -206,9 +206,9 @@ class Conversation extends $pb.GeneratedMessage {
   static $pb.PbList<Conversation> createRepeated() => $pb.PbList<Conversation>();
   @$core.pragma('dart2js:noInline')
   static Conversation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conversation>(create);
-  static Conversation _defaultInstance;
+  static Conversation? _defaultInstance;
 
-  Conversation_Party whichParty() => _Conversation_PartyByTag[$_whichOneof(0)];
+  Conversation_Party whichParty() => _Conversation_PartyByTag[$_whichOneof(0)]!;
   void clearParty() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -271,10 +271,10 @@ class ShortMessage extends $pb.GeneratedMessage {
 
   ShortMessage._() : super();
   factory ShortMessage({
-    $core.List<$core.int> id,
-    $fixnum.Int64 sent,
-    $core.String text,
-    $core.List<$core.int> oggVoice,
+    $core.List<$core.int>? id,
+    $fixnum.Int64? sent,
+    $core.String? text,
+    $core.List<$core.int>? oggVoice,
   }) {
     final _result = create();
     if (id != null) {
@@ -310,9 +310,9 @@ class ShortMessage extends $pb.GeneratedMessage {
   static $pb.PbList<ShortMessage> createRepeated() => $pb.PbList<ShortMessage>();
   @$core.pragma('dart2js:noInline')
   static ShortMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ShortMessage>(create);
-  static ShortMessage _defaultInstance;
+  static ShortMessage? _defaultInstance;
 
-  ShortMessage_Body whichBody() => _ShortMessage_BodyByTag[$_whichOneof(0)];
+  ShortMessage_Body whichBody() => _ShortMessage_BodyByTag[$_whichOneof(0)]!;
   void clearBody() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -365,12 +365,12 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
 
   ShortMessageRecord._() : super();
   factory ShortMessageRecord({
-    $core.String senderId,
-    $core.String id,
-    $fixnum.Int64 sent,
-    ShortMessageRecord_Direction direction,
-    ShortMessageRecord_DeliveryStatus status,
-    $core.List<$core.int> message,
+    $core.String? senderId,
+    $core.String? id,
+    $fixnum.Int64? sent,
+    ShortMessageRecord_Direction? direction,
+    ShortMessageRecord_DeliveryStatus? status,
+    $core.List<$core.int>? message,
   }) {
     final _result = create();
     if (senderId != null) {
@@ -412,7 +412,7 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
   static $pb.PbList<ShortMessageRecord> createRepeated() => $pb.PbList<ShortMessageRecord>();
   @$core.pragma('dart2js:noInline')
   static ShortMessageRecord getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ShortMessageRecord>(create);
-  static ShortMessageRecord _defaultInstance;
+  static ShortMessageRecord? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get senderId => $_getSZ(0);
@@ -493,11 +493,11 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
 
   OutgoingShortMessage._() : super();
   factory OutgoingShortMessage({
-    $core.String contactId,
-    $core.String groupId,
-    $core.Iterable<$core.String> remainingRecipients,
-    ShortMessage message,
-    $fixnum.Int64 lastFailed,
+    $core.String? contactId,
+    $core.String? groupId,
+    $core.Iterable<$core.String>? remainingRecipients,
+    ShortMessage? message,
+    $fixnum.Int64? lastFailed,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -536,9 +536,9 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
   static $pb.PbList<OutgoingShortMessage> createRepeated() => $pb.PbList<OutgoingShortMessage>();
   @$core.pragma('dart2js:noInline')
   static OutgoingShortMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OutgoingShortMessage>(create);
-  static OutgoingShortMessage _defaultInstance;
+  static OutgoingShortMessage? _defaultInstance;
 
-  OutgoingShortMessage_Recipient whichRecipient() => _OutgoingShortMessage_RecipientByTag[$_whichOneof(0)];
+  OutgoingShortMessage_Recipient whichRecipient() => _OutgoingShortMessage_RecipientByTag[$_whichOneof(0)]!;
   void clearRecipient() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -601,7 +601,7 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   TransferMessage._() : super();
   factory TransferMessage({
-    ShortMessage shortMessage,
+    ShortMessage? shortMessage,
   }) {
     final _result = create();
     if (shortMessage != null) {
@@ -628,9 +628,9 @@ class TransferMessage extends $pb.GeneratedMessage {
   static $pb.PbList<TransferMessage> createRepeated() => $pb.PbList<TransferMessage>();
   @$core.pragma('dart2js:noInline')
   static TransferMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TransferMessage>(create);
-  static TransferMessage _defaultInstance;
+  static TransferMessage? _defaultInstance;
 
-  TransferMessage_Content whichContent() => _TransferMessage_ContentByTag[$_whichOneof(0)];
+  TransferMessage_Content whichContent() => _TransferMessage_ContentByTag[$_whichOneof(0)]!;
   void clearContent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)

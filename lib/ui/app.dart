@@ -1,17 +1,13 @@
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'home.dart';
 
-class LanternApp extends StatefulWidget {
+class LanternApp extends StatelessWidget {
   LanternApp({Key key}) : super(key: key);
 
-  @override
-  _LanternAppState createState() => _LanternAppState();
-}
-
-class _LanternAppState extends State<LanternApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -30,13 +26,16 @@ class _LanternAppState extends State<LanternApp> {
           const Locale('en', "US"),
           const Locale('es'),
         ],
-        theme: buildTheme(),
-        home: I18n(child: HomePage(), initialLocale: Locale("en", "US")),
+        theme: buildTheme(context),
+        home: LoaderOverlay(
+          useDefaultLoading: true,
+          child: I18n(child: HomePage(), initialLocale: Locale("en", "US")),
+        ),
       ),
     );
   }
 
-  ThemeData buildTheme() {
+  ThemeData buildTheme(BuildContext context) {
     return ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.grey,

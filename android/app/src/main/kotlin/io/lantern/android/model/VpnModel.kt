@@ -2,7 +2,6 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 import io.lantern.db.DB
 import org.getlantern.lantern.LanternApp
 import java.io.File
@@ -39,14 +38,14 @@ class VpnModel(
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        when (call.method) {
+    override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
+        return when (call.method) {
             "switchVPN" -> {
                 val on = call.argument<Boolean>("on") ?: false
                 saveVpnStatus(if (on) "connecting" else "disconnecting")
                 switchLantern(on)
             }
-            else -> super.onMethodCall(call, result)
+            else -> super.doMethodCall(call, notImplemented)
         }
     }
 
