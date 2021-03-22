@@ -27,7 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  i18n_extension: ^1.4.2
+  i18n_extension: ^4.0.0
 
   provider: ^4.3.2
 
@@ -41,11 +41,13 @@ dependencies:
 
   flutter_switch: ^0.2.0
 
-  flag: ^3.2.2
+  flag: ^5.0.0-nullsafety
 
-  qr_flutter: ^3.2.0
+  qr_flutter: ^4.0.0
 
   qr_code_scanner: ^0.3.5
+
+  loader_overlay: ^2.0.0
 
 dev_dependencies:
   flutter_test:

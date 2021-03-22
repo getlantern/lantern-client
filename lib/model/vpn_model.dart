@@ -9,7 +9,7 @@ class VpnModel extends Model {
   VpnModel() : super("vpn");
 
   Future<void> switchVPN<T>(bool on) async {
-    methodChannel.invokeMethod('switchVPN', <String, dynamic>{
+    return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
       "on": on,
     });
   }

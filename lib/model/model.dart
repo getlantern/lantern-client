@@ -26,10 +26,11 @@ abstract class Model {
   }
 
   Future<List<T>> list<T>(String path,
-      {int start,
+      {int start = 0,
       int count = 2 ^ 32,
       String fullTextSearch,
-      bool reverseSort}) async {
+      bool reverseSort,
+      T deserialize(Uint8List serialized)}) async {
     var intermediate =
         await methodChannel.invokeMethod('list', <String, dynamic>{
       'path': path,
@@ -37,9 +38,15 @@ abstract class Model {
       'count': count,
       'fullTextSearch': fullTextSearch,
       'reverseSort': reverseSort,
+      'raw': deserialize != null,
     });
-    var result = List<T>();
-    intermediate.forEach((element) => result.add(element as T));
+    List<T> result = [];
+    if (deserialize != null) {
+      intermediate
+          .forEach((element) => result.add(deserialize(element as Uint8List)));
+    } else {
+      intermediate.forEach((element) => result.add(element as T));
+    }
     return result;
   }
 

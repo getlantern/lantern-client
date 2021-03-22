@@ -8,6 +8,7 @@ import io.lantern.db.DB
 import io.lantern.db.Raw
 import io.lantern.db.RawSubscriber
 import io.lantern.db.Subscriber
+import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
@@ -33,10 +34,22 @@ abstract class Model(
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        when (call.method) {
+        try {
+            val out = doMethodCall(call, { result.notImplemented() })
+            when (out) {
+                is Unit -> result.success(null)
+                else -> result.success(out)
+            }
+        } catch (t: Throwable) {
+            Logger.error(TAG, t.message, t)
+        }
+    }
+
+    open fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
+        return when (call.method) {
             "get" -> {
                 val path = call.arguments<String>()
-                result.success(db.get(path))
+                db.get(path)
             }
             "list" -> {
                 val path = call.argument<String>("path")
@@ -44,10 +57,16 @@ abstract class Model(
                 val count = call.argument<Int?>("count") ?: Int.MAX_VALUE
                 val fullTextSearch = call.argument<String?>("fullTextSearch")
                 val reverseSort = call.argument<Boolean?>("reverseSort") ?: false
-                result.success(
-                        db.list<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value })
+                val raw = call.argument<Boolean?>("raw") ?: false
+                val fullDb = db.list<Any>("%").map { "${it.path}: ${it.value}" }
+                println(fullDb)
+                if (raw) {
+                    db.listRaw<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value.bytes }
+                } else {
+                    db.list<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value }
+                }
             }
-            else -> result.notImplemented()
+            else -> notImplemented()
         }
     }
 
@@ -126,5 +145,9 @@ abstract class Model(
         activeSubscribers.forEach {
             db.unsubscribe(namespacedSubscriberId(it))
         }
+    }
+
+    companion object {
+        private const val TAG = "Model"
     }
 }

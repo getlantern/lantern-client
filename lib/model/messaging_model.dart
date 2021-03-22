@@ -8,8 +8,34 @@ import '../package_store.dart';
 class MessagingModel extends Model {
   MessagingModel() : super("messaging");
 
+  Future<void> addOrUpdateContact<T>(
+      String contactId, String displayName) async {
+    return methodChannel.invokeMethod('addOrUpdateContact', <String, dynamic>{
+      "contactId": contactId,
+      "displayName": displayName,
+    });
+  }
+
   Future<List<Conversation>> recentConversations({int count = 2 ^ 32}) {
-    return list<Conversation>("/cbt/%", count: count, reverseSort: true);
+    return list<Conversation>("/cbt/%", count: count, reverseSort: true,
+        deserialize: (Uint8List serialized) {
+      return Conversation.fromBuffer(serialized);
+    });
+  }
+
+  Future<List<Contact>> contactsSortedAlphabetically() {
+    return list<Contact>("/c/%", deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    }).then((result) {
+      result.sort((a, b) {
+        var dc = (a.displayName ?? "").compareTo(b.displayName ?? "");
+        if (dc != 0) {
+          return dc;
+        }
+        return a.id.compareTo(b.id);
+      });
+      return result;
+    });
   }
 
   ValueListenableBuilder<Conversation> conversation(
@@ -33,12 +59,11 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueListenableBuilder<String> myContactId(
-      ValueWidgetBuilder<String> builder) {
-    return subscribedBuilder<String>(
-        "/signalProtocolStore/identityKeyPair/publicBase32",
-        defaultValue: "Bob",
-        builder: builder);
+  ValueListenableBuilder<Contact> me(ValueWidgetBuilder<Contact> builder) {
+    return subscribedBuilder<Contact>("/c/me", builder: builder,
+        deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
   }
 
   String _partyPath(Conversation conversation) {
