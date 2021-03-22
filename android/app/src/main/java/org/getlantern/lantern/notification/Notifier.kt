@@ -29,7 +29,6 @@ class Notifier : BroadcastReceiver() {
 
         val notificationId: Int
         val resources = context.resources
-        val largeIcon = getBitmap(resources, R.drawable.app_icon)
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
         val builder = NotificationCompat.Builder(context)

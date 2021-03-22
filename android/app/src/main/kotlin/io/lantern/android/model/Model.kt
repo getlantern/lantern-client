@@ -53,7 +53,6 @@ abstract class Model(
             }
             "getRangeDetails" -> {
                 val path = call.argument<String>("path")
-                val detailsPrefix = call.argument<String>("detailsPrefix")
                 val start = call.argument<Int>("start")
                 val count = call.argument<Int>("count")
                 result.success(
@@ -85,10 +84,10 @@ abstract class Model(
         val subscriber: RawSubscriber<Any> = if (raw) {
             object :
                     RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
-                override fun onUpdate(path: String, value: Raw<Any>) {
+                override fun onUpdate(path: String, raw: Raw<Any>) {
                     Handler(Looper.getMainLooper()).post {
                         synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value.bytes))
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to raw.bytes))
                         }
                     }
                 }
@@ -132,7 +131,7 @@ abstract class Model(
         if (arguments == null) {
             return;
         }
-        val args = arguments as Map<String, String>
+        val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as Int
         db.unsubscribe(namespacedSubscriberId(subscriberID))
         activeSubscribers.remove(subscriberID)
