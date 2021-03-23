@@ -4,71 +4,75 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
 import '../package_store.dart';
+import 'protos_flutteronly/messaging.pb.dart';
 
 class MessagingModel extends Model {
   MessagingModel() : super("messaging");
 
-  Future<void> addOrUpdateContact<T>(
-      String contactId, String displayName) async {
-    return methodChannel.invokeMethod('addOrUpdateContact', <String, dynamic>{
-      "contactId": contactId,
+  Future<void> setMyDisplayName<T>(String displayName) {
+    return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
       "displayName": displayName,
     });
   }
 
-  Future<List<Conversation>> recentConversations({int count = 2 ^ 32}) {
-    return list<Conversation>("/cbt/%", count: count, reverseSort: true,
+  Future<void> addOrUpdateDirectContact<T>(
+      String identityKey, String displayName) {
+    return methodChannel
+        .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+      "identityKey": identityKey,
+      "displayName": displayName,
+    });
+  }
+
+  Future<void> sendToDirectContact(String identityKey, String text) {
+    return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
+      "identityKey": identityKey,
+      "text": text,
+    });
+  }
+
+  ValueListenableBuilder<List<Contact>> contacts(
+      {int count = 2 ^ 32,
+      @required ValueWidgetBuilder<List<Contact>> builder}) {
+    return tailingBuilder<Contact>('/contacts/', count: count, builder: builder,
         deserialize: (Uint8List serialized) {
-      return Conversation.fromBuffer(serialized);
-    });
-  }
-
-  Future<List<Contact>> contactsSortedAlphabetically() {
-    return list<Contact>("/c/%", deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
-    }).then((result) {
-      result.sort((a, b) {
-        var dc = (a.displayName ?? "").compareTo(b.displayName ?? "");
-        if (dc != 0) {
-          return dc;
-        }
-        return a.id.compareTo(b.id);
-      });
-      return result;
     });
   }
 
-  ValueListenableBuilder<Conversation> conversation(
-      Conversation conversation, ValueWidgetBuilder<Conversation> builder) {
-    return subscribedBuilder<Conversation>("/con/${_partyPath(conversation)}",
-        defaultValue: conversation,
+  ValueListenableBuilder<List<ShortMessageRecord>> contactMessages(
+      Contact contact,
+      {int count = 2 ^ 32,
+      @required ValueWidgetBuilder<List<ShortMessageRecord>> builder}) {
+    return tailingBuilder<ShortMessageRecord>(
+        '/cm/${_contactPathSegment(contact)}',
+        details: true,
+        count: count,
         builder: builder, deserialize: (Uint8List serialized) {
-      return Conversation.fromBuffer(serialized);
+      return ShortMessageRecord.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<dynamic> contactOrGroup(
-      Conversation conversation, ValueWidgetBuilder<dynamic> builder) {
-    return subscribedBuilder<dynamic>(_partyPath(conversation),
+  ValueListenableBuilder<ShortMessageRecord> message(ShortMessageRecord message,
+      ValueWidgetBuilder<ShortMessageRecord> builder) {
+    return subscribedBuilder<ShortMessageRecord>(
+        '/m/${message.sent}/${message.senderId}/${message.id}',
+        defaultValue: message,
         builder: builder, deserialize: (Uint8List serialized) {
-      if (conversation.contactId != null) {
-        return Contact.fromBuffer(serialized);
-      } else {
-        return Group.fromBuffer(serialized);
-      }
+      return ShortMessageRecord.fromBuffer(serialized);
     });
   }
 
   ValueListenableBuilder<Contact> me(ValueWidgetBuilder<Contact> builder) {
-    return subscribedBuilder<Contact>("/c/me", builder: builder,
+    return subscribedBuilder<Contact>('/me', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
   }
 
-  String _partyPath(Conversation conversation) {
-    return conversation.contactId != null
-        ? "/c/${conversation.contactId}"
-        : "/g/${conversation.groupId}";
+  String _contactPathSegment(Contact contact) {
+    return contact.type == Contact_Type.DIRECT
+        ? "d/${contact.id}"
+        : "g/${contact.id}";
   }
 }

@@ -8,7 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class ModelEventChannel extends EventChannel {
-  var nextSubscriberID = new Random().nextInt(2^32); // Start with a random value to work well with hot restart in dev
+  var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch)
+      .nextInt(2 ^
+          32); // Start with a random value to work well with hot restart in dev
   final subscribers = Map<int, Function>();
   final subscriptions = Map<int, StreamSubscription>();
 
@@ -16,13 +18,19 @@ class ModelEventChannel extends EventChannel {
 
   void Function() subscribe<T>(String path,
       {bool details,
-        @required void onNewValue(T newValue),
-        T deserialize(Uint8List serialized)}) {
+      bool tail,
+      int count,
+      @required void onNewValue(T newValue),
+      T deserialize(Uint8List serialized)}) {
     var subscriberID = nextSubscriberID++;
-    var arguments = {"subscriberID": subscriberID, "path": path};
-    arguments["details"] = details;
+    var arguments = {
+      "subscriberID": subscriberID,
+      "path": path,
+      "tail": tail,
+      "count": count,
+      "details": details
+    };
     if (deserialize != null) {
-      arguments["raw"] = true;
       subscribers[subscriberID] = (Uint8List serialized) {
         onNewValue(serialized == null ? null : deserialize(serialized));
       };
@@ -41,6 +49,17 @@ class ModelEventChannel extends EventChannel {
         }
       }
     };
+  }
+
+  void Function() tail<T>(String path,
+      {details: bool,
+      int count = 2 ^ 32,
+      @required void onNewValue(List<T> newValue),
+      T deserialize(Uint8List serialized)}) {
+    return subscribe(path, tail: true, details: details, count: count,
+        onNewValue: (List<dynamic> list) {
+      onNewValue(list.map((e) => deserialize(e)).toList());
+    });
   }
 
   StreamSubscription listen(Stream<dynamic> stream) {

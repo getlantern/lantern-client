@@ -71,10 +71,11 @@ class _AddContactByIdState extends State<AddContactById> {
                 if (_formKey.currentState.validate()) {
                   context.showLoaderOverlay();
                   try {
-                    await model.addOrUpdateContact(
+                    await model.addOrUpdateDirectContact(
                         contactId.value.text, displayName.value.text);
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'conversations', (r) => false);
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //     context, 'conversations', (r) => false);
+                    Navigator.pop(context);
                   } finally {
                     context.hideLoaderOverlay();
                   }

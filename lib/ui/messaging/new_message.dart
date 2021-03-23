@@ -22,41 +22,36 @@ class NewMessage extends StatelessWidget {
           leading: Icon(Icons.group_add),
           title: Text('New Group Message'.i18n),
         ),
+        Divider(thickness: 1),
         Expanded(
-          child: FutureBuilder<List<Conversation>>(
-              future: model.recentConversations(count: 10),
-              builder: (context, AsyncSnapshot<List<Conversation>> snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-                var recentConversations = snapshot.data;
-                return ListView.builder(
-                  itemCount: recentConversations.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('${recentConversations[index]}'),
-                    );
+          child: model.contacts(
+              builder: (context, List<Contact> contacts, Widget child) {
+            var recentContacts = contacts.take(10).toList();
+            contacts.sort((a, b) {
+              var dc = (a.displayName ?? "").compareTo(b.displayName ?? "");
+              if (dc != 0) {
+                return dc;
+              }
+              return a.id.compareTo(b.id);
+            });
+            var all = recentContacts + contacts;
+            return ListView.builder(
+              itemCount: all.length,
+              itemBuilder: (context, index) {
+                var contact = all[index];
+                return ListTile(
+                  title: Text(contact.displayName?.isEmpty
+                      ? 'Unnamed'.i18n
+                      : contact.displayName),
+                  subtitle: Text(contact.id, overflow: TextOverflow.ellipsis),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'conversation',
+                        arguments: contact);
                   },
                 );
-              }),
-        ),
-        Expanded(
-          child: FutureBuilder<List<Contact>>(
-              future: model.contactsSortedAlphabetically(),
-              builder: (context, AsyncSnapshot<List<Contact>> snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-                var contacts = snapshot.data;
-                return ListView.builder(
-                  itemCount: contacts.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('${contacts[index].id}'),
-                    );
-                  },
-                );
-              }),
+              },
+            );
+          }),
         )
       ]),
     );

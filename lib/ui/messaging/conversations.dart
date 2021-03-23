@@ -13,60 +13,60 @@ class _ConversationsState extends State<Conversations> {
 
   MessagingModel model;
 
-  final PagingController<int, Conversation> _pagingController =
-      PagingController(firstPageKey: 0);
+  // final PagingController<int, Conversation> _pagingController =
+  //     PagingController(firstPageKey: 0);
+  //
+  // Future<void> _fetchPage(int pageKey) async {
+  //   var page = await model.list<Conversation>("/cbt",
+  //       start: pageKey, count: pageLength, reverseSort: true);
+  //   var isLastPage = page.length < pageLength;
+  //   if (isLastPage) {
+  //     _pagingController.appendLastPage(page);
+  //   } else {
+  //     _pagingController.appendPage(page, pageKey + pageLength);
+  //   }
+  // }
+  //
+  // @override
+  // void initState() {
+  //   _pagingController.addPageRequestListener((pageKey) {
+  //     _fetchPage(pageKey);
+  //   });
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _pagingController.dispose();
+  //   super.dispose();
+  // }
 
-  Future<void> _fetchPage(int pageKey) async {
-    var page = await model.list<Conversation>("/cbt",
-        start: pageKey, count: pageLength, reverseSort: true);
-    var isLastPage = page.length < pageLength;
-    if (isLastPage) {
-      _pagingController.appendLastPage(page);
-    } else {
-      _pagingController.appendPage(page, pageKey + pageLength);
-    }
-  }
-
-  @override
-  void initState() {
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
-  }
-
-  Widget buildConversation(
-      BuildContext context, Conversation conversation, int index) {
-    return model.conversation(conversation,
-        (BuildContext context, Conversation conversation, Widget child) {
-      return Column(
-        children: [
-          ListTile(
-            title: model.contactOrGroup(conversation,
-                (BuildContext context, dynamic contactOrGroup, Widget child) {
-              return Text("$contactOrGroup.displayName ($contactOrGroup.id)",
-                  style: TextStyle(fontWeight: FontWeight.bold));
-            }),
-            subtitle: Text(
-              conversation.mostRecentMessageText ?? "voice memo".i18n,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Divider(thickness: 1),
-        ],
-      );
-    });
-  }
+  // Widget buildConversation(
+  //     BuildContext context, Conversation conversation, int index) {
+  //   return model.conversation(conversation,
+  //       (BuildContext context, Conversation conversation, Widget child) {
+  //     return Column(
+  //       children: [
+  //         ListTile(
+  //           title: model.contactOrGroup(conversation,
+  //               (BuildContext context, dynamic contactOrGroup, Widget child) {
+  //             return Text("$contactOrGroup.displayName ($contactOrGroup.id)",
+  //                 style: TextStyle(fontWeight: FontWeight.bold));
+  //           }),
+  //           subtitle: Text(
+  //             conversation.mostRecentMessageText ?? "voice memo".i18n,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //         ),
+  //         Divider(thickness: 1),
+  //       ],
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
+    model = context.watch<MessagingModel>();
 
     return BaseScreen(
         title: 'Messages'.i18n,

@@ -9,6 +9,21 @@
 import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class Contact_Type extends $pb.ProtobufEnum {
+  static const Contact_Type DIRECT = Contact_Type._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DIRECT');
+  static const Contact_Type GROUP = Contact_Type._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'GROUP');
+
+  static const $core.List<Contact_Type> values = <Contact_Type> [
+    DIRECT,
+    GROUP,
+  ];
+
+  static final $core.Map<$core.int, Contact_Type> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Contact_Type? valueOf($core.int value) => _byValue[value];
+
+  const Contact_Type._($core.int v, $core.String n) : super(v, n);
+}
+
 class ShortMessageRecord_Direction extends $pb.ProtobufEnum {
   static const ShortMessageRecord_Direction OUT = ShortMessageRecord_Direction._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'OUT');
   static const ShortMessageRecord_Direction IN = ShortMessageRecord_Direction._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'IN');
