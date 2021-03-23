@@ -62,7 +62,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
 
         httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                cb?.onFailure(e)
+                cb.onFailure(e)
             }
 
             @Throws(IOException::class)

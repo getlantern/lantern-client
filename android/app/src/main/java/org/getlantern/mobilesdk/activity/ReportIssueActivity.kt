@@ -25,7 +25,7 @@ open class ReportIssueActivity : FragmentActivity() {
         setContentView(binding.root)
 
         val email = LanternApp.getSession().email()
-        if (email != null && "" != email) {
+        if ("" != email) {
             binding.emailInput.setText(email)
         }
 
