@@ -391,7 +391,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user.email != "") {
-            setEmail(user!!.email)
+            setEmail(user.email)
         }
 
         setYinbiEnabled(user.yinbiEnabled)

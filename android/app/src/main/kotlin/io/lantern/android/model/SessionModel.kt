@@ -1,4 +1,4 @@
-package io.lantern.isimud.model
+package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import org.getlantern.lantern.model.LanternSessionManager
@@ -13,7 +13,7 @@ class SessionModel(
     }
 
     init {
-        observableModel.mutate { tx ->
+        db.mutate { tx ->
             // initialize data for fresh install
             tx.put(
                 namespacedPath(PATH_PRO_USER),
