@@ -1,4 +1,4 @@
-package io.lantern.isimud.model
+package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -16,7 +16,9 @@ class VpnModel(
     }
 
     init {
-        observableModel.mutate { tx ->
+        db.registerType(20, Vpn.ServerInfo::class.java)
+        db.registerType(21, Vpn.Bandwidth::class.java)
+        db.mutate { tx ->
             // initialize vpn status for fresh install
             tx.put(
                 namespacedPath(PATH_VPN_STATUS),
@@ -42,7 +44,7 @@ class VpnModel(
     }
 
     private fun vpnStatus(): String {
-        return observableModel.get(namespacedPath(PATH_VPN_STATUS)) ?: ""
+        return db.get(namespacedPath(PATH_VPN_STATUS)) ?: ""
     }
 
     private fun switchLantern(value: Boolean) {
@@ -55,19 +57,19 @@ class VpnModel(
     }
 
     fun saveVpnStatus(vpnStatus: String) {
-        observableModel.mutate { tx ->
+        db.mutate { tx ->
             tx.put(namespacedPath(PATH_VPN_STATUS), vpnStatus)
         }
     }
 
     fun saveServerInfo(serverInfo: Vpn.ServerInfo) {
-        observableModel.mutate { tx ->
+        db.mutate { tx ->
             tx.put(namespacedPath(PATH_SERVER_INFO), serverInfo)
         }
     }
 
     fun saveBandwidth(bandwidth: Vpn.Bandwidth) {
-        observableModel.mutate { tx ->
+        db.mutate { tx ->
             tx.put(namespacedPath(PATH_BANDWIDTH), bandwidth)
         }
     }

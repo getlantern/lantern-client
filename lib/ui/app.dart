@@ -1,4 +1,3 @@
-import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/session.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
@@ -17,7 +16,6 @@ class _LanternAppState extends State<LanternApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => MessagingModel()),
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => SessionModel()),
       ],

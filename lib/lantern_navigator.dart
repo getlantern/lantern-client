@@ -1,10 +1,8 @@
 import 'package:flutter/services.dart';
 
-import 'model/protobuf_message_codec.dart';
-
 class LanternNavigator {
-  static MethodChannel methodChannel = MethodChannel(
-      "navigator_method_channel", StandardMethodCodec(ProtobufMessageCodec()));
+  static MethodChannel methodChannel =
+      MethodChannel("navigator_method_channel");
 
   static startActivity(String activityName) {
     methodChannel.invokeMethod(

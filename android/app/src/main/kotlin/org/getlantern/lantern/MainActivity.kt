@@ -18,9 +18,8 @@ import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.isimud.model.MessagingModel
-import io.lantern.isimud.model.SessionModel
-import io.lantern.isimud.model.VpnModel
+import io.lantern.android.model.SessionModel
+import io.lantern.android.model.VpnModel
 import okhttp3.Response
 import org.getlantern.lantern.activity.PopUpAdActivity_
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
@@ -40,7 +39,6 @@ import java.util.*
 
 class MainActivity : FlutterActivity() {
 
-    private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
@@ -54,7 +52,6 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
         navigator = Navigator(this, flutterEngine)
@@ -123,7 +120,6 @@ class MainActivity : FlutterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        messagingModel.destroy()
         vpnModel.destroy()
         sessionModel.destroy()
         EventBus.getDefault().unregister(this)
@@ -419,7 +415,7 @@ class MainActivity : FlutterActivity() {
                     resources.getString(R.string.error_checking_for_update),
                     appName
                 )
-                Utils.showAlertDialog(activity, appName, message, false)
+//                Utils.showAlertDialog(activity, appName, message, false) // TODO [issue42] migrate to MainActivity
                 return
             }
             if (url == "") {
@@ -446,7 +442,7 @@ class MainActivity : FlutterActivity() {
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
             String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
-        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
+//        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false) // TODO [issue42] migrate to MainActivity
     }
 
     @Throws(Exception::class)
@@ -506,18 +502,19 @@ class MainActivity : FlutterActivity() {
                     PERMISSIONS_TAG,
                     msg.toString()
                 )
-                Utils.showAlertDialog(this,
-                    getString(R.string.please_allow_lantern_to),
-                    Html.fromHtml(msg.toString()),
-                    getString(R.string.continue_),
-                    false,
-                    Runnable {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            neededPermissions,
-                            FULL_PERMISSIONS_REQUEST
-                        )
-                    })
+                // TODO [issue42] migrate to MainActivity
+//                Utils.showAlertDialog(this,
+//                    getString(R.string.please_allow_lantern_to),
+//                    Html.fromHtml(msg.toString()),
+//                    getString(R.string.continue_),
+//                    false,
+//                    Runnable {
+//                        ActivityCompat.requestPermissions(
+//                            this,
+//                            neededPermissions,
+//                            FULL_PERMISSIONS_REQUEST
+//                        )
+//                    })
                 return
             }
 
@@ -583,7 +580,7 @@ class MainActivity : FlutterActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         when (requestCode) {
             FULL_PERMISSIONS_REQUEST -> {
