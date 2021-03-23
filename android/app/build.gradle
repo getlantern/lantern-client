@@ -189,8 +189,8 @@ android {
         }
 
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -213,8 +213,8 @@ android {
                 // This flag must be enabled to see properly-symbolicated native
                 // stack traces in the Crashlytics dashboard.
                 nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/prodRelease/out/lib/'
-                strippedNativeLibsDir 'build/intermediates/stripped_native_libs/prodRelease/out/lib/'
+                unstrippedNativeLibsDir '../../build/app/intermediates/merged_native_libs/prodRelease/out/lib/'
+                strippedNativeLibsDir '../../build/app/intermediates/stripped_native_libs/prodRelease/out/lib/'
             }
         }
 
@@ -224,7 +224,7 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
             java.srcDirs += 'src/main/kotlin'
-//            java.srcDirs += '../../build/app/generated/source/proto/prodDebug/java/io/lantern/isimud/model/' // this is a hack to get Android Studio to recognize the generated protocol buffer classes
+            java.srcDirs += '../../build/app/generated/source/proto/prodDebug/java' // this is a hack to get Android Studio to recognize the generated protocol buffer classes
             proto.srcDirs += '../../protos'
         }
     }
@@ -444,7 +444,7 @@ dependencies {
     implementation 'com.github.getlantern:db-android:8db3e24'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
-    implementation 'com.github.getlantern:messaging-android:d486531'
+    implementation 'com.github.getlantern:messaging-android:a4f7676'
 }
 
 apply plugin: 'com.google.gms.google-services'
