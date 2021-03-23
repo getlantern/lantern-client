@@ -4,10 +4,10 @@ class LanternNavigator {
   static MethodChannel methodChannel =
       MethodChannel("navigator_method_channel");
 
-  static startActivity(String activityName) {
+  static startScreen(String screenName) {
     methodChannel.invokeMethod(
-        'startActivity', <String, dynamic>{"activityName": activityName});
+        'startScreen', <String, dynamic>{"screenName": screenName});
   }
 
-  static const String ACTIVITY_PLANS = "ACTIVITY_PLANS";
+  static const String SCREEN_PLANS = "SCREEN_PLANS";
 }
