@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos/vpn.pb.dart';
 
@@ -18,11 +20,17 @@ class VpnModel extends Model {
 
   ValueListenableBuilder<ServerInfo> serverInfo(
       ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedBuilder<ServerInfo>("/server_info", builder: builder);
+    return subscribedBuilder<ServerInfo>("/server_info", builder: builder,
+        deserialize: (Uint8List serialized) {
+      return ServerInfo.fromBuffer(serialized);
+    });
   }
 
   ValueListenableBuilder<Bandwidth> bandwidth(
       ValueWidgetBuilder<Bandwidth> builder) {
-    return subscribedBuilder<Bandwidth>("/bandwidth", builder: builder);
+    return subscribedBuilder<Bandwidth>("/bandwidth", builder: builder,
+        deserialize: (Uint8List serialized) {
+      return Bandwidth.fromBuffer(serialized);
+    });
   }
 }
