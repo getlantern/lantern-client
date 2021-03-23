@@ -13,6 +13,7 @@ abstract class Model {
   MethodChannel methodChannel;
   ModelEventChannel _updatesChannel;
   Map<String, SubscribedValueNotifier> _subscribedValueNotifiers = HashMap();
+  Map<String, TailingValueNotifier> _tailingValueNotifiers = HashMap();
 
   Model(String name) {
     methodChannel = MethodChannel('${name}_method_channel');
@@ -38,7 +39,6 @@ abstract class Model {
       'count': count,
       'fullTextSearch': fullTextSearch,
       'reverseSort': reverseSort,
-      'raw': deserialize != null,
     });
     List<T> result = [];
     if (deserialize != null) {
@@ -61,6 +61,17 @@ abstract class Model {
     return result;
   }
 
+  ValueNotifier<List<T>> buildTailingNotifier<T>(String path,
+      {bool details, int count = 2 ^ 32, T deserialize(Uint8List serialized)}) {
+    TailingValueNotifier<T> result = _tailingValueNotifiers[path];
+    if (result == null) {
+      result = TailingValueNotifier(path, _updatesChannel,
+          details: details, count: count, deserialize: deserialize);
+      _tailingValueNotifiers[path] = result;
+    }
+    return result;
+  }
+
   ValueListenableBuilder<T> subscribedBuilder<T>(String path,
       {T defaultValue,
       @required ValueWidgetBuilder<T> builder,
@@ -69,6 +80,17 @@ abstract class Model {
     var notifier = buildValueNotifier(path, defaultValue,
         details: details, deserialize: deserialize);
     return SubscribedBuilder<T>(path, notifier, builder);
+    // TODO: provide a mechanism for canceling subscriptions
+  }
+
+  ValueListenableBuilder<List<T>> tailingBuilder<T>(String path,
+      {@required ValueWidgetBuilder<List<T>> builder,
+      bool details,
+      int count = 2 ^ 32,
+      T deserialize(Uint8List serialized)}) {
+    var notifier = buildTailingNotifier(path,
+        details: details, count: count, deserialize: deserialize);
+    return SubscribedBuilder<List<T>>(path, notifier, builder);
     // TODO: provide a mechanism for canceling subscriptions
   }
 }
@@ -80,19 +102,30 @@ class SubscribedValueNotifier<T> extends ValueNotifier<T> {
       String path, T defaultValue, ModelEventChannel channel,
       {bool details, T deserialize(Uint8List serialized)})
       : super(defaultValue) {
-    cancel = channel.subscribe(path, details: details,
-        onNewValue: (dynamic newValue) {
-      value = newValue as T;
+    cancel =
+        channel.subscribe(path, details: details, onNewValue: (T newValue) {
+      value = newValue;
+    }, deserialize: deserialize);
+  }
+}
+
+class TailingValueNotifier<T> extends ValueNotifier<List<T>> {
+  void Function() cancel;
+
+  TailingValueNotifier(String path, ModelEventChannel channel,
+      {bool details, int count = 2 ^ 32, T deserialize(Uint8List serialized)})
+      : super([]) {
+    cancel = channel.tail(path, details: details, count: count,
+        onNewValue: (List<T> newValue) {
+      value = newValue;
     }, deserialize: deserialize);
   }
 }
 
 class SubscribedBuilder<T> extends ValueListenableBuilder<T> {
-  final SubscribedValueNotifier<T> _notifier;
-  final String _path;
-
-  SubscribedBuilder(this._path, this._notifier, ValueWidgetBuilder<T> builder)
-      : super(valueListenable: _notifier, builder: builder);
+  SubscribedBuilder(
+      String path, ValueNotifier<T> notifier, ValueWidgetBuilder<T> builder)
+      : super(valueListenable: notifier, builder: builder);
 
   @override
   _SubscribedBuilderState createState() => _SubscribedBuilderState<T>();

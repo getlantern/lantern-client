@@ -3,6 +3,7 @@ import 'package:lantern/ui/messaging/new_message.dart';
 import 'package:lantern/ui/messaging/your_contact_info.dart';
 
 import 'add_contact.dart';
+import 'conversation.dart';
 import 'conversations.dart';
 
 class MessagesTab extends StatefulWidget {
@@ -28,6 +29,10 @@ class _MessagesTabState extends State<MessagesTab>
             break;
           case 'add_contact':
             builder = (BuildContext _) => AddContact();
+            break;
+          case 'conversation':
+            builder =
+                (BuildContext context) => Conversation(settings.arguments);
             break;
           default:
             throw Exception('Invalid route: ${settings.name}');

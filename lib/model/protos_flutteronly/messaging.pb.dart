@@ -16,22 +16,47 @@ export 'messaging.pbenum.dart';
 
 class Contact extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Contact', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..e<Contact_Type>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: Contact_Type.DIRECT, valueOf: Contact_Type.valueOf, enumValues: Contact_Type.values)
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..aInt64(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdTime', protoName: 'createdTime')
+    ..aInt64(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageTime', protoName: 'mostRecentMessageTime')
+    ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
+    ..pPS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'memberIds', protoName: 'memberIds')
     ..hasRequiredFields = false
   ;
 
   Contact._() : super();
   factory Contact({
+    Contact_Type? type,
     $core.String? id,
     $core.String? displayName,
+    $fixnum.Int64? createdTime,
+    $fixnum.Int64? mostRecentMessageTime,
+    $core.String? mostRecentMessageText,
+    $core.Iterable<$core.String>? memberIds,
   }) {
     final _result = create();
+    if (type != null) {
+      _result.type = type;
+    }
     if (id != null) {
       _result.id = id;
     }
     if (displayName != null) {
       _result.displayName = displayName;
+    }
+    if (createdTime != null) {
+      _result.createdTime = createdTime;
+    }
+    if (mostRecentMessageTime != null) {
+      _result.mostRecentMessageTime = mostRecentMessageTime;
+    }
+    if (mostRecentMessageText != null) {
+      _result.mostRecentMessageText = mostRecentMessageText;
+    }
+    if (memberIds != null) {
+      _result.memberIds.addAll(memberIds);
     }
     return _result;
   }
@@ -56,196 +81,62 @@ class Contact extends $pb.GeneratedMessage {
   static Contact getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Contact>(create);
   static Contact? _defaultInstance;
 
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
   @$pb.TagNumber(2)
-  $core.String get displayName => $_getSZ(1);
+  Contact_Type get type => $_getN(0);
   @$pb.TagNumber(2)
-  set displayName($core.String v) { $_setString(1, v); }
+  set type(Contact_Type v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasDisplayName() => $_has(1);
+  $core.bool hasType() => $_has(0);
   @$pb.TagNumber(2)
-  void clearDisplayName() => clearField(2);
-}
-
-class Group extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Group', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'memberIds', protoName: 'memberIds')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
-    ..hasRequiredFields = false
-  ;
-
-  Group._() : super();
-  factory Group({
-    $core.String? id,
-    $core.Iterable<$core.String>? memberIds,
-    $core.String? displayName,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (memberIds != null) {
-      _result.memberIds.addAll(memberIds);
-    }
-    if (displayName != null) {
-      _result.displayName = displayName;
-    }
-    return _result;
-  }
-  factory Group.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Group.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Group clone() => Group()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Group copyWith(void Function(Group) updates) => super.copyWith((message) => updates(message as Group)) as Group; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static Group create() => Group._();
-  Group createEmptyInstance() => create();
-  static $pb.PbList<Group> createRepeated() => $pb.PbList<Group>();
-  @$core.pragma('dart2js:noInline')
-  static Group getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Group>(create);
-  static Group? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.List<$core.String> get memberIds => $_getList(1);
+  void clearType() => clearField(2);
 
   @$pb.TagNumber(3)
+  $core.String get id => $_getSZ(1);
+  @$pb.TagNumber(3)
+  set id($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(3)
+  void clearId() => clearField(3);
+
+  @$pb.TagNumber(4)
   $core.String get displayName => $_getSZ(2);
-  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
   set displayName($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
+  @$pb.TagNumber(4)
   $core.bool hasDisplayName() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDisplayName() => clearField(3);
-}
-
-enum Conversation_Party {
-  contactId, 
-  groupId, 
-  notSet
-}
-
-class Conversation extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, Conversation_Party> _Conversation_PartyByTag = {
-    1 : Conversation_Party.contactId,
-    2 : Conversation_Party.groupId,
-    0 : Conversation_Party.notSet
-  };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Conversation', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'groupId', protoName: 'groupId')
-    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageTime', protoName: 'mostRecentMessageTime')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
-    ..hasRequiredFields = false
-  ;
-
-  Conversation._() : super();
-  factory Conversation({
-    $core.String? contactId,
-    $core.String? groupId,
-    $fixnum.Int64? mostRecentMessageTime,
-    $core.String? mostRecentMessageText,
-  }) {
-    final _result = create();
-    if (contactId != null) {
-      _result.contactId = contactId;
-    }
-    if (groupId != null) {
-      _result.groupId = groupId;
-    }
-    if (mostRecentMessageTime != null) {
-      _result.mostRecentMessageTime = mostRecentMessageTime;
-    }
-    if (mostRecentMessageText != null) {
-      _result.mostRecentMessageText = mostRecentMessageText;
-    }
-    return _result;
-  }
-  factory Conversation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Conversation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Conversation clone() => Conversation()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Conversation copyWith(void Function(Conversation) updates) => super.copyWith((message) => updates(message as Conversation)) as Conversation; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static Conversation create() => Conversation._();
-  Conversation createEmptyInstance() => create();
-  static $pb.PbList<Conversation> createRepeated() => $pb.PbList<Conversation>();
-  @$core.pragma('dart2js:noInline')
-  static Conversation getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Conversation>(create);
-  static Conversation? _defaultInstance;
-
-  Conversation_Party whichParty() => _Conversation_PartyByTag[$_whichOneof(0)]!;
-  void clearParty() => clearField($_whichOneof(0));
-
-  @$pb.TagNumber(1)
-  $core.String get contactId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set contactId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasContactId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearContactId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get groupId => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set groupId($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasGroupId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearGroupId() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $fixnum.Int64 get mostRecentMessageTime => $_getI64(2);
-  @$pb.TagNumber(3)
-  set mostRecentMessageTime($fixnum.Int64 v) { $_setInt64(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasMostRecentMessageTime() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearMostRecentMessageTime() => clearField(3);
-
   @$pb.TagNumber(4)
-  $core.String get mostRecentMessageText => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set mostRecentMessageText($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasMostRecentMessageText() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearMostRecentMessageText() => clearField(4);
+  void clearDisplayName() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get createdTime => $_getI64(3);
+  @$pb.TagNumber(5)
+  set createdTime($fixnum.Int64 v) { $_setInt64(3, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasCreatedTime() => $_has(3);
+  @$pb.TagNumber(5)
+  void clearCreatedTime() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get mostRecentMessageTime => $_getI64(4);
+  @$pb.TagNumber(6)
+  set mostRecentMessageTime($fixnum.Int64 v) { $_setInt64(4, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasMostRecentMessageTime() => $_has(4);
+  @$pb.TagNumber(6)
+  void clearMostRecentMessageTime() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get mostRecentMessageText => $_getSZ(5);
+  @$pb.TagNumber(7)
+  set mostRecentMessageText($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasMostRecentMessageText() => $_has(5);
+  @$pb.TagNumber(7)
+  void clearMostRecentMessageText() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.List<$core.String> get memberIds => $_getList(6);
 }
 
 enum ShortMessage_Body {
@@ -470,20 +361,20 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
 }
 
 enum OutgoingShortMessage_Recipient {
-  contactId, 
+  identityKey, 
   groupId, 
   notSet
 }
 
 class OutgoingShortMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, OutgoingShortMessage_Recipient> _OutgoingShortMessage_RecipientByTag = {
-    1 : OutgoingShortMessage_Recipient.contactId,
+    1 : OutgoingShortMessage_Recipient.identityKey,
     2 : OutgoingShortMessage_Recipient.groupId,
     0 : OutgoingShortMessage_Recipient.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutgoingShortMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..oo(0, [1, 2])
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId')
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'identityKey', protoName: 'identityKey')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'groupId', protoName: 'groupId')
     ..pPS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remainingRecipients', protoName: 'remainingRecipients')
     ..aOM<ShortMessage>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', subBuilder: ShortMessage.create)
@@ -493,15 +384,15 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
 
   OutgoingShortMessage._() : super();
   factory OutgoingShortMessage({
-    $core.String? contactId,
+    $core.String? identityKey,
     $core.String? groupId,
     $core.Iterable<$core.String>? remainingRecipients,
     ShortMessage? message,
     $fixnum.Int64? lastFailed,
   }) {
     final _result = create();
-    if (contactId != null) {
-      _result.contactId = contactId;
+    if (identityKey != null) {
+      _result.identityKey = identityKey;
     }
     if (groupId != null) {
       _result.groupId = groupId;
@@ -542,13 +433,13 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
   void clearRecipient() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  $core.String get contactId => $_getSZ(0);
+  $core.String get identityKey => $_getSZ(0);
   @$pb.TagNumber(1)
-  set contactId($core.String v) { $_setString(0, v); }
+  set identityKey($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasContactId() => $_has(0);
+  $core.bool hasIdentityKey() => $_has(0);
   @$pb.TagNumber(1)
-  void clearContactId() => clearField(1);
+  void clearIdentityKey() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get groupId => $_getSZ(1);

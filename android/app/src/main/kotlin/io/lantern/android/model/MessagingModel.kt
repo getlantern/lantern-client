@@ -7,8 +7,12 @@ import io.lantern.messaging.Messaging
 class MessagingModel constructor(flutterEngine: FlutterEngine, private val messaging: Messaging) : Model("messaging", flutterEngine, messaging.db) {
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-            "addOrUpdateContact" -> messaging.addOrUpdateContact(call.argument("contactId")!!, call.argument("displayName")!!)
-            "sendToContact" -> messaging.sendToContact(call.argument("contactId")!!, text = call.argument("text"), oggVoice = call.argument("oggVoice"))
+            "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
+            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
+            "sendToDirectContact" -> {
+                messaging.sendToDirectContact(call.argument("identityKey")!!, text = call.argument("text"), oggVoice = call.argument("oggVoice"))
+                null
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

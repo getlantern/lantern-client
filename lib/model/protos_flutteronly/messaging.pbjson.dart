@@ -12,41 +12,28 @@ import 'dart:typed_data' as $typed_data;
 const Contact$json = const {
   '1': 'Contact',
   '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'displayName', '3': 2, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.model.Contact.Type', '10': 'type'},
+    const {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'displayName', '3': 4, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'createdTime', '3': 5, '4': 1, '5': 3, '10': 'createdTime'},
+    const {'1': 'mostRecentMessageTime', '3': 6, '4': 1, '5': 3, '10': 'mostRecentMessageTime'},
+    const {'1': 'mostRecentMessageText', '3': 7, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
+    const {'1': 'memberIds', '3': 8, '4': 3, '5': 9, '10': 'memberIds'},
+  ],
+  '4': const [Contact_Type$json],
+};
+
+@$core.Deprecated('Use contactDescriptor instead')
+const Contact_Type$json = const {
+  '1': 'Type',
+  '2': const [
+    const {'1': 'DIRECT', '2': 0},
+    const {'1': 'GROUP', '2': 1},
   ],
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Eg4KAmlkGAEgASgJUgJpZBIgCgtkaXNwbGF5TmFtZRgCIAEoCVILZGlzcGxheU5hbWU=');
-@$core.Deprecated('Use groupDescriptor instead')
-const Group$json = const {
-  '1': 'Group',
-  '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'memberIds', '3': 2, '4': 3, '5': 9, '10': 'memberIds'},
-    const {'1': 'displayName', '3': 3, '4': 1, '5': 9, '10': 'displayName'},
-  ],
-};
-
-/// Descriptor for `Group`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List groupDescriptor = $convert.base64Decode('CgVHcm91cBIOCgJpZBgBIAEoCVICaWQSHAoJbWVtYmVySWRzGAIgAygJUgltZW1iZXJJZHMSIAoLZGlzcGxheU5hbWUYAyABKAlSC2Rpc3BsYXlOYW1l');
-@$core.Deprecated('Use conversationDescriptor instead')
-const Conversation$json = const {
-  '1': 'Conversation',
-  '2': const [
-    const {'1': 'contactId', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'contactId'},
-    const {'1': 'groupId', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'groupId'},
-    const {'1': 'mostRecentMessageTime', '3': 3, '4': 1, '5': 3, '10': 'mostRecentMessageTime'},
-    const {'1': 'mostRecentMessageText', '3': 4, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
-  ],
-  '8': const [
-    const {'1': 'party'},
-  ],
-};
-
-/// Descriptor for `Conversation`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List conversationDescriptor = $convert.base64Decode('CgxDb252ZXJzYXRpb24SHgoJY29udGFjdElkGAEgASgJSABSCWNvbnRhY3RJZBIaCgdncm91cElkGAIgASgJSABSB2dyb3VwSWQSNAoVbW9zdFJlY2VudE1lc3NhZ2VUaW1lGAMgASgDUhVtb3N0UmVjZW50TWVzc2FnZVRpbWUSNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAQgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHRCBwoFcGFydHk=');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0EicKBHR5cGUYAiABKA4yEy5tb2RlbC5Db250YWN0LlR5cGVSBHR5cGUSDgoCaWQYAyABKAlSAmlkEiAKC2Rpc3BsYXlOYW1lGAQgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgFIAEoA1ILY3JlYXRlZFRpbWUSNAoVbW9zdFJlY2VudE1lc3NhZ2VUaW1lGAYgASgDUhVtb3N0UmVjZW50TWVzc2FnZVRpbWUSNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSHAoJbWVtYmVySWRzGAggAygJUgltZW1iZXJJZHMiHQoEVHlwZRIKCgZESVJFQ1QQABIJCgVHUk9VUBAB');
 @$core.Deprecated('Use shortMessageDescriptor instead')
 const ShortMessage$json = const {
   '1': 'ShortMessage',
@@ -104,7 +91,7 @@ final $typed_data.Uint8List shortMessageRecordDescriptor = $convert.base64Decode
 const OutgoingShortMessage$json = const {
   '1': 'OutgoingShortMessage',
   '2': const [
-    const {'1': 'contactId', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'contactId'},
+    const {'1': 'identityKey', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'identityKey'},
     const {'1': 'groupId', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'groupId'},
     const {'1': 'remainingRecipients', '3': 3, '4': 3, '5': 9, '10': 'remainingRecipients'},
     const {'1': 'message', '3': 4, '4': 1, '5': 11, '6': '.model.ShortMessage', '10': 'message'},
@@ -116,7 +103,7 @@ const OutgoingShortMessage$json = const {
 };
 
 /// Descriptor for `OutgoingShortMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List outgoingShortMessageDescriptor = $convert.base64Decode('ChRPdXRnb2luZ1Nob3J0TWVzc2FnZRIeCgljb250YWN0SWQYASABKAlIAFIJY29udGFjdElkEhoKB2dyb3VwSWQYAiABKAlIAFIHZ3JvdXBJZBIwChNyZW1haW5pbmdSZWNpcGllbnRzGAMgAygJUhNyZW1haW5pbmdSZWNpcGllbnRzEi0KB21lc3NhZ2UYBCABKAsyEy5tb2RlbC5TaG9ydE1lc3NhZ2VSB21lc3NhZ2USHgoKbGFzdEZhaWxlZBgFIAEoA1IKbGFzdEZhaWxlZEILCglyZWNpcGllbnQ=');
+final $typed_data.Uint8List outgoingShortMessageDescriptor = $convert.base64Decode('ChRPdXRnb2luZ1Nob3J0TWVzc2FnZRIiCgtpZGVudGl0eUtleRgBIAEoCUgAUgtpZGVudGl0eUtleRIaCgdncm91cElkGAIgASgJSABSB2dyb3VwSWQSMAoTcmVtYWluaW5nUmVjaXBpZW50cxgDIAMoCVITcmVtYWluaW5nUmVjaXBpZW50cxItCgdtZXNzYWdlGAQgASgLMhMubW9kZWwuU2hvcnRNZXNzYWdlUgdtZXNzYWdlEh4KCmxhc3RGYWlsZWQYBSABKANSCmxhc3RGYWlsZWRCCwoJcmVjaXBpZW50');
 @$core.Deprecated('Use transferMessageDescriptor instead')
 const TransferMessage$json = const {
   '1': 'TransferMessage',

@@ -6,27 +6,18 @@ option java_package = "io.lantern.messaging";
 
 // A contact in the address book
 message Contact {
-  string id = 1; // the public IdentityKey identifying this Contact, base32 encoded
-  string displayName = 2; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
-}
-
-// A group
-message Group {
-  string id = 1; // a globally unique identifier for the group (type 4 UUID), base32 encoded
-  repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded
-  string displayName = 3; // the display name shown for this Group
-
-}
-
-// A conversation (
-message Conversation {
-  // Who this Conversation pertains to, either a single Contact or a Group
-  oneof party {
-    string contactId = 1;
-    string groupId = 2;
+  enum Type {
+    DIRECT = 0; // e.g. a person
+    GROUP = 1;
   }
-  int64 mostRecentMessageTime = 3; // the sent unix timestamp of the most recent message in this conversation
-  string mostRecentMessageText = 4; // the text of the most recent message in this conversation
+
+  Type type = 2; //
+  string id = 3; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
+  string displayName = 4; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
+  int64 createdTime = 5; // the nanosecond unix timestamp when this contact was created
+  int64 mostRecentMessageTime = 6; // the sent unix timestamp of the most recent message with this contact
+  string mostRecentMessageText = 7; // the text of the most recent message with this contact
+  repeated string memberIds = 8; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
 }
 
 // A short message, the primary type of message exchanged by users. It's either text or ogg encoded
@@ -64,9 +55,9 @@ message ShortMessageRecord {
 }
 
 message OutgoingShortMessage {
-  // Whom this Conversation pertains to, either a single Contact or a Group
+  // Whom this Conversation pertains to, either a direct Contact or a Group
   oneof recipient {
-    string contactId = 1;
+    string identityKey = 1;
     string groupId = 2;
   }
   repeated string remainingRecipients = 3; // identityKeys of recipients who still need to be sent the message, base32 encoded

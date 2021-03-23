@@ -41,7 +41,7 @@ abstract class Model(
                 else -> result.success(out)
             }
         } catch (t: Throwable) {
-            Logger.error(TAG, t.message, t)
+            Logger.error(TAG, "Unexpected error calling " + call.method, t)
         }
     }
 
@@ -57,14 +57,7 @@ abstract class Model(
                 val count = call.argument<Int?>("count") ?: Int.MAX_VALUE
                 val fullTextSearch = call.argument<String?>("fullTextSearch")
                 val reverseSort = call.argument<Boolean?>("reverseSort") ?: false
-                val raw = call.argument<Boolean?>("raw") ?: false
-                val fullDb = db.list<Any>("%").map { "${it.path}: ${it.value}" }
-                println(fullDb)
-                if (raw) {
-                    db.listRaw<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value.bytes }
-                } else {
-                    db.list<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value }
-                }
+                db.listRaw<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value.valueOrProtoBytes }
             }
             else -> notImplemented()
         }
@@ -79,43 +72,46 @@ abstract class Model(
         val subscriberID = args["subscriberID"] as Int
         val path = args["path"] as String
         val details = args["details"]?.let { it as Boolean } ?: false
-        val raw = args["raw"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
-        val subscriber: RawSubscriber<Any> = if (raw) {
-            object :
-                    RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
-                override fun onUpdate(path: String, raw: Raw<Any>) {
+
+        val tail = args["tail"]?.let { it as Boolean } ?: false
+        if (tail) {
+//            val dump = db.list<Any>("%")
+            val count = args["count"]?.let { it as Int } ?: Int.MAX_VALUE
+            val subscriber = object : Subscriber<List<Raw<Any>>>(namespacedSubscriberId(subscriberID), path) {
+                override fun onUpdate(path: String, value: List<Raw<Any>>) {
                     Handler(Looper.getMainLooper()).post {
                         synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to raw.bytes))
+                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value.map { it.valueOrProtoBytes }))
                         }
                     }
                 }
 
                 override fun onDelete(path: String) {
-                    Handler(Looper.getMainLooper()).post {
-                        synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
-                        }
+                    // ignored
+                }
+            }
+            if (details) {
+                db.tailDetails(subscriber, count)
+            } else {
+                db.tail(subscriber, count)
+            }
+            return
+        }
+
+        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
+            override fun onUpdate(path: String, raw: Raw<Any>) {
+                Handler(Looper.getMainLooper()).post {
+                    synchronized(this@Model) {
+                        activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to raw.valueOrProtoBytes))
                     }
                 }
             }
-        } else {
-            object :
-                    Subscriber<Any>(namespacedSubscriberId(subscriberID), path) {
-                override fun onUpdate(path: String, value: Any) {
-                    Handler(Looper.getMainLooper()).post {
-                        synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value))
-                        }
-                    }
-                }
 
-                override fun onDelete(path: String) {
-                    Handler(Looper.getMainLooper()).post {
-                        synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
-                        }
+            override fun onDelete(path: String) {
+                Handler(Looper.getMainLooper()).post {
+                    synchronized(this@Model) {
+                        activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
                     }
                 }
             }
