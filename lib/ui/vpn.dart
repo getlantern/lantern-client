@@ -96,7 +96,7 @@ class VPNTab extends StatelessWidget {
     Widget proBanner() {
       return InkWell( // TODO make InkWell ripple effect works with BoxDecoration
         onTap: () {
-          LanternNavigator.startActivity(LanternNavigator.ACTIVITY_PLANS);
+          LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
         }, // Handle your callback
         child: Container(
           padding: EdgeInsets.all(16),

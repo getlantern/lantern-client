@@ -12,7 +12,7 @@ class Navigator(
 ) : MethodChannel.MethodCallHandler {
 
     companion object {
-        const val ACTIVITY_PLANS = "ACTIVITY_PLANS"
+        const val SCREEN_PLANS = "SCREEN_PLANS"
     }
 
     init {
@@ -26,9 +26,9 @@ class Navigator(
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "startActivity" -> {
-                val activityName = call.argument<String>("activityName")!!
-                val activityClass = toActivityClass(activityName)
+            "startScreen" -> {
+                val screenName = call.argument<String>("screenName")!!
+                val activityClass = toActivityClass(screenName)
                 activityClass?.let {
                     activity.startActivity(Intent(activity, activityClass))
                     result.success(true)
@@ -37,9 +37,9 @@ class Navigator(
         }
     }
 
-    private fun toActivityClass(activityName: String): Class<*>? {
-        return when (activityName) {
-            ACTIVITY_PLANS -> LanternApp.getSession().plansActivity()
+    private fun toActivityClass(screenName: String): Class<*>? {
+        return when (screenName) {
+            SCREEN_PLANS -> LanternApp.getSession().plansActivity()
             else -> null
         }
     }
