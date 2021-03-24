@@ -9,10 +9,8 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.*
-import android.text.Html
 import android.view.View
 import androidx.annotation.NonNull
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
@@ -72,7 +70,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onResume() {
-        // TODO [issue42] migrate to MainActivity
+        // TODO [issue44] replace this with a notification bubble in the Accounts tab and Yinbi menu item
 //        if (LanternApp.getSession().yinbiEnabled()) {
 //            bulkRenewSection.setVisibility(View.VISIBLE)
 //        } else {
@@ -171,7 +169,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun setYinbiAuctionInfo() {
-        // TODO [issue42] migrate to MainActivity
+        // TODO [issue44] migrate the Yinbi Auction tab to the Yinbi Redemption Screen
 //        val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB) as View
 //            ?: return
 //        val title = tab.findViewById<View>(R.id.tabText) as TextView
@@ -228,9 +226,6 @@ class MainActivity : FlutterActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
         doProcessLoconf(loconf)
-        if (loconf.ads != null) {
-            handleBannerAd(loconf.ads!!)
-        }
     }
 
     private fun doProcessLoconf(loconf: LoConf) {
@@ -319,42 +314,6 @@ class MainActivity : FlutterActivity() {
         val intent = Intent(this, PopUpAdActivity_::class.java)
         intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
         startActivity(intent)
-    }
-
-    /**
-     * Check if the banner ad for our region or language is enabled and display. Returns true if ad
-     * was displayed.
-     *
-     * @param ads the ads as defined in loconf
-     */
-    private fun handleBannerAd(ads: Map<String, BannerAd>): Boolean {
-        // TODO [issue42] migrate to MainActivity
-//        var ad = ads[LanternApp.getSession().countryCode]
-//        if (ad == null) {
-//            ad = ads[LanternApp.getSession().language]
-//        }
-//        if (ad != null && ad.enabled) {
-//            val adUrl = ad.url
-//            Logger.debug(
-//                TAG,
-//                "Displaying banner ad with url " + adUrl + " " + ad.text
-//            )
-//            yinbiAdText.setText(ad.text)
-//            //Utils.setMargins(viewPagerTab, 125, 450, 0, 0);
-//            org.getlantern.lantern.model.Utils.clickify(
-//                yinbiWebsite, getString(R.string.visit_yinbi_website)
-//            ) {
-//                val intent = Intent(this@MainActivity, WebViewActivity_::class.java)
-//                intent.putExtra("url", adUrl)
-//                startActivity(intent)
-//                Lantern.sendEvent(this@MainActivity, "yinbi_link_clicked_on")
-//            }
-//            yinbiWebsite.setPaintFlags(0)
-//            Lantern.sendEvent(this, "yinbi_ad_shown")
-//            yinbiAdLayout.setVisibility(View.VISIBLE)
-//            return true
-//        }
-        return false
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
