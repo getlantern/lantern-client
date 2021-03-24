@@ -94,7 +94,8 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget proBanner() {
-      return InkWell( // TODO make InkWell ripple effect works with BoxDecoration
+      return InkWell(
+        // TODO make InkWell ripple effect works with BoxDecoration
         onTap: () {
           LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
         }, // Handle your callback
@@ -132,10 +133,15 @@ class VPNTab extends StatelessWidget {
                       SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        "Go Pro Description".i18n,
-                        style: tsCaption(context),
-                      ),
+                      sessionModel.yinbiEnabled((BuildContext context,
+                          bool yinbiEnabled, Widget child) {
+                        return Text(
+                          yinbiEnabled
+                              ? "Go Pro Description With Yinbi".i18n
+                              : "Go Pro Description".i18n,
+                          style: tsCaption(context),
+                        );
+                      })
                     ],
                   ),
                 ),
