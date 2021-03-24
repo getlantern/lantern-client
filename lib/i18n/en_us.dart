@@ -7,6 +7,7 @@ const en_us = {
   "Connecting": "Connecting...",
   "Go Pro Title": "Go Pro!",
   "Go Pro Description": "Unlock faster speeds, and unlimited data!",
+  "Go Pro Description With Yinbi": "Unlimited data + free Yinbi cryptocurrency!",
   "Server Location": "Server Location",
   "Server Location Info": "Lantern uses smart server selection to automatically connect you to our best data centers.",
   "OK": "OK",

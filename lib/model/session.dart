@@ -7,4 +7,8 @@ class SessionModel extends Model {
   ValueListenableBuilder<bool> proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedBuilder<bool>("/prouser", builder: builder);
   }
+
+  ValueListenableBuilder<bool> yinbiEnabled(ValueWidgetBuilder<bool> builder) {
+    return subscribedBuilder<bool>("/yinbienabled", builder: builder);
+  }
 }

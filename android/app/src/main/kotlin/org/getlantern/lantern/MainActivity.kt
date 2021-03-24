@@ -96,11 +96,6 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        // TODO [issue42] migrate to MainActivity
-//        if (LanternApp.getSession().yinbiEnabled()) {
-//            upgradeToPro.setText(resources.getString(R.string.upgrade_to_pro_yinbi))
-//        }
-
         if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
                 activity,
                 LanternVpnService::class.java
