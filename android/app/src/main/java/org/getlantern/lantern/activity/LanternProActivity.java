@@ -44,7 +44,7 @@ public class LanternProActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO [issue42] migrate to MainActivity
+        // TODO [issue44] replace this with a notification bubble in the Accounts tab and Yinbi menu item
         if (LanternApp.getSession().yinbiEnabled()) {
             renewProSection.setVisibility(View.VISIBLE);
         }
