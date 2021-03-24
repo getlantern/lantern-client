@@ -9,8 +9,10 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.*
+import android.text.Html
 import android.view.View
 import androidx.annotation.NonNull
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
@@ -369,7 +371,7 @@ class MainActivity : FlutterActivity() {
                     resources.getString(R.string.error_checking_for_update),
                     appName
                 )
-//                Utils.showAlertDialog(activity, appName, message, false) // TODO [issue42] migrate to MainActivity
+                Utils.showAlertDialog(activity, appName, message, false)
                 return
             }
             if (url == "") {
@@ -396,7 +398,7 @@ class MainActivity : FlutterActivity() {
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
             String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
-//        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false) // TODO [issue42] migrate to MainActivity
+        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
     }
 
     @Throws(Exception::class)
@@ -456,19 +458,18 @@ class MainActivity : FlutterActivity() {
                     PERMISSIONS_TAG,
                     msg.toString()
                 )
-                // TODO [issue42] migrate to MainActivity
-//                Utils.showAlertDialog(this,
-//                    getString(R.string.please_allow_lantern_to),
-//                    Html.fromHtml(msg.toString()),
-//                    getString(R.string.continue_),
-//                    false,
-//                    Runnable {
-//                        ActivityCompat.requestPermissions(
-//                            this,
-//                            neededPermissions,
-//                            FULL_PERMISSIONS_REQUEST
-//                        )
-//                    })
+                Utils.showAlertDialog(this,
+                    getString(R.string.please_allow_lantern_to),
+                    Html.fromHtml(msg.toString()),
+                    getString(R.string.continue_),
+                    false,
+                    Runnable {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            neededPermissions,
+                            FULL_PERMISSIONS_REQUEST
+                        )
+                    })
                 return
             }
 
