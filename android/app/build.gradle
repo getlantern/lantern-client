@@ -224,8 +224,8 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
             java.srcDirs += 'src/main/kotlin'
-            java.srcDirs += '../../build/app/generated/source/proto/prodDebug/java' // this is a hack to get Android Studio to recognize the generated protocol buffer classes
-            proto.srcDirs += '../../protos'
+//            java.srcDirs += '../../build/app/generated/source/proto/prodDebug/java' // this is a hack to get Android Studio to recognize the generated protocol buffer classes
+            proto.srcDirs += '../../protos_shared'
         }
     }
 
@@ -441,10 +441,10 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:3ac588e'
-    implementation 'com.github.getlantern:db-android:8db3e24'
+    implementation 'com.github.getlantern:db-android:92f04c8'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
-    implementation 'com.github.getlantern:messaging-android:a4f7676'
+    implementation 'com.github.getlantern:messaging-android:b850dfd269'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -36,9 +36,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        messagingModel = MessagingModel(flutterEngine, Messaging(
-                MessagingStore(context, File(File(application.filesDir, ".lantern"), "messagingdb").absolutePath),
-                WebSocketTransportFactory("wss://tassis.lantern.io/api")))
+        messagingModel = MessagingModel(flutterEngine, (application as LanternApp).messaging.messaging)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

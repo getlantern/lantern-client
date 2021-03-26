@@ -249,7 +249,7 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
     ..e<ShortMessageRecord_Direction>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_Direction.OUT, valueOf: ShortMessageRecord_Direction.valueOf, enumValues: ShortMessageRecord_Direction.values)
-    ..e<ShortMessageRecord_DeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_DeliveryStatus.UNSENT, valueOf: ShortMessageRecord_DeliveryStatus.valueOf, enumValues: ShortMessageRecord_DeliveryStatus.values)
+    ..e<ShortMessageRecord_DeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_DeliveryStatus.SENDING, valueOf: ShortMessageRecord_DeliveryStatus.valueOf, enumValues: ShortMessageRecord_DeliveryStatus.values)
     ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -360,51 +360,39 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
   void clearMessage() => clearField(6);
 }
 
-enum OutgoingShortMessage_Recipient {
-  identityKey, 
-  groupId, 
-  notSet
-}
-
 class OutgoingShortMessage extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, OutgoingShortMessage_Recipient> _OutgoingShortMessage_RecipientByTag = {
-    1 : OutgoingShortMessage_Recipient.identityKey,
-    2 : OutgoingShortMessage_Recipient.groupId,
-    0 : OutgoingShortMessage_Recipient.notSet
-  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutgoingShortMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'identityKey', protoName: 'identityKey')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'groupId', protoName: 'groupId')
-    ..pPS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remainingRecipients', protoName: 'remainingRecipients')
-    ..aOM<ShortMessage>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', subBuilder: ShortMessage.create)
-    ..aInt64(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lastFailed', protoName: 'lastFailed')
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientId', protoName: 'recipientId')
+    ..m<$core.String, OutgoingShortMessage_SubDeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'subDeliveryStatuses', protoName: 'subDeliveryStatuses', entryClassName: 'OutgoingShortMessage.SubDeliveryStatusesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OE, valueOf: OutgoingShortMessage_SubDeliveryStatus.valueOf, enumValues: OutgoingShortMessage_SubDeliveryStatus.values, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
   OutgoingShortMessage._() : super();
   factory OutgoingShortMessage({
-    $core.String? identityKey,
-    $core.String? groupId,
-    $core.Iterable<$core.String>? remainingRecipients,
-    ShortMessage? message,
-    $fixnum.Int64? lastFailed,
+    $core.String? senderId,
+    $core.String? id,
+    $fixnum.Int64? sent,
+    $core.String? recipientId,
+    $core.Map<$core.String, OutgoingShortMessage_SubDeliveryStatus>? subDeliveryStatuses,
   }) {
     final _result = create();
-    if (identityKey != null) {
-      _result.identityKey = identityKey;
+    if (senderId != null) {
+      _result.senderId = senderId;
     }
-    if (groupId != null) {
-      _result.groupId = groupId;
+    if (id != null) {
+      _result.id = id;
     }
-    if (remainingRecipients != null) {
-      _result.remainingRecipients.addAll(remainingRecipients);
+    if (sent != null) {
+      _result.sent = sent;
     }
-    if (message != null) {
-      _result.message = message;
+    if (recipientId != null) {
+      _result.recipientId = recipientId;
     }
-    if (lastFailed != null) {
-      _result.lastFailed = lastFailed;
+    if (subDeliveryStatuses != null) {
+      _result.subDeliveryStatuses.addAll(subDeliveryStatuses);
     }
     return _result;
   }
@@ -429,49 +417,44 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
   static OutgoingShortMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OutgoingShortMessage>(create);
   static OutgoingShortMessage? _defaultInstance;
 
-  OutgoingShortMessage_Recipient whichRecipient() => _OutgoingShortMessage_RecipientByTag[$_whichOneof(0)]!;
-  void clearRecipient() => clearField($_whichOneof(0));
-
   @$pb.TagNumber(1)
-  $core.String get identityKey => $_getSZ(0);
+  $core.String get senderId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set identityKey($core.String v) { $_setString(0, v); }
+  set senderId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasIdentityKey() => $_has(0);
+  $core.bool hasSenderId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearIdentityKey() => clearField(1);
+  void clearSenderId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get groupId => $_getSZ(1);
+  $core.String get id => $_getSZ(1);
   @$pb.TagNumber(2)
-  set groupId($core.String v) { $_setString(1, v); }
+  set id($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasGroupId() => $_has(1);
+  $core.bool hasId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearGroupId() => clearField(2);
+  void clearId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.String> get remainingRecipients => $_getList(2);
+  $fixnum.Int64 get sent => $_getI64(2);
+  @$pb.TagNumber(3)
+  set sent($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasSent() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSent() => clearField(3);
 
   @$pb.TagNumber(4)
-  ShortMessage get message => $_getN(3);
+  $core.String get recipientId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set message(ShortMessage v) { setField(4, v); }
+  set recipientId($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasMessage() => $_has(3);
+  $core.bool hasRecipientId() => $_has(3);
   @$pb.TagNumber(4)
-  void clearMessage() => clearField(4);
-  @$pb.TagNumber(4)
-  ShortMessage ensureMessage() => $_ensure(3);
+  void clearRecipientId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $fixnum.Int64 get lastFailed => $_getI64(4);
-  @$pb.TagNumber(5)
-  set lastFailed($fixnum.Int64 v) { $_setInt64(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasLastFailed() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearLastFailed() => clearField(5);
+  $core.Map<$core.String, OutgoingShortMessage_SubDeliveryStatus> get subDeliveryStatuses => $_getMap(4);
 }
 
 enum TransferMessage_Content {
@@ -486,13 +469,13 @@ class TransferMessage extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..oo(0, [1])
-    ..aOM<ShortMessage>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortMessage', protoName: 'shortMessage', subBuilder: ShortMessage.create)
+    ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortMessage', $pb.PbFieldType.OY, protoName: 'shortMessage')
     ..hasRequiredFields = false
   ;
 
   TransferMessage._() : super();
   factory TransferMessage({
-    ShortMessage? shortMessage,
+    $core.List<$core.int>? shortMessage,
   }) {
     final _result = create();
     if (shortMessage != null) {
@@ -525,14 +508,12 @@ class TransferMessage extends $pb.GeneratedMessage {
   void clearContent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  ShortMessage get shortMessage => $_getN(0);
+  $core.List<$core.int> get shortMessage => $_getN(0);
   @$pb.TagNumber(1)
-  set shortMessage(ShortMessage v) { setField(1, v); }
+  set shortMessage($core.List<$core.int> v) { $_setBytes(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasShortMessage() => $_has(0);
   @$pb.TagNumber(1)
   void clearShortMessage() => clearField(1);
-  @$pb.TagNumber(1)
-  ShortMessage ensureShortMessage() => $_ensure(0);
 }
 

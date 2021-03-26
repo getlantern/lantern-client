@@ -39,11 +39,9 @@ message ShortMessageRecord {
   }
 
   enum DeliveryStatus {
-    UNSENT = 0;
-    FAILING = 1; // message is currently failing to send but we'll try again
-    PARTIALLY_FAILED = 2; // message failed to send to a subset of recipients, will not retry
-    COMPLETELY_FAILED = 3; // message failed to send to any recipients, will not retry
-    SENT = 4; // message has been successfully sent
+    SENDING = 0; // message is currently in the process of sending but hasn't successfully finished yet
+    PARTIALLY_SENT = 1; // message failed to send to a subset of recipients, will not retry
+    COMPLETELY_SENT = 2; // message has been successfully sent
   }
 
   string senderId = 1; // the id of who sent this message
@@ -55,18 +53,20 @@ message ShortMessageRecord {
 }
 
 message OutgoingShortMessage {
-  // Whom this Conversation pertains to, either a direct Contact or a Group
-  oneof recipient {
-    string identityKey = 1;
-    string groupId = 2;
+  enum SubDeliveryStatus {
+    SENDING = 0; // message is currently in the process of sending to specific deviceId but hasn't successfully finished yet
+    SENT = 1; // message has been sent to specific deviceId
   }
-  repeated string remainingRecipients = 3; // identityKeys of recipients who still need to be sent the message, base32 encoded
-  ShortMessage message = 4;
-  int64 lastFailed = 5; // Time of last failure (nanoseconds since epoch)
+
+  string senderId = 1; // the id of who sent this message (same as on ShortMessageRecord)
+  string id = 2; // the id of the message (same as on ShortMessage), encoded in base32
+  int64 sent = 3; // The unix timestamp in nanoseconds for when the message was sent
+  string recipientId = 4; // the id of the recipient
+  map<string, SubDeliveryStatus> subDeliveryStatuses = 5; // Statuses of subdeliveries to specific deviceIds
 }
 
 message TransferMessage {
   oneof content {
-    ShortMessage shortMessage = 1;
+    bytes shortMessage = 1; // the serialized ShortMessage
   }
 }

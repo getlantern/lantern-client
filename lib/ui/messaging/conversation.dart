@@ -52,14 +52,8 @@ class _ConversationState extends State<Conversation> {
         )
       ]);
       switch (messageRecord.status) {
-        case ShortMessageRecord_DeliveryStatus.FAILING:
-          row.children.add(Icon(Icons.warning_amber_outlined));
-          break;
-        case ShortMessageRecord_DeliveryStatus.COMPLETELY_FAILED:
-          row.children.add(Icon(Icons.error_outline));
-          break;
-        case ShortMessageRecord_DeliveryStatus.PARTIALLY_FAILED:
-          row.children.add(Icon(Icons.error_outline));
+        case ShortMessageRecord_DeliveryStatus.PARTIALLY_SENT:
+          row.children.add(Icon(Icons.pending_outlined));
           break;
       }
       return Bubble(style: outbound ? _styleMe : _styleThem, child: row);
