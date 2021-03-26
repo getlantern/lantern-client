@@ -19,6 +19,9 @@ class _ConversationState extends State<Conversation> {
 
   static const _styleThem = BubbleStyle(
     nip: BubbleNip.leftBottom,
+    nipRadius: 0,
+    nipWidth: 1,
+    nipHeight: 1,
     color: Colors.black12,
     borderColor: Colors.black,
     borderWidth: 1,
@@ -29,6 +32,9 @@ class _ConversationState extends State<Conversation> {
 
   static const _styleMe = BubbleStyle(
     nip: BubbleNip.rightBottom,
+    nipRadius: 0,
+    nipWidth: 1,
+    nipHeight: 1,
     color: Colors.black38,
     borderColor: Colors.black,
     borderWidth: 1,
@@ -43,21 +49,47 @@ class _ConversationState extends State<Conversation> {
       var message = ShortMessage.fromBuffer(messageRecord.message);
       var outbound =
           messageRecord.direction == ShortMessageRecord_Direction.OUT;
-      var row = Row(mainAxisSize: MainAxisSize.min, children: [
-        Text(
-          message.text,
-          style: TextStyle(
-            color: outbound ? Colors.white : Colors.black,
-          ),
-        )
-      ]);
-      switch (messageRecord.status) {
-        case ShortMessageRecord_DeliveryStatus.PARTIALLY_SENT:
-          row.children.add(Icon(Icons.pending_outlined));
-          break;
-      }
-      return Bubble(style: outbound ? _styleMe : _styleThem, child: row);
+      return Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: outbound ? 20 : 4,
+                    right: outbound ? 4 : 20,
+                    top: 4,
+                    bottom: 4),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: outbound ? Colors.black38 : Colors.black12,
+                    borderRadius: BorderRadius.only(
+                        topLeft: outbound ? Radius.circular(5) : Radius.zero,
+                        bottomRight:
+                            outbound ? Radius.zero : Radius.circular(5),
+                        topRight: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Text(
+                      message.text,
+                      style: TextStyle(
+                        color: outbound ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ]);
     });
+  }
+
+  _send(String text) {
+    model.sendToDirectContact(widget._contact.id, text);
+    newMessage.clear();
   }
 
   @override
@@ -88,18 +120,19 @@ class _ConversationState extends State<Conversation> {
         Padding(
           padding: EdgeInsets.all(4),
           child: TextFormField(
+              textInputAction: TextInputAction.send,
+              onFieldSubmitted: _send,
               controller: newMessage,
               decoration: InputDecoration(
                 icon: Icon(Icons.emoji_emotions_outlined),
                 suffixIcon: IconButton(
-                    icon: Icon(Icons.add_circle),
+                    icon: Icon(Icons.send),
                     onPressed: () {
                       var text = newMessage.value.text;
                       if (text.isEmpty) {
                         return;
                       }
-                      model.sendToDirectContact(widget._contact.id, text);
-                      newMessage.clear();
+                      _send(text);
                     }),
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,

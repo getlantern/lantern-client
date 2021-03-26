@@ -444,7 +444,7 @@ dependencies {
     implementation 'com.github.getlantern:db-android:92f04c8'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
-    implementation 'com.github.getlantern:messaging-android:b850dfd269'
+    implementation 'com.github.getlantern:messaging-android:f369e51'
 }
 
 apply plugin: 'com.google.gms.google-services'
