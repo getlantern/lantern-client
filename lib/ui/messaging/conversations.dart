@@ -1,4 +1,3 @@
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -78,7 +77,28 @@ class _ConversationsState extends State<Conversations> {
                 Navigator.restorablePushNamed(context, 'your_contact_info');
               }),
         ],
-        body: Container(),
+        body: model.contacts(
+            builder: (context, List<Contact> contacts, Widget child) {
+          return ListView.builder(
+            itemCount: contacts.length,
+            itemBuilder: (context, index) {
+              var contact = contacts[index];
+              return ListTile(
+                title: Text(
+                    contact.displayName?.isEmpty
+                        ? 'Unnamed'.i18n
+                        : contact.displayName,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(contact.mostRecentMessageText,
+                    overflow: TextOverflow.ellipsis),
+                onTap: () {
+                  Navigator.pushNamed(context, 'conversation',
+                      arguments: contact);
+                },
+              );
+            },
+          );
+        }),
         actionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {

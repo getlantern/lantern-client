@@ -77,38 +77,54 @@ const ShortMessageRecord_Direction$json = const {
 const ShortMessageRecord_DeliveryStatus$json = const {
   '1': 'DeliveryStatus',
   '2': const [
-    const {'1': 'UNSENT', '2': 0},
-    const {'1': 'FAILING', '2': 1},
-    const {'1': 'PARTIALLY_FAILED', '2': 2},
-    const {'1': 'COMPLETELY_FAILED', '2': 3},
-    const {'1': 'SENT', '2': 4},
+    const {'1': 'SENDING', '2': 0},
+    const {'1': 'PARTIALLY_SENT', '2': 1},
+    const {'1': 'COMPLETELY_SENT', '2': 2},
   ],
 };
 
 /// Descriptor for `ShortMessageRecord`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List shortMessageRecordDescriptor = $convert.base64Decode('ChJTaG9ydE1lc3NhZ2VSZWNvcmQSGgoIc2VuZGVySWQYASABKAlSCHNlbmRlcklkEg4KAmlkGAIgASgJUgJpZBISCgRzZW50GAMgASgDUgRzZW50EkEKCWRpcmVjdGlvbhgEIAEoDjIjLm1vZGVsLlNob3J0TWVzc2FnZVJlY29yZC5EaXJlY3Rpb25SCWRpcmVjdGlvbhJACgZzdGF0dXMYBSABKA4yKC5tb2RlbC5TaG9ydE1lc3NhZ2VSZWNvcmQuRGVsaXZlcnlTdGF0dXNSBnN0YXR1cxIYCgdtZXNzYWdlGAYgASgMUgdtZXNzYWdlIhwKCURpcmVjdGlvbhIHCgNPVVQQABIGCgJJThABImAKDkRlbGl2ZXJ5U3RhdHVzEgoKBlVOU0VOVBAAEgsKB0ZBSUxJTkcQARIUChBQQVJUSUFMTFlfRkFJTEVEEAISFQoRQ09NUExFVEVMWV9GQUlMRUQQAxIICgRTRU5UEAQ=');
+final $typed_data.Uint8List shortMessageRecordDescriptor = $convert.base64Decode('ChJTaG9ydE1lc3NhZ2VSZWNvcmQSGgoIc2VuZGVySWQYASABKAlSCHNlbmRlcklkEg4KAmlkGAIgASgJUgJpZBISCgRzZW50GAMgASgDUgRzZW50EkEKCWRpcmVjdGlvbhgEIAEoDjIjLm1vZGVsLlNob3J0TWVzc2FnZVJlY29yZC5EaXJlY3Rpb25SCWRpcmVjdGlvbhJACgZzdGF0dXMYBSABKA4yKC5tb2RlbC5TaG9ydE1lc3NhZ2VSZWNvcmQuRGVsaXZlcnlTdGF0dXNSBnN0YXR1cxIYCgdtZXNzYWdlGAYgASgMUgdtZXNzYWdlIhwKCURpcmVjdGlvbhIHCgNPVVQQABIGCgJJThABIkYKDkRlbGl2ZXJ5U3RhdHVzEgsKB1NFTkRJTkcQABISCg5QQVJUSUFMTFlfU0VOVBABEhMKD0NPTVBMRVRFTFlfU0VOVBAC');
 @$core.Deprecated('Use outgoingShortMessageDescriptor instead')
 const OutgoingShortMessage$json = const {
   '1': 'OutgoingShortMessage',
   '2': const [
-    const {'1': 'identityKey', '3': 1, '4': 1, '5': 9, '9': 0, '10': 'identityKey'},
-    const {'1': 'groupId', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'groupId'},
-    const {'1': 'remainingRecipients', '3': 3, '4': 3, '5': 9, '10': 'remainingRecipients'},
-    const {'1': 'message', '3': 4, '4': 1, '5': 11, '6': '.model.ShortMessage', '10': 'message'},
-    const {'1': 'lastFailed', '3': 5, '4': 1, '5': 3, '10': 'lastFailed'},
+    const {'1': 'senderId', '3': 1, '4': 1, '5': 9, '10': 'senderId'},
+    const {'1': 'id', '3': 2, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'sent', '3': 3, '4': 1, '5': 3, '10': 'sent'},
+    const {'1': 'recipientId', '3': 4, '4': 1, '5': 9, '10': 'recipientId'},
+    const {'1': 'subDeliveryStatuses', '3': 5, '4': 3, '5': 11, '6': '.model.OutgoingShortMessage.SubDeliveryStatusesEntry', '10': 'subDeliveryStatuses'},
   ],
-  '8': const [
-    const {'1': 'recipient'},
+  '3': const [OutgoingShortMessage_SubDeliveryStatusesEntry$json],
+  '4': const [OutgoingShortMessage_SubDeliveryStatus$json],
+};
+
+@$core.Deprecated('Use outgoingShortMessageDescriptor instead')
+const OutgoingShortMessage_SubDeliveryStatusesEntry$json = const {
+  '1': 'SubDeliveryStatusesEntry',
+  '2': const [
+    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 14, '6': '.model.OutgoingShortMessage.SubDeliveryStatus', '10': 'value'},
+  ],
+  '7': const {'7': true},
+};
+
+@$core.Deprecated('Use outgoingShortMessageDescriptor instead')
+const OutgoingShortMessage_SubDeliveryStatus$json = const {
+  '1': 'SubDeliveryStatus',
+  '2': const [
+    const {'1': 'SENDING', '2': 0},
+    const {'1': 'SENT', '2': 1},
   ],
 };
 
 /// Descriptor for `OutgoingShortMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List outgoingShortMessageDescriptor = $convert.base64Decode('ChRPdXRnb2luZ1Nob3J0TWVzc2FnZRIiCgtpZGVudGl0eUtleRgBIAEoCUgAUgtpZGVudGl0eUtleRIaCgdncm91cElkGAIgASgJSABSB2dyb3VwSWQSMAoTcmVtYWluaW5nUmVjaXBpZW50cxgDIAMoCVITcmVtYWluaW5nUmVjaXBpZW50cxItCgdtZXNzYWdlGAQgASgLMhMubW9kZWwuU2hvcnRNZXNzYWdlUgdtZXNzYWdlEh4KCmxhc3RGYWlsZWQYBSABKANSCmxhc3RGYWlsZWRCCwoJcmVjaXBpZW50');
+final $typed_data.Uint8List outgoingShortMessageDescriptor = $convert.base64Decode('ChRPdXRnb2luZ1Nob3J0TWVzc2FnZRIaCghzZW5kZXJJZBgBIAEoCVIIc2VuZGVySWQSDgoCaWQYAiABKAlSAmlkEhIKBHNlbnQYAyABKANSBHNlbnQSIAoLcmVjaXBpZW50SWQYBCABKAlSC3JlY2lwaWVudElkEmYKE3N1YkRlbGl2ZXJ5U3RhdHVzZXMYBSADKAsyNC5tb2RlbC5PdXRnb2luZ1Nob3J0TWVzc2FnZS5TdWJEZWxpdmVyeVN0YXR1c2VzRW50cnlSE3N1YkRlbGl2ZXJ5U3RhdHVzZXMadQoYU3ViRGVsaXZlcnlTdGF0dXNlc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5EkMKBXZhbHVlGAIgASgOMi0ubW9kZWwuT3V0Z29pbmdTaG9ydE1lc3NhZ2UuU3ViRGVsaXZlcnlTdGF0dXNSBXZhbHVlOgI4ASIqChFTdWJEZWxpdmVyeVN0YXR1cxILCgdTRU5ESU5HEAASCAoEU0VOVBAB');
 @$core.Deprecated('Use transferMessageDescriptor instead')
 const TransferMessage$json = const {
   '1': 'TransferMessage',
   '2': const [
-    const {'1': 'shortMessage', '3': 1, '4': 1, '5': 11, '6': '.model.ShortMessage', '9': 0, '10': 'shortMessage'},
+    const {'1': 'shortMessage', '3': 1, '4': 1, '5': 12, '9': 0, '10': 'shortMessage'},
   ],
   '8': const [
     const {'1': 'content'},
@@ -116,4 +132,4 @@ const TransferMessage$json = const {
 };
 
 /// Descriptor for `TransferMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USOQoMc2hvcnRNZXNzYWdlGAEgASgLMhMubW9kZWwuU2hvcnRNZXNzYWdlSABSDHNob3J0TWVzc2FnZUIJCgdjb250ZW50');
+final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USJAoMc2hvcnRNZXNzYWdlGAEgASgMSABSDHNob3J0TWVzc2FnZUIJCgdjb250ZW50');

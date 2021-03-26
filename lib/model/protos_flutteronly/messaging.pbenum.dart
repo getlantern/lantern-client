@@ -40,23 +40,34 @@ class ShortMessageRecord_Direction extends $pb.ProtobufEnum {
 }
 
 class ShortMessageRecord_DeliveryStatus extends $pb.ProtobufEnum {
-  static const ShortMessageRecord_DeliveryStatus UNSENT = ShortMessageRecord_DeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UNSENT');
-  static const ShortMessageRecord_DeliveryStatus FAILING = ShortMessageRecord_DeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'FAILING');
-  static const ShortMessageRecord_DeliveryStatus PARTIALLY_FAILED = ShortMessageRecord_DeliveryStatus._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_FAILED');
-  static const ShortMessageRecord_DeliveryStatus COMPLETELY_FAILED = ShortMessageRecord_DeliveryStatus._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_FAILED');
-  static const ShortMessageRecord_DeliveryStatus SENT = ShortMessageRecord_DeliveryStatus._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENT');
+  static const ShortMessageRecord_DeliveryStatus SENDING = ShortMessageRecord_DeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
+  static const ShortMessageRecord_DeliveryStatus PARTIALLY_SENT = ShortMessageRecord_DeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_SENT');
+  static const ShortMessageRecord_DeliveryStatus COMPLETELY_SENT = ShortMessageRecord_DeliveryStatus._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_SENT');
 
   static const $core.List<ShortMessageRecord_DeliveryStatus> values = <ShortMessageRecord_DeliveryStatus> [
-    UNSENT,
-    FAILING,
-    PARTIALLY_FAILED,
-    COMPLETELY_FAILED,
-    SENT,
+    SENDING,
+    PARTIALLY_SENT,
+    COMPLETELY_SENT,
   ];
 
   static final $core.Map<$core.int, ShortMessageRecord_DeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
   static ShortMessageRecord_DeliveryStatus? valueOf($core.int value) => _byValue[value];
 
   const ShortMessageRecord_DeliveryStatus._($core.int v, $core.String n) : super(v, n);
+}
+
+class OutgoingShortMessage_SubDeliveryStatus extends $pb.ProtobufEnum {
+  static const OutgoingShortMessage_SubDeliveryStatus SENDING = OutgoingShortMessage_SubDeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
+  static const OutgoingShortMessage_SubDeliveryStatus SENT = OutgoingShortMessage_SubDeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENT');
+
+  static const $core.List<OutgoingShortMessage_SubDeliveryStatus> values = <OutgoingShortMessage_SubDeliveryStatus> [
+    SENDING,
+    SENT,
+  ];
+
+  static final $core.Map<$core.int, OutgoingShortMessage_SubDeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static OutgoingShortMessage_SubDeliveryStatus? valueOf($core.int value) => _byValue[value];
+
+  const OutgoingShortMessage_SubDeliveryStatus._($core.int v, $core.String n) : super(v, n);
 }
 

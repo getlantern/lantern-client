@@ -30,12 +30,18 @@ class _YourContactInfoState extends State<YourContactInfo> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
+    if (editing) {
+      displayNameFocus.requestFocus();
+    } else {
+      displayNameFocus.unfocus();
+    }
+
     return BaseScreen(
       title: 'Your Contact Info'.i18n,
       body: model.me((BuildContext context, Contact me, Widget child) {
         displayName.text = me.displayName;
 
-        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Expanded(
             flex: 5,
             child: Padding(
@@ -83,7 +89,6 @@ class _YourContactInfoState extends State<YourContactInfo> {
                         setState(() {
                           editing = true;
                         });
-                        displayNameFocus.requestFocus();
                       }
                     }),
               ),
