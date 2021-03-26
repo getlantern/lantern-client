@@ -1,4 +1,4 @@
-import 'package:bubble/bubble.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -17,38 +17,38 @@ class _ConversationState extends State<Conversation> {
 
   TextEditingController newMessage = TextEditingController();
 
-  static const _styleThem = BubbleStyle(
-    nip: BubbleNip.leftBottom,
-    nipRadius: 0,
-    nipWidth: 1,
-    nipHeight: 1,
-    color: Colors.black12,
-    borderColor: Colors.black,
-    borderWidth: 1,
-    elevation: 4,
-    margin: BubbleEdges.only(top: 8, right: 50),
-    alignment: Alignment.topLeft,
-  );
-
-  static const _styleMe = BubbleStyle(
-    nip: BubbleNip.rightBottom,
-    nipRadius: 0,
-    nipWidth: 1,
-    nipHeight: 1,
-    color: Colors.black38,
-    borderColor: Colors.black,
-    borderWidth: 1,
-    elevation: 4,
-    margin: BubbleEdges.only(top: 8, left: 50),
-    alignment: Alignment.topRight,
-  );
-
-  Widget buildMessage(BuildContext context, ShortMessageRecord message) {
+  Widget buildMessage(BuildContext context, ShortMessageRecord message,
+      ShortMessageRecord priorMessage, ShortMessageRecord nextMessage) {
     return model.message(message,
         (BuildContext context, ShortMessageRecord messageRecord, Widget child) {
-      var message = ShortMessage.fromBuffer(messageRecord.message);
+      var msg = ShortMessage.fromBuffer(messageRecord.message);
       var outbound =
           messageRecord.direction == ShortMessageRecord_Direction.OUT;
+      var inbound = !outbound;
+      var innerRow = Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Text(
+                "${msg.text}",
+                style: TextStyle(
+                  color: outbound ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ]);
+      if (outbound &&
+          messageRecord.status == ShortMessageRecord_DeliveryStatus.SENDING) {
+        innerRow.children.add(
+            Transform.scale(scale: .5, child: Icon(Icons.pending_outlined)));
+      }
+      var startOfBlock =
+          priorMessage == null || priorMessage.direction != message.direction;
+      var endOfBlock =
+          nextMessage == null || nextMessage.direction != message.direction;
+      var newestMessage = nextMessage == null;
       return Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment:
@@ -65,20 +65,24 @@ class _ConversationState extends State<Conversation> {
                   decoration: BoxDecoration(
                     color: outbound ? Colors.black38 : Colors.black12,
                     borderRadius: BorderRadius.only(
-                        topLeft: outbound ? Radius.circular(5) : Radius.zero,
-                        bottomRight:
-                            outbound ? Radius.zero : Radius.circular(5),
-                        topRight: Radius.circular(5),
-                        bottomLeft: Radius.circular(5)),
+                      topLeft: inbound && !startOfBlock
+                          ? Radius.zero
+                          : Radius.circular(5),
+                      topRight: outbound && !startOfBlock
+                          ? Radius.zero
+                          : Radius.circular(5),
+                      bottomRight: outbound && (!endOfBlock || newestMessage)
+                          ? Radius.zero
+                          : Radius.circular(5),
+                      bottomLeft: inbound && (!endOfBlock || newestMessage)
+                          ? Radius.zero
+                          : Radius.circular(5),
+                    ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                      message.text,
-                      style: TextStyle(
-                        color: outbound ? Colors.white : Colors.black,
-                      ),
-                    ),
+                    padding:
+                        EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                    child: innerRow,
                   ),
                 ),
               ),
@@ -108,7 +112,13 @@ class _ConversationState extends State<Conversation> {
               reverse: true,
               itemCount: messageRecords.length,
               itemBuilder: (context, index) {
-                return buildMessage(context, messageRecords[index]);
+                return buildMessage(
+                    context,
+                    messageRecords[index],
+                    index >= messageRecords.length - 1
+                        ? null
+                        : messageRecords[index + 1],
+                    index == 0 ? null : messageRecords[index - 1]);
               },
             );
           }),
