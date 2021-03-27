@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.*
 import android.text.Html
-import android.view.View
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,12 +17,16 @@ import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.SessionModel
 import io.lantern.android.model.VpnModel
 import okhttp3.Response
 import org.getlantern.lantern.activity.PopUpAdActivity_
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
+import org.getlantern.lantern.event.Event
+import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
@@ -37,11 +40,13 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
+
+    private lateinit var eventManager: EventManager
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -55,6 +60,13 @@ class MainActivity : FlutterActivity() {
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
         navigator = Navigator(this, flutterEngine)
+
+        eventManager = EventManager("lantern_event_channel", flutterEngine)
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "lantern_method_channel"
+        ).setMethodCallHandler(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,6 +148,16 @@ class MainActivity : FlutterActivity() {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {}
     }
 
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "showLastSurvey" -> {
+                showSurvey(lastSurvey)
+                result.success(true)
+            }
+            else -> result.notImplemented()
+        }
+    }
+
     /**
      * Fetch the latest loconf config and update the UI based on those
      * settings
@@ -189,40 +211,6 @@ class MainActivity : FlutterActivity() {
 //                    countDown!!.start()
 //                }
 //            })
-    }
-
-    fun showSurvey(survey: Survey) {
-        val url = survey.url
-        if (url != null && url != "") {
-            if (LanternApp.getSession().surveyLinkOpened(url)) {
-                Logger.debug(
-                    TAG,
-                    "User already opened link to survey; not displaying snackbar"
-                )
-                return
-            }
-        }
-        val surveyListener = View.OnClickListener {
-            if (survey.showPlansScreen) {
-                startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
-                return@OnClickListener
-            }
-            LanternApp.getSession().setSurveyLinkOpened(survey.url)
-            FinestWebView.Builder(this@MainActivity)
-                .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
-                .webViewSupportMultipleWindows(true)
-                .webViewJavaScriptEnabled(true)
-                .swipeRefreshColorRes(R.color.black)
-                .webViewAllowFileAccessFromFileURLs(true)
-                .webViewJavaScriptCanOpenWindowsAutomatically(true)
-                .show(survey.url!!)
-        }
-        Logger.debug(TAG, "Showing user survey snackbar")
-        // TODO [issue42] migrate to MainActivity
-//        org.getlantern.lantern.model.Utils.showSnackbar(
-//            coordinatorLayout, survey.message, survey.button,
-//            resources.getColor(R.color.pink), Snackbar.LENGTH_INDEFINITE, surveyListener
-//        )
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -286,8 +274,46 @@ class MainActivity : FlutterActivity() {
                     return
                 }
             }
-            showSurvey(survey)
+            showSurveySnackbar(survey)
         }
+    }
+
+    fun showSurveySnackbar(survey: Survey) {
+        val url = survey.url
+        if (url != null && url != "") {
+            if (LanternApp.getSession().surveyLinkOpened(url)) {
+                Logger.debug(
+                    TAG,
+                    "User already opened link to survey; not displaying snackbar"
+                )
+                return
+            }
+        }
+        lastSurvey = survey
+        Logger.debug(TAG, "Showing user survey snackbar")
+        eventManager.onNewEvent(
+            Event.SurveyAvailable,
+            hashMapOf("message" to survey.message, "buttonText" to survey.button)
+        )
+    }
+
+    private var lastSurvey: Survey? = null
+
+    private fun showSurvey(survey: Survey?) {
+        survey ?: return
+        if (survey.showPlansScreen) {
+            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
+            return
+        }
+        LanternApp.getSession().setSurveyLinkOpened(survey.url)
+        FinestWebView.Builder(this@MainActivity)
+            .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+            .webViewSupportMultipleWindows(true)
+            .webViewJavaScriptEnabled(true)
+            .swipeRefreshColorRes(R.color.black)
+            .webViewAllowFileAccessFromFileURLs(true)
+            .webViewJavaScriptCanOpenWindowsAutomatically(true)
+            .show(survey.url!!)
     }
 
     /**
