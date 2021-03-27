@@ -8,7 +8,7 @@ enum Event {
 extension EventParsing on Event {
   // map from [event name] to [the event], for example:
   // "All" -> Event.All
-  // "DeviceAdded" -> Event.DeviceAdded
+  // "SurveyAvailable" -> Event.SurveyAvailable
   static HashMap<String, Event> valuesMap;
 
   static Event fromValue(String name) {
