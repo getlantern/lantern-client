@@ -50,7 +50,7 @@ public class LanternFreeActivity extends BaseActivity {
 
         setHeaderLogo(LanternApp.getSession().useVpn());
 
-        // TODO [issue42] migrate to MainActivity
+        // TODO [issue44] use the existing event channel to send events to Flutter (DeviceLinked, AccountRecovered,...) instead of telling Flutter which UI to show
         Utils.showPlainSnackbar(coordinatorLayout, snackbarMsg);
     }
 
