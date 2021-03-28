@@ -2,9 +2,9 @@ import 'package:lantern/package_store.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
+  final String logoTitle;
   final List<Widget> actions;
-
-  CustomAppBar({this.title, this.actions, Key key}) : super(key: key);
+  CustomAppBar({this.title, this.logoTitle, this.actions, Key key}) : super(key: key);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -19,10 +19,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
       elevation: 1,
       backgroundColor: Colors.white,
       centerTitle: true,
-      title: Text(
-        (widget.title ?? '').toUpperCase(),
-        style: tsHeadline6(context).copyWith(fontWeight: FontWeight.bold),
-      ),
+      title: widget.logoTitle != null
+          ? SvgPicture.asset(
+              widget.logoTitle,
+              height: 16,
+              fit: BoxFit.contain,
+            )
+          : Text(
+              widget.title ?? '',
+              style: tsTitleAppbar(),
+            ),
       actions: widget.actions ?? [],
     );
   }

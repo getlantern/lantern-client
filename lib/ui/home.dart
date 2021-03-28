@@ -1,10 +1,4 @@
-import 'package:flutter/services.dart';
-import 'package:lantern/event/Event.dart';
-import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/hex_color.dart';
-
-import 'vpn.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -38,8 +32,7 @@ class _HomePageState extends State<HomePage> {
             final snackBar = SnackBar(
               backgroundColor: Colors.black,
               duration: Duration(days: 99999),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
               behavior: SnackBarBehavior.floating,
               margin: EdgeInsets.only(left: 8, right: 8, bottom: 16), // simple way to show indefinitely
               content: Text(message),
@@ -71,8 +64,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onUpdateCurrentIndexPageView(int index) {
-    _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -83,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         controller: _pageController,
         children: [
           VPNTab(),
-          Center(child: Text("Need to build this")),
+          AccountTab(),
         ],
       ),
       bottomNavigationBar: CustomBottomBar(

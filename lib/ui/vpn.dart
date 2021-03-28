@@ -1,12 +1,4 @@
-import 'package:flag/flag.dart';
-import 'package:lantern/lantern_navigator.dart';
-import 'package:lantern/model/session.dart';
-import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/hex_color.dart';
-import 'package:provider/provider.dart';
-
-import '../model/protos/vpn.pb.dart';
 
 class VPNTab extends StatelessWidget {
   VPNTab({Key key}) : super(key: key);
@@ -16,72 +8,13 @@ class VPNTab extends StatelessWidget {
     var vpnModel = context.watch<VpnModel>();
     var sessionModel = context.watch<SessionModel>();
 
-    void openInfoServerLocation() {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
-                ),
-              ),
-              content: Container(
-                width: double.maxFinite,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.mapMarkerAlt,
-                      size: 20,
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      "Server Location".i18n,
-                      style: tsSubHead(context)
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: 16,
-                          bottom: 24,
-                        ),
-                        child: Text(
-                          "Server Location Info".i18n,
-                          style: tsSubTitle(context).copyWith(
-                            color: HexColor(unselectedTabLabelColor),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Ink(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            "OK".i18n,
-                            style: tsSubHead(context).copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.pink,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
+    openInfoServerLocation() {
+      showInfoDialog(
+        context,
+        title: "Server Location".i18n,
+        des: "Server Location Info".i18n,
+        icon: ImagePaths.location_on_icon,
+      );
     }
 
     Widget customDivider({marginTop: 16.0, marginBottom: 16.0}) {
@@ -114,9 +47,9 @@ class VPNTab extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                FontAwesomeIcons.crown,
-                color: Colors.orange[300],
+              CustomAssetImage(
+                path: ImagePaths.crown_icon,
+                size: 32,
               ),
               Expanded(
                 child: Container(
@@ -146,9 +79,9 @@ class VPNTab extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(
-                FontAwesomeIcons.chevronRight,
-                size: 16,
+              CustomAssetImage(
+                path: ImagePaths.keyboard_arrow_right_icon,
+                size: 24,
               ),
             ],
           ),
@@ -189,101 +122,93 @@ class VPNTab extends StatelessWidget {
             ),
             (vpnStatus == "connecting" || vpnStatus == "disconnecting")
                 ? Row(
-                    children: [
-                      Text(
-                        (vpnStatus == "connecting")
-                            ? "Connecting".i18n
-                            : "Disconnecting".i18n,
-                        style: tsSubTitle(context)
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: SizedBox(
-                          height: 14,
-                          width: 14,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Text(
-                    (vpnStatus == "connected") ? "on".i18n : "off".i18n,
-                    style: tsSubTitle(context)
-                        .copyWith(fontWeight: FontWeight.bold),
+              children: [
+                Text(
+                  (vpnStatus == "connecting") ? "Connecting".i18n : "Disconnecting".i18n,
+                  style: tsSubTitle(context).copyWith(fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: SizedBox(
+                    height: 14,
+                    width: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                    ),
                   ),
+                ),
+              ],
+            )
+                : Text(
+              (vpnStatus == "connected") ? "on".i18n : "off".i18n,
+              style: tsTitleTrailVPNItem(),
+            ),
           ],
         );
       });
     }
 
-    Widget bandwidth() {
-      return vpnModel
-          .bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
+    Widget bandwidthWidget() {
+      return vpnModel.bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
         return bandwidth.allowed > 0
             ? Column(
+          children: [
+            customDivider(marginTop: 4.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Daily Data Usage".i18n + ": ",
+                  style: tsTitleHeadVPNItem().copyWith(
+                    color: HexColor(unselectedTabLabelColor),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
+                    textAlign: TextAlign.end,
+                    style: tsTitleTrailVPNItem(),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              height: 12,
+              decoration: BoxDecoration(
+                color: HexColor(unselectedTabColor),
+                border: Border.all(
+                  color: HexColor(borderColor),
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(borderRadius),
+                ),
+              ),
+              child: Row(
                 children: [
-                  customDivider(marginTop: 4.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Daily Data Usage".i18n + ": ",
-                        style: tsSubTitle(context).copyWith(
-                          color: HexColor(unselectedTabLabelColor),
+                  Expanded(
+                    flex: (bandwidth.allowed - bandwidth.remaining).toInt() ?? 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HexColor(usedDataBarColor),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(borderRadius),
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
-                          textAlign: TextAlign.end,
-                          style: tsSubTitle(context)
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: HexColor(unselectedTabColor),
-                      border: Border.all(
-                        color: HexColor(borderColor),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(borderRadius),
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: (bandwidth.allowed - bandwidth.remaining)
-                                  .toInt() ??
-                              0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: HexColor(usedDataBarColor),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(borderRadius),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: bandwidth.remaining.toInt(),
-                          child: Container(),
-                        ),
-                      ],
-                    ),
+                  ),
+                  Expanded(
+                    flex: bandwidth.remaining.toInt(),
+                    child: Container(),
                   ),
                 ],
-              )
+              ),
+            ),
+          ],
+        )
             : Container();
       });
     }
@@ -297,7 +222,7 @@ class VPNTab extends StatelessWidget {
             children: [
               Text(
                 "Server Location".i18n + ": ",
-                style: tsSubTitle(context).copyWith(
+                style: tsTitleHeadVPNItem().copyWith(
                   color: HexColor(unselectedTabLabelColor),
                 ),
               ),
@@ -318,27 +243,24 @@ class VPNTab extends StatelessWidget {
               ),
             ],
           ),
-          vpnModel.vpnStatus(
-              (BuildContext context, String vpnStatus, Widget child) {
-            return vpnModel.serverInfo(
-                (BuildContext context, ServerInfo serverInfo, Widget child) {
+          vpnModel.vpnStatus((BuildContext context, String vpnStatus, Widget child) {
+            return vpnModel.serverInfo((BuildContext context, ServerInfo serverInfo, Widget child) {
               if (vpnStatus == "connected" || vpnStatus == "disconnecting") {
                 return Row(
                   children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                        child: Flag(serverInfo.countryCode,
-                            height: 24, width: 36)),
+                    ClipRRect(borderRadius: BorderRadius.all(Radius.circular(4)), child: Flag(serverInfo.countryCode, height: 24, width: 36)),
                     SizedBox(width: 12),
-                    Text(serverInfo.city,
-                        style: tsSubTitle(context)
-                            .copyWith(fontWeight: FontWeight.bold))
+                    Text(
+                      serverInfo.city,
+                      style: tsTitleTrailVPNItem(),
+                    )
                   ],
                 );
               } else {
-                return Text('N/A',
-                    style: tsSubTitle(context)
-                        .copyWith(fontWeight: FontWeight.bold));
+                return Text(
+                  'N/A',
+                  style: tsTitleTrailVPNItem(),
+                );
               }
             });
           }),
@@ -346,41 +268,42 @@ class VPNTab extends StatelessWidget {
       );
     }
 
-    return sessionModel
-        .proUser((BuildContext context, bool proUser, Widget child) {
-      return BaseScreen(
-        title: proUser ? 'LANTERN PRO' : 'LANTERN',
-        body: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              proUser ? Container() : proBanner(),
-              vpnSwitch(),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: HexColor(borderColor),
-                    width: 1,
+    return sessionModel.proUser((BuildContext context, bool proUser, Widget child) {
+      return
+         BaseScreen(
+          logoTitle: proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
+          body: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                proUser ? Container() : proBanner(),
+                vpnSwitch(),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(borderRadius),
+                    ),
                   ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(borderRadius),
+                  child: Column(
+                    children: [
+                      vpnStatus(),
+                      customDivider(marginBottom: 4.0),
+                      serverLocation(),
+                      bandwidthWidget(),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    vpnStatus(),
-                    customDivider(marginBottom: 4.0),
-                    serverLocation(),
-                    bandwidth(),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
+        );
+
     });
   }
 }
