@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
       switch (event) {
         case Event.SurveyAvailable:
           {
-            final message = params["message"];
-            final buttonText = params["buttonText"];
+            final message = params["message"] as String;
+            final buttonText = params["buttonText"] as String;
             final snackBar = SnackBar(
               backgroundColor: Colors.black,
               duration: Duration(days: 99999),
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               content: Text(message),
               action: SnackBarAction(
                 textColor: HexColor(secondaryPink),
-                label: buttonText,
+                label: buttonText.toUpperCase(),
                 onPressed: () {
                   mainMethodChannel.invokeMethod("showLastSurvey");
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
