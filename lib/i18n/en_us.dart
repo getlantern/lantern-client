@@ -11,4 +11,18 @@ const en_us = {
   "Server Location": "Server Location",
   "Server Location Info": "Lantern uses smart server selection to automatically connect you to our best data centers.",
   "OK": "OK",
+  "pro_account_management": "Pro Account Management",
+  "add_device": "Add Device",
+  "authorize_device_for_pro": "Authorize Device for Pro",
+  "invite_friends": "Invite Friends",
+  "desktop_version": "Desktop version",
+  "free_yinbi_crypto": "Free Yinbi Cryptocurrency",
+  "settings": "Settings",
+  "auto_connect": "Auto-connect is OFF",
+  "proxy_all": "Proxy all is ON",
+  "language": "Language",
+  "report_issue": "Report an issue",
+  "title_proxy_all_dialog": "Proxy All",
+  "description_proxy_all_dialog":
+      "If enabled all traffic will be sent through Lantern (more secure). If disabled, only blocked traffic will be sent through Lantern (faster).",
 };
