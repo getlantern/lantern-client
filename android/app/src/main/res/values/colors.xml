@@ -91,7 +91,7 @@
 
     <color name="selected_item">@color/pink</color>
 
-    <color name="fine_print_link">#007a7c</color>
+    <color name="fine_print_link">@color/tertiary_green</color>
 
     <color name="update_dialog_accent_color">@color/pro_blue_color</color>
 
@@ -100,4 +100,5 @@
     <color name="secondary_pink">#DB0A5B</color>
     <color name="divider">#ebebeb</color>
     <color name="light_grey">#f5f5f5</color>
+    <color name="tertiary_green">#007a7c</color>
 </resources>
