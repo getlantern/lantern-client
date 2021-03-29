@@ -25,6 +25,11 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.MyApp.Headline6</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MyApp.Overline</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MyApp.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MyApp.Body2</item>
+        <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
+        <item name="android:windowBackground">@color/accent_white</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -276,5 +281,30 @@
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/black</item>
+        <item name="lineHeight">@dimen/line_height_body2</item>
+    </style>
+
+    <style name="Widget.MyApp.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="backgroundTint">@color/secondary_pink</item>
+        <item name="textColor">@color/white</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:minWidth">200dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
     </style>
 </resources>
