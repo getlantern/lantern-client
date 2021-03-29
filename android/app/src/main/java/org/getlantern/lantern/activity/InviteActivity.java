@@ -124,16 +124,13 @@ public class InviteActivity extends FragmentActivity {
             return;
         }
 
-        final String shareReferralText = String.format(
-                resources.getString(R.string.share_referral_text),
-                referralText.toString());
         Utils.copyToClipboard(this,
-                "Referral Code",
-                shareReferralText);
+            getString(R.string.referral_code),
+            referralText.toString());
         Utils.showToastMessage(getLayoutInflater(),
-                this,
-                this,
-                resources.getString(R.string.copied_to_clipboard));
+            this,
+            this,
+            resources.getString(R.string.copied_to_clipboard));
     }
 
     @Click
