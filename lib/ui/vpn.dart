@@ -207,6 +207,9 @@ class VPNTab extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(
+              height: 16,
+            ),
           ],
         )
             : Container();
@@ -280,7 +283,7 @@ class VPNTab extends StatelessWidget {
                 proUser ? Container() : proBanner(),
                 vpnSwitch(),
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: HexColor(borderColor),
