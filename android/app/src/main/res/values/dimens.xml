@@ -33,5 +33,6 @@
 
     <dimen name="adContentPadding">5dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="line_height_body2">23dp</dimen>
 
 </resources>
