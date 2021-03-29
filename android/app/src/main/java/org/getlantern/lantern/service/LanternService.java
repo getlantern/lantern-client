@@ -59,6 +59,8 @@ public class LanternService extends Service implements Runnable {
     // initial number of ms to wait until we try creating a new Pro user
     private final int baseWaitMs = 3000;
 
+    private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -71,7 +73,7 @@ public class LanternService extends Service implements Runnable {
         synchronized (LanternApp.getSession()) {
             if (thread == null) {
                 Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
-                updateForegroundNotification();
+                helper.makeForeground();
                 Logger.d(TAG, "starting Lantern service thread");
                 thread = new Thread(this, "LanternService");
                 thread.start();
@@ -81,31 +83,6 @@ public class LanternService extends Service implements Runnable {
         }
         return new Binder();
     }
-
-    private void updateForegroundNotification() {
-        // TODO: use the right text and icon, and add a content intent to open the main activity
-        String channelId = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channelId = createNotificationChannel();
-        } else {
-            // If earlier version channel ID is not used
-            // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-        }
-        Notification notification = new NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.app_icon)
-                .setLargeIcon(((BitmapDrawable) getResources().getDrawable(R.drawable.app_icon)).getBitmap())
-                .setContentTitle(getText(R.string.app_name)).setContentText(getText(R.string.service_connected)).build();
-        startForeground(1, notification);
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private String createNotificationChannel() {
-        String channelId = "lantern_service";
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.createNotificationChannel(
-                new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT));
-        return channelId;
-    }
-
 
     @Override
     public void run() {
@@ -211,6 +188,7 @@ public class LanternService extends Service implements Runnable {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        helper.onDestroy();
         try {
             Logger.debug(TAG, "Unregistering screen state receiver");
             createUserHandler.removeCallbacks(createUserRunnable);
