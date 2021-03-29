@@ -23,6 +23,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.text.style.UnderlineSpan;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -126,6 +127,11 @@ public class Utils {
 
     public static void clickify(TextView view, final String clickableText, final int color,
         final ClickSpan.OnClickListener listener) {
+        clickify(view, clickableText, color, false, listener);
+    }
+
+    public static void clickify(TextView view, final String clickableText, final int color, boolean hasUnderline,
+                                final ClickSpan.OnClickListener listener) {
         if (view == null) {
             return;
         }
@@ -141,9 +147,15 @@ public class Utils {
         }
         if (text instanceof Spannable) {
             ((Spannable)text).setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (hasUnderline) {
+                ((Spannable)text).setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         } else {
             SpannableString s = SpannableString.valueOf(text);
             s.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (hasUnderline) {
+                s.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             view.setText(s);
         }
 

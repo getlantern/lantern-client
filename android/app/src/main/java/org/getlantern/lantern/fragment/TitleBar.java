@@ -110,4 +110,12 @@ public class TitleBar extends Fragment {
         titleImage = null;
         background = null;
     }
+
+    public void setTitle(String title) {
+        if (titleHeader != null) {
+            titleHeader.setText(title);
+        } else {
+            this.title = title;
+        }
+    }
 }

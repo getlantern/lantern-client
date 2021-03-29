@@ -486,5 +486,9 @@
     <string name="lantern_desktop_share_description">The most recent Lantern apps for desktop and all other platforms can be found at the link above.</string>
     <string name="share_link">Share link</string>
     <string name="lantern_desktop_link_share_title">Share Lantern download link</string>
-
+    <string name="upgrade_to_pro_get_yinbi">Upgrade to pro get yinbi</string>
+    <string name="yinbi_description_free">Lantern has partnered with Yinbi to give YNB to everyone that purchases Lantern Pro! Upgrade now to get access to today’s giveaway! For more info about Yinbi visit the official site: Yin.bi</string>
+    <string name="yinbi_description_pro">Lantern has partnered with Yinbi to give YNB to everyone that renews Lantern Pro! Renew now to get access to today’s giveaway! For more info about Yinbi visit the official site: Yin.bi</string>
+    <string name="yinbi_title_free">Free Yinbi Cryptocurrency</string>
+    <string name="yinbi_title_pro">Yinbi Redemption</string>
 </resources>
