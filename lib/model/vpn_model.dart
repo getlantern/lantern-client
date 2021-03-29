@@ -15,12 +15,12 @@ class VpnModel extends Model {
   }
 
   ValueListenableBuilder<String> vpnStatus(ValueWidgetBuilder<String> builder) {
-    return subscribedBuilder<String>("/vpn_status", builder: builder);
+    return subscribedSingleValueBuilder<String>("/vpn_status", builder: builder);
   }
 
   ValueListenableBuilder<ServerInfo> serverInfo(
       ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedBuilder<ServerInfo>("/server_info", builder: builder,
+    return subscribedSingleValueBuilder<ServerInfo>("/server_info", builder: builder,
         deserialize: (Uint8List serialized) {
       return ServerInfo.fromBuffer(serialized);
     });
@@ -28,7 +28,7 @@ class VpnModel extends Model {
 
   ValueListenableBuilder<Bandwidth> bandwidth(
       ValueWidgetBuilder<Bandwidth> builder) {
-    return subscribedBuilder<Bandwidth>("/bandwidth", builder: builder,
+    return subscribedSingleValueBuilder<Bandwidth>("/bandwidth", builder: builder,
         deserialize: (Uint8List serialized) {
       return Bandwidth.fromBuffer(serialized);
     });

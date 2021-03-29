@@ -18,11 +18,12 @@ class Contact extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Contact', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..e<Contact_Type>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: Contact_Type.DIRECT, valueOf: Contact_Type.valueOf, enumValues: Contact_Type.values)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
-    ..aInt64(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdTime', protoName: 'createdTime')
-    ..aInt64(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageTime', protoName: 'mostRecentMessageTime')
-    ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
-    ..pPS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'memberIds', protoName: 'memberIds')
+    ..pPS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'memberIds', protoName: 'memberIds')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..aInt64(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdTime', protoName: 'createdTime')
+    ..aInt64(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageTs', protoName: 'mostRecentMessageTs')
+    ..e<MessageDirection>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageDirection', $pb.PbFieldType.OE, protoName: 'mostRecentMessageDirection', defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
+    ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
     ..hasRequiredFields = false
   ;
 
@@ -30,11 +31,12 @@ class Contact extends $pb.GeneratedMessage {
   factory Contact({
     Contact_Type? type,
     $core.String? id,
+    $core.Iterable<$core.String>? memberIds,
     $core.String? displayName,
     $fixnum.Int64? createdTime,
-    $fixnum.Int64? mostRecentMessageTime,
+    $fixnum.Int64? mostRecentMessageTs,
+    MessageDirection? mostRecentMessageDirection,
     $core.String? mostRecentMessageText,
-    $core.Iterable<$core.String>? memberIds,
   }) {
     final _result = create();
     if (type != null) {
@@ -43,20 +45,23 @@ class Contact extends $pb.GeneratedMessage {
     if (id != null) {
       _result.id = id;
     }
+    if (memberIds != null) {
+      _result.memberIds.addAll(memberIds);
+    }
     if (displayName != null) {
       _result.displayName = displayName;
     }
     if (createdTime != null) {
       _result.createdTime = createdTime;
     }
-    if (mostRecentMessageTime != null) {
-      _result.mostRecentMessageTime = mostRecentMessageTime;
+    if (mostRecentMessageTs != null) {
+      _result.mostRecentMessageTs = mostRecentMessageTs;
+    }
+    if (mostRecentMessageDirection != null) {
+      _result.mostRecentMessageDirection = mostRecentMessageDirection;
     }
     if (mostRecentMessageText != null) {
       _result.mostRecentMessageText = mostRecentMessageText;
-    }
-    if (memberIds != null) {
-      _result.memberIds.addAll(memberIds);
     }
     return _result;
   }
@@ -100,43 +105,52 @@ class Contact extends $pb.GeneratedMessage {
   void clearId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get displayName => $_getSZ(2);
-  @$pb.TagNumber(4)
-  set displayName($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasDisplayName() => $_has(2);
-  @$pb.TagNumber(4)
-  void clearDisplayName() => clearField(4);
+  $core.List<$core.String> get memberIds => $_getList(2);
 
   @$pb.TagNumber(5)
-  $fixnum.Int64 get createdTime => $_getI64(3);
+  $core.String get displayName => $_getSZ(3);
   @$pb.TagNumber(5)
-  set createdTime($fixnum.Int64 v) { $_setInt64(3, v); }
+  set displayName($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasCreatedTime() => $_has(3);
+  $core.bool hasDisplayName() => $_has(3);
   @$pb.TagNumber(5)
-  void clearCreatedTime() => clearField(5);
+  void clearDisplayName() => clearField(5);
 
   @$pb.TagNumber(6)
-  $fixnum.Int64 get mostRecentMessageTime => $_getI64(4);
+  $fixnum.Int64 get createdTime => $_getI64(4);
   @$pb.TagNumber(6)
-  set mostRecentMessageTime($fixnum.Int64 v) { $_setInt64(4, v); }
+  set createdTime($fixnum.Int64 v) { $_setInt64(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasMostRecentMessageTime() => $_has(4);
+  $core.bool hasCreatedTime() => $_has(4);
   @$pb.TagNumber(6)
-  void clearMostRecentMessageTime() => clearField(6);
+  void clearCreatedTime() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get mostRecentMessageText => $_getSZ(5);
+  $fixnum.Int64 get mostRecentMessageTs => $_getI64(5);
   @$pb.TagNumber(7)
-  set mostRecentMessageText($core.String v) { $_setString(5, v); }
+  set mostRecentMessageTs($fixnum.Int64 v) { $_setInt64(5, v); }
   @$pb.TagNumber(7)
-  $core.bool hasMostRecentMessageText() => $_has(5);
+  $core.bool hasMostRecentMessageTs() => $_has(5);
   @$pb.TagNumber(7)
-  void clearMostRecentMessageText() => clearField(7);
+  void clearMostRecentMessageTs() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.List<$core.String> get memberIds => $_getList(6);
+  MessageDirection get mostRecentMessageDirection => $_getN(6);
+  @$pb.TagNumber(8)
+  set mostRecentMessageDirection(MessageDirection v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasMostRecentMessageDirection() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearMostRecentMessageDirection() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get mostRecentMessageText => $_getSZ(7);
+  @$pb.TagNumber(9)
+  set mostRecentMessageText($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasMostRecentMessageText() => $_has(7);
+  @$pb.TagNumber(9)
+  void clearMostRecentMessageText() => clearField(9);
 }
 
 enum ShortMessage_Body {
@@ -147,23 +161,25 @@ enum ShortMessage_Body {
 
 class ShortMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, ShortMessage_Body> _ShortMessage_BodyByTag = {
-    3 : ShortMessage_Body.text,
-    4 : ShortMessage_Body.oggVoice,
+    4 : ShortMessage_Body.text,
+    5 : ShortMessage_Body.oggVoice,
     0 : ShortMessage_Body.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ShortMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [3, 4])
+    ..oo(0, [4, 5])
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OY)
-    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
-    ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'oggVoice', $pb.PbFieldType.OY, protoName: 'oggVoice')
+    ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', $pb.PbFieldType.OY, protoName: 'replyToSenderId')
+    ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', $pb.PbFieldType.OY, protoName: 'replyToId')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
+    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'oggVoice', $pb.PbFieldType.OY, protoName: 'oggVoice')
     ..hasRequiredFields = false
   ;
 
   ShortMessage._() : super();
   factory ShortMessage({
     $core.List<$core.int>? id,
-    $fixnum.Int64? sent,
+    $core.List<$core.int>? replyToSenderId,
+    $core.List<$core.int>? replyToId,
     $core.String? text,
     $core.List<$core.int>? oggVoice,
   }) {
@@ -171,8 +187,11 @@ class ShortMessage extends $pb.GeneratedMessage {
     if (id != null) {
       _result.id = id;
     }
-    if (sent != null) {
-      _result.sent = sent;
+    if (replyToSenderId != null) {
+      _result.replyToSenderId = replyToSenderId;
+    }
+    if (replyToId != null) {
+      _result.replyToId = replyToId;
     }
     if (text != null) {
       _result.text = text;
@@ -216,41 +235,52 @@ class ShortMessage extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $fixnum.Int64 get sent => $_getI64(1);
+  $core.List<$core.int> get replyToSenderId => $_getN(1);
   @$pb.TagNumber(2)
-  set sent($fixnum.Int64 v) { $_setInt64(1, v); }
+  set replyToSenderId($core.List<$core.int> v) { $_setBytes(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSent() => $_has(1);
+  $core.bool hasReplyToSenderId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearSent() => clearField(2);
+  void clearReplyToSenderId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get text => $_getSZ(2);
+  $core.List<$core.int> get replyToId => $_getN(2);
   @$pb.TagNumber(3)
-  set text($core.String v) { $_setString(2, v); }
+  set replyToId($core.List<$core.int> v) { $_setBytes(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasText() => $_has(2);
+  $core.bool hasReplyToId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearText() => clearField(3);
+  void clearReplyToId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.List<$core.int> get oggVoice => $_getN(3);
+  $core.String get text => $_getSZ(3);
   @$pb.TagNumber(4)
-  set oggVoice($core.List<$core.int> v) { $_setBytes(3, v); }
+  set text($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasOggVoice() => $_has(3);
+  $core.bool hasText() => $_has(3);
   @$pb.TagNumber(4)
-  void clearOggVoice() => clearField(4);
+  void clearText() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.int> get oggVoice => $_getN(4);
+  @$pb.TagNumber(5)
+  set oggVoice($core.List<$core.int> v) { $_setBytes(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasOggVoice() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearOggVoice() => clearField(5);
 }
 
 class ShortMessageRecord extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ShortMessageRecord', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
-    ..e<ShortMessageRecord_Direction>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_Direction.OUT, valueOf: ShortMessageRecord_Direction.valueOf, enumValues: ShortMessageRecord_Direction.values)
-    ..e<ShortMessageRecord_DeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_DeliveryStatus.SENDING, valueOf: ShortMessageRecord_DeliveryStatus.valueOf, enumValues: ShortMessageRecord_DeliveryStatus.values)
-    ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ts')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', protoName: 'replyToSenderId')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', protoName: 'replyToId')
+    ..e<MessageDirection>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
+    ..e<ShortMessageRecord_DeliveryStatus>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_DeliveryStatus.SENDING, valueOf: ShortMessageRecord_DeliveryStatus.valueOf, enumValues: ShortMessageRecord_DeliveryStatus.values)
+    ..a<$core.List<$core.int>>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -258,8 +288,10 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
   factory ShortMessageRecord({
     $core.String? senderId,
     $core.String? id,
-    $fixnum.Int64? sent,
-    ShortMessageRecord_Direction? direction,
+    $fixnum.Int64? ts,
+    $core.String? replyToSenderId,
+    $core.String? replyToId,
+    MessageDirection? direction,
     ShortMessageRecord_DeliveryStatus? status,
     $core.List<$core.int>? message,
   }) {
@@ -270,8 +302,14 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
     if (id != null) {
       _result.id = id;
     }
-    if (sent != null) {
-      _result.sent = sent;
+    if (ts != null) {
+      _result.ts = ts;
+    }
+    if (replyToSenderId != null) {
+      _result.replyToSenderId = replyToSenderId;
+    }
+    if (replyToId != null) {
+      _result.replyToId = replyToId;
     }
     if (direction != null) {
       _result.direction = direction;
@@ -324,40 +362,58 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
   void clearId() => clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get sent => $_getI64(2);
+  $fixnum.Int64 get ts => $_getI64(2);
   @$pb.TagNumber(3)
-  set sent($fixnum.Int64 v) { $_setInt64(2, v); }
+  set ts($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasSent() => $_has(2);
+  $core.bool hasTs() => $_has(2);
   @$pb.TagNumber(3)
-  void clearSent() => clearField(3);
+  void clearTs() => clearField(3);
 
   @$pb.TagNumber(4)
-  ShortMessageRecord_Direction get direction => $_getN(3);
+  $core.String get replyToSenderId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set direction(ShortMessageRecord_Direction v) { setField(4, v); }
+  set replyToSenderId($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasDirection() => $_has(3);
+  $core.bool hasReplyToSenderId() => $_has(3);
   @$pb.TagNumber(4)
-  void clearDirection() => clearField(4);
+  void clearReplyToSenderId() => clearField(4);
 
   @$pb.TagNumber(5)
-  ShortMessageRecord_DeliveryStatus get status => $_getN(4);
+  $core.String get replyToId => $_getSZ(4);
   @$pb.TagNumber(5)
-  set status(ShortMessageRecord_DeliveryStatus v) { setField(5, v); }
+  set replyToId($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasStatus() => $_has(4);
+  $core.bool hasReplyToId() => $_has(4);
   @$pb.TagNumber(5)
-  void clearStatus() => clearField(5);
+  void clearReplyToId() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.List<$core.int> get message => $_getN(5);
+  MessageDirection get direction => $_getN(5);
   @$pb.TagNumber(6)
-  set message($core.List<$core.int> v) { $_setBytes(5, v); }
+  set direction(MessageDirection v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasMessage() => $_has(5);
+  $core.bool hasDirection() => $_has(5);
   @$pb.TagNumber(6)
-  void clearMessage() => clearField(6);
+  void clearDirection() => clearField(6);
+
+  @$pb.TagNumber(7)
+  ShortMessageRecord_DeliveryStatus get status => $_getN(6);
+  @$pb.TagNumber(7)
+  set status(ShortMessageRecord_DeliveryStatus v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasStatus() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearStatus() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.List<$core.int> get message => $_getN(7);
+  @$pb.TagNumber(8)
+  set message($core.List<$core.int> v) { $_setBytes(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasMessage() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearMessage() => clearField(8);
 }
 
 class OutgoingShortMessage extends $pb.GeneratedMessage {

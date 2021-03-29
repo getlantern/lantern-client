@@ -1,4 +1,5 @@
 import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
@@ -11,57 +12,6 @@ class _ConversationsState extends State<Conversations> {
   static const int pageLength = 25;
 
   MessagingModel model;
-
-  // final PagingController<int, Conversation> _pagingController =
-  //     PagingController(firstPageKey: 0);
-  //
-  // Future<void> _fetchPage(int pageKey) async {
-  //   var page = await model.list<Conversation>("/cbt",
-  //       start: pageKey, count: pageLength, reverseSort: true);
-  //   var isLastPage = page.length < pageLength;
-  //   if (isLastPage) {
-  //     _pagingController.appendLastPage(page);
-  //   } else {
-  //     _pagingController.appendPage(page, pageKey + pageLength);
-  //   }
-  // }
-  //
-  // @override
-  // void initState() {
-  //   _pagingController.addPageRequestListener((pageKey) {
-  //     _fetchPage(pageKey);
-  //   });
-  //   super.initState();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   _pagingController.dispose();
-  //   super.dispose();
-  // }
-
-  // Widget buildConversation(
-  //     BuildContext context, Conversation conversation, int index) {
-  //   return model.conversation(conversation,
-  //       (BuildContext context, Conversation conversation, Widget child) {
-  //     return Column(
-  //       children: [
-  //         ListTile(
-  //           title: model.contactOrGroup(conversation,
-  //               (BuildContext context, dynamic contactOrGroup, Widget child) {
-  //             return Text("$contactOrGroup.displayName ($contactOrGroup.id)",
-  //                 style: TextStyle(fontWeight: FontWeight.bold));
-  //           }),
-  //           subtitle: Text(
-  //             conversation.mostRecentMessageText ?? "voice memo".i18n,
-  //             overflow: TextOverflow.ellipsis,
-  //           ),
-  //         ),
-  //         Divider(thickness: 1),
-  //       ],
-  //     );
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,32 +27,33 @@ class _ConversationsState extends State<Conversations> {
                 Navigator.restorablePushNamed(context, 'your_contact_info');
               }),
         ],
-        body: model.contacts(
-            builder: (context, List<Contact> contacts, Widget child) {
-              contacts.sort((a, b) {
-                return (b.mostRecentMessageTime - a.mostRecentMessageTime)
-                    .toInt();
-              });
-              return ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  var contact = contacts[index];
-                  return ListTile(
-                    title: Text(
-                        contact.displayName?.isEmpty
-                            ? 'Unnamed'.i18n
-                            : contact.displayName,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(contact.mostRecentMessageText,
-                        overflow: TextOverflow.ellipsis),
-                    onTap: () {
-                      Navigator.pushNamed(context, 'conversation',
-                          arguments: contact);
-                    },
-                  );
+        body: model.contacts(builder:
+            (context, List<PathAndValue<Contact>> contacts, Widget child) {
+          contacts.sort((a, b) {
+            return (b.value.mostRecentMessageTs - a.value.mostRecentMessageTs)
+                .toInt();
+          });
+          return ListView.builder(
+            itemCount: contacts.length,
+            itemBuilder: (context, index) {
+              var contact = contacts[index];
+              return ListTile(
+                title: Text(
+                    contact.value.displayName?.isEmpty
+                        ? 'Unnamed'.i18n
+                        : contact.value.displayName,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(
+                    "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
+                    overflow: TextOverflow.ellipsis),
+                onTap: () {
+                  Navigator.pushNamed(context, 'conversation',
+                      arguments: contact.value);
                 },
               );
-            }),
+            },
+          );
+        }),
         actionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {

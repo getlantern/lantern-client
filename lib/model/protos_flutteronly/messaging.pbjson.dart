@@ -8,17 +8,29 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use messageDirectionDescriptor instead')
+const MessageDirection$json = const {
+  '1': 'MessageDirection',
+  '2': const [
+    const {'1': 'OUT', '2': 0},
+    const {'1': 'IN', '2': 1},
+  ],
+};
+
+/// Descriptor for `MessageDirection`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List messageDirectionDescriptor = $convert.base64Decode('ChBNZXNzYWdlRGlyZWN0aW9uEgcKA09VVBAAEgYKAklOEAE=');
 @$core.Deprecated('Use contactDescriptor instead')
 const Contact$json = const {
   '1': 'Contact',
   '2': const [
     const {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.model.Contact.Type', '10': 'type'},
     const {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'displayName', '3': 4, '4': 1, '5': 9, '10': 'displayName'},
-    const {'1': 'createdTime', '3': 5, '4': 1, '5': 3, '10': 'createdTime'},
-    const {'1': 'mostRecentMessageTime', '3': 6, '4': 1, '5': 3, '10': 'mostRecentMessageTime'},
-    const {'1': 'mostRecentMessageText', '3': 7, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
-    const {'1': 'memberIds', '3': 8, '4': 3, '5': 9, '10': 'memberIds'},
+    const {'1': 'memberIds', '3': 4, '4': 3, '5': 9, '10': 'memberIds'},
+    const {'1': 'displayName', '3': 5, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'createdTime', '3': 6, '4': 1, '5': 3, '10': 'createdTime'},
+    const {'1': 'mostRecentMessageTs', '3': 7, '4': 1, '5': 3, '10': 'mostRecentMessageTs'},
+    const {'1': 'mostRecentMessageDirection', '3': 8, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'mostRecentMessageDirection'},
+    const {'1': 'mostRecentMessageText', '3': 9, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
   ],
   '4': const [Contact_Type$json],
 };
@@ -33,15 +45,16 @@ const Contact_Type$json = const {
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0EicKBHR5cGUYAiABKA4yEy5tb2RlbC5Db250YWN0LlR5cGVSBHR5cGUSDgoCaWQYAyABKAlSAmlkEiAKC2Rpc3BsYXlOYW1lGAQgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgFIAEoA1ILY3JlYXRlZFRpbWUSNAoVbW9zdFJlY2VudE1lc3NhZ2VUaW1lGAYgASgDUhVtb3N0UmVjZW50TWVzc2FnZVRpbWUSNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSHAoJbWVtYmVySWRzGAggAygJUgltZW1iZXJJZHMiHQoEVHlwZRIKCgZESVJFQ1QQABIJCgVHUk9VUBAB');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0EicKBHR5cGUYAiABKA4yEy5tb2RlbC5Db250YWN0LlR5cGVSBHR5cGUSDgoCaWQYAyABKAlSAmlkEhwKCW1lbWJlcklkcxgEIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAUgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgGIAEoA1ILY3JlYXRlZFRpbWUSMAoTbW9zdFJlY2VudE1lc3NhZ2VUcxgHIAEoA1ITbW9zdFJlY2VudE1lc3NhZ2VUcxJXChptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhgIIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uEjQKFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBgJIAEoCVIVbW9zdFJlY2VudE1lc3NhZ2VUZXh0Ih0KBFR5cGUSCgoGRElSRUNUEAASCQoFR1JPVVAQAQ==');
 @$core.Deprecated('Use shortMessageDescriptor instead')
 const ShortMessage$json = const {
   '1': 'ShortMessage',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 12, '10': 'id'},
-    const {'1': 'sent', '3': 2, '4': 1, '5': 3, '10': 'sent'},
-    const {'1': 'text', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'text'},
-    const {'1': 'oggVoice', '3': 4, '4': 1, '5': 12, '9': 0, '10': 'oggVoice'},
+    const {'1': 'replyToSenderId', '3': 2, '4': 1, '5': 12, '10': 'replyToSenderId'},
+    const {'1': 'replyToId', '3': 3, '4': 1, '5': 12, '10': 'replyToId'},
+    const {'1': 'text', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'text'},
+    const {'1': 'oggVoice', '3': 5, '4': 1, '5': 12, '9': 0, '10': 'oggVoice'},
   ],
   '8': const [
     const {'1': 'body'},
@@ -49,28 +62,21 @@ const ShortMessage$json = const {
 };
 
 /// Descriptor for `ShortMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List shortMessageDescriptor = $convert.base64Decode('CgxTaG9ydE1lc3NhZ2USDgoCaWQYASABKAxSAmlkEhIKBHNlbnQYAiABKANSBHNlbnQSFAoEdGV4dBgDIAEoCUgAUgR0ZXh0EhwKCG9nZ1ZvaWNlGAQgASgMSABSCG9nZ1ZvaWNlQgYKBGJvZHk=');
+final $typed_data.Uint8List shortMessageDescriptor = $convert.base64Decode('CgxTaG9ydE1lc3NhZ2USDgoCaWQYASABKAxSAmlkEigKD3JlcGx5VG9TZW5kZXJJZBgCIAEoDFIPcmVwbHlUb1NlbmRlcklkEhwKCXJlcGx5VG9JZBgDIAEoDFIJcmVwbHlUb0lkEhQKBHRleHQYBCABKAlIAFIEdGV4dBIcCghvZ2dWb2ljZRgFIAEoDEgAUghvZ2dWb2ljZUIGCgRib2R5');
 @$core.Deprecated('Use shortMessageRecordDescriptor instead')
 const ShortMessageRecord$json = const {
   '1': 'ShortMessageRecord',
   '2': const [
     const {'1': 'senderId', '3': 1, '4': 1, '5': 9, '10': 'senderId'},
     const {'1': 'id', '3': 2, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'sent', '3': 3, '4': 1, '5': 3, '10': 'sent'},
-    const {'1': 'direction', '3': 4, '4': 1, '5': 14, '6': '.model.ShortMessageRecord.Direction', '10': 'direction'},
-    const {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.model.ShortMessageRecord.DeliveryStatus', '10': 'status'},
-    const {'1': 'message', '3': 6, '4': 1, '5': 12, '10': 'message'},
+    const {'1': 'ts', '3': 3, '4': 1, '5': 3, '10': 'ts'},
+    const {'1': 'replyToSenderId', '3': 4, '4': 1, '5': 9, '10': 'replyToSenderId'},
+    const {'1': 'replyToId', '3': 5, '4': 1, '5': 9, '10': 'replyToId'},
+    const {'1': 'direction', '3': 6, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'direction'},
+    const {'1': 'status', '3': 7, '4': 1, '5': 14, '6': '.model.ShortMessageRecord.DeliveryStatus', '10': 'status'},
+    const {'1': 'message', '3': 8, '4': 1, '5': 12, '10': 'message'},
   ],
-  '4': const [ShortMessageRecord_Direction$json, ShortMessageRecord_DeliveryStatus$json],
-};
-
-@$core.Deprecated('Use shortMessageRecordDescriptor instead')
-const ShortMessageRecord_Direction$json = const {
-  '1': 'Direction',
-  '2': const [
-    const {'1': 'OUT', '2': 0},
-    const {'1': 'IN', '2': 1},
-  ],
+  '4': const [ShortMessageRecord_DeliveryStatus$json],
 };
 
 @$core.Deprecated('Use shortMessageRecordDescriptor instead')
@@ -80,11 +86,13 @@ const ShortMessageRecord_DeliveryStatus$json = const {
     const {'1': 'SENDING', '2': 0},
     const {'1': 'PARTIALLY_SENT', '2': 1},
     const {'1': 'COMPLETELY_SENT', '2': 2},
+    const {'1': 'PARTIALLY_FAILED', '2': 3},
+    const {'1': 'COMPLETELY_FAILED', '2': 4},
   ],
 };
 
 /// Descriptor for `ShortMessageRecord`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List shortMessageRecordDescriptor = $convert.base64Decode('ChJTaG9ydE1lc3NhZ2VSZWNvcmQSGgoIc2VuZGVySWQYASABKAlSCHNlbmRlcklkEg4KAmlkGAIgASgJUgJpZBISCgRzZW50GAMgASgDUgRzZW50EkEKCWRpcmVjdGlvbhgEIAEoDjIjLm1vZGVsLlNob3J0TWVzc2FnZVJlY29yZC5EaXJlY3Rpb25SCWRpcmVjdGlvbhJACgZzdGF0dXMYBSABKA4yKC5tb2RlbC5TaG9ydE1lc3NhZ2VSZWNvcmQuRGVsaXZlcnlTdGF0dXNSBnN0YXR1cxIYCgdtZXNzYWdlGAYgASgMUgdtZXNzYWdlIhwKCURpcmVjdGlvbhIHCgNPVVQQABIGCgJJThABIkYKDkRlbGl2ZXJ5U3RhdHVzEgsKB1NFTkRJTkcQABISCg5QQVJUSUFMTFlfU0VOVBABEhMKD0NPTVBMRVRFTFlfU0VOVBAC');
+final $typed_data.Uint8List shortMessageRecordDescriptor = $convert.base64Decode('ChJTaG9ydE1lc3NhZ2VSZWNvcmQSGgoIc2VuZGVySWQYASABKAlSCHNlbmRlcklkEg4KAmlkGAIgASgJUgJpZBIOCgJ0cxgDIAEoA1ICdHMSKAoPcmVwbHlUb1NlbmRlcklkGAQgASgJUg9yZXBseVRvU2VuZGVySWQSHAoJcmVwbHlUb0lkGAUgASgJUglyZXBseVRvSWQSNQoJZGlyZWN0aW9uGAYgASgOMhcubW9kZWwuTWVzc2FnZURpcmVjdGlvblIJZGlyZWN0aW9uEkAKBnN0YXR1cxgHIAEoDjIoLm1vZGVsLlNob3J0TWVzc2FnZVJlY29yZC5EZWxpdmVyeVN0YXR1c1IGc3RhdHVzEhgKB21lc3NhZ2UYCCABKAxSB21lc3NhZ2UicwoORGVsaXZlcnlTdGF0dXMSCwoHU0VORElORxAAEhIKDlBBUlRJQUxMWV9TRU5UEAESEwoPQ09NUExFVEVMWV9TRU5UEAISFAoQUEFSVElBTExZX0ZBSUxFRBADEhUKEUNPTVBMRVRFTFlfRkFJTEVEEAQ=');
 @$core.Deprecated('Use outgoingShortMessageDescriptor instead')
 const OutgoingShortMessage$json = const {
   '1': 'OutgoingShortMessage',

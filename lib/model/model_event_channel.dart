@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -7,41 +8,38 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
+import 'model.dart';
+
 class ModelEventChannel extends EventChannel {
   var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch)
       .nextInt(2 ^
           32); // Start with a random value to work well with hot restart in dev
-  final subscribers = Map<int, Function>();
+  final subscribers = Map<int, Subscriber>();
   final subscriptions = Map<int, StreamSubscription>();
 
   ModelEventChannel(String name) : super(name);
 
   void Function() subscribe<T>(String path,
       {bool details,
-      bool tail,
       int count,
-      @required void onNewValue(T newValue),
+      @required void onUpdates(Iterable<PathAndValue<T>> updates),
+      @required void onDeletes(Iterable<String> deletedPaths),
       T deserialize(Uint8List serialized)}) {
     var subscriberID = nextSubscriberID++;
     var arguments = {
       "subscriberID": subscriberID,
       "path": path,
-      "tail": tail,
       "count": count,
       "details": details
     };
-    if (deserialize != null) {
-      subscribers[subscriberID] = (Uint8List serialized) {
-        onNewValue(serialized == null ? null : deserialize(serialized));
-      };
-    } else {
-      subscribers[subscriberID] = onNewValue;
-    }
+    subscribers[subscriberID] =
+        Subscriber<T>(onUpdates, onDeletes, deserialize);
     var stream = receiveBroadcastStream(arguments);
     subscriptions[subscriberID] = listen(stream);
     return () {
       var subscription = subscriptions.remove(subscriberID);
       if (subscription != null) {
+        developer.log("canceling subscription for $path");
         subscribers.remove(subscriberID);
         subscription.cancel();
         if (subscribers.isNotEmpty) {
@@ -51,26 +49,44 @@ class ModelEventChannel extends EventChannel {
     };
   }
 
-  void Function() tail<T>(String path,
-      {details: bool,
-      int count = 2 ^ 32,
-      @required void onNewValue(List<T> newValue),
-      T deserialize(Uint8List serialized)}) {
-    return subscribe(path, tail: true, details: details, count: count,
-        onNewValue: (List<dynamic> list) {
-      onNewValue(list.map((e) => deserialize(e)).toList());
-    });
-  }
-
   StreamSubscription listen(Stream<dynamic> stream) {
-    return stream.listen((dynamic update) {
-      var updateMap = update as Map;
-      var subscriberID = updateMap["subscriberID"];
-      var newValue = updateMap["newValue"];
+    return stream.listen((dynamic event) {
+      var m = event as Map;
+      var subscriberID = m['s'];
       var subscriber = subscribers[subscriberID];
-      if (subscriber != null) {
-        subscriber(newValue);
+      if (subscriber == null) {
+        return;
+      }
+      var updates = m['u'];
+      if (updates != null) {
+        subscriber.onUpdates((updates as List<dynamic>).map((e) {
+          var u = e as List<dynamic>;
+          return PathAndValue(u[0] as String, u[1]);
+        }));
+      }
+      var deletes = m['d'];
+      if (deletes != null) {
+        subscriber.onDeletes(deletes as Iterable<String>);
       }
     });
+  }
+}
+
+class Subscriber<T> {
+  void Function(Iterable<PathAndValue<T>> updates) wrappedOnUpdates;
+
+  void Function(Iterable<String> deletions) onDeletes;
+
+  T Function(Uint8List serialized) deserialize;
+
+  Subscriber(this.wrappedOnUpdates, this.onDeletes, this.deserialize);
+
+  void onUpdates(Iterable<PathAndValue<dynamic>> updates) {
+    if (deserialize != null) {
+      wrappedOnUpdates(
+          updates.map((u) => PathAndValue(u.path, deserialize(u.value))));
+    } else {
+      wrappedOnUpdates(updates.map((u) => PathAndValue(u.path, u.value as T)));
+    }
   }
 }

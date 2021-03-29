@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/humanize.dart';
 
 class Conversation extends StatefulWidget {
   Contact _contact;
@@ -17,77 +19,109 @@ class _ConversationState extends State<Conversation> {
 
   TextEditingController newMessage = TextEditingController();
 
-  Widget buildMessage(BuildContext context, ShortMessageRecord message,
-      ShortMessageRecord priorMessage, ShortMessageRecord nextMessage) {
-    return model.message(message,
+  Widget buildMessage(
+      BuildContext context,
+      PathAndValue<ShortMessageRecord> message,
+      ShortMessageRecord priorMessage,
+      ShortMessageRecord nextMessage) {
+    return model.message(context, message,
         (BuildContext context, ShortMessageRecord messageRecord, Widget child) {
       var msg = ShortMessage.fromBuffer(messageRecord.message);
-      var outbound =
-          messageRecord.direction == ShortMessageRecord_Direction.OUT;
+      var outbound = messageRecord.direction == MessageDirection.OUT;
       var inbound = !outbound;
-      var innerRow = Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Text(
-                "${msg.text}",
-                style: TextStyle(
-                  color: outbound ? Colors.white : Colors.black,
-                ),
+
+      var statusRow = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Opacity(
+            opacity: 0.5,
+            child: Text(
+              message.value.ts.toInt().humanizedDate(),
+              style: TextStyle(
+                color: outbound ? Colors.white : Colors.black,
+                fontSize: 12,
               ),
             ),
+          ),
+        ],
+      );
+
+      var innerColumn = Column(
+          crossAxisAlignment:
+              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              Flexible(
+                child: Text(
+                  "${msg.text}",
+                  style: TextStyle(
+                    color: outbound ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+            ]),
+            statusRow,
           ]);
-      if (outbound &&
-          messageRecord.status == ShortMessageRecord_DeliveryStatus.SENDING) {
-        innerRow.children.add(
-            Transform.scale(scale: .5, child: Icon(Icons.pending_outlined)));
+
+      var statusIcon = inbound
+          ? null
+          : messageRecord.status == ShortMessageRecord_DeliveryStatus.SENDING
+              ? Icons.pending_outlined
+              : messageRecord.status ==
+                          ShortMessageRecord_DeliveryStatus.COMPLETELY_FAILED ||
+                      messageRecord.status ==
+                          ShortMessageRecord_DeliveryStatus.PARTIALLY_FAILED
+                  ? Icons.error_outline
+                  : null;
+      if (statusIcon != null) {
+        statusRow.children
+            .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
       }
-      var startOfBlock =
-          priorMessage == null || priorMessage.direction != message.direction;
-      var endOfBlock =
-          nextMessage == null || nextMessage.direction != message.direction;
+      var startOfBlock = priorMessage == null ||
+          priorMessage.direction != message.value.direction;
+      var endOfBlock = nextMessage == null ||
+          nextMessage.direction != message.value.direction;
       var newestMessage = nextMessage == null;
       return Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment:
-              outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: outbound ? 20 : 4,
-                    right: outbound ? 4 : 20,
-                    top: 4,
-                    bottom: 4),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: outbound ? Colors.black38 : Colors.black12,
-                    borderRadius: BorderRadius.only(
-                      topLeft: inbound && !startOfBlock
-                          ? Radius.zero
-                          : Radius.circular(5),
-                      topRight: outbound && !startOfBlock
-                          ? Radius.zero
-                          : Radius.circular(5),
-                      bottomRight: outbound && (!endOfBlock || newestMessage)
-                          ? Radius.zero
-                          : Radius.circular(5),
-                      bottomLeft: inbound && (!endOfBlock || newestMessage)
-                          ? Radius.zero
-                          : Radius.circular(5),
-                    ),
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: outbound ? 20 : 4,
+                  right: outbound ? 4 : 20,
+                  top: 4,
+                  bottom: 4),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: outbound ? Colors.black38 : Colors.black12,
+                  borderRadius: BorderRadius.only(
+                    topLeft: inbound && !startOfBlock
+                        ? Radius.zero
+                        : Radius.circular(5),
+                    topRight: outbound && !startOfBlock
+                        ? Radius.zero
+                        : Radius.circular(5),
+                    bottomRight: outbound && (!endOfBlock || newestMessage)
+                        ? Radius.zero
+                        : Radius.circular(5),
+                    bottomLeft: inbound && (!endOfBlock || newestMessage)
+                        ? Radius.zero
+                        : Radius.circular(5),
                   ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-                    child: innerRow,
-                  ),
+                ),
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                  child: innerColumn,
                 ),
               ),
             ),
-          ]);
+          ),
+        ],
+      );
     });
   }
 
@@ -106,8 +140,9 @@ class _ConversationState extends State<Conversation> {
           : widget._contact.displayName,
       body: Column(children: [
         Expanded(
-          child: model.contactMessages(widget._contact, builder:
-              (context, List<ShortMessageRecord> messageRecords, Widget child) {
+          child: model.contactMessages(widget._contact, builder: (context,
+              List<PathAndValue<ShortMessageRecord>> messageRecords,
+              Widget child) {
             return ListView.builder(
               reverse: true,
               itemCount: messageRecords.length,
@@ -117,8 +152,8 @@ class _ConversationState extends State<Conversation> {
                     messageRecords[index],
                     index >= messageRecords.length - 1
                         ? null
-                        : messageRecords[index + 1],
-                    index == 0 ? null : messageRecords[index - 1]);
+                        : messageRecords[index + 1].value,
+                    index == 0 ? null : messageRecords[index - 1].value);
               },
             );
           }),

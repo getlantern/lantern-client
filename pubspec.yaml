@@ -31,7 +31,7 @@ dependencies:
 
   provider: ^4.3.2
 
-  infinite_scroll_pagination: ^2.3.0
+  #  infinite_scroll_pagination: ^2.3.0
 
   protobuf: any
 

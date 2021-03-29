@@ -156,7 +156,6 @@ class VPNTab extends StatelessWidget {
             value: vpnStatus == "connected" || vpnStatus == "disconnecting",
             activeColor: HexColor(onSwitchColor),
             inactiveColor: HexColor(offSwitchColor),
-
             onToggle: (bool newValue) {
               if (vpnStatus != "connecting" || vpnStatus != "disconnecting") {
                 vpnModel.switchVPN(newValue);
