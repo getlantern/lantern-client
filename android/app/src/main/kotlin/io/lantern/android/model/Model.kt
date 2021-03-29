@@ -4,10 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
-import io.lantern.db.DB
-import io.lantern.db.Raw
-import io.lantern.db.RawSubscriber
-import io.lantern.db.Subscriber
+import io.lantern.db.*
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
@@ -74,36 +71,20 @@ abstract class Model(
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
 
-        val tail = args["tail"]?.let { it as Boolean } ?: false
-        if (tail) {
-//            val dump = db.list<Any>("%")
-            val count = args["count"]?.let { it as Int } ?: Int.MAX_VALUE
-            val subscriber = object : Subscriber<List<Raw<Any>>>(namespacedSubscriberId(subscriberID), path) {
-                override fun onUpdate(path: String, value: List<Raw<Any>>) {
-                    Handler(Looper.getMainLooper()).post {
-                        synchronized(this@Model) {
-                            activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to value.map { it.valueOrProtoBytes }))
-                        }
+        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
+            override fun onInitial(values: List<Entry<Raw<Any>>>) {
+                Handler(Looper.getMainLooper()).post {
+                    synchronized(this@Model) {
+                        activeSink.get()?.success(mapOf("s" to subscriberID, "u" to values.map { listOf(it.path, it.value.valueOrProtoBytes) }))
                     }
                 }
-
-                override fun onDelete(path: String) {
-                    // ignored
-                }
+                super.onInitial(values)
             }
-            if (details) {
-                db.tailDetails(subscriber, count)
-            } else {
-                db.tail(subscriber, count)
-            }
-            return
-        }
 
-        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
             override fun onUpdate(path: String, raw: Raw<Any>) {
                 Handler(Looper.getMainLooper()).post {
                     synchronized(this@Model) {
-                        activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to raw.valueOrProtoBytes))
+                        activeSink.get()?.success(mapOf("s" to subscriberID, "u" to listOf(listOf(path, raw.valueOrProtoBytes))))
                     }
                 }
             }
@@ -111,7 +92,7 @@ abstract class Model(
             override fun onDelete(path: String) {
                 Handler(Looper.getMainLooper()).post {
                     synchronized(this@Model) {
-                        activeSink.get()?.success(mapOf("subscriberID" to subscriberID, "newValue" to null))
+                        activeSink.get()?.success(mapOf("s" to subscriberID, "d" to null))
                     }
                 }
             }

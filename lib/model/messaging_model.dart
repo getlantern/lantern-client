@@ -4,6 +4,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
 import '../package_store.dart';
+import 'list_subscriber.dart';
 import 'protos_flutteronly/messaging.pb.dart';
 
 class MessagingModel extends Model {
@@ -31,40 +32,39 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueListenableBuilder<List<Contact>> contacts(
-      {int count = 2 ^ 32,
-      @required ValueWidgetBuilder<List<Contact>> builder}) {
-    return tailingBuilder<Contact>('/contacts/', count: count, builder: builder,
+  ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
+      {@required ValueWidgetBuilder<List<PathAndValue<Contact>>> builder}) {
+    return subscribedListBuilder<Contact>('/contacts/', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<List<ShortMessageRecord>> contactMessages(
-      Contact contact,
-      {int count = 2 ^ 32,
-      @required ValueWidgetBuilder<List<ShortMessageRecord>> builder}) {
-    return tailingBuilder<ShortMessageRecord>(
+  ValueListenableBuilder<ChangeTrackingList<ShortMessageRecord>>
+      contactMessages(
+          Contact contact,
+          {@required
+              ValueWidgetBuilder<List<PathAndValue<ShortMessageRecord>>>
+                  builder}) {
+    return subscribedListBuilder<ShortMessageRecord>(
         '/cm/${_contactPathSegment(contact)}',
         details: true,
-        count: count,
+        compare: sortReversed,
         builder: builder, deserialize: (Uint8List serialized) {
       return ShortMessageRecord.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<ShortMessageRecord> message(ShortMessageRecord message,
+  ValueListenableBuilder<ShortMessageRecord> message(
+      BuildContext context,
+      PathAndValue<ShortMessageRecord> message,
       ValueWidgetBuilder<ShortMessageRecord> builder) {
-    return subscribedBuilder<ShortMessageRecord>(
-        '/m/${message.sent}/${message.senderId}/${message.id}',
-        defaultValue: message,
-        builder: builder, deserialize: (Uint8List serialized) {
-      return ShortMessageRecord.fromBuffer(serialized);
-    });
+    return listChildBuilder(context, message.path,
+        defaultValue: message.value, builder: builder);
   }
 
   ValueListenableBuilder<Contact> me(ValueWidgetBuilder<Contact> builder) {
-    return subscribedBuilder<Contact>('/me', builder: builder,
+    return subscribedSingleValueBuilder<Contact>('/me', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });

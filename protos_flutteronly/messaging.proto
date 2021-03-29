@@ -4,6 +4,11 @@ package model;
 
 option java_package = "io.lantern.messaging";
 
+enum MessageDirection {
+  OUT = 0;
+  IN = 1;
+}
+
 // A contact in the address book
 message Contact {
   enum Type {
@@ -13,43 +18,44 @@ message Contact {
 
   Type type = 2; //
   string id = 3; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
-  string displayName = 4; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
-  int64 createdTime = 5; // the nanosecond unix timestamp when this contact was created
-  int64 mostRecentMessageTime = 6; // the sent unix timestamp of the most recent message with this contact
-  string mostRecentMessageText = 7; // the text of the most recent message with this contact
-  repeated string memberIds = 8; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
+  repeated string memberIds = 4; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
+  string displayName = 5; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
+  int64 createdTime = 6; // the millisecond unix timestamp when this contact was created
+  int64 mostRecentMessageTs = 7; // the unix timestamp of the most recent message with this contact
+  MessageDirection mostRecentMessageDirection = 8; // direction of the most recent message with this contact
+  string mostRecentMessageText = 9; // the text of the most recent message with this contact
 }
 
 // A short message, the primary type of message exchanged by users. It's either text or ogg encoded
 // voice data.
 message ShortMessage {
   bytes id = 1; // the id of the message, unique under the given sender
-  int64 sent = 2; // The unix timestamp in nanoseconds for when the message was sent
+  bytes replyToSenderId = 2; // if this message is a reply to another message, this contains the ID of the sender of that message
+  bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that messsage
   oneof body {
-    string text = 3;
-    bytes oggVoice = 4;
+    string text = 4;
+    bytes oggVoice = 5;
   }
 }
 
 // A record of a ShortMessage either sent or received
 message ShortMessageRecord {
-  enum Direction {
-    OUT = 0;
-    IN = 1;
-  }
-
   enum DeliveryStatus {
     SENDING = 0; // message is currently in the process of sending but hasn't successfully finished yet
-    PARTIALLY_SENT = 1; // message failed to send to a subset of recipients, will not retry
-    COMPLETELY_SENT = 2; // message has been successfully sent
+    PARTIALLY_SENT = 1; // message has been successfully sent to some of the recipients, will retry other recipients
+    COMPLETELY_SENT = 2; // message has been successfully sent to all recipients
+    PARTIALLY_FAILED = 3; // message failed to send to a subset of recipients, will not retry
+    COMPLETELY_FAILED = 4; // message failed to send to any recipients, will not retry
   }
 
   string senderId = 1; // the id of who sent this message
   string id = 2; // the id of the message (same as on ShortMessage), encoded in base32
-  int64 sent = 3; // The unix timestamp in nanoseconds for when the message was sent
-  Direction direction = 4; // direction in which the message is going/came
-  DeliveryStatus status = 5; // for outgoing messages, the status of its sending and delivery
-  bytes message = 6; // the serialized ShortMessage
+  int64 ts = 3; // The unix timestamp in nanoseconds for when the message was sent (for OUT) or received (for IN)
+  string replyToSenderId = 4; // if this message is a reply to another message, this contains the ID of the sender of that message
+  string replyToId = 5; // if this message is a reply to another message, this contains the ID of that messsage
+  MessageDirection direction = 6; // direction in which the message is going/came
+  DeliveryStatus status = 7; // for outgoing messages, the status of its sending and delivery
+  bytes message = 8; // the serialized ShortMessage
 }
 
 message OutgoingShortMessage {
