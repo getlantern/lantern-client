@@ -482,4 +482,9 @@
     <string name="referral_code_share_description_pro">Share your code with your friends and get one month of additional Lantern Pro service for free when they purchase Pro!</string>
     <string name="referral_code_share">Share referral code</string>
     <string name="referral_code_share_title">Share your Referral code:</string>
+    <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
+    <string name="lantern_desktop_share_description">The most recent Lantern apps for desktop and all other platforms can be found at the link above.</string>
+    <string name="share_link">Share link</string>
+    <string name="lantern_desktop_link_share_title">Share Lantern download link</string>
+
 </resources>
