@@ -95,7 +95,6 @@ class _AccountTabState extends State<AccountTab> {
           title: "authorize_device_for_pro".i18n,
           onTap: onAuthorizeDeviceForPro,
         );
-
       case FREE_ACCOUNT_ITEM.INVITE_FRIENDS:
         return renderAccountItem(
           icon: ImagePaths.star_icon,
@@ -141,7 +140,6 @@ class _AccountTabState extends State<AccountTab> {
           title: "add_device".i18n,
           onTap: onAddDevice,
         );
-
       case PRO_ACCOUNT_ITEM.INVITE_FRIENDS:
         return renderAccountItem(
           icon: ImagePaths.star_icon,
@@ -154,11 +152,11 @@ class _AccountTabState extends State<AccountTab> {
           title: "desktop_version".i18n,
           onTap: onOpenDesktopVersion,
         );
-      case PRO_ACCOUNT_ITEM.FREE_YINBI_CRYPTO:
+      case PRO_ACCOUNT_ITEM.YINBI_REDEMPTION:
         return renderAccountItem(
           icon: ImagePaths.yinbi_icon,
-          title: "free_yinbi_crypto".i18n,
-          onTap: onOpenFreeYinbiCrypto,
+          title: "yinbi_redemption".i18n,
+          onTap: onOpenYinbiRedemption,
         );
       case PRO_ACCOUNT_ITEM.SETTINGS:
         return Column(
@@ -197,6 +195,10 @@ class _AccountTabState extends State<AccountTab> {
 
   onOpenFreeYinbiCrypto() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_FREE_YINBI);
+  }
+
+  onOpenYinbiRedemption() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_YINBI_REDEMPTION);
   }
 
   onOpenSettings() {
