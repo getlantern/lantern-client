@@ -98,4 +98,5 @@
 
 
     <color name="secondary_pink">#DB0A5B</color>
+    <color name="divider">#ebebeb</color>
 </resources>

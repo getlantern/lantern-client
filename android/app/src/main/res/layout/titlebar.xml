@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:lantern="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navHeader"
     android:layout_width="match_parent"
     android:background="@color/accent_white"
@@ -10,14 +11,14 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:orientation="horizontal"
-        android:layout_height="52dp">
+        android:layout_height="@dimen/toolbarHeight">
 
             <ImageView
                 android:id="@+id/avatar"
-                android:paddingLeft="10dp"
+                android:padding="@dimen/space_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
+                android:layout_marginStart="@dimen/space_small"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
@@ -41,13 +42,15 @@
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:textAppearance="@style/MediumText"
-                android:text=""
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="@tools:sample/lorem"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/divider"
+                android:background="@color/divider"
+                android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 </LinearLayout>
