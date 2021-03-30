@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -469,12 +470,12 @@ public class LanternHttpClient extends HttpClient {
     }
 
     public interface ProCallback {
-        public void onFailure(Throwable throwable, final ProError error);
+        public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
         public void onSuccess(Response response, JsonObject result);
     }
 
     public interface ProUserCallback {
-        public void onFailure(Throwable throwable, final ProError error);
+        public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
         public void onSuccess(Response response, final ProUser userData);
     }
 
@@ -483,12 +484,12 @@ public class LanternHttpClient extends HttpClient {
     }
 
     public interface HttpCallback {
-        public void onFailure(Throwable throwable);
+        public void onFailure(@Nullable Throwable throwable);
         public void onSuccess(Response response);
     }
 
     public interface PlansCallback {
-        public void onFailure(Throwable throwable, final ProError error);
+        public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
         public void onSuccess(Map<String, ProPlan> plans);
     }
 }
