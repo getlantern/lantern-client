@@ -101,4 +101,7 @@
     <color name="divider">#ebebeb</color>
     <color name="light_grey">#f5f5f5</color>
     <color name="tertiary_green">#007a7c</color>
+    <color name="red">#D5001F</color>
+    <color name="grey_5">#707070</color>
+    <color name="grey_4">#BFBFBF</color>
 </resources>

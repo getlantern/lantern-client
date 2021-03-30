@@ -1,117 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:lantern="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/accent_white"
-    android:orientation="vertical"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:baselineAligned="false"
-    android:id="@+id/reportIssueView"
-    tools:context=".activity.yinbi.RedeemBulkCodesActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
+
 
     <fragment
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
-        lantern:titleText="@string/enter_lantern_pro_codes"/>
+        app:titleText="@string/redeem_lantern_pro_codes"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:textColor="#7c7c7c"
-            android:letterSpacing="0.01"
-            android:lineSpacingExtra="8sp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="@string/paste_pro_account_codes"
-            />
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCodeDescription"
+        tools:text="@tools:sample/lorem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_large"/>
 
-        <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/bulkCodesContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:hint="@string/lantern_pro_codes"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="84dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCodeDescription"
+        app:layout_constraintBottom_toTopOf="@+id/termsOfServiceText"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_large"
+        app:errorEnabled="true"
+        app:boxStrokeColor="@color/box_stroke_color"
+        app:hintTextColor="@color/tertiary_green"
+        android:textColorHint="@color/grey_5">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/bulkCodes"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/report_issue"
-            android:textColorHint="@color/hintText"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:drawablePadding="10dip"
+            android:gravity="top"
             android:textColor="@color/black"
-            android:textSize="12dp"
-            android:autoText="false"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:imeOptions="actionDone"
-            android:ems="10"
-            android:gravity="left"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_\n "
-            android:inputType="textMultiLine"/>
-
-        <LinearLayout
-            android:id="@+id/bottomSection"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:paddingBottom="40dp"
-            android:gravity="bottom|center"
-            android:layout_gravity="center">
+            android:layout_height="match_parent"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/errorMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:paddingBottom="10dp"
-                android:visibility="gone"
-                android:textStyle="normal"
-                android:textColor="#ff0000"
-                android:letterSpacing="0.01"
-                android:lineSpacingExtra="12sp"
-                android:text="@string/bulk_codes_error"
-                />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/termsOfServiceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                android:textColor="@color/black"
-                android:lineSpacingExtra="4sp"
-                android:text="@string/terms_of_service_enter_pro_codes"
-                android:gravity="left"/>
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorError"
+        tools:text="@tools:sample/lorem"
+        android:layout_marginTop="@dimen/space_tiny"
+        android:includeFontPadding="false"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:layout_marginStart="@dimen/space_small"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/bulk_codes_error"
+        app:layout_constraintTop_toBottomOf="@+id/bulkCodesContainer"
+        app:layout_constraintStart_toStartOf="@+id/bulkCodesContainer"
+        app:layout_constraintEnd_toEndOf="@+id/bulkCodesContainer"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/submitButton"
-                android:layout_height="36dp"
-                android:layout_width="216dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/submit"
-                android:textAppearance="@style/MediumText"
-                android:textSize="14sp"
-                android:elevation="2dp"
-                android:minHeight="48dp"
-                android:textColor="@color/accent_white"
-                android:clickable="true"
-                android:textAllCaps="true"
-                android:layout_gravity="center"
-                android:background="@drawable/send_btn"
-                android:onClick="sendReport" />
+    <TextView
+        android:text="@string/terms_of_service_complete_purchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/termsOfServiceText"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAppearance="@style/TextAppearance.MyApp.Overline.Small"
+        android:layout_marginBottom="@dimen/space_normal"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"/>
 
-        </LinearLayout>
-</LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/redeem_codes"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/bg_color_selector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
