@@ -491,4 +491,10 @@
     <string name="yinbi_description_pro">Lantern has partnered with Yinbi to give YNB to everyone that renews Lantern Pro! Renew now to get access to today’s giveaway! For more info about Yinbi visit the official site: Yin.bi</string>
     <string name="yinbi_title_free">Free Yinbi Cryptocurrency</string>
     <string name="yinbi_title_pro">Yinbi Redemption</string>
+    <string name="redeem_lantern_pro_codes">Redeem Lantern Pro Codes</string>
+    <string name="redeem_code_description_first_part">Bulk Lantern Pro codes can be obtained from </string>
+    <string name="redeem_code_description_second_part">reseller.lantern.io</string>
+    <string name="lantern_pro_codes">Lantern Pro Codes</string>
+    <string name="redeem_codes">REDEEM CODES</string>
+    <string name="terms_of_service_complete_purchase">By clicking Complete Purchase, you agree to our Terms of Service</string>
 </resources>

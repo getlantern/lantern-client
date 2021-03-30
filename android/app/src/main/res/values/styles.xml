@@ -31,6 +31,7 @@
         <item name="textAppearanceBody2">@style/TextAppearance.MyApp.Body2</item>
         <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
         <item name="borderlessButtonStyle">@style/Widget.MyApp.Button.TextButton</item>
+        <item name="colorError">@color/red</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -284,8 +285,15 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.MyApp.Overline" parent="TextAppearance.MaterialComponents.Overline">
+    <style name="TextAppearance.MyApp.Overline" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Overline.Small">
+        <item name="android:textSize">8sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="TextAppearance.MyApp.Body1" parent="TextAppearance.MaterialComponents.Body1">
