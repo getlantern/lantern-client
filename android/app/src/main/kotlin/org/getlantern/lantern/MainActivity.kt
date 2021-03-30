@@ -11,6 +11,7 @@ import android.net.VpnService
 import android.os.*
 import android.text.Html
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
@@ -174,7 +175,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
 
-            override fun onFailure(throwable: Throwable, error: ProError) {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user data", throwable)
             }
 
