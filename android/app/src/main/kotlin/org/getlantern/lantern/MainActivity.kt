@@ -15,16 +15,12 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.lantern.android.model.MessagingModel
 import io.lantern.android.model.VpnModel
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.store.MessagingStore
-import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
-import java.io.File
 import java.util.*
 
 class MainActivity : FlutterActivity() {
@@ -36,7 +32,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        messagingModel = MessagingModel(flutterEngine, (application as LanternApp).messaging.messaging)
+        messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -293,6 +289,7 @@ class MainActivity : FlutterActivity() {
         private val TAG = MainActivity::class.java.simpleName
         private val PERMISSIONS_TAG = "$TAG.permissions"
         private val FULL_PERMISSIONS_REQUEST = 8888
+        val RECORD_AUDIO_PERMISSIONS_REQUEST = 8889
         private val REQUEST_VPN = 7777
     }
 

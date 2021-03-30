@@ -32,6 +32,14 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<void> startRecordingVoiceMemo() {
+    return methodChannel.invokeMethod('startRecordingVoiceMemo');
+  }
+
+  Future<void> stopRecordingVoiceMemo() {
+    return methodChannel.invokeMethod('stopRecordingVoiceMemo');
+  }
+
   ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
       {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/contacts/', builder: builder,

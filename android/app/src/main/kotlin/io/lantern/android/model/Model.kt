@@ -38,7 +38,7 @@ abstract class Model(
                 else -> result.success(out)
             }
         } catch (t: Throwable) {
-            Logger.error(TAG, "Unexpected error calling " + call.method, t)
+            Logger.error(TAG, "Unexpected error calling ${call.method}: ${t}")
         }
     }
 

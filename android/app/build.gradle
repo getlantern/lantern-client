@@ -445,6 +445,8 @@ dependencies {
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
     implementation 'com.github.getlantern:messaging-android:f38cbb7'
+
+    implementation(name:'opuslib-release', ext: 'aar')
 }
 
 apply plugin: 'com.google.gms.google-services'
