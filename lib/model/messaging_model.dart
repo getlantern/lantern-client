@@ -33,7 +33,7 @@ class MessagingModel extends Model {
   }
 
   ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
-      {@required ValueWidgetBuilder<List<PathAndValue<Contact>>> builder}) {
+      {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/contacts/', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);

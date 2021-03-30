@@ -141,7 +141,7 @@ class _ConversationState extends State<Conversation> {
       body: Column(children: [
         Expanded(
           child: model.contactMessages(widget._contact, builder: (context,
-              List<PathAndValue<ShortMessageRecord>> messageRecords,
+              Iterable<PathAndValue<ShortMessageRecord>> messageRecords,
               Widget child) {
             return ListView.builder(
               reverse: true,
@@ -149,11 +149,13 @@ class _ConversationState extends State<Conversation> {
               itemBuilder: (context, index) {
                 return buildMessage(
                     context,
-                    messageRecords[index],
+                    messageRecords.elementAt(index),
                     index >= messageRecords.length - 1
                         ? null
-                        : messageRecords[index + 1].value,
-                    index == 0 ? null : messageRecords[index - 1].value);
+                        : messageRecords.elementAt(index + 1).value,
+                    index == 0
+                        ? null
+                        : messageRecords.elementAt(index - 1).value);
               },
             );
           }),

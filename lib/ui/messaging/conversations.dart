@@ -28,7 +28,8 @@ class _ConversationsState extends State<Conversations> {
               }),
         ],
         body: model.contacts(builder:
-            (context, List<PathAndValue<Contact>> contacts, Widget child) {
+            (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
+          var contacts = _contacts.where((contact) => contact.value.mostRecentMessageText?.isNotEmpty).toList();
           contacts.sort((a, b) {
             return (b.value.mostRecentMessageTs - a.value.mostRecentMessageTs)
                 .toInt();
@@ -44,8 +45,8 @@ class _ConversationsState extends State<Conversations> {
                         : contact.value.displayName,
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(
-                    "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
-                    overflow: TextOverflow.ellipsis),
+                        "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
+                        overflow: TextOverflow.ellipsis),
                 onTap: () {
                   Navigator.pushNamed(context, 'conversation',
                       arguments: contact.value);

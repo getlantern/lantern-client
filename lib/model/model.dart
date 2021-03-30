@@ -78,7 +78,7 @@ abstract class Model {
 
   ValueListenableBuilder<ChangeTrackingList<T>> subscribedListBuilder<T>(
       String path,
-      {@required ValueWidgetBuilder<List<PathAndValue<T>>> builder,
+      {@required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
       bool details,
       int compare(String key1, String key2),
       T deserialize(Uint8List serialized)}) {

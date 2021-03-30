@@ -36,7 +36,8 @@ class NewMessage extends StatelessWidget {
         Divider(thickness: 1),
         Expanded(
           child: model.contacts(builder:
-              (context, List<PathAndValue<Contact>> contacts, Widget child) {
+              (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
+            var contacts = _contacts.toList();
             var all = contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
               contacts.sort((a, b) {

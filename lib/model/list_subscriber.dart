@@ -107,7 +107,7 @@ class _SubscribedListBuilderState<T>
   void _valueChanged() {
     var newMap = widget.valueListenable.value;
     var pathsChanged =
-        newMap.updatedPaths.isNotEmpty || newMap.deletedPaths.isNotEmpty;
+        newMap.newPaths.isNotEmpty || newMap.deletedPaths.isNotEmpty;
     if (!pathsChanged) {
       // we can take the optimized path and just notify the children
       newMap.updatedPaths.forEach((path) {
@@ -158,12 +158,14 @@ class ListChildBuilder<T> extends ValueListenableBuilder<T> {
 
 class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
   T value;
+  _SubscribedListBuilderState<T> listBuilderState;
 
   @override
   void initState() {
     super.initState();
     value = widget.valueListenable.value;
     widget.valueListenable.addListener(_valueChanged);
+    listBuilderState = context.findAncestorStateOfType<_SubscribedListBuilderState>();
   }
 
   @override
@@ -179,10 +181,7 @@ class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
   @override
   void dispose() {
     widget.valueListenable.removeListener(_valueChanged);
-    context
-        .findAncestorStateOfType<_SubscribedListBuilderState>()
-        ._childNotifiers
-        ?.remove(this.widget.valueListenable);
+    listBuilderState?._childNotifiers?.remove(this.widget.valueListenable);
     super.dispose();
   }
 
