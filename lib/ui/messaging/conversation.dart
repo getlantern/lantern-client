@@ -186,6 +186,14 @@ class _ConversationState extends State<Conversation> {
                 hintText: 'Message'.i18n,
               )),
         ),
+        GestureDetector(
+            child: Icon(Icons.audiotrack),
+            onTapDown: (details) {
+              model.startRecordingVoiceMemo();
+            },
+            onTapUp: (details) {
+              model.stopRecordingVoiceMemo();
+            })
       ]),
     );
   }
