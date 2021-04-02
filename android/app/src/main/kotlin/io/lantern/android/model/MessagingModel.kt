@@ -1,32 +1,69 @@
 package io.lantern.android.model
 
 import android.content.pm.PackageManager
+import android.media.audiofx.NoiseSuppressor
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.Messaging
+import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
+import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : Model("messaging", flutterEngine, messaging.db) {
-    private val voiceMemoFile = File(activity.filesDir, "_voicememo.opus")
+    private val voiceMemoFile = File(activity.filesDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
+    private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
+
+    init {
+        // delete any lingering data in voiceMemoFile (e.g. if we crashed during recording)
+        voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
+    }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
             "sendToDirectContact" -> {
-                messaging.sendToDirectContact(call.argument("identityKey")!!, text = call.argument("text"), oggVoice = call.argument("oggVoice"))
+                messaging.sendToDirectContact(
+                        call.argument("identityKey")!!,
+                        text = call.argument("text"),
+                        attachments = call.argument<List<ByteArray>>("attachments")?.map { io.lantern.messaging.Model.StoredAttachment.parseFrom(it) }?.toTypedArray())
                 null
             }
-            "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
-            "stopRecordingVoiceMemo" -> stopRecordingVoiceMemo()
+            "startRecordingVoiceMemo" -> {
+                startRecordingVoiceMemo()
+                startedRecording.set(System.currentTimeMillis())
+            }
+            "stopRecordingVoiceMemo" -> {
+                try {
+                    val started = startedRecording.get()
+                    stopRecordingVoiceMemo()
+                    val duration = (System.currentTimeMillis() - started).toDouble() / 1000.0
+                    return messaging.createAttachment(
+                            "audio/ogg",
+                            voiceMemoFile,
+                            mapOf("duration" to duration.toString(), "role" to "voiceMemo")).toByteArray()
+                } finally {
+                    voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
+                }
+            }
+            "decryptAttachment" -> {
+                val attachment = io.lantern.messaging.Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
+                ByteArrayOutputStream(attachment.attachment.plaintextLength.toInt()).use { output ->
+                    attachment.inputStream.use { input ->
+                        Util.copy(input, output)
+                    }
+                    return output.toByteArray()
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -46,7 +83,18 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     }
 
     private fun doStartRecordingVoiceMemo() {
-        stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 16000, false))
+        stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, object : OpusRecorder.EffectsInitializer {
+            override fun init(audioSessionId: Int) {
+                if (NoiseSuppressor.isAvailable()) {
+                    try {
+                        val noiseSuppressor = NoiseSuppressor.create(audioSessionId);
+                        if (noiseSuppressor != null) noiseSuppressor.setEnabled(true);
+                    } catch (t: Throwable) {
+                        // couldn't init noise suppressor, won't use
+                    }
+                }
+            }
+        }))
     }
 
     private fun stopRecordingVoiceMemo(): ByteArray? {

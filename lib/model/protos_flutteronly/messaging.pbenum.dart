@@ -39,14 +39,31 @@ class Contact_Type extends $pb.ProtobufEnum {
   const Contact_Type._($core.int v, $core.String n) : super(v, n);
 }
 
-class ShortMessageRecord_DeliveryStatus extends $pb.ProtobufEnum {
-  static const ShortMessageRecord_DeliveryStatus SENDING = ShortMessageRecord_DeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
-  static const ShortMessageRecord_DeliveryStatus PARTIALLY_SENT = ShortMessageRecord_DeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_SENT');
-  static const ShortMessageRecord_DeliveryStatus COMPLETELY_SENT = ShortMessageRecord_DeliveryStatus._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_SENT');
-  static const ShortMessageRecord_DeliveryStatus PARTIALLY_FAILED = ShortMessageRecord_DeliveryStatus._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_FAILED');
-  static const ShortMessageRecord_DeliveryStatus COMPLETELY_FAILED = ShortMessageRecord_DeliveryStatus._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_FAILED');
+class StoredAttachment_Status extends $pb.ProtobufEnum {
+  static const StoredAttachment_Status PENDING = StoredAttachment_Status._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING');
+  static const StoredAttachment_Status DONE = StoredAttachment_Status._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DONE');
+  static const StoredAttachment_Status FAILED = StoredAttachment_Status._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'FAILED');
 
-  static const $core.List<ShortMessageRecord_DeliveryStatus> values = <ShortMessageRecord_DeliveryStatus> [
+  static const $core.List<StoredAttachment_Status> values = <StoredAttachment_Status> [
+    PENDING,
+    DONE,
+    FAILED,
+  ];
+
+  static final $core.Map<$core.int, StoredAttachment_Status> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static StoredAttachment_Status? valueOf($core.int value) => _byValue[value];
+
+  const StoredAttachment_Status._($core.int v, $core.String n) : super(v, n);
+}
+
+class StoredMessage_DeliveryStatus extends $pb.ProtobufEnum {
+  static const StoredMessage_DeliveryStatus SENDING = StoredMessage_DeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
+  static const StoredMessage_DeliveryStatus PARTIALLY_SENT = StoredMessage_DeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_SENT');
+  static const StoredMessage_DeliveryStatus COMPLETELY_SENT = StoredMessage_DeliveryStatus._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_SENT');
+  static const StoredMessage_DeliveryStatus PARTIALLY_FAILED = StoredMessage_DeliveryStatus._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_FAILED');
+  static const StoredMessage_DeliveryStatus COMPLETELY_FAILED = StoredMessage_DeliveryStatus._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'COMPLETELY_FAILED');
+
+  static const $core.List<StoredMessage_DeliveryStatus> values = <StoredMessage_DeliveryStatus> [
     SENDING,
     PARTIALLY_SENT,
     COMPLETELY_SENT,
@@ -54,24 +71,24 @@ class ShortMessageRecord_DeliveryStatus extends $pb.ProtobufEnum {
     COMPLETELY_FAILED,
   ];
 
-  static final $core.Map<$core.int, ShortMessageRecord_DeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static ShortMessageRecord_DeliveryStatus? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, StoredMessage_DeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static StoredMessage_DeliveryStatus? valueOf($core.int value) => _byValue[value];
 
-  const ShortMessageRecord_DeliveryStatus._($core.int v, $core.String n) : super(v, n);
+  const StoredMessage_DeliveryStatus._($core.int v, $core.String n) : super(v, n);
 }
 
-class OutgoingShortMessage_SubDeliveryStatus extends $pb.ProtobufEnum {
-  static const OutgoingShortMessage_SubDeliveryStatus SENDING = OutgoingShortMessage_SubDeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
-  static const OutgoingShortMessage_SubDeliveryStatus SENT = OutgoingShortMessage_SubDeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENT');
+class OutboundMessage_SubDeliveryStatus extends $pb.ProtobufEnum {
+  static const OutboundMessage_SubDeliveryStatus SENDING = OutboundMessage_SubDeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
+  static const OutboundMessage_SubDeliveryStatus SENT = OutboundMessage_SubDeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENT');
 
-  static const $core.List<OutgoingShortMessage_SubDeliveryStatus> values = <OutgoingShortMessage_SubDeliveryStatus> [
+  static const $core.List<OutboundMessage_SubDeliveryStatus> values = <OutboundMessage_SubDeliveryStatus> [
     SENDING,
     SENT,
   ];
 
-  static final $core.Map<$core.int, OutgoingShortMessage_SubDeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static OutgoingShortMessage_SubDeliveryStatus? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, OutboundMessage_SubDeliveryStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static OutboundMessage_SubDeliveryStatus? valueOf($core.int value) => _byValue[value];
 
-  const OutgoingShortMessage_SubDeliveryStatus._($core.int v, $core.String n) : super(v, n);
+  const OutboundMessage_SubDeliveryStatus._($core.int v, $core.String n) : super(v, n);
 }
 

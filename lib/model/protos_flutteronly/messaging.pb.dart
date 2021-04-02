@@ -153,35 +153,225 @@ class Contact extends $pb.GeneratedMessage {
   void clearMostRecentMessageText() => clearField(9);
 }
 
-enum ShortMessage_Body {
-  text, 
-  oggVoice, 
-  notSet
+class Attachment extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Attachment', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mimeType', protoName: 'mimeType')
+    ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'keyMaterial', $pb.PbFieldType.OY, protoName: 'keyMaterial')
+    ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'digest', $pb.PbFieldType.OY)
+    ..aInt64(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'plaintextLength', protoName: 'plaintextLength')
+    ..m<$core.String, $core.String>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', entryClassName: 'Attachment.MetadataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('model'))
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downloadUrl', protoName: 'downloadUrl')
+    ..hasRequiredFields = false
+  ;
+
+  Attachment._() : super();
+  factory Attachment({
+    $core.String? mimeType,
+    $core.List<$core.int>? keyMaterial,
+    $core.List<$core.int>? digest,
+    $fixnum.Int64? plaintextLength,
+    $core.Map<$core.String, $core.String>? metadata,
+    $core.String? downloadUrl,
+  }) {
+    final _result = create();
+    if (mimeType != null) {
+      _result.mimeType = mimeType;
+    }
+    if (keyMaterial != null) {
+      _result.keyMaterial = keyMaterial;
+    }
+    if (digest != null) {
+      _result.digest = digest;
+    }
+    if (plaintextLength != null) {
+      _result.plaintextLength = plaintextLength;
+    }
+    if (metadata != null) {
+      _result.metadata.addAll(metadata);
+    }
+    if (downloadUrl != null) {
+      _result.downloadUrl = downloadUrl;
+    }
+    return _result;
+  }
+  factory Attachment.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Attachment.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Attachment clone() => Attachment()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Attachment copyWith(void Function(Attachment) updates) => super.copyWith((message) => updates(message as Attachment)) as Attachment; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Attachment create() => Attachment._();
+  Attachment createEmptyInstance() => create();
+  static $pb.PbList<Attachment> createRepeated() => $pb.PbList<Attachment>();
+  @$core.pragma('dart2js:noInline')
+  static Attachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Attachment>(create);
+  static Attachment? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get mimeType => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set mimeType($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMimeType() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMimeType() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get keyMaterial => $_getN(1);
+  @$pb.TagNumber(2)
+  set keyMaterial($core.List<$core.int> v) { $_setBytes(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasKeyMaterial() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearKeyMaterial() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.int> get digest => $_getN(2);
+  @$pb.TagNumber(3)
+  set digest($core.List<$core.int> v) { $_setBytes(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDigest() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDigest() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get plaintextLength => $_getI64(3);
+  @$pb.TagNumber(4)
+  set plaintextLength($fixnum.Int64 v) { $_setInt64(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPlaintextLength() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPlaintextLength() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.Map<$core.String, $core.String> get metadata => $_getMap(4);
+
+  @$pb.TagNumber(6)
+  $core.String get downloadUrl => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set downloadUrl($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasDownloadUrl() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearDownloadUrl() => clearField(6);
 }
 
-class ShortMessage extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, ShortMessage_Body> _ShortMessage_BodyByTag = {
-    4 : ShortMessage_Body.text,
-    5 : ShortMessage_Body.oggVoice,
-    0 : ShortMessage_Body.notSet
-  };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ShortMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [4, 5])
+class StoredAttachment extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoredAttachment', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'guid')
+    ..aOM<Attachment>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachment', subBuilder: Attachment.create)
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'filePath', protoName: 'filePath')
+    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..hasRequiredFields = false
+  ;
+
+  StoredAttachment._() : super();
+  factory StoredAttachment({
+    $core.String? guid,
+    Attachment? attachment,
+    $core.String? filePath,
+    StoredAttachment_Status? status,
+  }) {
+    final _result = create();
+    if (guid != null) {
+      _result.guid = guid;
+    }
+    if (attachment != null) {
+      _result.attachment = attachment;
+    }
+    if (filePath != null) {
+      _result.filePath = filePath;
+    }
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory StoredAttachment.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StoredAttachment.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  StoredAttachment clone() => StoredAttachment()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  StoredAttachment copyWith(void Function(StoredAttachment) updates) => super.copyWith((message) => updates(message as StoredAttachment)) as StoredAttachment; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static StoredAttachment create() => StoredAttachment._();
+  StoredAttachment createEmptyInstance() => create();
+  static $pb.PbList<StoredAttachment> createRepeated() => $pb.PbList<StoredAttachment>();
+  @$core.pragma('dart2js:noInline')
+  static StoredAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StoredAttachment>(create);
+  static StoredAttachment? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get guid => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set guid($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasGuid() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGuid() => clearField(1);
+
+  @$pb.TagNumber(2)
+  Attachment get attachment => $_getN(1);
+  @$pb.TagNumber(2)
+  set attachment(Attachment v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAttachment() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAttachment() => clearField(2);
+  @$pb.TagNumber(2)
+  Attachment ensureAttachment() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $core.String get filePath => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set filePath($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasFilePath() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearFilePath() => clearField(3);
+
+  @$pb.TagNumber(4)
+  StoredAttachment_Status get status => $_getN(3);
+  @$pb.TagNumber(4)
+  set status(StoredAttachment_Status v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasStatus() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStatus() => clearField(4);
+}
+
+class Message extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Message', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', $pb.PbFieldType.OY, protoName: 'replyToSenderId')
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', $pb.PbFieldType.OY, protoName: 'replyToId')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
-    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'oggVoice', $pb.PbFieldType.OY, protoName: 'oggVoice')
+    ..m<$core.int, Attachment>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'Message.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Attachment.create, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
-  ShortMessage._() : super();
-  factory ShortMessage({
+  Message._() : super();
+  factory Message({
     $core.List<$core.int>? id,
     $core.List<$core.int>? replyToSenderId,
     $core.List<$core.int>? replyToId,
     $core.String? text,
-    $core.List<$core.int>? oggVoice,
+    $core.Map<$core.int, Attachment>? attachments,
   }) {
     final _result = create();
     if (id != null) {
@@ -196,34 +386,31 @@ class ShortMessage extends $pb.GeneratedMessage {
     if (text != null) {
       _result.text = text;
     }
-    if (oggVoice != null) {
-      _result.oggVoice = oggVoice;
+    if (attachments != null) {
+      _result.attachments.addAll(attachments);
     }
     return _result;
   }
-  factory ShortMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ShortMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Message.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Message.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ShortMessage clone() => ShortMessage()..mergeFromMessage(this);
+  Message clone() => Message()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ShortMessage copyWith(void Function(ShortMessage) updates) => super.copyWith((message) => updates(message as ShortMessage)) as ShortMessage; // ignore: deprecated_member_use
+  Message copyWith(void Function(Message) updates) => super.copyWith((message) => updates(message as Message)) as Message; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static ShortMessage create() => ShortMessage._();
-  ShortMessage createEmptyInstance() => create();
-  static $pb.PbList<ShortMessage> createRepeated() => $pb.PbList<ShortMessage>();
+  static Message create() => Message._();
+  Message createEmptyInstance() => create();
+  static $pb.PbList<Message> createRepeated() => $pb.PbList<Message>();
   @$core.pragma('dart2js:noInline')
-  static ShortMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ShortMessage>(create);
-  static ShortMessage? _defaultInstance;
-
-  ShortMessage_Body whichBody() => _ShortMessage_BodyByTag[$_whichOneof(0)]!;
-  void clearBody() => clearField($_whichOneof(0));
+  static Message getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Message>(create);
+  static Message? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get id => $_getN(0);
@@ -262,38 +449,34 @@ class ShortMessage extends $pb.GeneratedMessage {
   void clearText() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<$core.int> get oggVoice => $_getN(4);
-  @$pb.TagNumber(5)
-  set oggVoice($core.List<$core.int> v) { $_setBytes(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasOggVoice() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearOggVoice() => clearField(5);
+  $core.Map<$core.int, Attachment> get attachments => $_getMap(4);
 }
 
-class ShortMessageRecord extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ShortMessageRecord', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+class StoredMessage extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoredMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ts')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', protoName: 'replyToSenderId')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', protoName: 'replyToId')
-    ..e<MessageDirection>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
-    ..e<ShortMessageRecord_DeliveryStatus>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: ShortMessageRecord_DeliveryStatus.SENDING, valueOf: ShortMessageRecord_DeliveryStatus.valueOf, enumValues: ShortMessageRecord_DeliveryStatus.values)
-    ..a<$core.List<$core.int>>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
+    ..m<$core.int, StoredAttachment>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'StoredMessage.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoredAttachment.create, packageName: const $pb.PackageName('model'))
+    ..e<MessageDirection>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
+    ..e<StoredMessage_DeliveryStatus>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredMessage_DeliveryStatus.SENDING, valueOf: StoredMessage_DeliveryStatus.valueOf, enumValues: StoredMessage_DeliveryStatus.values)
     ..hasRequiredFields = false
   ;
 
-  ShortMessageRecord._() : super();
-  factory ShortMessageRecord({
+  StoredMessage._() : super();
+  factory StoredMessage({
     $core.String? senderId,
     $core.String? id,
     $fixnum.Int64? ts,
     $core.String? replyToSenderId,
     $core.String? replyToId,
+    $core.String? text,
+    $core.Map<$core.int, StoredAttachment>? attachments,
     MessageDirection? direction,
-    ShortMessageRecord_DeliveryStatus? status,
-    $core.List<$core.int>? message,
+    StoredMessage_DeliveryStatus? status,
   }) {
     final _result = create();
     if (senderId != null) {
@@ -311,37 +494,40 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
     if (replyToId != null) {
       _result.replyToId = replyToId;
     }
+    if (text != null) {
+      _result.text = text;
+    }
+    if (attachments != null) {
+      _result.attachments.addAll(attachments);
+    }
     if (direction != null) {
       _result.direction = direction;
     }
     if (status != null) {
       _result.status = status;
     }
-    if (message != null) {
-      _result.message = message;
-    }
     return _result;
   }
-  factory ShortMessageRecord.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ShortMessageRecord.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory StoredMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StoredMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ShortMessageRecord clone() => ShortMessageRecord()..mergeFromMessage(this);
+  StoredMessage clone() => StoredMessage()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ShortMessageRecord copyWith(void Function(ShortMessageRecord) updates) => super.copyWith((message) => updates(message as ShortMessageRecord)) as ShortMessageRecord; // ignore: deprecated_member_use
+  StoredMessage copyWith(void Function(StoredMessage) updates) => super.copyWith((message) => updates(message as StoredMessage)) as StoredMessage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static ShortMessageRecord create() => ShortMessageRecord._();
-  ShortMessageRecord createEmptyInstance() => create();
-  static $pb.PbList<ShortMessageRecord> createRepeated() => $pb.PbList<ShortMessageRecord>();
+  static StoredMessage create() => StoredMessage._();
+  StoredMessage createEmptyInstance() => create();
+  static $pb.PbList<StoredMessage> createRepeated() => $pb.PbList<StoredMessage>();
   @$core.pragma('dart2js:noInline')
-  static ShortMessageRecord getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ShortMessageRecord>(create);
-  static ShortMessageRecord? _defaultInstance;
+  static StoredMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StoredMessage>(create);
+  static StoredMessage? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get senderId => $_getSZ(0);
@@ -389,50 +575,53 @@ class ShortMessageRecord extends $pb.GeneratedMessage {
   void clearReplyToId() => clearField(5);
 
   @$pb.TagNumber(6)
-  MessageDirection get direction => $_getN(5);
+  $core.String get text => $_getSZ(5);
   @$pb.TagNumber(6)
-  set direction(MessageDirection v) { setField(6, v); }
+  set text($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasDirection() => $_has(5);
+  $core.bool hasText() => $_has(5);
   @$pb.TagNumber(6)
-  void clearDirection() => clearField(6);
+  void clearText() => clearField(6);
 
   @$pb.TagNumber(7)
-  ShortMessageRecord_DeliveryStatus get status => $_getN(6);
-  @$pb.TagNumber(7)
-  set status(ShortMessageRecord_DeliveryStatus v) { setField(7, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasStatus() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearStatus() => clearField(7);
+  $core.Map<$core.int, StoredAttachment> get attachments => $_getMap(6);
 
   @$pb.TagNumber(8)
-  $core.List<$core.int> get message => $_getN(7);
+  MessageDirection get direction => $_getN(7);
   @$pb.TagNumber(8)
-  set message($core.List<$core.int> v) { $_setBytes(7, v); }
+  set direction(MessageDirection v) { setField(8, v); }
   @$pb.TagNumber(8)
-  $core.bool hasMessage() => $_has(7);
+  $core.bool hasDirection() => $_has(7);
   @$pb.TagNumber(8)
-  void clearMessage() => clearField(8);
+  void clearDirection() => clearField(8);
+
+  @$pb.TagNumber(9)
+  StoredMessage_DeliveryStatus get status => $_getN(8);
+  @$pb.TagNumber(9)
+  set status(StoredMessage_DeliveryStatus v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasStatus() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearStatus() => clearField(9);
 }
 
-class OutgoingShortMessage extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutgoingShortMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+class OutboundMessage extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutboundMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientId', protoName: 'recipientId')
-    ..m<$core.String, OutgoingShortMessage_SubDeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'subDeliveryStatuses', protoName: 'subDeliveryStatuses', entryClassName: 'OutgoingShortMessage.SubDeliveryStatusesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OE, valueOf: OutgoingShortMessage_SubDeliveryStatus.valueOf, enumValues: OutgoingShortMessage_SubDeliveryStatus.values, packageName: const $pb.PackageName('model'))
+    ..m<$core.String, OutboundMessage_SubDeliveryStatus>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'subDeliveryStatuses', protoName: 'subDeliveryStatuses', entryClassName: 'OutboundMessage.SubDeliveryStatusesEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OE, valueOf: OutboundMessage_SubDeliveryStatus.valueOf, enumValues: OutboundMessage_SubDeliveryStatus.values, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
-  OutgoingShortMessage._() : super();
-  factory OutgoingShortMessage({
+  OutboundMessage._() : super();
+  factory OutboundMessage({
     $core.String? senderId,
     $core.String? id,
     $fixnum.Int64? sent,
     $core.String? recipientId,
-    $core.Map<$core.String, OutgoingShortMessage_SubDeliveryStatus>? subDeliveryStatuses,
+    $core.Map<$core.String, OutboundMessage_SubDeliveryStatus>? subDeliveryStatuses,
   }) {
     final _result = create();
     if (senderId != null) {
@@ -452,26 +641,26 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory OutgoingShortMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory OutgoingShortMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory OutboundMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory OutboundMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  OutgoingShortMessage clone() => OutgoingShortMessage()..mergeFromMessage(this);
+  OutboundMessage clone() => OutboundMessage()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  OutgoingShortMessage copyWith(void Function(OutgoingShortMessage) updates) => super.copyWith((message) => updates(message as OutgoingShortMessage)) as OutgoingShortMessage; // ignore: deprecated_member_use
+  OutboundMessage copyWith(void Function(OutboundMessage) updates) => super.copyWith((message) => updates(message as OutboundMessage)) as OutboundMessage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static OutgoingShortMessage create() => OutgoingShortMessage._();
-  OutgoingShortMessage createEmptyInstance() => create();
-  static $pb.PbList<OutgoingShortMessage> createRepeated() => $pb.PbList<OutgoingShortMessage>();
+  static OutboundMessage create() => OutboundMessage._();
+  OutboundMessage createEmptyInstance() => create();
+  static $pb.PbList<OutboundMessage> createRepeated() => $pb.PbList<OutboundMessage>();
   @$core.pragma('dart2js:noInline')
-  static OutgoingShortMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OutgoingShortMessage>(create);
-  static OutgoingShortMessage? _defaultInstance;
+  static OutboundMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OutboundMessage>(create);
+  static OutboundMessage? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get senderId => $_getSZ(0);
@@ -510,32 +699,121 @@ class OutgoingShortMessage extends $pb.GeneratedMessage {
   void clearRecipientId() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.Map<$core.String, OutgoingShortMessage_SubDeliveryStatus> get subDeliveryStatuses => $_getMap(4);
+  $core.Map<$core.String, OutboundMessage_SubDeliveryStatus> get subDeliveryStatuses => $_getMap(4);
+}
+
+class InboundAttachment extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InboundAttachment', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageId', protoName: 'messageId')
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ts')
+    ..a<$core.int>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachmentId', $pb.PbFieldType.O3, protoName: 'attachmentId')
+    ..hasRequiredFields = false
+  ;
+
+  InboundAttachment._() : super();
+  factory InboundAttachment({
+    $core.String? senderId,
+    $core.String? messageId,
+    $fixnum.Int64? ts,
+    $core.int? attachmentId,
+  }) {
+    final _result = create();
+    if (senderId != null) {
+      _result.senderId = senderId;
+    }
+    if (messageId != null) {
+      _result.messageId = messageId;
+    }
+    if (ts != null) {
+      _result.ts = ts;
+    }
+    if (attachmentId != null) {
+      _result.attachmentId = attachmentId;
+    }
+    return _result;
+  }
+  factory InboundAttachment.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory InboundAttachment.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  InboundAttachment clone() => InboundAttachment()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  InboundAttachment copyWith(void Function(InboundAttachment) updates) => super.copyWith((message) => updates(message as InboundAttachment)) as InboundAttachment; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static InboundAttachment create() => InboundAttachment._();
+  InboundAttachment createEmptyInstance() => create();
+  static $pb.PbList<InboundAttachment> createRepeated() => $pb.PbList<InboundAttachment>();
+  @$core.pragma('dart2js:noInline')
+  static InboundAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InboundAttachment>(create);
+  static InboundAttachment? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get senderId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set senderId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSenderId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSenderId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get messageId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set messageId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMessageId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessageId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get ts => $_getI64(2);
+  @$pb.TagNumber(3)
+  set ts($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasTs() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTs() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get attachmentId => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set attachmentId($core.int v) { $_setSignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasAttachmentId() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAttachmentId() => clearField(4);
 }
 
 enum TransferMessage_Content {
-  shortMessage, 
+  message, 
   notSet
 }
 
 class TransferMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, TransferMessage_Content> _TransferMessage_ContentByTag = {
-    1 : TransferMessage_Content.shortMessage,
+    1 : TransferMessage_Content.message,
     0 : TransferMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..oo(0, [1])
-    ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortMessage', $pb.PbFieldType.OY, protoName: 'shortMessage')
+    ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'Message', $pb.PbFieldType.OY, protoName: 'Message')
     ..hasRequiredFields = false
   ;
 
   TransferMessage._() : super();
   factory TransferMessage({
-    $core.List<$core.int>? shortMessage,
+    $core.List<$core.int>? message,
   }) {
     final _result = create();
-    if (shortMessage != null) {
-      _result.shortMessage = shortMessage;
+    if (message != null) {
+      _result.message = message;
     }
     return _result;
   }
@@ -564,12 +842,12 @@ class TransferMessage extends $pb.GeneratedMessage {
   void clearContent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  $core.List<$core.int> get shortMessage => $_getN(0);
+  $core.List<$core.int> get message => $_getN(0);
   @$pb.TagNumber(1)
-  set shortMessage($core.List<$core.int> v) { $_setBytes(0, v); }
+  set message($core.List<$core.int> v) { $_setBytes(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasShortMessage() => $_has(0);
+  $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(1)
-  void clearShortMessage() => clearField(1);
+  void clearMessage() => clearField(1);
 }
 

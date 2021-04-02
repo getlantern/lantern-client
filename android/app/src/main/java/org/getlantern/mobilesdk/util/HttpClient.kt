@@ -3,6 +3,7 @@ package org.getlantern.mobilesdk.util
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import okhttp3.*
+import okhttp3.Headers.Companion.toHeaders
 import okio.Buffer
 import org.getlantern.mobilesdk.Logger
 import java.io.IOException
@@ -36,13 +37,13 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
     }
 
     fun request(method: String, url: HttpUrl,
-                headers: Map<String?, String?>?,
+                headers: Map<String, String>?,
                 _body: RequestBody?, cb: HttpCallback) {
         var body = _body
         var builder = Request.Builder()
                 .cacheControl(CacheControl.FORCE_NETWORK)
         if (headers != null) {
-            builder = builder.headers(Headers.of(headers))
+            builder = builder.headers(headers.toHeaders())
         }
         builder = builder.url(url)
         if (method == "POST") {
@@ -54,7 +55,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
         val request = builder.build()
         if (headers != null) {
             Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                    method, url, request.headers()))
+                    method, url, request.headers))
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url))
         }
@@ -67,7 +68,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()
+                val responseBody = response.body
                 if (!response.isSuccessful) {
                     Logger.error(TAG, "Request to $url failed")
                     Logger.error(TAG, "Response: $response")
@@ -81,7 +82,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
                     Logger.error(TAG, String.format("Invalid response body for %s request", url))
                     return
                 }
-                val responseData = response.body()!!.string()
+                val responseData = response.body!!.string()
                 val result: JsonObject
                 result = try {
                     JsonParser().parse(responseData).asJsonObject
@@ -107,7 +108,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
             try {
                 val copy = request.newBuilder().build()
                 val buffer = Buffer()
-                copy.body()!!.writeTo(buffer)
+                copy.body!!.writeTo(buffer)
                 Logger.debug(TAG, "New request: " + buffer.readUtf8())
             } catch (e: Exception) {
                 Logger.error(TAG, "Unable to log request " + e.message)

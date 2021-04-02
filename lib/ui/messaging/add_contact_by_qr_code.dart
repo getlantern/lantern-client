@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -38,15 +37,13 @@ class _AddContactByQrCodeState extends State<AddContactByQrCode> {
   }
 
   @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
-    @override
-    void dispose() {
-      controller?.dispose();
-      super.dispose();
-    }
-
     return Column(
       children: [
         Expanded(

@@ -56,7 +56,7 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return ListTile(
                   title: Text(
-                      contact.value.displayName?.isEmpty
+                      contact.value.displayName != null && contact.value.displayName.isEmpty
                           ? 'Unnamed'.i18n
                           : contact.value.displayName,
                       style: TextStyle(fontWeight: FontWeight.bold)),
@@ -64,7 +64,7 @@ class NewMessage extends StatelessWidget {
                       Text(contact.value.id, overflow: TextOverflow.ellipsis),
                   onTap: () {
                     Navigator.pushNamed(context, 'conversation',
-                        arguments: contact);
+                        arguments: contact.value);
                   },
                 );
               },

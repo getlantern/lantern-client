@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
@@ -14,6 +15,7 @@ class LanternApp extends StatelessWidget {
       providers: [
         Provider(create: (context) => MessagingModel()),
         Provider(create: (context) => VpnModel()),
+        Provider(create: (context) => AudioPlayer()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
