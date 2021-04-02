@@ -1,8 +1,6 @@
 import 'package:intl/intl.dart';
 
-/**
- * Based on https://www.flutterclutter.dev/flutter/tutorials/date-format-dynamic-string-depending-on-how-long-ago/2020/229/
- */
+/// Based on https://www.flutterclutter.dev/flutter/tutorials/date-format-dynamic-string-depending-on-how-long-ago/2020/229/
 extension Humanize on int {
   String humanizedDate() {
     DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(this ~/ 1000);

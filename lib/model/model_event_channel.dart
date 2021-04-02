@@ -13,7 +13,7 @@ import 'model.dart';
 class ModelEventChannel extends EventChannel {
   var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch)
       .nextInt(2 ^
-          32); // Start with a random value to work well with hot restart in dev
+          31); // Start with a random value to work well with hot restart in dev
   final subscribers = Map<int, Subscriber>();
   final subscriptions = Map<int, StreamSubscription>();
 

@@ -9,8 +9,6 @@ class Conversations extends StatefulWidget {
 }
 
 class _ConversationsState extends State<Conversations> {
-  static const int pageLength = 25;
-
   MessagingModel model;
 
   @override
@@ -29,7 +27,9 @@ class _ConversationsState extends State<Conversations> {
         ],
         body: model.contacts(builder:
             (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
-          var contacts = _contacts.where((contact) => contact.value.mostRecentMessageText?.isNotEmpty).toList();
+          // TODO: implement filtering, but include contacts that have sent attachments without text
+          // var contacts = _contacts.where((contact) => contact.value.mostRecentMessageText?.isNotEmpty).toList();
+          var contacts = _contacts.toList();
           contacts.sort((a, b) {
             return (b.value.mostRecentMessageTs - a.value.mostRecentMessageTs)
                 .toInt();
@@ -40,13 +40,14 @@ class _ConversationsState extends State<Conversations> {
               var contact = contacts[index];
               return ListTile(
                 title: Text(
-                    contact.value.displayName?.isEmpty
+                    contact.value.displayName != null &&
+                            contact.value.displayName.isEmpty
                         ? 'Unnamed'.i18n
                         : contact.value.displayName,
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(
-                        "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
-                        overflow: TextOverflow.ellipsis),
+                    "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
+                    overflow: TextOverflow.ellipsis),
                 onTap: () {
                   Navigator.pushNamed(context, 'conversation',
                       arguments: contact.value);

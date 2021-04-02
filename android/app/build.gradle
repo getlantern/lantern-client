@@ -364,7 +364,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: '*.jar')
 
-    implementation 'com.squareup.okhttp3:okhttp:3.12.6'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     // The below aar is built from https://github.com/getlantern/FinestWebView-Android
     implementation(name:'finestwebview', ext: 'aar')
@@ -443,8 +443,8 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:3ac588e'
     implementation 'com.github.getlantern:db-android:3239503ffc'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
-    implementation 'com.github.getlantern:libsignal-metadata-java:45d4898'
-    implementation 'com.github.getlantern:messaging-android:f38cbb7'
+    implementation 'com.github.getlantern:libsignal-metadata-java:2aed184'
+    implementation 'com.github.getlantern:messaging-android:a903b2d'
 
     implementation(name:'opuslib-release', ext: 'aar')
 }

@@ -46,10 +46,8 @@ class _MessagesTabState extends State<MessagesTab>
     return navigator;
   }
 
-  /**
-   * This captures the back-button and makes sure it's used to pop the scope on
-   * the navigator inside the messaging tab.
-   */
+  /// This captures the back-button and makes sure it's used to pop the scope on
+  /// the navigator inside the messaging tab.
   WidgetBuilder willPopScopeBuilder(WidgetBuilder wrapped) {
     return (BuildContext context) =>
         new WillPopScope(child: wrapped(context), onWillPop: _onWillPop);

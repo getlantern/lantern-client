@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         onPageChanged: onPageChange,
         controller: _pageController,
+        physics: NeverScrollableScrollPhysics(), // TODO: only disable scrolling while we need to detect the drag gesture for the record button
         children: [
           MessagesTab(),
           VPNTab(),

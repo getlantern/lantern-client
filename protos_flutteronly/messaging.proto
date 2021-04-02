@@ -26,22 +26,43 @@ message Contact {
   string mostRecentMessageText = 9; // the text of the most recent message with this contact
 }
 
-// A short message, the primary type of message exchanged by users. It's either text or ogg encoded
-// voice data.
-message ShortMessage {
+// An attachment to a Message
+message Attachment {
+  string mimeType = 1; // the MIME type for this attachment
+  bytes keyMaterial = 2; // 64 bytes of key material (32 bytes for AES256 encryption, 32 bytes for HmacSHA256 authentication)
+  bytes digest = 3; // secure digest of the attachment
+  int64 plaintextLength = 4; // the content length of the plain text
+  map<string, string> metadata = 5;
+  string downloadUrl = 6; // the URL from which the encrypted attachment can be downloaded
+}
+
+// A locally stored Attachment
+message StoredAttachment {
+  enum Status {
+    PENDING = 0; // attachment has not yet been uploaded/downloaded
+    DONE = 1; // attachment has been uploaded/downloaded
+    FAILED = 2; // attachment permanently failed to upload/download
+  }
+
+  string guid = 1; // a globally unique ID for the attachment
+  Attachment attachment = 2; // the Attachment
+  string filePath = 3; // path to the on-disk location of this attachment
+  Status status = 4; // the status of the upload/download
+}
+
+// A text message with attachments, the primary type of message exchanged by users.
+message Message {
   bytes id = 1; // the id of the message, unique under the given sender
   bytes replyToSenderId = 2; // if this message is a reply to another message, this contains the ID of the sender of that message
   bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that messsage
-  oneof body {
-    string text = 4;
-    bytes oggVoice = 5;
-  }
+  string text = 4;
+  map<int32, Attachment> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
 }
 
-// A record of a ShortMessage either sent or received
-message ShortMessageRecord {
+// A locally stored Message
+message StoredMessage {
   enum DeliveryStatus {
-    SENDING = 0; // message is currently in the process of sending but hasn't successfully finished yet
+    SENDING = 0; // message is currently pending send but hasn't successfully finished yet
     PARTIALLY_SENT = 1; // message has been successfully sent to some of the recipients, will retry other recipients
     COMPLETELY_SENT = 2; // message has been successfully sent to all recipients
     PARTIALLY_FAILED = 3; // message failed to send to a subset of recipients, will not retry
@@ -49,30 +70,40 @@ message ShortMessageRecord {
   }
 
   string senderId = 1; // the id of who sent this message
-  string id = 2; // the id of the message (same as on ShortMessage), encoded in base32
+  string id = 2; // the id of the message (same as on Message), encoded in base32
   int64 ts = 3; // The unix timestamp in nanoseconds for when the message was sent (for OUT) or received (for IN)
   string replyToSenderId = 4; // if this message is a reply to another message, this contains the ID of the sender of that message
   string replyToId = 5; // if this message is a reply to another message, this contains the ID of that messsage
-  MessageDirection direction = 6; // direction in which the message is going/came
-  DeliveryStatus status = 7; // for outgoing messages, the status of its sending and delivery
-  bytes message = 8; // the serialized ShortMessage
+  string text = 6;
+  map<int32, StoredAttachment> attachments = 7; // attachments keyed to unique IDs for each attachment within this message
+  MessageDirection direction = 8; // direction in which the message is going/came
+  DeliveryStatus status = 9; // for outgoing messages, the status of its sending and delivery
 }
 
-message OutgoingShortMessage {
+// An outbound Message
+message OutboundMessage {
   enum SubDeliveryStatus {
     SENDING = 0; // message is currently in the process of sending to specific deviceId but hasn't successfully finished yet
     SENT = 1; // message has been sent to specific deviceId
   }
 
-  string senderId = 1; // the id of who sent this message (same as on ShortMessageRecord)
-  string id = 2; // the id of the message (same as on ShortMessage), encoded in base32
+  string senderId = 1; // the id of who sent this message (same as on StoredMessage)
+  string id = 2; // the id of the message (same as on Message), encoded in base32
   int64 sent = 3; // The unix timestamp in nanoseconds for when the message was sent
   string recipientId = 4; // the id of the recipient
   map<string, SubDeliveryStatus> subDeliveryStatuses = 5; // Statuses of subdeliveries to specific deviceIds
 }
 
+// An inbound Attachment
+message InboundAttachment {
+  string senderId = 1; // the id of who sent the message associated to the attachment
+  string messageId = 2; // the id of the StoredMessage, encoded in base32
+  int64 ts = 3; // The unix timestamp in nanoseconds for when the message was received (has to match what's on the StoredMessage
+  int32 attachmentId = 4; // The id of the attachment within the Message
+}
+
 message TransferMessage {
   oneof content {
-    bytes shortMessage = 1; // the serialized ShortMessage
+    bytes Message = 1; // the serialized Message
   }
 }

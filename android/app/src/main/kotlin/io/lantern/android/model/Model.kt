@@ -5,6 +5,7 @@ import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
 import io.lantern.db.*
+import io.lantern.messaging.AttachmentTooBigException
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
@@ -37,7 +38,10 @@ abstract class Model(
                 is Unit -> result.success(null)
                 else -> result.success(out)
             }
+        } catch (e: AttachmentTooBigException) {
+            result.error("attachmentTooBig", e.message, e.maxAttachmentBytes)
         } catch (t: Throwable) {
+            result.error("unknownError", t.message, null)
             Logger.error(TAG, "Unexpected error calling ${call.method}: ${t}")
         }
     }

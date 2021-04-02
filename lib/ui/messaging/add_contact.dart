@@ -60,14 +60,14 @@ class _AddContactState extends State<AddContact> {
   }
 
   @override
+  void dispose() {
+    qrController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-
-    @override
-    void dispose() {
-      qrController?.dispose();
-      super.dispose();
-    }
 
     return BaseScreen(
       title: 'Add Contact'.i18n,

@@ -25,10 +25,12 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> sendToDirectContact(String identityKey, String text) {
+  Future<void> sendToDirectContact(String identityKey,
+      {String text, List<Uint8List> attachments}) {
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
       "identityKey": identityKey,
       "text": text,
+      "attachments": attachments,
     });
   }
 
@@ -36,8 +38,14 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('startRecordingVoiceMemo');
   }
 
-  Future<void> stopRecordingVoiceMemo() {
+  Future<Uint8List> stopRecordingVoiceMemo() async {
     return methodChannel.invokeMethod('stopRecordingVoiceMemo');
+  }
+
+  Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
+    return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
+      "attachment": attachment.writeToBuffer(),
+    });
   }
 
   ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
@@ -48,25 +56,23 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueListenableBuilder<ChangeTrackingList<ShortMessageRecord>>
-      contactMessages(
-          Contact contact,
-          {@required
-              ValueWidgetBuilder<List<PathAndValue<ShortMessageRecord>>>
-                  builder}) {
-    return subscribedListBuilder<ShortMessageRecord>(
+  ValueListenableBuilder<ChangeTrackingList<StoredMessage>> contactMessages(
+      Contact contact,
+      {@required
+          ValueWidgetBuilder<List<PathAndValue<StoredMessage>>> builder}) {
+    return subscribedListBuilder<StoredMessage>(
         '/cm/${_contactPathSegment(contact)}',
         details: true,
         compare: sortReversed,
         builder: builder, deserialize: (Uint8List serialized) {
-      return ShortMessageRecord.fromBuffer(serialized);
+      return StoredMessage.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<ShortMessageRecord> message(
+  ValueListenableBuilder<StoredMessage> message(
       BuildContext context,
-      PathAndValue<ShortMessageRecord> message,
-      ValueWidgetBuilder<ShortMessageRecord> builder) {
+      PathAndValue<StoredMessage> message,
+      ValueWidgetBuilder<StoredMessage> builder) {
     return listChildBuilder(context, message.path,
         defaultValue: message.value, builder: builder);
   }
