@@ -18,7 +18,7 @@ import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : Model("messaging", flutterEngine, messaging.db) {
-    private val voiceMemoFile = File(activity.filesDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
+    private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
     private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
 
