@@ -146,21 +146,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="org.getlantern.lantern.activity.LanternPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiRenewActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
             android:screenOrientation="portrait"
             />
@@ -202,6 +187,11 @@
 
         <activity
             android:name=".activity.PopUpAdActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.PlansActivity_"
             android:screenOrientation="portrait"
             />
 

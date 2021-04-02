@@ -410,6 +410,12 @@ public class Utils {
         return nf.format(number);
     }
 
+    public static String convertEasternArabicToDecimalFloat(final float number) {
+        // format the number to English locale
+        final NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        return nf.format(number);
+    }
+
     public static ClickSpan.OnClickListener createClickSpan(final Context context, final String url) {
         return new ClickSpan.OnClickListener() {
             @Override
