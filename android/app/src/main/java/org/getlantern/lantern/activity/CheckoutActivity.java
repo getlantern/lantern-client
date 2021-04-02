@@ -21,6 +21,7 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
@@ -45,7 +46,6 @@ import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.widget.TextInputLayout;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.ArrayList;
@@ -80,16 +80,16 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     TextInputLayout emailLayout, cardLayout, expirationLayout, cvcLayout, referralCodeLayout;
 
     @ViewById
-    TextView header, priceWithoutTax, tax, price, productText, togglePaymentMethod, termsOfServiceText;
-
-    @ViewById
-    View taxLine;
+    TextView header, price, productText, togglePaymentMethod, termsOfServiceText;
 
     @ViewById
     View stripeSection;
 
     @ViewById
     Button continueBtn;
+
+    @ViewById
+    TextView tvStepDescription;
 
     @Extra
     String headerText;
@@ -123,21 +123,17 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
         if (LanternApp.getSession().getSelectedPlan().numYears() == 2) {
-            productText.setText(getResources().getText(R.string.two_years_lantern_pro));
+            String durationFormat = getString(R.string.two_years_lantern_pro);
+            if (LanternApp.getSession().yinbiEnabled()) {
+                durationFormat += " + " + getString(R.string.free_extra_yinbi);
+            }
+            productText.setText(durationFormat);
         } else {
             productText.setText(getResources().getText(R.string.one_year_lantern_pro));
         }
 
         if (isPlayVersion) {
             continueBtn.setEnabled(false);
-            // Only show tax if there is a tax
-            if (!plan.getCostStr().equals(plan.getCostWithoutTaxStr())) {
-                productText.setText(productText.getText() + ":");
-                priceWithoutTax.setVisibility(View.VISIBLE);
-                taxLine.setVisibility(View.VISIBLE);
-                priceWithoutTax.setText(plan.getCostWithoutTaxStr());
-                tax.setText(plan.getTaxStr());
-            }
         }
 
         // update the screen title with a custom headerText
@@ -232,12 +228,18 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         continueBtn.setText(getResources().getText(continueText));
         MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
 
+        // hide the buttons and move the referral code
         if (useStripe) {
             stripeSection.setVisibility(View.VISIBLE);
             togglePaymentMethod.setText(getText(R.string.switch_to_alipay));
+            tvStepDescription.setText(R.string.enter_payment_details);
+            referralCodeLayout.setTranslationY(0);
         } else {
-            stripeSection.setVisibility((View.GONE));
+            stripeSection.setVisibility((View.INVISIBLE));
             togglePaymentMethod.setText(getText(R.string.switch_to_credit_card));
+            tvStepDescription.setText(R.string.enter_email);
+            float referralCodeTranslateY = cardLayout.getBottom() - referralCodeLayout.getBottom();
+            referralCodeLayout.setTranslationY(referralCodeTranslateY);
         }
 
         // immediately run validation to enable button if we can

@@ -376,4 +376,11 @@
         <item name="textColor">@color/secondary_pink</item>
         <item name="android:textColor">@color/secondary_pink</item>
     </style>
+
+    <style name="Widget.MyApp.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">@color/tertiary_green</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+        <item name="android:textColorHint">@color/grey_5</item>
+        <item name="startIconTint">@color/black</item>
+    </style>
 </resources>

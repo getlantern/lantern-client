@@ -1,220 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:lantern="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:background="@color/accent_white"
-    android:id="@+id/confirmEmailView">
+    android:orientation="vertical">
 
     <fragment
-        android:id="@+id/titlebar_fragment"
-        class="org.getlantern.lantern.fragment.TitleBar"
-        android:layout_width="fill_parent"
+        xmlns:lantern="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
-        lantern:titleText="@string/lantern_pro_checkout" />
+        class="org.getlantern.lantern.fragment.TitleBar"
+        lantern:titleText="@string/lantern_pro_checkout"/>
 
-    <LinearLayout
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <org.getlantern.lantern.widget.TextInputLayout
-            style="@style/MaterialFieldLayout" android:id="@+id/emailLayout">
-            <com.google.android.material.textfield.TextInputEditText style="@style/MaterialField"
-                android:id="@+id/emailInput"
-                android:drawableLeft="@drawable/email_icon"
-                android:hint="@string/email_address"
-                android:inputType="textEmailAddress" />
-        </org.getlantern.lantern.widget.TextInputLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
-        <LinearLayout
-            android:id="@+id/stripeSection"
-            android:visibility="gone"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:paddingBottom="32dp"
+            android:clipToPadding="false">
 
-            <org.getlantern.lantern.widget.TextInputLayout
-                style="@style/MaterialFieldLayout" android:id="@+id/cardLayout">
-                <com.stripe.android.view.CardNumberEditText style="@style/MaterialField"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stepContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/space_large"
+                android:layout_marginTop="@dimen/space_large"
+                app:cardBackgroundColor="@color/black"
+                app:cardCornerRadius="@dimen/radius_large">
+
+                <TextView
+                    android:text="@string/step_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/accent_white"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:id="@+id/tvStep"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:text="@string/enter_payment_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvStepDescription"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:layout_marginStart="@dimen/space_small"
+                app:layout_constraintTop_toTopOf="@+id/stepContainer"
+                app:layout_constraintBottom_toBottomOf="@+id/stepContainer"
+                app:layout_constraintStart_toEndOf="@+id/stepContainer"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stepContainer"
+                android:layout_marginStart="@dimen/space_large"
+                android:layout_marginEnd="@dimen/space_large"
+                android:layout_marginTop="@dimen/space_large"
+                app:startIconDrawable="@drawable/email_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailInput"
+                    android:textColor="@color/black"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cardLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/credit_card"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintTop_toBottomOf="@+id/emailLayout"
+                android:layout_marginTop="@dimen/space_above_normal"
+                app:startIconDrawable="@drawable/ic_credit_card">
+
+                <com.stripe.android.view.CardNumberEditText
                     android:id="@+id/cardInput"
-                    android:drawableLeft="@drawable/credit_card"
-                    android:hint="@string/credit_card"
+                    android:textColor="@color/black"
                     android:inputType="number"
-                    android:nextFocusDown="@+id/expirationInput" />
-            </org.getlantern.lantern.widget.TextInputLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingBottom="5dp"
-                android:orientation="horizontal">
-                <org.getlantern.lantern.widget.TextInputLayout
-                    style="@style/MaterialFieldLayout"
-                    android:id="@+id/expirationLayout"
-                    android:layout_weight="50">
-                    <com.stripe.android.view.ExpiryDateEditText style="@style/MaterialField"
-                        android:id="@+id/expirationInput"
-                        android:drawableLeft="@drawable/date"
-                        android:hint="@string/card_expiration"
-                        android:inputType="number"
-                        android:maxLength="5"
-                        android:nextFocusDown="@+id/cvcInput" />
-                </org.getlantern.lantern.widget.TextInputLayout>
+                android:id="@+id/guidelineCenterHoz"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"/>
 
-                <org.getlantern.lantern.widget.TextInputLayout
-                    style="@style/MaterialFieldLayout"
-                    android:id="@+id/cvcLayout"
-                    android:layout_weight="50"
-                    android:layout_marginLeft="15dp">
-                    <com.google.android.material.textfield.TextInputEditText style="@style/MaterialField"
-                        android:id="@+id/cvcInput"
-                        android:drawableLeft="@drawable/lock"
-                        android:hint="@string/cvc"
-                        android:maxLength="4"
-                        android:inputType="number" />
-                </org.getlantern.lantern.widget.TextInputLayout>
-            </LinearLayout>
-        </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/expirationLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/mm_yy"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintEnd_toEndOf="@+id/guidelineCenterHoz"
+                app:layout_constraintTop_toBottomOf="@+id/cardLayout"
+                app:startIconDrawable="@drawable/ic_date_small"
+                android:layout_marginTop="@dimen/space_above_normal"
+                android:layout_marginEnd="@dimen/space_pretty_small">
 
-        <org.getlantern.lantern.widget.TextInputLayout
-            style="@style/MaterialFieldLayout" android:id="@+id/referralCodeLayout">
-            <com.google.android.material.textfield.TextInputEditText style="@style/MaterialField"
-                android:id="@+id/referralCodeInput"
-                android:drawableLeft="@drawable/referral_code"
-                android:hint="@string/referral_code_opt"
-                android:inputType="text" />
-        </org.getlantern.lantern.widget.TextInputLayout>
+                <com.stripe.android.view.ExpiryDateEditText
+                    android:id="@+id/expirationInput"
+                    android:textColor="@color/black"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/bottomSection"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp"
-            android:gravity="bottom|center"
-            android:layout_gravity="center">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cvcLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/cvc"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
+                app:layout_constraintStart_toStartOf="@+id/guidelineCenterHoz"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintTop_toTopOf="@+id/expirationLayout"
+                android:layout_marginStart="@dimen/space_pretty_small"
+                app:startIconDrawable="@drawable/ic_lock">
 
-            <androidx.appcompat.widget.AppCompatTextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cvcInput"
+                    android:textColor="@color/black"
+                    android:maxLength="4"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/referralCodeLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/referral_code_optional"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintTop_toBottomOf="@+id/expirationLayout"
+                android:layout_marginTop="@dimen/space_above_normal"
+                app:startIconDrawable="@drawable/ic_referral_code">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/referralCodeInput"
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
                 android:id="@+id/togglePaymentMethod"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp"
                 android:text="@string/switch_to_alipay"
-                android:textSize="10sp"
-                android:lineSpacingExtra="1sp"
-                android:textStyle="normal"
-                android:textColor="@color/material_link"
-                android:maxLines="1"
-                android:gravity="center_horizontal" />
+                android:layout_marginTop="@dimen/space_normal"
+                android:padding="@dimen/space_small"
+                android:textColor="@color/tertiary_green"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/referralCodeLayout"/>
 
-            <View style="@style/Divider" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider"
+                android:layout_marginTop="@dimen/space_normal"
+                android:background="@color/divider"
+                android:layout_marginHorizontal="@dimen/space_normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/togglePaymentMethod"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/productText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="10sp"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@color/black" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/priceWithoutTax"
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textSize="10sp"
-                    android:lineSpacingExtra="3sp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/faded" />
-            </RelativeLayout>
+                android:layout_marginEnd="@dimen/space_large"
+                tools:text="$58 USD"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textStyle="bold"
+                android:textColor="@color/secondary_pink"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTotalPrimary"/>
 
-            <RelativeLayout
-                android:id="@+id/taxLine"
-                android:visibility="gone"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvTotalPrimary"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="@string/tax"
-                    android:textSize="10sp"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@color/black" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tax"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textSize="10sp"
-                    android:lineSpacingExtra="3sp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/faded" />
-            </RelativeLayout>
+                android:layout_marginStart="@dimen/space_large"
+                android:text="@string/total"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:layout_marginTop="@dimen/space_normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/productText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="@string/total"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="9sp"
-                    android:textColor="@color/black" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="9sp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/money" />
-            </RelativeLayout>
+                android:layout_marginStart="@dimen/space_large"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="TWO YEARS LANTERN PRO + 2x FREE YINBI"
+                android:layout_marginTop="@dimen/space_between_text_small"
+                android:textAppearance="?attr/textAppearanceOverline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTotalPrimary"
+                />
 
-            <View style="@style/Divider" android:layout_marginTop="12dp" />
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/divider"
+                android:layout_marginTop="@dimen/space_normal"
+                android:background="@color/divider"
+                android:layout_marginHorizontal="@dimen/space_normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productText"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
+                android:text="@string/terms_of_service_complete_purchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/termsOfServiceText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="8sp"
-                android:lineSpacingExtra="2sp"
-                android:textStyle="normal"
-                android:textColor="@color/faded"
-                android:maxLines="1"
-                android:gravity="center_horizontal" />
+                app:layout_constrainedWidth="true"
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textAppearance="@style/TextAppearance.MyApp.Overline.Small"
+                android:layout_marginTop="@dimen/space_large"
+                android:layout_marginStart="@dimen/space_large"
+                android:layout_marginEnd="@dimen/space_large"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/continueBtn"
-                style="@style/MaterialButton"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center"
-                android:enabled="false"
-                android:onClick="continueClicked" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/complete_purchase"
+                android:layout_marginTop="@dimen/space_large"
+                app:backgroundTint="@color/bg_color_selector"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/termsOfServiceText"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/stripeSection"
+                app:constraint_referenced_ids="cardLayout,expirationLayout,cvcLayout"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 </LinearLayout>

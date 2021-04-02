@@ -515,4 +515,10 @@
     <string name="membership_ends_today">Your membership ends today. Renew now and enjoy up to %s free!</string>
     <string name="membership_has_expired">Your membership has expired! Renew now and enjoy up to f%s free!</string>
     <string name="free_extra_yinbi">2x Yinbi!</string>
+    <string name="step_2">Step 2</string>
+    <string name="enter_email_short">Enter Email</string>
+    <string name="mm_yy">MM/YY</string>
+    <string name="referral_code_optional">Referral Code (Optional)</string>
+    <string name="enter_payment_details">Enter Payment Details</string>
+    <string name="email">Email</string>
 </resources>
