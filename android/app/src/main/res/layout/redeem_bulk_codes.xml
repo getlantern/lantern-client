@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:text="@string/redeem_codes"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/bg_color_selector"
+        app:backgroundTint="@color/bg_color_selector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
