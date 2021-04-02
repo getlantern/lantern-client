@@ -6,10 +6,8 @@ import android.text.TextUtils
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.AddDeviceActivity
-import org.getlantern.lantern.activity.LanternPlansActivity
+import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.activity.yinbi.YinbiPlansActivity
-import org.getlantern.lantern.activity.yinbi.YinbiRenewActivity
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -19,6 +17,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
+    private val TAG = LanternSessionManager::class.java.name
+
     private var selectedPlan: ProPlan? = null
 
     // the devices associated with a user's Pro account
@@ -161,15 +161,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun plansActivity(): Class<*>? {
-        return if (!isPlayVersion && yinbiEnabled()) {
-            if (isProUser) {
-                YinbiRenewActivity::class.java
-            } else {
-                YinbiPlansActivity::class.java
-            }
-        } else {
-            LanternPlansActivity::class.java
-        }
+        return PlansActivity_::class.java
     }
 
     fun welcomeActivity(): Class<*>? {

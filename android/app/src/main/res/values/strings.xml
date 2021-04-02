@@ -497,4 +497,22 @@
     <string name="lantern_pro_codes">Lantern Pro Codes</string>
     <string name="redeem_codes">REDEEM CODES</string>
     <string name="terms_of_service_complete_purchase">By clicking Complete Purchase, you agree to our Terms of Service</string>
+    <string name="step_1">Step 1</string>
+    <string name="choose_plan">Choose Plan</string>
+    <string name="unlimited_data">Unlimited data</string>
+    <string name="faster_data_centers">Faster data centers</string>
+    <string name="no_logs">No logs</string>
+    <string name="connect_up_to_3_devices">Connect up to 3 devices</string>
+    <string name="free_yinbi_cryptocurrency">Free Yinbi cryptocurrency!</string>
+    <string name="yinbi_cryptocurrency">Yinbi Cryptocurrency</string>
+    <string name="the_yinbi_foundation_description">The Yinbi foundation is giving away 888 billion YNB cryptocurrency exclusively through Lantern to purchasers of Lantern Pro. YNB will be distributed at the end of every day, based on the quantity of Yinbi released that day, the number of people that upgrade/renew, and the number of years or accounts you purchase. After purchase you can find details about collecting your YNB on the Yinbi Redemption screen.</string>
+    <string name="plan_duration">%d-year plan</string>
+    <string name="total_cost">%s billed one time</string>
+    <string name="discount">Save %s%%</string>
+    <string name="short_month">/mo</string>
+    <string name="most_popular">Most Popular!</string>
+    <string name="membership_end_soon">Your membership is ending soon. Renew now and enjoy up to %s free!</string>
+    <string name="membership_ends_today">Your membership ends today. Renew now and enjoy up to %s free!</string>
+    <string name="membership_has_expired">Your membership has expired! Renew now and enjoy up to f%s free!</string>
+    <string name="free_extra_yinbi">2x Yinbi!</string>
 </resources>
