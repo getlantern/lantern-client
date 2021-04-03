@@ -38,21 +38,23 @@ class _ConversationsState extends State<Conversations> {
             itemCount: contacts.length,
             itemBuilder: (context, index) {
               var contact = contacts[index];
-              return ListTile(
-                title: Text(
-                    contact.value.displayName != null &&
-                            contact.value.displayName.isEmpty
-                        ? 'Unnamed'.i18n
-                        : contact.value.displayName,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text(
-                    "${contact.value.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.value.mostRecentMessageText}",
-                    overflow: TextOverflow.ellipsis),
-                onTap: () {
-                  Navigator.pushNamed(context, 'conversation',
-                      arguments: contact.value);
-                },
-              );
+              return model.contact(context, contact,
+                  (BuildContext context, Contact contact, Widget child) {
+                return ListTile(
+                  title: Text(
+                      contact.displayName != null && contact.displayName.isEmpty
+                          ? 'Unnamed'.i18n
+                          : contact.displayName,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(
+                      "${contact.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.mostRecentMessageText}",
+                      overflow: TextOverflow.ellipsis),
+                  onTap: () async {
+                    Navigator.pushNamed(context, 'conversation',
+                        arguments: contact);
+                  },
+                );
+              });
             },
           );
         }),

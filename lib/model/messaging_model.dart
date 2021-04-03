@@ -56,6 +56,14 @@ class MessagingModel extends Model {
     });
   }
 
+  ValueListenableBuilder<Contact> contact(
+      BuildContext context,
+      PathAndValue<Contact> contact,
+      ValueWidgetBuilder<Contact> builder) {
+    return listChildBuilder(context, contact.path,
+        defaultValue: contact.value, builder: builder);
+  }
+
   ValueListenableBuilder<ChangeTrackingList<StoredMessage>> contactMessages(
       Contact contact,
       {@required

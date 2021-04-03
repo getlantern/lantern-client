@@ -166,8 +166,8 @@ class _ConversationState extends State<Conversation> {
     }
 
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+    var attachment = await model.stopRecordingVoiceMemo();
     if (!_willCancelRecording) {
-      var attachment = await model.stopRecordingVoiceMemo();
       _send(_newMessage.value.text, attachments: [attachment]);
     }
     setState(() {

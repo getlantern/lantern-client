@@ -11,9 +11,7 @@ import 'package:meta/meta.dart';
 import 'model.dart';
 
 class ModelEventChannel extends EventChannel {
-  var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch)
-      .nextInt(2 ^
-          31); // Start with a random value to work well with hot restart in dev
+  var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch);
   final subscribers = Map<int, Subscriber>();
   final subscriptions = Map<int, StreamSubscription>();
 
@@ -25,7 +23,8 @@ class ModelEventChannel extends EventChannel {
       @required void onUpdates(Iterable<PathAndValue<T>> updates),
       @required void onDeletes(Iterable<String> deletedPaths),
       T deserialize(Uint8List serialized)}) {
-    var subscriberID = nextSubscriberID++;
+    var subscriberID = nextSubscriberID.nextInt(2^31);
+    developer.log("subscribing with id $subscriberID to $path");
     var arguments = {
       "subscriberID": subscriberID,
       "path": path,
