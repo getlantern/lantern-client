@@ -180,7 +180,7 @@ class _AccountTabState extends State<AccountTab> {
   onOpenProAccountManagement() {}
 
   onAuthorizeDeviceForPro() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
   }
 
   onAddDevice() {}
