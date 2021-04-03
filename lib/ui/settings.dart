@@ -168,9 +168,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  onChangeLanguage() {}
+  onChangeLanguage() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_CHANGE_LANGUAGE);
+  }
 
-  onReportIssue() {}
+  onReportIssue() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,9 +5,12 @@ import android.content.Intent
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import org.getlantern.lantern.activity.AccountRecoveryActivity_
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
+import org.getlantern.mobilesdk.activity.LanguageActivity
+import org.getlantern.mobilesdk.activity.ReportIssueActivity
 
 class Navigator(
     private val activity: Activity,
@@ -20,6 +23,9 @@ class Navigator(
         const val SCREEN_DESKTOP_VERSION = "SCREEN_DESKTOP_VERSION"
         const val SCREEN_FREE_YINBI = "SCREEN_FREE_YINBI"
         const val SCREEN_YINBI_REDEMPTION = "SCREEN_YINBI_REDEMPTION"
+        const val SCREEN_AUTHORIZE_DEVICE_FOR_PRO = "SCREEN_AUTHORIZE_DEVICE_FOR_PRO"
+        const val SCREEN_CHANGE_LANGUAGE = "SCREEN_CHANGE_LANGUAGE"
+        const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
     }
 
     init {
@@ -51,6 +57,9 @@ class Navigator(
             SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
             SCREEN_FREE_YINBI -> YinbiLauncher::class.java
             SCREEN_YINBI_REDEMPTION -> YinbiLauncher::class.java
+            SCREEN_AUTHORIZE_DEVICE_FOR_PRO -> AccountRecoveryActivity_::class.java
+            SCREEN_CHANGE_LANGUAGE -> LanguageActivity::class.java
+            SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             else -> null
         }
     }
