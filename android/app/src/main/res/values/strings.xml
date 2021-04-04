@@ -531,4 +531,6 @@
     <string name="open_the_add_device_menu_item_on_your_pro_device">Open the ‘Add Device’ menu item on your Pro device.</string>
     <string name="enter_the_device_linking_pin_and_submit">Enter the device linking PIN, and submit.</string>
     <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">*Ensure both devices are running the most recent version of Lantern.</string>
+    <string name="your_device_linking_pin_has_been_sent">Your Device Linking Pin has been sent to %s. The email may take several hours to arrive. Please check your spam folder if you do not find it.</string>
+    <string name="enter_or_paste_device_linking_pin">Enter or paste device linking pin</string>
 </resources>

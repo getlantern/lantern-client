@@ -92,16 +92,8 @@ public class PlansActivity extends FragmentActivity {
 
     @Click
     void imgvYinbiInfo() {
-        View contentView = getLayoutInflater().inflate(R.layout.yinbi_dialog, null);
-        if (yinbiInfoDialog == null) {
-            yinbiInfoDialog = new MaterialAlertDialogBuilder(this)
-                .setView(contentView)
-                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
-                })
-                .create();
-        }
-        yinbiInfoDialog.show();
-        contentView.findViewById(R.id.button).setOnClickListener(v -> yinbiInfoDialog.dismiss());
+        Utils.showAlertDialog(this, getString(R.string.yinbi_cryptocurrency), getString(R.string.the_yinbi_foundation_description),
+            ContextCompat.getDrawable(this, R.drawable.ic_yinbi_small));
     }
 
     private void initViews() {
