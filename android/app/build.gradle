@@ -389,7 +389,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.android.billingclient:billing:3.0.1'
-    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0-beta01"
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
     implementation 'org.greenrobot:eventbus:3.1.1'

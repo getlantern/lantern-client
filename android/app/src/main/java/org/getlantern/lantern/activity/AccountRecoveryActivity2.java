@@ -15,6 +15,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
@@ -25,9 +26,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.activity_account_recovery)
-public class AccountRecoveryActivity extends FragmentActivity implements LanternHttpClient.ProCallback {
+public class AccountRecoveryActivity2 extends FragmentActivity implements LanternHttpClient.ProCallback {
 
-    private static final String TAG = AccountRecoveryActivity.class.getName();
+    private static final String TAG = AccountRecoveryActivity2.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
 
     @ViewById
@@ -86,7 +87,7 @@ public class AccountRecoveryActivity extends FragmentActivity implements Lantern
                 @Override
                 public void run() {
                     dontRemember.setVisibility(View.VISIBLE);
-                    Utils.showErrorDialog(AccountRecoveryActivity.this,
+                    Utils.showErrorDialog(AccountRecoveryActivity2.this,
                             getResources().getString(R.string.cannot_find_email));
                 }
             });

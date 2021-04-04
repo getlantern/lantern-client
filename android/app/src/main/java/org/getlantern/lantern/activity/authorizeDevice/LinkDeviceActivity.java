@@ -1,4 +1,4 @@
-package org.getlantern.lantern.activity;
+package org.getlantern.lantern.activity.authorizeDevice;
 
 import android.content.Intent;
 import android.content.res.Resources;

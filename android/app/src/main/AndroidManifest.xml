@@ -86,12 +86,17 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.LinkDeviceActivity_"
+            android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".activity.AccountRecoveryActivity_"
+            android:name=".activity.authorizeDevice.LinkEmailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.authorizeDevice.AccountRecoveryActivity"
             android:screenOrientation="portrait">
         </activity>
 

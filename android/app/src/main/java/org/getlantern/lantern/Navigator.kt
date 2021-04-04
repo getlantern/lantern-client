@@ -5,9 +5,9 @@ import android.content.Intent
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import org.getlantern.lantern.activity.AccountRecoveryActivity_
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
+import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.LanguageActivity
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
@@ -57,7 +57,7 @@ class Navigator(
             SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
             SCREEN_FREE_YINBI -> YinbiLauncher::class.java
             SCREEN_YINBI_REDEMPTION -> YinbiLauncher::class.java
-            SCREEN_AUTHORIZE_DEVICE_FOR_PRO -> AccountRecoveryActivity_::class.java
+            SCREEN_AUTHORIZE_DEVICE_FOR_PRO -> AccountRecoveryActivity::class.java
             SCREEN_CHANGE_LANGUAGE -> LanguageActivity::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             else -> null
