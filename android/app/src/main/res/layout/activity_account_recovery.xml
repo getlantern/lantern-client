@@ -7,7 +7,7 @@
     android:background="@color/accent_white"
     android:layout_gravity="center_vertical"
     android:id="@+id/linkDeviceView"
-    tools:context=".LinkDeviceActivity">
+    tools:context=".activity.AccountRecoveryActivity2">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"

@@ -521,4 +521,14 @@
     <string name="referral_code_optional">Referral Code (Optional)</string>
     <string name="enter_payment_details">Enter Payment Details</string>
     <string name="email">Email</string>
+    <string name="authorize_with_device_linking_pin">Authorize with Device Linking Pin</string>
+    <string name="requires_physical_access_to_a_lantern_pro_device">Requires physical access to a Lantern Pro Device</string>
+    <string name="link_with_pin">LINK WITH PIN</string>
+    <string name="authorize_device_via_email">Authorize Device via Email</string>
+    <string name="requires_access_to_the_email_you_used_to_buy_lantern_pro">Requires access to the email you used to buy Lantern Pro</string>
+    <string name="link_via_email">LINK VIA EMAIL</string>
+    <string name="device_linking_pin">Device linking pin</string>
+    <string name="open_the_add_device_menu_item_on_your_pro_device">Open the ‘Add Device’ menu item on your Pro device.</string>
+    <string name="enter_the_device_linking_pin_and_submit">Enter the device linking PIN, and submit.</string>
+    <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">*Ensure both devices are running the most recent version of Lantern.</string>
 </resources>

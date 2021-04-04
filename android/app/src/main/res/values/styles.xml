@@ -40,6 +40,7 @@
         <item name="textAppearanceCaption">@style/TextAppearance.MyApp.Caption</item>
         <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
         <item name="borderlessButtonStyle">@style/Widget.MyApp.Button.TextButton</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.MyApp.Button.OutlinedButton</item>
         <item name="colorError">@color/red</item>
         <item name="android:textColorSecondary">@color/grey_5</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
@@ -352,6 +353,20 @@
         <item name="android:minHeight">56dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:minWidth">220dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="strokeColor">@color/secondary_pink</item>
+        <item name="strokeWidth">@dimen/stroke_large</item>
     </style>
 
     <style name="Widget.MyApp.Button.TextButton.Normal" parent="Widget.MaterialComponents.Button.TextButton">

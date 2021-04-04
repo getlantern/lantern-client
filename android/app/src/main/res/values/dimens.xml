@@ -8,6 +8,8 @@
     <dimen name="space_normal">16dp</dimen>
     <dimen name="space_tiny">4dp</dimen>
     <dimen name="space_pretty_small">12dp</dimen>
+    <dimen name="space_between_text_small">2dp</dimen>
+    <dimen name="space_between_text_large">4dp</dimen>
 
     <dimen name="ksw_md_thumb_ripple_size">42dp</dimen>
     <dimen name="ksw_md_thumb_solid_inset">11dp</dimen>
@@ -41,6 +43,5 @@
     <dimen name="radius_medium">8dp</dimen>
     <dimen name="stroke">1dp</dimen>
     <dimen name="stroke_large">2dp</dimen>
-    <dimen name="space_between_text_small">2dp</dimen>
 
 </resources>
