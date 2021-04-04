@@ -41,6 +41,7 @@
     <dimen name="line_height_body2">23dp</dimen>
     <dimen name="radius_large">12dp</dimen>
     <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
     <dimen name="stroke">1dp</dimen>
     <dimen name="stroke_large">2dp</dimen>
 

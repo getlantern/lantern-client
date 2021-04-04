@@ -1,11 +1,17 @@
 package org.getlantern.lantern.activity;
 
 import android.content.Intent;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.gson.JsonObject;
@@ -42,7 +48,33 @@ public class RecoveryCodeActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        emailWithRecoveryCode.setText(String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email()));
+        String email = LanternApp.getSession().email();
+        String emailText = String.format(getResources().getString(R.string.your_device_linking_pin_has_been_sent), email);
+        int startEmailIndex = emailText.indexOf(email);
+        Spannable emailSpan = new SpannableString(emailText);
+        emailSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.tertiary_green)), startEmailIndex, startEmailIndex + email.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        emailWithRecoveryCode.setText(emailSpan);
+
+        codeInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() > 0) {
+                    submit.setEnabled(true);
+                } else {
+                    submit.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void showLinkRequestSentAlert() {
@@ -77,6 +109,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
                 public void onSuccess(final Response response, final JsonObject result) {
                     Logger.debug(TAG, "Response: " + result);
                     if (result.get("token") != null && result.get("userID") != null) {
+                        // TODO: 04/04/2021 so the dialog when adding success
                         linkDevice(result);
                     }
                 }

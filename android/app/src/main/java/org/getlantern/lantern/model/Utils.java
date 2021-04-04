@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -15,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.text.Spannable;
@@ -36,12 +36,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import glide.Glide;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WebViewActivity_;
@@ -202,6 +203,7 @@ public class Utils {
         }
     }
 
+    // TODO: 04/04/2021 refactor this dialog to use new dialog format
     public static void showErrorDialog(final Activity activity, String error) {
         if (activity.isDestroyed()) {
             return;
@@ -263,6 +265,12 @@ public class Utils {
     }
 
     public static void showAlertDialog(final Activity activity,
+                                       CharSequence title, CharSequence msg,
+                                       Drawable icon) {
+        Utils.showAlertDialog(activity, title, msg, "OK", false, icon, null);
+    }
+
+    public static void showAlertDialog(final Activity activity,
             CharSequence title, CharSequence msg,
             final boolean finish) {
         Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
@@ -274,30 +282,38 @@ public class Utils {
                                        CharSequence okLabel,
                                        final boolean finish,
                                        Runnable onClick) {
+        showAlertDialog(activity, title, msg, okLabel, finish, null, onClick);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title,
+                                       CharSequence msg,
+                                       CharSequence okLabel,
+                                       final boolean finish,
+                                       Drawable icon,
+                                       Runnable onClick) {
         Logger.debug(TAG, "Showing alert dialog...");
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-                alertDialog.setTitle(title);
-                alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, okLabel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                if (onClick != null) {
-                                    onClick.run();
-                                }
-                                if (finish) {
-                                    activity.finish();
-                                }
-                            }
-                });
-                if (!activity.isFinishing()) {
-                    alertDialog.show();
-                }
-            }
+        activity.runOnUiThread(() -> {
+            View contentView = activity.getLayoutInflater().inflate(R.layout.base_dialog, null);
+            TextView titleTv = contentView.findViewById(R.id.title);
+            TextView messageTv = contentView.findViewById(R.id.message);
+            titleTv.setText(title);
+            messageTv.setText(msg);
+            ImageView imageView = contentView.findViewById(R.id.icon);
+            imageView.setImageDrawable(icon);
+            new MaterialAlertDialogBuilder(activity)
+                .setView(contentView)
+                .setPositiveButton(okLabel, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (onClick != null) {
+                        onClick.run();
+                    }
+                    if (finish) {
+                        activity.finish();
+                    }
+                })
+                .show();
         });
     }
 
