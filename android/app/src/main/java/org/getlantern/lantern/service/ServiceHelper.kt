@@ -12,7 +12,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.Launcher
-import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.LinkedBlockingDeque
 
 class ServiceHelper(private val service: Service, private val largeIcon: Int, private val smallIcon: Int, private val content: Int) {
@@ -27,9 +26,17 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
             }
             val openMainActivity = PendingIntent.getActivity(service, 0, Intent(service, Launcher::class.java),
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            val notification = NotificationCompat.Builder(service, channelId!!).setSmallIcon(smallIcon)
-                    .setLargeIcon((service.getResources().getDrawable(largeIcon) as BitmapDrawable).bitmap)
-                    .setContentTitle(service.getText(R.string.app_name)).setContentText(service.getText(content)).setContentIntent(openMainActivity).build()
+            val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
+                    ?: NotificationCompat.Builder(service)
+            notificationBuilder.setSmallIcon(smallIcon)
+            val largeIcon = (service.getResources().getDrawable(largeIcon) as BitmapDrawable).bitmap
+            notificationBuilder.setLargeIcon(largeIcon)
+            val appName = service.getText(R.string.app_name)
+            notificationBuilder.setContentTitle(appName)
+            val content = service.getText(content)
+            notificationBuilder.setContentText(content)
+            notificationBuilder.setContentIntent(openMainActivity)
+            val notification = notificationBuilder.build()
             service.startForeground(1, notification)
         }
         serviceDeque.push(doIt)

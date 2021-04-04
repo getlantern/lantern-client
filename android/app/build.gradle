@@ -216,8 +216,11 @@ android {
                 unstrippedNativeLibsDir '../../build/app/intermediates/merged_native_libs/prodRelease/out/lib/'
                 strippedNativeLibsDir '../../build/app/intermediates/stripped_native_libs/prodRelease/out/lib/'
             }
-        }
 
+            ndk {
+                abiFilters 'armeabi-v7a','arm64-v8a','x86_64'
+            }
+        }
     }
 
     sourceSets {
@@ -441,10 +444,10 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:3ac588e'
-    implementation 'com.github.getlantern:db-android:fe3280e'
+    implementation 'com.github.getlantern:db-android:d98d2d6'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:2aed184'
-    implementation 'com.github.getlantern:messaging-android:2158116f21'
+    implementation 'com.github.getlantern:messaging-android:915adce73a'
 
     implementation(name:'opuslib-release', ext: 'aar')
 }

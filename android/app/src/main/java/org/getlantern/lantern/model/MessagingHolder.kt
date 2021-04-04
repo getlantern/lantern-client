@@ -10,10 +10,12 @@ class MessagingHolder {
     lateinit var messaging: Messaging
 
     fun init(application: Application) {
+        val lanternDir = File(application.filesDir, ".lantern")
+        lanternDir.mkdirs()
         try {
             messaging = Messaging(
                     File(application.filesDir, "attachments"),
-                    MessagingStore(application.applicationContext, File(File(application.filesDir, ".lantern"), "messagingdb").absolutePath),
+                    MessagingStore(application.applicationContext, File(lanternDir, "messagingdb").absolutePath),
                     WebSocketTransportFactory("wss://tassis.lantern.io/api"))
         } catch (t: Throwable) {
             throw RuntimeException(t);
