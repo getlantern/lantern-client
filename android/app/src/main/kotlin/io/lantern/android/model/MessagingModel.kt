@@ -83,7 +83,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     }
 
     private fun doStartRecordingVoiceMemo() {
-        stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, object : OpusRecorder.EffectsInitializer {
+        stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000, object : OpusRecorder.EffectsInitializer {
             override fun init(audioSessionId: Int) {
                 if (NoiseSuppressor.isAvailable()) {
                     try {
