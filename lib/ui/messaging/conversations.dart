@@ -25,7 +25,7 @@ class _ConversationsState extends State<Conversations> {
                 Navigator.restorablePushNamed(context, 'your_contact_info');
               }),
         ],
-        body: model.contacts(builder:
+        body: model.contactsByActivity(builder:
             (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
           // TODO: implement filtering, but include contacts that have sent attachments without text
           // var contacts = _contacts.where((contact) => contact.value.mostRecentMessageText?.isNotEmpty).toList();

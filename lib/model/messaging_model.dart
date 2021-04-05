@@ -48,18 +48,24 @@ class MessagingModel extends Model {
     });
   }
 
+  ValueListenableBuilder<ChangeTrackingList<Contact>> contactsByActivity(
+      {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
+    return subscribedListBuilder<Contact>('/cba/',
+        details: true, builder: builder, deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
+  }
+
   ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
       {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
-    return subscribedListBuilder<Contact>('/cba/', details: true, builder: builder,
+    return subscribedListBuilder<Contact>('/contacts/', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<Contact> contact(
-      BuildContext context,
-      PathAndValue<Contact> contact,
-      ValueWidgetBuilder<Contact> builder) {
+  ValueListenableBuilder<Contact> contact(BuildContext context,
+      PathAndValue<Contact> contact, ValueWidgetBuilder<Contact> builder) {
     return listChildBuilder(context, contact.path,
         defaultValue: contact.value, builder: builder);
   }
