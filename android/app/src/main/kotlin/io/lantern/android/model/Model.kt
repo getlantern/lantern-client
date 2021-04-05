@@ -75,28 +75,14 @@ abstract class Model(
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
 
-        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(namespacedSubscriberId(subscriberID), path) {
-            override fun onInitial(values: List<Entry<Raw<Any>>>) {
+        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
+            override fun onChanges(changes: RawChangeSet<Any>) {
                 Handler(Looper.getMainLooper()).post {
                     synchronized(this@Model) {
-                        activeSink.get()?.success(mapOf("s" to subscriberID, "u" to values.map { listOf(it.path, it.value.valueOrProtoBytes) }))
-                    }
-                }
-                super.onInitial(values)
-            }
-
-            override fun onUpdate(path: String, raw: Raw<Any>) {
-                Handler(Looper.getMainLooper()).post {
-                    synchronized(this@Model) {
-                        activeSink.get()?.success(mapOf("s" to subscriberID, "u" to listOf(listOf(path, raw.valueOrProtoBytes))))
-                    }
-                }
-            }
-
-            override fun onDelete(path: String) {
-                Handler(Looper.getMainLooper()).post {
-                    synchronized(this@Model) {
-                        activeSink.get()?.success(mapOf("s" to subscriberID, "d" to null))
+                        activeSink.get()?.success(
+                                mapOf("s" to subscriberID,
+                                        "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
+                                        "d" to changes.deletions.toList()))
                     }
                 }
             }
@@ -114,17 +100,17 @@ abstract class Model(
         }
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as Int
-        db.unsubscribe(namespacedSubscriberId(subscriberID))
+        db.unsubscribe(nameSpacedSubscriberId(subscriberID))
         activeSubscribers.remove(subscriberID)
     }
 
-    fun namespacedSubscriberId(id: Int): String {
+    fun nameSpacedSubscriberId(id: Int): String {
         return "${name}_model_${id}"
     }
 
     fun destroy() {
         activeSubscribers.forEach {
-            db.unsubscribe(namespacedSubscriberId(it))
+            db.unsubscribe(nameSpacedSubscriberId(it))
         }
     }
 

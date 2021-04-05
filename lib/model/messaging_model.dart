@@ -50,7 +50,7 @@ class MessagingModel extends Model {
 
   ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
       {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
-    return subscribedListBuilder<Contact>('/contacts/', builder: builder,
+    return subscribedListBuilder<Contact>('/cba/', details: true, builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });

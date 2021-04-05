@@ -90,9 +90,7 @@ abstract class Model {
         (BuildContext context, ChangeTrackingList<T> value, Widget child) =>
             builder(
                 context,
-                value.map.entries
-                    .map((e) => PathAndValue(e.key, e.value))
-                    .toList(),
+                value.map.entries.map((e) => PathAndValue(e.key, e.value)),
                 child));
   }
 
@@ -118,13 +116,6 @@ abstract class Model {
   }
 }
 
-class PathAndValue<T> {
-  String path;
-  T value;
-
-  PathAndValue(this.path, this.value);
-}
-
 abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
   void Function() removeFromCache;
   void Function() cancel;
@@ -148,4 +139,11 @@ abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
       cancel();
     }
   }
+}
+
+class PathAndValue<T> {
+  String path;
+  T value;
+
+  PathAndValue(this.path, this.value);
 }
