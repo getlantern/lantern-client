@@ -44,6 +44,7 @@
         <item name="colorError">@color/red</item>
         <item name="android:textColorSecondary">@color/grey_5</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
+        <item name="radioButtonStyle">@style/Widget.MyApp.RadioButton</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -397,5 +398,9 @@
         <item name="boxStrokeColor">@color/box_stroke_color</item>
         <item name="android:textColorHint">@color/grey_5</item>
         <item name="startIconTint">@color/black</item>
+    </style>
+
+    <style name="Widget.MyApp.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/button_tint</item>
     </style>
 </resources>
