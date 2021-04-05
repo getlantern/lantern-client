@@ -13,12 +13,15 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T> {
       path, T defaultValue, ModelEventChannel channel, void removeFromCache(),
       {bool details, T deserialize(Uint8List serialized)})
       : super(defaultValue, removeFromCache) {
-    cancel = channel.subscribe(path, details: details,
-        onUpdates: (Iterable<PathAndValue<T>> updates) {
-      value = updates.length > 0 ? updates.last.value : null;
-    }, onDeletes: (Iterable<String> deletes) {
-      value = null;
-    }, deserialize: deserialize);
+    void onChanges(Map<String, T> updates, Iterable<String> deletions) {
+      if (deletions.isNotEmpty) {
+        value = null;
+      } else {
+        value = updates.isNotEmpty ? updates.values.first : null;
+      }
+    }
+    cancel = channel.subscribe(path,
+        details: details, onChanges: onChanges, deserialize: deserialize);
   }
 }
 

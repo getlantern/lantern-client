@@ -21,26 +21,25 @@ class SubscribedListNotifier<T>
       deserialize(Uint8List serialized)})
       : super(ChangeTrackingList(compare != null ? compare : sortNormally),
             removeFromCache) {
-    cancel = channel.subscribe<T>(path, details: details,
-        onUpdates: (Iterable<PathAndValue<T>> updates) {
+    void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       value.clearPaths();
-      updates.forEach((u) {
-        if (value.map.containsKey(u.path)) {
-          value.updatedPaths.add(u.path);
+      updates.forEach((path, v) {
+        if (value.map.containsKey(path)) {
+          value.updatedPaths.add(path);
         } else {
-          value.newPaths.add(u.path);
+          value.newPaths.add(path);
         }
-        value.map[u.path] = u.value;
+        value.map[path] = v;
       });
-      notifyListeners();
-    }, onDeletes: (Iterable<String> deletes) {
-      value.clearPaths();
-      deletes.forEach((path) {
+      deletions.forEach((path) {
         value.deletedPaths.add(path);
         value.map.remove(path);
       });
       notifyListeners();
-    }, deserialize: deserialize);
+    }
+
+    cancel = channel.subscribe<T>(path,
+        details: details, onChanges: onChanges, deserialize: deserialize);
   }
 }
 
@@ -165,7 +164,8 @@ class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
     super.initState();
     value = widget.valueListenable.value;
     widget.valueListenable.addListener(_valueChanged);
-    listBuilderState = context.findAncestorStateOfType<_SubscribedListBuilderState>();
+    listBuilderState =
+        context.findAncestorStateOfType<_SubscribedListBuilderState>();
   }
 
   @override

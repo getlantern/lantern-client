@@ -8,8 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import 'model.dart';
-
 class ModelEventChannel extends EventChannel {
   var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch);
   final subscribers = Map<int, Subscriber>();
@@ -20,10 +18,9 @@ class ModelEventChannel extends EventChannel {
   void Function() subscribe<T>(String path,
       {bool details,
       int count,
-      @required void onUpdates(Iterable<PathAndValue<T>> updates),
-      @required void onDeletes(Iterable<String> deletedPaths),
+      @required void onChanges(Map<String, T> updates, List<String> deletions),
       T deserialize(Uint8List serialized)}) {
-    var subscriberID = nextSubscriberID.nextInt(2^31);
+    var subscriberID = nextSubscriberID.nextInt(2 ^ 31);
     developer.log("subscribing with id $subscriberID to $path");
     var arguments = {
       "subscriberID": subscriberID,
@@ -31,8 +28,7 @@ class ModelEventChannel extends EventChannel {
       "count": count,
       "details": details
     };
-    subscribers[subscriberID] =
-        Subscriber<T>(onUpdates, onDeletes, deserialize);
+    subscribers[subscriberID] = Subscriber<T>(onChanges, deserialize);
     var stream = receiveBroadcastStream(arguments);
     subscriptions[subscriberID] = listen(stream);
     return () {
@@ -57,35 +53,29 @@ class ModelEventChannel extends EventChannel {
         return;
       }
       var updates = m['u'];
-      if (updates != null) {
-        subscriber.onUpdates((updates as List<dynamic>).map((e) {
-          var u = e as List<dynamic>;
-          return PathAndValue(u[0] as String, u[1]);
-        }));
-      }
       var deletes = m['d'];
-      if (deletes != null) {
-        subscriber.onDeletes(deletes as Iterable<String>);
-      }
+      subscriber.onChanges(updates, deletes);
     });
   }
 }
 
 class Subscriber<T> {
-  void Function(Iterable<PathAndValue<T>> updates) wrappedOnUpdates;
-
-  void Function(Iterable<String> deletions) onDeletes;
+  void Function(Map<String, T>, Iterable<String>) wrappedOnChanges;
 
   T Function(Uint8List serialized) deserialize;
 
-  Subscriber(this.wrappedOnUpdates, this.onDeletes, this.deserialize);
+  Subscriber(this.wrappedOnChanges, this.deserialize);
 
-  void onUpdates(Iterable<PathAndValue<dynamic>> updates) {
+  void onChanges(Map<dynamic, dynamic> _updates, List<dynamic> _deletions) {
+    var deletions = _deletions.map((path) => path as String);
+    Map<String, T> updates;
     if (deserialize != null) {
-      wrappedOnUpdates(
-          updates.map((u) => PathAndValue(u.path, deserialize(u.value))));
+      updates = _updates.map((key, value) =>
+          MapEntry(key as String, deserialize(value as Uint8List)));
     } else {
-      wrappedOnUpdates(updates.map((u) => PathAndValue(u.path, u.value as T)));
+      updates =
+          _updates.map((key, value) => MapEntry(key as String, value as T));
     }
+    wrappedOnChanges(updates, deletions);
   }
 }
