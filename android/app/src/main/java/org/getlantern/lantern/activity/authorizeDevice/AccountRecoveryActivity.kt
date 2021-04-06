@@ -3,14 +3,14 @@ package org.getlantern.lantern.activity.authorizeDevice
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.getlantern.lantern.databinding.ActivityAccountRecovery2Binding
+import org.getlantern.lantern.databinding.ActivityAccountRecoveryBinding
 
 class AccountRecoveryActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAccountRecovery2Binding
+    private lateinit var binding: ActivityAccountRecoveryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAccountRecovery2Binding.inflate(layoutInflater)
+        binding = ActivityAccountRecoveryBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         binding.linkThisDevice.setOnClickListener {

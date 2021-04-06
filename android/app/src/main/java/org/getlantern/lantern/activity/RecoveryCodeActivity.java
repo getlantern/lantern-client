@@ -21,10 +21,12 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.NavigatorKt;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -80,7 +82,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
     private void showLinkRequestSentAlert() {
         final String title = getResources().getString(R.string.account_recovery);
         final String msg = String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email());
-        Utils.showAlertDialog(this, title, msg, false);
+        ActivityExtKt.showAlertDialog(this, title, msg);
     }
 
     @Click(R.id.submit)
@@ -109,7 +111,6 @@ public class RecoveryCodeActivity extends FragmentActivity {
                 public void onSuccess(final Response response, final JsonObject result) {
                     Logger.debug(TAG, "Response: " + result);
                     if (result.get("token") != null && result.get("userID") != null) {
-                        // TODO: 04/04/2021 so the dialog when adding success
                         linkDevice(result);
                     }
                 }
@@ -135,10 +136,12 @@ public class RecoveryCodeActivity extends FragmentActivity {
         LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
-        Intent intent = new Intent(this, LanternProActivity.class);
-        intent.putExtra("snackbarMsg", getResources().getString(R.string.device_now_linked));
-        startActivity(intent);
-        finish();
+        ActivityExtKt.showAlertDialog(
+            RecoveryCodeActivity.this,
+            getString(R.string.device_added),
+            getString(R.string.device_authorized_pro),
+            ContextCompat.getDrawable(RecoveryCodeActivity.this, R.drawable.ic_filled_check),
+            () -> NavigatorKt.openHome(this));
     }
 
     @Click(R.id.resendEmail)

@@ -536,4 +536,6 @@
     <string name="describe_your_issue">Describe your Issue</string>
     <string name="send_report">Send report</string>
     <string name="email_optional">Email (Optional)</string>
+    <string name="device_added">Device Added</string>
+    <string name="device_authorized_pro">This device is now authorized to use your Lantern Pro account.</string>
 </resources>

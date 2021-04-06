@@ -7,19 +7,21 @@ import android.text.TextWatcher;
 import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import com.google.gson.JsonObject;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.NavigatorKt;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.LanternProActivity;
 import org.getlantern.lantern.activity.RecoveryCodeActivity_;
 import org.getlantern.lantern.activity.SubmitAccountActivity_;
 import org.getlantern.lantern.databinding.ActivityLinkEmailBinding;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 public class LinkEmailActivity extends AppCompatActivity implements LanternHttpClient.ProCallback {
@@ -60,21 +62,23 @@ public class LinkEmailActivity extends AppCompatActivity implements LanternHttpC
     @Override
     public void onSuccess(final Response response, final JsonObject result) {
         Logger.debug(TAG, "Account recovery response: " + result);
-        final Intent intent;
         if (result.get("token") != null && result.get("userID") != null) {
             Logger.debug(TAG, "Successfully recovered account");
             // update token and user ID with those returned by the pro server
             LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
             LanternApp.getSession().linkDevice();
             LanternApp.getSession().setIsProUser(true);
-            intent = new Intent(this, LanternProActivity.class);
-            intent.putExtra("snackbarMsg", getResources().getString(R.string.device_now_linked));
+            ActivityExtKt.showAlertDialog(
+                LinkEmailActivity.this,
+                getString(R.string.device_added),
+                getString(R.string.device_authorized_pro),
+                ContextCompat.getDrawable(LinkEmailActivity.this, R.drawable.ic_filled_check),
+                () -> NavigatorKt.openHome(this));
         } else {
-            intent = new Intent(this, SubmitAccountActivity_.class);
+            Intent intent = new Intent(this, SubmitAccountActivity_.class);
+            startActivity(intent);
+            finish();
         }
-
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -93,8 +97,6 @@ public class LinkEmailActivity extends AppCompatActivity implements LanternHttpC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // TODO: 04/04/2021 missing this view
-//                    dontRemember.setVisibility(View.VISIBLE);
                     Utils.showErrorDialog(LinkEmailActivity.this,
                         getResources().getString(R.string.cannot_find_email));
                 }

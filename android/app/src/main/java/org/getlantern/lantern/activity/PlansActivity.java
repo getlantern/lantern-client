@@ -23,6 +23,7 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.*;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.lantern.util.DateUtil;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
@@ -92,7 +93,7 @@ public class PlansActivity extends FragmentActivity {
 
     @Click
     void imgvYinbiInfo() {
-        Utils.showAlertDialog(this, getString(R.string.yinbi_cryptocurrency), getString(R.string.the_yinbi_foundation_description),
+        ActivityExtKt.showAlertDialog(this, getString(R.string.yinbi_cryptocurrency), getString(R.string.the_yinbi_foundation_description),
             ContextCompat.getDrawable(this, R.drawable.ic_yinbi_small));
     }
 

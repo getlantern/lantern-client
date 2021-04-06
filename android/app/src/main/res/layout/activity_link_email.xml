@@ -14,7 +14,7 @@
         lantern:layout_constraintEnd_toEndOf="parent"
         lantern:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleText="Authorize Device via Email"/>
+        lantern:titleText="@string/authorize_device_via_email"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
