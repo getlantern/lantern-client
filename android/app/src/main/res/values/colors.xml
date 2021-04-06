@@ -104,6 +104,7 @@
     <color name="red">#D5001F</color>
     <color name="grey_5">#707070</color>
     <color name="grey_4">#BFBFBF</color>
+    <color name="grey_3">#f7f7f7</color>
     <color name="pink_light">#FFF4F8</color>
     <color name="yellow">#FFC107</color>
 </resources>

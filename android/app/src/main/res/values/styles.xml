@@ -42,6 +42,7 @@
         <item name="borderlessButtonStyle">@style/Widget.MyApp.Button.TextButton</item>
         <item name="materialButtonOutlinedStyle">@style/Widget.MyApp.Button.OutlinedButton</item>
         <item name="colorError">@color/red</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorSecondary">@color/grey_5</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
         <item name="radioButtonStyle">@style/Widget.MyApp.RadioButton</item>
@@ -398,6 +399,15 @@
         <item name="boxStrokeColor">@color/box_stroke_color</item>
         <item name="android:textColorHint">@color/grey_5</item>
         <item name="startIconTint">@color/black</item>
+        <item name="endIconTint">@color/black</item>
+    </style>
+
+    <style name="Widget.MyApp.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintTextColor">@color/tertiary_green</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+        <item name="android:textColorHint">@color/grey_5</item>
+        <item name="startIconTint">@color/black</item>
+        <item name="endIconTint">@color/black</item>
     </style>
 
     <style name="Widget.MyApp.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">

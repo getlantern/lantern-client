@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -14,9 +15,6 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.MailSender
 
 open class ReportIssueActivity : FragmentActivity() {
-    private var issueAdapter: ArrayAdapter<String>? = null
-    private var selectedIssue: String? = null
-
     private lateinit var binding: ActivityReportIssueBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,39 +28,43 @@ open class ReportIssueActivity : FragmentActivity() {
         }
 
         val issues = resources.getStringArray(R.array.common_issue_list)
-        issueAdapter = ArrayAdapter(this, R.layout.issue_row, issues)
-        binding.list.adapter = issueAdapter
+        val issueAdapter = ArrayAdapter(this, R.layout.issue_row, issues)
+        binding.issue.setAdapter(issueAdapter)
 
-        binding.issue.setOnClickListener { _ -> showIssueList() }
-        binding.list.setOnItemClickListener { _, _, _, id  -> issueClicked(issues[id.toInt()]) }
-    }
-
-    fun showIssueList() {
-        if (binding.list.isShown) {
-            binding.list.visibility = View.GONE
-            selectedIssue = null
-            binding.issue.setText("")
-        } else {
-            binding.list.visibility = View.VISIBLE
+        binding.sendBtn.setOnClickListener {
+            sendReport(it)
+        }
+        binding.issue.addTextChangedListener {
+           checkValidField()
+        }
+        binding.emailInput.addTextChangedListener {
+            checkValidField()
         }
     }
 
-    fun issueClicked(issueText: String) {
-        Logger.debug(TAG, "Selected issue is $issueText")
-        selectedIssue = issueText
-        binding.issue.setText(issueText)
-        binding.list.visibility = View.GONE
+    private fun checkValidField() {
+        when {
+            binding.issue.text?.toString()?.isEmpty() == true -> {
+                binding.sendBtn.isEnabled = false
+            }
+            binding.emailInput.text?.toString()?.isEmpty() == true -> {
+                binding.sendBtn.isEnabled = false
+            }
+            else -> {
+                binding.sendBtn.isEnabled = true
+            }
+        }
     }
 
     fun sendReport(view: View?) {
         val email = binding.emailInput.text.toString()
-        val issue = selectedIssue
+        val issue = binding.issue.text?.toString()
         if (!Utils.isNetworkAvailable(this)) {
             Utils.showErrorDialog(this,
                     resources.getString(R.string.no_internet_connection))
             return
         }
-        if (issue == null) {
+        if (issue.isNullOrEmpty()) {
             Utils.showErrorDialog(this,
                     resources.getString(R.string.no_issue_selected))
             return
