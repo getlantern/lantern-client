@@ -170,26 +170,6 @@ public class Utils {
         }
     }
 
-    public static void showErrorDialog(final Activity activity, String error) {
-        ActivityExtKt.showAlertDialog(
-            activity,
-            activity.getString(R.string.validation_errors),
-            error
-        );
-    }
-
-    public static void showUIErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showErrorDialog(activity, error);
-            }
-        });
-    }
-
     public static boolean isEmailValid(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -223,45 +203,6 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-            CharSequence title, CharSequence msg,
-            final boolean finish) {
-        Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title,
-                                       CharSequence msg,
-                                       CharSequence okLabel,
-                                       final boolean finish,
-                                       Runnable onClick) {
-        Logger.debug(TAG, "Showing alert dialog...");
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-                alertDialog.setTitle(title);
-                alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, okLabel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                if (onClick != null) {
-                                    onClick.run();
-                                }
-                                if (finish) {
-                                    activity.finish();
-                                }
-                            }
-                });
-                if (!activity.isFinishing()) {
-                    alertDialog.show();
-                }
-            }
-        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {

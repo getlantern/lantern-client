@@ -17,6 +17,7 @@ import org.getlantern.lantern.fragment.UserForm;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -54,7 +55,7 @@ public class AddDeviceActivity extends FragmentActivity {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
                 Logger.error(TAG, "Error retrieving link code: " + error);
-                Utils.showUIErrorDialog(activity,
+                ActivityExtKt.showErrorDialog(activity,
                         res.getString(R.string.invalid_verification_code));
             }
             @Override

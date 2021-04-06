@@ -12,6 +12,7 @@
         tools:src="@drawable/ic_yinbi_small"
         android:id="@+id/icon"
         android:layout_marginTop="@dimen/space_large"
+        tools:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/icon"
         android:textAppearance="?attr/textAppearanceBody1"
-        android:layout_marginTop="@dimen/space_small"/>
+        android:layout_marginTop="@dimen/space_small"
+        app:layout_goneMarginTop="@dimen/space_large"/>
 
     <com.google.android.material.textview.MaterialTextView
         tools:text="@string/the_yinbi_foundation_description"
@@ -35,9 +37,11 @@
         android:id="@+id/message"
         android:textAppearance="?attr/textAppearanceBody2"
         android:textColor="?android:attr/textColorSecondary"
+        android:layout_marginBottom="@dimen/space_normal"
         app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

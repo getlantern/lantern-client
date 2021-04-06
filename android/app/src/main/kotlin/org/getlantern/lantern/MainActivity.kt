@@ -30,6 +30,7 @@ import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.*
@@ -397,7 +398,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     resources.getString(R.string.error_checking_for_update),
                     appName
                 )
-                Utils.showAlertDialog(activity, appName, message, false)
+                activity.showAlertDialog(appName, message)
                 return
             }
             if (url == "") {
@@ -424,7 +425,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
             String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
-        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
+        showAlertDialog(noUpdateTitle, noUpdateMsg)
     }
 
     @Throws(Exception::class)
@@ -484,12 +485,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     PERMISSIONS_TAG,
                     msg.toString()
                 )
-                Utils.showAlertDialog(this,
-                    getString(R.string.please_allow_lantern_to),
-                    Html.fromHtml(msg.toString()),
-                    getString(R.string.continue_),
-                    false,
-                    Runnable {
+                showAlertDialog(
+                    title = getString(R.string.please_allow_lantern_to),
+                    msg = Html.fromHtml(msg.toString()),
+                    okLabel = getString(R.string.continue_),
+                    onClick = {
                         ActivityCompat.requestPermissions(
                             this,
                             neededPermissions,

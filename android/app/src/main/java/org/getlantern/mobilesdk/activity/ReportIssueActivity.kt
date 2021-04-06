@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.databinding.ActivityReportIssueBinding
+import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.model.Utils
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.MailSender
@@ -60,18 +61,15 @@ open class ReportIssueActivity : FragmentActivity() {
         val email = binding.emailInput.text.toString()
         val issue = binding.issue.text?.toString()
         if (!Utils.isNetworkAvailable(this)) {
-            Utils.showErrorDialog(this,
-                    resources.getString(R.string.no_internet_connection))
+            showErrorDialog(resources.getString(R.string.no_internet_connection))
             return
         }
         if (issue.isNullOrEmpty()) {
-            Utils.showErrorDialog(this,
-                    resources.getString(R.string.no_issue_selected))
+            showErrorDialog(resources.getString(R.string.no_issue_selected))
             return
         }
         if (!Utils.isEmailValid(email)) {
-            Utils.showErrorDialog(this,
-                    resources.getString(R.string.invalid_email))
+            showErrorDialog(resources.getString(R.string.invalid_email))
             return
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")

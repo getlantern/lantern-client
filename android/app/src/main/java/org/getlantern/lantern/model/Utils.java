@@ -200,26 +200,6 @@ public class Utils {
         }
     }
 
-    public static void showErrorDialog(final Activity activity, String error) {
-        ActivityExtKt.showAlertDialog(
-            activity,
-            activity.getString(R.string.validation_errors),
-            error
-        );
-    }
-
-    public static void showUIErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showErrorDialog(activity, error);
-            }
-        });
-    }
-
     public static boolean isEmailValid(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
