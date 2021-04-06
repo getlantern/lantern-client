@@ -119,7 +119,7 @@ public class ProAccountActivity extends FragmentActivity {
                     Logger.error(TAG, "Error removing device:" + error);
                 }
                 // encountered some issue removing the device; display an error
-                Utils.showUIErrorDialog(ProAccountActivity.this,
+                ActivityExtKt.showErrorDialog(ProAccountActivity.this,
                         getResources().getString(R.string.unable_remove_device));
             }
             @Override

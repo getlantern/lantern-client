@@ -90,7 +90,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
         final String code = codeInput.getText().toString();
 
         if (code.equals("") || !code.matches("[0-9]+")) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.enter_valid_code));
             return;
         }
@@ -124,9 +124,9 @@ public class RecoveryCodeActivity extends FragmentActivity {
         }
         final String errorId = error.getId();
         if (errorId.equals("too-many-devices")) {
-            Utils.showUIErrorDialog(this, getResources().getString(R.string.too_many_devices));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.too_many_devices));
         } else if (error.getMessage() != null) {
-            Utils.showUIErrorDialog(this, error.getMessage());
+            ActivityExtKt.showErrorDialog(this, error.getMessage());
         }
     }
 

@@ -162,7 +162,7 @@ public class PlansActivity extends FragmentActivity {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
                 if (error != null && error.getMessage() != null) {
-                    Utils.showUIErrorDialog(PlansActivity.this, error.getMessage());
+                    ActivityExtKt.showErrorDialog(PlansActivity.this, error.getMessage());
                 }
             }
             @Override

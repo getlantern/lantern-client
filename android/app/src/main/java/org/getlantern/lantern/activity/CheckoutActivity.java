@@ -46,6 +46,7 @@ import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.ArrayList;
@@ -335,7 +336,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                         closeDialog();
                         Logger.error(TAG, "Error retrieving referral code: " + error);
                         if (error != null && error.getMessage() != null) {
-                            Utils.showUIErrorDialog(activity, error.getMessage());
+                            ActivityExtKt.showErrorDialog(activity, error.getMessage());
                         }
                     }
 
@@ -419,14 +420,14 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
                         public void onError(@NonNull Exception error) {
                             closeDialog();
-                            Utils.showUIErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
+                            ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
                         }
                     }
             );
         } catch (Throwable t) {
             Logger.error(STRIPE_TAG, "Error submitting to stripe", t);
             closeDialog();
-            Utils.showUIErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
         }
     }
 
@@ -441,10 +442,10 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         }
         final String errorId = error.getId();
         if (errorId != null && errorId.equals("existing-email")) {
-            Utils.showUIErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.email_in_use));
         } else if (error.getMessage() != null) {
-            Utils.showUIErrorDialog(this, error.getMessage());
+            ActivityExtKt.showErrorDialog(this, error.getMessage());
         }
     }
 
@@ -463,7 +464,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         } else {
             if (Utils.isPlayVersion(this)) {
                 if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
-                    Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+                    ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
                 }
                 return;
             }
@@ -501,7 +502,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
             return;
         }
 
@@ -515,7 +516,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
         if (tokens.size() != 1) {
             Logger.error(TAG, "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size());
-            Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
             return;
         }
 

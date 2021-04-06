@@ -97,7 +97,7 @@ public class LinkEmailActivity extends AppCompatActivity implements LanternHttpC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.showErrorDialog(LinkEmailActivity.this,
+                    ActivityExtKt.showErrorDialog(LinkEmailActivity.this,
                         getResources().getString(R.string.cannot_find_email));
                 }
             });
@@ -110,7 +110,7 @@ public class LinkEmailActivity extends AppCompatActivity implements LanternHttpC
         final String accountId = binding.accountInput.getText().toString();
 
         if (accountId == null || accountId.equals("")) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                 getResources().getString(R.string.invalid_email));
             return;
         }

@@ -15,6 +15,7 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.reseller_register_pro)
@@ -76,13 +77,13 @@ public class RegisterProActivity extends FragmentActivity {
 
         // email validation
         if (!Utils.isEmailValid(email)) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.invalid_email));
             return;
         }
 
         if (!email.equalsIgnoreCase(confirmEmail)) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.emails_do_not_match));
             return;
         }
@@ -90,7 +91,7 @@ public class RegisterProActivity extends FragmentActivity {
         // reseller code validation
         if (resellerCode.length() != RESELLER_CODE_LEN) {
             // reseller code unexpected length
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.invalid_reseller_code));
             return;
         }
