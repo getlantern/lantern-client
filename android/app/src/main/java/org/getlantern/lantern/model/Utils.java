@@ -14,7 +14,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.text.Spannable;
@@ -39,15 +38,13 @@ import android.widget.Toast;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import glide.Glide;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WebViewActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.ErrorDialogFragment;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.reflect.Field;
@@ -203,18 +200,12 @@ public class Utils {
         }
     }
 
-    // TODO: 04/04/2021 refactor this dialog to use new dialog format
     public static void showErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-
-        try {
-            DialogFragment fragment = ErrorDialogFragment.newInstance(R.string.validation_errors, error);
-            activity.getFragmentManager().beginTransaction().add(fragment, "error").commitAllowingStateLoss();
-        } catch (Exception e) {
-            Logger.error(TAG, "Unable to show error dialog", e);
-        }
+        ActivityExtKt.showAlertDialog(
+            activity,
+            activity.getString(R.string.validation_errors),
+            error
+        );
     }
 
     public static void showUIErrorDialog(final Activity activity, String error) {
@@ -262,59 +253,6 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title, CharSequence msg,
-                                       Drawable icon) {
-        Utils.showAlertDialog(activity, title, msg, "OK", false, icon, null);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-            CharSequence title, CharSequence msg,
-            final boolean finish) {
-        Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title,
-                                       CharSequence msg,
-                                       CharSequence okLabel,
-                                       final boolean finish,
-                                       Runnable onClick) {
-        showAlertDialog(activity, title, msg, okLabel, finish, null, onClick);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title,
-                                       CharSequence msg,
-                                       CharSequence okLabel,
-                                       final boolean finish,
-                                       Drawable icon,
-                                       Runnable onClick) {
-        Logger.debug(TAG, "Showing alert dialog...");
-
-        activity.runOnUiThread(() -> {
-            View contentView = activity.getLayoutInflater().inflate(R.layout.base_dialog, null);
-            TextView titleTv = contentView.findViewById(R.id.title);
-            TextView messageTv = contentView.findViewById(R.id.message);
-            titleTv.setText(title);
-            messageTv.setText(msg);
-            ImageView imageView = contentView.findViewById(R.id.icon);
-            imageView.setImageDrawable(icon);
-            new MaterialAlertDialogBuilder(activity)
-                .setView(contentView)
-                .setPositiveButton(okLabel, (dialog, which) -> {
-                    dialog.dismiss();
-                    if (onClick != null) {
-                        onClick.run();
-                    }
-                    if (finish) {
-                        activity.finish();
-                    }
-                })
-                .show();
-        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {

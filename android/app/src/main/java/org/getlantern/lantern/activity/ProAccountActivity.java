@@ -25,6 +25,7 @@ import org.getlantern.lantern.model.DeviceView;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.Map;
@@ -169,8 +170,8 @@ public class ProAccountActivity extends FragmentActivity {
             Logger.debug(TAG, "Only one device found. Not letting user unauthorize it");
             Resources res = getResources();
 
-            Utils.showAlertDialog(this, res.getString(R.string.only_one_device),
-                    res.getString(R.string.sorry_cannot_remove), false);
+            ActivityExtKt.showAlertDialog(this, res.getString(R.string.only_one_device),
+                    res.getString(R.string.sorry_cannot_remove));
             return;
         }
 

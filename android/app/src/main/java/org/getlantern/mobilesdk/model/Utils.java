@@ -41,11 +41,10 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WebViewActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.ErrorDialogFragment;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.reflect.Field;
-import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -172,16 +171,11 @@ public class Utils {
     }
 
     public static void showErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-
-        try {
-            DialogFragment fragment = ErrorDialogFragment.newInstance(R.string.validation_errors, error);
-            activity.getFragmentManager().beginTransaction().add(fragment, "error").commitAllowingStateLoss();
-        } catch (Exception e) {
-            Logger.error(TAG, "Unable to show error dialog", e);
-        }
+        ActivityExtKt.showAlertDialog(
+            activity,
+            activity.getString(R.string.validation_errors),
+            error
+        );
     }
 
     public static void showUIErrorDialog(final Activity activity, String error) {
