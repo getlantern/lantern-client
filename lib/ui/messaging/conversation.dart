@@ -11,7 +11,7 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class Conversation extends StatefulWidget {
-  final Contact _contact;
+  Contact _contact;
 
   Conversation(this._contact) : super();
 

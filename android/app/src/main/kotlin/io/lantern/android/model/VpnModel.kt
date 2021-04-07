@@ -12,7 +12,7 @@ import java.io.File
 class VpnModel(
         flutterEngine: FlutterEngine? = null,
         private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
-) : Model("vpn", flutterEngine, db) {
+) : BaseModel("vpn", flutterEngine, db) {
 
     companion object {
         const val PATH_VPN_STATUS = "/vpn_status"

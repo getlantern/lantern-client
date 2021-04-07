@@ -48,6 +48,11 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<Contact> getContact(String contactPath) async {
+    return get<Uint8List>(contactPath).then((serialized) =>
+        serialized == null ? null : Contact.fromBuffer(serialized));
+  }
+
   ValueListenableBuilder<ChangeTrackingList<Contact>> contactsByActivity(
       {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/cba/',

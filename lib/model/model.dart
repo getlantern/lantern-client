@@ -24,9 +24,7 @@ abstract class Model {
   }
 
   Future<T> get<T>(String path) async {
-    return methodChannel.invokeMethod('get', <String, dynamic>{
-      'path': path,
-    });
+    return methodChannel.invokeMethod('get', path);
   }
 
   Future<List<T>> list<T>(String path,

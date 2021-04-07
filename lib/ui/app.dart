@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lantern/model/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
@@ -28,11 +32,20 @@ class LanternApp extends StatelessWidget {
           const Locale('en', "US"),
           const Locale('es'),
         ],
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute<dynamic>(
+            builder: (context) {
+              return LoaderOverlay(
+                useDefaultLoading: true,
+                child: I18n(
+                    child: HomePage(settings.name, settings.arguments),
+                    initialLocale: Locale("en", "US")),
+              );
+            },
+            settings: settings,
+          );
+        },
         theme: buildTheme(context),
-        home: LoaderOverlay(
-          useDefaultLoading: true,
-          child: I18n(child: HomePage(), initialLocale: Locale("en", "US")),
-        ),
       ),
     );
   }

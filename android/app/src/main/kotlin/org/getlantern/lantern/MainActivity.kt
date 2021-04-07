@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.MessagingModel
 import io.lantern.android.model.VpnModel
 import org.getlantern.lantern.model.VpnState
@@ -27,19 +28,48 @@ class MainActivity : FlutterActivity() {
 
     private lateinit var vpnModel: VpnModel
     private lateinit var messagingModel: MessagingModel
-
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
-
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
-    }
+    private lateinit var flutterNavigation: MethodChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val intent = Intent(this, LanternService_::class.java)
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
+    }
+
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
+        flutterNavigation = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "navigation"
+        )
+
+        flutterNavigation.setMethodCallHandler { call, _ ->
+            if (call.method == "ready") {
+                intent.let { intent ->
+                    // If the user clicks on a message notification and MainActivity opens in
+                    // response, this ensures that we navigate to the corresponding conversation.
+                    navigateForIntent(intent)
+                }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // If the user clicks on a message notification and MainActivity is already the top activity,
+        // this ensures that we navigate to the corresponding conversation.
+        navigateForIntent(intent)
+    }
+
+    private fun navigateForIntent(intent: Intent) {
+        intent.getByteArrayExtra("contactForConversation")?.let { contact ->
+            flutterNavigation.invokeMethod("openConversation", contact)
+            intent.removeExtra("contactForConversation")
+        }
     }
 
     override fun onResume() {

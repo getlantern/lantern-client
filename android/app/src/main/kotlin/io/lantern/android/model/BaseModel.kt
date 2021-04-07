@@ -10,12 +10,12 @@ import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class Model(
+abstract class BaseModel(
         private val name: String,
         flutterEngine: FlutterEngine? = null,
         protected val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
-    private val activeSubscribers = ConcurrentSkipListSet<Int>()
+    private val activeSubscribers = ConcurrentSkipListSet<String>()
 
     init {
         flutterEngine?.let {
@@ -33,8 +33,7 @@ abstract class Model(
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            val out = doMethodCall(call, { result.notImplemented() })
-            when (out) {
+            when (val out = doMethodCall(call, { result.notImplemented() })) {
                 is Unit -> result.success(null)
                 else -> result.success(out)
             }
@@ -50,7 +49,7 @@ abstract class Model(
         return when (call.method) {
             "get" -> {
                 val path = call.arguments<String>()
-                db.get(path)
+                db.getRaw<Any>(path)?.valueOrProtoBytes
             }
             "list" -> {
                 val path = call.argument<String>("path")
@@ -70,7 +69,7 @@ abstract class Model(
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         activeSink.set(events)
         val args = arguments as Map<String, Any>
-        val subscriberID = args["subscriberID"] as Int
+        val subscriberID = args["subscriberID"] as String
         val path = args["path"] as String
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
@@ -78,7 +77,7 @@ abstract class Model(
         val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
             override fun onChanges(changes: RawChangeSet<Any>) {
                 Handler(Looper.getMainLooper()).post {
-                    synchronized(this@Model) {
+                    synchronized(this@BaseModel) {
                         activeSink.get()?.success(
                                 mapOf("s" to subscriberID,
                                         "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
@@ -96,15 +95,15 @@ abstract class Model(
 
     override fun onCancel(arguments: Any?) {
         if (arguments == null) {
-            return;
+            return
         }
         val args = arguments as Map<String, Any>
-        val subscriberID = args["subscriberID"] as Int
+        val subscriberID = args["subscriberID"] as String
         db.unsubscribe(nameSpacedSubscriberId(subscriberID))
         activeSubscribers.remove(subscriberID)
     }
 
-    fun nameSpacedSubscriberId(id: Int): String {
+    fun nameSpacedSubscriberId(id: String): String {
         return "${name}_model_${id}"
     }
 

@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 class ModelEventChannel extends EventChannel {
-  var nextSubscriberID = new Random(DateTime.now().millisecondsSinceEpoch);
-  final subscribers = Map<int, Subscriber>();
-  final subscriptions = Map<int, StreamSubscription>();
+  var uuid = Uuid();
+
+  final subscribers = Map<String, Subscriber>();
+  final subscriptions = Map<String, StreamSubscription>();
 
   ModelEventChannel(String name) : super(name);
 
@@ -20,7 +21,7 @@ class ModelEventChannel extends EventChannel {
       int count,
       @required void onChanges(Map<String, T> updates, List<String> deletions),
       T deserialize(Uint8List serialized)}) {
-    var subscriberID = nextSubscriberID.nextInt(2 ^ 31);
+    var subscriberID = uuid.v4();
     developer.log("subscribing with id $subscriberID to $path");
     var arguments = {
       "subscriberID": subscriberID,
