@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
@@ -17,7 +18,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
-class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : Model("messaging", flutterEngine, messaging.db) {
+class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
     private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
@@ -35,7 +36,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 messaging.sendToDirectContact(
                         call.argument("identityKey")!!,
                         text = call.argument("text"),
-                        attachments = call.argument<List<ByteArray>>("attachments")?.map { io.lantern.messaging.Model.StoredAttachment.parseFrom(it) }?.toTypedArray())
+                        attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray())
                 null
             }
             "startRecordingVoiceMemo" -> {
@@ -56,7 +57,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 }
             }
             "decryptAttachment" -> {
-                val attachment = io.lantern.messaging.Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
+                val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
                 ByteArrayOutputStream(attachment.attachment.plaintextLength.toInt()).use { output ->
                     attachment.inputStream.use { input ->
                         Util.copy(input, output)
@@ -87,8 +88,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             override fun init(audioSessionId: Int) {
                 if (NoiseSuppressor.isAvailable()) {
                     try {
-                        val noiseSuppressor = NoiseSuppressor.create(audioSessionId);
-                        if (noiseSuppressor != null) noiseSuppressor.setEnabled(true);
+                        val noiseSuppressor = NoiseSuppressor.create(audioSessionId)
+                        if (noiseSuppressor != null) noiseSuppressor.setEnabled(true)
                     } catch (t: Throwable) {
                         // couldn't init noise suppressor, won't use
                     }

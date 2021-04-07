@@ -76,7 +76,7 @@ class _AddContactState extends State<AddContact> {
             icon: Icon(Icons.qr_code),
             tooltip: "Your Contact Info".i18n,
             onPressed: () {
-              Navigator.restorablePushNamed(context, 'your_contact_info');
+              Navigator.restorablePushNamed(context, '/your_contact_info');
             }),
       ],
       body: SingleChildScrollView(

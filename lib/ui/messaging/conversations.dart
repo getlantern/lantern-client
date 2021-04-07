@@ -3,17 +3,10 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-class Conversations extends StatefulWidget {
-  @override
-  _ConversationsState createState() => _ConversationsState();
-}
-
-class _ConversationsState extends State<Conversations> {
-  MessagingModel model;
-
+class Conversations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    model = context.watch<MessagingModel>();
+    var model = context.watch<MessagingModel>();
 
     return BaseScreen(
         title: 'Messages'.i18n,
@@ -22,7 +15,7 @@ class _ConversationsState extends State<Conversations> {
               icon: Icon(Icons.qr_code),
               tooltip: "Your Contact Info".i18n,
               onPressed: () {
-                Navigator.restorablePushNamed(context, 'your_contact_info');
+                Navigator.restorablePushNamed(context, '/your_contact_info');
               }),
         ],
         body: model.contactsByActivity(builder:
@@ -50,7 +43,7 @@ class _ConversationsState extends State<Conversations> {
                       "${contact.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.mostRecentMessageText}",
                       overflow: TextOverflow.ellipsis),
                   onTap: () async {
-                    Navigator.pushNamed(context, 'conversation',
+                    Navigator.pushNamed(context, '/conversation',
                         arguments: contact);
                   },
                 );
@@ -61,7 +54,7 @@ class _ConversationsState extends State<Conversations> {
         actionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.restorablePushNamed(context, 'new_message');
+            Navigator.restorablePushNamed(context, '/new_message');
           },
         ));
   }

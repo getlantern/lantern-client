@@ -17,7 +17,7 @@ class NewMessage extends StatelessWidget {
             icon: Icon(Icons.qr_code),
             tooltip: "Your Contact Info".i18n,
             onPressed: () {
-              Navigator.restorablePushNamed(context, 'your_contact_info');
+              Navigator.restorablePushNamed(context, '/your_contact_info');
             }),
       ],
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -25,7 +25,7 @@ class NewMessage extends StatelessWidget {
           leading: Icon(Icons.person_add),
           title: Text('Add Contact'.i18n),
           onTap: () {
-            Navigator.restorablePushNamed(context, 'add_contact');
+            Navigator.restorablePushNamed(context, '/add_contact');
           },
         ),
         Divider(thickness: 1),
@@ -35,8 +35,8 @@ class NewMessage extends StatelessWidget {
         ),
         Divider(thickness: 1),
         Expanded(
-          child: model.contacts(builder:
-              (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
+          child: model.contacts(builder: (context,
+              Iterable<PathAndValue<Contact>> _contacts, Widget child) {
             var contacts = _contacts.toList();
             var all = contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
@@ -56,14 +56,15 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return ListTile(
                   title: Text(
-                      contact.value.displayName != null && contact.value.displayName.isEmpty
+                      contact.value.displayName != null &&
+                              contact.value.displayName.isEmpty
                           ? 'Unnamed'.i18n
                           : contact.value.displayName,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle:
                       Text(contact.value.id, overflow: TextOverflow.ellipsis),
                   onTap: () {
-                    Navigator.pushNamed(context, 'conversation',
+                    Navigator.pushNamed(context, '/conversation',
                         arguments: contact.value);
                   },
                 );
