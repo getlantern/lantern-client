@@ -16,9 +16,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,6 +26,7 @@ import okhttp3.HttpUrl;
 import org.getlantern.lantern.activity.WebViewActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.model.AccountInfo;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
@@ -60,13 +58,7 @@ public class YinbiRedemptionActivity extends YinbiActivity {
 
     private Button copyAllCodesBtn;
 
-    private FrameLayout distributionSection;
-
-    private LinearLayout redemptionSection;
-
     private TableLayout redemptionTable;
-
-    private TextView okDistributionBtn;
 
     private Handler fetchCodesHandler;
 
@@ -112,6 +104,8 @@ public class YinbiRedemptionActivity extends YinbiActivity {
             }
         }
     };
+
+    private final Handler handlerCopyAnim = new Handler();
 
     private void closeDialog() {
         if (dialog != null && dialog.isShowing()) {
@@ -188,7 +182,11 @@ public class YinbiRedemptionActivity extends YinbiActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleDistributionPopup();
+                    ActivityExtKt.showAlertDialog(
+                        YinbiRedemptionActivity.this,
+                        getString(R.string.yinbi_redemption_code),
+                        getString(R.string.ynb_distributed)
+                    );
                 }
             });
         }
@@ -228,46 +226,30 @@ public class YinbiRedemptionActivity extends YinbiActivity {
             Logger.debug(TAG, "Adding new reward " + reward);
 
             final boolean redeemed = reward.redeemed();
-            final int layout = reward.getLayout();
-            final TableRow row = (TableRow)LayoutInflater.from(this).inflate(layout,
-                    null);
-            final TextView date = (TextView)row.findViewById(R.id.date);
-            final TextView codeView = (TextView)row.findViewById(R.id.code);
-            final TextView status = (TextView)row.findViewById(R.id.status);
-            final ImageView helpCircle;
-            if (status == null && !redeemed) {
-                continue;
-            }
-
-            if (!redeemed) {
-                helpCircle = (ImageView)row.findViewById(R.id.helpCircle);
-            } else {
-                helpCircle = null;
-            }
-
             final Double amount = reward.getAmount();
+
+            TableRow row;
             if (!redeemed && (amount == null || amount == 0)) {
                 // if the redemption code has no amount, the corresponding
                 // auction is still pending
-                status.setTextColor(getResources().getColor(R.color.pink));
-                helpCircle.setVisibility(View.VISIBLE);
-
-                addDistributionPopupListeners(new View[]{status, helpCircle, codeView});
-                RewardCountDown countDown = new RewardCountDown(1000, reward, status);
+                row = (TableRow) LayoutInflater.from(this).inflate(R.layout.redemption_row_pending, null);
+                addDistributionPopupListeners(new View[]{row.findViewById(R.id.imgv)});
+                RewardCountDown countDown = new RewardCountDown(1000, reward, (TextView) row.findViewById(R.id.date));
                 countDown.start();
             } else {
+                final int layout = reward.getLayout();
+                row = (TableRow) LayoutInflater.from(this).inflate(layout, null);
+                final TextView codeView = (TextView) row.findViewById(R.id.code);
+                final TextView status = (TextView) row.findViewById(R.id.status);
                 status.setText(String.format("%d YNB", amount.intValue()));
+                codeView.setText(code);
+                if (redeemed) {
+                    // add strikethrough to redemption code that was already
+                    // redeemed
+                    codeView.setPaintFlags(codeView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
             }
 
-            date.setText(reward.getDate());
-            if (amount != null && amount > 0) {
-                codeView.setText(code);
-            }
-            if (redeemed) {
-                // add strikethrough to redemption code that was already
-                // redeemed
-                codeView.setPaintFlags(codeView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }
             row.setTag(reward.getCode());
 
             if (!redeemed) {
@@ -326,6 +308,7 @@ public class YinbiRedemptionActivity extends YinbiActivity {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(screenStateReceiver);
+        handlerCopyAnim.removeCallbacksAndMessages(null);
         if (fetchCodesHandler != null) {
             fetchCodesHandler.removeCallbacks(checkCodesRunner);
         }
@@ -351,16 +334,6 @@ public class YinbiRedemptionActivity extends YinbiActivity {
 
         coordinatorLayout = (CoordinatorLayout)findViewById(R.id.coordinatorLayout);
 
-        redemptionSection = (LinearLayout)findViewById(R.id.redemptionSection);
-        distributionSection = (FrameLayout)findViewById(R.id.distributionSection);
-
-        okDistributionBtn = (TextView)findViewById(R.id.okDistributionBtn);
-        okDistributionBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toggleDistributionPopup();
-            }
-        });
-
         copyAllCodesBtn = (Button)findViewById(R.id.copyAllCodes);
         copyAllCodesBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -377,21 +350,8 @@ public class YinbiRedemptionActivity extends YinbiActivity {
         highlightWebsite(clickSpan, visitYinbi);
     }
 
-    /**
-     * When the help circle next to a pending redemption code is clicked on, a
-     * popup appears with details about how Yinbi is distributed
-     */
-    private void toggleDistributionPopup() {
-        if (redemptionSection.getVisibility() == View.VISIBLE) {
-            redemptionSection.setVisibility(View.GONE);
-            distributionSection.setVisibility(View.VISIBLE);
-        } else {
-            redemptionSection.setVisibility(View.VISIBLE);
-            distributionSection.setVisibility(View.GONE);
-        }
-    }
-
     private void copyAllCodes(View view) {
+
         final String codes = getActiveCodes();
         if (codes != null && codes.equals("")) {
             Logger.debug(TAG, "No active redemption codes; skipping copying");
@@ -399,6 +359,32 @@ public class YinbiRedemptionActivity extends YinbiActivity {
                     getResources().getString(R.string.no_active_codes));
             return;
         }
+
+        // animate when click the button
+        long animDuration = 300L;
+        long delayDuration = 1000L;
+        handlerCopyAnim.removeCallbacksAndMessages(null);
+        // prevent fast click
+        view.setEnabled(false);
+        handlerCopyAnim.postDelayed(() -> view.setEnabled(true), animDuration + delayDuration);
+        for (final RedemptionCode rc : redemptionCodes.values()) {
+            final Reward reward = rc.getReward();
+            if (reward != null && !reward.redeemed() && (reward.getAmount() != null && reward.getAmount() > 0)) {
+                View status = rc.getRow().findViewById(R.id.status);
+                View bgCode = rc.getRow().findViewById(R.id.bgText);
+                View checkIcon = rc.getRow().findViewById(R.id.imgvChecked);
+
+                status.animate().alpha(0f).setDuration(animDuration).start();
+                bgCode.animate().alpha(1f).setDuration(animDuration).start();
+                checkIcon.animate().alpha(1f).setDuration(animDuration).start();
+                handlerCopyAnim.postDelayed(() -> {
+                    status.animate().alpha(1f).setDuration(animDuration).start();
+                    bgCode.animate().alpha(0f).setDuration(animDuration).start();
+                    checkIcon.animate().alpha(0f).setDuration(animDuration).start();
+                }, delayDuration);
+            }
+        }
+
         final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         final ClipData clip = ClipData.newPlainText("label", codes);
         clipboard.setPrimaryClip(clip);

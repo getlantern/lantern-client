@@ -1,253 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:background="@color/accent_white"
-    android:id="@+id/settingsView"
-    tools:context=".SettingsActivity">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/coordinatorLayout"
-        android:background="@color/accent_white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <fragment
             xmlns:lantern="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/titlebar_fragment"
-            android:layout_width="fill_parent"
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            lantern:layout_constraintStart_toStartOf="parent"
+            lantern:layout_constraintEnd_toEndOf="parent"
+            lantern:layout_constraintTop_toTopOf="parent"
             class="org.getlantern.lantern.fragment.TitleBar"
-            lantern:titleBackgroundColor="@drawable/nav_background_white"
             lantern:titleText="@string/yinbi_redemption"/>
 
-        <FrameLayout
-            android:id="@+id/distributionSection"
-            android:background="@drawable/thanks_card"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"
-            android:layout_width="match_parent"
+        <TextView
+            android:text="@string/redeem_codes"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:id="@+id/textView3"
+            android:layout_marginTop="24dp"
+            android:textAppearance="?attr/textAppearanceOverline"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="20dp"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                android:textColor="@color/black"
-                android:lineSpacingExtra="8sp"
-                android:layout_gravity="center"
-                android:gravity="left"
-                android:text="@string/how_yinbis_distributed"/>
+        <TextView
+            android:text="@string/ynb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView8"
+            android:textAppearance="?attr/textAppearanceOverline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            android:layout_marginEnd="24dp"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/okDistributionBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:lineSpacingExtra="10sp"
-                android:textSize="16sp"
-                android:textAppearance="@style/MediumText"
-                android:textColor="@color/pink"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="40dp"
-                android:text="@string/ok"/>
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/divider"
+            android:background="@color/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            android:layout_marginTop="@dimen/space_small"
+            android:layout_marginHorizontal="@dimen/space_normal"/>
 
-        </FrameLayout>
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/space_tiny"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintBottom_toTopOf="@+id/copyAllCodes">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/redemptionSection"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="50dp"
+            <TableLayout
+                android:id="@+id/redemptionTable"
+                android:stretchColumns="*"
+                android:weightSum="2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/bottomSection"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"/>
+        </ScrollView>
 
-                <TableLayout
-                    android:id="@+id/tableHeader"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:stretchColumns="*"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/copyAllCodes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy_all_codes"
+            android:layout_marginBottom="60dp"
+            android:visibility="gone"
+            style="?attr/borderlessButtonStyle"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/visitYinbi"/>
 
-                    <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:textColor="#000000"
-                            android:lineSpacingExtra="2sp"
-                            android:text="@string/date"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/visitYinbi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/visit_yin_bi_to_redeem_your_ynb"
+            android:layout_marginHorizontal="@dimen/space_large"
+            android:layout_marginBottom="@dimen/space_large"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#000000"
-                            android:lineSpacingExtra="2sp"
-                            android:text="@string/redemption_code"
-                            />
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textColor="#000000"
-                            android:gravity="right"
-                            android:lineSpacingExtra="2sp"
-                            android:text="@string/status"
-                            />
-                    </TableRow>
-                </TableLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/divider"
+            android:layout_marginBottom="@dimen/space_large"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:background="@color/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/renewPro"/>
 
-                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/scrollView1"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:scrollbars="none"
-                    android:fillViewport="true"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/renewPro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/renew_pro_get_yinbi"
+            android:layout_marginBottom="@dimen/space_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/enterProCodes"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TableLayout
-                            android:id="@+id/redemptionTable"
-                            android:weightSum="2"
-                            android:layout_width="fill_parent"
-                            android:layout_height="match_parent"
-                            android:stretchColumns="*"
-                            android:layout_gravity="center">
-                        </TableLayout>
-                    </LinearLayout>
-                </ScrollView>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/bottomSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="vertical"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:gravity="bottom"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:layout_alignParentBottom="true">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/copyAllCodes"
-                    android:layout_height="27dp"
-                    android:layout_width="130dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="@string/copy_all_codes"
-                    android:textAppearance="@style/MediumText"
-                    android:textSize="10sp"
-                    android:elevation="2dp"
-                    android:minHeight="48dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/accent_white"
-                    android:clickable = "true"
-                    android:background="#484848"
-                    android:onClick="enterBulkProCodes" />
-
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/visitYinbi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="12sp"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:textStyle="normal"
-                    android:textColor="#7c7c7c"
-                    android:letterSpacing="0.01"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal"
-                    android:linksClickable="false"
-                    android:textColorLink="@color/pink"
-                    android:text="@string/visit_yinbi"/>
-
-                <View android:id="@+id/separator"
-                    android:background="@color/black"
-                    android:paddingTop="25dp"
-                    android:paddingBottom="15dp"
-                    android:layout_below="@+id/visitYinbi"
-                    android:layout_width = "fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_centerVertical ="true"
-                    android:layout_alignParentTop="true"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/enterProCodes"
-                    android:layout_height="36dp"
-                    android:layout_width="216dp"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:text="@string/enter_bulk_pro_codes"
-                    android:stateListAnimator="@null"
-                    android:layout_marginTop="20dp"
-                    android:textAppearance="@style/MediumText"
-                    android:textSize="14sp"
-                    android:minHeight="48dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/accent_white"
-                    android:clickable = "true"
-                    android:layout_gravity="center"
-                    android:background="@color/pink"
-                    android:layout_centerInParent="true"
-                    android:onClick="enterBulkProCodes" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/renewPro"
-                    android:layout_height="36dp"
-                    android:layout_width="216dp"
-                    android:text="@string/renew_pro_get_yinbi"
-                    android:layout_marginTop="20dp"
-                    android:textAppearance="@style/MediumText"
-                    android:textSize="14sp"
-                    android:minHeight="48dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/pink"
-                    android:layout_gravity="center"
-                    android:clickable = "true"
-                    android:background="@drawable/text_invite"
-                    android:layout_centerInParent="true"
-                    android:onClick="resendEmail" />
-
-            </LinearLayout>
-        </RelativeLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</RelativeLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enterProCodes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_lantern_pro_codes"
+            android:layout_marginBottom="@dimen/space_normal"
+            style="?attr/borderlessButtonStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
