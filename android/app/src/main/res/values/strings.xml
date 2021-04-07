@@ -538,4 +538,6 @@
     <string name="email_optional">Email (Optional)</string>
     <string name="device_added">Device Added</string>
     <string name="device_authorized_pro">This device is now authorized to use your Lantern Pro account.</string>
+    <string name="report_sent">Report Sent</string>
+    <string name="thank_you_for_reporting_your_issue">Thank you for reporting your issue. If you provided your email we will get back to you as soon as we are able.</string>
 </resources>

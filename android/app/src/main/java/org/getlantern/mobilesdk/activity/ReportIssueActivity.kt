@@ -74,7 +74,8 @@ open class ReportIssueActivity : FragmentActivity() {
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
         LanternApp.getSession().setEmail(email)
-        val mailSender = MailSender(this, "user-send-logs", true, true)
+        val mailSender = MailSender(this, "user-send-logs", showProgress = true, finish = true, getString(R.string.report_sent),
+        getString(R.string.thank_you_for_reporting_your_issue))
         val report = binding.description.text.toString()
         mailSender.addMergeVar("issue", issue)
         mailSender.addMergeVar("report", report)
