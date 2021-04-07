@@ -28,7 +28,7 @@
         android:id="@+id/yinbiDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Lantern has partnered with Yinbi to give YNB to everyone that purchases Lantern Pro! Upgrade now to get access to today’s giveaway! For more info about Yinbi visit the official site: Yin.bi"
+        android:text="@string/yinbi_description_free"
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginTop="@dimen/space_large"
         android:textAppearance="?attr/textAppearanceBody2"
