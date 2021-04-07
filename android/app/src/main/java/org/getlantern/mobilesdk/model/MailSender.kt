@@ -14,8 +14,14 @@ import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import java.util.*
 
-
-class MailSender(private val context: Context, private val template: String, private val showProgress: Boolean, private val finish: Boolean) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
+class MailSender @JvmOverloads constructor(
+    private val context: Context,
+    private val template: String,
+    private val showProgress: Boolean,
+    private val finish: Boolean,
+    private val title: String? = null,
+    private val message: String? = null
+) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
     private var dialog: ProgressDialog? = null
     private val userEmail: String
     private val appVersion: String
@@ -102,7 +108,10 @@ class MailSender(private val context: Context, private val template: String, pri
             }
         }
         if (showProgress) {
-            (context as Activity).showAlertDialog(getAppName(), getResponseMessage(success), finish = finish)
+            (context as Activity).showAlertDialog(
+                title ?: getAppName(),
+                message ?: getResponseMessage(success),
+                finish = finish)
         }
     }
 
