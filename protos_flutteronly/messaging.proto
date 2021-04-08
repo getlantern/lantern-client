@@ -9,21 +9,27 @@ enum MessageDirection {
   IN = 1;
 }
 
+enum ContactType {
+  DIRECT = 0; // e.g. a person
+  GROUP = 1;
+}
+
+// A globally unique identifier for a Contact
+message ContactId {
+  ContactType type = 1;
+  string id = 2; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
+}
+
 // A contact in the address book
 message Contact {
-  enum Type {
-    DIRECT = 0; // e.g. a person
-    GROUP = 1;
-  }
-
-  Type type = 2; //
-  string id = 3; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
-  repeated string memberIds = 4; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
-  string displayName = 5; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
-  int64 createdTime = 6; // the millisecond unix timestamp when this contact was created
-  int64 mostRecentMessageTs = 7; // the unix timestamp of the most recent message with this contact
-  MessageDirection mostRecentMessageDirection = 8; // direction of the most recent message with this contact
-  string mostRecentMessageText = 9; // the text of the most recent message with this contact
+  ContactId contactId = 1;
+  repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
+  string displayName = 3; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
+  int64 createdTime = 4; // the millisecond unix timestamp when this contact was created
+  int64 mostRecentMessageTs = 5; // the unix timestamp of the most recent message with this contact
+  MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
+  string mostRecentMessageText = 7; // the text of the most recent message with this contact
+  string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
 }
 
 // An attachment to a Message
@@ -54,7 +60,7 @@ message StoredAttachment {
 message Message {
   bytes id = 1; // the id of the message, unique under the given sender
   bytes replyToSenderId = 2; // if this message is a reply to another message, this contains the ID of the sender of that message
-  bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that messsage
+  bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that message
   string text = 4;
   map<int32, Attachment> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
 }
@@ -69,15 +75,33 @@ message StoredMessage {
     COMPLETELY_FAILED = 4; // message failed to send to any recipients, will not retry
   }
 
-  string senderId = 1; // the id of who sent this message
-  string id = 2; // the id of the message (same as on Message), encoded in base32
-  int64 ts = 3; // The unix timestamp in nanoseconds for when the message was sent (for OUT) or received (for IN)
-  string replyToSenderId = 4; // if this message is a reply to another message, this contains the ID of the sender of that message
-  string replyToId = 5; // if this message is a reply to another message, this contains the ID of that messsage
-  string text = 6;
-  map<int32, StoredAttachment> attachments = 7; // attachments keyed to unique IDs for each attachment within this message
-  MessageDirection direction = 8; // direction in which the message is going/came
-  DeliveryStatus status = 9; // for outgoing messages, the status of its sending and delivery
+  ContactId contactId = 1; // the ContactId that identifies the conversation to which this message belongs (either a direct conversation with a person, or messages in a group)
+  string senderId = 2; // the id of the person who sent this message (will match the conversation.id for direct conversations)
+  string id = 3; // the id of the message (same as on Message), encoded in base32
+  int64 ts = 4; // The unix timestamp in nanoseconds for when the message was sent (for OUT) or received (for IN)
+  string replyToSenderId = 5; // if this message is a reply to another message, this contains the ID of the sender of that message
+  string replyToId = 6; // if this message is a reply to another message, this contains the ID of that message
+  string text = 7;
+  map<int32, StoredAttachment> attachments = 8; // attachments keyed to unique IDs for each attachment within this message
+  MessageDirection direction = 9; // direction in which the message is going/came
+  DeliveryStatus status = 10; // for outgoing messages, the status of its sending and delivery
+  map<string, Reaction> reactions = 11; // reactions by the id of the reacter
+}
+
+// A reaction to a message
+message Reaction {
+  bytes reactingToSenderId = 1; // the id of the sender of the message to which this is reacting
+  bytes reactingToMessageId = 2; // the id of the message to which this is reacting
+  string emoticon = 3; // a single character emoticon representing the reaction
+}
+
+// An envelope for messages to be transferred via the message broker
+message TransferMessage {
+  oneof content {
+    bytes message = 1; // serialized Message
+    bytes reaction = 2; // serialized Reaction
+    bytes deleteMessageId = 3; // the id of a message from this Sender to delete
+  }
 }
 
 // An outbound Message
@@ -87,11 +111,16 @@ message OutboundMessage {
     SENT = 1; // message has been sent to specific deviceId
   }
 
-  string senderId = 1; // the id of who sent this message (same as on StoredMessage)
-  string id = 2; // the id of the message (same as on Message), encoded in base32
-  int64 sent = 3; // The unix timestamp in nanoseconds for when the message was sent
-  string recipientId = 4; // the id of the recipient
+  string id = 1; // a unique identifier for this
+  string senderId = 2; // the id of who sent this message (same as on StoredMessage)
+  string recipientId = 3; // the id of the recipient
+  int64 sent = 4; // The unix timestamp in nanoseconds for when the message was sent
   map<string, SubDeliveryStatus> subDeliveryStatuses = 5; // Statuses of subdeliveries to specific deviceIds
+  oneof content {
+    string messageId = 31; // the id of the message (same as on Message), encoded in base32
+    bytes reaction = 32; // serialized Reaction
+    bytes deleteMessageId = 33; // the id of a message from this Sender to delete
+  }
 }
 
 // An inbound Attachment
@@ -100,10 +129,4 @@ message InboundAttachment {
   string messageId = 2; // the id of the StoredMessage, encoded in base32
   int64 ts = 3; // The unix timestamp in nanoseconds for when the message was received (has to match what's on the StoredMessage
   int32 attachmentId = 4; // The id of the attachment within the Message
-}
-
-message TransferMessage {
-  oneof content {
-    bytes Message = 1; // the serialized Message
-  }
 }

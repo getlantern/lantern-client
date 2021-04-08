@@ -46,7 +46,7 @@ class NewMessage extends StatelessWidget {
                 if (dc != 0) {
                   return dc;
                 }
-                return a.value.id.compareTo(b.value.id);
+                return a.value.contactId.id.compareTo(b.value.contactId.id);
               });
               all += contacts;
             }
@@ -62,7 +62,7 @@ class NewMessage extends StatelessWidget {
                           : contact.value.displayName,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle:
-                      Text(contact.value.id, overflow: TextOverflow.ellipsis),
+                      Text(contact.value.contactId.id, overflow: TextOverflow.ellipsis),
                   onTap: () {
                     Navigator.pushNamed(context, '/conversation',
                         arguments: contact.value);

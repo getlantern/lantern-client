@@ -36,6 +36,9 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
             val content = service.getText(content)
             notificationBuilder.setContentText(content)
             notificationBuilder.setContentIntent(openMainActivity)
+            notificationBuilder.setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
+            notificationBuilder.setNumber(0)
+            notificationBuilder.setOngoing(true)
             val notification = notificationBuilder.build()
             service.startForeground(1, notification)
         }
