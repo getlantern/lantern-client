@@ -80,7 +80,7 @@ class MessagingModel extends Model {
       {@required
           ValueWidgetBuilder<List<PathAndValue<StoredMessage>>> builder}) {
     return subscribedListBuilder<StoredMessage>(
-        '/cm/${_contactPathSegment(contact)}',
+        '/cm/${_contactPathSegment(contact.contactId)}',
         details: true,
         compare: sortReversed,
         builder: builder, deserialize: (Uint8List serialized) {
@@ -103,9 +103,9 @@ class MessagingModel extends Model {
     });
   }
 
-  String _contactPathSegment(Contact contact) {
-    return contact.type == Contact_Type.DIRECT
-        ? "d/${contact.id}"
-        : "g/${contact.id}";
+  String _contactPathSegment(ContactId contactId) {
+    return contactId.type == ContactType.DIRECT
+        ? "d/${contactId.id}"
+        : "g/${contactId.id}";
   }
 }

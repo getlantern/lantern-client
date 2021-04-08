@@ -48,7 +48,7 @@ class _AddContactState extends State<AddContact> {
     qrController?.scannedDataStream?.listen((scanData) {
       try {
         var contact = Contact.fromJson(scanData.code);
-        contactId.text = contact.id;
+        contactId.text = contact.contactId.id;
         displayName.text = contact.displayName;
       } finally {
         qrController?.pauseCamera();

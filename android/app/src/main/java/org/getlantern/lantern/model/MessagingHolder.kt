@@ -10,10 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Schema
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.path
+import io.lantern.messaging.*
 import io.lantern.messaging.store.MessagingStore
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
@@ -26,7 +23,7 @@ internal const val defaultNotificationChannelId = "default"
 
 class MessagingHolder {
     lateinit var messaging: Messaging
-    private val contactNotificationIds = HashMap<String, Int>()
+    private val contactNotificationIds = HashMap<Model.ContactId, Int>()
     private var nextNotificationId = 5000;
 
     fun init(application: Application) {
@@ -41,17 +38,17 @@ class MessagingHolder {
             messaging.db.subscribe(object : Subscriber<String>("newMessageNotifications", Schema.PATH_CONTACT_MESSAGES.path("%")) {
                 override fun onChanges(changes: ChangeSet<String>) {
                     changes.updates.values.forEach { messagePath ->
-                        val msg = messaging.db.get<io.lantern.messaging.Model.StoredMessage>(messagePath)
+                        val msg = messaging.db.get<Model.StoredMessage>(messagePath)
                         msg?.let {
-                            if (msg.direction == io.lantern.messaging.Model.MessageDirection.OUT) {
+                            if (msg.direction == Model.MessageDirection.OUT) {
                                 return
                             }
-                            val contact = messaging.db.get<io.lantern.messaging.Model.Contact>(msg.senderId.directContactPath)
+                            val contact = messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
                             contact?.let {
-                                var notificationId = contactNotificationIds[contact.id]
+                                var notificationId = contactNotificationIds[contact.contactId]
                                 if (notificationId == null) {
                                     notificationId = nextNotificationId++
-                                    contactNotificationIds[contact.id] = notificationId
+                                    contactNotificationIds[contact.contactId] = notificationId
                                 }
                                 val mainActivityIntent = Intent(application, MainActivity::class.java)
                                 mainActivityIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
@@ -61,10 +58,11 @@ class MessagingHolder {
                                 val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                                 val builder = NotificationCompat.Builder(application, defaultNotificationChannelId)
                                 builder.setContentTitle("New Message") // TODO: localize me
-                                builder.setContentText("from ${contact.displayName ?: contact.id}")
+                                builder.setContentText("from ${contact.displayName ?: contact.contactId.id}")
                                 builder.setTicker("Notification Listener Service Example")
                                 builder.setSmallIcon(R.drawable.status_on)
                                 builder.setAutoCancel(true)
+                                builder.setOnlyAlertOnce(true)
                                 builder.setContentIntent(openMainActivity)
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     val importance = NotificationManager.IMPORTANCE_HIGH

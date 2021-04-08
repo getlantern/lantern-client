@@ -141,7 +141,7 @@ class _ConversationState extends State<Conversation> {
   }
 
   _send(String text, {List<Uint8List> attachments}) {
-    model.sendToDirectContact(widget._contact.id,
+    model.sendToDirectContact(widget._contact.contactId.id,
         text: text, attachments: attachments);
     _newMessage.clear();
   }
@@ -182,7 +182,7 @@ class _ConversationState extends State<Conversation> {
 
     return BaseScreen(
       title: widget._contact.displayName.isEmpty
-          ? widget._contact.id
+          ? widget._contact.contactId.id
           : widget._contact.displayName,
       body: GestureDetector(
         child: Stack(children: [

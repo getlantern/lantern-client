@@ -43,7 +43,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
         displayName.text = me.displayName;
 
         void copyToClipboard() {
-          Clipboard.setData(new ClipboardData(text: me.id));
+          Clipboard.setData(new ClipboardData(text: me.contactId.id));
         }
 
         return Column(children: [
@@ -116,7 +116,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
                                   tsSubTitle(context).copyWith(fontSize: 12))),
                       ListTile(
                         leading: Icon(Icons.vpn_key_rounded),
-                        title: Text(me.id),
+                        title: Text(me.contactId.id),
                         tileColor: Colors.black12,
                         onTap: copyToClipboard,
                       ),
@@ -132,7 +132,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
             OutlinedButton(
                 child: Text('Share'.i18n),
                 onPressed: () {
-                  Share.share('Join me on Lantern Messenger.\n\nMy ID is: ${me.id}');
+                  Share.share('Join me on Lantern Messenger.\n\nMy ID is: ${me.contactId.id}');
                 }),
           ])
         ]);
