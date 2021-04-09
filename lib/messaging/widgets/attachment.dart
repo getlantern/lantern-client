@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 

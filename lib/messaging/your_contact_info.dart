@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_flutter/qr_flutter.dart';

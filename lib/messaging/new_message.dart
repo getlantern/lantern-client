@@ -1,7 +1,8 @@
-import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/humanize.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -61,8 +62,10 @@ class NewMessage extends StatelessWidget {
                           ? 'Unnamed'.i18n
                           : contact.value.displayName,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle:
-                      Text(contact.value.contactId.id, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(
+                      'added '.i18n +
+                          contact.value.createdTime.toInt().humanizeDate(),
+                      overflow: TextOverflow.ellipsis),
                   onTap: () {
                     Navigator.pushNamed(context, '/conversation',
                         arguments: contact.value);

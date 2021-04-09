@@ -1,6 +1,6 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/messaging/new_message.dart';
-import 'package:lantern/ui/messaging/your_contact_info.dart';
+import 'package:lantern/messaging/new_message.dart';
+import 'package:lantern/messaging/your_contact_info.dart';
 
 import 'add_contact.dart';
 import 'conversation.dart';

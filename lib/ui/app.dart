@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lantern/model/messaging_model.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
