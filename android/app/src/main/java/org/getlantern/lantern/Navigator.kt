@@ -7,6 +7,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
+import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.LanguageActivity
@@ -71,4 +72,8 @@ fun Activity.openHome() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         })
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+}
+
+fun Activity.openCheckOutReseller() {
+    startActivity(Intent(this, RegisterProActivity_::class.java))
 }

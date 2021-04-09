@@ -63,7 +63,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
 
-    private static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
+    public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     
     private ProgressDialog dialog;
