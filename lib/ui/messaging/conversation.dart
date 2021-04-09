@@ -47,22 +47,22 @@ class _ConversationState extends State<Conversation> {
 
       var statusRow = Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          Opacity(
-            opacity: 0.5,
-            child: Text(
-              message.value.ts.toInt().humanizedDate(),
-              style: TextStyle(
-                color: outbound ? Colors.white : Colors.black,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
+        children: msg.reactions.values
+            .map((e) => Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Text(e.emoticon)) as Widget)
+            .toList(),
       );
-      msg.reactions.forEach((key, value) {
-        statusRow.children.add(Text(value.emoticon));
-      });
+      statusRow.children.add(Opacity(
+        opacity: 0.5,
+        child: Text(
+          message.value.ts.toInt().humanizedDate(),
+          style: TextStyle(
+            color: outbound ? Colors.white : Colors.black,
+            fontSize: 12,
+          ),
+        ),
+      ));
 
       var innerColumn = Column(
           crossAxisAlignment:
@@ -153,16 +153,26 @@ class _ConversationState extends State<Conversation> {
                 isDismissible: true,
                 builder: (context) {
                   return Wrap(children: [
-                    Row(
-                      children: ['😄', '🙁']
-                          .map((e) => ElevatedButton(
-                                child: Text(e),
-                                onPressed: () {
-                                  model.react(message, e);
-                                },
-                              ))
-                          .toList(growable: false),
-                    ),
+                    if (msg.direction == MessageDirection.IN)
+                      Row(
+                        children: ['👍', '👎', '😄', '❤', '😢']
+                            .map(
+                              (e) => Padding(
+                                padding: EdgeInsets.all(16),
+                                child: InkWell(
+                                  child: Transform.scale(
+                                      scale: 2,
+                                      child: Text(e,
+                                          style: TextStyle(fontSize: 16))),
+                                  onTap: () {
+                                    model.react(message, e);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            )
+                            .toList(growable: false),
+                      ),
                     ListTile(
                       leading: Icon(Icons.delete),
                       title: Text('Delete for me'.i18n),
