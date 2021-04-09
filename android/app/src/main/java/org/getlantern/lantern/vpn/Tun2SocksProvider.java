@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 
-import org.getlantern.lantern.activity.LanternFreeActivity;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.android.vpn.Tun2Socks;
 
 import org.getlantern.mobilesdk.Logger;
@@ -41,7 +41,7 @@ public class Tun2SocksProvider implements Provider {
     builder.addRoute("0.0.0.0", 0);
     builder.addDnsServer("8.8.8.8");
 
-    Intent intent = new Intent(vpnService, LanternFreeActivity.class);
+    Intent intent = new Intent(vpnService, MainActivity.class);
     PendingIntent pendingIntent = PendingIntent.getActivity(vpnService, 0, intent, 0);
     builder.setConfigureIntent(pendingIntent);
 

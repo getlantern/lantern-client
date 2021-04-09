@@ -4,16 +4,14 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
-import android.widget.ListView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.Launcher
 import org.getlantern.lantern.databinding.LanguagesBinding
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.LangAdapter
 import org.getlantern.mobilesdk.model.LocaleInfo
 import java.util.*
 
@@ -68,7 +66,7 @@ class LanguageActivity : FragmentActivity() {
         val locale = localeMap[lang]
         Logger.debug(TAG, "Language selected: $lang setting locale to $locale")
         LanternApp.getSession().setLanguage(locale)
-        val refresh = Intent(this, Launcher::class.java)
+        val refresh = Intent(this, MainActivity::class.java)
         refresh.action = "restart"
         refresh.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(refresh)

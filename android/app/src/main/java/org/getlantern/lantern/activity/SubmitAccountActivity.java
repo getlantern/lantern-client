@@ -22,6 +22,7 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.util.ActivityExtKt;
@@ -125,7 +126,7 @@ public class SubmitAccountActivity extends FragmentActivity {
         else
             mailSender.execute(toEmail);
 
-        Intent intent = new Intent(this, LanternFreeActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("snackbarMsg", getResources().getString(R.string.thanks_report));
         startActivity(intent);
         finish();

@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.UserForm;
 import org.getlantern.lantern.model.LanternHttpClient;
@@ -60,7 +61,7 @@ public class AddDeviceActivity extends FragmentActivity {
             }
             @Override
             public void onSuccess(final Response response, final JsonObject result) {
-                Intent intent = new Intent(activity, Launcher.class);
+                Intent intent = new Intent(activity, MainActivity.class);
                 intent.putExtra("snackbarMsg",
                         getResources().getString(R.string.device_linked_success));
                 activity.startActivity(intent);
