@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.os.Handler;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.activity.LanternProActivity;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
@@ -107,7 +107,7 @@ public class LinkDeviceService extends Service implements LanternHttpClient.ProC
 
         try {
             final Context context = getApplicationContext();
-            final Intent intent = new Intent(this, LanternProActivity.class);
+            final Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("snackbarMsg",
                     context.getResources().getString(R.string.device_now_linked));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

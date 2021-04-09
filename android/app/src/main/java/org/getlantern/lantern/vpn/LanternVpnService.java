@@ -22,8 +22,8 @@ import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.Launcher;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.mobilesdk.Logger;
@@ -65,7 +65,7 @@ public class LanternVpnService extends VpnService implements Runnable {
   public void onCreate() {
     super.onCreate();
     Logger.d(TAG, "VpnService created");
-    mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, Launcher.class),
+    mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class),
         PendingIntent.FLAG_UPDATE_CURRENT);
     bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
   }

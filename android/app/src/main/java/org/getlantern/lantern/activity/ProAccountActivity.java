@@ -19,6 +19,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Device;
 import org.getlantern.lantern.model.DeviceView;
@@ -150,7 +151,7 @@ public class ProAccountActivity extends FragmentActivity {
     public void logout(View view) {
         Logger.debug(TAG, "Logout button clicked.");
         LanternApp.getSession().unlinkDevice();
-        startActivity(new Intent(this, LanternFreeActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     public void renewPro(View view) {
