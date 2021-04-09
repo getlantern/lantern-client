@@ -8,7 +8,7 @@ extension Humanize on int {
     DateTime justNow = now.subtract(Duration(minutes: 1));
     DateTime localDateTime = dateTime.toLocal();
     if (!localDateTime.difference(justNow).isNegative) {
-      return 'Just now'; // TODO: use i18n
+      return 'just now'; // TODO: use i18n
     }
     String roughTimeString = DateFormat('jm').format(dateTime);
     if (localDateTime.day == now.day &&
@@ -36,11 +36,11 @@ extension Humanize on int {
       return this.toString() + (longForm ? ' seconds' : 's');
     }
     if (this < 3600) {
-      return (this / 60).toInt().toString() + (longForm ? ' minutes' : 'm');
+      return (this ~/ 60).toString() + (longForm ? ' minutes' : 'm');
     }
     if (this < 86400) {
-      return (this / 60 / 60).toInt().toString() + (longForm ? ' hours' : 'h');
+      return (this ~/ 3600).toString() + (longForm ? ' hours' : 'h');
     }
-    return (this / 86400).toInt().toString() + (longForm ? ' days' : 'd');
+    return (this ~ 86400).toString() + (longForm ? ' days' : 'd');
   }
 }
