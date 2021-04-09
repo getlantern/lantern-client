@@ -2,6 +2,7 @@ package io.lantern.android.model
 
 import android.os.Handler
 import android.os.Looper
+import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
 import io.lantern.db.*
@@ -35,6 +36,7 @@ abstract class BaseModel(
         try {
             when (val out = doMethodCall(call, { result.notImplemented() })) {
                 is Unit -> result.success(null)
+                is GeneratedMessageLite<*, *> -> result.success(out.toByteArray())
                 else -> result.success(out)
             }
         } catch (e: AttachmentTooBigException) {

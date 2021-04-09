@@ -38,6 +38,10 @@ class _ConversationState extends State<Conversation> {
       StoredMessage priorMessage, StoredMessage nextMessage) {
     return model.message(context, message,
         (BuildContext context, StoredMessage msg, Widget child) {
+      if (msg.firstViewedAt == 0) {
+        model.markViewed(message);
+      }
+
       var outbound = msg.direction == MessageDirection.OUT;
       var inbound = !outbound;
 
@@ -56,6 +60,9 @@ class _ConversationState extends State<Conversation> {
           ),
         ],
       );
+      msg.reactions.forEach((key, value) {
+        statusRow.children.add(Text(value.emoticon));
+      });
 
       var innerColumn = Column(
           crossAxisAlignment:
@@ -97,7 +104,7 @@ class _ConversationState extends State<Conversation> {
       var endOfBlock = nextMessage == null ||
           nextMessage.direction != message.value.direction;
       var newestMessage = nextMessage == null;
-      return Row(
+      var row = Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
             outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -137,6 +144,45 @@ class _ConversationState extends State<Conversation> {
           ),
         ],
       );
+
+      return InkWell(
+          child: row,
+          onLongPress: () {
+            showModalBottomSheet(
+                context: context,
+                isDismissible: true,
+                builder: (context) {
+                  return Wrap(children: [
+                    Row(
+                      children: ['😄', '🙁']
+                          .map((e) => ElevatedButton(
+                                child: Text(e),
+                                onPressed: () {
+                                  model.react(message, e);
+                                },
+                              ))
+                          .toList(growable: false),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Delete for me'.i18n),
+                      onTap: () {
+                        model.deleteLocally(message);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    if (msg.direction == MessageDirection.OUT)
+                      ListTile(
+                        leading: Icon(Icons.delete),
+                        title: Text('Delete for everyone'.i18n),
+                        onTap: () {
+                          model.deleteGlobally(message);
+                          Navigator.pop(context);
+                        },
+                      ),
+                  ]);
+                });
+          });
     });
   }
 
@@ -184,9 +230,92 @@ class _ConversationState extends State<Conversation> {
       title: widget._contact.displayName.isEmpty
           ? widget._contact.contactId.id
           : widget._contact.displayName,
+      actions: [
+        model.singleContact(
+          context,
+          widget._contact,
+          (context, contact, child) => PopupMenuButton(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Column(children: [
+                Icon(Icons.timer),
+                if (contact.messagesDisappearAfterSeconds > 0)
+                  Text(contact.messagesDisappearAfterSeconds.humanizeSeconds()),
+              ]),
+            ),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              PopupMenuItem(
+                child: Text(
+                    'All messages will disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)} for you and your contact'
+                        .i18n),
+              ),
+              PopupMenuItem(
+                value: 5,
+                child: ListTile(
+                  leading: Icon(contact.messagesDisappearAfterSeconds == 5
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank),
+                  title: Text('5' + ' seconds'.i18n),
+                ),
+              ),
+              PopupMenuItem(
+                value: 60,
+                child: ListTile(
+                  leading: Icon(contact.messagesDisappearAfterSeconds == 60
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank),
+                  title: Text('1' + ' minute'.i18n),
+                ),
+              ),
+              PopupMenuItem(
+                value: 60 * 60,
+                child: ListTile(
+                  leading: Icon(contact.messagesDisappearAfterSeconds == 60 * 60
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank),
+                  title: Text('1' + ' hour'.i18n),
+                ),
+              ),
+              PopupMenuItem(
+                value: 24 * 60 * 60,
+                child: ListTile(
+                  leading: Icon(
+                      contact.messagesDisappearAfterSeconds == 24 * 60 * 60
+                          ? Icons.check_box_outlined
+                          : Icons.check_box_outline_blank),
+                  title: Text('1' + ' day'.i18n),
+                ),
+              ),
+              PopupMenuItem(
+                value: 0,
+                child: ListTile(
+                  leading: Icon(contact.messagesDisappearAfterSeconds == 0
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank),
+                  title: Text('Never'.i18n),
+                ),
+              ),
+            ],
+            onSelected: (int value) {
+              model.setDisappearSettings(contact, value);
+            },
+          ),
+        ),
+      ],
       body: GestureDetector(
         child: Stack(children: [
           Column(children: [
+            Padding(
+                padding: EdgeInsets.only(top: 8, bottom: 8),
+                child: model.singleContact(
+                    context,
+                    widget._contact,
+                    (context, contact, child) => contact
+                                .messagesDisappearAfterSeconds >
+                            0
+                        ? Text(
+                            'New messages disappear after ${contact.messagesDisappearAfterSeconds} seconds')
+                        : Container())),
             Expanded(
               child: model.contactMessages(widget._contact, builder: (context,
                   Iterable<PathAndValue<StoredMessage>> messageRecords,

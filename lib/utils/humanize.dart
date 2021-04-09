@@ -28,4 +28,19 @@ extension Humanize on int {
     }
     return '${DateFormat('yMd').format(dateTime)}, $roughTimeString';
   }
+
+  String humanizeSeconds({bool longForm = false}) {
+    // TODO: unit test this
+    // TODO: localize the string portions of the below
+    if (this < 60) {
+      return this.toString() + (longForm ? ' seconds' : 's');
+    }
+    if (this < 3600) {
+      return (this / 60).toInt().toString() + (longForm ? ' minutes' : 'm');
+    }
+    if (this < 86400) {
+      return (this / 60 / 60).toInt().toString() + (longForm ? ' hours' : 'h');
+    }
+    return (this / 86400).toInt().toString() + (longForm ? ' days' : 'd');
+  }
 }

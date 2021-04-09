@@ -34,6 +34,35 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<void> react(PathAndValue<StoredMessage> message, String reaction) {
+    return methodChannel.invokeMethod('react', <String, dynamic>{
+      "msg": message.value.writeToBuffer(),
+      'reaction': reaction
+    });
+  }
+
+  Future<void> markViewed(PathAndValue<StoredMessage> message) {
+    return methodChannel.invokeMethod(
+        'markViewed', <String, dynamic>{"msg": message.value.writeToBuffer()});
+  }
+
+  Future<void> deleteLocally(PathAndValue<StoredMessage> message) {
+    return methodChannel.invokeMethod('deleteLocally',
+        <String, dynamic>{"msg": message.value.writeToBuffer()});
+  }
+
+  Future<void> deleteGlobally(PathAndValue<StoredMessage> message) {
+    return methodChannel.invokeMethod('deleteGlobally',
+        <String, dynamic>{"msg": message.value.writeToBuffer()});
+  }
+
+  Future<void> setDisappearSettings(Contact contact, int seconds) {
+    return methodChannel.invokeMethod('setDisappearSettings', <String, dynamic>{
+      "contactId": contact.contactId.id,
+      "seconds": seconds
+    });
+  }
+
   Future<void> startRecordingVoiceMemo() {
     return methodChannel.invokeMethod('startRecordingVoiceMemo');
   }
@@ -73,6 +102,15 @@ class MessagingModel extends Model {
       PathAndValue<Contact> contact, ValueWidgetBuilder<Contact> builder) {
     return listChildBuilder(context, contact.path,
         defaultValue: contact.value, builder: builder);
+  }
+
+  ValueListenableBuilder<Contact> singleContact(BuildContext context,
+      Contact contact, ValueWidgetBuilder<Contact> builder) {
+    return subscribedSingleValueBuilder(
+        '/contacts/${_contactPathSegment(contact.contactId)}',
+        builder: builder, deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
   }
 
   ValueListenableBuilder<ChangeTrackingList<StoredMessage>> contactMessages(
