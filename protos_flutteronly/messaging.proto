@@ -97,7 +97,7 @@ message StoredMessage {
 message Reaction {
   bytes reactingToSenderId = 1; // the id of the sender of the message to which this is reacting
   bytes reactingToMessageId = 2; // the id of the message to which this is reacting
-  string emoticon = 3; // a single character emoticon representing the reaction
+  string emoticon = 3; // a 2 byte emoticon representing the reaction
 }
 
 // An update to disappearing message settings

@@ -447,7 +447,7 @@ dependencies {
     implementation 'com.github.getlantern:db-android:4d0a81cb69'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:2aed184'
-    implementation 'com.github.getlantern:messaging-android:ce39b0d1e5'
+    implementation 'com.github.getlantern:messaging-android:9908c43f87'
 
     implementation(name:'opuslib-release', ext: 'aar')
 }
