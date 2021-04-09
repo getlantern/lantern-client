@@ -30,6 +30,7 @@ message Contact {
   MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
   string mostRecentMessageText = 7; // the text of the most recent message with this contact
   string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
+  int32 messagesDisappearAfterSeconds = 9; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
 }
 
 // An attachment to a Message
@@ -63,6 +64,7 @@ message Message {
   bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that message
   string text = 4;
   map<int32, Attachment> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
+  int32 disappearAfterSeconds = 6; // if > 0, message should disappear within this many seconds of first being viewed
 }
 
 // A locally stored Message
@@ -82,10 +84,13 @@ message StoredMessage {
   string replyToSenderId = 5; // if this message is a reply to another message, this contains the ID of the sender of that message
   string replyToId = 6; // if this message is a reply to another message, this contains the ID of that message
   string text = 7;
-  map<int32, StoredAttachment> attachments = 8; // attachments keyed to unique IDs for each attachment within this message
-  MessageDirection direction = 9; // direction in which the message is going/came
-  DeliveryStatus status = 10; // for outgoing messages, the status of its sending and delivery
+  int32 disappearAfterSeconds = 8;
+  map<int32, StoredAttachment> attachments = 9; // attachments keyed to unique IDs for each attachment within this message
+  MessageDirection direction = 10; // direction in which the message is going/came
   map<string, Reaction> reactions = 11; // reactions by the id of the reacter
+  DeliveryStatus status = 12; // for outgoing messages, the status of its sending and delivery
+  int64 firstViewedAt = 13; // the unix timestamp in nanoseconds of when this message was first viewed on the current device
+  int64 disappearAt = 14; // the unix timestamp in nanoseconds of when this message will automatically disappear
 }
 
 // A reaction to a message
@@ -95,12 +100,18 @@ message Reaction {
   string emoticon = 3; // a single character emoticon representing the reaction
 }
 
+// An update to disappearing message settings
+message DisappearSettings {
+  int32 messagesDisappearAfterSeconds = 1; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
+}
+
 // An envelope for messages to be transferred via the message broker
 message TransferMessage {
   oneof content {
     bytes message = 1; // serialized Message
     bytes reaction = 2; // serialized Reaction
     bytes deleteMessageId = 3; // the id of a message from this Sender to delete
+    bytes disappearSettings = 4; // serialized DisappearSettings
   }
 }
 
@@ -120,6 +131,7 @@ message OutboundMessage {
     string messageId = 31; // the id of the message (same as on Message), encoded in base32
     bytes reaction = 32; // serialized Reaction
     bytes deleteMessageId = 33; // the id of a message from this Sender to delete
+    bytes disappearSettings = 34; // serialized DisappearSettings
   }
 }
 

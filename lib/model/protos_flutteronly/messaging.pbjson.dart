@@ -53,11 +53,12 @@ const Contact$json = const {
     const {'1': 'mostRecentMessageDirection', '3': 6, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'mostRecentMessageDirection'},
     const {'1': 'mostRecentMessageText', '3': 7, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
     const {'1': 'mostRecentAttachmentMimeType', '3': 8, '4': 1, '5': 9, '10': 'mostRecentAttachmentMimeType'},
+    const {'1': 'messagesDisappearAfterSeconds', '3': 9, '4': 1, '5': 5, '10': 'messagesDisappearAfterSeconds'},
   ],
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgEIAEoA1ILY3JlYXRlZFRpbWUSMAoTbW9zdFJlY2VudE1lc3NhZ2VUcxgFIAEoA1ITbW9zdFJlY2VudE1lc3NhZ2VUcxJXChptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhgGIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uEjQKFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBgHIAEoCVIVbW9zdFJlY2VudE1lc3NhZ2VUZXh0EkIKHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGUYCCABKAlSHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGU=');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgEIAEoA1ILY3JlYXRlZFRpbWUSMAoTbW9zdFJlY2VudE1lc3NhZ2VUcxgFIAEoA1ITbW9zdFJlY2VudE1lc3NhZ2VUcxJXChptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhgGIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uEjQKFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBgHIAEoCVIVbW9zdFJlY2VudE1lc3NhZ2VUZXh0EkIKHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGUYCCABKAlSHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGUSRAodbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHMYCSABKAVSHW1lc3NhZ2VzRGlzYXBwZWFyQWZ0ZXJTZWNvbmRz');
 @$core.Deprecated('Use attachmentDescriptor instead')
 const Attachment$json = const {
   '1': 'Attachment',
@@ -117,6 +118,7 @@ const Message$json = const {
     const {'1': 'replyToId', '3': 3, '4': 1, '5': 12, '10': 'replyToId'},
     const {'1': 'text', '3': 4, '4': 1, '5': 9, '10': 'text'},
     const {'1': 'attachments', '3': 5, '4': 3, '5': 11, '6': '.model.Message.AttachmentsEntry', '10': 'attachments'},
+    const {'1': 'disappearAfterSeconds', '3': 6, '4': 1, '5': 5, '10': 'disappearAfterSeconds'},
   ],
   '3': const [Message_AttachmentsEntry$json],
 };
@@ -132,7 +134,7 @@ const Message_AttachmentsEntry$json = const {
 };
 
 /// Descriptor for `Message`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List messageDescriptor = $convert.base64Decode('CgdNZXNzYWdlEg4KAmlkGAEgASgMUgJpZBIoCg9yZXBseVRvU2VuZGVySWQYAiABKAxSD3JlcGx5VG9TZW5kZXJJZBIcCglyZXBseVRvSWQYAyABKAxSCXJlcGx5VG9JZBISCgR0ZXh0GAQgASgJUgR0ZXh0EkEKC2F0dGFjaG1lbnRzGAUgAygLMh8ubW9kZWwuTWVzc2FnZS5BdHRhY2htZW50c0VudHJ5UgthdHRhY2htZW50cxpRChBBdHRhY2htZW50c0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EicKBXZhbHVlGAIgASgLMhEubW9kZWwuQXR0YWNobWVudFIFdmFsdWU6AjgB');
+final $typed_data.Uint8List messageDescriptor = $convert.base64Decode('CgdNZXNzYWdlEg4KAmlkGAEgASgMUgJpZBIoCg9yZXBseVRvU2VuZGVySWQYAiABKAxSD3JlcGx5VG9TZW5kZXJJZBIcCglyZXBseVRvSWQYAyABKAxSCXJlcGx5VG9JZBISCgR0ZXh0GAQgASgJUgR0ZXh0EkEKC2F0dGFjaG1lbnRzGAUgAygLMh8ubW9kZWwuTWVzc2FnZS5BdHRhY2htZW50c0VudHJ5UgthdHRhY2htZW50cxI0ChVkaXNhcHBlYXJBZnRlclNlY29uZHMYBiABKAVSFWRpc2FwcGVhckFmdGVyU2Vjb25kcxpRChBBdHRhY2htZW50c0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EicKBXZhbHVlGAIgASgLMhEubW9kZWwuQXR0YWNobWVudFIFdmFsdWU6AjgB');
 @$core.Deprecated('Use storedMessageDescriptor instead')
 const StoredMessage$json = const {
   '1': 'StoredMessage',
@@ -144,10 +146,13 @@ const StoredMessage$json = const {
     const {'1': 'replyToSenderId', '3': 5, '4': 1, '5': 9, '10': 'replyToSenderId'},
     const {'1': 'replyToId', '3': 6, '4': 1, '5': 9, '10': 'replyToId'},
     const {'1': 'text', '3': 7, '4': 1, '5': 9, '10': 'text'},
-    const {'1': 'attachments', '3': 8, '4': 3, '5': 11, '6': '.model.StoredMessage.AttachmentsEntry', '10': 'attachments'},
-    const {'1': 'direction', '3': 9, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'direction'},
-    const {'1': 'status', '3': 10, '4': 1, '5': 14, '6': '.model.StoredMessage.DeliveryStatus', '10': 'status'},
+    const {'1': 'disappearAfterSeconds', '3': 8, '4': 1, '5': 5, '10': 'disappearAfterSeconds'},
+    const {'1': 'attachments', '3': 9, '4': 3, '5': 11, '6': '.model.StoredMessage.AttachmentsEntry', '10': 'attachments'},
+    const {'1': 'direction', '3': 10, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'direction'},
     const {'1': 'reactions', '3': 11, '4': 3, '5': 11, '6': '.model.StoredMessage.ReactionsEntry', '10': 'reactions'},
+    const {'1': 'status', '3': 12, '4': 1, '5': 14, '6': '.model.StoredMessage.DeliveryStatus', '10': 'status'},
+    const {'1': 'firstViewedAt', '3': 13, '4': 1, '5': 3, '10': 'firstViewedAt'},
+    const {'1': 'disappearAt', '3': 14, '4': 1, '5': 3, '10': 'disappearAt'},
   ],
   '3': const [StoredMessage_AttachmentsEntry$json, StoredMessage_ReactionsEntry$json],
   '4': const [StoredMessage_DeliveryStatus$json],
@@ -186,7 +191,7 @@ const StoredMessage_DeliveryStatus$json = const {
 };
 
 /// Descriptor for `StoredMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storedMessageDescriptor = $convert.base64Decode('Cg1TdG9yZWRNZXNzYWdlEi4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIOCgJpZBgDIAEoCVICaWQSDgoCdHMYBCABKANSAnRzEigKD3JlcGx5VG9TZW5kZXJJZBgFIAEoCVIPcmVwbHlUb1NlbmRlcklkEhwKCXJlcGx5VG9JZBgGIAEoCVIJcmVwbHlUb0lkEhIKBHRleHQYByABKAlSBHRleHQSRwoLYXR0YWNobWVudHMYCCADKAsyJS5tb2RlbC5TdG9yZWRNZXNzYWdlLkF0dGFjaG1lbnRzRW50cnlSC2F0dGFjaG1lbnRzEjUKCWRpcmVjdGlvbhgJIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SCWRpcmVjdGlvbhI7CgZzdGF0dXMYCiABKA4yIy5tb2RlbC5TdG9yZWRNZXNzYWdlLkRlbGl2ZXJ5U3RhdHVzUgZzdGF0dXMSQQoJcmVhY3Rpb25zGAsgAygLMiMubW9kZWwuU3RvcmVkTWVzc2FnZS5SZWFjdGlvbnNFbnRyeVIJcmVhY3Rpb25zGlcKEEF0dGFjaG1lbnRzRW50cnkSEAoDa2V5GAEgASgFUgNrZXkSLQoFdmFsdWUYAiABKAsyFy5tb2RlbC5TdG9yZWRBdHRhY2htZW50UgV2YWx1ZToCOAEaTQoOUmVhY3Rpb25zRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSJQoFdmFsdWUYAiABKAsyDy5tb2RlbC5SZWFjdGlvblIFdmFsdWU6AjgBInMKDkRlbGl2ZXJ5U3RhdHVzEgsKB1NFTkRJTkcQABISCg5QQVJUSUFMTFlfU0VOVBABEhMKD0NPTVBMRVRFTFlfU0VOVBACEhQKEFBBUlRJQUxMWV9GQUlMRUQQAxIVChFDT01QTEVURUxZX0ZBSUxFRBAE');
+final $typed_data.Uint8List storedMessageDescriptor = $convert.base64Decode('Cg1TdG9yZWRNZXNzYWdlEi4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIOCgJpZBgDIAEoCVICaWQSDgoCdHMYBCABKANSAnRzEigKD3JlcGx5VG9TZW5kZXJJZBgFIAEoCVIPcmVwbHlUb1NlbmRlcklkEhwKCXJlcGx5VG9JZBgGIAEoCVIJcmVwbHlUb0lkEhIKBHRleHQYByABKAlSBHRleHQSNAoVZGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAggASgFUhVkaXNhcHBlYXJBZnRlclNlY29uZHMSRwoLYXR0YWNobWVudHMYCSADKAsyJS5tb2RlbC5TdG9yZWRNZXNzYWdlLkF0dGFjaG1lbnRzRW50cnlSC2F0dGFjaG1lbnRzEjUKCWRpcmVjdGlvbhgKIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SCWRpcmVjdGlvbhJBCglyZWFjdGlvbnMYCyADKAsyIy5tb2RlbC5TdG9yZWRNZXNzYWdlLlJlYWN0aW9uc0VudHJ5UglyZWFjdGlvbnMSOwoGc3RhdHVzGAwgASgOMiMubW9kZWwuU3RvcmVkTWVzc2FnZS5EZWxpdmVyeVN0YXR1c1IGc3RhdHVzEiQKDWZpcnN0Vmlld2VkQXQYDSABKANSDWZpcnN0Vmlld2VkQXQSIAoLZGlzYXBwZWFyQXQYDiABKANSC2Rpc2FwcGVhckF0GlcKEEF0dGFjaG1lbnRzRW50cnkSEAoDa2V5GAEgASgFUgNrZXkSLQoFdmFsdWUYAiABKAsyFy5tb2RlbC5TdG9yZWRBdHRhY2htZW50UgV2YWx1ZToCOAEaTQoOUmVhY3Rpb25zRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSJQoFdmFsdWUYAiABKAsyDy5tb2RlbC5SZWFjdGlvblIFdmFsdWU6AjgBInMKDkRlbGl2ZXJ5U3RhdHVzEgsKB1NFTkRJTkcQABISCg5QQVJUSUFMTFlfU0VOVBABEhMKD0NPTVBMRVRFTFlfU0VOVBACEhQKEFBBUlRJQUxMWV9GQUlMRUQQAxIVChFDT01QTEVURUxZX0ZBSUxFRBAE');
 @$core.Deprecated('Use reactionDescriptor instead')
 const Reaction$json = const {
   '1': 'Reaction',
@@ -199,6 +204,16 @@ const Reaction$json = const {
 
 /// Descriptor for `Reaction`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List reactionDescriptor = $convert.base64Decode('CghSZWFjdGlvbhIuChJyZWFjdGluZ1RvU2VuZGVySWQYASABKAxSEnJlYWN0aW5nVG9TZW5kZXJJZBIwChNyZWFjdGluZ1RvTWVzc2FnZUlkGAIgASgMUhNyZWFjdGluZ1RvTWVzc2FnZUlkEhoKCGVtb3RpY29uGAMgASgJUghlbW90aWNvbg==');
+@$core.Deprecated('Use disappearSettingsDescriptor instead')
+const DisappearSettings$json = const {
+  '1': 'DisappearSettings',
+  '2': const [
+    const {'1': 'messagesDisappearAfterSeconds', '3': 1, '4': 1, '5': 5, '10': 'messagesDisappearAfterSeconds'},
+  ],
+};
+
+/// Descriptor for `DisappearSettings`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List disappearSettingsDescriptor = $convert.base64Decode('ChFEaXNhcHBlYXJTZXR0aW5ncxJECh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxgBIAEoBVIdbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHM=');
 @$core.Deprecated('Use transferMessageDescriptor instead')
 const TransferMessage$json = const {
   '1': 'TransferMessage',
@@ -206,6 +221,7 @@ const TransferMessage$json = const {
     const {'1': 'message', '3': 1, '4': 1, '5': 12, '9': 0, '10': 'message'},
     const {'1': 'reaction', '3': 2, '4': 1, '5': 12, '9': 0, '10': 'reaction'},
     const {'1': 'deleteMessageId', '3': 3, '4': 1, '5': 12, '9': 0, '10': 'deleteMessageId'},
+    const {'1': 'disappearSettings', '3': 4, '4': 1, '5': 12, '9': 0, '10': 'disappearSettings'},
   ],
   '8': const [
     const {'1': 'content'},
@@ -213,7 +229,7 @@ const TransferMessage$json = const {
 };
 
 /// Descriptor for `TransferMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USGgoHbWVzc2FnZRgBIAEoDEgAUgdtZXNzYWdlEhwKCHJlYWN0aW9uGAIgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBgDIAEoDEgAUg9kZWxldGVNZXNzYWdlSWRCCQoHY29udGVudA==');
+final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USGgoHbWVzc2FnZRgBIAEoDEgAUgdtZXNzYWdlEhwKCHJlYWN0aW9uGAIgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBgDIAEoDEgAUg9kZWxldGVNZXNzYWdlSWQSLgoRZGlzYXBwZWFyU2V0dGluZ3MYBCABKAxIAFIRZGlzYXBwZWFyU2V0dGluZ3NCCQoHY29udGVudA==');
 @$core.Deprecated('Use outboundMessageDescriptor instead')
 const OutboundMessage$json = const {
   '1': 'OutboundMessage',
@@ -226,6 +242,7 @@ const OutboundMessage$json = const {
     const {'1': 'messageId', '3': 31, '4': 1, '5': 9, '9': 0, '10': 'messageId'},
     const {'1': 'reaction', '3': 32, '4': 1, '5': 12, '9': 0, '10': 'reaction'},
     const {'1': 'deleteMessageId', '3': 33, '4': 1, '5': 12, '9': 0, '10': 'deleteMessageId'},
+    const {'1': 'disappearSettings', '3': 34, '4': 1, '5': 12, '9': 0, '10': 'disappearSettings'},
   ],
   '3': const [OutboundMessage_SubDeliveryStatusesEntry$json],
   '4': const [OutboundMessage_SubDeliveryStatus$json],
@@ -254,7 +271,7 @@ const OutboundMessage_SubDeliveryStatus$json = const {
 };
 
 /// Descriptor for `OutboundMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List outboundMessageDescriptor = $convert.base64Decode('Cg9PdXRib3VuZE1lc3NhZ2USDgoCaWQYASABKAlSAmlkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIgCgtyZWNpcGllbnRJZBgDIAEoCVILcmVjaXBpZW50SWQSEgoEc2VudBgEIAEoA1IEc2VudBJhChNzdWJEZWxpdmVyeVN0YXR1c2VzGAUgAygLMi8ubW9kZWwuT3V0Ym91bmRNZXNzYWdlLlN1YkRlbGl2ZXJ5U3RhdHVzZXNFbnRyeVITc3ViRGVsaXZlcnlTdGF0dXNlcxIeCgltZXNzYWdlSWQYHyABKAlIAFIJbWVzc2FnZUlkEhwKCHJlYWN0aW9uGCAgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBghIAEoDEgAUg9kZWxldGVNZXNzYWdlSWQacAoYU3ViRGVsaXZlcnlTdGF0dXNlc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5Ej4KBXZhbHVlGAIgASgOMigubW9kZWwuT3V0Ym91bmRNZXNzYWdlLlN1YkRlbGl2ZXJ5U3RhdHVzUgV2YWx1ZToCOAEiKgoRU3ViRGVsaXZlcnlTdGF0dXMSCwoHU0VORElORxAAEggKBFNFTlQQAUIJCgdjb250ZW50');
+final $typed_data.Uint8List outboundMessageDescriptor = $convert.base64Decode('Cg9PdXRib3VuZE1lc3NhZ2USDgoCaWQYASABKAlSAmlkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIgCgtyZWNpcGllbnRJZBgDIAEoCVILcmVjaXBpZW50SWQSEgoEc2VudBgEIAEoA1IEc2VudBJhChNzdWJEZWxpdmVyeVN0YXR1c2VzGAUgAygLMi8ubW9kZWwuT3V0Ym91bmRNZXNzYWdlLlN1YkRlbGl2ZXJ5U3RhdHVzZXNFbnRyeVITc3ViRGVsaXZlcnlTdGF0dXNlcxIeCgltZXNzYWdlSWQYHyABKAlIAFIJbWVzc2FnZUlkEhwKCHJlYWN0aW9uGCAgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBghIAEoDEgAUg9kZWxldGVNZXNzYWdlSWQSLgoRZGlzYXBwZWFyU2V0dGluZ3MYIiABKAxIAFIRZGlzYXBwZWFyU2V0dGluZ3MacAoYU3ViRGVsaXZlcnlTdGF0dXNlc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5Ej4KBXZhbHVlGAIgASgOMigubW9kZWwuT3V0Ym91bmRNZXNzYWdlLlN1YkRlbGl2ZXJ5U3RhdHVzUgV2YWx1ZToCOAEiKgoRU3ViRGVsaXZlcnlTdGF0dXMSCwoHU0VORElORxAAEggKBFNFTlQQAUIJCgdjb250ZW50');
 @$core.Deprecated('Use inboundAttachmentDescriptor instead')
 const InboundAttachment$json = const {
   '1': 'InboundAttachment',

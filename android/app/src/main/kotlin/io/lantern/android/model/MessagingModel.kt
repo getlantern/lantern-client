@@ -8,6 +8,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.Messaging
 import io.lantern.messaging.Model
+import io.lantern.messaging.dbPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
@@ -31,14 +32,17 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
-            "sendToDirectContact" -> {
+            "addOrUpdateDirectContact" -> messaging.addOrUpdateContact(Model.ContactType.DIRECT, call.argument("identityKey")!!, call.argument("displayName")!!)
+            "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)
+            "sendToDirectContact" ->
                 messaging.sendToDirectContact(
                         call.argument("identityKey")!!,
                         text = call.argument("text"),
                         attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray())
-                null
-            }
+            "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
+            "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
+            "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
+            "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "startRecordingVoiceMemo" -> {
                 startRecordingVoiceMemo()
                 startedRecording.set(System.currentTimeMillis())

@@ -85,6 +85,7 @@ class Contact extends $pb.GeneratedMessage {
     ..e<MessageDirection>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageDirection', $pb.PbFieldType.OE, protoName: 'mostRecentMessageDirection', defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentAttachmentMimeType', protoName: 'mostRecentAttachmentMimeType')
+    ..a<$core.int>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messagesDisappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'messagesDisappearAfterSeconds')
     ..hasRequiredFields = false
   ;
 
@@ -98,6 +99,7 @@ class Contact extends $pb.GeneratedMessage {
     MessageDirection? mostRecentMessageDirection,
     $core.String? mostRecentMessageText,
     $core.String? mostRecentAttachmentMimeType,
+    $core.int? messagesDisappearAfterSeconds,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -123,6 +125,9 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (mostRecentAttachmentMimeType != null) {
       _result.mostRecentAttachmentMimeType = mostRecentAttachmentMimeType;
+    }
+    if (messagesDisappearAfterSeconds != null) {
+      _result.messagesDisappearAfterSeconds = messagesDisappearAfterSeconds;
     }
     return _result;
   }
@@ -214,6 +219,15 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasMostRecentAttachmentMimeType() => $_has(7);
   @$pb.TagNumber(8)
   void clearMostRecentAttachmentMimeType() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.int get messagesDisappearAfterSeconds => $_getIZ(8);
+  @$pb.TagNumber(9)
+  set messagesDisappearAfterSeconds($core.int v) { $_setSignedInt32(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasMessagesDisappearAfterSeconds() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearMessagesDisappearAfterSeconds() => clearField(9);
 }
 
 class Attachment extends $pb.GeneratedMessage {
@@ -425,6 +439,7 @@ class Message extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', $pb.PbFieldType.OY, protoName: 'replyToId')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
     ..m<$core.int, Attachment>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'Message.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Attachment.create, packageName: const $pb.PackageName('model'))
+    ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'disappearAfterSeconds')
     ..hasRequiredFields = false
   ;
 
@@ -435,6 +450,7 @@ class Message extends $pb.GeneratedMessage {
     $core.List<$core.int>? replyToId,
     $core.String? text,
     $core.Map<$core.int, Attachment>? attachments,
+    $core.int? disappearAfterSeconds,
   }) {
     final _result = create();
     if (id != null) {
@@ -451,6 +467,9 @@ class Message extends $pb.GeneratedMessage {
     }
     if (attachments != null) {
       _result.attachments.addAll(attachments);
+    }
+    if (disappearAfterSeconds != null) {
+      _result.disappearAfterSeconds = disappearAfterSeconds;
     }
     return _result;
   }
@@ -513,6 +532,15 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.Map<$core.int, Attachment> get attachments => $_getMap(4);
+
+  @$pb.TagNumber(6)
+  $core.int get disappearAfterSeconds => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set disappearAfterSeconds($core.int v) { $_setSignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasDisappearAfterSeconds() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearDisappearAfterSeconds() => clearField(6);
 }
 
 class StoredMessage extends $pb.GeneratedMessage {
@@ -524,10 +552,13 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', protoName: 'replyToSenderId')
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', protoName: 'replyToId')
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
-    ..m<$core.int, StoredAttachment>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'StoredMessage.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoredAttachment.create, packageName: const $pb.PackageName('model'))
-    ..e<MessageDirection>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
-    ..e<StoredMessage_DeliveryStatus>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredMessage_DeliveryStatus.SENDING, valueOf: StoredMessage_DeliveryStatus.valueOf, enumValues: StoredMessage_DeliveryStatus.values)
+    ..a<$core.int>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'disappearAfterSeconds')
+    ..m<$core.int, StoredAttachment>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'StoredMessage.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoredAttachment.create, packageName: const $pb.PackageName('model'))
+    ..e<MessageDirection>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'direction', $pb.PbFieldType.OE, defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
     ..m<$core.String, Reaction>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reactions', entryClassName: 'StoredMessage.ReactionsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: Reaction.create, packageName: const $pb.PackageName('model'))
+    ..e<StoredMessage_DeliveryStatus>(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredMessage_DeliveryStatus.SENDING, valueOf: StoredMessage_DeliveryStatus.valueOf, enumValues: StoredMessage_DeliveryStatus.values)
+    ..aInt64(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstViewedAt', protoName: 'firstViewedAt')
+    ..aInt64(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAt', protoName: 'disappearAt')
     ..hasRequiredFields = false
   ;
 
@@ -540,10 +571,13 @@ class StoredMessage extends $pb.GeneratedMessage {
     $core.String? replyToSenderId,
     $core.String? replyToId,
     $core.String? text,
+    $core.int? disappearAfterSeconds,
     $core.Map<$core.int, StoredAttachment>? attachments,
     MessageDirection? direction,
-    StoredMessage_DeliveryStatus? status,
     $core.Map<$core.String, Reaction>? reactions,
+    StoredMessage_DeliveryStatus? status,
+    $fixnum.Int64? firstViewedAt,
+    $fixnum.Int64? disappearAt,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -567,17 +601,26 @@ class StoredMessage extends $pb.GeneratedMessage {
     if (text != null) {
       _result.text = text;
     }
+    if (disappearAfterSeconds != null) {
+      _result.disappearAfterSeconds = disappearAfterSeconds;
+    }
     if (attachments != null) {
       _result.attachments.addAll(attachments);
     }
     if (direction != null) {
       _result.direction = direction;
     }
+    if (reactions != null) {
+      _result.reactions.addAll(reactions);
+    }
     if (status != null) {
       _result.status = status;
     }
-    if (reactions != null) {
-      _result.reactions.addAll(reactions);
+    if (firstViewedAt != null) {
+      _result.firstViewedAt = firstViewedAt;
+    }
+    if (disappearAt != null) {
+      _result.disappearAt = disappearAt;
     }
     return _result;
   }
@@ -668,28 +711,55 @@ class StoredMessage extends $pb.GeneratedMessage {
   void clearText() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.Map<$core.int, StoredAttachment> get attachments => $_getMap(7);
+  $core.int get disappearAfterSeconds => $_getIZ(7);
+  @$pb.TagNumber(8)
+  set disappearAfterSeconds($core.int v) { $_setSignedInt32(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasDisappearAfterSeconds() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearDisappearAfterSeconds() => clearField(8);
 
   @$pb.TagNumber(9)
-  MessageDirection get direction => $_getN(8);
-  @$pb.TagNumber(9)
-  set direction(MessageDirection v) { setField(9, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasDirection() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearDirection() => clearField(9);
+  $core.Map<$core.int, StoredAttachment> get attachments => $_getMap(8);
 
   @$pb.TagNumber(10)
-  StoredMessage_DeliveryStatus get status => $_getN(9);
+  MessageDirection get direction => $_getN(9);
   @$pb.TagNumber(10)
-  set status(StoredMessage_DeliveryStatus v) { setField(10, v); }
+  set direction(MessageDirection v) { setField(10, v); }
   @$pb.TagNumber(10)
-  $core.bool hasStatus() => $_has(9);
+  $core.bool hasDirection() => $_has(9);
   @$pb.TagNumber(10)
-  void clearStatus() => clearField(10);
+  void clearDirection() => clearField(10);
 
   @$pb.TagNumber(11)
   $core.Map<$core.String, Reaction> get reactions => $_getMap(10);
+
+  @$pb.TagNumber(12)
+  StoredMessage_DeliveryStatus get status => $_getN(11);
+  @$pb.TagNumber(12)
+  set status(StoredMessage_DeliveryStatus v) { setField(12, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasStatus() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearStatus() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $fixnum.Int64 get firstViewedAt => $_getI64(12);
+  @$pb.TagNumber(13)
+  set firstViewedAt($fixnum.Int64 v) { $_setInt64(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasFirstViewedAt() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearFirstViewedAt() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $fixnum.Int64 get disappearAt => $_getI64(13);
+  @$pb.TagNumber(14)
+  set disappearAt($fixnum.Int64 v) { $_setInt64(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasDisappearAt() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearDisappearAt() => clearField(14);
 }
 
 class Reaction extends $pb.GeneratedMessage {
@@ -767,10 +837,58 @@ class Reaction extends $pb.GeneratedMessage {
   void clearEmoticon() => clearField(3);
 }
 
+class DisappearSettings extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DisappearSettings', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messagesDisappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'messagesDisappearAfterSeconds')
+    ..hasRequiredFields = false
+  ;
+
+  DisappearSettings._() : super();
+  factory DisappearSettings({
+    $core.int? messagesDisappearAfterSeconds,
+  }) {
+    final _result = create();
+    if (messagesDisappearAfterSeconds != null) {
+      _result.messagesDisappearAfterSeconds = messagesDisappearAfterSeconds;
+    }
+    return _result;
+  }
+  factory DisappearSettings.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DisappearSettings.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DisappearSettings clone() => DisappearSettings()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DisappearSettings copyWith(void Function(DisappearSettings) updates) => super.copyWith((message) => updates(message as DisappearSettings)) as DisappearSettings; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DisappearSettings create() => DisappearSettings._();
+  DisappearSettings createEmptyInstance() => create();
+  static $pb.PbList<DisappearSettings> createRepeated() => $pb.PbList<DisappearSettings>();
+  @$core.pragma('dart2js:noInline')
+  static DisappearSettings getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DisappearSettings>(create);
+  static DisappearSettings? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get messagesDisappearAfterSeconds => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set messagesDisappearAfterSeconds($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMessagesDisappearAfterSeconds() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMessagesDisappearAfterSeconds() => clearField(1);
+}
+
 enum TransferMessage_Content {
   message, 
   reaction, 
   deleteMessageId, 
+  disappearSettings, 
   notSet
 }
 
@@ -779,13 +897,15 @@ class TransferMessage extends $pb.GeneratedMessage {
     1 : TransferMessage_Content.message,
     2 : TransferMessage_Content.reaction,
     3 : TransferMessage_Content.deleteMessageId,
+    4 : TransferMessage_Content.disappearSettings,
     0 : TransferMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3])
+    ..oo(0, [1, 2, 3, 4])
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
+    ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
     ..hasRequiredFields = false
   ;
 
@@ -794,6 +914,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? message,
     $core.List<$core.int>? reaction,
     $core.List<$core.int>? deleteMessageId,
+    $core.List<$core.int>? disappearSettings,
   }) {
     final _result = create();
     if (message != null) {
@@ -804,6 +925,9 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     if (deleteMessageId != null) {
       _result.deleteMessageId = deleteMessageId;
+    }
+    if (disappearSettings != null) {
+      _result.disappearSettings = disappearSettings;
     }
     return _result;
   }
@@ -857,12 +981,22 @@ class TransferMessage extends $pb.GeneratedMessage {
   $core.bool hasDeleteMessageId() => $_has(2);
   @$pb.TagNumber(3)
   void clearDeleteMessageId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.List<$core.int> get disappearSettings => $_getN(3);
+  @$pb.TagNumber(4)
+  set disappearSettings($core.List<$core.int> v) { $_setBytes(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasDisappearSettings() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDisappearSettings() => clearField(4);
 }
 
 enum OutboundMessage_Content {
   messageId, 
   reaction, 
   deleteMessageId, 
+  disappearSettings, 
   notSet
 }
 
@@ -871,10 +1005,11 @@ class OutboundMessage extends $pb.GeneratedMessage {
     31 : OutboundMessage_Content.messageId,
     32 : OutboundMessage_Content.reaction,
     33 : OutboundMessage_Content.deleteMessageId,
+    34 : OutboundMessage_Content.disappearSettings,
     0 : OutboundMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutboundMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [31, 32, 33])
+    ..oo(0, [31, 32, 33, 34])
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientId', protoName: 'recipientId')
@@ -883,6 +1018,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
     ..aOS(31, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageId', protoName: 'messageId')
     ..a<$core.List<$core.int>>(32, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(33, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
+    ..a<$core.List<$core.int>>(34, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
     ..hasRequiredFields = false
   ;
 
@@ -896,6 +1032,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
     $core.String? messageId,
     $core.List<$core.int>? reaction,
     $core.List<$core.int>? deleteMessageId,
+    $core.List<$core.int>? disappearSettings,
   }) {
     final _result = create();
     if (id != null) {
@@ -921,6 +1058,9 @@ class OutboundMessage extends $pb.GeneratedMessage {
     }
     if (deleteMessageId != null) {
       _result.deleteMessageId = deleteMessageId;
+    }
+    if (disappearSettings != null) {
+      _result.disappearSettings = disappearSettings;
     }
     return _result;
   }
@@ -1013,6 +1153,15 @@ class OutboundMessage extends $pb.GeneratedMessage {
   $core.bool hasDeleteMessageId() => $_has(7);
   @$pb.TagNumber(33)
   void clearDeleteMessageId() => clearField(33);
+
+  @$pb.TagNumber(34)
+  $core.List<$core.int> get disappearSettings => $_getN(8);
+  @$pb.TagNumber(34)
+  set disappearSettings($core.List<$core.int> v) { $_setBytes(8, v); }
+  @$pb.TagNumber(34)
+  $core.bool hasDisappearSettings() => $_has(8);
+  @$pb.TagNumber(34)
+  void clearDisappearSettings() => clearField(34);
 }
 
 class InboundAttachment extends $pb.GeneratedMessage {
