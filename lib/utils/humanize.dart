@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 /// Based on https://www.flutterclutter.dev/flutter/tutorials/date-format-dynamic-string-depending-on-how-long-ago/2020/229/
 extension Humanize on int {
-  String humanizedDate() {
+  String humanizeDate() {
     DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(this ~/ 1000);
     DateTime now = DateTime.now();
     DateTime justNow = now.subtract(Duration(minutes: 1));

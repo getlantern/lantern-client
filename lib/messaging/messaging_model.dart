@@ -4,8 +4,8 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
 import '../package_store.dart';
-import 'list_subscriber.dart';
-import 'protos_flutteronly/messaging.pb.dart';
+import '../model/list_subscriber.dart';
+import '../model/protos_flutteronly/messaging.pb.dart';
 
 class MessagingModel extends Model {
   MessagingModel() : super("messaging");
