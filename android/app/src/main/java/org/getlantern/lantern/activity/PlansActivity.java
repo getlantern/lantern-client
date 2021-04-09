@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.JsonObject;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -21,6 +19,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.NavigatorKt;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.*;
 import org.getlantern.lantern.util.ActivityExtKt;
@@ -104,12 +103,19 @@ public class PlansActivity extends FragmentActivity {
         tvTotalCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvTotalCost);
         tvDurationFirst = (TextView) itemPlanYear1.findViewById(R.id.tvDuration);
         tvDurationSecond = (TextView) itemPlanYear2.findViewById(R.id.tvDuration);
+        View activateCodeContainer = findViewById(R.id.activateCodeContainer);
         if (LanternApp.getSession().yinbiEnabled()) {
             tvYinbi.setVisibility(View.VISIBLE);
             imgvYinbiInfo.setVisibility(View.VISIBLE);
         } else {
             tvYinbi.setVisibility(View.GONE);
             imgvYinbiInfo.setVisibility(View.GONE);
+        }
+        if (Utils.isPlayVersion(this)) {
+            activateCodeContainer.setVisibility(View.GONE);
+        } else {
+            activateCodeContainer.setVisibility(View.VISIBLE);
+            activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this));
         }
     }
 

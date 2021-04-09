@@ -544,4 +544,9 @@
     <string name="ynb"># YNB</string>
     <string name="ynb_distributed">YNB will be distributed at the end of every day, based on the quantity of Yinbi released that day, the number of people that upgrade, and the number of years or accounts you purchase. Your Yinbi redemption code will appear on this screen when today’s giveaway is complete. Check back in when the timer is finished.</string>
     <string name="until_code_and_ynb_will_be_shown">Until code and # YNB will be shown</string>
+    <string name="have_a_lantern_pro_activation_code_click_here">Have a Lantern Pro activation code? Click here</string>
+    <string name="enter_email_and_activation_code">Enter Email and Activation Code</string>
+    <string name="activation_code">Activation Code</string>
+    <string name="by_clicking_register_for_pro_you_agree_to_our_terms_of_service">By clicking Register for Pro you agree to our Terms of Service</string>
+    <string name="register_for_pro">Register for pro</string>
 </resources>

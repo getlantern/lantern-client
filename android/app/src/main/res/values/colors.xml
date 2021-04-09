@@ -105,6 +105,7 @@
     <color name="grey_5">#707070</color>
     <color name="grey_4">#BFBFBF</color>
     <color name="grey_3">#f7f7f7</color>
+    <color name="grey_1">#f9f9f9</color>
     <color name="pink_light">#FFF4F8</color>
     <color name="yellow">#FFC107</color>
 </resources>
