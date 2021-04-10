@@ -8,10 +8,10 @@ import 'model_event_channel.dart';
 
 /// A ValueNotifier that updates a single value based on subscribing to a path
 /// in the database.
-class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T> {
+class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
   SubscribedSingleValueNotifier(
       path, T defaultValue, ModelEventChannel channel, void removeFromCache(),
-      {bool details, T deserialize(Uint8List serialized)})
+      {bool details = false, T deserialize(Uint8List serialized)?})
       : super(defaultValue, removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       if (deletions.isNotEmpty) {
@@ -20,6 +20,7 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T> {
         value = updates.isNotEmpty ? updates.values.first : null;
       }
     }
+
     cancel = channel.subscribe(path,
         details: details, onChanges: onChanges, deserialize: deserialize);
   }
@@ -27,10 +28,13 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T> {
 
 /// A ValueListenableBuilder that obtains its single value by subscribing to a
 /// path in the database.
-class SubscribedSingleValueBuilder<T> extends ValueListenableBuilder<T> {
+class SubscribedSingleValueBuilder<T> extends ValueListenableBuilder<T?> {
   SubscribedSingleValueBuilder(
-      String path, ValueNotifier<T> notifier, ValueWidgetBuilder<T> builder)
-      : super(valueListenable: notifier, builder: builder);
+      String path, ValueNotifier<T?> notifier, ValueWidgetBuilder<T> builder)
+      : super(
+            valueListenable: notifier,
+            builder: (BuildContext context, T? value, Widget? child) =>
+                value == null ? Container() : builder(context, value, child));
 
   @override
   _SubscribedSingleValueBuilderState createState() =>
@@ -38,8 +42,8 @@ class SubscribedSingleValueBuilder<T> extends ValueListenableBuilder<T> {
 }
 
 class _SubscribedSingleValueBuilderState<T>
-    extends State<ValueListenableBuilder<T>> {
-  T value;
+    extends State<ValueListenableBuilder<T?>> {
+  T? value;
 
   @override
   void initState() {
@@ -49,7 +53,7 @@ class _SubscribedSingleValueBuilderState<T>
   }
 
   @override
-  void didUpdateWidget(ValueListenableBuilder<T> oldWidget) {
+  void didUpdateWidget(ValueListenableBuilder<T?> oldWidget) {
     if (oldWidget.valueListenable != widget.valueListenable) {
       oldWidget.valueListenable.removeListener(_valueChanged);
       value = widget.valueListenable.value;
@@ -72,9 +76,6 @@ class _SubscribedSingleValueBuilderState<T>
 
   @override
   Widget build(BuildContext context) {
-    if (value == null) {
-      return Container();
-    }
     return widget.builder(context, value, widget.child);
   }
 }

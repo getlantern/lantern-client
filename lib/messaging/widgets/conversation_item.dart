@@ -14,12 +14,10 @@ class ConversationItem extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return model.contact(context, contact,
-        (BuildContext context, Contact contact, Widget child) {
+        (BuildContext context, Contact contact, Widget? child) {
       return ListTile(
         title: Text(
-            contact.displayName != null && contact.displayName.isEmpty
-                ? 'Unnamed'.i18n
-                : contact.displayName,
+            contact.displayName.isEmpty ? 'Unnamed'.i18n : contact.displayName,
             style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
             "${contact.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'.i18n}",

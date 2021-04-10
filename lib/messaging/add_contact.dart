@@ -15,7 +15,7 @@ class _AddContactState extends State<AddContact> {
   final _qrKey = GlobalKey(debugLabel: 'QR');
   final _formKey = GlobalKey<FormState>(debugLabel: 'Contact Form');
 
-  QRViewController qrController;
+  QRViewController? qrController;
   TextEditingController contactId = TextEditingController();
   TextEditingController displayName = TextEditingController();
 
@@ -45,7 +45,7 @@ class _AddContactState extends State<AddContact> {
     setState(() {
       scanning = false;
     });
-    qrController?.scannedDataStream?.listen((scanData) {
+    qrController?.scannedDataStream.listen((scanData) {
       try {
         var contact = Contact.fromJson(scanData.code);
         contactId.text = contact.contactId.id;
@@ -100,12 +100,12 @@ class _AddContactState extends State<AddContact> {
                           : 'Scan QR Code'.i18n),
                       onPressed: () async {
                         if (scanning) {
-                          qrController.pauseCamera();
+                          qrController?.pauseCamera();
                           setState(() {
                             scanning = false;
                           });
                         } else {
-                          qrController.resumeCamera();
+                          qrController?.resumeCamera();
                           setState(() {
                             scanning = true;
                           });
@@ -123,7 +123,7 @@ class _AddContactState extends State<AddContact> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value.length != 52) {
+                      if (value?.length != 52) {
                         return 'Please enter a 52 digit Messenger ID'.i18n;
                       }
                       return null;
@@ -139,7 +139,7 @@ class _AddContactState extends State<AddContact> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter a name for this contact'.i18n;
                       }
                       return null;
@@ -154,7 +154,7 @@ class _AddContactState extends State<AddContact> {
                         ElevatedButton(
                             child: Text('Continue'.i18n),
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 context.showLoaderOverlay();
                                 try {
                                   await model.addOrUpdateDirectContact(

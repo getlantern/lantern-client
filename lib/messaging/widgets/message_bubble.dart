@@ -8,8 +8,8 @@ import 'attachment.dart';
 
 class MessageBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
-  final StoredMessage priorMessage;
-  final StoredMessage nextMessage;
+  final StoredMessage? priorMessage;
+  final StoredMessage? nextMessage;
 
   MessageBubble(this.message, this.priorMessage, this.nextMessage) : super();
 
@@ -18,7 +18,7 @@ class MessageBubble extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return model.message(context, message,
-        (BuildContext context, StoredMessage msg, Widget child) {
+        (BuildContext context, StoredMessage msg, Widget? child) {
       if (msg.firstViewedAt == 0) {
         model.markViewed(message);
       }
@@ -51,7 +51,7 @@ class MessageBubble extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(mainAxisSize: MainAxisSize.min, children: [
-              if (msg.text?.isNotEmpty)
+              if (msg.text.isNotEmpty)
                 Flexible(
                   child: Text(
                     "${msg.text}",
@@ -81,9 +81,9 @@ class MessageBubble extends StatelessWidget {
             .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
       }
       var startOfBlock = priorMessage == null ||
-          priorMessage.direction != message.value.direction;
+          priorMessage!.direction != message.value.direction;
       var endOfBlock = nextMessage == null ||
-          nextMessage.direction != message.value.direction;
+          nextMessage!.direction != message.value.direction;
       var newestMessage = nextMessage == null;
       var row = Row(
         mainAxisSize: MainAxisSize.min,

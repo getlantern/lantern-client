@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 class ModelEventChannel extends EventChannel {
@@ -17,10 +14,11 @@ class ModelEventChannel extends EventChannel {
   ModelEventChannel(String name) : super(name);
 
   void Function() subscribe<T>(String path,
-      {bool details,
-      int count,
-      @required void onChanges(Map<String, T> updates, List<String> deletions),
-      T deserialize(Uint8List serialized)}) {
+      {bool details = false,
+      int count = 2 << 31,
+      required void onChanges(
+          Map<String, T> updates, Iterable<String> deletions),
+      T deserialize(Uint8List serialized)?}) {
     var subscriberID = uuid.v4();
     developer.log("subscribing with id $subscriberID to $path");
     var arguments = {
@@ -63,7 +61,7 @@ class ModelEventChannel extends EventChannel {
 class Subscriber<T> {
   void Function(Map<String, T>, Iterable<String>) wrappedOnChanges;
 
-  T Function(Uint8List serialized) deserialize;
+  T Function(Uint8List serialized)? deserialize;
 
   Subscriber(this.wrappedOnChanges, this.deserialize);
 
@@ -72,7 +70,7 @@ class Subscriber<T> {
     Map<String, T> updates;
     if (deserialize != null) {
       updates = _updates.map((key, value) =>
-          MapEntry(key as String, deserialize(value as Uint8List)));
+          MapEntry(key as String, deserialize!(value as Uint8List)));
     } else {
       updates =
           _updates.map((key, value) => MapEntry(key as String, value as T));

@@ -20,7 +20,7 @@ class Conversation extends StatefulWidget {
 }
 
 class _ConversationState extends State<Conversation> {
-  MessagingModel model;
+  late MessagingModel model;
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
@@ -34,7 +34,7 @@ class _ConversationState extends State<Conversation> {
     super.dispose();
   }
 
-  _send(String text, {List<Uint8List> attachments}) {
+  _send(String text, {List<Uint8List>? attachments}) {
     model.sendToDirectContact(widget._contact.contactId.id,
         text: text, attachments: attachments);
     _newMessage.clear();
@@ -45,13 +45,14 @@ class _ConversationState extends State<Conversation> {
       return;
     }
 
-    _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    setState(() {
-      _recording = true;
-      _totalPanned = 0;
+    model.startRecordingVoiceMemo().then((value) {
+      _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+      setState(() {
+        _recording = true;
+        _totalPanned = 0;
+      });
     });
-    model.startRecordingVoiceMemo();
   }
 
   _finishRecording() async {
@@ -96,7 +97,7 @@ class _ConversationState extends State<Conversation> {
             Expanded(
               child: model.contactMessages(widget._contact, builder: (context,
                   Iterable<PathAndValue<StoredMessage>> messageRecords,
-                  Widget child) {
+                  Widget? child) {
                 return ListView.builder(
                   reverse: true,
                   itemCount: messageRecords.length,
@@ -175,7 +176,7 @@ class _ConversationState extends State<Conversation> {
                           builder: (context, snap) {
                             final value = snap.data;
                             final displayTime = StopWatchTimer.getDisplayTime(
-                                value,
+                                value ?? 0,
                                 minute: true,
                                 second: true,
                                 hours: false,

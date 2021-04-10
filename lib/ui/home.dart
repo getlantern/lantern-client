@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   final String _initialRoute;
   final dynamic _initialRouteArguments;
 
-  HomePage(this._initialRoute, this._initialRouteArguments, {Key key})
+  HomePage(this._initialRoute, this._initialRouteArguments, {Key? key})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  PageController _pageController;
+  late PageController _pageController;
   int _currentIndex = 0;
   final String _initialRoute;
 
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         default:
           throw Exception("unknown navigation method ${call.method}");
       }
-      return null;
+      return Future.value(null);
     });
     navigationChannel.invokeMethod('ready');
   }
