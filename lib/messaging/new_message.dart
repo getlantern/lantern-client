@@ -37,13 +37,13 @@ class NewMessage extends StatelessWidget {
         Divider(thickness: 1),
         Expanded(
           child: model.contacts(builder: (context,
-              Iterable<PathAndValue<Contact>> _contacts, Widget child) {
+              Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var contacts = _contacts.toList();
             var all = contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
               contacts.sort((a, b) {
-                var dc = (a.value.displayName ?? "")
-                    .compareTo(b.value.displayName ?? "");
+                var dc = (a.value.displayName)
+                    .compareTo(b.value.displayName);
                 if (dc != 0) {
                   return dc;
                 }
@@ -57,8 +57,7 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return ListTile(
                   title: Text(
-                      contact.value.displayName != null &&
-                              contact.value.displayName.isEmpty
+                      contact.value.displayName.isEmpty
                           ? 'Unnamed'.i18n
                           : contact.value.displayName,
                       style: TextStyle(fontWeight: FontWeight.bold)),

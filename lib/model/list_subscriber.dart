@@ -16,9 +16,9 @@ class SubscribedListNotifier<T>
     extends SubscribedNotifier<ChangeTrackingList<T>> {
   SubscribedListNotifier(
       path, ModelEventChannel channel, void removeFromCache(),
-      {bool details,
-      int compare(String key1, String key2),
-      deserialize(Uint8List serialized)})
+      {bool details = false,
+      int compare(String key1, String key2)?,
+      T deserialize(Uint8List serialized)?})
       : super(ChangeTrackingList(compare != null ? compare : sortNormally),
             removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
@@ -44,7 +44,7 @@ class SubscribedListNotifier<T>
 }
 
 class ChangeTrackingList<T> {
-  SplayTreeMap<String, T> map;
+  late SplayTreeMap<String, T> map;
   var newPaths = <String>[];
   var updatedPaths = <String>[];
   var deletedPaths = <String>[];
@@ -76,8 +76,8 @@ class SubscribedListBuilder<T>
 
 class _SubscribedListBuilderState<T>
     extends State<ValueListenableBuilder<ChangeTrackingList<T>>> {
-  ChangeTrackingList<T> value;
-  var _childNotifiers = HashMap<String, List<ListChildValueNotifier<T>>>();
+  late ChangeTrackingList<T> value;
+  var _childNotifiers = HashMap<String, List<ListChildValueNotifier<T?>>>();
 
   @override
   void initState() {
@@ -126,9 +126,6 @@ class _SubscribedListBuilderState<T>
 
   @override
   Widget build(BuildContext context) {
-    if (value == null) {
-      return Container();
-    }
     return widget.builder(context, value, widget.child);
   }
 }
@@ -137,7 +134,7 @@ class ListChildValueNotifier<T> extends ValueNotifier<T> {
   ListChildValueNotifier(BuildContext context, String path, T defaultValue)
       : super(defaultValue) {
     var childNotifiers = context
-        .findAncestorStateOfType<_SubscribedListBuilderState>()
+        .findAncestorStateOfType<_SubscribedListBuilderState>()!
         ._childNotifiers;
     var notifiers = childNotifiers[path] ?? <ListChildValueNotifier<T>>[];
     notifiers.add(this);
@@ -152,12 +149,12 @@ class ListChildBuilder<T> extends ValueListenableBuilder<T> {
       : super(valueListenable: notifier, builder: builder);
 
   @override
-  _MapChildBuilderState createState() => _MapChildBuilderState<T>();
+  _ListChildBuilderState createState() => _ListChildBuilderState<T>();
 }
 
-class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
-  T value;
-  _SubscribedListBuilderState<T> listBuilderState;
+class _ListChildBuilderState<T> extends State<ListChildBuilder<T>> {
+  late T value;
+  _SubscribedListBuilderState<T>? listBuilderState;
 
   @override
   void initState() {
@@ -165,11 +162,11 @@ class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
     value = widget.valueListenable.value;
     widget.valueListenable.addListener(_valueChanged);
     listBuilderState =
-        context.findAncestorStateOfType<_SubscribedListBuilderState>();
+        context.findAncestorStateOfType<_SubscribedListBuilderState<T>>();
   }
 
   @override
-  void didUpdateWidget(ValueListenableBuilder<T> oldWidget) {
+  void didUpdateWidget(ListChildBuilder<T> oldWidget) {
     if (oldWidget.valueListenable != widget.valueListenable) {
       oldWidget.valueListenable.removeListener(_valueChanged);
       value = widget.valueListenable.value;
@@ -181,7 +178,7 @@ class _MapChildBuilderState<T> extends State<ListChildBuilder<T>> {
   @override
   void dispose() {
     widget.valueListenable.removeListener(_valueChanged);
-    listBuilderState?._childNotifiers?.remove(this.widget.valueListenable);
+    listBuilderState?._childNotifiers.remove(this.widget.valueListenable);
     super.dispose();
   }
 

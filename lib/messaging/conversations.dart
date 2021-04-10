@@ -20,7 +20,7 @@ class Conversations extends StatelessWidget {
               }),
         ],
         body: model.contactsByActivity(builder:
-            (context, Iterable<PathAndValue<Contact>> _contacts, Widget child) {
+            (context, Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var contacts = _contacts
               .where((contact) => contact.value.mostRecentMessageTs > 0)
               .toList();

@@ -41,6 +41,6 @@ extension Humanize on int {
     if (this < 86400) {
       return (this ~/ 3600).toString() + (longForm ? ' hours' : 'h');
     }
-    return (this ~ 86400).toString() + (longForm ? ' days' : 'd');
+    return (this ~/ 86400).toString() + (longForm ? ' days' : 'd');
   }
 }

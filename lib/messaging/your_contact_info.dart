@@ -12,7 +12,7 @@ class YourContactInfo extends StatefulWidget {
 
 class _YourContactInfoState extends State<YourContactInfo> {
   TextEditingController displayName = TextEditingController();
-  FocusNode displayNameFocus;
+  late FocusNode displayNameFocus;
   var editing = false;
 
   @override
@@ -39,7 +39,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
 
     return BaseScreen(
       title: 'Your Contact Info'.i18n,
-      body: model.me((BuildContext context, Contact me, Widget child) {
+      body: model.me((BuildContext context, Contact me, Widget? child) {
         displayName.text = me.displayName;
 
         void copyToClipboard() {
@@ -74,7 +74,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
                                       .toUpperCase() +
                                   ":",
                               style:
-                                  tsSubTitle(context).copyWith(fontSize: 12))),
+                                  tsSubTitle(context)?.copyWith(fontSize: 12))),
                       ListTile(
                         title: TextFormField(
                             controller: displayName,
@@ -113,7 +113,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
                                       .toUpperCase() +
                                   ":",
                               style:
-                                  tsSubTitle(context).copyWith(fontSize: 12))),
+                                  tsSubTitle(context)?.copyWith(fontSize: 12))),
                       ListTile(
                         leading: Icon(Icons.vpn_key_rounded),
                         title: Text(me.contactId.id),
@@ -132,7 +132,8 @@ class _YourContactInfoState extends State<YourContactInfo> {
             OutlinedButton(
                 child: Text('Share'.i18n),
                 onPressed: () {
-                  Share.share('Join me on Lantern Messenger.\n\nMy ID is: ${me.contactId.id}');
+                  Share.share(
+                      'Join me on Lantern Messenger.\n\nMy ID is: ${me.contactId.id}');
                 }),
           ])
         ]);

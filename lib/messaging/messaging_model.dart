@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
-import '../package_store.dart';
 import '../model/list_subscriber.dart';
 import '../model/protos_flutteronly/messaging.pb.dart';
+import '../package_store.dart';
 
 class MessagingModel extends Model {
   MessagingModel() : super("messaging");
@@ -26,7 +26,7 @@ class MessagingModel extends Model {
   }
 
   Future<void> sendToDirectContact(String identityKey,
-      {String text, List<Uint8List> attachments}) {
+      {String? text, List<Uint8List>? attachments}) {
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
       "identityKey": identityKey,
       "text": text,
@@ -63,49 +63,52 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> startRecordingVoiceMemo() {
-    return methodChannel.invokeMethod('startRecordingVoiceMemo');
+  Future<bool> startRecordingVoiceMemo() async {
+    return methodChannel.invokeMethod('startRecordingVoiceMemo')
+        as Future<bool>;
   }
 
   Future<Uint8List> stopRecordingVoiceMemo() async {
-    return methodChannel.invokeMethod('stopRecordingVoiceMemo');
+    return methodChannel.invokeMethod('stopRecordingVoiceMemo')
+        as Future<Uint8List>;
   }
 
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       "attachment": attachment.writeToBuffer(),
-    });
+    }) as Future<Uint8List>;
   }
 
   Future<Contact> getContact(String contactPath) async {
-    return get<Uint8List>(contactPath).then((serialized) =>
-        serialized == null ? null : Contact.fromBuffer(serialized));
+    return get<Uint8List?>(contactPath).then((serialized) =>
+            serialized == null ? null : Contact.fromBuffer(serialized))
+        as Future<Contact>;
   }
 
-  ValueListenableBuilder<ChangeTrackingList<Contact>> contactsByActivity(
-      {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
+  Widget contactsByActivity(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/cba/',
         details: true, builder: builder, deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<ChangeTrackingList<Contact>> contacts(
-      {@required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
+  Widget contacts(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/contacts/', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<Contact> contact(BuildContext context,
-      PathAndValue<Contact> contact, ValueWidgetBuilder<Contact> builder) {
+  Widget contact(BuildContext context, PathAndValue<Contact> contact,
+      ValueWidgetBuilder<Contact> builder) {
     return listChildBuilder(context, contact.path,
         defaultValue: contact.value, builder: builder);
   }
 
-  ValueListenableBuilder<Contact> singleContact(BuildContext context,
-      Contact contact, ValueWidgetBuilder<Contact> builder) {
+  Widget singleContact(BuildContext context, Contact contact,
+      ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder(
         '/contacts/${_contactPathSegment(contact.contactId)}',
         builder: builder, deserialize: (Uint8List serialized) {
@@ -113,10 +116,9 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueListenableBuilder<ChangeTrackingList<StoredMessage>> contactMessages(
-      Contact contact,
-      {@required
-          ValueWidgetBuilder<List<PathAndValue<StoredMessage>>> builder}) {
+  Widget contactMessages(Contact contact,
+      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
+          builder}) {
     return subscribedListBuilder<StoredMessage>(
         '/cm/${_contactPathSegment(contact.contactId)}',
         details: true,
@@ -126,15 +128,13 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueListenableBuilder<StoredMessage> message(
-      BuildContext context,
-      PathAndValue<StoredMessage> message,
+  Widget message(BuildContext context, PathAndValue<StoredMessage> message,
       ValueWidgetBuilder<StoredMessage> builder) {
     return listChildBuilder(context, message.path,
         defaultValue: message.value, builder: builder);
   }
 
-  ValueListenableBuilder<Contact> me(ValueWidgetBuilder<Contact> builder) {
+  Widget me(ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder<Contact>('/me', builder: builder,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);

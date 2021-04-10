@@ -14,22 +14,21 @@ class VpnModel extends Model {
     });
   }
 
-  ValueListenableBuilder<String> vpnStatus(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>("/vpn_status", builder: builder);
+  Widget vpnStatus(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>("/vpn_status",
+        builder: builder);
   }
 
-  ValueListenableBuilder<ServerInfo> serverInfo(
-      ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedSingleValueBuilder<ServerInfo>("/server_info", builder: builder,
-        deserialize: (Uint8List serialized) {
+  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+    return subscribedSingleValueBuilder<ServerInfo>("/server_info",
+        builder: builder, deserialize: (Uint8List serialized) {
       return ServerInfo.fromBuffer(serialized);
     });
   }
 
-  ValueListenableBuilder<Bandwidth> bandwidth(
-      ValueWidgetBuilder<Bandwidth> builder) {
-    return subscribedSingleValueBuilder<Bandwidth>("/bandwidth", builder: builder,
-        deserialize: (Uint8List serialized) {
+  Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
+    return subscribedSingleValueBuilder<Bandwidth>("/bandwidth",
+        builder: builder, deserialize: (Uint8List serialized) {
       return Bandwidth.fromBuffer(serialized);
     });
   }

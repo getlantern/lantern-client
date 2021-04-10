@@ -1,6 +1,7 @@
 package io.lantern.android.model
 
 import android.content.pm.PackageManager
+import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
 import android.os.Build
 import androidx.core.app.ActivityCompat
@@ -43,10 +44,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "startRecordingVoiceMemo" -> {
-                startRecordingVoiceMemo()
-                startedRecording.set(System.currentTimeMillis())
-            }
+            "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
                     val started = startedRecording.get()
@@ -73,27 +71,36 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         }
     }
 
-    private fun startRecordingVoiceMemo() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            doStartRecordingVoiceMemo()
-        } else if (activity.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+    private fun startRecordingVoiceMemo(): Boolean {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && activity.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     activity,
                     arrayOf(android.Manifest.permission.RECORD_AUDIO),
                     MainActivity.RECORD_AUDIO_PERMISSIONS_REQUEST
             )
+            false
         } else {
             doStartRecordingVoiceMemo()
+            true
         }
     }
 
     private fun doStartRecordingVoiceMemo() {
+        startedRecording.set(System.currentTimeMillis())
         stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000, object : OpusRecorder.EffectsInitializer {
             override fun init(audioSessionId: Int) {
+                if (AutomaticGainControl.isAvailable()) {
+                    try {
+                        val automaticGainControl = AutomaticGainControl.create(audioSessionId)
+                        if (automaticGainControl != null) automaticGainControl.enabled = true
+                    } catch (t: Throwable) {
+                        // couldn't init automatic gain control, won't use
+                    }
+                }
                 if (NoiseSuppressor.isAvailable()) {
                     try {
                         val noiseSuppressor = NoiseSuppressor.create(audioSessionId)
-                        if (noiseSuppressor != null) noiseSuppressor.setEnabled(true)
+                        if (noiseSuppressor != null) noiseSuppressor.enabled = true
                     } catch (t: Throwable) {
                         // couldn't init noise suppressor, won't use
                     }

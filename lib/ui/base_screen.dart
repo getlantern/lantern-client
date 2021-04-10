@@ -3,11 +3,16 @@ import 'package:lantern/package_store.dart';
 
 class BaseScreen extends StatelessWidget {
   final String title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
   final Widget body;
-  final FloatingActionButton actionButton;
+  final FloatingActionButton? actionButton;
 
-  BaseScreen({this.title, this.actions, this.body, this.actionButton, Key key})
+  BaseScreen(
+      {required this.title,
+      this.actions,
+      required this.body,
+      this.actionButton,
+      Key? key})
       : super(key: key);
 
   @override

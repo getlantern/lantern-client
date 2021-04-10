@@ -11,7 +11,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'home.dart';
 
 class LanternApp extends StatelessWidget {
-  LanternApp({Key key}) : super(key: key);
+  LanternApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class LanternApp extends StatelessWidget {
               return LoaderOverlay(
                 useDefaultLoading: true,
                 child: I18n(
-                    child: HomePage(settings.name, settings.arguments),
+                    child: HomePage(settings.name!, settings.arguments),
                     initialLocale: Locale("en", "US")),
               );
             },
@@ -60,55 +60,55 @@ class LanternApp extends StatelessWidget {
             headline1: Theme.of(context)
                 .textTheme
                 .headline1
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             headline2: Theme.of(context)
                 .textTheme
                 .headline2
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             headline3: Theme.of(context)
                 .textTheme
                 .headline3
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             headline4: Theme.of(context)
                 .textTheme
                 .headline4
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             headline5: Theme.of(context)
                 .textTheme
                 .headline5
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             headline6: Theme.of(context)
                 .textTheme
                 .headline6
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             subtitle1: Theme.of(context)
                 .textTheme
                 .subtitle1
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             subtitle2: Theme.of(context)
                 .textTheme
                 .subtitle2
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             bodyText1: Theme.of(context)
                 .textTheme
                 .bodyText1
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             bodyText2: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             button: Theme.of(context)
                 .textTheme
                 .button
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             caption: Theme.of(context)
                 .textTheme
                 .caption
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
             overline: Theme.of(context)
                 .textTheme
                 .overline
-                .copyWith(color: Colors.black),
+                ?.copyWith(color: Colors.black),
           ),
     );
   }

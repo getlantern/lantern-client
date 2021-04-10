@@ -6,14 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/model/single_value_subscriber.dart';
-import 'package:meta/meta.dart';
 
 import 'list_subscriber.dart';
 import 'model_event_channel.dart';
 
 abstract class Model {
-  MethodChannel methodChannel;
-  ModelEventChannel _updatesChannel;
+  late MethodChannel methodChannel;
+  late ModelEventChannel _updatesChannel;
   Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
       HashMap();
   Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
@@ -24,15 +23,15 @@ abstract class Model {
   }
 
   Future<T> get<T>(String path) async {
-    return methodChannel.invokeMethod('get', path);
+    return methodChannel.invokeMethod('get', path) as Future<T>;
   }
 
   Future<List<T>> list<T>(String path,
       {int start = 0,
       int count = 2 ^ 32,
-      String fullTextSearch,
-      bool reverseSort,
-      T deserialize(Uint8List serialized)}) async {
+      String? fullTextSearch,
+      bool reverseSort = false,
+      T deserialize(Uint8List serialized)?}) async {
     var intermediate =
         await methodChannel.invokeMethod('list', <String, dynamic>{
       'path': path,
@@ -51,19 +50,20 @@ abstract class Model {
     return result;
   }
 
-  ValueListenableBuilder<T> subscribedSingleValueBuilder<T>(String path,
-      {T defaultValue,
-      @required ValueWidgetBuilder<T> builder,
-      bool details,
-      T deserialize(Uint8List serialized)}) {
+  ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(String path,
+      {T? defaultValue,
+      required ValueWidgetBuilder<T> builder,
+      bool details = false,
+      T deserialize(Uint8List serialized)?}) {
     var notifier = singleValueNotifier(path, defaultValue,
         details: details, deserialize: deserialize);
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
 
-  ValueNotifier<T> singleValueNotifier<T>(String path, T defaultValue,
-      {bool details, T deserialize(Uint8List serialized)}) {
-    SubscribedSingleValueNotifier<T> result = _singleValueNotifierCache[path];
+  ValueNotifier<T?> singleValueNotifier<T>(String path, T defaultValue,
+      {bool details = false, T deserialize(Uint8List serialized)?}) {
+    var result =
+        _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;
     if (result == null) {
       result = SubscribedSingleValueNotifier(
           path, defaultValue, _updatesChannel, () {
@@ -76,16 +76,16 @@ abstract class Model {
 
   ValueListenableBuilder<ChangeTrackingList<T>> subscribedListBuilder<T>(
       String path,
-      {@required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
-      bool details,
-      int compare(String key1, String key2),
-      T deserialize(Uint8List serialized)}) {
+      {required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
+      bool details = false,
+      int compare(String key1, String key2)?,
+      T deserialize(Uint8List serialized)?}) {
     var notifier = listNotifier(path,
         details: details, compare: compare, deserialize: deserialize);
     return SubscribedListBuilder<T>(
         path,
         notifier,
-        (BuildContext context, ChangeTrackingList<T> value, Widget child) =>
+        (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
             builder(
                 context,
                 value.map.entries.map((e) => PathAndValue(e.key, e.value)),
@@ -93,10 +93,10 @@ abstract class Model {
   }
 
   ValueNotifier<ChangeTrackingList<T>> listNotifier<T>(String path,
-      {bool details,
-      int compare(String key1, String key2),
-      T deserialize(Uint8List serialized)}) {
-    SubscribedListNotifier<T> result = _listNotifierCache[path];
+      {bool details = false,
+      int compare(String key1, String key2)?,
+      T deserialize(Uint8List serialized)?}) {
+    var result = _listNotifierCache[path] as SubscribedListNotifier<T>?;
     if (result == null) {
       result = SubscribedListNotifier(path, _updatesChannel, () {
         _listNotifierCache.remove(path);
@@ -108,7 +108,7 @@ abstract class Model {
 
   ValueListenableBuilder<T> listChildBuilder<T>(
       BuildContext context, String path,
-      {T defaultValue, ValueWidgetBuilder<T> builder}) {
+      {required T defaultValue, required ValueWidgetBuilder<T> builder}) {
     return ListChildBuilder(
         ListChildValueNotifier(context, path, defaultValue), builder);
   }
@@ -116,7 +116,7 @@ abstract class Model {
 
 abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
   void Function() removeFromCache;
-  void Function() cancel;
+  late void Function() cancel;
   int refCount = 0;
 
   SubscribedNotifier(T defaultValue, this.removeFromCache)
