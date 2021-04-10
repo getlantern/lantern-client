@@ -26,14 +26,11 @@ class MessageBubble extends StatelessWidget {
       var outbound = msg.direction == MessageDirection.OUT;
       var inbound = !outbound;
 
-      var statusRow = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: msg.reactions.values
-            .map((e) => Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Text(e.emoticon)) as Widget)
-            .toList(),
-      );
+      var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
+      msg.reactions.values.forEach((e) {
+        statusRow.children.add(Padding(
+            padding: const EdgeInsets.only(right: 8), child: Text(e.emoticon)));
+      });
       statusRow.children.add(Opacity(
         opacity: 0.5,
         child: Text(
@@ -54,7 +51,7 @@ class MessageBubble extends StatelessWidget {
               if (msg.text.isNotEmpty)
                 Flexible(
                   child: Text(
-                    "${msg.text}",
+                    '${msg.text}',
                     style: TextStyle(
                       color: outbound ? Colors.white : Colors.black,
                     ),
@@ -103,21 +100,21 @@ class MessageBubble extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: inbound && !startOfBlock
                         ? Radius.zero
-                        : Radius.circular(5),
+                        : const Radius.circular(5),
                     topRight: outbound && !startOfBlock
                         ? Radius.zero
-                        : Radius.circular(5),
+                        : const Radius.circular(5),
                     bottomRight: outbound && (!endOfBlock || newestMessage)
                         ? Radius.zero
-                        : Radius.circular(5),
+                        : const Radius.circular(5),
                     bottomLeft: inbound && (!endOfBlock || newestMessage)
                         ? Radius.zero
-                        : Radius.circular(5),
+                        : const Radius.circular(5),
                   ),
                 ),
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                  padding: const EdgeInsets.only(
+                      top: 4, bottom: 4, left: 8, right: 8),
                   child: innerColumn,
                 ),
               ),
@@ -127,53 +124,54 @@ class MessageBubble extends StatelessWidget {
       );
 
       return InkWell(
-          child: row,
-          onLongPress: () {
-            showModalBottomSheet(
-                context: context,
-                isDismissible: true,
-                builder: (context) {
-                  return Wrap(children: [
-                    if (msg.direction == MessageDirection.IN)
-                      Row(
-                        children: ['👍', '👎', '😄', '❤', '😢']
-                            .map(
-                              (e) => Padding(
-                                padding: EdgeInsets.all(16),
-                                child: InkWell(
-                                  child: Transform.scale(
-                                      scale: 2,
-                                      child: Text(e,
-                                          style: TextStyle(fontSize: 16))),
-                                  onTap: () {
-                                    model.react(message, e);
-                                    Navigator.pop(context);
-                                  },
-                                ),
+        onLongPress: () {
+          showModalBottomSheet(
+              context: context,
+              isDismissible: true,
+              builder: (context) {
+                return Wrap(children: [
+                  if (msg.direction == MessageDirection.IN)
+                    Row(
+                      children: ['👍', '👎', '😄', '❤', '😢']
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: InkWell(
+                                onTap: () {
+                                  model.react(message, e);
+                                  Navigator.pop(context);
+                                },
+                                child: Transform.scale(
+                                    scale: 2,
+                                    child: Text(e,
+                                        style: const TextStyle(fontSize: 16))),
                               ),
-                            )
-                            .toList(growable: false),
-                      ),
+                            ),
+                          )
+                          .toList(growable: false),
+                    ),
+                  ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: Text('Delete for me'.i18n),
+                    onTap: () {
+                      model.deleteLocally(message);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  if (msg.direction == MessageDirection.OUT)
                     ListTile(
-                      leading: Icon(Icons.delete),
-                      title: Text('Delete for me'.i18n),
+                      leading: const Icon(Icons.delete),
+                      title: Text('Delete for everyone'.i18n),
                       onTap: () {
-                        model.deleteLocally(message);
+                        model.deleteGlobally(message);
                         Navigator.pop(context);
                       },
                     ),
-                    if (msg.direction == MessageDirection.OUT)
-                      ListTile(
-                        leading: Icon(Icons.delete),
-                        title: Text('Delete for everyone'.i18n),
-                        onTap: () {
-                          model.deleteGlobally(message);
-                          Navigator.pop(context);
-                        },
-                      ),
-                  ]);
-                });
-          });
+                ]);
+              });
+        },
+        child: row,
+      );
     });
   }
 }

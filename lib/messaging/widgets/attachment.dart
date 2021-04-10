@@ -2,10 +2,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:pedantic/pedantic.dart';
 
+/// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
   switch (attachment.attachment.mimeType) {
-    case "audio/ogg":
+    case 'audio/ogg':
       return Flexible(child: _AudioAttachment(attachment));
     default:
       // TODO: handle other types of attachments
@@ -13,6 +15,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
   }
 }
 
+/// An attachment that shows an audio player.
 class _AudioAttachment extends StatefulWidget {
   final StoredAttachment _attachment;
 
@@ -34,9 +37,9 @@ class _AudioAttachmentState extends State<_AudioAttachment> {
 
     switch (widget._attachment.status) {
       case StoredAttachment_Status.PENDING:
-        return Icon(Icons.pending_outlined);
+        return const Icon(Icons.pending_outlined);
       case StoredAttachment_Status.FAILED:
-        return Icon(Icons.error_outlined);
+        return const Icon(Icons.error_outlined);
       default:
         return Transform.scale(
           scale: 2,
@@ -46,7 +49,7 @@ class _AudioAttachmentState extends State<_AudioAttachment> {
                 : Icons.play_circle_outline),
             onPressed: () async {
               if (_playing) {
-                audioPlayer.stop();
+                await audioPlayer.stop();
                 setState(() {
                   _playing = false;
                 });
@@ -61,11 +64,11 @@ class _AudioAttachmentState extends State<_AudioAttachment> {
                 // way to expose the data, perhaps as a temp file or through a
                 // local HTTPS server (one that uses disposable tokens for
                 // authentication so that other apps can't access our content).
-                audioPlayer.playBytes(bytes).then((value) {
+                unawaited(audioPlayer.playBytes(bytes).then((value) {
                   setState(() {
                     _playing = true;
                   });
-                });
+                }));
               }
             },
           ),

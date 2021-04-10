@@ -17,20 +17,20 @@ class DisappearingTimerAction extends StatelessWidget {
       context,
       contact,
       (context, contact, child) => PopupMenuButton(
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: Column(children: [
-            Icon(Icons.timer),
-            if (contact.messagesDisappearAfterSeconds > 0)
-              Text(contact.messagesDisappearAfterSeconds.humanizeSeconds()),
-          ]),
-        ),
         itemBuilder: (BuildContext context) => [5, 60, 3600, 86400]
             .map((e) => DisappearingTimerMenuItem(contact, e))
             .toList(),
         onSelected: (int value) {
           model.setDisappearSettings(contact, value);
         },
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(children: [
+            const Icon(Icons.timer),
+            if (contact.messagesDisappearAfterSeconds > 0)
+              Text(contact.messagesDisappearAfterSeconds.humanizeSeconds()),
+          ]),
+        ),
       ),
     );
   }

@@ -15,26 +15,26 @@ class NewMessage extends StatelessWidget {
       title: 'New Message'.i18n,
       actions: [
         IconButton(
-            icon: Icon(Icons.qr_code),
-            tooltip: "Your Contact Info".i18n,
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Your Contact Info'.i18n,
             onPressed: () {
               Navigator.restorablePushNamed(context, '/your_contact_info');
             }),
       ],
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(
-          leading: Icon(Icons.person_add),
+          leading: const Icon(Icons.person_add),
           title: Text('Add Contact'.i18n),
           onTap: () {
             Navigator.restorablePushNamed(context, '/add_contact');
           },
         ),
-        Divider(thickness: 1),
+        const Divider(thickness: 1),
         ListTile(
-          leading: Icon(Icons.group_add),
+          leading: const Icon(Icons.group_add),
           title: Text('New Group Message'.i18n),
         ),
-        Divider(thickness: 1),
+        const Divider(thickness: 1),
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
@@ -60,7 +60,7 @@ class NewMessage extends StatelessWidget {
                       contact.value.displayName.isEmpty
                           ? 'Unnamed'.i18n
                           : contact.value.displayName,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text(
                       'added '.i18n +
                           contact.value.createdTime.toInt().humanizeDate(),

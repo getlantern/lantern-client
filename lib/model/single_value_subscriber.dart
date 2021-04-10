@@ -10,8 +10,8 @@ import 'model_event_channel.dart';
 /// in the database.
 class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
   SubscribedSingleValueNotifier(
-      path, T defaultValue, ModelEventChannel channel, void removeFromCache(),
-      {bool details = false, T deserialize(Uint8List serialized)?})
+      path, T defaultValue, ModelEventChannel channel, void Function() removeFromCache,
+      {bool details = false, T Function(Uint8List serialized)? deserialize})
       : super(defaultValue, removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       if (deletions.isNotEmpty) {

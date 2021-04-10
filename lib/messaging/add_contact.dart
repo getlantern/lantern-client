@@ -40,7 +40,7 @@ class _AddContactState extends State<AddContact> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    this.qrController = controller;
+    qrController = controller;
     qrController?.pauseCamera();
     setState(() {
       scanning = false;
@@ -73,8 +73,8 @@ class _AddContactState extends State<AddContact> {
       title: 'Add Contact'.i18n,
       actions: [
         IconButton(
-            icon: Icon(Icons.qr_code),
-            tooltip: "Your Contact Info".i18n,
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Your Contact Info'.i18n,
             onPressed: () {
               Navigator.restorablePushNamed(context, '/your_contact_info');
             }),
@@ -93,34 +93,34 @@ class _AddContactState extends State<AddContact> {
               key: _formKey,
               child: Column(children: [
                 Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: ElevatedButton(
-                      child: Text(scanning
-                          ? 'Stop Scanning'.i18n
-                          : 'Scan QR Code'.i18n),
-                      onPressed: () async {
-                        if (scanning) {
-                          qrController?.pauseCamera();
-                          setState(() {
-                            scanning = false;
-                          });
-                        } else {
-                          qrController?.resumeCamera();
-                          setState(() {
-                            scanning = true;
-                          });
-                        }
-                      }),
+                    onPressed: () async {
+                      if (scanning) {
+                        await qrController?.pauseCamera();
+                        setState(() {
+                          scanning = false;
+                        });
+                      } else {
+                        await qrController?.resumeCamera();
+                        setState(() {
+                          scanning = true;
+                        });
+                      }
+                    },
+                    child: Text(
+                        scanning ? 'Stop Scanning'.i18n : 'Scan QR Code'.i18n),
+                  ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: TextFormField(
                     controller: contactId,
                     minLines: 2,
                     maxLines: null,
                     decoration: InputDecoration(
                       labelText: 'Messenger ID'.i18n,
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value?.length != 52) {
@@ -131,12 +131,12 @@ class _AddContactState extends State<AddContact> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: TextFormField(
                     controller: displayName,
                     decoration: InputDecoration(
                       labelText: 'Name'.i18n,
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -147,27 +147,28 @@ class _AddContactState extends State<AddContact> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                            child: Text('Continue'.i18n),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                context.showLoaderOverlay();
-                                try {
-                                  await model.addOrUpdateDirectContact(
-                                      contactId.value.text,
-                                      displayName.value.text);
-                                  // Navigator.pushNamedAndRemoveUntil(
-                                  //     context, 'conversations', (r) => false);
-                                  Navigator.pop(context);
-                                } finally {
-                                  context.hideLoaderOverlay();
-                                }
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              context.showLoaderOverlay();
+                              try {
+                                await model.addOrUpdateDirectContact(
+                                    contactId.value.text,
+                                    displayName.value.text);
+                                // Navigator.pushNamedAndRemoveUntil(
+                                //     context, 'conversations', (r) => false);
+                                Navigator.pop(context);
+                              } finally {
+                                context.hideLoaderOverlay();
                               }
-                            }),
+                            }
+                          },
+                          child: Text('Continue'.i18n),
+                        ),
                       ]),
                 )
               ]),

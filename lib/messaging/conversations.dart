@@ -13,14 +13,14 @@ class Conversations extends StatelessWidget {
         title: 'Messages'.i18n,
         actions: [
           IconButton(
-              icon: Icon(Icons.qr_code),
-              tooltip: "Your Contact Info".i18n,
+              icon: const Icon(Icons.qr_code),
+              tooltip: 'Your Contact Info'.i18n,
               onPressed: () {
                 Navigator.restorablePushNamed(context, '/your_contact_info');
               }),
         ],
-        body: model.contactsByActivity(builder:
-            (context, Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+        body: model.contactsByActivity(builder: (context,
+            Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var contacts = _contacts
               .where((contact) => contact.value.mostRecentMessageTs > 0)
               .toList();
@@ -36,10 +36,10 @@ class Conversations extends StatelessWidget {
           );
         }),
         actionButton: FloatingActionButton(
-          child: Icon(Icons.add),
           onPressed: () {
             Navigator.restorablePushNamed(context, '/new_message');
           },
+          child: const Icon(Icons.add),
         ));
   }
 }

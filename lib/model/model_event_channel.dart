@@ -6,26 +6,26 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 class ModelEventChannel extends EventChannel {
-  var uuid = Uuid();
+  var uuid = const Uuid();
 
-  final subscribers = Map<String, Subscriber>();
-  final subscriptions = Map<String, StreamSubscription>();
+  final subscribers = <String, Subscriber>{};
+  final subscriptions = <String, StreamSubscription>{};
 
   ModelEventChannel(String name) : super(name);
 
   void Function() subscribe<T>(String path,
       {bool details = false,
       int count = 2 << 31,
-      required void onChanges(
-          Map<String, T> updates, Iterable<String> deletions),
-      T deserialize(Uint8List serialized)?}) {
+      required void Function(
+          Map<String, T> updates, Iterable<String> deletions) onChanges,
+      T Function(Uint8List serialized)? deserialize}) {
     var subscriberID = uuid.v4();
-    developer.log("subscribing with id $subscriberID to $path");
+    developer.log('subscribing with id $subscriberID to $path');
     var arguments = {
-      "subscriberID": subscriberID,
-      "path": path,
-      "count": count,
-      "details": details
+      'subscriberID': subscriberID,
+      'path': path,
+      'count': count,
+      'details': details
     };
     subscribers[subscriberID] = Subscriber<T>(onChanges, deserialize);
     var stream = receiveBroadcastStream(arguments);
@@ -33,7 +33,7 @@ class ModelEventChannel extends EventChannel {
     return () {
       var subscription = subscriptions.remove(subscriberID);
       if (subscription != null) {
-        developer.log("canceling subscription for $path");
+        developer.log('canceling subscription for $path');
         subscribers.remove(subscriberID);
         subscription.cancel();
         if (subscribers.isNotEmpty) {

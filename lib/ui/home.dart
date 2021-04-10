@@ -39,15 +39,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleNavigationRequestsFromNative() {
-    var navigationChannel = MethodChannel('navigation');
+    var navigationChannel = const MethodChannel('navigation');
     navigationChannel.setMethodCallHandler((call) {
       switch (call.method) {
-        case "openConversation":
+        case 'openConversation':
           Navigator.pushNamed(context, '/messaging/conversation',
               arguments: Contact.fromBuffer(call.arguments as Uint8List));
           break;
         default:
-          throw Exception("unknown navigation method ${call.method}");
+          throw Exception('unknown navigation method ${call.method}');
       }
       return Future.value(null);
     });
@@ -66,9 +66,9 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  onUpdateCurrentIndexPageView(int index) {
+  void onUpdateCurrentIndexPageView(int index) {
     _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
+        duration: const Duration(milliseconds: 100), curve: Curves.bounceIn);
   }
 
   @override
@@ -77,13 +77,13 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         onPageChanged: onPageChange,
         controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         // TODO: only disable scrolling while we need to detect the drag gesture for the record button
         children: [
           MessagesTab(_initialRoute.replaceFirst(routeMessaging, ''),
               widget._initialRouteArguments),
           VPNTab(),
-          Center(child: Text("Need to build this")),
+          const Center(child: Text('Need to build this')),
         ],
       ),
       bottomNavigationBar: CustomBottomBar(

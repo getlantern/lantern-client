@@ -34,13 +34,13 @@ class _ConversationState extends State<Conversation> {
     super.dispose();
   }
 
-  _send(String text, {List<Uint8List>? attachments}) {
+  void _send(String text, {List<Uint8List>? attachments}) {
     model.sendToDirectContact(widget._contact.contactId.id,
         text: text, attachments: attachments);
     _newMessage.clear();
   }
 
-  _startRecording() {
+  void _startRecording() {
     if (_recording) {
       return;
     }
@@ -55,7 +55,7 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  _finishRecording() async {
+  Future<void> _finishRecording() async {
     if (!_recording) {
       return;
     }
@@ -81,10 +81,25 @@ class _ConversationState extends State<Conversation> {
           : widget._contact.displayName,
       actions: [DisappearingTimerAction(widget._contact)],
       body: GestureDetector(
+        onPanUpdate: (details) {
+          _totalPanned += details.delta.dx;
+          if (!_willCancelRecording && _totalPanned < -19) {
+            setState(() {
+              _willCancelRecording = true;
+            });
+          } else if (_willCancelRecording && _totalPanned > -19) {
+            setState(() {
+              _willCancelRecording = false;
+            });
+          }
+        },
+        onPanEnd: (details) async {
+          await _finishRecording();
+        },
         child: Stack(children: [
           Column(children: [
             Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
                 child: model.singleContact(
                     context,
                     widget._contact,
@@ -114,12 +129,12 @@ class _ConversationState extends State<Conversation> {
                 );
               }),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 8),
               child: Divider(height: 3),
             ),
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: Row(children: [
                 Expanded(
                   child: TextFormField(
@@ -128,7 +143,7 @@ class _ConversationState extends State<Conversation> {
                     controller: _newMessage,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                          icon: Icon(Icons.send),
+                          icon: const Icon(Icons.send),
                           onPressed: () {
                             var text = _newMessage.value.text;
                             if (text.isEmpty) {
@@ -143,13 +158,13 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
                 GestureDetector(
-                  child: Icon(Icons.mic),
                   onTapDown: (details) {
                     _startRecording();
                   },
                   onTapUp: (details) async {
                     await _finishRecording();
                   },
+                  child: const Icon(Icons.mic),
                 )
               ]),
             ),
@@ -163,12 +178,12 @@ class _ConversationState extends State<Conversation> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(left: 16, bottom: 17),
                         child: Icon(Icons.circle, color: Colors.red),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 16, bottom: 22),
+                        padding: const EdgeInsets.only(left: 16, bottom: 22),
                         child: StreamBuilder<int>(
                           stream: _stopWatchTimer.rawTime,
                           initialData:
@@ -192,7 +207,7 @@ class _ConversationState extends State<Conversation> {
                           alignment: Alignment.center,
                           height: 63,
                           child: Padding(
-                              padding: EdgeInsets.only(right: 24),
+                              padding: const EdgeInsets.only(right: 24),
                               child: Text(
                                   _willCancelRecording
                                       ? 'will cancel'.i18n
@@ -202,25 +217,25 @@ class _ConversationState extends State<Conversation> {
                         ),
                       ),
                       GestureDetector(
+                        onTapUp: (details) async {
+                          await _finishRecording();
+                        },
                         child: Transform.scale(
                           scale: 2,
                           alignment: Alignment.bottomRight,
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(38)),
                             ),
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.only(
                                   left: 15, top: 15, right: 4, bottom: 4),
                               child: Icon(Icons.mic_none),
                             ),
                           ),
                         ),
-                        onTapUp: (details) async {
-                          await _finishRecording();
-                        },
                       ),
                     ],
                   ),
@@ -228,21 +243,6 @@ class _ConversationState extends State<Conversation> {
               ),
             ]),
         ]),
-        onPanUpdate: (details) {
-          _totalPanned += details.delta.dx;
-          if (!_willCancelRecording && _totalPanned < -19) {
-            setState(() {
-              _willCancelRecording = true;
-            });
-          } else if (_willCancelRecording && _totalPanned > -19) {
-            setState(() {
-              _willCancelRecording = false;
-            });
-          }
-        },
-        onPanEnd: (details) async {
-          await _finishRecording();
-        },
       ),
     );
   }

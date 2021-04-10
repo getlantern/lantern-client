@@ -29,7 +29,7 @@ class LanternApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: [
-          const Locale('en', "US"),
+          const Locale('en', 'US'),
           const Locale('es'),
         ],
         onGenerateRoute: (RouteSettings settings) {
@@ -38,8 +38,9 @@ class LanternApp extends StatelessWidget {
               return LoaderOverlay(
                 useDefaultLoading: true,
                 child: I18n(
-                    child: HomePage(settings.name!, settings.arguments),
-                    initialLocale: Locale("en", "US")),
+                  initialLocale: const Locale('en', 'US'),
+                  child: HomePage(settings.name!, settings.arguments),
+                ),
               );
             },
             settings: settings,
@@ -54,7 +55,7 @@ class LanternApp extends StatelessWidget {
     return ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.grey,
-      appBarTheme: AppBarTheme(brightness: Brightness.light),
+      appBarTheme: const AppBarTheme(brightness: Brightness.light),
       accentColor: Colors.black,
       textTheme: Theme.of(context).textTheme.copyWith(
             headline1: Theme.of(context)

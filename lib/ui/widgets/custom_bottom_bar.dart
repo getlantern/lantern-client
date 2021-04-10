@@ -19,12 +19,12 @@ class CustomBottomBar extends StatefulWidget {
 class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget activeIcon({bool isActive = false}) {
     return Container(
-      margin: EdgeInsets.only(left: 4),
+      margin: const EdgeInsets.only(left: 4),
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(
         color: isActive ? Colors.green : Colors.red,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(activeIconSize / 2),
         ),
         boxShadow: isActive
@@ -33,7 +33,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   color: Colors.green.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 3,
-                  offset: Offset(0, 0), // changes position of shadow
+                  offset: const Offset(0, 0), // changes position of shadow
                 ),
               ]
             : [],
@@ -60,7 +60,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         icon = Icons.account_circle;
         break;
       default:
-        throw Exception("unknown tabEnum");
+        throw Exception('unknown tabEnum');
     }
     return Expanded(
       flex: 1,
@@ -149,8 +149,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   renderBottomTabItem(
                     index: index,
                     tabEnum: tabEnum,
-                    isActive: (vpnStatus == "connected" ||
-                        vpnStatus == "disconnecting"),
+                    isActive: (vpnStatus == 'connected' ||
+                        vpnStatus == 'disconnecting'),
                   ),
                 ),
               )
