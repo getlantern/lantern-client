@@ -2,77 +2,77 @@ import 'dart:ui';
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
     if (hexColor.length == 8) {
-      String hexOpacityColor = hexColor.substring(6);
+      var hexOpacityColor = hexColor.substring(6);
       switch (hexOpacityColor) {
-        case "95":
-          hexOpacityColor = "F2";
+        case '95':
+          hexOpacityColor = 'F2';
           break;
-        case "90":
-          hexOpacityColor = "E6";
+        case '90':
+          hexOpacityColor = 'E6';
           break;
-        case "85":
-          hexOpacityColor = "D9";
+        case '85':
+          hexOpacityColor = 'D9';
           break;
-        case "80":
-          hexOpacityColor = "CC";
+        case '80':
+          hexOpacityColor = 'CC';
           break;
-        case "75":
-          hexOpacityColor = "BF";
+        case '75':
+          hexOpacityColor = 'BF';
           break;
-        case "70":
-          hexOpacityColor = "B3";
+        case '70':
+          hexOpacityColor = 'B3';
           break;
-        case "65":
-          hexOpacityColor = "A6";
+        case '65':
+          hexOpacityColor = 'A6';
           break;
-        case "60":
-          hexOpacityColor = "99";
+        case '60':
+          hexOpacityColor = '99';
           break;
-        case "55":
-          hexOpacityColor = "8C";
+        case '55':
+          hexOpacityColor = '8C';
           break;
-        case "50":
-          hexOpacityColor = "80";
+        case '50':
+          hexOpacityColor = '80';
           break;
-        case "45":
-          hexOpacityColor = "73";
+        case '45':
+          hexOpacityColor = '73';
           break;
-        case "40":
-          hexOpacityColor = "66";
+        case '40':
+          hexOpacityColor = '66';
           break;
-        case "35":
-          hexOpacityColor = "59";
+        case '35':
+          hexOpacityColor = '59';
           break;
-        case "30":
-          hexOpacityColor = "4D";
+        case '30':
+          hexOpacityColor = '4D';
           break;
-        case "25":
-          hexOpacityColor = "40";
+        case '25':
+          hexOpacityColor = '40';
           break;
-        case "20":
-          hexOpacityColor = "33";
+        case '20':
+          hexOpacityColor = '33';
           break;
-        case "15":
-          hexOpacityColor = "26";
+        case '15':
+          hexOpacityColor = '26';
           break;
-        case "10":
-          hexOpacityColor = "1A";
+        case '10':
+          hexOpacityColor = '1A';
           break;
-        case "05":
-          hexOpacityColor = "0D";
+        case '05':
+          hexOpacityColor = '0D';
           break;
-        case "00":
-          hexOpacityColor = "00";
+        case '00':
+          hexOpacityColor = '00';
           break;
         default:
-          hexOpacityColor = "FF";
+          hexOpacityColor = 'FF';
       }
       hexColor = hexOpacityColor + hexColor;
       hexColor = hexColor.substring(0, 8);
     } else if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = 'FF' + hexColor;
     }
     return int.parse(hexColor, radix: 16);
   }

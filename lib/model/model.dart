@@ -13,9 +13,9 @@ import 'model_event_channel.dart';
 abstract class Model {
   late MethodChannel methodChannel;
   late ModelEventChannel _updatesChannel;
-  Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
+  final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
       HashMap();
-  Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
+  final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
 
   Model(String name) {
     methodChannel = MethodChannel('${name}_method_channel');
@@ -31,7 +31,7 @@ abstract class Model {
       int count = 2 ^ 32,
       String? fullTextSearch,
       bool reverseSort = false,
-      T deserialize(Uint8List serialized)?}) async {
+      T Function(Uint8List serialized)? deserialize}) async {
     var intermediate =
         await methodChannel.invokeMethod('list', <String, dynamic>{
       'path': path,
@@ -40,7 +40,7 @@ abstract class Model {
       'fullTextSearch': fullTextSearch,
       'reverseSort': reverseSort,
     });
-    List<T> result = [];
+    var result = <T>[];
     if (deserialize != null) {
       intermediate
           .forEach((element) => result.add(deserialize(element as Uint8List)));
@@ -54,14 +54,14 @@ abstract class Model {
       {T? defaultValue,
       required ValueWidgetBuilder<T> builder,
       bool details = false,
-      T deserialize(Uint8List serialized)?}) {
+      T Function(Uint8List serialized)? deserialize}) {
     var notifier = singleValueNotifier(path, defaultValue,
         details: details, deserialize: deserialize);
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
 
   ValueNotifier<T?> singleValueNotifier<T>(String path, T defaultValue,
-      {bool details = false, T deserialize(Uint8List serialized)?}) {
+      {bool details = false, T Function(Uint8List serialized)? deserialize}) {
     var result =
         _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;
     if (result == null) {
@@ -78,8 +78,8 @@ abstract class Model {
       String path,
       {required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
       bool details = false,
-      int compare(String key1, String key2)?,
-      T deserialize(Uint8List serialized)?}) {
+      int Function(String key1, String key2)? compare,
+      T Function(Uint8List serialized)? deserialize}) {
     var notifier = listNotifier(path,
         details: details, compare: compare, deserialize: deserialize);
     return SubscribedListBuilder<T>(
@@ -94,8 +94,8 @@ abstract class Model {
 
   ValueNotifier<ChangeTrackingList<T>> listNotifier<T>(String path,
       {bool details = false,
-      int compare(String key1, String key2)?,
-      T deserialize(Uint8List serialized)?}) {
+      int Function(String key1, String key2)? compare,
+      T Function(Uint8List serialized)? deserialize}) {
     var result = _listNotifierCache[path] as SubscribedListNotifier<T>?;
     if (result == null) {
       result = SubscribedListNotifier(path, _updatesChannel, () {

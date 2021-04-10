@@ -8,11 +8,11 @@ import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
 
 class MessagingModel extends Model {
-  MessagingModel() : super("messaging");
+  MessagingModel() : super('messaging');
 
   Future<void> setMyDisplayName<T>(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
-      "displayName": displayName,
+      'displayName': displayName,
     });
   }
 
@@ -20,46 +20,46 @@ class MessagingModel extends Model {
       String identityKey, String displayName) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
-      "identityKey": identityKey,
-      "displayName": displayName,
+      'identityKey': identityKey,
+      'displayName': displayName,
     });
   }
 
   Future<void> sendToDirectContact(String identityKey,
       {String? text, List<Uint8List>? attachments}) {
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
-      "identityKey": identityKey,
-      "text": text,
-      "attachments": attachments,
+      'identityKey': identityKey,
+      'text': text,
+      'attachments': attachments,
     });
   }
 
   Future<void> react(PathAndValue<StoredMessage> message, String reaction) {
     return methodChannel.invokeMethod('react', <String, dynamic>{
-      "msg": message.value.writeToBuffer(),
+      'msg': message.value.writeToBuffer(),
       'reaction': reaction
     });
   }
 
   Future<void> markViewed(PathAndValue<StoredMessage> message) {
     return methodChannel.invokeMethod(
-        'markViewed', <String, dynamic>{"msg": message.value.writeToBuffer()});
+        'markViewed', <String, dynamic>{'msg': message.value.writeToBuffer()});
   }
 
   Future<void> deleteLocally(PathAndValue<StoredMessage> message) {
     return methodChannel.invokeMethod('deleteLocally',
-        <String, dynamic>{"msg": message.value.writeToBuffer()});
+        <String, dynamic>{'msg': message.value.writeToBuffer()});
   }
 
   Future<void> deleteGlobally(PathAndValue<StoredMessage> message) {
     return methodChannel.invokeMethod('deleteGlobally',
-        <String, dynamic>{"msg": message.value.writeToBuffer()});
+        <String, dynamic>{'msg': message.value.writeToBuffer()});
   }
 
   Future<void> setDisappearSettings(Contact contact, int seconds) {
     return methodChannel.invokeMethod('setDisappearSettings', <String, dynamic>{
-      "contactId": contact.contactId.id,
-      "seconds": seconds
+      'contactId': contact.contactId.id,
+      'seconds': seconds
     });
   }
 
@@ -75,7 +75,7 @@ class MessagingModel extends Model {
 
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
-      "attachment": attachment.writeToBuffer(),
+      'attachment': attachment.writeToBuffer(),
     }) as Future<Uint8List>;
   }
 
@@ -143,7 +143,7 @@ class MessagingModel extends Model {
 
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
-        ? "d/${contactId.id}"
-        : "g/${contactId.id}";
+        ? 'd/${contactId.id}'
+        : 'g/${contactId.id}';
   }
 }

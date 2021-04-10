@@ -1,6 +1,6 @@
-import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/new_message.dart';
 import 'package:lantern/messaging/your_contact_info.dart';
+import 'package:lantern/package_store.dart';
 
 import 'add_contact.dart';
 import 'conversation.dart';
@@ -43,7 +43,7 @@ class _MessagesTabState extends State<MessagesTab>
                   settings.arguments ?? widget._initialRouteArguments);
               break;
             default:
-              throw Exception("unknown route ${settings.name}");
+              throw Exception('unknown route ${settings.name}');
           }
           return MaterialPageRoute(builder: builder, settings: settings);
         });
@@ -53,7 +53,7 @@ class _MessagesTabState extends State<MessagesTab>
   /// the navigator inside the messaging tab.
   WidgetBuilder willPopScopeBuilder(WidgetBuilder wrapped) {
     return (BuildContext context) =>
-        new WillPopScope(child: wrapped(context), onWillPop: _onWillPop);
+        WillPopScope(onWillPop: _onWillPop, child: wrapped(context));
   }
 
   Future<bool> _onWillPop() {

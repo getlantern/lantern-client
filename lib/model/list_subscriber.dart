@@ -15,11 +15,11 @@ import 'model_event_channel.dart';
 class SubscribedListNotifier<T>
     extends SubscribedNotifier<ChangeTrackingList<T>> {
   SubscribedListNotifier(
-      path, ModelEventChannel channel, void removeFromCache(),
+      path, ModelEventChannel channel, void Function() removeFromCache,
       {bool details = false,
-      int compare(String key1, String key2)?,
-      T deserialize(Uint8List serialized)?})
-      : super(ChangeTrackingList(compare != null ? compare : sortNormally),
+      int Function(String key1, String key2)? compare,
+      T Function(Uint8List serialized)? deserialize})
+      : super(ChangeTrackingList(compare ?? sortNormally),
             removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       value.clearPaths();
@@ -43,14 +43,15 @@ class SubscribedListNotifier<T>
   }
 }
 
+/// A list that keeps track of changed paths.
 class ChangeTrackingList<T> {
   late SplayTreeMap<String, T> map;
   var newPaths = <String>[];
   var updatedPaths = <String>[];
   var deletedPaths = <String>[];
 
-  ChangeTrackingList(int compare(String key1, String key2)) {
-    this.map = SplayTreeMap<String, T>(compare);
+  ChangeTrackingList(int Function(String key1, String key2) compare) {
+    map = SplayTreeMap<String, T>(compare);
   }
 
   void clearPaths() {
@@ -77,7 +78,7 @@ class SubscribedListBuilder<T>
 class _SubscribedListBuilderState<T>
     extends State<ValueListenableBuilder<ChangeTrackingList<T>>> {
   late ChangeTrackingList<T> value;
-  var _childNotifiers = HashMap<String, List<ListChildValueNotifier<T?>>>();
+  final _childNotifiers = HashMap<String, List<ListChildValueNotifier<T?>>>();
 
   @override
   void initState() {
@@ -178,7 +179,7 @@ class _ListChildBuilderState<T> extends State<ListChildBuilder<T>> {
   @override
   void dispose() {
     widget.valueListenable.removeListener(_valueChanged);
-    listBuilderState?._childNotifiers.remove(this.widget.valueListenable);
+    listBuilderState?._childNotifiers.remove(widget.valueListenable);
     super.dispose();
   }
 

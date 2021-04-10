@@ -43,7 +43,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
         displayName.text = me.displayName;
 
         void copyToClipboard() {
-          Clipboard.setData(new ClipboardData(text: me.contactId.id));
+          Clipboard.setData(ClipboardData(text: me.contactId.id));
         }
 
         return Column(children: [
@@ -54,7 +54,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
                   Expanded(
                     flex: 5,
                     child: Padding(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                           left: 64, right: 64, top: 32, bottom: 32),
                       child: QrImage(
                         data: me.writeToJson(),
@@ -67,19 +67,19 @@ class _YourContactInfoState extends State<YourContactInfo> {
                     flex: 5,
                     child: Column(children: [
                       Padding(
-                          padding: EdgeInsets.only(left: 16, bottom: 4),
+                          padding: const EdgeInsets.only(left: 16, bottom: 4),
                           child: Text(
-                              "Messenger Display Name (How Others See You)"
+                              'Messenger Display Name (How Others See You)'
                                       .i18n
                                       .toUpperCase() +
-                                  ":",
+                                  ':',
                               style:
                                   tsSubTitle(context)?.copyWith(fontSize: 12))),
                       ListTile(
                         title: TextFormField(
                             controller: displayName,
                             focusNode: displayNameFocus,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               icon: Icon(Icons.perm_identity),
                               enabledBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
@@ -87,35 +87,35 @@ class _YourContactInfoState extends State<YourContactInfo> {
                             )),
                         tileColor: Colors.black12,
                         trailing: TextButton(
-                            child: editing
-                                ? Text('Save'.i18n)
-                                : Text('Change'.i18n),
-                            onPressed: () {
-                              if (editing) {
-                                var text = displayName.value.text;
-                                model.setMyDisplayName(text);
-                                setState(() {
-                                  editing = false;
-                                });
-                              } else {
-                                setState(() {
-                                  editing = true;
-                                });
-                              }
-                            }),
+                          onPressed: () {
+                            if (editing) {
+                              var text = displayName.value.text;
+                              model.setMyDisplayName(text);
+                              setState(() {
+                                editing = false;
+                              });
+                            } else {
+                              setState(() {
+                                editing = true;
+                              });
+                            }
+                          },
+                          child:
+                              editing ? Text('Save'.i18n) : Text('Change'.i18n),
+                        ),
                       ),
                       Padding(
                           padding:
-                              EdgeInsets.only(left: 16, bottom: 4, top: 32),
+                              const EdgeInsets.only(left: 16, bottom: 4, top: 32),
                           child: Text(
-                              "Messenger ID (How Others Contact You)"
+                              'Messenger ID (How Others Contact You)'
                                       .i18n
                                       .toUpperCase() +
-                                  ":",
+                                  ':',
                               style:
                                   tsSubTitle(context)?.copyWith(fontSize: 12))),
                       ListTile(
-                        leading: Icon(Icons.vpn_key_rounded),
+                        leading: const Icon(Icons.vpn_key_rounded),
                         title: Text(me.contactId.id),
                         tileColor: Colors.black12,
                         onTap: copyToClipboard,
@@ -126,15 +126,16 @@ class _YourContactInfoState extends State<YourContactInfo> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             OutlinedButton(
-              child: Text('Copy ID'.i18n),
               onPressed: copyToClipboard,
+              child: Text('Copy ID'.i18n),
             ),
             OutlinedButton(
-                child: Text('Share'.i18n),
-                onPressed: () {
-                  Share.share(
-                      'Join me on Lantern Messenger.\n\nMy ID is: ${me.contactId.id}');
-                }),
+              onPressed: () {
+                Share.share(
+                    'Join me on Lantern Messenger.\n\nMy ID is: ${me.contactId.id}');
+              },
+              child: Text('Share'.i18n),
+            ),
           ])
         ]);
       }),
