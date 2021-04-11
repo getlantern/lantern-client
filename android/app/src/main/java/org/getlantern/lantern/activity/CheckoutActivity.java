@@ -179,8 +179,6 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         if (isRenewal) {
             // Don't allow changing email of existing pro user
             emailInput.setEnabled(false);
-            // Don't allow entering a referral code
-            referralCodeInput.setVisibility(View.GONE);
         } else {
             emailInput.addTextChangedListener(validator);
             emailInput.setOnFocusChangeListener(focusListener);
