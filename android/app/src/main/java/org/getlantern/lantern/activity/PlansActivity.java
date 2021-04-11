@@ -111,7 +111,7 @@ public class PlansActivity extends FragmentActivity {
             tvYinbi.setVisibility(View.GONE);
             imgvYinbiInfo.setVisibility(View.GONE);
         }
-        if (Utils.isPlayVersion(this)) {
+        if (LanternApp.getSession().isProUser()) {
             activateCodeContainer.setVisibility(View.GONE);
         } else {
             activateCodeContainer.setVisibility(View.VISIBLE);
