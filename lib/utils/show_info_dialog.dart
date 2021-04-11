@@ -57,7 +57,7 @@ showInfoDialog(BuildContext context, {String title = '', String des = '', String
                       style: GoogleFonts.roboto().copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
-                        color: HexColor(okColor),
+                        color: HexColor(primaryPink),
                       ),
                     ),
                   ),

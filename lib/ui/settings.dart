@@ -88,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           "English",
                           style: tsTitleItem().copyWith(
                               color: HexColor(
-                                okColor,
+                                primaryPink,
                               )),
                         ),
                       )
