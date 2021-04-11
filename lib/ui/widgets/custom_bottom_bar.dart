@@ -48,6 +48,10 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         text = 'VPN'.i18n;
         icon = ImagePaths.key_icon;
         break;
+      case TAB_ENUM.EXCHANGE:
+        text = 'Exchange'.i18n;
+        icon = ImagePaths.exchange_icon;
+        break;
       case TAB_ENUM.ACCOUNT:
         text = 'Account'.i18n;
         icon = ImagePaths.account_icon;
