@@ -238,7 +238,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         } else {
             stripeSection.setVisibility((View.INVISIBLE));
             togglePaymentMethod.setText(getText(R.string.switch_to_credit_card));
-            tvStepDescription.setText(R.string.enter_email);
+            tvStepDescription.setText(R.string.enter_email_short);
             float referralCodeTranslateY = cardLayout.getBottom() - referralCodeLayout.getBottom();
             referralCodeLayout.setTranslationY(referralCodeTranslateY);
         }
