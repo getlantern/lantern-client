@@ -3,6 +3,7 @@ package org.getlantern.lantern.model;
 import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 
+import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
@@ -222,6 +223,26 @@ public class ProPlan {
         } else {
             this.costWithoutTaxStr = this.costStr;
         }
+    }
+
+    public String getFormatPriceWithBonus(Context context, boolean useNumber) {
+        String durationFormat = "";
+        if (useNumber) {
+            durationFormat = context.getString(R.string.plan_duration, numYears());
+        } else {
+            if (numYears() == 1) {
+                durationFormat = context.getString(R.string.one_year_lantern_pro);
+            } else {
+                durationFormat = context.getString(R.string.two_years_lantern_pro);
+            }
+        }
+        durationFormat += " + " + getRenewalBonusExpected(context);
+        if (numYears() != 1) {
+            if (isBestValue() && LanternApp.getSession().yinbiEnabled()) {
+                durationFormat += " + " + context.getString(R.string.free_extra_yinbi);
+            }
+        }
+        return durationFormat;
     }
 
     public boolean isBestValue() {

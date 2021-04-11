@@ -192,9 +192,7 @@ public class PlansActivity extends FragmentActivity {
 
     protected void updatePrice(ProPlan plan) {
         content.setVisibility(View.VISIBLE);
-        String duration = getString(R.string.plan_duration, plan.numYears());
         String bonus = plan.getRenewalBonusExpected(this);
-        String durationFormat = String.format("%s + %s", duration, bonus);
         CharSequence totalCost = getString(R.string.total_cost, plan.getCostWithoutTaxStr());
         if (plan.getDiscount() > 0) {
             totalCost += " - ";
@@ -206,6 +204,7 @@ public class PlansActivity extends FragmentActivity {
             totalCost = totalCostSpanned;
         }
         String oneMonth = plan.getFormatterPriceOneMonth();
+        String durationFormat = plan.getFormatPriceWithBonus(this, true);
         if (plan.numYears() == 1) {
             itemPlanYear1.setVisibility(View.VISIBLE);
             tvOneMonthCostFirst.setText(oneMonth);
@@ -237,9 +236,6 @@ public class PlansActivity extends FragmentActivity {
             if (plan.isBestValue()) {
                 mostPopularYear2.setVisibility(View.VISIBLE);
                 itemPlanYear2.setSelected(true);
-                if (LanternApp.getSession().yinbiEnabled()) {
-                    durationFormat += " + " + getString(R.string.free_extra_yinbi);
-                }
             }
             tvDurationSecond.setText(durationFormat);
         }

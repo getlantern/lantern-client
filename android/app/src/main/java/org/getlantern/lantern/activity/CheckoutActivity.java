@@ -123,15 +123,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
-        if (LanternApp.getSession().getSelectedPlan().numYears() == 2) {
-            String durationFormat = getString(R.string.two_years_lantern_pro);
-            if (LanternApp.getSession().yinbiEnabled()) {
-                durationFormat += " + " + getString(R.string.free_extra_yinbi);
-            }
-            productText.setText(durationFormat);
-        } else {
-            productText.setText(getResources().getText(R.string.one_year_lantern_pro));
-        }
+        productText.setText(plan.getFormatPriceWithBonus(this, false));
 
         if (isPlayVersion) {
             continueBtn.setEnabled(false);
