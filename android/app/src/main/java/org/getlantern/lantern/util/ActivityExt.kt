@@ -22,12 +22,13 @@ fun Activity.showErrorDialog(
 
 @JvmOverloads
 fun Activity.showAlertDialog(
-    title: CharSequence?,
+    title: CharSequence? = null,
     msg: CharSequence?,
     icon: Drawable? = null,
     onClick: Runnable? = null,
     okLabel: CharSequence? = "OK",
     finish: Boolean = false,
+    negativeLabel: CharSequence? = null
 ) {
     if (isDestroyed) {
         return
@@ -37,7 +38,12 @@ fun Activity.showAlertDialog(
         val contentView = layoutInflater.inflate(R.layout.base_dialog, null)
         val titleTv = contentView.findViewById<TextView>(R.id.title)
         val messageTv = contentView.findViewById<TextView>(R.id.message)
-        titleTv.text = title
+        if (title == null) {
+            titleTv.visibility = View.GONE
+        } else {
+            titleTv.visibility = View.VISIBLE
+            titleTv.text = title
+        }
         messageTv.text = msg
         val imageView = contentView.findViewById<ImageView>(R.id.icon)
         if (icon != null) {
@@ -52,6 +58,10 @@ fun Activity.showAlertDialog(
                 onClick?.run()
                 if (finish) {
                     finish()
+                }
+            }.apply {
+                negativeLabel?.let {
+                    setNegativeButton(it, null)
                 }
             }
             .show()

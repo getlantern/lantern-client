@@ -552,4 +552,8 @@
     <string name="enter_your_device_linking_pin">Enter your device linking pin</string>
     <string name="enter_the_linking_code_obtained">Enter the linking code obtained from step 1, and submit.</string>
     <string name="open_authorize_device_for_pro_from_the_menu">Open ‘Authorize Device for Pro’ from the menu on the device you wish to link.</string>
+    <string name="email_with_colon">Email:</string>
+    <string name="pro_account_expiration">Pro account expiration:</string>
+    <string name="lantern_pro_devices_up_to_3">Lantern pro devices (up to 3)</string>
+    <string name="renew_short">Renew</string>
 </resources>

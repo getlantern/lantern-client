@@ -357,6 +357,15 @@
         <item name="android:insetBottom">0dp</item>
     </style>
 
+    <style name="Widget.MyApp.Button.TextButton.Small" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="textColor">@color/secondary_pink</item>
@@ -383,6 +392,7 @@
         <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.MyApp.Dialog.Button</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.MyApp.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.MyApp.Dialog.NegativeButton</item>
     </style>
 
     <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
@@ -392,6 +402,11 @@
     <style name="Widget.MyApp.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="textColor">@color/secondary_pink</item>
         <item name="android:textColor">@color/secondary_pink</item>
+    </style>
+
+    <style name="Widget.MyApp.Dialog.NegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="textColor">@color/grey_5</item>
+        <item name="android:textColor">@color/grey_5</item>
     </style>
 
     <style name="Widget.MyApp.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
