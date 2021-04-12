@@ -10,6 +10,7 @@ class SessionModel(
     companion object {
         const val PATH_PRO_USER = "/${LanternSessionManager.PRO_USER}"
         const val PATH_YINBI_ENABLED = "/${LanternSessionManager.YINBI_ENABLED}"
+        const val PATH_SHOULD_SHOW_YINBI_BADGE = "/${LanternSessionManager.SHOULD_SHOW_YINBI_BADGE}"
     }
 
     init {
@@ -22,6 +23,10 @@ class SessionModel(
             tx.put(
                 namespacedPath(PATH_YINBI_ENABLED),
                 tx.get<Boolean>(namespacedPath(PATH_YINBI_ENABLED)) ?: false
+            )
+            tx.put(
+                namespacedPath(PATH_SHOULD_SHOW_YINBI_BADGE),
+                tx.get<Boolean>(namespacedPath(PATH_SHOULD_SHOW_YINBI_BADGE)) ?: true
             )
         }
     }
