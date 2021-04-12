@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.text.TextUtils
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.AddDeviceActivity
+import org.getlantern.lantern.activity.AddDeviceActivity_
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
@@ -174,7 +174,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun deviceLinked(): Boolean {
         if (!isDeviceLinked()) {
-            launchActivity(AddDeviceActivity::class.java, false)
+            launchActivity(AddDeviceActivity_::class.java, false)
             return false
         }
         return true
