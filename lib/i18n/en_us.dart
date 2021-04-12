@@ -19,7 +19,6 @@ const en_us = {
   "free_yinbi_crypto": "Free Yinbi Cryptocurrency",
   "yinbi_redemption": "Yinbi Redemption",
   "settings": "Settings",
-  "auto_connect": "Auto-connect is OFF",
   "proxy_all": "Proxy all is ON",
   "language": "Language",
   "report_issue": "Report an issue",

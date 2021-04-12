@@ -8,10 +8,14 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isAutoConnect = false;
   bool isProxyAll = false;
 
-  renderSettingItem({String icon, String title, Function onTap, bool hasDivider = true, SETTINGS_ENUM settingItemEnum}) {
+  renderSettingItem(
+      {String icon,
+      String title,
+      Function onTap,
+      bool hasDivider = true,
+      SETTINGS_ENUM settingItemEnum}) {
     // var vpnModel = context.watch<VpnModel>();
     return Column(
       children: [
@@ -46,59 +50,57 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       settingItemEnum == SETTINGS_ENUM.PROXY
                           ? Container(
-                        transform: Matrix4.translationValues(-8.0, 0.0, 0.0),
-                        child: InkWell(
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: CustomAssetImage(
-                              path: ImagePaths.info_icon,
-                              size: 16,
-                            ),
-                          ),
-                          onTap: openInfoProxyAll,
-                        ),
-                      )
+                              transform:
+                                  Matrix4.translationValues(-8.0, 0.0, 0.0),
+                              child: InkWell(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: CustomAssetImage(
+                                    path: ImagePaths.info_icon,
+                                    size: 16,
+                                  ),
+                                ),
+                                onTap: openInfoProxyAll,
+                              ),
+                            )
                           : Container(),
                     ],
                   ),
-                  settingItemEnum == SETTINGS_ENUM.AUTO_CONNECT || settingItemEnum == SETTINGS_ENUM.PROXY
+                  settingItemEnum == SETTINGS_ENUM.PROXY
                       ? FlutterSwitch(
-                    width: 44.0,
-                    height: 24.0,
-                    valueFontSize: 12.0,
-                    padding: 2,
-                    toggleSize: 18.0,
-                    value: settingItemEnum == SETTINGS_ENUM.AUTO_CONNECT ? isAutoConnect : isProxyAll,
-                    activeColor: HexColor(greenDotColor),
-                    inactiveColor: HexColor(offSwitchColor),
-                    onToggle: (bool newValue) {
-                      if (settingItemEnum == SETTINGS_ENUM.AUTO_CONNECT) {
-                        onToggleAutoConnect();
-                      } else {
-                        onToggleProxyAll();
-                      }
-                    },
-                  )
+                          width: 44.0,
+                          height: 24.0,
+                          valueFontSize: 12.0,
+                          padding: 2,
+                          toggleSize: 18.0,
+                          value: isProxyAll,
+                          activeColor: HexColor(greenDotColor),
+                          inactiveColor: HexColor(offSwitchColor),
+                          onToggle: (bool newValue) {
+                            onToggleProxyAll();
+                          },
+                        )
                       : Row(
-                    children: [
-                      settingItemEnum == SETTINGS_ENUM.LANGUAGE
-                          ? Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          "English",
-                          style: tsTitleItem().copyWith(
-                              color: HexColor(
-                                primaryPink,
-                              )),
+                          children: [
+                            settingItemEnum == SETTINGS_ENUM.LANGUAGE
+                                ? Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      "English",
+                                      style: tsTitleItem().copyWith(
+                                          color: HexColor(
+                                        primaryPink,
+                                      )),
+                                    ),
+                                  )
+                                : Container(),
+                            CustomAssetImage(
+                              path: ImagePaths.keyboard_arrow_right_icon,
+                              size: 24,
+                            ),
+                          ],
                         ),
-                      )
-                          : Container(),
-                      CustomAssetImage(
-                        path: ImagePaths.keyboard_arrow_right_icon,
-                        size: 24,
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -110,17 +112,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   renderItem({SETTINGS_ENUM settingItemEnum}) {
     switch (settingItemEnum) {
-      case SETTINGS_ENUM.AUTO_CONNECT:
-        return renderSettingItem(
-          hasDivider: false,
-          icon: ImagePaths.power_icon,
-          title: "auto_connect".i18n,
-          onTap: onToggleAutoConnect,
-          settingItemEnum: settingItemEnum,
-        );
-
       case SETTINGS_ENUM.PROXY:
         return renderSettingItem(
+          hasDivider: false,
           icon: ImagePaths.key_icon,
           title: "proxy_all".i18n,
           onTap: onToggleProxyAll,
@@ -143,14 +137,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       default:
         return null;
     }
-  }
-
-  // FUNCTION
-
-  onToggleAutoConnect() {
-    setState(() {
-      isAutoConnect = !isAutoConnect;
-    });
   }
 
   onToggleProxyAll() {
