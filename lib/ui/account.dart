@@ -177,13 +177,17 @@ class _AccountTabState extends State<AccountTab> {
 
   //FUNCTION
 
-  onOpenProAccountManagement() {}
+  onOpenProAccountManagement() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_ACCOUNT_MANAGEMENT);
+  }
 
   onAuthorizeDeviceForPro() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
   }
 
-  onAddDevice() {}
+  onAddDevice() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_ADD_DEVICE);
+  }
 
   onInviteFriends() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);

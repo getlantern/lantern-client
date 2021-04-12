@@ -5,9 +5,7 @@ import android.content.Intent
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import org.getlantern.lantern.activity.DesktopActivity_
-import org.getlantern.lantern.activity.InviteActivity_
-import org.getlantern.lantern.activity.RegisterProActivity_
+import org.getlantern.lantern.activity.*
 import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.LanguageActivity
@@ -27,6 +25,8 @@ class Navigator(
         const val SCREEN_AUTHORIZE_DEVICE_FOR_PRO = "SCREEN_AUTHORIZE_DEVICE_FOR_PRO"
         const val SCREEN_CHANGE_LANGUAGE = "SCREEN_CHANGE_LANGUAGE"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
+        const val SCREEN_ACCOUNT_MANAGEMENT = "SCREEN_ACCOUNT_MANAGEMENT"
+        const val SCREEN_ADD_DEVICE = "SCREEN_ADD_DEVICE"
     }
 
     init {
@@ -61,6 +61,8 @@ class Navigator(
             SCREEN_AUTHORIZE_DEVICE_FOR_PRO -> AccountRecoveryActivity::class.java
             SCREEN_CHANGE_LANGUAGE -> LanguageActivity::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
+            SCREEN_ACCOUNT_MANAGEMENT -> ProAccountActivity_::class.java
+            SCREEN_ADD_DEVICE -> AddDeviceActivity_::class.java
             else -> null
         }
     }
