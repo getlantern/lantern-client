@@ -5,9 +5,9 @@ import android.content.res.Resources
 import android.text.TextUtils
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.AddDeviceActivity_
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
+import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager

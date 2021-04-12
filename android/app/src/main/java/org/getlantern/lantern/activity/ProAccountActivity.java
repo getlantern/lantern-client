@@ -21,11 +21,11 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_;
 import org.getlantern.lantern.model.Device;
 import org.getlantern.lantern.model.DeviceView;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
