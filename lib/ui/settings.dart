@@ -8,15 +8,13 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isProxyAll = false;
-
   renderSettingItem(
       {String icon,
       String title,
       Function onTap,
       bool hasDivider = true,
       SETTINGS_ENUM settingItemEnum}) {
-    // var vpnModel = context.watch<VpnModel>();
+    var sessionModel = context.watch<SessionModel>();
     return Column(
       children: [
         //divider
@@ -67,19 +65,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                   settingItemEnum == SETTINGS_ENUM.PROXY
-                      ? FlutterSwitch(
-                          width: 44.0,
-                          height: 24.0,
-                          valueFontSize: 12.0,
-                          padding: 2,
-                          toggleSize: 18.0,
-                          value: isProxyAll,
-                          activeColor: HexColor(greenDotColor),
-                          inactiveColor: HexColor(offSwitchColor),
-                          onToggle: (bool newValue) {
-                            onToggleProxyAll();
-                          },
-                        )
+                      ? sessionModel.proxyAll(
+                          (BuildContext context, bool proxyAll, Widget child) {
+                          return FlutterSwitch(
+                            width: 44.0,
+                            height: 24.0,
+                            valueFontSize: 12.0,
+                            padding: 2,
+                            toggleSize: 18.0,
+                            value: proxyAll,
+                            activeColor: HexColor(greenDotColor),
+                            inactiveColor: HexColor(offSwitchColor),
+                            onToggle: (bool newValue) {
+                              sessionModel.switchProxyAll(newValue);
+                            },
+                          );
+                        })
                       : Row(
                           children: [
                             settingItemEnum == SETTINGS_ENUM.LANGUAGE
@@ -117,7 +118,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           hasDivider: false,
           icon: ImagePaths.key_icon,
           title: "proxy_all".i18n,
-          onTap: onToggleProxyAll,
           settingItemEnum: settingItemEnum,
         );
       case SETTINGS_ENUM.LANGUAGE:
@@ -137,12 +137,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       default:
         return null;
     }
-  }
-
-  onToggleProxyAll() {
-    setState(() {
-      isProxyAll = !isProxyAll;
-    });
   }
 
   openInfoProxyAll() {

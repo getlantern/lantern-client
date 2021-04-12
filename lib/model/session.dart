@@ -15,4 +15,14 @@ class SessionModel extends Model {
   ValueListenableBuilder<bool> shouldShowYinbiBadge(ValueWidgetBuilder<bool> builder) {
     return subscribedBuilder<bool>("/should_show_yinbi_badge", builder: builder);
   }
+
+  ValueListenableBuilder<bool> proxyAll(ValueWidgetBuilder<bool> builder) {
+    return subscribedBuilder<bool>("/proxyAll", builder: builder);
+  }
+
+  Future<void> switchProxyAll<T>(bool on) async {
+    methodChannel.invokeMethod('switchProxyAll', <String, dynamic>{
+      "on": on,
+    });
+  }
 }

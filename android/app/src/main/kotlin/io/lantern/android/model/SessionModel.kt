@@ -1,7 +1,10 @@
 package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.model.LanternSessionManager
+import org.getlantern.mobilesdk.model.SessionManager
 
 class SessionModel(
     flutterEngine: FlutterEngine? = null
@@ -11,6 +14,7 @@ class SessionModel(
         const val PATH_PRO_USER = "/${LanternSessionManager.PRO_USER}"
         const val PATH_YINBI_ENABLED = "/${LanternSessionManager.YINBI_ENABLED}"
         const val PATH_SHOULD_SHOW_YINBI_BADGE = "/${LanternSessionManager.SHOULD_SHOW_YINBI_BADGE}"
+        const val PATH_PROXY_ALL = "/${SessionManager.PROXY_ALL}"
     }
 
     init {
@@ -28,6 +32,27 @@ class SessionModel(
                 namespacedPath(PATH_SHOULD_SHOW_YINBI_BADGE),
                 tx.get<Boolean>(namespacedPath(PATH_SHOULD_SHOW_YINBI_BADGE)) ?: true
             )
+            tx.put(
+                namespacedPath(PATH_PROXY_ALL),
+                tx.get<Boolean>(namespacedPath(PATH_PROXY_ALL)) ?: false
+            )
+        }
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "switchProxyAll" -> {
+                val on = call.argument<Boolean>("on") ?: false
+                saveProxyAll(on)
+                result.success(true)
+            }
+            else -> super.onMethodCall(call, result)
+        }
+    }
+
+    fun saveProxyAll(on: Boolean) {
+        db.mutate { tx ->
+            tx.put(namespacedPath(PATH_PROXY_ALL), on)
         }
     }
 }
