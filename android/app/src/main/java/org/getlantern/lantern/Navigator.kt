@@ -80,3 +80,7 @@ fun Activity.openHome() {
 fun Activity.openCheckOutReseller() {
     startActivity(Intent(this, RegisterProActivity_::class.java))
 }
+
+fun Activity.openAddDevice() {
+    startActivity(Intent(this, AddDeviceActivity_::class.java))
+}
