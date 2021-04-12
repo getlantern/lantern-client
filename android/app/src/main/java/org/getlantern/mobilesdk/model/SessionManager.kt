@@ -441,7 +441,7 @@ abstract class SessionManager(application: Application) : Session {
 
         @JvmStatic
         protected val TOKEN = "token"
-        protected const val PROXY_ALL = "proxyAll"
+        const val PROXY_ALL = "proxyAll"
         protected const val LANG = "lang"
         protected const val SHOW_ADS_AFTER_DAYS = "showadsafterdays"
 
