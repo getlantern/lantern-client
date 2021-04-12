@@ -73,6 +73,7 @@ class _AccountTabState extends State<AccountTab> {
                 CustomAssetImage(
                   path: icon,
                   size: 24,
+                  color: Colors.black
                 ),
                 SizedBox(
                   width: 16,
@@ -136,6 +137,12 @@ class _AccountTabState extends State<AccountTab> {
 
   renderFreeItem({FREE_ACCOUNT_ITEM accountItemEnum}) {
     switch (accountItemEnum) {
+      case FREE_ACCOUNT_ITEM.UPGRADE_TO_LANTERN_PRO:
+        return renderAccountItem(
+          icon: ImagePaths.crown_icon,
+          title: "upgrade_to_lantern_pro".i18n,
+          onTap: onUpgradeToLanternPro,
+        );
       case FREE_ACCOUNT_ITEM.AUTHORIZE_DEVICE_FOR_PRO:
         return renderAccountItem(
           icon: ImagePaths.devices_icon,
@@ -226,6 +233,10 @@ class _AccountTabState extends State<AccountTab> {
 
   onOpenProAccountManagement() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_ACCOUNT_MANAGEMENT);
+  }
+
+  onUpgradeToLanternPro() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
   }
 
   onAuthorizeDeviceForPro() {

@@ -28,6 +28,7 @@ class Navigator(
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
         const val SCREEN_ACCOUNT_MANAGEMENT = "SCREEN_ACCOUNT_MANAGEMENT"
         const val SCREEN_ADD_DEVICE = "SCREEN_ADD_DEVICE"
+        const val SCREEN_UPGRADE_TO_LANTERN_PRO = "SCREEN_UPGRADE_TO_LANTERN_PRO"
     }
 
     init {
@@ -64,6 +65,7 @@ class Navigator(
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             SCREEN_ACCOUNT_MANAGEMENT -> ProAccountActivity_::class.java
             SCREEN_ADD_DEVICE -> AddDeviceActivity_::class.java
+            SCREEN_UPGRADE_TO_LANTERN_PRO -> PlansActivity_::class.java
             else -> null
         }
     }
