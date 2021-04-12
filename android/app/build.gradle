@@ -444,7 +444,7 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:3ac588e'
-    implementation 'com.github.getlantern:db-android:4d0a81cb69'
+    implementation 'com.github.getlantern:db-android:52dd517b5a'
     implementation 'com.github.getlantern:libsignal-protocol-java:5c7d676'
     implementation 'com.github.getlantern:libsignal-metadata-java:2aed184'
     implementation 'com.github.getlantern:messaging-android:b60c6d5cc0'
