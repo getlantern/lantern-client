@@ -11,4 +11,8 @@ class SessionModel extends Model {
   ValueListenableBuilder<bool> yinbiEnabled(ValueWidgetBuilder<bool> builder) {
     return subscribedBuilder<bool>("/yinbienabled", builder: builder);
   }
+
+  ValueListenableBuilder<bool> shouldShowYinbiBadge(ValueWidgetBuilder<bool> builder) {
+    return subscribedBuilder<bool>("/should_show_yinbi_badge", builder: builder);
+  }
 }

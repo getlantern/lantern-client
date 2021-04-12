@@ -49,6 +49,8 @@ dependencies:
 
   fluttertoast: ^8.0.3
 
+  badges: ^1.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/custom_badge.dart';
 
 class AccountTab extends StatefulWidget {
   AccountTab({Key key}) : super(key: key);
@@ -9,6 +10,52 @@ class AccountTab extends StatefulWidget {
 }
 
 class _AccountTabState extends State<AccountTab> {
+  renderYinbiItem({String icon, String title, Function onTap}) {
+    var sessionModel = context.watch<SessionModel>();
+    return Container(
+      margin: EdgeInsets.only(
+        top: 8,
+      ),
+      child: InkWell(
+        onTap: onTap ?? () {},
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 24,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CustomAssetImage(
+                    path: icon,
+                    size: 24,
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text(
+                    title,
+                    style: tsTitleItem(),
+                  ),
+                ],
+              ),
+              sessionModel.shouldShowYinbiBadge((BuildContext context,
+                  bool shouldShowYinbiBadge, Widget child) {
+                return CustomBadge(
+                  count: 1,
+                  fontSize: 16,
+                  showBadge: shouldShowYinbiBadge,
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   renderAccountItem({String icon, String title, Function onTap}) {
     return Container(
         margin: EdgeInsets.only(
@@ -108,7 +155,7 @@ class _AccountTabState extends State<AccountTab> {
           onTap: onOpenDesktopVersion,
         );
       case FREE_ACCOUNT_ITEM.FREE_YINBI_CRYPTO:
-        return renderAccountItem(
+        return renderYinbiItem(
           icon: ImagePaths.yinbi_icon,
           title: "free_yinbi_crypto".i18n,
           onTap: onOpenFreeYinbiCrypto,
@@ -153,7 +200,7 @@ class _AccountTabState extends State<AccountTab> {
           onTap: onOpenDesktopVersion,
         );
       case PRO_ACCOUNT_ITEM.YINBI_REDEMPTION:
-        return renderAccountItem(
+        return renderYinbiItem(
           icon: ImagePaths.yinbi_icon,
           title: "yinbi_redemption".i18n,
           onTap: onOpenYinbiRedemption,
@@ -182,7 +229,8 @@ class _AccountTabState extends State<AccountTab> {
   }
 
   onAuthorizeDeviceForPro() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
+    LanternNavigator.startScreen(
+        LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
   }
 
   onAddDevice() {
@@ -215,22 +263,25 @@ class _AccountTabState extends State<AccountTab> {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
-    return sessionModel.proUser((BuildContext context, bool proUser, Widget child) {
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget child) {
       return BaseScreen(
           title: 'Account'.i18n,
           body: ListView.builder(
             padding: EdgeInsets.only(
               bottom: 8,
             ),
-            itemCount: proUser ? PRO_ACCOUNT_ITEM.values.length : FREE_ACCOUNT_ITEM.values.length,
+            itemCount: proUser
+                ? PRO_ACCOUNT_ITEM.values.length
+                : FREE_ACCOUNT_ITEM.values.length,
             itemBuilder: (context, index) {
               return proUser
                   ? renderProItem(
-                accountItemEnum: PRO_ACCOUNT_ITEM.values[index],
-              )
+                      accountItemEnum: PRO_ACCOUNT_ITEM.values[index],
+                    )
                   : renderFreeItem(
-                accountItemEnum: FREE_ACCOUNT_ITEM.values[index],
-              );
+                      accountItemEnum: FREE_ACCOUNT_ITEM.values[index],
+                    );
             },
           ));
     });

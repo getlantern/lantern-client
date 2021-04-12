@@ -210,6 +210,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         editor.putBoolean(YINBI_ENABLED, enabled).commit()
     }
 
+    fun shouldShowYinbiBadge(): Boolean {
+        return prefs.getBoolean(SHOULD_SHOW_YINBI_BADGE, true)
+    }
+
+    fun setShouldShowYinbiBadge(shouldShow: Boolean) {
+        editor.putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
+    }
+
     fun showYinbiThanksPurchase(): Boolean {
         return prefs.getBoolean(YINBI_THANKS_PURCHASE, false)
     }
@@ -438,6 +446,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val RENEWAL_LAST_SEEN = "renewalseen"
         private const val PROVIDER = "provider"
         private const val RESELLER_CODE = "resellercode"
+        const val SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200
