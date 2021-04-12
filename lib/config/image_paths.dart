@@ -14,7 +14,6 @@ class ImagePaths {
   static const settings_icon = "assets/images/settings_icon.svg";
 
   static const alert_icon = "assets/images/alert_icon.svg";
-  static const power_icon = "assets/images/power_icon.svg";
   static const translate_icon = "assets/images/translate_icon.svg";
 
   static const free_logo = "assets/images/free_logo.svg";
