@@ -13,6 +13,7 @@ const en_us = {
   "OK": "OK",
   "pro_account_management": "Pro Account Management",
   "add_device": "Add Device",
+  "upgrade_to_lantern_pro": "Upgrade to Lantern Pro",
   "authorize_device_for_pro": "Authorize Device for Pro",
   "invite_friends": "Invite Friends",
   "desktop_version": "Desktop version",
