@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.kyleduo.switchbutton.SwitchButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -26,6 +25,7 @@ import com.thefinestartist.finestwebview.FinestWebView;
 
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_;
 import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity;
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher;
 import org.getlantern.lantern.fragment.ClickSpan;

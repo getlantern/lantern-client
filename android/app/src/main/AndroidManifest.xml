@@ -78,7 +78,7 @@
             android:theme="@style/FinestWebViewTheme.Light" />
 
         <activity
-            android:name=".activity.AddDeviceActivity_"
+            android:name=".activity.addDevice.AddDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
         <activity

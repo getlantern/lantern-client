@@ -20,7 +20,7 @@
         lantern:titleText="@string/authorize_device_via_email"/>
 
     <TextView
-        android:text="@string/enter_or_paste_device_linking_pin"
+        android:text="@string/enter_your_device_linking_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView11"

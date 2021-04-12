@@ -70,7 +70,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 0) {
+                if (s.toString().length() >= 6) {
                     submit.setEnabled(true);
                 } else {
                     submit.setEnabled(false);
