@@ -51,8 +51,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
-    private var countDown: AuctionCountDown? = null
-
     private lateinit var appVersion: String
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -85,16 +83,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     }
 
     override fun onResume() {
-        // TODO [issue44] replace this with a notification bubble in the Accounts tab and Yinbi menu item
-//        if (LanternApp.getSession().yinbiEnabled()) {
-//            bulkRenewSection.setVisibility(View.VISIBLE)
-//        } else {
-//            val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB)
-//            if (tab != null) {
-//                tab.visibility = View.GONE
-//            }
-//        }
-
         updateUserData()
 
         super.onResume()
@@ -117,13 +105,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // stop auction countdown
-        countDown?.cancel()
-        countDown = null
     }
 
     override fun onDestroy() {
@@ -182,36 +163,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             override fun onSuccess(response: Response, user: ProUser?) {
                 runOnUiThread {
                     user?.let {
-                        val yinbiEnabled = user.yinbiEnabled
-                        if (yinbiEnabled) {
-                            setYinbiAuctionInfo()
-                        }
-                        LanternApp.getSession().setYinbiEnabled(yinbiEnabled)
+                        LanternApp.getSession().setYinbiEnabled(user.yinbiEnabled)
                     }
                 }
             }
         })
-    }
-
-    private fun setYinbiAuctionInfo() {
-        // TODO [issue44] migrate the Yinbi Auction tab to the Yinbi Redemption Screen
-//        val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB) as View
-//            ?: return
-//        val title = tab.findViewById<View>(R.id.tabText) as TextView
-//        if (countDown != null && countDown!!.isRunning) {
-//            return
-//        }
-//        lanternClient.getYinbiAuctionInfo(
-//            AuctionInfoCallback { info ->
-//                if (info == null || info.timeLeft == null) {
-//                    return@AuctionInfoCallback
-//                }
-//                EventBus.getDefault().post(info)
-//                runOnUiThread {
-//                    countDown = AuctionCountDown(info, title)
-//                    countDown!!.start()
-//                }
-//            })
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -653,57 +609,5 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         private val FULL_PERMISSIONS_REQUEST = 8888
         private val REQUEST_VPN = 7777
     }
-
-//    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-//        super.configureFlutterEngine(flutterEngine)
-//        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannel).setMethodCallHandler {
-//            // Note: this method is invoked on the main thread.
-//            call, result ->
-//            when(call.method) {
-//                "getUserID" -> result.success(echoSystem.client.userID)
-//                "connect" -> try {
-//                    echoSystem.connect(call.argument<String>("userID") ?: throw RuntimeException("Missing userID"))
-//                    result.success(null)
-//                } catch (e: Throwable) {
-//                    e.printStackTrace()
-//                    result.error("exception", e.localizedMessage, null)
-//                }
-//                "send" -> {
-//                    try {
-//                        echoSystem.send(call.argument<String>("userID")!!, call.argument<ByteArray>("message")!!)
-//                        result.success(null)
-//                    } catch (e: Throwable) {
-//                        e.printStackTrace()
-//                        result.error("exception", e.localizedMessage, null)
-//                    }
-//                }
-//                else -> result.notImplemented()
-//            }
-//        }
-//
-//        // Prepare channel
-//        EventChannel(getFlutterEngine()?.dartExecutor, eventsChannel).setStreamHandler(this)
-//    }
-//
-//    override fun onListen(arguments: Any?, events: EventSink?) {
-//        echoSystem.client.registerListener({ from: SignalProtocolAddress, plainText: ByteArray ->
-//            events?.success(hashMapOf(
-//                "from" to from.name,
-//                "plainText" to plainText
-//            ))
-//        })
-//    }
-//
-//    override fun onCancel(arguments: Any?) {
-////        TODO("Not yet implemented")
-//    }
-//
-//    companion object {
-//        private val methodChannel = "methods"
-//        private val eventsChannel = "events"
-//
-//        private val echoSystem = EchoSystem()
-//    }
-
 }
 
