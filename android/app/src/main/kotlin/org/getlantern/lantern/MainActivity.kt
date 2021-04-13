@@ -275,7 +275,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     return
                 }
             }
-            showSurveySnackbar(survey)
+            Handler(Looper.getMainLooper()).postDelayed({
+                showSurveySnackbar(survey)
+            }, 2000)
         }
     }
 

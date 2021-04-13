@@ -21,13 +21,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final mainMethodChannel = context.watch<MethodChannel>();
-    final eventManager = context.watch<EventManager>();
+    final mainMethodChannel = MethodChannel("lantern_method_channel");
+    final eventManager = EventManager("lantern_event_channel");
+
     eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
       switch (event) {
