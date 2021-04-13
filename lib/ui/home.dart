@@ -1,4 +1,8 @@
+import 'package:flutter/services.dart';
+import 'package:lantern/event/Event.dart';
+import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/hex_color.dart';
 
 import 'vpn.dart';
 
@@ -17,6 +21,38 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+
+    final mainMethodChannel = MethodChannel("lantern_method_channel");
+    final eventManager = EventManager("lantern_event_channel");
+
+    eventManager.subscribe(Event.All, (eventName, params) {
+      final event = EventParsing.fromValue(eventName);
+      switch (event) {
+        case Event.SurveyAvailable:
+          {
+            final message = params["message"] as String;
+            final buttonText = params["buttonText"] as String;
+            final snackBar = SnackBar(
+              backgroundColor: Colors.black,
+              duration: Duration(days: 99999),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.only(left: 8, right: 8, bottom: 16), // simple way to show indefinitely
+              content: Text(message),
+              action: SnackBarAction(
+                textColor: HexColor(secondaryPink),
+                label: buttonText.toUpperCase(),
+                onPressed: () {
+                  mainMethodChannel.invokeMethod("showLastSurvey");
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+      }
+    });
   }
 
   void onPageChange(int index) {

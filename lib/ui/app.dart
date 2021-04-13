@@ -1,3 +1,6 @@
+import 'package:flutter/services.dart';
+import 'package:lantern/event/EventManager.dart';
+import 'package:lantern/model/session.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 
@@ -16,6 +19,9 @@ class _LanternAppState extends State<LanternApp> {
     return MultiProvider(
       providers: [
         Provider(create: (context) => VpnModel()),
+        Provider(create: (context) => SessionModel()),
+        Provider(create: (context) => EventManager("lantern_event_channel")),
+        Provider(create: (context) => MethodChannel("lantern_method_channel")),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
