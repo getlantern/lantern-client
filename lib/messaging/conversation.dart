@@ -31,6 +31,7 @@ class _ConversationState extends State<Conversation> {
   @override
   void dispose() {
     _newMessage.dispose();
+    _stopWatchTimer.dispose();
     super.dispose();
   }
 
@@ -74,7 +75,6 @@ class _ConversationState extends State<Conversation> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: widget._contact.displayName.isEmpty
           ? widget._contact.contactId.id

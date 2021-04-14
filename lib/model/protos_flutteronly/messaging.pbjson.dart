@@ -48,7 +48,7 @@ const Contact$json = const {
     const {'1': 'contactId', '3': 1, '4': 1, '5': 11, '6': '.model.ContactId', '10': 'contactId'},
     const {'1': 'memberIds', '3': 2, '4': 3, '5': 9, '10': 'memberIds'},
     const {'1': 'displayName', '3': 3, '4': 1, '5': 9, '10': 'displayName'},
-    const {'1': 'createdTime', '3': 4, '4': 1, '5': 3, '10': 'createdTime'},
+    const {'1': 'createdTs', '3': 4, '4': 1, '5': 3, '10': 'createdTs'},
     const {'1': 'mostRecentMessageTs', '3': 5, '4': 1, '5': 3, '10': 'mostRecentMessageTs'},
     const {'1': 'mostRecentMessageDirection', '3': 6, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'mostRecentMessageDirection'},
     const {'1': 'mostRecentMessageText', '3': 7, '4': 1, '5': 9, '10': 'mostRecentMessageText'},
@@ -58,7 +58,7 @@ const Contact$json = const {
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIgCgtjcmVhdGVkVGltZRgEIAEoA1ILY3JlYXRlZFRpbWUSMAoTbW9zdFJlY2VudE1lc3NhZ2VUcxgFIAEoA1ITbW9zdFJlY2VudE1lc3NhZ2VUcxJXChptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhgGIAEoDjIXLm1vZGVsLk1lc3NhZ2VEaXJlY3Rpb25SGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uEjQKFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBgHIAEoCVIVbW9zdFJlY2VudE1lc3NhZ2VUZXh0EkIKHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGUYCCABKAlSHG1vc3RSZWNlbnRBdHRhY2htZW50TWltZVR5cGUSRAodbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHMYCSABKAVSHW1lc3NhZ2VzRGlzYXBwZWFyQWZ0ZXJTZWNvbmRz');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIcCgljcmVhdGVkVHMYBCABKANSCWNyZWF0ZWRUcxIwChNtb3N0UmVjZW50TWVzc2FnZVRzGAUgASgDUhNtb3N0UmVjZW50TWVzc2FnZVRzElcKGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uGAYgASgOMhcubW9kZWwuTWVzc2FnZURpcmVjdGlvblIabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24SNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSQgocbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRgIIAEoCVIcbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRJECh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxgJIAEoBVIdbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHM=');
 @$core.Deprecated('Use attachmentDescriptor instead')
 const Attachment$json = const {
   '1': 'Attachment',

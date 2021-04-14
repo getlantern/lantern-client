@@ -25,8 +25,8 @@ message Contact {
   ContactId contactId = 1;
   repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
   string displayName = 3; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
-  int64 createdTime = 4; // the millisecond unix timestamp when this contact was created
-  int64 mostRecentMessageTs = 5; // the unix timestamp of the most recent message with this contact
+  int64 createdTs = 4; // the nanosecond unix timestamp when this contact was created
+  int64 mostRecentMessageTs = 5; // the nanosecond unix timestamp of the most recent message with this contact
   MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
   string mostRecentMessageText = 7; // the text of the most recent message with this contact
   string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
