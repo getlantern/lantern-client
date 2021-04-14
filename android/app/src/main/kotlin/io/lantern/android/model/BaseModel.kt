@@ -76,21 +76,34 @@ abstract class BaseModel(
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
 
-        val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
-            override fun onChanges(changes: RawChangeSet<Any>) {
-                Handler(Looper.getMainLooper()).post {
-                    synchronized(this@BaseModel) {
-                        activeSink.get()?.success(
-                                mapOf("s" to subscriberID,
-                                        "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
-                                        "d" to changes.deletions.toList()))
+
+        if (details) {
+            val subscriber: DetailsSubscriber<Any> = object : DetailsSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
+                override fun onChanges(changes: DetailsChangeSet<Any>) {
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@BaseModel) {
+                            activeSink.get()?.success(
+                                    mapOf("s" to subscriberID,
+                                            "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }.toMap(),
+                                            "d" to changes.deletions.toList()))
+                        }
                     }
                 }
             }
-        }
-        if (details) {
-            db.subscribeDetails(subscriber)
+            db.subscribe(subscriber)
         } else {
+            val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
+                override fun onChanges(changes: RawChangeSet<Any>) {
+                    Handler(Looper.getMainLooper()).post {
+                        synchronized(this@BaseModel) {
+                            activeSink.get()?.success(
+                                    mapOf("s" to subscriberID,
+                                            "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
+                                            "d" to changes.deletions.toList()))
+                        }
+                    }
+                }
+            }
             db.subscribe(subscriber)
         }
     }

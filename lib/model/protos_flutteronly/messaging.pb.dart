@@ -80,7 +80,7 @@ class Contact extends $pb.GeneratedMessage {
     ..aOM<ContactId>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId', subBuilder: ContactId.create)
     ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'memberIds', protoName: 'memberIds')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
-    ..aInt64(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdTime', protoName: 'createdTime')
+    ..aInt64(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdTs', protoName: 'createdTs')
     ..aInt64(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageTs', protoName: 'mostRecentMessageTs')
     ..e<MessageDirection>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageDirection', $pb.PbFieldType.OE, protoName: 'mostRecentMessageDirection', defaultOrMaker: MessageDirection.OUT, valueOf: MessageDirection.valueOf, enumValues: MessageDirection.values)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentMessageText', protoName: 'mostRecentMessageText')
@@ -94,7 +94,7 @@ class Contact extends $pb.GeneratedMessage {
     ContactId? contactId,
     $core.Iterable<$core.String>? memberIds,
     $core.String? displayName,
-    $fixnum.Int64? createdTime,
+    $fixnum.Int64? createdTs,
     $fixnum.Int64? mostRecentMessageTs,
     MessageDirection? mostRecentMessageDirection,
     $core.String? mostRecentMessageText,
@@ -111,8 +111,8 @@ class Contact extends $pb.GeneratedMessage {
     if (displayName != null) {
       _result.displayName = displayName;
     }
-    if (createdTime != null) {
-      _result.createdTime = createdTime;
+    if (createdTs != null) {
+      _result.createdTs = createdTs;
     }
     if (mostRecentMessageTs != null) {
       _result.mostRecentMessageTs = mostRecentMessageTs;
@@ -176,13 +176,13 @@ class Contact extends $pb.GeneratedMessage {
   void clearDisplayName() => clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get createdTime => $_getI64(3);
+  $fixnum.Int64 get createdTs => $_getI64(3);
   @$pb.TagNumber(4)
-  set createdTime($fixnum.Int64 v) { $_setInt64(3, v); }
+  set createdTs($fixnum.Int64 v) { $_setInt64(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasCreatedTime() => $_has(3);
+  $core.bool hasCreatedTs() => $_has(3);
   @$pb.TagNumber(4)
-  void clearCreatedTime() => clearField(4);
+  void clearCreatedTs() => clearField(4);
 
   @$pb.TagNumber(5)
   $fixnum.Int64 get mostRecentMessageTs => $_getI64(4);

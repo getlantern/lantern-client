@@ -80,7 +80,7 @@ class VPNTab extends StatelessWidget {
           });
     }
 
-    Widget customDivider({marginTop = 16, marginBottom = 16}) {
+    Widget customDivider({marginTop = 16.0, marginBottom = 16.0}) {
       return Container(
         margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
         height: 1,

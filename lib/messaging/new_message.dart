@@ -63,7 +63,7 @@ class NewMessage extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text(
                       'added '.i18n +
-                          contact.value.createdTime.toInt().humanizeDate(),
+                          contact.value.createdTs.toInt().humanizeDate(),
                       overflow: TextOverflow.ellipsis),
                   onTap: () {
                     Navigator.pushNamed(context, '/conversation',
