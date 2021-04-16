@@ -1,18 +1,14 @@
 import 'package:lantern/package_store.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
-  CustomAppBar({this.title, this.actions, Key key}) : super(key: key);
+  CustomAppBar({required this.title, this.actions, Key? key}) : super(key: key);
 
   @override
-  _CustomAppBarState createState() => _CustomAppBarState();
+  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
 
-  Size get preferredSize => new Size.fromHeight(AppBar().preferredSize.height);
-}
-
-class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -20,10 +16,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: Colors.white,
       centerTitle: true,
       title: Text(
-        (widget.title ?? '').toUpperCase(),
-        style: tsHeadline6(context).copyWith(fontWeight: FontWeight.bold),
+        title,
+        style: tsHeadline6(context)?.copyWith(fontWeight: FontWeight.bold),
       ),
-      actions: widget.actions ?? [],
+      actions: actions ?? [],
     );
   }
 }

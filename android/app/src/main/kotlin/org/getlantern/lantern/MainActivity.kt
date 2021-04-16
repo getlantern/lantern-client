@@ -13,8 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.isimud.model.MessagingModel
-import io.lantern.isimud.model.VpnModel
+import io.flutter.plugin.common.MethodChannel
+import io.lantern.android.model.VpnModel
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -25,21 +25,48 @@ import java.util.*
 
 class MainActivity : FlutterActivity() {
 
-    private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
-
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
-
-        messagingModel = MessagingModel(flutterEngine)
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
-    }
+    private lateinit var flutterNavigation: MethodChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val intent = Intent(this, LanternService_::class.java)
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
+    }
+
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        flutterNavigation = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "navigation"
+        )
+
+        flutterNavigation.setMethodCallHandler { call, _ ->
+            if (call.method == "ready") {
+                intent.let { intent ->
+                    // If the user clicks on a message notification and MainActivity opens in
+                    // response, this ensures that we navigate to the corresponding conversation.
+                    navigateForIntent(intent)
+                }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // If the user clicks on a message notification and MainActivity is already the top activity,
+        // this ensures that we navigate to the corresponding conversation.
+        navigateForIntent(intent)
+    }
+
+    private fun navigateForIntent(intent: Intent) {
+        intent.getByteArrayExtra("contactForConversation")?.let { contact ->
+            flutterNavigation.invokeMethod("openConversation", contact)
+            intent.removeExtra("contactForConversation")
+        }
     }
 
     override fun onResume() {
@@ -52,7 +79,6 @@ class MainActivity : FlutterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        messagingModel.destroy()
         vpnModel.destroy()
         try {
             unbindService(lanternServiceConnection)
@@ -89,15 +115,15 @@ class MainActivity : FlutterActivity() {
                         val pm = packageManager
                         try {
                             val info =
-                                pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
+                                    pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
                             val label = info.loadLabel(pm)
                             msg.append(label)
                         } catch (nmfe: PackageManager.NameNotFoundException) {
                             Logger.error(
-                                PERMISSIONS_TAG,
-                                "Unexpected exception loading label for permission %s: %s",
-                                permission,
-                                nmfe
+                                    PERMISSIONS_TAG,
+                                    "Unexpected exception loading label for permission %s: %s",
+                                    permission,
+                                    nmfe
                             )
                             msg.append(permission)
                         }
@@ -107,18 +133,18 @@ class MainActivity : FlutterActivity() {
                         var description = "..."
                         try {
                             description = getString(
-                                resources.getIdentifier(
-                                    permission,
-                                    "string",
-                                    "org.getlantern.lantern"
-                                )
+                                    resources.getIdentifier(
+                                            permission,
+                                            "string",
+                                            "org.getlantern.lantern"
+                                    )
                             )
                         } catch (t: Throwable) {
                             Logger.warn(
-                                PERMISSIONS_TAG,
-                                "Couldn't get permission description for %s: %s",
-                                permission,
-                                t
+                                    PERMISSIONS_TAG,
+                                    "Couldn't get permission description for %s: %s",
+                                    permission,
+                                    t
                             )
                         }
                         msg.append(description)
@@ -126,21 +152,21 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    msg.toString()
+                        PERMISSIONS_TAG,
+                        msg.toString()
                 )
                 Utils.showAlertDialog(this,
-                    getString(R.string.please_allow_lantern_to),
-                    Html.fromHtml(msg.toString()),
-                    getString(R.string.continue_),
-                    false,
-                    Runnable {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            neededPermissions,
-                            FULL_PERMISSIONS_REQUEST
-                        )
-                    })
+                        getString(R.string.please_allow_lantern_to),
+                        Html.fromHtml(msg.toString()),
+                        getString(R.string.continue_),
+                        false,
+                        Runnable {
+                            ActivityCompat.requestPermissions(
+                                    this,
+                                    neededPermissions,
+                                    FULL_PERMISSIONS_REQUEST
+                            )
+                        })
                 return
             }
 
@@ -148,23 +174,23 @@ class MainActivity : FlutterActivity() {
             // Prompt the user to enable full-device VPN mode
             // Make a VPN connection from the client
             Logger.debug(
-                TAG,
-                "Load VPN configuration"
+                    TAG,
+                    "Load VPN configuration"
             )
             val intent = VpnService.prepare(this)
             if (intent != null) {
                 Logger.warn(
-                    TAG,
-                    "Requesting VPN connection"
+                        TAG,
+                        "Requesting VPN connection"
                 )
                 startActivityForResult(
-                    intent.setAction(LanternVpnService.ACTION_CONNECT),
-                    REQUEST_VPN
+                        intent.setAction(LanternVpnService.ACTION_CONNECT),
+                        REQUEST_VPN
                 )
             } else {
                 Logger.debug(
-                    TAG,
-                    "VPN enabled, starting Lantern..."
+                        TAG,
+                        "VPN enabled, starting Lantern..."
                 )
                 updateStatus(true)
                 startVpnService()
@@ -179,9 +205,9 @@ class MainActivity : FlutterActivity() {
     granted based on being included in Manifest and will show as denied even if we're eligible
     to get it.*/
     private val allRequiredPermissions = arrayOf(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.ACCESS_NETWORK_STATE
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.ACCESS_NETWORK_STATE
     )
 
     private fun missingPermissions(): Array<String> {
@@ -196,25 +222,25 @@ class MainActivity : FlutterActivity() {
 
     private fun hasPermission(permission: String): Boolean {
         val result = ContextCompat.checkSelfPermission(
-            applicationContext,
-            permission
+                applicationContext,
+                permission
         ) == PackageManager.PERMISSION_GRANTED
         Logger.debug(PERMISSIONS_TAG, "has permission %s: %s", permission, result)
         return result
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray,
     ) {
         when (requestCode) {
             FULL_PERMISSIONS_REQUEST -> {
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "Got result for %s: %s",
-                    permissions.size,
-                    grantResults.size
+                        PERMISSIONS_TAG,
+                        "Got result for %s: %s",
+                        permissions.size,
+                        grantResults.size
                 )
                 var i = 0
                 while (i < permissions.size) {
@@ -222,17 +248,17 @@ class MainActivity : FlutterActivity() {
                     val result = grantResults[i]
                     if (result == PackageManager.PERMISSION_DENIED) {
                         Logger.debug(
-                            PERMISSIONS_TAG,
-                            "User denied permission %s",
-                            permission
+                                PERMISSIONS_TAG,
+                                "User denied permission %s",
+                                permission
                         )
                         return
                     }
                     i++
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "User granted requested permissions, attempt to switch on Lantern"
+                        PERMISSIONS_TAG,
+                        "User granted requested permissions, attempt to switch on Lantern"
                 )
                 try {
                     switchLantern(true)
@@ -257,19 +283,19 @@ class MainActivity : FlutterActivity() {
 
     private fun startVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_CONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_CONNECT)
         )
     }
 
-    protected open fun stopVpnService() {
+    private fun stopVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_DISCONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_DISCONNECT)
         )
     }
 
@@ -289,59 +315,9 @@ class MainActivity : FlutterActivity() {
         private val TAG = MainActivity::class.java.simpleName
         private val PERMISSIONS_TAG = "$TAG.permissions"
         private val FULL_PERMISSIONS_REQUEST = 8888
+        val RECORD_AUDIO_PERMISSIONS_REQUEST = 8889
         private val REQUEST_VPN = 7777
     }
-
-//    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-//        super.configureFlutterEngine(flutterEngine)
-//        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannel).setMethodCallHandler {
-//            // Note: this method is invoked on the main thread.
-//            call, result ->
-//            when(call.method) {
-//                "getUserID" -> result.success(echoSystem.client.userID)
-//                "connect" -> try {
-//                    echoSystem.connect(call.argument<String>("userID") ?: throw RuntimeException("Missing userID"))
-//                    result.success(null)
-//                } catch (e: Throwable) {
-//                    e.printStackTrace()
-//                    result.error("exception", e.localizedMessage, null)
-//                }
-//                "send" -> {
-//                    try {
-//                        echoSystem.send(call.argument<String>("userID")!!, call.argument<ByteArray>("message")!!)
-//                        result.success(null)
-//                    } catch (e: Throwable) {
-//                        e.printStackTrace()
-//                        result.error("exception", e.localizedMessage, null)
-//                    }
-//                }
-//                else -> result.notImplemented()
-//            }
-//        }
-//
-//        // Prepare channel
-//        EventChannel(getFlutterEngine()?.dartExecutor, eventsChannel).setStreamHandler(this)
-//    }
-//
-//    override fun onListen(arguments: Any?, events: EventSink?) {
-//        echoSystem.client.registerListener({ from: SignalProtocolAddress, plainText: ByteArray ->
-//            events?.success(hashMapOf(
-//                "from" to from.name,
-//                "plainText" to plainText
-//            ))
-//        })
-//    }
-//
-//    override fun onCancel(arguments: Any?) {
-////        TODO("Not yet implemented")
-//    }
-//
-//    companion object {
-//        private val methodChannel = "methods"
-//        private val eventsChannel = "events"
-//
-//        private val echoSystem = EchoSystem()
-//    }
 
 }
 
