@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
@@ -52,7 +53,7 @@ class LoConf {
         }
 
         fun fetch(client: HttpClient, loconfUrl: String, cb: LoConfCallback) {
-            val builder = HttpUrl.parse(loconfUrl)!!.newBuilder()
+            val builder = loconfUrl.toHttpUrlOrNull()!!.newBuilder()
             client.request("GET", builder.build(), object : HttpCallback {
                 override fun onFailure(throwable: Throwable?) {
                     Logger.error(TAG, "Unable to fetch surveys", throwable)

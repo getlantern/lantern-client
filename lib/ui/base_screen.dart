@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 
-class BaseScreen extends StatefulWidget {
+class BaseScreen extends StatelessWidget {
   final String title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
   final Widget body;
+  final FloatingActionButton? actionButton;
 
-  BaseScreen({this.title, this.actions, this.body, Key key}) : super(key: key);
+  BaseScreen(
+      {required this.title,
+        this.actions,
+        required this.body,
+        this.actionButton,
+        Key? key})
+      : super(key: key);
 
-  @override
-  _BaseScreenState createState() => _BaseScreenState();
-}
-
-class _BaseScreenState extends State<BaseScreen>
-    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: widget.title,
-        actions: widget.actions,
+        title: title,
+        actions: actions,
       ),
-      body: widget.body,
+      body: body,
+      floatingActionButton: actionButton,
     );
   }
-
-  @override
-  // prevent to re-render
-  bool get wantKeepAlive => true;
 }

@@ -7,7 +7,9 @@ class CustomBottomBar extends StatefulWidget {
   final Function updateCurrentIndexPageView;
 
   CustomBottomBar(
-      {this.currentIndex = 0, this.updateCurrentIndexPageView, Key key})
+      {this.currentIndex = 0,
+        required this.updateCurrentIndexPageView,
+        Key? key})
       : super(key: key);
 
   @override
@@ -17,32 +19,32 @@ class CustomBottomBar extends StatefulWidget {
 class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget activeIcon({bool isActive = false}) {
     return Container(
-      margin: EdgeInsets.only(left: 4),
+      margin: const EdgeInsets.only(left: 4),
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(
         color: isActive ? Colors.green : Colors.red,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(activeIconSize / 2),
         ),
         boxShadow: isActive
             ? [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: Offset(0, 0), // changes position of shadow
-                ),
-              ]
+          BoxShadow(
+            color: Colors.green.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 0), // changes position of shadow
+          ),
+        ]
             : [],
       ),
     );
   }
 
   Widget renderBottomTabItem(
-      {TAB_ENUM tabEnum, int index, bool isActive = false}) {
+      {required TAB_ENUM tabEnum, required int index, bool isActive = false}) {
     String text;
-    IconData icon;
+    late IconData icon;
 
     switch (tabEnum) {
       case TAB_ENUM.VPN:
@@ -54,7 +56,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         icon = Icons.account_circle;
         break;
       default:
-        break;
+        throw Exception('unknown tabEnum');
     }
     return Expanded(
       flex: 1,
@@ -107,8 +109,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      text ?? "",
-                      style: tsCaption(context).copyWith(
+                      text,
+                      style: tsCaption(context)?.copyWith(
                         color: HexColor(widget.currentIndex == index
                             ? selectedTabLabelColor
                             : unselectedTabLabelColor),
@@ -133,21 +135,21 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     return Container(
       height: 68,
       child: vpnModel
-          .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
+          .vpnStatus((BuildContext context, String? vpnStatus, Widget? child) {
         return Row(
           children: TAB_ENUM.values
               .asMap()
               .map(
                 (index, tabEnum) => MapEntry(
-                  index,
-                  renderBottomTabItem(
-                    index: index,
-                    tabEnum: tabEnum,
-                    isActive: (vpnStatus == "connected" ||
-                        vpnStatus == "disconnecting"),
-                  ),
-                ),
-              )
+              index,
+              renderBottomTabItem(
+                index: index,
+                tabEnum: tabEnum,
+                isActive: (vpnStatus == 'connected' ||
+                    vpnStatus == 'disconnecting'),
+              ),
+            ),
+          )
               .values
               .toList(),
         );
