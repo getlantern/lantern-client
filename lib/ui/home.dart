@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
         default:
           throw Exception('unknown navigation method ${call.method}');
       }
+      return Future.value(null);
     });
     navigationChannel.invokeMethod('ready');
   }

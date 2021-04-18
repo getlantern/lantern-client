@@ -31,8 +31,6 @@ dependencies:
 
   provider: ^5.0.0
 
-  #  infinite_scroll_pagination: ^2.3.0
-
   protobuf: any
 
   google_fonts:

@@ -87,11 +87,15 @@
     <color name="faded">#707070</color>
     <color name="error">#f44336</color>
 
-    <color name="material_button">#db0a5b</color>
+    <color name="material_button">@color/secondary_pink</color>
 
     <color name="selected_item">@color/pink</color>
 
     <color name="fine_print_link">#007a7c</color>
 
     <color name="update_dialog_accent_color">@color/pro_blue_color</color>
+
+
+
+    <color name="secondary_pink">#DB0A5B</color>
 </resources>
