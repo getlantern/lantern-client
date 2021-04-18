@@ -111,7 +111,7 @@ class MailSender(private val context: Context, private val template: String, pri
     init {
         appVersion = Utils.appVersion(context)
         userEmail = LanternApp.getSession().email()
-        sendLogs = template != null && template == "user-send-logs"
+        sendLogs = template == "user-send-logs"
         if (showProgress) {
             dialog = ProgressDialog(context)
             dialog!!.setCancelable(false)

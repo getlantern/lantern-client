@@ -12,10 +12,8 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
-import io.lantern.db.DB
-import io.lantern.android.model.Vpn
-import io.lantern.android.model.VpnModel
-import io.lantern.secrets.Secrets
+import io.lantern.android.model.*
+
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -23,7 +21,6 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.greenrobot.eventbus.EventBus
-import java.io.File
 import java.text.DateFormat
 import java.util.*
 
@@ -36,10 +33,8 @@ abstract class SessionManager(application: Application) : Session {
     private var staging = false
     val settings: Settings
     protected val context: Context
-    protected val secrets: Secrets
     protected val prefs: SharedPreferences
     protected val editor: SharedPreferences.Editor
-    protected val prefsDb: DB
     protected val vpnModel: VpnModel
 
     // dynamic settings passed to internal services
@@ -53,8 +48,12 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setStartResult(result: StartResult?) {
         startResult = result
-        Logger.debug(TAG, String.format("Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
-                hTTPAddr, sOCKS5Addr))
+        Logger.debug(
+                TAG, String.format(
+                "Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
+                hTTPAddr, sOCKS5Addr
+        )
+        )
     }
 
     fun lanternDidStart(): Boolean {
@@ -353,11 +352,13 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(SERVER_COUNTRY, country).commit()
         editor.putString(SERVER_CITY, city).commit()
         editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
-        vpnModel.saveServerInfo(Vpn.ServerInfo.newBuilder()
-                .setCity(city)
-                .setCountry(country)
-                .setCountryCode(countryCode)
-                .build())
+        vpnModel.saveServerInfo(
+                Vpn.ServerInfo.newBuilder()
+                        .setCity(city)
+                        .setCountry(country)
+                        .setCountryCode(countryCode)
+                        .build()
+        )
     }
 
     protected fun getInt(name: String?, defaultValue: Int): Int {
@@ -419,9 +420,9 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     companion object {
-        @JvmStatic
-        protected val TAG = SessionManager::class.java.name
+        private val TAG = SessionManager::class.java.name
         const val CONFIG_PAYMENT_TEST_MODE = "config_payment_test_mode"
+        const val PREFERENCES_SCHEMA = "session"
 
         // shared preferences
         protected const val PREF_NAME = "LanternSession"
@@ -466,20 +467,23 @@ abstract class SessionManager(application: Application) : Session {
     init {
         appVersion = Utils.appVersion(application)
         context = application
-        val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
-        secrets = Secrets("lanternMasterKey", secretsPreferences)
-        val prefsDBLocation = File(File(application.filesDir, ".lantern"), "prefsdb").absolutePath
-        val prefsDBPassword = secrets.get("prefsPassword", 32) // TODO: don't hardcode this
-        prefsDb = DB.createOrOpen(application, prefsDBLocation, prefsDBPassword)
-        prefs = prefsDb.asSharedPreferences("", context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE))
         vpnModel = VpnModel()
+        prefs = BaseModel.masterDB.asSharedPreferences(
+                PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        )
         editor = prefs.edit()
-        internalHeaders = context.getSharedPreferences(INTERNAL_HEADERS_PREF_NAME,
-                Context.MODE_PRIVATE)
+        internalHeaders = context.getSharedPreferences(
+                INTERNAL_HEADERS_PREF_NAME,
+                Context.MODE_PRIVATE
+        )
         settings = Settings.init(context)
         val configuredLocale = prefs.getString(LANG, null)
         if (!TextUtils.isEmpty(configuredLocale)) {
-            Logger.debug(TAG, "Configured locale was %1\$s, setting as default locale", configuredLocale)
+            Logger.debug(
+                    TAG,
+                    "Configured locale was %1\$s, setting as default locale",
+                    configuredLocale
+            )
             locale = LocaleInfo(context, configuredLocale!!).locale
             Lingver.init(application, locale!!)
         } else {

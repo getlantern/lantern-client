@@ -391,7 +391,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user.email != "") {
-            setEmail(user!!.email)
+            setEmail(user.email)
         }
 
         setYinbiEnabled(user.yinbiEnabled)
@@ -419,6 +419,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     companion object {
+        private val TAG = LanternSessionManager::class.java.name
+
         // shared preferences
         private const val PRO_USER = "prouser"
         private const val PRO_EXPIRED = "proexpired"

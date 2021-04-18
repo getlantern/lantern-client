@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lantern/event/EventManager.dart';
+import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -16,6 +18,9 @@ class LanternApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (context) => VpnModel()),
+        Provider(create: (context) => SessionModel()),
+        Provider(create: (context) => EventManager('lantern_event_channel')),
+        Provider(create: (context) => const MethodChannel('lantern_method_channel')),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
