@@ -73,6 +73,12 @@ class MessagingModel extends Model {
         as Future<Uint8List>;
   }
 
+  Future<Uint8List> filePickerLoadAttachment(
+      String? fileExtension, String? filePath, int? fileSize) async {
+    return methodChannel.invokeMethod('filePickerLoadAttachment')
+        as Future<Uint8List>;
+  }
+
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       'attachment': attachment.writeToBuffer(),
