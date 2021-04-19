@@ -73,8 +73,7 @@ class MessagingModel extends Model {
         as Future<Uint8List>;
   }
 
-  Future<Uint8List> filePickerLoadAttachment(
-      String? fileExtension, String? filePath, int? fileSize) async {
+  Future<Uint8List> filePickerLoadAttachment(String? filePath) async {
     return methodChannel.invokeMethod('filePickerLoadAttachment')
         as Future<Uint8List>;
   }

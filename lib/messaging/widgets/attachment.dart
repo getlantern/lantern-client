@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
-import 'dart:io';
+import 'package:image/image.dart' as Img;
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
@@ -30,9 +30,13 @@ class _ImageAttachment extends StatefulWidget {
 }
 
 class _ImageAttachmentState extends State<_ImageAttachment> {
+  Future<void> getDecryptedAttachement(model) async {
+    return await model.decryptAttachment(widget._attachment);
+  }
+
   @override
   Widget build(BuildContext context) {
-    var filePath = widget._attachment.filePath;
+    var model = context.watch<MessagingModel>();
     switch (widget._attachment.status) {
       case StoredAttachment_Status.PENDING:
         // share placeholder while status is pending
@@ -40,14 +44,9 @@ class _ImageAttachmentState extends State<_ImageAttachment> {
           image: NetworkImage('https://via.placeholder.com/150/ffe500/000.png'),
         );
       default:
+        var _decryptedAttachment = getDecryptedAttachement(model);
         return Transform.scale(
-            scale: 0.5,
-            child: Image.file(
-              File(filePath),
-              width: 100,
-              height: 100,
-              fit: BoxFit.fill,
-            ));
+            scale: 0.5, child: Img.fromBytes(100, 100, _decryptedAttachment));
     }
   }
 }
