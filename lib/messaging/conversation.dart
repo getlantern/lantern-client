@@ -1,5 +1,6 @@
 import 'dart:typed_data';
-
+import 'dart:ui';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -70,6 +71,26 @@ class _ConversationState extends State<Conversation> {
       _recording = false;
       _willCancelRecording = false;
     });
+  }
+
+  Future<void> _selectFilesToShare() async {
+    try {
+      var pickedFile = await FilePicker.platform
+          .pickFiles(allowMultiple: false, type: FileType.image);
+
+      if (pickedFile != null) {
+        var filePath = pickedFile.files.first.path;
+        var fileExtension = pickedFile.files.first.extension;
+        var fileSize = pickedFile.files.first.size;
+        var attachment = await model.filePickerLoadAttachment(
+            filePath, fileExtension, fileSize);
+        _send(_newMessage.value.text, attachments: [attachment]);
+      } else {
+        print('User has cancelled the selection');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -158,6 +179,12 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    _selectFilesToShare();
+                  },
+                  child: const Icon(Icons.image),
+                ),
+                GestureDetector(
                   onTapDown: (details) {
                     _startRecording();
                   },
@@ -165,7 +192,7 @@ class _ConversationState extends State<Conversation> {
                     await _finishRecording();
                   },
                   child: const Icon(Icons.mic),
-                )
+                ),
               ]),
             ),
           ]),

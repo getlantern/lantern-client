@@ -3,15 +3,52 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
+import 'dart:io';
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
   switch (attachment.attachment.mimeType) {
     case 'audio/ogg':
       return Flexible(child: _AudioAttachment(attachment));
+    case 'image/*':
+      return Flexible(child: _ImageAttachment(attachment));
+    case 'video/*':
+    // return Flexible(child: _VideoAttachment(attachment));
     default:
       // TODO: handle other types of attachments
       return Flexible(child: Container());
+  }
+}
+
+class _ImageAttachment extends StatefulWidget {
+  final StoredAttachment _attachment;
+  _ImageAttachment(this._attachment);
+  @override
+  State<StatefulWidget> createState() {
+    return _ImageAttachmentState();
+  }
+}
+
+class _ImageAttachmentState extends State<_ImageAttachment> {
+  @override
+  Widget build(BuildContext context) {
+    var filePath = widget._attachment.filePath;
+    switch (widget._attachment.status) {
+      case StoredAttachment_Status.PENDING:
+        // share placeholder while status is pending
+        return const Image(
+          image: NetworkImage('https://via.placeholder.com/150/ffe500/000.png'),
+        );
+      default:
+        return Transform.scale(
+            scale: 0.5,
+            child: Image.file(
+              File(filePath),
+              width: 100,
+              height: 100,
+              fit: BoxFit.fill,
+            ));
+    }
   }
 }
 
