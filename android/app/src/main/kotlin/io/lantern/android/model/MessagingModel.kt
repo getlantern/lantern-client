@@ -24,7 +24,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
     private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
-
     init {
         // delete any lingering data in voiceMemoFile (e.g. if we crashed during recording)
         voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
@@ -58,15 +57,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
                 }
             }
-            "filePickerLoadAttachment" -> {
-                val mimeType = call.argument("fileExtension")
-                val filePath = call.argument("filePath")
-                val fileSize = call.argument("fileSize")
-                return messaging.createAttachment(
-                        mimeType,
-                        filePath,
-                        fileSize).toByteArray()
-            }
+            "filePickerLoadAttachment" -> messaging.createAttachment(call.argument("filePath")).toByteArray()
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
                 ByteArrayOutputStream(attachment.attachment.plaintextLength.toInt()).use { output ->
