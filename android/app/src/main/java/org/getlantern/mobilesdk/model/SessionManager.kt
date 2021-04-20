@@ -12,9 +12,8 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
-import io.lantern.android.model.Model
-import io.lantern.android.model.Vpn
-import io.lantern.android.model.VpnModel
+import io.lantern.android.model.*
+
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -50,10 +49,10 @@ abstract class SessionManager(application: Application) : Session {
     fun setStartResult(result: StartResult?) {
         startResult = result
         Logger.debug(
-            TAG, String.format(
+                TAG, String.format(
                 "Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
                 hTTPAddr, sOCKS5Addr
-            )
+        )
         )
     }
 
@@ -304,14 +303,12 @@ abstract class SessionManager(application: Application) : Session {
     fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
         editor.putString(LATEST_BANDWIDTH, amount).commit()
-        vpnModel.saveBandwidth(
-            Vpn.Bandwidth.newBuilder()
+        vpnModel.saveBandwidth(Vpn.Bandwidth.newBuilder()
                 .setPercent(update.percent)
                 .setRemaining(update.remaining)
                 .setAllowed(update.allowed)
                 .setTtlSeconds(update.ttlSeconds)
-                .build()
-        )
+                .build())
     }
 
     fun savedBandwidth(): String? {
@@ -345,8 +342,8 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun updateStats(
-        city: String, country: String,
-        countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
+            city: String, country: String,
+            countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
     ) {
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
         EventBus.getDefault().post(st)
@@ -356,11 +353,11 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(SERVER_CITY, city).commit()
         editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
         vpnModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder()
-                .setCity(city)
-                .setCountry(country)
-                .setCountryCode(countryCode)
-                .build()
+                Vpn.ServerInfo.newBuilder()
+                        .setCity(city)
+                        .setCountry(country)
+                        .setCountryCode(countryCode)
+                        .build()
         )
     }
 
@@ -423,9 +420,9 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     companion object {
-        @JvmStatic
-        protected val TAG = SessionManager::class.java.name
+        private val TAG = SessionManager::class.java.name
         const val CONFIG_PAYMENT_TEST_MODE = "config_payment_test_mode"
+        const val PREFERENCES_SCHEMA = "session"
 
         // shared preferences
         protected const val PREF_NAME = "LanternSession"
@@ -455,15 +452,15 @@ abstract class SessionManager(application: Application) : Session {
         protected const val INTERNAL_HEADERS_PREF_NAME = "LanternMeta"
         private val enLocale = Locale("en", "US")
         private val chineseLocales = arrayOf<Locale?>(
-            Locale("zh", "CN"),
-            Locale("zh", "TW")
+                Locale("zh", "CN"),
+                Locale("zh", "TW")
         )
         private val englishLocales = arrayOf<Locale?>(
-            Locale("en", "US"),
-            Locale("en", "GB")
+                Locale("en", "US"),
+                Locale("en", "GB")
         )
         private val iranLocale = arrayOf<Locale?>(
-            Locale("fa", "IR")
+                Locale("fa", "IR")
         )
     }
 
@@ -471,22 +468,21 @@ abstract class SessionManager(application: Application) : Session {
         appVersion = Utils.appVersion(application)
         context = application
         vpnModel = VpnModel()
-        prefs = Model.db.asSharedPreferences(
-            "session/",
-            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs = BaseModel.masterDB.asSharedPreferences(
+                PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(
-            INTERNAL_HEADERS_PREF_NAME,
-            Context.MODE_PRIVATE
+                INTERNAL_HEADERS_PREF_NAME,
+                Context.MODE_PRIVATE
         )
         settings = Settings.init(context)
         val configuredLocale = prefs.getString(LANG, null)
         if (!TextUtils.isEmpty(configuredLocale)) {
             Logger.debug(
-                TAG,
-                "Configured locale was %1\$s, setting as default locale",
-                configuredLocale
+                    TAG,
+                    "Configured locale was %1\$s, setting as default locale",
+                    configuredLocale
             )
             locale = LocaleInfo(context, configuredLocale!!).locale
             Lingver.init(application, locale!!)

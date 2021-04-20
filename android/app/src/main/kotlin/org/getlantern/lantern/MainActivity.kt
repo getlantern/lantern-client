@@ -11,7 +11,6 @@ import android.net.VpnService
 import android.os.*
 import android.text.Html
 import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
@@ -46,13 +45,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
-
     private lateinit var eventManager: EventManager
-
     private val lanternClient = LanternApp.getLanternHttpClient()
-
     private var countDown: AuctionCountDown? = null
-
     private lateinit var appVersion: String
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -61,12 +56,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
         navigator = Navigator(this, flutterEngine)
-
         eventManager = EventManager("lantern_event_channel", flutterEngine)
 
         MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "lantern_method_channel"
+                flutterEngine.dartExecutor.binaryMessenger,
+                "lantern_method_channel"
         ).setMethodCallHandler(this)
     }
 
@@ -110,9 +104,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         }
 
         if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
-                activity,
-                LanternVpnService::class.java
-            )
+                        activity,
+                        LanternVpnService::class.java
+                )
         ) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
@@ -223,8 +217,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val locale = LanternApp.getSession().language
         val countryCode = LanternApp.getSession().countryCode
         Logger.debug(
-            SURVEY_TAG,
-            "Processing loconf; country code is $countryCode"
+                SURVEY_TAG,
+                "Processing loconf; country code is $countryCode"
         )
         if (loconf.popUpAds != null) {
             handlePopUpAd(loconf.popUpAds!!)
@@ -254,23 +248,23 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             Logger.debug(SURVEY_TAG, "Not showing survey this time")
         } else {
             Logger.debug(
-                SURVEY_TAG,
-                "Deciding whether to show survey for '%s' at %s",
-                key,
-                survey.url
+                    SURVEY_TAG,
+                    "Deciding whether to show survey for '%s' at %s",
+                    key,
+                    survey.url
             )
             val userType = survey.userType
             if (userType != null) {
                 if (userType == "free" && LanternApp.getSession().isProUser) {
                     Logger.debug(
-                        SURVEY_TAG,
-                        "Not showing messages targetted to free users to Pro users"
+                            SURVEY_TAG,
+                            "Not showing messages targetted to free users to Pro users"
                     )
                     return
                 } else if (userType == "pro" && !LanternApp.getSession().isProUser) {
                     Logger.debug(
-                        SURVEY_TAG,
-                        "Not showing messages targetted to free users to Pro users"
+                            SURVEY_TAG,
+                            "Not showing messages targetted to free users to Pro users"
                     )
                     return
                 }
@@ -286,8 +280,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         if (url != null && url != "") {
             if (LanternApp.getSession().surveyLinkOpened(url)) {
                 Logger.debug(
-                    TAG,
-                    "User already opened link to survey; not displaying snackbar"
+                        TAG,
+                        "User already opened link to survey; not displaying snackbar"
                 )
                 return
             }
@@ -295,8 +289,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         lastSurvey = survey
         Logger.debug(TAG, "Showing user survey snackbar")
         eventManager.onNewEvent(
-            Event.SurveyAvailable,
-            hashMapOf("message" to survey.message, "buttonText" to survey.button)
+                Event.SurveyAvailable,
+                hashMapOf("message" to survey.message, "buttonText" to survey.button)
         )
     }
 
@@ -310,13 +304,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         }
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
         FinestWebView.Builder(this@MainActivity)
-            .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
-            .webViewSupportMultipleWindows(true)
-            .webViewJavaScriptEnabled(true)
-            .swipeRefreshColorRes(R.color.black)
-            .webViewAllowFileAccessFromFileURLs(true)
-            .webViewJavaScriptCanOpenWindowsAutomatically(true)
-            .show(survey.url!!)
+                .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+                .webViewSupportMultipleWindows(true)
+                .webViewJavaScriptEnabled(true)
+                .swipeRefreshColorRes(R.color.black)
+                .webViewAllowFileAccessFromFileURLs(true)
+                .webViewJavaScriptCanOpenWindowsAutomatically(true)
+                .show(survey.url!!)
     }
 
     /**
@@ -334,8 +328,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         }
         if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
             Logger.debug(
-                TAG,
-                "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
+                    TAG,
+                    "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
             )
             return
         }
@@ -376,10 +370,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
      * triggered from the side-menu or is an automatic check
      */
     private inner class UpdateTask(
-        private val activity: Activity,
-        private val userInitiated: Boolean
-    ) :
-        AsyncTask<Void, Void, String?>() {
+            private val activity: Activity,
+            private val userInitiated: Boolean,
+    ) : AsyncTask<Void, Void, String?>() {
 
         override fun doInBackground(vararg v: Void): String? {
             try {
@@ -397,8 +390,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             if (url == null) {
                 val appName: String = resources.getString(R.string.app_name)
                 val message: String = String.format(
-                    resources.getString(R.string.error_checking_for_update),
-                    appName
+                        resources.getString(R.string.error_checking_for_update),
+                        appName
                 )
                 Utils.showAlertDialog(activity, appName, message, false)
                 return
@@ -409,8 +402,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 return
             }
             Logger.debug(
-                TAG,
-                "Update available at $url"
+                    TAG,
+                    "Update available at $url"
             )
             // an updated version of Lantern is available at the given url
             val intent = Intent(activity, UpdateActivity_::class.java)
@@ -426,7 +419,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val appName = resources.getString(R.string.app_name)
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
-            String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
+                String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
         Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
     }
 
@@ -447,15 +440,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                         val pm = packageManager
                         try {
                             val info =
-                                pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
+                                    pm.getPermissionInfo(permission, PackageManager.GET_META_DATA)
                             val label = info.loadLabel(pm)
                             msg.append(label)
                         } catch (nmfe: PackageManager.NameNotFoundException) {
                             Logger.error(
-                                PERMISSIONS_TAG,
-                                "Unexpected exception loading label for permission %s: %s",
-                                permission,
-                                nmfe
+                                    PERMISSIONS_TAG,
+                                    "Unexpected exception loading label for permission %s: %s",
+                                    permission,
+                                    nmfe
                             )
                             msg.append(permission)
                         }
@@ -465,18 +458,18 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                         var description = "..."
                         try {
                             description = getString(
-                                resources.getIdentifier(
-                                    permission,
-                                    "string",
-                                    "org.getlantern.lantern"
-                                )
+                                    resources.getIdentifier(
+                                            permission,
+                                            "string",
+                                            "org.getlantern.lantern"
+                                    )
                             )
                         } catch (t: Throwable) {
                             Logger.warn(
-                                PERMISSIONS_TAG,
-                                "Couldn't get permission description for %s: %s",
-                                permission,
-                                t
+                                    PERMISSIONS_TAG,
+                                    "Couldn't get permission description for %s: %s",
+                                    permission,
+                                    t
                             )
                         }
                         msg.append(description)
@@ -484,21 +477,21 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     }
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    msg.toString()
+                        PERMISSIONS_TAG,
+                        msg.toString()
                 )
                 Utils.showAlertDialog(this,
-                    getString(R.string.please_allow_lantern_to),
-                    Html.fromHtml(msg.toString()),
-                    getString(R.string.continue_),
-                    false,
-                    Runnable {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            neededPermissions,
-                            FULL_PERMISSIONS_REQUEST
-                        )
-                    })
+                        getString(R.string.please_allow_lantern_to),
+                        Html.fromHtml(msg.toString()),
+                        getString(R.string.continue_),
+                        false,
+                        Runnable {
+                            ActivityCompat.requestPermissions(
+                                    this,
+                                    neededPermissions,
+                                    FULL_PERMISSIONS_REQUEST
+                            )
+                        })
                 return
             }
 
@@ -506,23 +499,23 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             // Prompt the user to enable full-device VPN mode
             // Make a VPN connection from the client
             Logger.debug(
-                TAG,
-                "Load VPN configuration"
+                    TAG,
+                    "Load VPN configuration"
             )
             val intent = VpnService.prepare(this)
             if (intent != null) {
                 Logger.warn(
-                    TAG,
-                    "Requesting VPN connection"
+                        TAG,
+                        "Requesting VPN connection"
                 )
                 startActivityForResult(
-                    intent.setAction(LanternVpnService.ACTION_CONNECT),
-                    REQUEST_VPN
+                        intent.setAction(LanternVpnService.ACTION_CONNECT),
+                        REQUEST_VPN
                 )
             } else {
                 Logger.debug(
-                    TAG,
-                    "VPN enabled, starting Lantern..."
+                        TAG,
+                        "VPN enabled, starting Lantern..."
                 )
                 updateStatus(true)
                 startVpnService()
@@ -537,9 +530,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     granted based on being included in Manifest and will show as denied even if we're eligible
     to get it.*/
     private val allRequiredPermissions = arrayOf(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.ACCESS_NETWORK_STATE
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.ACCESS_NETWORK_STATE
     )
 
     private fun missingPermissions(): Array<String> {
@@ -554,25 +547,25 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private fun hasPermission(permission: String): Boolean {
         val result = ContextCompat.checkSelfPermission(
-            applicationContext,
-            permission
+                applicationContext,
+                permission
         ) == PackageManager.PERMISSION_GRANTED
         Logger.debug(PERMISSIONS_TAG, "has permission %s: %s", permission, result)
         return result
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray,
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray,
     ) {
         when (requestCode) {
             FULL_PERMISSIONS_REQUEST -> {
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "Got result for %s: %s",
-                    permissions.size,
-                    grantResults.size
+                        PERMISSIONS_TAG,
+                        "Got result for %s: %s",
+                        permissions.size,
+                        grantResults.size
                 )
                 var i = 0
                 while (i < permissions.size) {
@@ -580,17 +573,17 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     val result = grantResults[i]
                     if (result == PackageManager.PERMISSION_DENIED) {
                         Logger.debug(
-                            PERMISSIONS_TAG,
-                            "User denied permission %s",
-                            permission
+                                PERMISSIONS_TAG,
+                                "User denied permission %s",
+                                permission
                         )
                         return
                     }
                     i++
                 }
                 Logger.debug(
-                    PERMISSIONS_TAG,
-                    "User granted requested permissions, attempt to switch on Lantern"
+                        PERMISSIONS_TAG,
+                        "User granted requested permissions, attempt to switch on Lantern"
                 )
                 try {
                     switchLantern(true)
@@ -615,19 +608,19 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private fun startVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_CONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_CONNECT)
         )
     }
 
     private fun stopVpnService() {
         startService(
-            Intent(
-                this,
-                LanternVpnService::class.java
-            ).setAction(LanternVpnService.ACTION_DISCONNECT)
+                Intent(
+                        this,
+                        LanternVpnService::class.java
+                ).setAction(LanternVpnService.ACTION_DISCONNECT)
         )
     }
 
@@ -656,57 +649,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         private val FULL_PERMISSIONS_REQUEST = 8888
         private val REQUEST_VPN = 7777
     }
-
-//    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-//        super.configureFlutterEngine(flutterEngine)
-//        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannel).setMethodCallHandler {
-//            // Note: this method is invoked on the main thread.
-//            call, result ->
-//            when(call.method) {
-//                "getUserID" -> result.success(echoSystem.client.userID)
-//                "connect" -> try {
-//                    echoSystem.connect(call.argument<String>("userID") ?: throw RuntimeException("Missing userID"))
-//                    result.success(null)
-//                } catch (e: Throwable) {
-//                    e.printStackTrace()
-//                    result.error("exception", e.localizedMessage, null)
-//                }
-//                "send" -> {
-//                    try {
-//                        echoSystem.send(call.argument<String>("userID")!!, call.argument<ByteArray>("message")!!)
-//                        result.success(null)
-//                    } catch (e: Throwable) {
-//                        e.printStackTrace()
-//                        result.error("exception", e.localizedMessage, null)
-//                    }
-//                }
-//                else -> result.notImplemented()
-//            }
-//        }
-//
-//        // Prepare channel
-//        EventChannel(getFlutterEngine()?.dartExecutor, eventsChannel).setStreamHandler(this)
-//    }
-//
-//    override fun onListen(arguments: Any?, events: EventSink?) {
-//        echoSystem.client.registerListener({ from: SignalProtocolAddress, plainText: ByteArray ->
-//            events?.success(hashMapOf(
-//                "from" to from.name,
-//                "plainText" to plainText
-//            ))
-//        })
-//    }
-//
-//    override fun onCancel(arguments: Any?) {
-////        TODO("Not yet implemented")
-//    }
-//
-//    companion object {
-//        private val methodChannel = "methods"
-//        private val eventsChannel = "events"
-//
-//        private val echoSystem = EchoSystem()
-//    }
 
 }
 

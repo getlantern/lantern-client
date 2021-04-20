@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.3 <3.0.0"
 
 dependencies:
   flutter:
@@ -29,19 +29,23 @@ dependencies:
 
   i18n_extension: ^4.0.0
 
-  provider: ^4.3.2
-
-  infinite_scroll_pagination: ^2.3.0
+  provider: ^5.0.0
 
   protobuf: any
 
   google_fonts:
 
-  font_awesome_flutter: ^8.12.0
+  font_awesome_flutter: ^9.0.0
 
-  flutter_switch: ^0.2.0
+  flutter_switch: ^0.3.0
 
-  flag: ^3.2.2
+  flag: ^5.0.0-nullsafety
+
+  loader_overlay: ^2.0.0
+
+  uuid: ^3.0.3
+
+  pedantic: ^1.11.0
 
 dev_dependencies:
   flutter_test:

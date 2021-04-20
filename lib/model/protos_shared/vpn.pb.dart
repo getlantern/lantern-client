@@ -1,8 +1,8 @@
 ///
 //  Generated code. Do not modify.
-//  source: protos/vpn.proto
+//  source: protos_shared/vpn.proto
 //
-// @dart = 2.7
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 import 'dart:core' as $core;
@@ -20,9 +20,9 @@ class ServerInfo extends $pb.GeneratedMessage {
 
   ServerInfo._() : super();
   factory ServerInfo({
-    $core.String city,
-    $core.String country,
-    $core.String countryCode,
+    $core.String? city,
+    $core.String? country,
+    $core.String? countryCode,
   }) {
     final _result = create();
     if (city != null) {
@@ -55,7 +55,7 @@ class ServerInfo extends $pb.GeneratedMessage {
   static $pb.PbList<ServerInfo> createRepeated() => $pb.PbList<ServerInfo>();
   @$core.pragma('dart2js:noInline')
   static ServerInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerInfo>(create);
-  static ServerInfo _defaultInstance;
+  static ServerInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get city => $_getSZ(0);
@@ -96,10 +96,10 @@ class Bandwidth extends $pb.GeneratedMessage {
 
   Bandwidth._() : super();
   factory Bandwidth({
-    $fixnum.Int64 percent,
-    $fixnum.Int64 remaining,
-    $fixnum.Int64 allowed,
-    $fixnum.Int64 ttlSeconds,
+    $fixnum.Int64? percent,
+    $fixnum.Int64? remaining,
+    $fixnum.Int64? allowed,
+    $fixnum.Int64? ttlSeconds,
   }) {
     final _result = create();
     if (percent != null) {
@@ -135,7 +135,7 @@ class Bandwidth extends $pb.GeneratedMessage {
   static $pb.PbList<Bandwidth> createRepeated() => $pb.PbList<Bandwidth>();
   @$core.pragma('dart2js:noInline')
   static Bandwidth getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Bandwidth>(create);
-  static Bandwidth _defaultInstance;
+  static Bandwidth? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get percent => $_getI64(0);
