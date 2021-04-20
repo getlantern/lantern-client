@@ -64,25 +64,26 @@ class MessagingModel extends Model {
   }
 
   Future<bool> startRecordingVoiceMemo() async {
-    return methodChannel.invokeMethod('startRecordingVoiceMemo')
-        as Future<bool>;
+    return methodChannel
+        .invokeMethod('startRecordingVoiceMemo')
+        .then((value) => value as bool);
   }
 
   Future<Uint8List> stopRecordingVoiceMemo() async {
-    return methodChannel.invokeMethod('stopRecordingVoiceMemo')
-        as Future<Uint8List>;
+    return methodChannel
+        .invokeMethod('stopRecordingVoiceMemo')
+        .then((value) => value as Uint8List);
   }
 
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       'attachment': attachment.writeToBuffer(),
-    }) as Future<Uint8List>;
+    }).then((value) => value as Uint8List);
   }
 
-  Future<Contact> getContact(String contactPath) async {
+  Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
-            serialized == null ? null : Contact.fromBuffer(serialized))
-        as Future<Contact>;
+        serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
   Widget contactsByActivity(
