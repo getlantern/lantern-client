@@ -81,8 +81,9 @@ class _ConversationState extends State<Conversation> {
       if (pickedFile != null) {
         var filePath = pickedFile.files.first.path;
         var fileExtension = pickedFile.files.first.extension;
-        var attachment = await model.filePickerLoadAttachment(filePath);
-        _send(_newMessage.value.text, attachments: [attachment]);
+        var attachment =
+            model.filePickerLoadAttachment(fileExtension, filePath);
+        _send(_newMessage.value.text, attachments: [attachment as Uint8List]);
       } else {
         print('User has cancelled the selection');
       }
