@@ -29,7 +29,7 @@ class _ImageAttachment extends StatefulWidget {
 }
 
 class _ImageAttachmentState extends State<_ImageAttachment> {
-  Future _getDecryptedAttachment(model) async {
+  Future<void> _getDecryptedAttachment(model) async {
     return await model.decryptAttachment(widget._attachment);
   }
 
