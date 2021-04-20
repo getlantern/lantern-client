@@ -3,7 +3,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
-import 'package:image/image.dart' as Img;
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
@@ -30,24 +29,31 @@ class _ImageAttachment extends StatefulWidget {
 }
 
 class _ImageAttachmentState extends State<_ImageAttachment> {
-  Future<void> getDecryptedAttachement(model) async {
+  Future _getDecryptedAttachment(model) async {
     return await model.decryptAttachment(widget._attachment);
   }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    switch (widget._attachment.status) {
-      case StoredAttachment_Status.PENDING:
-        // share placeholder while status is pending
-        return const Image(
-          image: NetworkImage('https://via.placeholder.com/150/ffe500/000.png'),
-        );
-      default:
-        var _decryptedAttachment = getDecryptedAttachement(model);
-        return Transform.scale(
-            scale: 0.5, child: Img.fromBytes(100, 100, _decryptedAttachment));
-    }
+    return Container(
+      child: FutureBuilder(
+          future: _getDecryptedAttachment(model),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Image(
+                  image: NetworkImage(
+                      'https://via.placeholder.com/150/ffe500/000.png'),
+                );
+              default:
+                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+
+                return Transform.scale(
+                    scale: 0.5, child: Image.memory(snapshot.data));
+            }
+          }),
+    );
   }
 }
 
