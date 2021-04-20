@@ -49,15 +49,14 @@ class _ImageAttachmentState extends State<_ImageAttachment> {
             switch (snapshot.connectionState) {
               case ConnectionState.active:
               case ConnectionState.waiting:
-                return const Icon(Icons.pending);
+                return CircularProgressIndicator();
               case ConnectionState.done:
                 if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
                 return Transform.scale(
                     scale: 1, child: Image.memory(snapshot.data));
               default:
-                // TODO: handle default
-                return
+                return Icon(Icons.image);
             }
           }),
     );
