@@ -79,8 +79,8 @@ class _ConversationState extends State<Conversation> {
           .pickFiles(allowMultiple: false, type: FileType.image);
 
       if (pickedFile != null) {
-        var filePath = pickedFile.files.first.path;
-        var fileExtension = pickedFile.files.first.extension;
+        var filePath = pickedFile.files.first.path as String;
+        var fileExtension = pickedFile.files.first.extension as String;
         var attachment =
             await model.filePickerLoadAttachment(fileExtension, filePath);
         _send(_newMessage.value.text, attachments: [attachment]);
