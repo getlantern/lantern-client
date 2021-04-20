@@ -57,7 +57,13 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
                 }
             }
-            "filePickerLoadAttachment" -> messaging.createAttachment("image/*",call.argument("filePath")!!).toByteArray()
+            "filePickerLoadAttachment" -> {
+                try {
+                    return messaging.createAttachment("image/*",call.argument("filePath")!!).toByteArray() 
+                } finally {
+                    // TODO: clear attachment data?
+                }
+            }
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
                 ByteArrayOutputStream(attachment.attachment.plaintextLength.toInt()).use { output ->
