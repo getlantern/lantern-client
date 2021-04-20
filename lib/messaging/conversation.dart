@@ -10,6 +10,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:mime/mime.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -76,13 +77,14 @@ class _ConversationState extends State<Conversation> {
   Future<void> _selectFilesToShare() async {
     try {
       var pickedFile = await FilePicker.platform
-          .pickFiles(allowMultiple: false, type: FileType.image);
+          .pickFiles(allowMultiple: false, type: FileType.any);
 
       if (pickedFile != null) {
         var filePath = pickedFile.files.first.path as String;
         var fileExtension = pickedFile.files.first.extension as String;
+        var mimeType = lookupMimeType(fileExtension) as String;
         var attachment =
-            await model.filePickerLoadAttachment(fileExtension, filePath);
+            await model.filePickerLoadAttachment(mimeType, filePath);
         _send(_newMessage.value.text, attachments: [attachment]);
       } else {
         print('User has cancelled the selection');
