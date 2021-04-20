@@ -7,8 +7,9 @@ extension EventParsing on Event {
   // map from [event name] to [the event], for example:
   // "All" -> Event.All
   // "SurveyAvailable" -> Event.SurveyAvailable
-  static var valuesMap = Map<String, Event>.fromIterable(
-      Event.values.map((e) => MapEntry(e.toShortString(), e)));
+  static var valuesMap = {
+    for (var item in Event.values) item.toShortString(): item
+  };
 
   static Event? fromValue(String name) {
     return valuesMap[name];
