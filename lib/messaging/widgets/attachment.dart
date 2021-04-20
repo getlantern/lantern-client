@@ -9,7 +9,13 @@ Widget attachmentWidget(StoredAttachment attachment) {
   switch (attachment.attachment.mimeType) {
     case 'audio/ogg':
       return Flexible(child: _AudioAttachment(attachment));
-    case 'image/*':
+    // https://developer.android.com/guide/topics/media/media-formats
+    case 'image/jpeg':
+    case 'image/png':
+    case 'image/bpm':
+    case 'image/gif':
+    case 'image/webp':
+    case 'image/heif':
       return Flexible(child: _ImageAttachment(attachment));
     case 'video/*':
     // return Flexible(child: _VideoAttachment(attachment));
@@ -41,16 +47,17 @@ class _ImageAttachmentState extends State<_ImageAttachment> {
           future: _getDecryptedAttachment(model),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
+              case ConnectionState.active:
               case ConnectionState.waiting:
-                return const Image(
-                  image: NetworkImage(
-                      'https://via.placeholder.com/150/ffe500/000.png'),
-                );
-              default:
+                return const Icon(Icons.pending);
+              case ConnectionState.done:
                 if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
                 return Transform.scale(
-                    scale: 0.5, child: Image.memory(snapshot.data));
+                    scale: 1, child: Image.memory(snapshot.data));
+              default:
+                // TODO: handle default
+                return
             }
           }),
     );
