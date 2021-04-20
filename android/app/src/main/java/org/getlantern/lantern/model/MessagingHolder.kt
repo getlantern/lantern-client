@@ -8,10 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import io.lantern.android.model.BaseModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
 import io.lantern.messaging.*
-import io.lantern.messaging.store.MessagingStore
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -31,8 +31,8 @@ class MessagingHolder {
         lanternDir.mkdirs()
         try {
             messaging = Messaging(
+                    BaseModel.masterDB,
                     File(application.filesDir, "attachments"),
-                    MessagingStore(application.applicationContext, File(lanternDir, "messagingdb").absolutePath),
                     WebSocketTransportFactory("wss://tassis.lantern.io/api"))
 
             messaging.db.subscribe(object : Subscriber<String>("newMessageNotifications", Schema.PATH_CONTACT_MESSAGES.path("%")) {

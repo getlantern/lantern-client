@@ -16,8 +16,8 @@ class ModelEventChannel extends EventChannel {
   void Function() subscribe<T>(String path,
       {bool details = false,
       int count = 2 << 31,
-      required void Function(
-          Map<String, T> updates, Iterable<String> deletions) onChanges,
+      required void Function(Map<String, T> updates, Iterable<String> deletions)
+          onChanges,
       T Function(Uint8List serialized)? deserialize}) {
     var subscriberID = uuid.v4();
     developer.log('subscribing with id $subscriberID to $path');

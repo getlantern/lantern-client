@@ -2,39 +2,24 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.lantern.db.DB
-import org.getlantern.lantern.LanternApp
-import java.io.File
 
-/**
- * Created by DoNguyen on 10/3/21.
- */
 class VpnModel(
         flutterEngine: FlutterEngine? = null,
         private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
-) : BaseModel("vpn", flutterEngine, db) {
+) : BaseModel("vpn", flutterEngine, masterDB.withSchema("vpn")) {
 
     companion object {
         const val PATH_VPN_STATUS = "/vpn_status"
         const val PATH_SERVER_INFO = "/server_info"
         const val PATH_BANDWIDTH = "/bandwidth"
+    }
 
-        val db = DB.createOrOpen(
-                ctx = LanternApp.getAppContext(),
-                filePath = File(
-                        File(LanternApp.getAppContext().filesDir, ".lantern"),
-                        "vpn_db"
-                ).absolutePath,
-                password = "password" // TODO: make the password random and save it as an encrypted preference
-        )
-
-        init {
-            db.registerType(20, Vpn.ServerInfo::class.java)
-            db.registerType(21, Vpn.Bandwidth::class.java)
-            db.mutate { tx ->
-                // initialize vpn status for fresh install
-                tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
-            }
+    init {
+        db.registerType(20, Vpn.ServerInfo::class.java)
+        db.registerType(21, Vpn.Bandwidth::class.java)
+        db.mutate { tx ->
+            // initialize vpn status for fresh install
+            tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
         }
     }
 
