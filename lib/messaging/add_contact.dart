@@ -154,7 +154,7 @@ class _AddContactState extends State<AddContact> {
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              context.showLoaderOverlay();
+                              context.loaderOverlay.show();
                               try {
                                 await model.addOrUpdateDirectContact(
                                     contactId.value.text,
@@ -163,7 +163,7 @@ class _AddContactState extends State<AddContact> {
                                 //     context, 'conversations', (r) => false);
                                 Navigator.pop(context);
                               } finally {
-                                context.hideLoaderOverlay();
+                                context.loaderOverlay.hide();
                               }
                             }
                           },

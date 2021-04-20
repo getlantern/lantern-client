@@ -419,6 +419,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     companion object {
+        private val TAG = LanternSessionManager::class.java.name
+
         // shared preferences
         private const val PRO_USER = "prouser"
         private const val PRO_EXPIRED = "proexpired"
