@@ -1,5 +1,6 @@
 package io.lantern.android.model
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
@@ -7,16 +8,35 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.*
 import io.lantern.db.*
 import io.lantern.messaging.AttachmentTooBigException
+import io.lantern.secrets.Secrets
+import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
+import java.io.File
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
 abstract class BaseModel(
         private val name: String,
         flutterEngine: FlutterEngine? = null,
-        protected val db: DB,
+        val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<String>()
+    private val handler = Handler(Looper.getMainLooper())
+
+    companion object {
+        private const val TAG = "Model"
+
+        internal val masterDB: DB
+
+        init {
+            val context = LanternApp.getAppContext()
+            val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+            val secrets = Secrets("lanternMasterKey", secretsPreferences)
+            val dbLocation = File(File(context.filesDir, ".lantern"), "db").absolutePath
+            val dbPassword = secrets.get("dbPassword", 32)
+            masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
+        }
+    }
 
     init {
         flutterEngine?.let {
@@ -76,11 +96,10 @@ abstract class BaseModel(
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
 
-
         if (details) {
-            val subscriber: DetailsSubscriber<Any> = object : DetailsSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
+            val subscriber: DetailsSubscriber<Any> = object : DetailsSubscriber<Any>(subscriberID, path) {
                 override fun onChanges(changes: DetailsChangeSet<Any>) {
-                    Handler(Looper.getMainLooper()).post {
+                    handler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
                                     mapOf("s" to subscriberID,
@@ -92,9 +111,9 @@ abstract class BaseModel(
             }
             db.subscribe(subscriber)
         } else {
-            val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(nameSpacedSubscriberId(subscriberID), path) {
+            val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(subscriberID, path) {
                 override fun onChanges(changes: RawChangeSet<Any>) {
-                    Handler(Looper.getMainLooper()).post {
+                    handler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
                                     mapOf("s" to subscriberID,
@@ -114,21 +133,13 @@ abstract class BaseModel(
         }
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as String
-        db.unsubscribe(nameSpacedSubscriberId(subscriberID))
+        db.unsubscribe(subscriberID)
         activeSubscribers.remove(subscriberID)
-    }
-
-    fun nameSpacedSubscriberId(id: String): String {
-        return "${name}_model_${id}"
     }
 
     fun destroy() {
         activeSubscribers.forEach {
-            db.unsubscribe(nameSpacedSubscriberId(it))
+            db.unsubscribe(it)
         }
-    }
-
-    companion object {
-        private const val TAG = "Model"
     }
 }

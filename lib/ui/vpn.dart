@@ -1,9 +1,12 @@
 import 'package:flag/flag.dart';
-import 'package:lantern/model/protos_shared/vpn.pb.dart';
+import 'package:lantern/lantern_navigator.dart';
+import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
+
+import '../model/protos_shared/vpn.pb.dart';
 
 class VPNTab extends StatelessWidget {
   VPNTab({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var vpnModel = context.watch<VpnModel>();
+    var sessionModel = context.watch<SessionModel>();
 
     void openInfoServerLocation() {
       showDialog(
@@ -90,61 +94,66 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget proBanner() {
-      return vpnModel.bandwidth(
-          (BuildContext context, Bandwidth bandwidth, Widget? child) {
-        return Opacity(
-          opacity: bandwidth.allowed > 0 ? 1 : 0,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: HexColor(unselectedTabColor),
-              border: Border.all(
-                color: HexColor(borderColor),
-                width: 1,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(borderRadius),
-              ),
+      return InkWell(
+        // TODO make InkWell ripple effect works with BoxDecoration
+        onTap: () {
+          LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
+        }, // Handle your callback
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: HexColor(unselectedTabColor),
+            border: Border.all(
+              color: HexColor(borderColor),
+              width: 1,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  FontAwesomeIcons.crown,
-                  color: Colors.orange[300],
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Go Pro Title'.i18n,
-                          style: tsSubHead(context)?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          'Go Pro Description'.i18n,
-                          style: tsCaption(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Icon(
-                  FontAwesomeIcons.chevronRight,
-                  size: 16,
-                ),
-              ],
+            borderRadius: const BorderRadius.all(
+              Radius.circular(borderRadius),
             ),
           ),
-        );
-      });
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                FontAwesomeIcons.crown,
+                color: Colors.orange[300],
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Go Pro Title'.i18n,
+                        style: tsSubHead(context)?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      sessionModel.yinbiEnabled((BuildContext context,
+                          bool yinbiEnabled, Widget? child) {
+                        return Text(
+                          yinbiEnabled
+                              ? 'Go Pro Description With Yinbi'.i18n
+                              : 'Go Pro Description'.i18n,
+                          style: tsCaption(context),
+                        );
+                      })
+                    ],
+                  ),
+                ),
+              ),
+              const Icon(
+                FontAwesomeIcons.chevronRight,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     Widget vpnSwitch() {
@@ -316,7 +325,8 @@ class VPNTab extends StatelessWidget {
                 return Row(
                   children: [
                     ClipRRect(
-                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4)),
                         child: Flag(serverInfo.countryCode,
                             height: 24, width: 36)),
                     const SizedBox(width: 12),
@@ -336,38 +346,41 @@ class VPNTab extends StatelessWidget {
       );
     }
 
-    return BaseScreen(
-      title: 'VPN'.i18n,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            proBanner(),
-            vpnSwitch(),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: HexColor(borderColor),
-                  width: 1,
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget? child) {
+      return BaseScreen(
+        title: proUser ? 'LANTERN PRO' : 'LANTERN',
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              proUser ? Container() : proBanner(),
+              vpnSwitch(),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: HexColor(borderColor),
+                    width: 1,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(borderRadius),
+                  ),
                 ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(borderRadius),
+                child: Column(
+                  children: [
+                    vpnStatus(),
+                    customDivider(marginBottom: 4.0),
+                    serverLocation(),
+                    bandwidth(),
+                  ],
                 ),
               ),
-              child: Column(
-                children: [
-                  vpnStatus(),
-                  customDivider(marginBottom: 4.0),
-                  serverLocation(),
-                  bandwidth(),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
