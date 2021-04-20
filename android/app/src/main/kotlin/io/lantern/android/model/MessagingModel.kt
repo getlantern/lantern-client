@@ -59,7 +59,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             }
             "filePickerLoadAttachment" -> {
                 try {
-                    return messaging.createAttachment("image/*",call.argument("filePath")!!).toByteArray() 
+                    val filePath = call.argument("filePath") as String?
+                    val mimeType = call.argument("mimeType") as String?
+                    return messaging.createAttachment(mimeType as String,File(filePath)).toByteArray() 
                 } finally {
                     // TODO: clear attachment data?
                 }

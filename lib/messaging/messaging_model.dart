@@ -76,9 +76,9 @@ class MessagingModel extends Model {
   }
 
   Future<Uint8List> filePickerLoadAttachment(
-      String? mimeType, String? filePath) async {
+      String mimeType, String filePath) async {
     return methodChannel.invokeMethod(
-        'filePickerLoadAttachment', <String?, String?>{
+        'filePickerLoadAttachment', <String, String>{
       'mimeType': mimeType,
       'filePath': filePath
     }).then((value) => value as Uint8List);
