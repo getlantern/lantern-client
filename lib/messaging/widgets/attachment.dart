@@ -38,24 +38,37 @@ class _ImageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    return Container(
-      child: FutureBuilder(
-          future: _getDecryptedAttachment(model),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.active:
-              case ConnectionState.waiting:
-                return const CircularProgressIndicator();
-              case ConnectionState.done:
-                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-
-                return Transform.scale(
-                    scale: 1, child: Image.memory(snapshot.data));
-              default:
-                return const Icon(Icons.image);
-            }
-          }),
-    );
+    // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
+    switch (attachment!.status) {
+      case StoredAttachment_Status.PENDING:
+        // pending download
+        return const CircularProgressIndicator();
+      case StoredAttachment_Status.DONE:
+        // successful download, onto decrypting
+        return Container(
+          child: FutureBuilder(
+              future: _getDecryptedAttachment(model),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const CircularProgressIndicator();
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return const Icon(Icons.error_outlined);
+                    }
+                    return Transform.scale(
+                        scale: 1, child: Image.memory(snapshot.data));
+                  default:
+                    return const Icon(Icons.image);
+                }
+              }),
+        );
+      case StoredAttachment_Status.FAILED:
+        // error with download
+        return const Icon(Icons.error_outlined);
+      default:
+        return const Text('default case');
+    }
   }
 }
 

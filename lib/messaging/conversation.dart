@@ -90,6 +90,7 @@ class _ConversationState extends State<Conversation> {
         print('User has cancelled the selection');
       }
     } catch (e) {
+      // TODO: display error pop up
       print(e);
     }
   }
