@@ -15,6 +15,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'image/bpm':
     case 'image/gif':
     case 'image/webp':
+    // TODO: check older platforms for HEIF
     case 'image/heif':
       return Flexible(child: _ImageAttachment(attachment));
     case 'video/*':
@@ -25,18 +26,12 @@ Widget attachmentWidget(StoredAttachment attachment) {
   }
 }
 
-class _ImageAttachment extends StatefulWidget {
-  final StoredAttachment _attachment;
-  _ImageAttachment(this._attachment);
-  @override
-  State<StatefulWidget> createState() {
-    return _ImageAttachmentState();
-  }
-}
+class _ImageAttachment extends StatelessWidget {
+  final StoredAttachment? attachment;
+  _ImageAttachment({this.attachment});
 
-class _ImageAttachmentState extends State<_ImageAttachment> {
   Future<void> _getDecryptedAttachment(model) async {
-    return await model.decryptAttachment(widget._attachment);
+    return await model.decryptAttachment(attachment);
   }
 
   @override
@@ -49,14 +44,14 @@ class _ImageAttachmentState extends State<_ImageAttachment> {
             switch (snapshot.connectionState) {
               case ConnectionState.active:
               case ConnectionState.waiting:
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               case ConnectionState.done:
                 if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
                 return Transform.scale(
                     scale: 1, child: Image.memory(snapshot.data));
               default:
-                return Icon(Icons.image);
+                return const Icon(Icons.image);
             }
           }),
     );

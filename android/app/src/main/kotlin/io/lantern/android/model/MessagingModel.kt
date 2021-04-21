@@ -59,10 +59,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             }
             "filePickerLoadAttachment" -> {
                 // TODO: figure out why there are so many type complaints unless we explicitly cast
-                val filePath = call.argument("filePath") as String?
-                val mimeType = call.argument("mimeType") as String?
+                val filePath = call.argument<String?>("filePath")
+                val mimeType = call.argument<String?>("mimeType")
                 val file = File(filePath)
-                return messaging.createAttachment(mimeType as String, file).toByteArray() 
+                return messaging.createAttachment(file, mimeType).toByteArray() 
             }
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
