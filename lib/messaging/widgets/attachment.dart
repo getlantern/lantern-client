@@ -28,7 +28,8 @@ Widget attachmentWidget(StoredAttachment attachment) {
 
 class _ImageAttachment extends StatelessWidget {
   final StoredAttachment? attachment;
-  _ImageAttachment({this.attachment});
+
+  _ImageAttachment(this.attachment);
 
   Future<void> _getDecryptedAttachment(model) async {
     return await model.decryptAttachment(attachment);
