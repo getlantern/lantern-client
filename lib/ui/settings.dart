@@ -1,7 +1,7 @@
 import 'package:lantern/package_store.dart';
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -9,11 +9,11 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   renderSettingItem(
-      {String icon,
-      String title,
-      Function onTap,
+      {String icon = '',
+      String title = '',
+      void Function()? onTap,
       bool hasDivider = true,
-      SETTINGS_ENUM settingItemEnum}) {
+      required SETTINGS_ENUM settingItemEnum}) {
     var sessionModel = context.watch<SessionModel>();
     return Column(
       children: [
@@ -24,7 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             top: 8,
           ),
           child: InkWell(
-            onTap: onTap ?? () {},
+            onTap: onTap,
             child: Ink(
               padding: EdgeInsets.symmetric(
                 vertical: settingItemEnum == SETTINGS_ENUM.PROXY ? 4 : 16,
@@ -66,7 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   settingItemEnum == SETTINGS_ENUM.PROXY
                       ? sessionModel.proxyAll(
-                          (BuildContext context, bool proxyAll, Widget child) {
+                          (BuildContext context, bool proxyAll, Widget? child) {
                           return FlutterSwitch(
                             width: 44.0,
                             height: 24.0,
@@ -88,8 +88,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 16),
                                     child: Text(
-                                      "English",
-                                      style: tsTitleItem().copyWith(
+                                      'English',
+                                      style: tsTitleItem()?.copyWith(
                                           color: HexColor(
                                         primaryPink,
                                       )),
@@ -111,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  renderItem({SETTINGS_ENUM settingItemEnum}) {
+  renderItem({required SETTINGS_ENUM settingItemEnum}) {
     switch (settingItemEnum) {
       case SETTINGS_ENUM.PROXY:
         return renderSettingItem(

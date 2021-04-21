@@ -2,12 +2,11 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 
 class VpnModel(
-    flutterEngine: FlutterEngine? = null,
-    private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
-) : Model("vpn", flutterEngine) {
+        flutterEngine: FlutterEngine? = null,
+        private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
+) : BaseModel("vpn", flutterEngine, masterDB.withSchema("vpn")) {
 
     companion object {
         const val PATH_VPN_STATUS = "/vpn_status"
@@ -20,21 +19,18 @@ class VpnModel(
         db.registerType(21, Vpn.Bandwidth::class.java)
         db.mutate { tx ->
             // initialize vpn status for fresh install
-            tx.put(
-                namespacedPath(PATH_VPN_STATUS),
-                tx.get<String>(namespacedPath(PATH_VPN_STATUS)) ?: "disconnected"
-            )
+            tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        when (call.method) {
+    override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
+        return when (call.method) {
             "switchVPN" -> {
                 val on = call.argument<Boolean>("on") ?: false
                 saveVpnStatus(if (on) "connecting" else "disconnecting")
                 switchLantern(on)
             }
-            else -> super.onMethodCall(call, result)
+            else -> super.doMethodCall(call, notImplemented)
         }
     }
 
@@ -44,7 +40,7 @@ class VpnModel(
     }
 
     private fun vpnStatus(): String {
-        return db.get(namespacedPath(PATH_VPN_STATUS)) ?: ""
+        return db.get(PATH_VPN_STATUS) ?: ""
     }
 
     private fun switchLantern(value: Boolean) {
@@ -58,19 +54,19 @@ class VpnModel(
 
     fun saveVpnStatus(vpnStatus: String) {
         db.mutate { tx ->
-            tx.put(namespacedPath(PATH_VPN_STATUS), vpnStatus)
+            tx.put(PATH_VPN_STATUS, vpnStatus)
         }
     }
 
     fun saveServerInfo(serverInfo: Vpn.ServerInfo) {
         db.mutate { tx ->
-            tx.put(namespacedPath(PATH_SERVER_INFO), serverInfo)
+            tx.put(PATH_SERVER_INFO, serverInfo)
         }
     }
 
     fun saveBandwidth(bandwidth: Vpn.Bandwidth) {
         db.mutate { tx ->
-            tx.put(namespacedPath(PATH_BANDWIDTH), bandwidth)
+            tx.put(PATH_BANDWIDTH, bandwidth)
         }
     }
 }

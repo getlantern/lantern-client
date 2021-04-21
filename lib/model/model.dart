@@ -5,142 +5,143 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
+import 'package:lantern/model/single_value_subscriber.dart';
 
+import 'list_subscriber.dart';
 import 'model_event_channel.dart';
 
 abstract class Model {
-  MethodChannel methodChannel;
-  ModelEventChannel _updatesChannel;
-  Map<String, SubscribedValueNotifier> _subscribedValueNotifiers = HashMap();
+  late MethodChannel methodChannel;
+  late ModelEventChannel _updatesChannel;
+  final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
+  HashMap();
+  final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
 
   Model(String name) {
-    methodChannel = MethodChannel("${name}_method_channel");
-    _updatesChannel = ModelEventChannel("${name}_event_channel");
+    methodChannel = MethodChannel('${name}_method_channel');
+    _updatesChannel = ModelEventChannel('${name}_event_channel');
   }
 
-  Future<void> put<T>(String path, T value) async {
-    methodChannel.invokeMethod('put', <String, dynamic>{
-      "path": path,
-      "value": value,
-    });
+  Future<T> get<T>(String path) async {
+    return methodChannel.invokeMethod('get', path) as Future<T>;
   }
 
-  Future<List<T>> getRange<T>(String path, int start, int count) async {
+  Future<List<T>> list<T>(String path,
+      {int start = 0,
+        int count = 2 ^ 32,
+        String? fullTextSearch,
+        bool reverseSort = false,
+        T Function(Uint8List serialized)? deserialize}) async {
     var intermediate =
-        await methodChannel.invokeMethod('getRange', <String, dynamic>{
-      "path": path,
-      "start": start,
-      "count": count,
+    await methodChannel.invokeMethod('list', <String, dynamic>{
+      'path': path,
+      'start': start,
+      'count': count,
+      'fullTextSearch': fullTextSearch,
+      'reverseSort': reverseSort,
     });
-    var result = List<T>();
-    intermediate.forEach((element) => result.add(element as T));
-    return result;
-  }
-
-  Future<List<T>> getRangeDetails<T>(
-      String path, String detailsPrefix, int start, int count) async {
-    var intermediate =
-        await methodChannel.invokeMethod('getRangeDetails', <String, dynamic>{
-      "path": path,
-      "detailsPrefix": detailsPrefix,
-      "start": start,
-      "count": count,
-    });
-    var result = List<T>();
-    intermediate.forEach((element) => result.add(element as T));
-    return result;
-  }
-
-  Future<List<ValueNotifier<T>>> getRangeDetailNotifiers<T>(String path,
-      String detailsPrefix, int start, int count, T defaultValue) async {
-    var list = await getRange(path, start, count);
-    return Future.value(list.map((e) {
-      var detailsPath = "$detailsPrefix/$e";
-      return buildValueNotifier(detailsPath, defaultValue);
-    }).toList());
-  }
-
-  ValueNotifier<T> buildValueNotifier<T>(String path, T defaultValue, {T deserialize(Uint8List serialized)}) {
-    SubscribedValueNotifier<T> result = _subscribedValueNotifiers[path];
-    if (result == null) {
-      result = SubscribedValueNotifier(path, defaultValue, _updatesChannel, deserialize: deserialize);
-      _subscribedValueNotifiers[path] = result;
+    var result = <T>[];
+    if (deserialize != null) {
+      intermediate
+          .forEach((element) => result.add(deserialize(element as Uint8List)));
+    } else {
+      intermediate.forEach((element) => result.add(element as T));
     }
     return result;
   }
 
-  ValueListenableBuilder<T> subscribedBuilder<T>(String path,
-      {@required T defaultValue, @required ValueWidgetBuilder<T> builder, T deserialize(Uint8List serialized)}) {
-    var notifier = buildValueNotifier(path, defaultValue, deserialize: deserialize);
-    return SubscribedBuilder<T>(path, notifier, builder);
-    // TODO: provide a mechanism for canceling subscriptions
+  ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(String path,
+      {T? defaultValue,
+        required ValueWidgetBuilder<T> builder,
+        bool details = false,
+        T Function(Uint8List serialized)? deserialize}) {
+    var notifier = singleValueNotifier(path, defaultValue,
+        details: details, deserialize: deserialize);
+    return SubscribedSingleValueBuilder<T>(path, notifier, builder);
+  }
+
+  ValueNotifier<T?> singleValueNotifier<T>(String path, T defaultValue,
+      {bool details = false, T Function(Uint8List serialized)? deserialize}) {
+    var result =
+    _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;
+    if (result == null) {
+      result = SubscribedSingleValueNotifier(
+          path, defaultValue, _updatesChannel, () {
+        _singleValueNotifierCache.remove(path);
+      }, details: details, deserialize: deserialize);
+      _singleValueNotifierCache[path] = result;
+    }
+    return result;
+  }
+
+  ValueListenableBuilder<ChangeTrackingList<T>> subscribedListBuilder<T>(
+      String path,
+      {required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
+        bool details = false,
+        int Function(String key1, String key2)? compare,
+        T Function(Uint8List serialized)? deserialize}) {
+    var notifier = listNotifier(path,
+        details: details, compare: compare, deserialize: deserialize);
+    return SubscribedListBuilder<T>(
+        path,
+        notifier,
+            (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
+            builder(
+                context,
+                value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+                child));
+  }
+
+  ValueNotifier<ChangeTrackingList<T>> listNotifier<T>(String path,
+      {bool details = false,
+        int Function(String key1, String key2)? compare,
+        T Function(Uint8List serialized)? deserialize}) {
+    var result = _listNotifierCache[path] as SubscribedListNotifier<T>?;
+    if (result == null) {
+      result = SubscribedListNotifier(path, _updatesChannel, () {
+        _listNotifierCache.remove(path);
+      }, details: details, compare: compare, deserialize: deserialize);
+      _listNotifierCache[path] = result;
+    }
+    return result;
+  }
+
+  ValueListenableBuilder<T> listChildBuilder<T>(
+      BuildContext context, String path,
+      {required T defaultValue, required ValueWidgetBuilder<T> builder}) {
+    return ListChildBuilder(
+        ListChildValueNotifier(context, path, defaultValue), builder);
   }
 }
 
-class SubscribedValueNotifier<T> extends ValueNotifier<T> {
-  void Function() cancel;
+abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
+  void Function() removeFromCache;
+  late void Function() cancel;
+  int refCount = 0;
 
-  SubscribedValueNotifier(
-      String path, T defaultValue, ModelEventChannel channel,
-      {T deserialize(Uint8List serialized)})
-      : super(defaultValue) {
-    cancel = channel.subscribe(path, onNewValue: (dynamic newValue) {
-      value = newValue as T;
-    }, deserialize: deserialize);
-  }
-}
-
-class SubscribedBuilder<T> extends ValueListenableBuilder<T> {
-  final SubscribedValueNotifier<T> _notifier;
-  final String _path;
-
-  SubscribedBuilder(this._path, this._notifier, ValueWidgetBuilder<T> builder)
-      : super(valueListenable: _notifier, builder: builder);
+  SubscribedNotifier(T defaultValue, this.removeFromCache)
+      : super(defaultValue);
 
   @override
-  _SubscribedBuilderState createState() => _SubscribedBuilderState<T>();
+  void addListener(listener) {
+    refCount++;
+    super.addListener(listener);
+  }
+
+  @override
+  void removeListener(listener) {
+    refCount--;
+    super.removeListener(listener);
+    if (refCount == 0) {
+      removeFromCache();
+      cancel();
+    }
+  }
 }
 
-class _SubscribedBuilderState<T> extends State<ValueListenableBuilder<T>> {
+class PathAndValue<T> {
+  String path;
   T value;
 
-  @override
-  void initState() {
-    super.initState();
-    value = widget.valueListenable.value;
-    widget.valueListenable.addListener(_valueChanged);
-  }
-
-  @override
-  void didUpdateWidget(ValueListenableBuilder<T> oldWidget) {
-    if (oldWidget.valueListenable != widget.valueListenable) {
-      oldWidget.valueListenable.removeListener(_valueChanged);
-      value = widget.valueListenable.value;
-      widget.valueListenable.addListener(_valueChanged);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    widget.valueListenable.removeListener(_valueChanged);
-    // TODO: we should only cancel if we're the last one
-    // (widget.valueListenable as SubscribedValueNotifier).cancel();
-    super.dispose();
-  }
-
-  void _valueChanged() {
-    setState(() {
-      value = widget.valueListenable.value;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (value == null) {
-      return Container();
-    }
-    return widget.builder(context, value, widget.child);
-  }
+  PathAndValue(this.path, this.value);
 }

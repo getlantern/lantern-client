@@ -3,7 +3,7 @@ import 'package:lantern/package_store.dart';
 
 class CustomBadge extends StatefulWidget {
   final int count;
-  final Widget child;
+  final Widget? child;
   final double fontSize;
   final bool showBadge;
 
@@ -12,7 +12,7 @@ class CustomBadge extends StatefulWidget {
       this.child,
       this.fontSize = 10.0,
       this.showBadge = false,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override

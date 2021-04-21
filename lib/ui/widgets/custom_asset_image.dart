@@ -2,14 +2,14 @@ import 'package:lantern/package_store.dart';
 
 class CustomAssetImage extends StatelessWidget {
   final String path;
-  final double size;
-  final Color color;
-  const CustomAssetImage({this.path, this.size, this.color, Key key}) : super(key: key);
+  final double? size;
+  final Color? color;
+  const CustomAssetImage({required this.path, this.size = null, this.color = null, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
-      path ?? '',
+      path,
       height: size,
       width: size,
       color: color,

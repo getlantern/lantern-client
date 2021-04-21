@@ -1,12 +1,13 @@
 import 'package:lantern/package_store.dart';
 
-showInfoDialog(BuildContext context, {String title = '', String des = '', String icon}) {
+showInfoDialog(BuildContext context,
+    {String title = '', String des = '', String icon = ''}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 12),
-        shape: RoundedRectangleBorder(
+        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
           ),
@@ -20,7 +21,7 @@ showInfoDialog(BuildContext context, {String title = '', String des = '', String
                 path: icon,
                 size: 24,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Text(
@@ -30,7 +31,7 @@ showInfoDialog(BuildContext context, {String title = '', String des = '', String
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 16,
                     bottom: 24,
                   ),
@@ -51,9 +52,9 @@ showInfoDialog(BuildContext context, {String title = '', String des = '', String
                     Navigator.pop(context);
                   },
                   child: Ink(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
-                      "OK".i18n,
+                      'OK'.i18n,
                       style: GoogleFonts.roboto().copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
