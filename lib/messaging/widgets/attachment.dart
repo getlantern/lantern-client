@@ -40,7 +40,7 @@ class _ImageAttachment extends StatelessWidget {
     var model = context.watch<MessagingModel>();
     // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
     switch (attachment!.status) {
-      case StoredAttachment_Status.PENDING:
+      case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
         return const CircularProgressIndicator();
       case StoredAttachment_Status.DONE:
@@ -93,7 +93,7 @@ class _AudioAttachmentState extends State<_AudioAttachment> {
     var audioPlayer = context.watch<AudioPlayer>();
 
     switch (widget._attachment.status) {
-      case StoredAttachment_Status.PENDING:
+      case StoredAttachment_Status.PENDING_UPLOAD:
         return const Icon(Icons.pending_outlined);
       case StoredAttachment_Status.FAILED:
         return const Icon(Icons.error_outlined);

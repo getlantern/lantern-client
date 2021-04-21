@@ -11,6 +11,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:mime/mime.dart';
+import 'file_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
