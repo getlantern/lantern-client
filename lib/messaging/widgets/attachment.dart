@@ -43,7 +43,10 @@ class _ImageAttachment extends StatelessWidget {
       case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
         return const CircularProgressIndicator();
-      case StoredAttachment_Status.DONE:
+      case StoredAttachment_Status.FAILED:
+        // error with download
+        return const Icon(Icons.error_outlined);
+      default:
         // successful download, onto decrypting
         return Container(
           child: FutureBuilder(
@@ -63,11 +66,6 @@ class _ImageAttachment extends StatelessWidget {
                 }
               }),
         );
-      case StoredAttachment_Status.FAILED:
-        // error with download
-        return const Icon(Icons.error_outlined);
-      default:
-        return const Text('default case');
     }
   }
 }
