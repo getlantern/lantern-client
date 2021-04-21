@@ -116,7 +116,7 @@ class _AccountTabState extends State<AccountTab> {
                         width: 16,
                       ),
                       Text(
-                        "pro_account_management".i18n,
+                        'pro_account_management'.i18n,
                         style: tsTitleItem(),
                       ),
                     ],
@@ -140,31 +140,31 @@ class _AccountTabState extends State<AccountTab> {
       case FREE_ACCOUNT_ITEM.UPGRADE_TO_LANTERN_PRO:
         return renderAccountItem(
           icon: ImagePaths.crown_icon,
-          title: "upgrade_to_lantern_pro".i18n,
+          title: 'upgrade_to_lantern_pro'.i18n,
           onTap: onUpgradeToLanternPro,
         );
       case FREE_ACCOUNT_ITEM.AUTHORIZE_DEVICE_FOR_PRO:
         return renderAccountItem(
           icon: ImagePaths.devices_icon,
-          title: "authorize_device_for_pro".i18n,
+          title: 'authorize_device_for_pro'.i18n,
           onTap: onAuthorizeDeviceForPro,
         );
       case FREE_ACCOUNT_ITEM.INVITE_FRIENDS:
         return renderAccountItem(
           icon: ImagePaths.star_icon,
-          title: "invite_friends".i18n,
+          title: 'invite_friends'.i18n,
           onTap: onInviteFriends,
         );
       case FREE_ACCOUNT_ITEM.DESKTOP_VERSION:
         return renderAccountItem(
           icon: ImagePaths.desktop_icon,
-          title: "desktop_version".i18n,
+          title: 'desktop_version'.i18n,
           onTap: onOpenDesktopVersion,
         );
       case FREE_ACCOUNT_ITEM.FREE_YINBI_CRYPTO:
         return renderYinbiItem(
           icon: ImagePaths.yinbi_icon,
-          title: "free_yinbi_crypto".i18n,
+          title: 'free_yinbi_crypto'.i18n,
           onTap: onOpenFreeYinbiCrypto,
         );
       case FREE_ACCOUNT_ITEM.SETTINGS:
@@ -174,7 +174,7 @@ class _AccountTabState extends State<AccountTab> {
             CustomDivider(),
             renderAccountItem(
               icon: ImagePaths.settings_icon,
-              title: "settings".i18n,
+              title: 'settings'.i18n,
               onTap: onOpenSettings,
             ),
           ],
@@ -191,25 +191,25 @@ class _AccountTabState extends State<AccountTab> {
       case PRO_ACCOUNT_ITEM.ADD_DEVICE:
         return renderAccountItem(
           icon: ImagePaths.devices_icon,
-          title: "add_device".i18n,
+          title: 'add_device'.i18n,
           onTap: onAddDevice,
         );
       case PRO_ACCOUNT_ITEM.INVITE_FRIENDS:
         return renderAccountItem(
           icon: ImagePaths.star_icon,
-          title: "invite_friends".i18n,
+          title: 'invite_friends'.i18n,
           onTap: onInviteFriends,
         );
       case PRO_ACCOUNT_ITEM.DESKTOP_VERSION:
         return renderAccountItem(
           icon: ImagePaths.desktop_icon,
-          title: "desktop_version".i18n,
+          title: 'desktop_version'.i18n,
           onTap: onOpenDesktopVersion,
         );
       case PRO_ACCOUNT_ITEM.YINBI_REDEMPTION:
         return renderYinbiItem(
           icon: ImagePaths.yinbi_icon,
-          title: "yinbi_redemption".i18n,
+          title: 'yinbi_redemption'.i18n,
           onTap: onOpenYinbiRedemption,
         );
       case PRO_ACCOUNT_ITEM.SETTINGS:
@@ -219,7 +219,7 @@ class _AccountTabState extends State<AccountTab> {
             CustomDivider(),
             renderAccountItem(
               icon: ImagePaths.settings_icon,
-              title: "settings".i18n,
+              title: 'settings'.i18n,
               onTap: onOpenSettings,
             ),
           ],

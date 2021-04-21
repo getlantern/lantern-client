@@ -117,20 +117,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return renderSettingItem(
           hasDivider: false,
           icon: ImagePaths.key_icon,
-          title: "proxy_all".i18n,
+          title: 'proxy_all'.i18n,
           settingItemEnum: settingItemEnum,
         );
       case SETTINGS_ENUM.LANGUAGE:
         return renderSettingItem(
           icon: ImagePaths.translate_icon,
-          title: "language".i18n,
+          title: 'language'.i18n,
           onTap: onChangeLanguage,
           settingItemEnum: settingItemEnum,
         );
       case SETTINGS_ENUM.REPORT:
         return renderSettingItem(
           icon: ImagePaths.alert_icon,
-          title: "report_issue".i18n,
+          title: 'report_issue'.i18n,
           onTap: onReportIssue,
           settingItemEnum: settingItemEnum,
         );
@@ -142,8 +142,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   openInfoProxyAll() {
     showInfoDialog(
       context,
-      title: "title_proxy_all_dialog".i18n,
-      des: "description_proxy_all_dialog".i18n,
+      title: 'title_proxy_all_dialog'.i18n,
+      des: 'description_proxy_all_dialog'.i18n,
       icon: ImagePaths.key_icon,
     );
   }

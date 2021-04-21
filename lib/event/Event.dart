@@ -5,8 +5,8 @@ enum Event {
 
 extension EventParsing on Event {
   // map from [event name] to [the event], for example:
-  // "All" -> Event.All
-  // "SurveyAvailable" -> Event.SurveyAvailable
+  // 'All' -> Event.All
+  // 'SurveyAvailable' -> Event.SurveyAvailable
   static var valuesMap = {
     for (var item in Event.values) item.toShortString(): item
   };
@@ -16,7 +16,7 @@ extension EventParsing on Event {
   }
 
   String toShortString() {
-    // this is because Enum.EnumA.toString() == "Enum.EnumA" instead of just "EnumA"
+    // this is because Enum.EnumA.toString() == 'Enum.EnumA' instead of just 'EnumA'
     return toString().split('.').last;
   }
 }
