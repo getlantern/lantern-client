@@ -419,8 +419,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     companion object {
+        private val TAG = LanternSessionManager::class.java.name
+
         // shared preferences
-        const val PRO_USER = "prouser"
+        private const val PRO_USER = "prouser"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"
@@ -437,7 +439,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PW_SIGNATURE = "pwsignature"
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"
         private const val DEVICE_CODE_EXP = "devicecodeexp"
-        const val YINBI_ENABLED = "yinbienabled"
+        private const val YINBI_ENABLED = "yinbienabled"
         private const val YINBI_THANKS_PURCHASE = "showyinbithankspurchase"
         private const val SHOW_YINBI_REDEMPTION = "showyinbiredemption"
         private const val REMOTE_CONFIG_PAYMENT_PROVIDER = "remoteConfigPaymentProvider"

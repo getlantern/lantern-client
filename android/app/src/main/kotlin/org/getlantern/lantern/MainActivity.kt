@@ -46,11 +46,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
-
     private lateinit var eventManager: EventManager
-
     private val lanternClient = LanternApp.getLanternHttpClient()
-
     private lateinit var appVersion: String
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -59,7 +56,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
         navigator = Navigator(this, flutterEngine)
-
         eventManager = EventManager("lantern_event_channel", flutterEngine)
 
         MethodChannel(
@@ -156,7 +152,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
 
-            override fun onFailure(throwable: Throwable, error: ProError) {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user data", throwable)
             }
 
@@ -231,7 +227,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     return
                 }
             }
-            showSurveySnackbar(survey)
+            Handler(Looper.getMainLooper()).postDelayed({
+                showSurveySnackbar(survey)
+            }, 2000)
         }
     }
 
@@ -331,9 +329,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
      */
     private inner class UpdateTask(
         private val activity: Activity,
-        private val userInitiated: Boolean
-    ) :
-        AsyncTask<Void, Void, String?>() {
+        private val userInitiated: Boolean,
+    ) : AsyncTask<Void, Void, String?>() {
 
         override fun doInBackground(vararg v: Void): String? {
             try {

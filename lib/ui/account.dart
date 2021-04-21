@@ -3,21 +3,21 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
 
 class AccountTab extends StatefulWidget {
-  AccountTab({Key key}) : super(key: key);
+  AccountTab({Key? key}) : super(key: key);
 
   @override
   _AccountTabState createState() => _AccountTabState();
 }
 
 class _AccountTabState extends State<AccountTab> {
-  renderYinbiItem({String icon, String title, Function onTap}) {
+  renderYinbiItem({required String icon, required String title, void Function()? onTap}) {
     var sessionModel = context.watch<SessionModel>();
     return Container(
       margin: EdgeInsets.only(
         top: 8,
       ),
       child: InkWell(
-        onTap: onTap ?? () {},
+        onTap: onTap,
         child: Ink(
           padding: EdgeInsets.symmetric(
             vertical: 16,
@@ -42,7 +42,7 @@ class _AccountTabState extends State<AccountTab> {
                 ],
               ),
               sessionModel.shouldShowYinbiBadge((BuildContext context,
-                  bool shouldShowYinbiBadge, Widget child) {
+                  bool shouldShowYinbiBadge, Widget? child) {
                 return CustomBadge(
                   count: 1,
                   fontSize: 16,
@@ -56,13 +56,13 @@ class _AccountTabState extends State<AccountTab> {
     );
   }
 
-  renderAccountItem({String icon, String title, Function onTap}) {
+  renderAccountItem({required String icon, required String title, void Function()? onTap}) {
     return Container(
         margin: EdgeInsets.only(
           top: 8,
         ),
         child: InkWell(
-          onTap: onTap ?? () {},
+          onTap: onTap,
           child: Ink(
             padding: EdgeInsets.symmetric(
               vertical: 16,
@@ -135,7 +135,7 @@ class _AccountTabState extends State<AccountTab> {
     );
   }
 
-  renderFreeItem({FREE_ACCOUNT_ITEM accountItemEnum}) {
+  renderFreeItem({required FREE_ACCOUNT_ITEM accountItemEnum}) {
     switch (accountItemEnum) {
       case FREE_ACCOUNT_ITEM.UPGRADE_TO_LANTERN_PRO:
         return renderAccountItem(
@@ -184,7 +184,7 @@ class _AccountTabState extends State<AccountTab> {
     }
   }
 
-  renderProItem({PRO_ACCOUNT_ITEM accountItemEnum}) {
+  renderProItem({required PRO_ACCOUNT_ITEM accountItemEnum}) {
     switch (accountItemEnum) {
       case PRO_ACCOUNT_ITEM.PRO_ACCOUNT_MANAGEMENT:
         return renderProAccountManagementItem();
@@ -275,7 +275,7 @@ class _AccountTabState extends State<AccountTab> {
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
     return sessionModel
-        .proUser((BuildContext context, bool proUser, Widget child) {
+        .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
           title: 'Account'.i18n,
           body: ListView.builder(

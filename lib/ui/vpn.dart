@@ -1,7 +1,15 @@
 import 'package:lantern/package_store.dart';
+import 'package:flag/flag.dart';
+import 'package:lantern/lantern_navigator.dart';
+import 'package:lantern/model/session_model.dart';
+import 'package:lantern/model/vpn_model.dart';
+import 'package:lantern/utils/hex_color.dart';
+import 'package:provider/provider.dart';
+
+import '../model/protos_shared/vpn.pb.dart';
 
 class VPNTab extends StatelessWidget {
-  VPNTab({Key key}) : super(key: key);
+  VPNTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +19,13 @@ class VPNTab extends StatelessWidget {
     openInfoServerLocation() {
       showInfoDialog(
         context,
-        title: "Server Location".i18n,
-        des: "Server Location Info".i18n,
+        title: 'Server Location'.i18n,
+        des: 'Server Location Info'.i18n,
         icon: ImagePaths.location_on_icon,
       );
     }
 
-    Widget customDivider({marginTop: 16.0, marginBottom: 16.0}) {
+    Widget customDivider({marginTop = 16.0, marginBottom = 16.0}) {
       return Container(
         margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
         height: 1,
@@ -33,14 +41,14 @@ class VPNTab extends StatelessWidget {
           LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
         }, // Handle your callback
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: HexColor(unselectedTabColor),
             border: Border.all(
               color: HexColor(borderColor),
               width: 1,
             ),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(borderRadius),
             ),
           ),
@@ -53,25 +61,25 @@ class VPNTab extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Go Pro Title".i18n,
-                        style: tsSubHead(context).copyWith(
+                        'Go Pro Title'.i18n,
+                        style: tsSubHead(context)?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       sessionModel.yinbiEnabled((BuildContext context,
-                          bool yinbiEnabled, Widget child) {
+                          bool yinbiEnabled, Widget? child) {
                         return Text(
                           yinbiEnabled
-                              ? "Go Pro Description With Yinbi".i18n
-                              : "Go Pro Description".i18n,
+                              ? 'Go Pro Description With Yinbi'.i18n
+                              : 'Go Pro Description'.i18n,
                           style: tsCaption(context),
                         );
                       })
@@ -79,7 +87,7 @@ class VPNTab extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomAssetImage(
+              const CustomAssetImage(
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
               ),
@@ -93,13 +101,13 @@ class VPNTab extends StatelessWidget {
       return Transform.scale(
         scale: 2,
         child: vpnModel
-            .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
           return FlutterSwitch(
-            value: vpnStatus == "connected" || vpnStatus == "disconnecting",
+            value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
             activeColor: HexColor(onSwitchColor),
             inactiveColor: HexColor(offSwitchColor),
             onToggle: (bool newValue) {
-              if (vpnStatus != "connecting" || vpnStatus != "disconnecting") {
+              if (vpnStatus != 'connecting' || vpnStatus != 'disconnecting') {
                 vpnModel.switchVPN(newValue);
               }
             },
@@ -110,24 +118,27 @@ class VPNTab extends StatelessWidget {
 
     Widget vpnStatus() {
       return vpnModel
-          .vpnStatus((BuildContext context, String vpnStatus, Widget child) {
+          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "VPN Status".i18n + ": ",
-              style: tsSubTitle(context).copyWith(
+              'VPN Status'.i18n + ': ',
+              style: tsSubTitle(context)?.copyWith(
                 color: HexColor(unselectedTabLabelColor),
               ),
             ),
-            (vpnStatus == "connecting" || vpnStatus == "disconnecting")
+            (vpnStatus == 'connecting' || vpnStatus == 'disconnecting')
                 ? Row(
               children: [
                 Text(
-                  (vpnStatus == "connecting") ? "Connecting".i18n : "Disconnecting".i18n,
-                  style: tsSubTitle(context).copyWith(fontWeight: FontWeight.bold),
+                  (vpnStatus == 'connecting')
+                      ? 'Connecting'.i18n
+                      : 'Disconnecting'.i18n,
+                  style: tsSubTitle(context)
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(left: 12),
                   child: SizedBox(
                     height: 14,
@@ -140,7 +151,7 @@ class VPNTab extends StatelessWidget {
               ],
             )
                 : Text(
-              (vpnStatus == "connected") ? "on".i18n : "off".i18n,
+              (vpnStatus == 'connected') ? 'on'.i18n : 'off'.i18n,
               style: tsTitleTrailVPNItem(),
             ),
           ],
@@ -149,7 +160,8 @@ class VPNTab extends StatelessWidget {
     }
 
     Widget bandwidthWidget() {
-      return vpnModel.bandwidth((BuildContext context, Bandwidth bandwidth, Widget child) {
+      return vpnModel.bandwidth((BuildContext context, Bandwidth bandwidth,
+          Widget? child) {
         return bandwidth.allowed > 0
             ? Column(
           children: [
@@ -158,21 +170,21 @@ class VPNTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Daily Data Usage".i18n + ": ",
-                  style: tsTitleHeadVPNItem().copyWith(
+                  'Daily Data Usage'.i18n + ': ',
+                  style: tsTitleHeadVPNItem()?.copyWith(
                     color: HexColor(unselectedTabLabelColor),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    "${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB",
+                    '${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB',
                     textAlign: TextAlign.end,
                     style: tsTitleTrailVPNItem(),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Container(
@@ -183,18 +195,18 @@ class VPNTab extends StatelessWidget {
                   color: HexColor(borderColor),
                   width: 1,
                 ),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(borderRadius),
                 ),
               ),
               child: Row(
                 children: [
                   Expanded(
-                    flex: (bandwidth.allowed - bandwidth.remaining).toInt() ?? 0,
+                    flex: (bandwidth.allowed - bandwidth.remaining).toInt(),
                     child: Container(
                       decoration: BoxDecoration(
                         color: HexColor(usedDataBarColor),
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(borderRadius),
                         ),
                       ),
@@ -224,14 +236,15 @@ class VPNTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Server Location".i18n + ": ",
-                style: tsTitleHeadVPNItem().copyWith(
+                'Server Location'.i18n + ': ',
+                style: tsTitleHeadVPNItem()?.copyWith(
                   color: HexColor(unselectedTabLabelColor),
                 ),
               ),
               Container(
                 transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
                 child: InkWell(
+                  onTap: openInfoServerLocation,
                   child: Container(
                     height: 48,
                     width: 48,
@@ -241,18 +254,21 @@ class VPNTab extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: openInfoServerLocation,
                 ),
               ),
             ],
           ),
-          vpnModel.vpnStatus((BuildContext context, String vpnStatus, Widget child) {
-            return vpnModel.serverInfo((BuildContext context, ServerInfo serverInfo, Widget child) {
-              if (vpnStatus == "connected" || vpnStatus == "disconnecting") {
+          vpnModel.vpnStatus((BuildContext context, String vpnStatus,
+              Widget? child) {
+            return vpnModel.serverInfo((BuildContext context,
+                ServerInfo serverInfo, Widget? child) {
+              if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
                 return Row(
                   children: [
-                    ClipRRect(borderRadius: BorderRadius.all(Radius.circular(4)), child: Flag(serverInfo.countryCode, height: 24, width: 36)),
-                    SizedBox(width: 12),
+                    ClipRRect(borderRadius: const BorderRadius.all(Radius
+                        .circular(4)), child: Flag(serverInfo.countryCode,
+                        height: 24, width: 36)),
+                    const SizedBox(width: 12),
                     Text(
                       serverInfo.city,
                       style: tsTitleTrailVPNItem(),
@@ -271,25 +287,26 @@ class VPNTab extends StatelessWidget {
       );
     }
 
-    return sessionModel.proUser((BuildContext context, bool proUser, Widget child) {
+    return sessionModel.proUser((BuildContext context, bool proUser,
+        Widget? child) {
       return
-         BaseScreen(
+        BaseScreen(
           logoTitle: proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
           body: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 proUser ? Container() : proBanner(),
                 vpnSwitch(),
                 Container(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: HexColor(borderColor),
                       width: 1,
                     ),
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(borderRadius),
                     ),
                   ),
@@ -306,7 +323,6 @@ class VPNTab extends StatelessWidget {
             ),
           ),
         );
-
     });
   }
 }

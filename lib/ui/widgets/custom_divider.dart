@@ -1,7 +1,7 @@
 import 'package:lantern/package_store.dart';
 
 class CustomDivider extends StatelessWidget {
-  const CustomDivider({Key key}) : super(key: key);
+  const CustomDivider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

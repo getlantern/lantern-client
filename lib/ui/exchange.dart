@@ -8,7 +8,7 @@ int buy = 1;
 int method = 1;
 
 class ExchangeTab extends StatefulWidget {
-  ExchangeTab({Key key}) : super(key: key);
+  ExchangeTab({Key? key}) : super(key: key);
 
   @override
   _ExchangeTabState createState() => _ExchangeTabState();
@@ -34,7 +34,7 @@ class _ExchangeTabState extends State<ExchangeTab> {
         fontSize: 16.0);
   }
 
-  String getUrl(int id) {
+  String? getUrl(int id) {
     switch (id) {
       case 11:
         return 'https://paxful.com/s/Paxful_Online_Wallets';
@@ -173,7 +173,7 @@ class _ExchangeTabState extends State<ExchangeTab> {
                               EdgeInsets.only(left: 70, right: 70, bottom: 20),
                           child: TextButton(
                             onPressed: () {
-                              launchURL(getUrl(buy * 10 + method));
+                              launchURL(getUrl(buy * 10 + method) ?? '');
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -230,7 +230,7 @@ class BuyDropDownWidget extends StatefulWidget {
 }
 
 class _BuyDropDownWidgetState extends State<BuyDropDownWidget> {
-  BuyModel currentValue;
+  late BuyModel currentValue;
 
   @override
   void initState() {
@@ -254,7 +254,8 @@ class _BuyDropDownWidgetState extends State<BuyDropDownWidget> {
       underline: Container(
         height: 0,
       ),
-      onChanged: (BuyModel newValue) {
+      onChanged: (BuyModel? newValue) {
+        if(newValue == null) return;
         setState(() {
           currentValue = newValue;
           buy = newValue.id;
@@ -299,7 +300,7 @@ class MethodDropDownWidget extends StatefulWidget {
 }
 
 class _MethodDropDownWidgetState extends State<MethodDropDownWidget> {
-  MethodModel currentValue;
+  late MethodModel currentValue;
 
   @override
   void initState() {
@@ -323,7 +324,8 @@ class _MethodDropDownWidgetState extends State<MethodDropDownWidget> {
       underline: Container(
         height: 0,
       ),
-      onChanged: (MethodModel newValue) {
+      onChanged: (MethodModel? newValue) {
+        if(newValue == null) return;
         setState(() {
           currentValue = newValue;
           method = newValue.id;
