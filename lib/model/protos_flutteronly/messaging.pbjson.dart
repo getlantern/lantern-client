@@ -91,7 +91,8 @@ const StoredAttachment$json = const {
   '2': const [
     const {'1': 'guid', '3': 1, '4': 1, '5': 9, '10': 'guid'},
     const {'1': 'attachment', '3': 2, '4': 1, '5': 11, '6': '.model.Attachment', '10': 'attachment'},
-    const {'1': 'filePath', '3': 3, '4': 1, '5': 9, '10': 'filePath'},
+    const {'1': 'plainTextFilePath', '3': 5, '4': 1, '5': 9, '10': 'plainTextFilePath'},
+    const {'1': 'encryptedFilePath', '3': 3, '4': 1, '5': 9, '10': 'encryptedFilePath'},
     const {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.model.StoredAttachment.Status', '10': 'status'},
   ],
   '4': const [StoredAttachment_Status$json],
@@ -101,14 +102,15 @@ const StoredAttachment$json = const {
 const StoredAttachment_Status$json = const {
   '1': 'Status',
   '2': const [
-    const {'1': 'PENDING', '2': 0},
-    const {'1': 'DONE', '2': 1},
-    const {'1': 'FAILED', '2': 2},
+    const {'1': 'PENDING_ENCRYPTION', '2': 0},
+    const {'1': 'PENDING_UPLOAD', '2': 1},
+    const {'1': 'DONE', '2': 2},
+    const {'1': 'FAILED', '2': 3},
   ],
 };
 
 /// Descriptor for `StoredAttachment`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storedAttachmentDescriptor = $convert.base64Decode('ChBTdG9yZWRBdHRhY2htZW50EhIKBGd1aWQYASABKAlSBGd1aWQSMQoKYXR0YWNobWVudBgCIAEoCzIRLm1vZGVsLkF0dGFjaG1lbnRSCmF0dGFjaG1lbnQSGgoIZmlsZVBhdGgYAyABKAlSCGZpbGVQYXRoEjYKBnN0YXR1cxgEIAEoDjIeLm1vZGVsLlN0b3JlZEF0dGFjaG1lbnQuU3RhdHVzUgZzdGF0dXMiKwoGU3RhdHVzEgsKB1BFTkRJTkcQABIICgRET05FEAESCgoGRkFJTEVEEAI=');
+final $typed_data.Uint8List storedAttachmentDescriptor = $convert.base64Decode('ChBTdG9yZWRBdHRhY2htZW50EhIKBGd1aWQYASABKAlSBGd1aWQSMQoKYXR0YWNobWVudBgCIAEoCzIRLm1vZGVsLkF0dGFjaG1lbnRSCmF0dGFjaG1lbnQSLAoRcGxhaW5UZXh0RmlsZVBhdGgYBSABKAlSEXBsYWluVGV4dEZpbGVQYXRoEiwKEWVuY3J5cHRlZEZpbGVQYXRoGAMgASgJUhFlbmNyeXB0ZWRGaWxlUGF0aBI2CgZzdGF0dXMYBCABKA4yHi5tb2RlbC5TdG9yZWRBdHRhY2htZW50LlN0YXR1c1IGc3RhdHVzIkoKBlN0YXR1cxIWChJQRU5ESU5HX0VOQ1JZUFRJT04QABISCg5QRU5ESU5HX1VQTE9BRBABEggKBERPTkUQAhIKCgZGQUlMRUQQAw==');
 @$core.Deprecated('Use messageDescriptor instead')
 const Message$json = const {
   '1': 'Message',

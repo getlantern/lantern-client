@@ -345,8 +345,9 @@ class StoredAttachment extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoredAttachment', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'guid')
     ..aOM<Attachment>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachment', subBuilder: Attachment.create)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'filePath', protoName: 'filePath')
-    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'encryptedFilePath', protoName: 'encryptedFilePath')
+    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING_ENCRYPTION, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'plainTextFilePath', protoName: 'plainTextFilePath')
     ..hasRequiredFields = false
   ;
 
@@ -354,8 +355,9 @@ class StoredAttachment extends $pb.GeneratedMessage {
   factory StoredAttachment({
     $core.String? guid,
     Attachment? attachment,
-    $core.String? filePath,
+    $core.String? encryptedFilePath,
     StoredAttachment_Status? status,
+    $core.String? plainTextFilePath,
   }) {
     final _result = create();
     if (guid != null) {
@@ -364,11 +366,14 @@ class StoredAttachment extends $pb.GeneratedMessage {
     if (attachment != null) {
       _result.attachment = attachment;
     }
-    if (filePath != null) {
-      _result.filePath = filePath;
+    if (encryptedFilePath != null) {
+      _result.encryptedFilePath = encryptedFilePath;
     }
     if (status != null) {
       _result.status = status;
+    }
+    if (plainTextFilePath != null) {
+      _result.plainTextFilePath = plainTextFilePath;
     }
     return _result;
   }
@@ -414,13 +419,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
   Attachment ensureAttachment() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  $core.String get filePath => $_getSZ(2);
+  $core.String get encryptedFilePath => $_getSZ(2);
   @$pb.TagNumber(3)
-  set filePath($core.String v) { $_setString(2, v); }
+  set encryptedFilePath($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasFilePath() => $_has(2);
+  $core.bool hasEncryptedFilePath() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFilePath() => clearField(3);
+  void clearEncryptedFilePath() => clearField(3);
 
   @$pb.TagNumber(4)
   StoredAttachment_Status get status => $_getN(3);
@@ -430,6 +435,15 @@ class StoredAttachment extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
   void clearStatus() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get plainTextFilePath => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set plainTextFilePath($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPlainTextFilePath() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPlainTextFilePath() => clearField(5);
 }
 
 class Message extends $pb.GeneratedMessage {

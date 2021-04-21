@@ -46,14 +46,16 @@ message Attachment {
 // A locally stored Attachment
 message StoredAttachment {
   enum Status {
-    PENDING = 0; // attachment has not yet been uploaded/downloaded
-    DONE = 1; // attachment has been uploaded/downloaded
-    FAILED = 2; // attachment permanently failed to upload/download
+    PENDING_ENCRYPTION = 0; // attachment has not yet been encrypted
+    PENDING_UPLOAD = 1; // attachment has not yet been uploaded/downloaded
+    DONE = 2; // attachment has been uploaded/downloaded
+    FAILED = 3; // attachment permanently failed to encrypt or upload/download
   }
 
   string guid = 1; // a globally unique ID for the attachment
   Attachment attachment = 2; // the Attachment
-  string filePath = 3; // path to the on-disk location of this attachment
+  string plainTextFilePath = 5; // path to the on-disk location of the plain text version of this attachment
+  string encryptedFilePath = 3; // path to the on-disk location of encrypted version of this attachment
   Status status = 4; // the status of the upload/download
 }
 
