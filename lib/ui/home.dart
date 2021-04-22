@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -102,25 +104,53 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loadAsync,
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        return Scaffold(
-          body: PageView(
-            onPageChanged: onPageChange,
-            controller: _pageController,
-            children: [
-              VPNTab(),
-              ExchangeTab(),
-              AccountTab(),
-            ],
-          ),
-          bottomNavigationBar: CustomBottomBar(
-            currentIndex: _currentIndex,
-            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-          ),
-        );
-      },
+    var sessionModel = context.watch<SessionModel>();
+    return MaterialApp(
+      home: FutureBuilder(
+        future: loadAsync,
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return sessionModel
+              .language((BuildContext context, String lang, Widget? child) {
+            Localization.locale = lang;
+            return Scaffold(
+              body: PageView(
+                onPageChanged: onPageChange,
+                controller: _pageController,
+                children: [
+                  VPNTab(),
+                  ExchangeTab(),
+                  AccountTab(),
+                ],
+              ),
+              bottomNavigationBar: CustomBottomBar(
+                currentIndex: _currentIndex,
+                updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+              ),
+            );
+          });
+        },
+      ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        LocaleNamesLocalizationsDelegate(),
+      ],
+      supportedLocales: [
+        const Locale('ar', 'EG'),
+        const Locale('fr', 'FR'),
+        const Locale('en', 'US'),
+        const Locale('fa', 'IR'),
+        const Locale('th', 'TH'),
+        const Locale('ms', 'MY'),
+        const Locale('ru', 'RU'),
+        const Locale('ur', 'IN'),
+        const Locale('zh', 'CN'),
+        const Locale('zh', 'HK'),
+        const Locale('es', 'ES'),
+        const Locale('tr', 'TR'),
+        const Locale('vi', 'VN'),
+      ],
     );
   }
 }

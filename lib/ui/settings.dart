@@ -87,13 +87,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ? Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 16),
-                                    child: Text(
-                                      'English',
-                                      style: tsTitleItem()?.copyWith(
-                                          color: HexColor(
-                                        primaryPink,
-                                      )),
-                                    ),
+                                    child: sessionModel.language(
+                                        (BuildContext context, String lang,
+                                            Widget? child) {
+                                      return Text(
+                                        lang.displayLanguage(context, lang),
+                                        style: tsTitleItem()?.copyWith(
+                                            color: HexColor(
+                                          primaryPink,
+                                        )),
+                                      );
+                                    }),
                                   )
                                 : Container(),
                             CustomAssetImage(

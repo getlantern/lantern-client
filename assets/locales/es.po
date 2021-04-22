@@ -33,3 +33,6 @@ msgstr "OK"
 
 msgid "Exchange"
 msgstr "Intercambio"
+
+msgid "Account"
+msgstr "Cuenta"
