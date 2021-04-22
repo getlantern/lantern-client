@@ -1,0 +1,35 @@
+msgid "Daily Data Usage"
+msgstr "Datos Usado Cada Dia"
+
+msgid "is"
+msgstr "es"
+
+msgid "on"
+msgstr "encendido"
+
+msgid "off"
+msgstr "apagado"
+
+msgid "Disconnecting"
+msgstr "Desconectando..."
+
+msgid "Connecting"
+msgstr "Conectando..."
+
+msgid "Go Pro Title"
+msgstr "Hazte Pro!"
+
+msgid "Go Pro Description"
+msgstr "Desbloquee velocidades más rápidas y datos ilimitados!"
+
+msgid "Server Location"
+msgstr "Ubicación"
+
+msgid "Server Location Info"
+msgstr "Lantern utiliza la selección de servidor inteligente para conectarlo automáticamente a nuestros mejores centros de datos."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Exchange"
+msgstr "Intercambio"

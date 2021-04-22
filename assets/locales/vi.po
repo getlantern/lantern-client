@@ -1,0 +1,2 @@
+msgid "Exchange"
+msgstr "Chuyển đổi"

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final String _initialRoute;
 
+  late Future<void> loadAsync;
+
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
@@ -34,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     _pageController = PageController(initialPage: _currentIndex);
     final mainMethodChannel = const MethodChannel('lantern_method_channel');
     final eventManager = EventManager('lantern_event_channel');
+    loadAsync = Localization.loadTranslations();
 
     eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -98,22 +102,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        onPageChanged: onPageChange,
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        // TODO: only disable scrolling while we need to detect the drag gesture for the record button
-        children: [
-          VPNTab(),
-          ExchangeTab(),
-          AccountTab(),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        currentIndex: _currentIndex,
-        updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-      ),
+    return FutureBuilder(
+      future: loadAsync,
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        return Scaffold(
+          body: PageView(
+            onPageChanged: onPageChange,
+            controller: _pageController,
+            children: [
+              VPNTab(),
+              ExchangeTab(),
+              AccountTab(),
+            ],
+          ),
+          bottomNavigationBar: CustomBottomBar(
+            currentIndex: _currentIndex,
+            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+          ),
+        );
+      },
     );
   }
 }
