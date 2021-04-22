@@ -1,2 +1,14 @@
+msgid "on"
+msgstr "Bật"
+
+msgid "off"
+msgstr "Tắt"
+
+msgid "Server Location"
+msgstr "Vị trí máy chủ"
+
 msgid "Exchange"
 msgstr "Chuyển đổi"
+
+msgid "Account"
+msgstr "Tài khoản"

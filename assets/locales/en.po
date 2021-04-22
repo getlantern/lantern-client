@@ -78,3 +78,6 @@ msgstr "If enabled all traffic will be sent through Lantern (more secure). If di
 
 msgid "Exchange"
 msgstr "Exchange"
+
+msgid "Account"
+msgstr "Account"
