@@ -210,6 +210,7 @@ public class YinbiRedemptionActivity extends YinbiActivity {
      * new redemption code table row for each
      */
     private void addRedemptionCodes(final List<Reward> rewards) {
+        if(rewards == null) return;
         for (final Reward reward : rewards) {
             final String code = reward.getCode();
             final RedemptionCode previousCode = redemptionCodes.get(code);
