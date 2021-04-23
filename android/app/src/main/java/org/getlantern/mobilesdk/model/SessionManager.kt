@@ -12,8 +12,9 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
-import io.lantern.android.model.*
-
+import io.lantern.android.model.BaseModel
+import io.lantern.android.model.Vpn
+import io.lantern.android.model.VpnModel
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -49,10 +50,10 @@ abstract class SessionManager(application: Application) : Session {
     fun setStartResult(result: StartResult?) {
         startResult = result
         Logger.debug(
-                TAG, String.format(
+            TAG, String.format(
                 "Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
                 hTTPAddr, sOCKS5Addr
-        )
+            )
         )
     }
 
@@ -224,13 +225,13 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(EMAIL_ADDRESS, email).commit()
     }
 
-    fun setUserIdAndToken(userId: Int, token: String) {
-        if (userId == 0 || TextUtils.isEmpty(token)) {
+    fun setUserIdAndToken(userId: Long, token: String) {
+        if (userId == 0L || TextUtils.isEmpty(token)) {
             Logger.debug(TAG, "Not setting invalid user ID $userId or token $token")
             return
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        editor.putInt(USER_ID, userId).putString(TOKEN, token).commit()
+        editor.putLong(USER_ID, userId).putString(TOKEN, token).commit()
         FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
@@ -261,7 +262,7 @@ abstract class SessionManager(application: Application) : Session {
             // production environment but that gets special treatment from the proserver to hit
             // payment providers' test endpoints.
             9007199254740992L
-        } else getInt(USER_ID, 0).toLong()
+        } else getLong(USER_ID, 0)
     }
 
     override fun getToken(): String {
@@ -303,12 +304,14 @@ abstract class SessionManager(application: Application) : Session {
     fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
         editor.putString(LATEST_BANDWIDTH, amount).commit()
-        vpnModel.saveBandwidth(Vpn.Bandwidth.newBuilder()
+        vpnModel.saveBandwidth(
+            Vpn.Bandwidth.newBuilder()
                 .setPercent(update.percent)
                 .setRemaining(update.remaining)
                 .setAllowed(update.allowed)
                 .setTtlSeconds(update.ttlSeconds)
-                .build())
+                .build()
+        )
     }
 
     fun savedBandwidth(): String? {
@@ -342,8 +345,8 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun updateStats(
-            city: String, country: String,
-            countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
+        city: String, country: String,
+        countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
     ) {
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
         EventBus.getDefault().post(st)
@@ -353,11 +356,11 @@ abstract class SessionManager(application: Application) : Session {
         editor.putString(SERVER_CITY, city).commit()
         editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
         vpnModel.saveServerInfo(
-                Vpn.ServerInfo.newBuilder()
-                        .setCity(city)
-                        .setCountry(country)
-                        .setCountryCode(countryCode)
-                        .build()
+            Vpn.ServerInfo.newBuilder()
+                .setCity(city)
+                .setCountry(country)
+                .setCountryCode(countryCode)
+                .build()
         )
     }
 
@@ -371,6 +374,20 @@ abstract class SessionManager(application: Application) : Session {
             } catch (e2: ClassCastException) {
                 Logger.error(TAG, e2.message)
                 Integer.valueOf(prefs.getString(name, defaultValue.toString())!!)
+            }
+        }
+    }
+
+    protected fun getLong(name: String?, defaultValue: Long): Long {
+        return try {
+            prefs.getLong(name, defaultValue)
+        } catch (e: ClassCastException) {
+            Logger.error(TAG, e.message)
+            try {
+                prefs.getInt(name, defaultValue.toInt()).toLong()
+            } catch (e2: ClassCastException) {
+                Logger.error(TAG, e2.message)
+                prefs.getString(name, defaultValue.toString())?.toLong() ?: 0L
             }
         }
     }
@@ -452,15 +469,15 @@ abstract class SessionManager(application: Application) : Session {
         protected const val INTERNAL_HEADERS_PREF_NAME = "LanternMeta"
         private val enLocale = Locale("en", "US")
         private val chineseLocales = arrayOf<Locale?>(
-                Locale("zh", "CN"),
-                Locale("zh", "TW")
+            Locale("zh", "CN"),
+            Locale("zh", "TW")
         )
         private val englishLocales = arrayOf<Locale?>(
-                Locale("en", "US"),
-                Locale("en", "GB")
+            Locale("en", "US"),
+            Locale("en", "GB")
         )
         private val iranLocale = arrayOf<Locale?>(
-                Locale("fa", "IR")
+            Locale("fa", "IR")
         )
     }
 
@@ -469,20 +486,20 @@ abstract class SessionManager(application: Application) : Session {
         context = application
         vpnModel = VpnModel()
         prefs = BaseModel.masterDB.asSharedPreferences(
-                PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         editor = prefs.edit()
         internalHeaders = context.getSharedPreferences(
-                INTERNAL_HEADERS_PREF_NAME,
-                Context.MODE_PRIVATE
+            INTERNAL_HEADERS_PREF_NAME,
+            Context.MODE_PRIVATE
         )
         settings = Settings.init(context)
         val configuredLocale = prefs.getString(LANG, null)
         if (!TextUtils.isEmpty(configuredLocale)) {
             Logger.debug(
-                    TAG,
-                    "Configured locale was %1\$s, setting as default locale",
-                    configuredLocale
+                TAG,
+                "Configured locale was %1\$s, setting as default locale",
+                configuredLocale
             )
             locale = LocaleInfo(context, configuredLocale!!).locale
             Lingver.init(application, locale!!)
