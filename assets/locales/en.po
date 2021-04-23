@@ -81,3 +81,42 @@ msgstr "Exchange"
 
 msgid "Account"
 msgstr "Account"
+
+msgid "In partnership with"
+msgstr "In partnership with"
+
+msgid "Buy"
+msgstr "Buy"
+
+msgid "With"
+msgstr "With"
+
+msgid "Online Wallets"
+msgstr "Online Wallets"
+
+msgid "Bank Transfers"
+msgstr "Bank Transfers"
+
+msgid "Gift Cards"
+msgstr "Gift Cards"
+
+msgid "Game Cards"
+msgstr "Game Cards"
+
+msgid "Cash Payment"
+msgstr "Cash Payment"
+
+msgid "Digital Currencies"
+msgstr "Digital Currencies"
+
+msgid "Payment Method"
+msgstr "Payment Method"
+
+msgid "SHOW BEST DEALS"
+msgstr "SHOW BEST DEALS"
+
+msgid "VPN Status"
+msgstr "VPN Status"
+
+msgid "VPN"
+msgstr "VPN"
