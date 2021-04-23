@@ -133,7 +133,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
     private void linkDevice(final JsonObject result) {
         Logger.debug(TAG, "Successfully validated recovery code");
         // update token and user ID with those returned by the pro server
-        LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
+        LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsLong(), result.get("token").getAsString());
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
         ActivityExtKt.showAlertDialog(
