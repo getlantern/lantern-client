@@ -8,3 +8,9 @@ source_file = android/app/src/main/res/values/strings.xml
 source_lang = en_US
 type = ANDROID
 
+[lantern.lantern-flutter]
+file_filter = assets/locales/<lang>.po
+minimum_perc = 0
+source_file = assets/locales/en.po
+source_lang = en
+type = PO
