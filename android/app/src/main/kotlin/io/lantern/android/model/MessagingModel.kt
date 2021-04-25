@@ -51,8 +51,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     stopRecordingVoiceMemo()
                     val duration = (System.currentTimeMillis() - started).toDouble() / 1000.0
                     return messaging.createAttachment(
-                            "audio/ogg",
                             voiceMemoFile,
+                            "audio/ogg",
                             mapOf("duration" to duration.toString(), "role" to "voiceMemo")).toByteArray()
                 } finally {
                     voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
