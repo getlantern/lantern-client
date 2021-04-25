@@ -110,6 +110,7 @@
         <item>fa_IR</item>
         <item>zh_CN</item>
         <item>zh_HK</item>
+        <item>my_MM</item>
     </string-array>
 
     <string-array translatable="false" name="special_locale_names">
@@ -117,6 +118,7 @@
         <item>فارسی-</item>
         <item>中文 (简体)</item>
         <item>中文 (繁體)</item>
+        <item>မြန်မာစာ</item>
     </string-array>
 
 
@@ -134,5 +136,6 @@
         <item>es_ES</item>
         <item>tr_TR</item>
         <item>vi_VN</item>
+        <item>my_MM</item>
     </string-array>
 </resources>

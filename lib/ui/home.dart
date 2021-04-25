@@ -150,6 +150,7 @@ class _HomePageState extends State<HomePage> {
         const Locale('es', 'ES'),
         const Locale('tr', 'TR'),
         const Locale('vi', 'VN'),
+        const Locale('my', 'MM'),
       ],
     );
   }
