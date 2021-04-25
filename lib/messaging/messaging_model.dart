@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
@@ -8,7 +9,19 @@ import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
 
 class MessagingModel extends Model {
-  MessagingModel() : super('messaging');
+  late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
+
+  MessagingModel() : super('messaging') {
+    _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
+        100,
+        (attachment) =>
+            methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
+              'attachment': (attachment.hasThumbnail()
+                      ? attachment.thumbnail
+                      : attachment)
+                  .writeToBuffer(),
+            }).then((value) => value as Uint8List));
+  }
 
   Future<void> setMyDisplayName<T>(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
@@ -82,6 +95,10 @@ class MessagingModel extends Model {
       'mimeType': mimeType,
       'filePath': filePath
     }).then((value) => value as Uint8List);
+  }
+
+  Future<Uint8List> thumbnail(StoredAttachment attachment) async {
+    return _thumbnailCache.get(attachment);
   }
 
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
