@@ -27,19 +27,15 @@ Widget attachmentWidget(StoredAttachment attachment) {
 }
 
 class _ImageAttachment extends StatelessWidget {
-  final StoredAttachment? attachment;
+  final StoredAttachment attachment;
 
   _ImageAttachment(this.attachment);
-
-  Future<void> _getDecryptedAttachment(model) async {
-    return await model.decryptAttachment(attachment);
-  }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
-    switch (attachment!.status) {
+    switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
         return const CircularProgressIndicator();
@@ -50,7 +46,7 @@ class _ImageAttachment extends StatelessWidget {
         // successful download, onto decrypting
         return Container(
           child: FutureBuilder(
-              future: _getDecryptedAttachment(model),
+              future: model.thumbnail(attachment),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
