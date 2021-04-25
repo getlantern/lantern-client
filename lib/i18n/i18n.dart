@@ -17,7 +17,7 @@ extension Localization on String {
 
   static String locale = 'en_US';
 
-  static TranslationsByLocale translations = Translations.byLocale('en_US');
+  static TranslationsByLocale translations = Translations.byLocale('en');
 
   static Future<void> loadTranslations() async {
     translations += await GettextImporter().fromAssetDirectory('assets/locales');
