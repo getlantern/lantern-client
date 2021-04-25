@@ -38,6 +38,9 @@ extension Localization on String {
     if (languageCode == 'zh_HK') {
       return '中文 (繁體)';
     }
+    if (languageCode == 'my_MM') {
+    return 'မြန်မာစာ';
+    }
     if (languageCode.contains('_')) {
       List<String> splits = languageCode.split('_');
       if (splits.length > 0) {
