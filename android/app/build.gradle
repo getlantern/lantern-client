@@ -434,7 +434,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
-    implementation 'com.github.getlantern:messaging-android:caa2fbcf5f'
+    implementation 'com.github.getlantern:messaging-android:089205cd31'
 
     implementation(name:'opuslib-release', ext: 'aar')
 }
