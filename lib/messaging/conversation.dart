@@ -82,6 +82,7 @@ class _ConversationState extends State<Conversation> {
   }
 
   Future<List<AssetEntity>?> _renderFilePicker() async {
+    AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
       context,
       maxAssets: maxAssetsCount,
@@ -157,6 +158,7 @@ class _ConversationState extends State<Conversation> {
       // TODO: display error pop up
       print(e);
     }
+    AssetPicker.unregisterObserve();
   }
 
   @override
