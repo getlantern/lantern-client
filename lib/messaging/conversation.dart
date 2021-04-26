@@ -151,13 +151,12 @@ class _ConversationState extends State<Conversation> {
 
       var pickedFile = pickedAssets.first;
       // /data/user/0/org.getlantern.lantern/cache/file_picker/original_d1600dcdcd031ef8fe0b5585b315f764.png
-      var originFile = pickedFile.originFile as File;
-      var relativePath = pickedFile.relativePath as String;
-      var fileTitle = pickedFile.title as String;
-      var filePath = '$relativePath/$fileTitle';
-      var filePathFromOrigin = originFile.path;
+      var absolutePath = await pickedFile.originFile
+          .then((file) async => file?.path) as String;
+      // var filePathFromOrigin = originFile;
       var mimeType = pickedFile.mimeType as String;
-      var attachment = await model.filePickerLoadAttachment(mimeType, filePath);
+      var attachment =
+          await model.filePickerLoadAttachment(mimeType, absolutePath);
       _send(_newMessage.value.text, attachments: [attachment]);
     } catch (e) {
       // TODO: display error pop up
