@@ -55,7 +55,8 @@ class _ImageAttachment extends StatelessWidget {
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
                     }
-                    return Image.memory(snapshot.data, filterQuality: FilterQuality.high, scale: 4);
+                    return Image.memory(snapshot.data,
+                        filterQuality: FilterQuality.high, scale: 3);
                   default:
                     return const Icon(Icons.image);
                 }
