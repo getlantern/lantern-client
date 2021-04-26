@@ -116,7 +116,7 @@ class _ConversationState extends State<Conversation> {
         return;
       }
       //
-      // Here is an of an AssetEntity:
+      // Here is an example of an AssetEntity:
       //
       // _latitude:null
       // _longitude:null
@@ -150,10 +150,8 @@ class _ConversationState extends State<Conversation> {
       // videoDuration:Duration (0:00:00.000000)
 
       var pickedFile = pickedAssets.first;
-      // /data/user/0/org.getlantern.lantern/cache/file_picker/original_d1600dcdcd031ef8fe0b5585b315f764.png
       var absolutePath = await pickedFile.originFile
           .then((file) async => file?.path) as String;
-      // var filePathFromOrigin = originFile;
       var mimeType = pickedFile.mimeType as String;
       var attachment =
           await model.filePickerLoadAttachment(mimeType, absolutePath);
