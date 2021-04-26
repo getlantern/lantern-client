@@ -57,6 +57,13 @@ message StoredAttachment {
   string plainTextFilePath = 5; // path to the on-disk location of the plain text version of this attachment
   string encryptedFilePath = 3; // path to the on-disk location of encrypted version of this attachment
   Status status = 4; // the status of the upload/download
+  StoredAttachment thumbnail = 6; // an optional thumbnail of this attachment
+}
+
+// An attachment with optional associated Thumbnail
+message AttachmentWithThumbnail {
+  Attachment attachment = 1;
+  Attachment thumbnail = 2;
 }
 
 // A text message with attachments, the primary type of message exchanged by users.
@@ -65,7 +72,7 @@ message Message {
   bytes replyToSenderId = 2; // if this message is a reply to another message, this contains the ID of the sender of that message
   bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that message
   string text = 4;
-  map<int32, Attachment> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
+  map<int32, AttachmentWithThumbnail> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
   int32 disappearAfterSeconds = 6; // if > 0, message should disappear within this many seconds of first being viewed
 }
 
@@ -87,7 +94,8 @@ message StoredMessage {
   string replyToId = 6; // if this message is a reply to another message, this contains the ID of that message
   string text = 7;
   int32 disappearAfterSeconds = 8;
-  map<int32, StoredAttachment> attachments = 9; // attachments keyed to unique IDs for each attachment within this message
+  map<int32, StoredAttachment> attachments = 9; // attachments keyed to unique IDs for each attachment within this message (excluding thumbnails)
+  map<int32, int32> thumbnails = 15; // maps the id of a thumbnail attachment to the attachment for which it is a thumbnail
   MessageDirection direction = 10; // direction in which the message is going/came
   map<string, Reaction> reactions = 11; // reactions by the id of the reacter
   DeliveryStatus status = 12; // for outgoing messages, the status of its sending and delivery
@@ -143,4 +151,5 @@ message InboundAttachment {
   string messageId = 2; // the id of the StoredMessage, encoded in base32
   int64 ts = 3; // The unix timestamp in nanoseconds for when the message was received (has to match what's on the StoredMessage
   int32 attachmentId = 4; // The id of the attachment within the Message
+  bool isThumbnail = 5; // indicates if this is a download of a thumbnail
 }
