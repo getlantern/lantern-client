@@ -82,6 +82,27 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
+  Future<void> _selectFilesToShare() async {
+    try {
+      var pickedFile = await FilePicker.platform
+          .pickFiles(allowMultiple: false, type: FileType.any);
+
+      if (pickedFile != null) {
+        var filePath = pickedFile.files.first.path as String;
+        var fileExtension = pickedFile.files.first.extension as String;
+        var mimeType = lookupMimeType(fileExtension) as String;
+        var attachment =
+            await model.filePickerLoadAttachment(mimeType, filePath);
+        _send(_newMessage.value.text, attachments: [attachment]);
+      } else {
+        print('User has cancelled the selection');
+      }
+    } catch (e) {
+      // TODO: display error pop up
+      print(e);
+    }
+  }
+
   Future<List<AssetEntity>?> _renderFilePickerModel() async {
     return await AssetPicker.pickAssets(
       context,
