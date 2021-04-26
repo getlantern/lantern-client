@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -149,11 +150,14 @@ class _ConversationState extends State<Conversation> {
       // videoDuration:Duration (0:00:00.000000)
 
       var pickedFile = pickedAssets.first;
-      var filePath = pickedFile.relativePath as String;
+      // /data/user/0/org.getlantern.lantern/cache/file_picker/original_d1600dcdcd031ef8fe0b5585b315f764.png
+      var originFile = pickedFile.originFile as File;
+      var relativePath = pickedFile.relativePath as String;
       var fileTitle = pickedFile.title as String;
+      var filePath = '$relativePath/$fileTitle';
+      var filePathFromOrigin = originFile.path;
       var mimeType = pickedFile.mimeType as String;
-      var attachment = await model.filePickerLoadAttachment(
-          mimeType, '$filePath/$fileTitle');
+      var attachment = await model.filePickerLoadAttachment(mimeType, filePath);
       _send(_newMessage.value.text, attachments: [attachment]);
     } catch (e) {
       // TODO: display error pop up
