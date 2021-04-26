@@ -16,7 +16,6 @@ import io.lantern.android.model.*
 
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.Stats
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
@@ -492,10 +491,5 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             doSetLanguage(locale)
         }
-
-        editor.putBoolean(PROXY_ALL, prefs.getBoolean(PROXY_ALL, false)).apply()
-        editor.putBoolean(LanternSessionManager.PRO_USER, prefs.getBoolean(LanternSessionManager.PRO_USER, false)).apply()
-        editor.putBoolean(LanternSessionManager.YINBI_ENABLED, prefs.getBoolean(LanternSessionManager.YINBI_ENABLED, false)).apply()
-        editor.putBoolean(LanternSessionManager.SHOULD_SHOW_YINBI_BADGE, prefs.getBoolean(LanternSessionManager.SHOULD_SHOW_YINBI_BADGE, true)).apply()
     }
 }
