@@ -35,7 +35,6 @@ class _ConversationState extends State<Conversation> {
   final int maxAssetsCount = 9;
   List<AssetEntity> assets = <AssetEntity>[];
   bool isDisplayingDetail = true;
-  int get assetsLength => assets.length;
   ThemeData get currentTheme => context.themeData;
 
   @override
@@ -82,28 +81,7 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  Future<void> _selectFilesToShare() async {
-    try {
-      var pickedFile = await FilePicker.platform
-          .pickFiles(allowMultiple: false, type: FileType.any);
-
-      if (pickedFile != null) {
-        var filePath = pickedFile.files.first.path as String;
-        var fileExtension = pickedFile.files.first.extension as String;
-        var mimeType = lookupMimeType(fileExtension) as String;
-        var attachment =
-            await model.filePickerLoadAttachment(mimeType, filePath);
-        _send(_newMessage.value.text, attachments: [attachment]);
-      } else {
-        print('User has cancelled the selection');
-      }
-    } catch (e) {
-      // TODO: display error pop up
-      print(e);
-    }
-  }
-
-  Future<List<AssetEntity>?> _renderFilePickerModel() async {
+  Future<List<AssetEntity>?> _renderFilePicker() async {
     return await AssetPicker.pickAssets(
       context,
       maxAssets: maxAssetsCount,
@@ -128,6 +106,57 @@ class _ConversationState extends State<Conversation> {
         );
       },
     );
+  }
+
+  Future<void> _selectFilesToShare() async {
+    try {
+      var pickedAssets = await _renderFilePicker();
+      if (pickedAssets == null) {
+        return;
+      }
+      //
+      // Here is an of an AssetEntity:
+      //
+      // _latitude:null
+      // _longitude:null
+      // createDtSecond:1618960950
+      // duration:0
+      // height:600
+      // id:"62"
+      // isFavorite:false
+      // mimeType:"image/jpeg"
+      // modifiedDateSecond:1618960950
+      // orientation:0
+      // relativePath:"Download/"
+      // title:"original_3f30a68a04a1d9529da9e2219458c7bd.jpg"
+      // typeInt:1
+      // width:800
+      // createDateTime:DateTime (2021-04-20 19:22:30.000)
+      // exists:_Future (Instance of 'Future<bool>')
+      // file:_Future (Instance of 'Future<File?>')
+      // fullData:_Future (Instance of 'Future<Uint8List?>')
+      // hashCode:614304830
+      // latitude:0.0
+      // longitude:0.0
+      // modifiedDateTime:DateTime (2021-04-20 19:22:30.000)
+      // originBytes:_Future (Instance of 'Future<Uint8List?>')
+      // originFile:_Future (Instance of 'Future<File?>')
+      // runtimeType:Type (AssetEntity)
+      // size:Size (Size(800.0, 600.0))
+      // thumbData:_Future (Instance of 'Future<Uint8List?>')
+      // titleAsync:_Future (Instance of 'Future<String>')
+      // type:AssetType (AssetType.image)
+      // videoDuration:Duration (0:00:00.000000)
+
+      var pickedFile = pickedAssets.first;
+      var filePath = pickedFile.relativePath as String;
+      var mimeType = pickedFile.mimeType as String;
+      var attachment = await model.filePickerLoadAttachment(mimeType, filePath);
+      _send(_newMessage.value.text, attachments: [attachment]);
+    } catch (e) {
+      // TODO: display error pop up
+      print(e);
+    }
   }
 
   @override
@@ -216,7 +245,7 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => _renderFilePickerModel(),
+                  onTap: () => _selectFilesToShare(),
                   child: const Icon(Icons.image),
                 ),
                 GestureDetector(
