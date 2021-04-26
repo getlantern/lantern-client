@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -10,7 +9,9 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:mime/mime.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:lantern/messaging/widgets/filepicker_extensions.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -29,6 +30,13 @@ class _ConversationState extends State<Conversation> {
   var _recording = false;
   var _willCancelRecording = false;
   var _totalPanned = 0.0;
+
+  // Filepicker vars
+  final int maxAssetsCount = 9;
+  List<AssetEntity> assets = <AssetEntity>[];
+  bool isDisplayingDetail = true;
+  int get assetsLength => assets.length;
+  ThemeData get currentTheme => context.themeData;
 
   @override
   void dispose() {
@@ -74,25 +82,31 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  Future<void> _selectFilesToShare() async {
-    try {
-      var pickedFile = await FilePicker.platform
-          .pickFiles(allowMultiple: false, type: FileType.any);
-
-      if (pickedFile != null) {
-        var filePath = pickedFile.files.first.path as String;
-        var fileExtension = pickedFile.files.first.extension as String;
-        var mimeType = lookupMimeType(fileExtension) as String;
-        var attachment =
-            await model.filePickerLoadAttachment(mimeType, filePath);
-        _send(_newMessage.value.text, attachments: [attachment]);
-      } else {
-        print('User has cancelled the selection');
-      }
-    } catch (e) {
-      // TODO: display error pop up
-      print(e);
-    }
+  Future<List<AssetEntity>?> _renderFilePickerModel() async {
+    return await AssetPicker.pickAssets(
+      context,
+      maxAssets: maxAssetsCount,
+      selectedAssets: assets,
+      requestType: RequestType.all,
+      specialItemPosition: SpecialItemPosition.prepend,
+      specialItemBuilder: (BuildContext context) {
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () async {
+            final result = await CameraPicker.pickFromCamera(
+              context,
+              enableRecording: true,
+            );
+            if (result != null) {
+              Navigator.of(context).pop(<AssetEntity>[result]);
+            }
+          },
+          child: const Center(
+            child: Icon(Icons.camera_enhance, size: 42.0),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -181,9 +195,7 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    _selectFilesToShare();
-                  },
+                  onTap: () => _renderFilePickerModel(),
                   child: const Icon(Icons.image),
                 ),
                 GestureDetector(
