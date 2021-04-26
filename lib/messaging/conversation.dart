@@ -151,9 +151,7 @@ class _ConversationState extends State<Conversation> {
       var pickedFile = pickedAssets.first;
       var absolutePath = await pickedFile.originFile
           .then((file) async => file?.path) as String;
-      var mimeType = pickedFile.mimeType as String;
-      var attachment =
-          await model.filePickerLoadAttachment(mimeType, absolutePath);
+      var attachment = await model.filePickerLoadAttachment(absolutePath);
       _send(_newMessage.value.text, attachments: [attachment]);
     } catch (e) {
       // TODO: display error pop up
