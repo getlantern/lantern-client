@@ -3,13 +3,15 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:io';
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
+  // https://developer.android.com/guide/topics/media/media-formats
   switch (attachment.attachment.mimeType) {
     case 'audio/ogg':
       return Flexible(child: _AudioAttachment(attachment));
-    // https://developer.android.com/guide/topics/media/media-formats
     case 'image/jpeg':
     case 'image/png':
     case 'image/bpm':
@@ -19,7 +21,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'image/heif':
       return Flexible(child: _ImageAttachment(attachment));
     case 'video/*':
-    // return Flexible(child: _VideoAttachment(attachment));
+      return Flexible(child: _VideoAttachment(attachment));
     default:
       // TODO: handle other types of attachments
       return Flexible(child: Container());
@@ -63,6 +65,94 @@ class _ImageAttachment extends StatelessWidget {
               }),
         );
     }
+  }
+}
+
+class _VideoAttachment extends StatefulWidget {
+  final StoredAttachment _attachment;
+  _VideoAttachment(this._attachment);
+  @override
+  _VideoAttachmentState createState() => _VideoAttachmentState();
+}
+
+class _VideoAttachmentState extends State<_VideoAttachment> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(
+        'https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
+    // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
+    switch (widget._attachment.status) {
+      case StoredAttachment_Status.PENDING_UPLOAD:
+        // pending download
+        return const CircularProgressIndicator();
+      case StoredAttachment_Status.FAILED:
+        // error with download
+        return const Icon(Icons.error_outlined);
+      default:
+        // successful download, onto decrypting
+        return Container(
+          child: FutureBuilder(
+              future: model.thumbnail(widget._attachment),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const CircularProgressIndicator();
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return const Icon(Icons.error_outlined);
+                    }
+                    var videoFile = File(snapshot.data);
+                    setState(() {
+                      _controller = VideoPlayerController.file(videoFile);
+                    });
+                    return Scaffold(
+                      body: Center(
+                        child: _controller.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio: _controller.value.aspectRatio,
+                                child: VideoPlayer(_controller),
+                              )
+                            : Container(),
+                      ),
+                      floatingActionButton: FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _controller.value.isPlaying
+                                ? _controller.pause()
+                                : _controller.play();
+                          });
+                        },
+                        child: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                        ),
+                      ),
+                    );
+                  default:
+                    return Container();
+                }
+              }),
+        );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }
 
