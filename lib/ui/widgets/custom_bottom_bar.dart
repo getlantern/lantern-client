@@ -2,7 +2,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 
-class CustomBottomBar extends StatefulWidget {
+class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
   final Function updateCurrentIndexPageView;
 
@@ -11,11 +11,6 @@ class CustomBottomBar extends StatefulWidget {
     Key? key})
       : super(key: key);
 
-  @override
-  _CustomBottomBarState createState() => _CustomBottomBarState();
-}
-
-class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget activeIcon({bool isActive = false}) {
     return Container(
       margin: const EdgeInsets.only(left: 4),
@@ -41,7 +36,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   }
 
   Widget renderBottomTabItem(
-      {required TAB_ENUM tabEnum, required int index, bool isActive = false}) {
+      {required TAB_ENUM tabEnum, required int index, bool isActive = false, required BuildContext context}) {
     String text;
     String icon;
     var sessionModel = context.watch<SessionModel>();
@@ -76,57 +71,57 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                 index != TAB_ENUM.values.length - 1 ? borderRadius : 0),
           ),
         ),
-        onTap: () => widget.updateCurrentIndexPageView(index),
+        onTap: () => updateCurrentIndexPageView(index),
         child: Ink(
           decoration: ShapeDecoration(
-            color: widget.currentIndex == index
+            color: currentIndex == index
                 ? HexColor(selectedTabColor)
                 : HexColor(unselectedTabColor),
             shape: CustomRoundedRectangleBorder(
-              topSide: widget.currentIndex == index
+              topSide: currentIndex == index
                   ? null
                   : BorderSide(
                 color: HexColor(borderColor),
                 width: 1,
               ),
-              rightSide: widget.currentIndex == index ||
-                  widget.currentIndex == 2 && index == 0 ||
-                  widget.currentIndex == 0 && index == 1
+              rightSide: currentIndex == index ||
+                  currentIndex == 2 && index == 0 ||
+                  currentIndex == 0 && index == 1
                   ? null
                   : BorderSide(
                 color: HexColor(borderColor),
                 width: 1,
               ),
-              leftSide: widget.currentIndex == index ||
-                  widget.currentIndex == 0 && index == 2 ||
-                  widget.currentIndex == 2 && index == 1
+              leftSide: currentIndex == index ||
+                  currentIndex == 0 && index == 2 ||
+                  currentIndex == 2 && index == 1
                   ? null
                   : BorderSide(
                 color: HexColor(borderColor),
                 width: 1,
               ),
               topLeftCornerSide: BorderSide(
-                color: (widget.currentIndex == 0 && index == 1) ||
-                    (widget.currentIndex == 1 && index == 2)
+                color: (currentIndex == 0 && index == 1) ||
+                    (currentIndex == 1 && index == 2)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
               topRightCornerSide: BorderSide(
-                color: (widget.currentIndex == 1 && index == 0) ||
-                    (widget.currentIndex == 2 && index == 1)
+                color: (currentIndex == 1 && index == 0) ||
+                    (currentIndex == 2 && index == 1)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
-                  (widget.currentIndex == 0 && index == 1) ||
-                      (widget.currentIndex == 1 && index == 2)
+                  (currentIndex == 0 && index == 1) ||
+                      (currentIndex == 1 && index == 2)
                       ? borderRadius
                       : 0,
                 ),
                 topRight: Radius.circular(
-                  (widget.currentIndex == 1 && index == 0) ||
-                      (widget.currentIndex == 2 && index == 1)
+                  (currentIndex == 1 && index == 0) ||
+                      (currentIndex == 2 && index == 1)
                       ? borderRadius
                       : 0,
                 ),
@@ -146,14 +141,14 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                   child: CustomAssetImage(
                     path: icon,
                     size: 24,
-                    color: HexColor(widget.currentIndex == index
+                    color: HexColor(currentIndex == index
                         ? selectedTabLabelColor
                         : unselectedTabLabelColor),),);
               })
                   : CustomAssetImage(
                 path: icon,
                 size: 24,
-                color: HexColor(widget.currentIndex == index
+                color: HexColor(currentIndex == index
                     ? selectedTabLabelColor
                     : unselectedTabLabelColor),
               ),
@@ -164,7 +159,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                     text,
                     style: GoogleFonts.roboto().copyWith(
                       fontSize: 12,
-                      color: HexColor(widget.currentIndex == index
+                      color: HexColor(currentIndex == index
                           ? selectedTabLabelColor
                           : unselectedTabLabelColor),
                     ),
@@ -200,6 +195,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                     tabEnum: tabEnum,
                     isActive: (vpnStatus == 'connected' ||
                         vpnStatus == 'disconnecting'),
+                    context: context
                   ),
                 ),)
               .values

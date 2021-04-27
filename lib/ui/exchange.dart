@@ -2,19 +2,23 @@ import 'dart:ui';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/exchange_buy_dropdown.dart';
+import 'package:lantern/ui/widgets/exchange_payment_method_dropdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-int buy = 1;
-int method = 1;
+class ExchangeTab extends StatelessWidget {
 
-class ExchangeTab extends StatefulWidget {
-  ExchangeTab({Key? key}) : super(key: key);
+  int buyItem = 1;
+  int methodItem = 1;
 
-  @override
-  _ExchangeTabState createState() => _ExchangeTabState();
-}
+  void _setBuyItem(int value){
+      buyItem = value;
+  }
 
-class _ExchangeTabState extends State<ExchangeTab> {
+  void _setMethodItem(int value){
+      methodItem = value;
+  }
+
   launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceWebView: false);
@@ -96,7 +100,8 @@ class _ExchangeTabState extends State<ExchangeTab> {
                         child: BuyDropDownWidget(<BuyModel>[
                           BuyModel(1, 'Bitcoin', ImagePaths.bitcoin_icon),
                           BuyModel(2, 'Tether', ImagePaths.tether_icon)
-                        ]),
+                        ],
+                        _setBuyItem),
                       ),
                     ),
                     Positioned(
@@ -150,7 +155,8 @@ class _ExchangeTabState extends State<ExchangeTab> {
                           MethodModel(4, 'Game Cards'.i18n),
                           MethodModel(5, 'Cash Payment'.i18n),
                           MethodModel(6, 'Digital Currencies'.i18n),
-                        ]),
+                        ],
+                        _setMethodItem),
                       ),
                     ),
                     Positioned(
@@ -173,7 +179,8 @@ class _ExchangeTabState extends State<ExchangeTab> {
                               EdgeInsets.only(left: 70, right: 70, bottom: 20),
                           child: TextButton(
                             onPressed: () {
-                              launchURL(getUrl(buy * 10 + method) ?? '');
+                              // buyDropDownWidget
+                              launchURL(getUrl(buyItem * 10 + methodItem) ?? '');
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -204,140 +211,5 @@ class _ExchangeTabState extends State<ExchangeTab> {
                 ],
               )),
         ));
-  }
-}
-
-class BuyModel {
-  int id;
-  String name;
-  String icon;
-
-  BuyModel(this.id, this.name, this.icon);
-
-  @override
-  bool operator ==(Object other) {
-    return other != null && other is BuyModel && other.id == this.id;
-  }
-}
-
-class BuyDropDownWidget extends StatefulWidget {
-  final List<BuyModel> items;
-
-  BuyDropDownWidget(this.items) : super();
-
-  @override
-  _BuyDropDownWidgetState createState() => _BuyDropDownWidgetState();
-}
-
-class _BuyDropDownWidgetState extends State<BuyDropDownWidget> {
-  late BuyModel currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    currentValue = widget.items.first;
-    buy = currentValue.id;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<BuyModel>(
-      itemHeight: 56,
-      value: currentValue,
-      icon: const CustomAssetImage(
-        path: ImagePaths.dropdown_icon,
-      ),
-      iconSize: 24,
-      elevation: 16,
-      isExpanded: true,
-      style: const TextStyle(color: Colors.black, fontSize: 15),
-      underline: Container(
-        height: 0,
-      ),
-      onChanged: (BuyModel? newValue) {
-        if(newValue == null) return;
-        setState(() {
-          currentValue = newValue;
-          buy = newValue.id;
-        });
-      },
-      items: widget.items.map<DropdownMenuItem<BuyModel>>((BuyModel value) {
-        return DropdownMenuItem<BuyModel>(
-          value: value,
-          child: ListTile(
-            contentPadding: EdgeInsets.only(left: 0, right: 0),
-            leading: CustomAssetImage(
-              path: value.icon,
-            ),
-            minLeadingWidth: 0,
-            title: Text(value.name),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class MethodModel {
-  int id;
-  String name;
-
-  MethodModel(this.id, this.name);
-
-  @override
-  bool operator ==(Object other) {
-    return other != null && other is MethodModel && other.id == this.id;
-  }
-}
-
-class MethodDropDownWidget extends StatefulWidget {
-  final List<MethodModel> items;
-
-  const MethodDropDownWidget(this.items) : super();
-
-  @override
-  _MethodDropDownWidgetState createState() => _MethodDropDownWidgetState();
-}
-
-class _MethodDropDownWidgetState extends State<MethodDropDownWidget> {
-  late MethodModel currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    currentValue = widget.items.first;
-    method = currentValue.id;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<MethodModel>(
-      itemHeight: 56,
-      value: currentValue,
-      icon: const CustomAssetImage(
-        path: ImagePaths.dropdown_icon,
-      ),
-      iconSize: 24,
-      elevation: 16,
-      isExpanded: true,
-      style: const TextStyle(color: Colors.black, fontSize: 15),
-      underline: Container(
-        height: 0,
-      ),
-      onChanged: (MethodModel? newValue) {
-        if(newValue == null) return;
-        setState(() {
-          currentValue = newValue;
-          method = newValue.id;
-        });
-      },
-      items:
-          widget.items.map<DropdownMenuItem<MethodModel>>((MethodModel value) {
-        return DropdownMenuItem<MethodModel>(
-          value: value,
-          child: Text(value.name),
-        );
-      }).toList(),
-    );
   }
 }
