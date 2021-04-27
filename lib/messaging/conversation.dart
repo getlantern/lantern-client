@@ -86,7 +86,11 @@ class _ConversationState extends State<Conversation> {
     return await AssetPicker.pickAssets(
       context,
       maxAssets: maxAssetsCount,
+      gridCount: 2,
+      pathThumbSize: 80,
       selectedAssets: assets,
+      themeColor: currentTheme.accentColor,
+      // textDelegate: DefaultTextDelegate(),
       requestType: RequestType.all,
       specialItemPosition: SpecialItemPosition.prepend,
       specialItemBuilder: (BuildContext context) {
