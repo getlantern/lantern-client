@@ -20,7 +20,8 @@ Widget attachmentWidget(StoredAttachment attachment) {
     // TODO: check older platforms for HEIF
     case 'image/heif':
       return Flexible(child: _ImageAttachment(attachment));
-    case 'video/*':
+    case 'video/mp4':
+    case 'video/mov':
       return Flexible(child: _VideoAttachment(attachment));
     default:
       // TODO: handle other types of attachments
@@ -77,6 +78,7 @@ class _VideoAttachment extends StatefulWidget {
 
 class _VideoAttachmentState extends State<_VideoAttachment> {
   late VideoPlayerController _controller;
+  late File _videoFile;
 
   @override
   void initState() {
@@ -87,6 +89,17 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
+  }
+
+  Future<void> _playVideo(File file) async {
+    if (mounted) {
+      _controller = VideoPlayerController.file(file);
+      await _controller.setVolume(1.0);
+      await _controller.initialize();
+      await _controller.setLooping(true);
+      await _controller.play();
+      setState(() {});
+    }
   }
 
   @override
@@ -104,7 +117,7 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
         // successful download, onto decrypting
         return Container(
           child: FutureBuilder(
-              future: model.thumbnail(widget._attachment),
+              future: model.decryptAttachment(widget._attachment),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
@@ -113,12 +126,8 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
                     }
-                    var videoFile = File(snapshot.data);
-                    setState(() {
-                      _controller = VideoPlayerController.file(videoFile);
-                    });
-                    return Scaffold(
-                      body: Center(
+                    return Stack(children: <Widget>[
+                      Center(
                         child: _controller.value.isInitialized
                             ? AspectRatio(
                                 aspectRatio: _controller.value.aspectRatio,
@@ -126,13 +135,16 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                               )
                             : Container(),
                       ),
-                      floatingActionButton: FloatingActionButton(
-                        onPressed: () {
+                      FloatingActionButton(
+                        onPressed: () async {
                           setState(() {
+                            _videoFile =
+                                File(snapshot.data).readAsBytes() as File;
                             _controller.value.isPlaying
                                 ? _controller.pause()
                                 : _controller.play();
                           });
+                          await _playVideo(_videoFile);
                         },
                         child: Icon(
                           _controller.value.isPlaying
@@ -140,7 +152,7 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                               : Icons.play_arrow,
                         ),
                       ),
-                    );
+                    ]);
                   default:
                     return Container();
                 }
