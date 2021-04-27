@@ -90,7 +90,8 @@ class _ConversationState extends State<Conversation> {
       pathThumbSize: 80,
       selectedAssets: assets,
       themeColor: currentTheme.accentColor,
-      // textDelegate: DefaultTextDelegate(),
+      textDelegate:
+          EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
       specialItemPosition: SpecialItemPosition.prepend,
       specialItemBuilder: (BuildContext context) {
