@@ -78,26 +78,24 @@ class _VideoAttachment extends StatefulWidget {
 
 class _VideoAttachmentState extends State<_VideoAttachment> {
   late VideoPlayerController _controller;
-  late File _videoFile;
+  File _videoFile = File('');
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-        'https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
+    _controller = VideoPlayerController.file(_videoFile)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
   }
 
-  Future<void> _playVideo(File file) async {
+  Future<void> _playVideo() async {
     if (mounted) {
-      _controller = VideoPlayerController.file(file);
-      await _controller.setVolume(1.0);
-      await _controller.initialize();
-      await _controller.setLooping(true);
-      await _controller.play();
+      _controller = VideoPlayerController.file(_videoFile);
+      setState(() {
+        _controller.value.isPlaying ? _controller.pause() : _controller.play();
+      });
       setState(() {});
     }
   }
@@ -126,6 +124,9 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
                     }
+                    setState(() {
+                      _videoFile = File(snapshot.data).readAsBytes() as File;
+                    });
                     return Stack(children: <Widget>[
                       Center(
                         child: _controller.value.isInitialized
@@ -136,16 +137,7 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                             : Container(),
                       ),
                       FloatingActionButton(
-                        onPressed: () async {
-                          setState(() {
-                            _videoFile =
-                                File(snapshot.data).readAsBytes() as File;
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                          await _playVideo(_videoFile);
-                        },
+                        onPressed: () async => await _playVideo(),
                         child: Icon(
                           _controller.value.isPlaying
                               ? Icons.pause
