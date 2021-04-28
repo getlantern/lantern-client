@@ -59,7 +59,8 @@ dependencies:
 
   photo_manager: ^1.1.4
 
-  wechat_assets_picker: ^5.1.3
+  wechat_assets_picker:
+    path: ./wechat_assets_picker
 
   wechat_camera_picker: ^2.1.0
 
