@@ -18,8 +18,8 @@ class CustomBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      position: BadgePosition(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      position: const BadgePosition(
         end: -5,
         top: -3,
       ),

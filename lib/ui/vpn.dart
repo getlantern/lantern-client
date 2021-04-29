@@ -50,7 +50,7 @@ class VPNTab extends StatelessWidget {
                 child: Column(
                   children: [
                     VPNStatus(),
-                    VPNCustomDivider(marginBottom: 4.0),
+                    const VPNCustomDivider(marginBottom: 4.0),
                     ServerLocationWidget(_openInfoServerLocation),
                     VPNBandwidth(),
                   ],

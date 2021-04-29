@@ -9,7 +9,7 @@ import 'es.dart';
 
 extension Localization on String {
 
-  static var _t = Translations.byLocale('en_us') +
+  static final _t = Translations.byLocale('en_us') +
       {
         'en_us': en_us,
         'es': es,
@@ -42,9 +42,9 @@ extension Localization on String {
     return 'မြန်မာစာ';
     }
     if (languageCode.contains('_')) {
-      List<String> splits = languageCode.split('_');
+      var splits = languageCode.split('_');
       if (splits.length > 0) {
-        String? displayName = LocaleNames.of(context)?.nameOf(splits.first);
+        var displayName = LocaleNames.of(context)?.nameOf(splits.first);
         if (displayName != null) {
           return displayName;
         }

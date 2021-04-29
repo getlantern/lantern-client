@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        LocaleNamesLocalizationsDelegate(),
+        const LocaleNamesLocalizationsDelegate(),
       ],
       supportedLocales: [
         const Locale('ar', 'EG'),

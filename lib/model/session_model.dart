@@ -1,3 +1,5 @@
+import 'package:pedantic/pedantic.dart';
+
 import '../package_store.dart';
 import 'model.dart';
 
@@ -13,7 +15,8 @@ class SessionModel extends Model {
   }
 
   Widget shouldShowYinbiBadge(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('should_show_yinbi_badge', builder: builder);
+    return subscribedSingleValueBuilder<bool>('should_show_yinbi_badge',
+        builder: builder);
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
@@ -25,8 +28,8 @@ class SessionModel extends Model {
   }
 
   Future<void> switchProxyAll<T>(bool on) async {
-    methodChannel.invokeMethod('switchProxyAll', <String, dynamic>{
+    unawaited(methodChannel.invokeMethod('switchProxyAll', <String, dynamic>{
       'on': on,
-    });
+    }));
   }
 }

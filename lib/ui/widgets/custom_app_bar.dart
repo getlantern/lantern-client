@@ -5,7 +5,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? logoTitle;
   final List<Widget>? actions;
 
-  CustomAppBar({this.title = '', this.logoTitle = null, this.actions, Key? key})
+  CustomAppBar({this.title = '', this.logoTitle, this.actions, Key? key})
       : super(key: key);
 
   @override
@@ -19,14 +19,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: logoTitle != null
           ? SvgPicture.asset(
-        logoTitle!,
-        height: 16,
-        fit: BoxFit.contain,
-      )
+              logoTitle!,
+              height: 16,
+              fit: BoxFit.contain,
+            )
           : Text(
-        title,
-        style: tsTitleAppbar(),
-      ),
+              title,
+              style: tsTitleAppbar(),
+            ),
       actions: actions ?? [],
     );
   }
