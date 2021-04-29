@@ -1,4 +1,3 @@
-
 import 'package:lantern/package_store.dart';
 
 class VPNSwitch extends StatelessWidget {

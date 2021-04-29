@@ -1,13 +1,14 @@
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_bandwidth.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_custom_divider.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_pro_banner.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_server_location.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_status.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_switch.dart';
 import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
+
+import 'vpn_bandwidth.dart';
+import 'vpn_custom_divider.dart';
+import 'vpn_pro_banner.dart';
+import 'vpn_server_location.dart';
+import 'vpn_status.dart';
+import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
   VPNTab({Key? key}) : super(key: key);

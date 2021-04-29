@@ -3,20 +3,20 @@ import 'package:lantern/package_store.dart';
 class SettingsItem extends StatelessWidget {
   late final String icon;
   late final String title;
+  final bool showArrow;
   late final double inkVerticalPadding;
   final Widget? child;
   final void Function(BuildContext context)? openInfoDialog;
   final void Function()? onTap;
-  final bool showArrow;
 
   SettingsItem(
       {required this.icon,
       required this.title,
+      this.showArrow = false,
       this.inkVerticalPadding = 16,
       this.openInfoDialog,
       this.onTap,
-      this.child,
-      this.showArrow = true});
+      this.child});
 
   @override
   Widget build(BuildContext context) {
