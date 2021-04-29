@@ -15,11 +15,11 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void onChangeLanguage() {
+  void changeLanguage() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_CHANGE_LANGUAGE);
   }
 
-  void onReportIssue() {
+  void reportIssue() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
   }
 
@@ -61,7 +61,7 @@ class SettingsScreen extends StatelessWidget {
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
             showArrow: true,
-            onTap: onChangeLanguage,
+            onTap: changeLanguage,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: sessionModel
@@ -82,7 +82,7 @@ class SettingsScreen extends StatelessWidget {
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,
             showArrow: true,
-            onTap: onReportIssue,
+            onTap: reportIssue,
           )
         ],
       ),
