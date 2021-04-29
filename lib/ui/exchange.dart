@@ -7,19 +7,18 @@ import 'package:lantern/ui/widgets/exchange_payment_method_dropdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExchangeTab extends StatelessWidget {
-
   int buyItem = 1;
   int methodItem = 1;
 
-  void _setBuyItem(int value){
-      buyItem = value;
+  void _setBuyItem(int value) {
+    buyItem = value;
   }
 
-  void _setMethodItem(int value){
-      methodItem = value;
+  void _setMethodItem(int value) {
+    methodItem = value;
   }
 
-  launchURL(String url) async {
+  void launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceWebView: false);
     } else {
@@ -27,7 +26,7 @@ class ExchangeTab extends StatelessWidget {
     }
   }
 
-  showToast(String message) {
+  void showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
@@ -72,22 +71,23 @@ class ExchangeTab extends StatelessWidget {
     return BaseScreen(
         title: 'Exchange'.i18n,
         body: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Container(
               alignment: Alignment.center,
               child: Column(
                 children: [
                   Text('In partnership with'.i18n),
                   Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: CustomAssetImage(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: const CustomAssetImage(
                       path: ImagePaths.paxful_logo,
                     ),
                   ),
                   Stack(children: [
                     Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 40),
-                      padding: EdgeInsets.only(left: 6),
+                      margin:
+                          const EdgeInsets.only(left: 30, right: 30, top: 40),
+                      padding: const EdgeInsets.only(left: 6),
                       decoration: BoxDecoration(
                         border: Border.all(color: HexColor(gray4), width: 1),
                         borderRadius: BorderRadius.circular(5),
@@ -96,29 +96,29 @@ class ExchangeTab extends StatelessWidget {
                         // decoration: BoxDecoration(
                         //   color: Colors.red,
                         // ),
-                        padding: EdgeInsets.only(left: 10, right: 10),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         child: BuyDropDownWidget(<BuyModel>[
                           BuyModel(1, 'Bitcoin', ImagePaths.bitcoin_icon),
                           BuyModel(2, 'Tether', ImagePaths.tether_icon)
-                        ],
-                        _setBuyItem),
+                        ], _setBuyItem),
                       ),
                     ),
                     Positioned(
                         left: 42,
                         top: 33.5,
                         child: Container(
-                          padding: EdgeInsets.only(left: 5, right: 5),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
                           color: Colors.white,
                           child: Text(
                             'Buy'.i18n,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 12),
                           ),
                         )),
                   ]),
                   Stack(alignment: Alignment.center, children: [
                     Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           left: 20, right: 20, top: 20, bottom: 10),
                       child: Divider(
                         color: HexColor(gray4),
@@ -127,18 +127,20 @@ class ExchangeTab extends StatelessWidget {
                     Positioned(
                         top: 20,
                         child: Container(
-                          padding: EdgeInsets.only(left: 5, right: 5),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
                           color: Colors.white,
                           child: Text(
                             'With'.i18n,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 12),
                           ),
                         )),
                   ]),
                   Stack(children: [
                     Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, top: 10),
-                      padding: EdgeInsets.only(left: 6),
+                      margin:
+                          const EdgeInsets.only(left: 30, right: 30, top: 10),
+                      padding: const EdgeInsets.only(left: 6),
                       decoration: BoxDecoration(
                         border: Border.all(color: HexColor(gray4), width: 1),
                         borderRadius: BorderRadius.circular(5),
@@ -147,7 +149,7 @@ class ExchangeTab extends StatelessWidget {
                         // decoration: BoxDecoration(
                         //   color: Colors.red,
                         // ),
-                        padding: EdgeInsets.only(left: 10, right: 10),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         child: MethodDropDownWidget(<MethodModel>[
                           MethodModel(1, 'Online Wallets'.i18n),
                           MethodModel(2, 'Bank Transfers'.i18n),
@@ -155,19 +157,19 @@ class ExchangeTab extends StatelessWidget {
                           MethodModel(4, 'Game Cards'.i18n),
                           MethodModel(5, 'Cash Payment'.i18n),
                           MethodModel(6, 'Digital Currencies'.i18n),
-                        ],
-                        _setMethodItem),
+                        ], _setMethodItem),
                       ),
                     ),
                     Positioned(
                         left: 42,
                         top: 3.5,
                         child: Container(
-                          padding: EdgeInsets.only(left: 5, right: 5),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
                           color: Colors.white,
                           child: Text(
                             'Payment Method'.i18n,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 12),
                           ),
                         )),
                   ]),
@@ -175,36 +177,37 @@ class ExchangeTab extends StatelessWidget {
                     child: Container(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          margin:
-                              EdgeInsets.only(left: 70, right: 70, bottom: 20),
+                          margin: const EdgeInsets.only(
+                              left: 70, right: 70, bottom: 20),
                           child: TextButton(
                             onPressed: () {
                               // buyDropDownWidget
-                              launchURL(getUrl(buyItem * 10 + methodItem) ?? '');
+                              launchURL(
+                                  getUrl(buyItem * 10 + methodItem) ?? '');
                             },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.only(top: 15, bottom: 15)),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        HexColor(primaryPink))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'SHOW BEST DEALS'.i18n,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(width: 5),
-                                CustomAssetImage(
+                                const SizedBox(width: 5),
+                                const CustomAssetImage(
                                   path: ImagePaths.open_in_new_icon,
                                   color: Colors.white,
                                 )
                               ],
                             ),
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                    EdgeInsets.only(top: 15, bottom: 15)),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        HexColor(primaryPink))),
                           ),
                         )),
                   ),

@@ -4,7 +4,9 @@ class VPNCustomDivider extends StatelessWidget {
   final double marginTop;
   final double marginBottom;
 
-  const VPNCustomDivider({Key? key, this.marginTop = 16, this.marginBottom = 16}) : super(key: key);
+  const VPNCustomDivider(
+      {Key? key, this.marginTop = 16, this.marginBottom = 16})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

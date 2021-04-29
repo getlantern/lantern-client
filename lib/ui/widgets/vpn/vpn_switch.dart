@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:lantern/package_store.dart';
 

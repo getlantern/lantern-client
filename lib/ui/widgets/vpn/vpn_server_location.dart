@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:lantern/package_store.dart';
 
 class ServerLocationWidget extends StatefulWidget {
-
   final ValueChanged<BuildContext> openInfoServerLocation;
 
   ServerLocationWidget(this.openInfoServerLocation) : super();
@@ -13,7 +12,6 @@ class ServerLocationWidget extends StatefulWidget {
 }
 
 class _ServerLocationWidgetState extends State<ServerLocationWidget> {
-
   void _onTap() {
     widget.openInfoServerLocation(context);
   }
@@ -50,16 +48,17 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
             ),
           ],
         ),
-        vpnModel.vpnStatus((BuildContext context, String vpnStatus,
-            Widget? child) {
-          return vpnModel.serverInfo((BuildContext context,
-              ServerInfo serverInfo, Widget? child) {
+        vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+          return vpnModel.serverInfo(
+              (BuildContext context, ServerInfo serverInfo, Widget? child) {
             if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
               return Row(
                 children: [
-                  ClipRRect(borderRadius: const BorderRadius.all(Radius
-                      .circular(4)), child: Flag(serverInfo.countryCode,
-                      height: 24, width: 36)),
+                  ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      child:
+                          Flag(serverInfo.countryCode, height: 24, width: 36)),
                   const SizedBox(width: 12),
                   Text(
                     serverInfo.city,

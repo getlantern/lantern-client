@@ -37,7 +37,7 @@ class _BuyDropDownWidgetState extends State<BuyDropDownWidget> {
         height: 0,
       ),
       onChanged: (BuyModel? newValue) {
-        if(newValue == null) return;
+        if (newValue == null) return;
         setState(() {
           currentValue = newValue;
           widget.setBuyItem(newValue.id);
@@ -47,7 +47,7 @@ class _BuyDropDownWidgetState extends State<BuyDropDownWidget> {
         return DropdownMenuItem<BuyModel>(
           value: value,
           child: ListTile(
-            contentPadding: EdgeInsets.only(left: 0, right: 0),
+            contentPadding: const EdgeInsets.only(left: 0, right: 0),
             leading: CustomAssetImage(
               path: value.icon,
             ),
@@ -69,6 +69,6 @@ class BuyModel {
 
   @override
   bool operator ==(Object other) {
-    return other != null && other is BuyModel && other.id == this.id;
+    return other is BuyModel && other.id == id;
   }
 }

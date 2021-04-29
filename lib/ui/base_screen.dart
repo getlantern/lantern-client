@@ -8,12 +8,13 @@ class BaseScreen extends StatelessWidget {
   final Widget body;
   final FloatingActionButton? actionButton;
 
-  BaseScreen({this.title = '',
-    this.logoTitle = null,
-    this.actions,
-    required this.body,
-    this.actionButton,
-    Key? key})
+  BaseScreen(
+      {this.title = '',
+      this.logoTitle,
+      this.actions,
+      required this.body,
+      this.actionButton,
+      Key? key})
       : super(key: key);
 
   @override

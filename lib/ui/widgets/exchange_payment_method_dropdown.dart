@@ -37,14 +37,14 @@ class _MethodDropDownWidgetState extends State<MethodDropDownWidget> {
         height: 0,
       ),
       onChanged: (MethodModel? newValue) {
-        if(newValue == null) return;
+        if (newValue == null) return;
         setState(() {
           currentValue = newValue;
           widget.setMethodItem(newValue.id);
         });
       },
       items:
-      widget.items.map<DropdownMenuItem<MethodModel>>((MethodModel value) {
+          widget.items.map<DropdownMenuItem<MethodModel>>((MethodModel value) {
         return DropdownMenuItem<MethodModel>(
           value: value,
           child: Text(value.name),
@@ -62,6 +62,6 @@ class MethodModel {
 
   @override
   bool operator ==(Object other) {
-    return other != null && other is MethodModel && other.id == this.id;
+    return other is MethodModel && other.id == id;
   }
 }

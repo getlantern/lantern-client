@@ -1,14 +1,16 @@
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
-import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
+
+import 'custom_rounded_rectangle_border.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
   final Function updateCurrentIndexPageView;
 
-  CustomBottomBar({this.currentIndex = 0,
-    required this.updateCurrentIndexPageView,
-    Key? key})
+  CustomBottomBar(
+      {this.currentIndex = 0,
+      required this.updateCurrentIndexPageView,
+      Key? key})
       : super(key: key);
 
   Widget activeIcon({bool isActive = false}) {
@@ -23,20 +25,23 @@ class CustomBottomBar extends StatelessWidget {
         ),
         boxShadow: isActive
             ? [
-          BoxShadow(
-            color: Colors.green.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 0), // changes position of shadow
-          ),
-        ]
+                BoxShadow(
+                  color: Colors.green.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 0), // changes position of shadow
+                ),
+              ]
             : [],
       ),
     );
   }
 
   Widget renderBottomTabItem(
-      {required TAB_ENUM tabEnum, required int index, bool isActive = false, required BuildContext context}) {
+      {required TAB_ENUM tabEnum,
+      required int index,
+      bool isActive = false,
+      required BuildContext context}) {
     String text;
     String icon;
     var sessionModel = context.watch<SessionModel>();
@@ -81,47 +86,47 @@ class CustomBottomBar extends StatelessWidget {
               topSide: currentIndex == index
                   ? null
                   : BorderSide(
-                color: HexColor(borderColor),
-                width: 1,
-              ),
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
               rightSide: currentIndex == index ||
-                  currentIndex == 2 && index == 0 ||
-                  currentIndex == 0 && index == 1
+                      currentIndex == 2 && index == 0 ||
+                      currentIndex == 0 && index == 1
                   ? null
                   : BorderSide(
-                color: HexColor(borderColor),
-                width: 1,
-              ),
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
               leftSide: currentIndex == index ||
-                  currentIndex == 0 && index == 2 ||
-                  currentIndex == 2 && index == 1
+                      currentIndex == 0 && index == 2 ||
+                      currentIndex == 2 && index == 1
                   ? null
                   : BorderSide(
-                color: HexColor(borderColor),
-                width: 1,
-              ),
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
               topLeftCornerSide: BorderSide(
                 color: (currentIndex == 0 && index == 1) ||
-                    (currentIndex == 1 && index == 2)
+                        (currentIndex == 1 && index == 2)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
               topRightCornerSide: BorderSide(
                 color: (currentIndex == 1 && index == 0) ||
-                    (currentIndex == 2 && index == 1)
+                        (currentIndex == 2 && index == 1)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
                   (currentIndex == 0 && index == 1) ||
-                      (currentIndex == 1 && index == 2)
+                          (currentIndex == 1 && index == 2)
                       ? borderRadius
                       : 0,
                 ),
                 topRight: Radius.circular(
                   (currentIndex == 1 && index == 0) ||
-                      (currentIndex == 2 && index == 1)
+                          (currentIndex == 2 && index == 1)
                       ? borderRadius
                       : 0,
                 ),
@@ -133,25 +138,27 @@ class CustomBottomBar extends StatelessWidget {
             children: [
               tabEnum == TAB_ENUM.ACCOUNT
                   ? sessionModel.shouldShowYinbiBadge((BuildContext context,
-                  bool shouldShowYinbiBadge, Widget? child) {
-                return CustomBadge(
-                  count: 1,
-                  fontSize: 8.0,
-                  showBadge: shouldShowYinbiBadge,
-                  child: CustomAssetImage(
-                    path: icon,
-                    size: 24,
-                    color: HexColor(currentIndex == index
-                        ? selectedTabLabelColor
-                        : unselectedTabLabelColor),),);
-              })
+                      bool shouldShowYinbiBadge, Widget? child) {
+                      return CustomBadge(
+                        count: 1,
+                        fontSize: 8.0,
+                        showBadge: shouldShowYinbiBadge,
+                        child: CustomAssetImage(
+                          path: icon,
+                          size: 24,
+                          color: HexColor(currentIndex == index
+                              ? selectedTabLabelColor
+                              : unselectedTabLabelColor),
+                        ),
+                      );
+                    })
                   : CustomAssetImage(
-                path: icon,
-                size: 24,
-                color: HexColor(currentIndex == index
-                    ? selectedTabLabelColor
-                    : unselectedTabLabelColor),
-              ),
+                      path: icon,
+                      size: 24,
+                      color: HexColor(currentIndex == index
+                          ? selectedTabLabelColor
+                          : unselectedTabLabelColor),
+                    ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -187,17 +194,16 @@ class CustomBottomBar extends StatelessWidget {
           children: TAB_ENUM.values
               .asMap()
               .map(
-                (index, tabEnum) =>
-                MapEntry(
+                (index, tabEnum) => MapEntry(
                   index,
                   renderBottomTabItem(
-                    index: index,
-                    tabEnum: tabEnum,
-                    isActive: (vpnStatus == 'connected' ||
-                        vpnStatus == 'disconnecting'),
-                    context: context
-                  ),
-                ),)
+                      index: index,
+                      tabEnum: tabEnum,
+                      isActive: (vpnStatus == 'connected' ||
+                          vpnStatus == 'disconnecting'),
+                      context: context),
+                ),
+              )
               .values
               .toList(),
         );

@@ -1,6 +1,6 @@
 import 'package:lantern/package_store.dart';
 
-showInfoDialog(BuildContext context,
+void showInfoDialog(BuildContext context,
     {String title = '', String des = '', String icon = ''}) {
   showDialog(
     context: context,

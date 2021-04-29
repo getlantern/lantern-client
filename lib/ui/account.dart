@@ -10,16 +10,17 @@ class AccountTab extends StatefulWidget {
 }
 
 class _AccountTabState extends State<AccountTab> {
-  renderYinbiItem({required String icon, required String title, void Function()? onTap}) {
+  Widget renderYinbiItem(
+      {required String icon, required String title, void Function()? onTap}) {
     var sessionModel = context.watch<SessionModel>();
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 8,
       ),
       child: InkWell(
         onTap: onTap,
         child: Ink(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 16,
             horizontal: 24,
           ),
@@ -32,7 +33,7 @@ class _AccountTabState extends State<AccountTab> {
                     path: icon,
                     size: 24,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Text(
@@ -56,26 +57,23 @@ class _AccountTabState extends State<AccountTab> {
     );
   }
 
-  renderAccountItem({required String icon, required String title, void Function()? onTap}) {
+  Widget renderAccountItem(
+      {required String icon, required String title, void Function()? onTap}) {
     return Container(
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
           top: 8,
         ),
         child: InkWell(
           onTap: onTap,
           child: Ink(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 16,
               horizontal: 24,
             ),
             child: Row(
               children: [
-                CustomAssetImage(
-                  path: icon,
-                  size: 24,
-                  color: Colors.black
-                ),
-                SizedBox(
+                CustomAssetImage(path: icon, size: 24, color: Colors.black),
+                const SizedBox(
                   width: 16,
                 ),
                 Text(
@@ -88,17 +86,17 @@ class _AccountTabState extends State<AccountTab> {
         ));
   }
 
-  renderProAccountManagementItem() {
+  Widget renderProAccountManagementItem() {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             top: 8,
           ),
           child: InkWell(
             onTap: onOpenProAccountManagement,
             child: Ink(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 16,
                 horizontal: 24,
               ),
@@ -107,12 +105,12 @@ class _AccountTabState extends State<AccountTab> {
                 children: [
                   Row(
                     children: [
-                      CustomAssetImage(
+                      const CustomAssetImage(
                         path: ImagePaths.account_icon,
                         size: 32,
                         color: Colors.black,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       Text(
@@ -121,7 +119,7 @@ class _AccountTabState extends State<AccountTab> {
                       ),
                     ],
                   ),
-                  CustomAssetImage(
+                  const CustomAssetImage(
                     path: ImagePaths.keyboard_arrow_right_icon,
                     size: 24,
                   ),
@@ -130,12 +128,12 @@ class _AccountTabState extends State<AccountTab> {
             ),
           ),
         ),
-        CustomDivider(),
+        const CustomDivider(),
       ],
     );
   }
 
-  renderFreeItem({required FREE_ACCOUNT_ITEM accountItemEnum}) {
+  Widget renderFreeItem({required FREE_ACCOUNT_ITEM accountItemEnum}) {
     switch (accountItemEnum) {
       case FREE_ACCOUNT_ITEM.UPGRADE_TO_LANTERN_PRO:
         return renderAccountItem(
@@ -171,7 +169,7 @@ class _AccountTabState extends State<AccountTab> {
         return Column(
           children: [
             //divider
-            CustomDivider(),
+            const CustomDivider(),
             renderAccountItem(
               icon: ImagePaths.settings_icon,
               title: 'settings'.i18n,
@@ -180,11 +178,11 @@ class _AccountTabState extends State<AccountTab> {
           ],
         );
       default:
-        return null;
+        throw Exception("this shouldn't happen");
     }
   }
 
-  renderProItem({required PRO_ACCOUNT_ITEM accountItemEnum}) {
+  Widget renderProItem({required PRO_ACCOUNT_ITEM accountItemEnum}) {
     switch (accountItemEnum) {
       case PRO_ACCOUNT_ITEM.PRO_ACCOUNT_MANAGEMENT:
         return renderProAccountManagementItem();
@@ -216,7 +214,7 @@ class _AccountTabState extends State<AccountTab> {
         return Column(
           children: [
             //divider
-            CustomDivider(),
+            const CustomDivider(),
             renderAccountItem(
               icon: ImagePaths.settings_icon,
               title: 'settings'.i18n,
@@ -225,46 +223,47 @@ class _AccountTabState extends State<AccountTab> {
           ],
         );
       default:
-        return null;
+        throw Exception("this shouldn't happen");
     }
   }
 
   //FUNCTION
 
-  onOpenProAccountManagement() {
+  void onOpenProAccountManagement() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_ACCOUNT_MANAGEMENT);
   }
 
-  onUpgradeToLanternPro() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
+  void onUpgradeToLanternPro() {
+    LanternNavigator.startScreen(
+        LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
   }
 
-  onAuthorizeDeviceForPro() {
+  void onAuthorizeDeviceForPro() {
     LanternNavigator.startScreen(
         LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
   }
 
-  onAddDevice() {
+  void onAddDevice() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_ADD_DEVICE);
   }
 
-  onInviteFriends() {
+  void onInviteFriends() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
   }
 
-  onOpenDesktopVersion() {
+  void onOpenDesktopVersion() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
   }
 
-  onOpenFreeYinbiCrypto() {
+  void onOpenFreeYinbiCrypto() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_FREE_YINBI);
   }
 
-  onOpenYinbiRedemption() {
+  void onOpenYinbiRedemption() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_YINBI_REDEMPTION);
   }
 
-  onOpenSettings() {
+  void onOpenSettings() {
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => SettingsScreen()),
@@ -279,7 +278,7 @@ class _AccountTabState extends State<AccountTab> {
       return BaseScreen(
           title: 'Account'.i18n,
           body: ListView.builder(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               bottom: 8,
             ),
             itemCount: proUser
