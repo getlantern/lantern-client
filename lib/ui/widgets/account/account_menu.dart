@@ -71,7 +71,7 @@ class AccountMenu extends StatelessWidget {
         title: 'free_yinbi_crypto'.i18n,
         onTap: openFreeYinbiCrypto,
       ),
-      const CustomDivider(),
+      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
@@ -90,7 +90,7 @@ class AccountMenu extends StatelessWidget {
         showArrow: true,
         onTap: openProAccountManagement,
       ),
-      const CustomDivider(),
+      CustomDivider(),
       SettingsItem(
           icon: ImagePaths.devices_icon,
           title: 'add_device'.i18n,
@@ -110,7 +110,7 @@ class AccountMenu extends StatelessWidget {
         title: 'yinbi_redemption'.i18n,
         onTap: openYinbiRedemption,
       ),
-      const CustomDivider(),
+      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,

@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
               );
             }),
           ),
-          const CustomDivider(),
+          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
@@ -77,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
               }),
             ),
           ),
-          const CustomDivider(),
+          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,
