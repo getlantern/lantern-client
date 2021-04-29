@@ -729,7 +729,7 @@ packages:
   wechat_assets_picker:
     dependency: "direct main"
     description:
-      path: wechat_assets_picker
+      path: "../wechat_assets_picker"
       relative: true
     source: path
     version: "5.1.3"
