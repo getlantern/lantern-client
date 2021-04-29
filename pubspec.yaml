@@ -53,8 +53,6 @@ dependencies:
 
   badges: ^2.0.0-nullsafety.1
 
-  flutter_localized_locales: ^2.0.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
