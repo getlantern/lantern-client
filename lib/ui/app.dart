@@ -72,7 +72,7 @@ class LanternApp extends StatelessWidget {
     return ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.grey,
-      appBarTheme: const AppBarTheme(brightness: Brightness.light),
+      appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       accentColor: Colors.black,
       textTheme: Theme.of(context).textTheme.copyWith(
             headline1: Theme.of(context)
