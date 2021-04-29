@@ -1,14 +1,141 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# Anh Phan <vietnamesel10n@gmail.com>, 2021
+# Nathan Tran, 2021
+# Yen Le Van <yenlevanbk@gmail.com>, 2021
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021\n"
+"Language-Team: Vietnamese (https://www.transifex.com/lantern-1/teams/94371/vi/)\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "Sử dụng dữ liệu hàng ngày"
+
+msgid "is"
+msgstr "là"
+
 msgid "on"
-msgstr "Bật"
+msgstr "Đã kết nối"
 
 msgid "off"
-msgstr "Tắt"
+msgstr "Đã ngắt kết nối"
+
+msgid "Disconnecting"
+msgstr "Đang ngắt kết nối..."
+
+msgid "Connecting"
+msgstr "Đang kết nối..."
+
+msgid "Go Pro Title"
+msgstr "Đến Pro!"
+
+msgid "Go Pro Description"
+msgstr "Mở khóa tốc độ nhanh hơn và dữ liệu không giới hạn!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Dữ liệu không giới hạn + tiền điện tử Yinbi miễn phí!"
 
 msgid "Server Location"
-msgstr "Vị trí máy chủ"
+msgstr "Địa chỉ Server"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern sử dụng lựa chọn máy chủ thông minh để tự động kết nối bạn với các "
+"trung tâm dữ liệu tốt nhất của chúng tôi."
+
+msgid "OK"
+msgstr "ĐỒNG Ý"
+
+msgid "pro_account_management"
+msgstr "Quản Trị Tài Khoản Pro"
+
+msgid "add_device"
+msgstr "Thêm Máy"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Nâng Cấp lên Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Cho Phép Máy dùng bản Pro"
+
+msgid "invite_friends"
+msgstr "Mời Bạn Bè"
+
+msgid "desktop_version"
+msgstr "Phiên bản Để Bàn"
+
+msgid "free_yinbi_crypto"
+msgstr "Tiền điện tử Yinbi miễn phí"
+
+msgid "yinbi_redemption"
+msgstr "Đổi thưởng Yinbi"
+
+msgid "settings"
+msgstr "Cài đặt"
+
+msgid "proxy_all"
+msgstr "Proxy tất cả đang BẬT"
+
+msgid "language"
+msgstr "Ngôn ngữ"
+
+msgid "report_issue"
+msgstr "Báo cáo lỗi"
+
+msgid "title_proxy_all_dialog"
+msgstr "Proxy tất cả"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Nếu được bật, tất cả lưu lượng sẽ được gửi qua Lantern (an toàn hơn). Nếu bị"
+" tắt, chỉ lưu lượng bị chặn mới được gửi qua Lantern (nhanh hơn)."
 
 msgid "Exchange"
-msgstr "Chuyển đổi"
+msgstr "Trao đổi"
 
 msgid "Account"
 msgstr "Tài khoản"
+
+msgid "In partnership with"
+msgstr "Hợp tác với"
+
+msgid "Buy"
+msgstr "Mua"
+
+msgid "With"
+msgstr "Với"
+
+msgid "Online Wallets"
+msgstr "Các ví trực tuyến"
+
+msgid "Bank Transfers"
+msgstr "Chuyển khoản ngân hàng"
+
+msgid "Gift Cards"
+msgstr "Thẻ quà tặng"
+
+msgid "Game Cards"
+msgstr "Thẻ Game"
+
+msgid "Cash Payment"
+msgstr "Thanh toán tiền mặt"
+
+msgid "Digital Currencies"
+msgstr "Tiền kỹ thuật số"
+
+msgid "Payment Method"
+msgstr "Phương thức Trả tiền"
+
+msgid "SHOW BEST DEALS"
+msgstr "HIỂN THỊ CÁC ĐỀ XUẤT TỐT NHẤT"
+
+msgid "VPN Status"
+msgstr "Trạng thái VPN"
+
+msgid "VPN"
+msgstr "VPN"
