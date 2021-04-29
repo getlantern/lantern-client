@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/settings/settings_item.dart';
+
+import 'settings_item.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
@@ -37,7 +38,6 @@ class SettingsScreen extends StatelessWidget {
             icon: ImagePaths.key_icon,
             title: 'proxy_all'.i18n,
             inkVerticalPadding: 4,
-            showArrow: false,
             openInfoDialog: openInfoProxyAll,
             child: sessionModel
                 .proxyAll((BuildContext context, bool proxyAll, Widget? child) {
@@ -60,6 +60,7 @@ class SettingsScreen extends StatelessWidget {
           SettingsItem(
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
+            showArrow: true,
             onTap: onChangeLanguage,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -80,6 +81,7 @@ class SettingsScreen extends StatelessWidget {
           SettingsItem(
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,
+            showArrow: true,
             onTap: onReportIssue,
           )
         ],
