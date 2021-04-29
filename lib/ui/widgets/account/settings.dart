@@ -48,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
                 padding: 2,
                 toggleSize: 18.0,
                 value: proxyAll,
-                activeColor: HexColor(greenDotColor),
+                activeColor: HexColor(indicatorGreen),
                 inactiveColor: HexColor(offSwitchColor),
                 onToggle: (bool newValue) {
                   sessionModel.switchProxyAll(newValue);

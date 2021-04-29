@@ -19,7 +19,7 @@ class CustomBottomBar extends StatelessWidget {
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(
-        color: isActive ? HexColor(greenDotColor) : HexColor(redDotColor),
+        color: isActive ? HexColor(indicatorGreen) : HexColor(indicatorRed),
         borderRadius: const BorderRadius.all(
           Radius.circular(activeIconSize / 2),
         ),
