@@ -30,6 +30,8 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = 1;
     } else if (_initialRoute.startsWith(routeSettings)) {
       _currentIndex = 2;
+    } else if (_initialRoute.startsWith(routeAccount)) {
+      _currentIndex = 3;
     }
   }
 
