@@ -2,6 +2,7 @@ package org.getlantern.lantern
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
