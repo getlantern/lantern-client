@@ -79,7 +79,7 @@ msgid "settings"
 msgstr "Configuración"
 
 msgid "proxy_all"
-msgstr "Proxyficar todo el tráfico está ACTIVADO"
+msgstr "Proxyficar todo"
 
 msgid "language"
 msgstr "Idioma"

@@ -68,7 +68,7 @@ msgid "settings"
 msgstr "Settings"
 
 msgid "proxy_all"
-msgstr "Proxy all is ON"
+msgstr "Proxy everything"
 
 msgid "language"
 msgstr "Language"
@@ -95,6 +95,12 @@ msgstr "In partnership with"
 
 msgid "Buy"
 msgstr "Buy"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "With"
