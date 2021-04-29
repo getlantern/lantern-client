@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -107,8 +105,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
-    return MaterialApp(
-      home: FutureBuilder(
+    return FutureBuilder(
         future: loadAsync,
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           return sessionModel
@@ -130,30 +127,6 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           });
-        },
-      ),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        const LocaleNamesLocalizationsDelegate(),
-      ],
-      supportedLocales: [
-        const Locale('ar', 'EG'),
-        const Locale('fr', 'FR'),
-        const Locale('en', 'US'),
-        const Locale('fa', 'IR'),
-        const Locale('th', 'TH'),
-        const Locale('ms', 'MY'),
-        const Locale('ru', 'RU'),
-        const Locale('ur', 'IN'),
-        const Locale('zh', 'CN'),
-        const Locale('zh', 'HK'),
-        const Locale('es', 'ES'),
-        const Locale('tr', 'TR'),
-        const Locale('vi', 'VN'),
-        const Locale('my', 'MM'),
-      ],
-    );
+        });
   }
 }
