@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
@@ -31,7 +30,6 @@ class LanternApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
-          const LocaleNamesLocalizationsDelegate(),
         ],
         supportedLocales: [
           const Locale('ar', 'EG'),
@@ -72,7 +70,8 @@ class LanternApp extends StatelessWidget {
     return ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.grey,
-      appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+      appBarTheme:
+          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       accentColor: Colors.black,
       textTheme: Theme.of(context).textTheme.copyWith(
             headline1: Theme.of(context)
