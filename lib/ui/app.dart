@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
@@ -29,10 +30,24 @@ class LanternApp extends StatelessWidget {
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          const LocaleNamesLocalizationsDelegate(),
         ],
         supportedLocales: [
+          const Locale('ar', 'EG'),
+          const Locale('fr', 'FR'),
           const Locale('en', 'US'),
-          const Locale('es'),
+          const Locale('fa', 'IR'),
+          const Locale('th', 'TH'),
+          const Locale('ms', 'MY'),
+          const Locale('ru', 'RU'),
+          const Locale('ur', 'IN'),
+          const Locale('zh', 'CN'),
+          const Locale('zh', 'HK'),
+          const Locale('es', 'ES'),
+          const Locale('tr', 'TR'),
+          const Locale('vi', 'VN'),
+          const Locale('my', 'MM'),
         ],
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute<dynamic>(
