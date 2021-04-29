@@ -1,0 +1,148 @@
+# 
+# Translators:
+# Lantern, 2021
+# Derek F <derek@getlantern.org>, 2021
+# NoProfile, 2021
+# Evan <alireza.firoozi68@gmail.com>, 2021
+# Sina <sina@asl19.org>, 2021
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2021
+# Amir Moezzi <amirreza.mz@yahoo.com>, 2021
+# Vaseto Nora <n.nouri67@gmail.com>, 2021
+# Mary Sol <salar.adlparvar@gmail.com>, 2021
+# b0b47d46632b78a09a40de799fda9a65, 2021
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2021\n"
+"Language-Team: Persian (Iran) (https://www.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "مصرف داده روزانه"
+
+msgid "is"
+msgstr "در حال"
+
+msgid "on"
+msgstr "متصل شد"
+
+msgid "off"
+msgstr "قطع شده است"
+
+msgid "Disconnecting"
+msgstr "در حال قطع اتصال…"
+
+msgid "Connecting"
+msgstr "درحال اتصال..."
+
+msgid "Go Pro Title"
+msgstr "به نسخه Pro بروید!"
+
+msgid "Go Pro Description"
+msgstr "به سرعت‌های بالاتر و داده‌های نامحدود دسترسی پیدا کنید!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "داده‌های نامحدود + رمزارز Yinbi رایگان!"
+
+msgid "Server Location"
+msgstr "موقعیت سرور"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern از سرور هوشمند انتخابی برای اتصال خودکار شما به بهترین مراکز داده ما"
+" استفاده می‌کند."
+
+msgid "OK"
+msgstr "بسیار خوب"
+
+msgid "pro_account_management"
+msgstr "مدیریت حساب نسخه حرفه‌ای"
+
+msgid "add_device"
+msgstr "افزودن دستگاه جدید"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "رتقاء به نسخه Pro  فانوس"
+
+msgid "authorize_device_for_pro"
+msgstr "تایید دستگاه برای نسخه حرفه ای"
+
+msgid "invite_friends"
+msgstr "دعوت از دوستان"
+
+msgid "desktop_version"
+msgstr "نسخه دسک‌تاپ"
+
+msgid "free_yinbi_crypto"
+msgstr "ارز رمزنگاری‌شده رایگان Yinbi"
+
+msgid "yinbi_redemption"
+msgstr "بازخرید Yinbi"
+
+msgid "settings"
+msgstr "تنظیمات"
+
+msgid "proxy_all"
+msgstr "پراکسی کردن تمام ترافیک روشن است"
+
+msgid "language"
+msgstr "زبان"
+
+msgid "report_issue"
+msgstr "گزارش مشکل"
+
+msgid "title_proxy_all_dialog"
+msgstr "پراکسی کردن تمام ترافیک"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"اگر این گزینه فعال باشد همه ترافیک از طریق Lantern (امن‌تر) ارسال خواهد شد. "
+"اگر این گزینه فعال نباشد، فقط ترافیک مسدودشده از طریق Lantern (سریع‌تر) "
+"ارسال خواهد شد."
+
+msgid "Exchange"
+msgstr "تبدیل ارز"
+
+msgid "Account"
+msgstr "حساب کاربری"
+
+msgid "In partnership with"
+msgstr "با شراکت:"
+
+msgid "Buy"
+msgstr "خرید"
+
+msgid "With"
+msgstr "با"
+
+msgid "Online Wallets"
+msgstr "کیف‌های پول آنلاین"
+
+msgid "Bank Transfers"
+msgstr "انتقالات بانکی"
+
+msgid "Gift Cards"
+msgstr "کارت‌های هدیه"
+
+msgid "Game Cards"
+msgstr "کارت‌های بازی"
+
+msgid "Cash Payment"
+msgstr "پرداخت نقدی"
+
+msgid "Digital Currencies"
+msgstr "ارزهای دیجیتالی"
+
+msgid "Payment Method"
+msgstr "روش پرداخت"
+
+msgid "SHOW BEST DEALS"
+msgstr "نمایش بهترین قیمت‌ها"
+
+msgid "VPN Status"
+msgstr "وضعیت VPN"
+
+msgid "VPN"
+msgstr "VPN"

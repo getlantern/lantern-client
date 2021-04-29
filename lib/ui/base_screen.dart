@@ -3,13 +3,13 @@ import 'package:lantern/package_store.dart';
 
 class BaseScreen extends StatelessWidget {
   final String title;
-  final String logoTitle;
+  final String? logoTitle;
   final List<Widget>? actions;
   final Widget body;
   final FloatingActionButton? actionButton;
 
   BaseScreen({this.title = '',
-    this.logoTitle = '',
+    this.logoTitle = null,
     this.actions,
     required this.body,
     this.actionButton,

@@ -27,7 +27,7 @@ TextStyle? tsCaption(BuildContext context) => Theme.of(context).textTheme.captio
 
 TextStyle? tsOverline(BuildContext context) => Theme.of(context).textTheme.overline;
 
-TextStyle? tsTitleAppbar() => GoogleFonts.roboto().copyWith(fontWeight: FontWeight.bold, fontSize: 20);
+TextStyle? tsTitleAppbar() => GoogleFonts.roboto().copyWith(fontWeight: FontWeight.bold, fontSize: 20, color: const Color(0xff040505));
 
 TextStyle? tsTitleItem() => GoogleFonts.roboto().copyWith(fontWeight: FontWeight.w500, fontSize: 16);
 

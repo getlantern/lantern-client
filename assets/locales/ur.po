@@ -1,0 +1,139 @@
+# 
+# Translators:
+# Diversity83 83, 2021
+# tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2021
+# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2021\n"
+"Language-Team: Urdu (https://www.transifex.com/lantern-1/teams/94371/ur/)\n"
+"Language: ur\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "روزانہ ڈیٹا کا استعمال"
+
+msgid "is"
+msgstr "منقطع"
+
+msgid "on"
+msgstr "کنیکٹ ہو چکا ہے"
+
+msgid "off"
+msgstr "منقطع"
+
+msgid "Disconnecting"
+msgstr "ہو رہا ہے…"
+
+msgid "Connecting"
+msgstr "کنیکٹ ہو رہا ہے۔۔۔"
+
+msgid "Go Pro Title"
+msgstr "پرو اپنائیں!"
+
+msgid "Go Pro Description"
+msgstr "تیز رفتار، اور لامحدود ڈیٹا کو ان لاک کریں!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "لامحدود ڈیٹا + مفت Yinbi کریپٹوکرنسی!"
+
+msgid "Server Location"
+msgstr "سرور لوکیشن"
+
+msgid "Server Location Info"
+msgstr ""
+"آپ کو خودکارانہ طور پر ہمارے ڈیٹا کے بہترین مراکز سے جوڑنے کے لئے Lantern "
+"اسمارٹ سرور انتخاب کا استعمال کرتا ہے۔"
+
+msgid "OK"
+msgstr "اوکے"
+
+msgid "pro_account_management"
+msgstr "پرو اکاؤنٹ مینجمنٹ"
+
+msgid "add_device"
+msgstr "ڈیوائس شامل کیجئے"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "لینٹرن پرو پر اَپ گریڈ کیجئے"
+
+msgid "authorize_device_for_pro"
+msgstr "پرو کے لئے منظور شدہ ڈیوائس"
+
+msgid "invite_friends"
+msgstr "دوستوں کو مدعو کیجئے"
+
+msgid "desktop_version"
+msgstr "ڈیسک ٹاپ ورژن"
+
+msgid "free_yinbi_crypto"
+msgstr "مفت Yinbi کرپٹوکرنسی"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi بھنائیں"
+
+msgid "settings"
+msgstr "سینٹنگ"
+
+msgid "proxy_all"
+msgstr "پراکسی آل آن ہے"
+
+msgid "language"
+msgstr "زبان"
+
+msgid "report_issue"
+msgstr "مسئلہ کو رپورٹ کریں"
+
+msgid "title_proxy_all_dialog"
+msgstr "پراکسی آل"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"فعال ہونے پر تمام ٹریفک کو Lantern کے ذریعہ بھیجا جائے گا (مزید محفوظ)۔ غیر "
+"فعال ہونے پر، صرف بلاک شدہ ٹریفک کو Lantern کے ذریعہ بھیجا جائے گا (تیز)۔"
+
+msgid "Exchange"
+msgstr "تبادلہ"
+
+msgid "Account"
+msgstr "اکاؤنٹ"
+
+msgid "In partnership with"
+msgstr "کے ساتھ شراکت میں"
+
+msgid "Buy"
+msgstr "خریدیں"
+
+msgid "With"
+msgstr "کے ساتھ"
+
+msgid "Online Wallets"
+msgstr "آن لائن والیٹس"
+
+msgid "Bank Transfers"
+msgstr "بینک ٹرانسفرز"
+
+msgid "Gift Cards"
+msgstr "گفٹ کارڈز"
+
+msgid "Game Cards"
+msgstr "گیم کارڈز"
+
+msgid "Cash Payment"
+msgstr "نقد ادائیگی"
+
+msgid "Digital Currencies"
+msgstr "ڈیجیٹل کرنسیاں"
+
+msgid "Payment Method"
+msgstr "رقم ادائیگی کا طریقہ"
+
+msgid "SHOW BEST DEALS"
+msgstr "بہترین ڈیلز دکھائیں"
+
+msgid "VPN Status"
+msgstr "VPN کی حالت"
+
+msgid "VPN"
+msgstr "VPN"

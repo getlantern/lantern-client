@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/utils/hex_color.dart';
@@ -20,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final String _initialRoute;
 
+  late Future<void> loadAsync;
+
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
@@ -34,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     _pageController = PageController(initialPage: _currentIndex);
     final mainMethodChannel = const MethodChannel('lantern_method_channel');
     final eventManager = EventManager('lantern_event_channel');
+    loadAsync = Localization.loadTranslations();
 
     eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -98,22 +104,54 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        onPageChanged: onPageChange,
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        // TODO: only disable scrolling while we need to detect the drag gesture for the record button
-        children: [
-          VPNTab(),
-          ExchangeTab(),
-          AccountTab(),
-        ],
+    var sessionModel = context.watch<SessionModel>();
+    return MaterialApp(
+      home: FutureBuilder(
+        future: loadAsync,
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return sessionModel
+              .language((BuildContext context, String lang, Widget? child) {
+            Localization.locale = lang;
+            return Scaffold(
+              body: PageView(
+                onPageChanged: onPageChange,
+                controller: _pageController,
+                children: [
+                  VPNTab(),
+                  ExchangeTab(),
+                  AccountTab(),
+                ],
+              ),
+              bottomNavigationBar: CustomBottomBar(
+                currentIndex: _currentIndex,
+                updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+              ),
+            );
+          });
+        },
       ),
-      bottomNavigationBar: CustomBottomBar(
-        currentIndex: _currentIndex,
-        updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-      ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        LocaleNamesLocalizationsDelegate(),
+      ],
+      supportedLocales: [
+        const Locale('ar', 'EG'),
+        const Locale('fr', 'FR'),
+        const Locale('en', 'US'),
+        const Locale('fa', 'IR'),
+        const Locale('th', 'TH'),
+        const Locale('ms', 'MY'),
+        const Locale('ru', 'RU'),
+        const Locale('ur', 'IN'),
+        const Locale('zh', 'CN'),
+        const Locale('zh', 'HK'),
+        const Locale('es', 'ES'),
+        const Locale('tr', 'TR'),
+        const Locale('vi', 'VN'),
+        const Locale('my', 'MM'),
+      ],
     );
   }
 }

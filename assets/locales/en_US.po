@@ -1,0 +1,130 @@
+# 
+msgid ""
+msgstr ""
+
+msgid "Daily Data Usage"
+msgstr "Daily Data Usage"
+
+msgid "is"
+msgstr "is"
+
+msgid "on"
+msgstr "Connected"
+
+msgid "off"
+msgstr "Disconnected"
+
+msgid "Disconnecting"
+msgstr "Disconnecting..."
+
+msgid "Connecting"
+msgstr "Connecting..."
+
+msgid "Go Pro Title"
+msgstr "Go Pro!"
+
+msgid "Go Pro Description"
+msgstr "Unlock faster speeds, and unlimited data!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Unlimited data + free Yinbi cryptocurrency!"
+
+msgid "Server Location"
+msgstr "Server Location"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern uses smart server selection to automatically connect you to our best"
+" data centers."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "pro_account_management"
+msgstr "Pro Account Management"
+
+msgid "add_device"
+msgstr "Add Device"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Upgrade to Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Authorize Device for Pro"
+
+msgid "invite_friends"
+msgstr "Invite Friends"
+
+msgid "desktop_version"
+msgstr "Desktop version"
+
+msgid "free_yinbi_crypto"
+msgstr "Free Yinbi Cryptocurrency"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi Redemption"
+
+msgid "settings"
+msgstr "Settings"
+
+msgid "proxy_all"
+msgstr "Proxy all is ON"
+
+msgid "language"
+msgstr "Language"
+
+msgid "report_issue"
+msgstr "Report an issue"
+
+msgid "title_proxy_all_dialog"
+msgstr "Proxy All"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"If enabled all traffic will be sent through Lantern (more secure). If "
+"disabled, only blocked traffic will be sent through Lantern (faster)."
+
+msgid "Exchange"
+msgstr "Exchange"
+
+msgid "Account"
+msgstr "Account"
+
+msgid "In partnership with"
+msgstr "In partnership with"
+
+msgid "Buy"
+msgstr "Buy"
+
+msgid "With"
+msgstr "With"
+
+msgid "Online Wallets"
+msgstr "Online Wallets"
+
+msgid "Bank Transfers"
+msgstr "Bank Transfers"
+
+msgid "Gift Cards"
+msgstr "Gift Cards"
+
+msgid "Game Cards"
+msgstr "Game Cards"
+
+msgid "Cash Payment"
+msgstr "Cash Payment"
+
+msgid "Digital Currencies"
+msgstr "Digital Currencies"
+
+msgid "Payment Method"
+msgstr "Payment Method"
+
+msgid "SHOW BEST DEALS"
+msgstr "SHOW BEST DEALS"
+
+msgid "VPN Status"
+msgstr "VPN Status"
+
+msgid "VPN"
+msgstr "VPN"
