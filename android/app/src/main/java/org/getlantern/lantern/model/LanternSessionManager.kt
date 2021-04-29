@@ -448,7 +448,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val RENEWAL_LAST_SEEN = "renewalseen"
         private const val PROVIDER = "provider"
         private const val RESELLER_CODE = "resellercode"
-        const val SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
+        private const val SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200

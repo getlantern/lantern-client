@@ -20,6 +20,10 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
 
+  Widget language(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('lang', builder: builder);
+  }
+
   Future<void> switchProxyAll<T>(bool on) async {
     methodChannel.invokeMethod('switchProxyAll', <String, dynamic>{
       'on': on,

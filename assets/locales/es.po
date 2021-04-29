@@ -1,0 +1,142 @@
+# 
+# Translators:
+# strel, 2021
+# Giorgio Maone <giorgio@maone.net>, 2021
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
+# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021\n"
+"Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "Uso de datos diario"
+
+msgid "is"
+msgstr "está"
+
+msgid "on"
+msgstr "Conectado"
+
+msgid "off"
+msgstr "Desconectado"
+
+msgid "Disconnecting"
+msgstr "Desconectando..."
+
+msgid "Connecting"
+msgstr "Conectando..."
+
+msgid "Go Pro Title"
+msgstr "¡Hágase Pro!"
+
+msgid "Go Pro Description"
+msgstr "¡Navegue a más velocidad y con datos ilimitados!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "¡Datos ilimitadps + criptomonedas Yinbi gratis!"
+
+msgid "Server Location"
+msgstr "Ubicación del servidor"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern selecciona inteligentemente cada servidor para conectarle a nuestros"
+" mejores centros de datos."
+
+msgid "OK"
+msgstr "Aceptar"
+
+msgid "pro_account_management"
+msgstr "Gestión de cuenta Pro"
+
+msgid "add_device"
+msgstr "Añadir dispositivo"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Actualizar a Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Autorizar dispositivo para Pro"
+
+msgid "invite_friends"
+msgstr "Invitar amigos"
+
+msgid "desktop_version"
+msgstr "Versión de escritorio"
+
+msgid "free_yinbi_crypto"
+msgstr "Criptomonedas Yinbi gratis"
+
+msgid "yinbi_redemption"
+msgstr "Canje de Yinbi"
+
+msgid "settings"
+msgstr "Configuración"
+
+msgid "proxy_all"
+msgstr "Proxyficar todo el tráfico está ACTIVADO"
+
+msgid "language"
+msgstr "Idioma"
+
+msgid "report_issue"
+msgstr "Informar de un problema"
+
+msgid "title_proxy_all_dialog"
+msgstr "Proxyficar todo"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Si está habilitado, todo el trafico se enviará a través de Lantern (más "
+"seguro). Si está deshabilitado, solo el tráfico bloqueado se enviará a "
+"través de Lantern (más rápido)."
+
+msgid "Exchange"
+msgstr "Intercambiar"
+
+msgid "Account"
+msgstr "Cuenta"
+
+msgid "In partnership with"
+msgstr "En asociación con"
+
+msgid "Buy"
+msgstr "Comprar"
+
+msgid "With"
+msgstr "Con"
+
+msgid "Online Wallets"
+msgstr "Carteras en línea"
+
+msgid "Bank Transfers"
+msgstr "Transferencias bancaria"
+
+msgid "Gift Cards"
+msgstr "Tarjetas regalo"
+
+msgid "Game Cards"
+msgstr "Tarjetas de juego"
+
+msgid "Cash Payment"
+msgstr "Pago en efectivo"
+
+msgid "Digital Currencies"
+msgstr "Divisas digitales"
+
+msgid "Payment Method"
+msgstr "Método de pago"
+
+msgid "SHOW BEST DEALS"
+msgstr "VER MEJORES OFERTAS"
+
+msgid "VPN Status"
+msgstr "Estado de la VPN"
+
+msgid "VPN"
+msgstr "VPN"

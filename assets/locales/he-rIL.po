@@ -1,0 +1,138 @@
+# 
+# Translators:
+# Kunda, 2021
+# ION, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: ION, 2021\n"
+"Language-Team: Hebrew (Israel) (https://www.transifex.com/lantern-1/teams/94371/he_IL/)\n"
+"Language: he_IL\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
+
+msgid "Daily Data Usage"
+msgstr "שימוש יומי בנתונים"
+
+msgid "is"
+msgstr "הוא"
+
+msgid "on"
+msgstr "מחובר"
+
+msgid "off"
+msgstr "מנותק"
+
+msgid "Disconnecting"
+msgstr "מתנתק…"
+
+msgid "Connecting"
+msgstr "מתחבר…"
+
+msgid "Go Pro Title"
+msgstr "עבור אל Pro!"
+
+msgid "Go Pro Description"
+msgstr "שחרר נעילה של מהירויות מהירות יותר, ונתונים בלתי מוגבלים!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "נתונים בלתי מוגבלים + מטבע מבוזר Yinbi חינמי!"
+
+msgid "Server Location"
+msgstr "מיקום שרת"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern משתמש בבחירת שרתים חכמה כדי לחבר אותך באופן אוטומטי אל מרכזי הנתונים"
+" הטובים ביותר שלנו."
+
+msgid "OK"
+msgstr "אישור"
+
+msgid "pro_account_management"
+msgstr "ניהול של חשבון מקצועי"
+
+msgid "add_device"
+msgstr "הוסף מכשיר"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "שדרג אל Lantern מקצועי"
+
+msgid "authorize_device_for_pro"
+msgstr "הרשה מכשיר עבור Pro"
+
+msgid "invite_friends"
+msgstr "הזמן חברים"
+
+msgid "desktop_version"
+msgstr "גרסת שולחן עבודה"
+
+msgid "free_yinbi_crypto"
+msgstr "מטבע מבוזר Yinbi חינמי"
+
+msgid "yinbi_redemption"
+msgstr "מימוש Yinbi"
+
+msgid "settings"
+msgstr "הגדרות"
+
+msgid "proxy_all"
+msgstr "ייפוי כוח הכול מופעל"
+
+msgid "language"
+msgstr "שפה"
+
+msgid "report_issue"
+msgstr "דווח על סוגייה"
+
+msgid "title_proxy_all_dialog"
+msgstr "ייפוי כוח בהכול"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"אם מאופשר, כל התעבורה תישלח דרך Lantern (מאובטח יותר). אם מושבת, רק תעבורה "
+"חסומה תישלח דרך Lantern (מהיר יותר)."
+
+msgid "Exchange"
+msgstr "סחור"
+
+msgid "Account"
+msgstr "חשבון"
+
+msgid "In partnership with"
+msgstr "בשותפות עם"
+
+msgid "Buy"
+msgstr "קנה"
+
+msgid "With"
+msgstr "עם"
+
+msgid "Online Wallets"
+msgstr "ארנקים מקוונים"
+
+msgid "Bank Transfers"
+msgstr "העברות בנקאיות"
+
+msgid "Gift Cards"
+msgstr "כרטיסי שי"
+
+msgid "Game Cards"
+msgstr "כרטיסי משחק"
+
+msgid "Cash Payment"
+msgstr "תשלום מזומן"
+
+msgid "Digital Currencies"
+msgstr "מטבעות דיגיטליים"
+
+msgid "Payment Method"
+msgstr "שיטת תשלום"
+
+msgid "SHOW BEST DEALS"
+msgstr "הראה את ההצעות הכי טובות"
+
+msgid "VPN Status"
+msgstr "מעמד VPN"
+
+msgid "VPN"
+msgstr "VPN"
