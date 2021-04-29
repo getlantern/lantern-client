@@ -175,41 +175,41 @@ class ExchangeTab extends StatelessWidget {
                   ]),
                   Expanded(
                     child: Container(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              left: 70, right: 70, bottom: 20),
-                          child: TextButton(
-                            onPressed: () {
-                              // buyDropDownWidget
-                              launchURL(
-                                  getUrl(buyItem * 10 + methodItem) ?? '');
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
+                      alignment: Alignment.bottomCenter,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: TextButton(
+                        onPressed: () {
+                          // buyDropDownWidget
+                          launchURL(getUrl(buyItem * 10 + methodItem) ?? '');
+                        },
+                        style: ButtonStyle(
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
                                     const EdgeInsets.only(top: 15, bottom: 15)),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        HexColor(primaryPink))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'SHOW BEST DEALS'.i18n,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(width: 5),
-                                const CustomAssetImage(
-                                  path: ImagePaths.open_in_new_icon,
-                                  color: Colors.white,
-                                )
-                              ],
-                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                HexColor(primaryPink))),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'SHOW BEST DEALS'.i18n,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(width: 5),
+                              const CustomAssetImage(
+                                path: ImagePaths.open_in_new_icon,
+                                color: Colors.white,
+                              )
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               )),
