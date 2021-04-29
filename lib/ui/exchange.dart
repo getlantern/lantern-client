@@ -32,7 +32,7 @@ class ExchangeTab extends StatelessWidget {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: HexColor(indicatorRed),
         textColor: Colors.white,
         fontSize: 16.0);
   }
@@ -89,13 +89,10 @@ class ExchangeTab extends StatelessWidget {
                           const EdgeInsets.only(left: 30, right: 30, top: 40),
                       padding: const EdgeInsets.only(left: 6),
                       decoration: BoxDecoration(
-                        border: Border.all(color: HexColor(gray4), width: 1),
+                        border: Border.all(color: HexColor(grey4), width: 1),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Container(
-                        // decoration: BoxDecoration(
-                        //   color: Colors.red,
-                        // ),
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: BuyDropDownWidget(<BuyModel>[
                           BuyModel(1, 'Bitcoin', ImagePaths.bitcoin_icon),
@@ -121,7 +118,7 @@ class ExchangeTab extends StatelessWidget {
                       margin: const EdgeInsets.only(
                           left: 20, right: 20, top: 20, bottom: 10),
                       child: Divider(
-                        color: HexColor(gray4),
+                        color: HexColor(grey4),
                       ),
                     ),
                     Positioned(
@@ -142,13 +139,10 @@ class ExchangeTab extends StatelessWidget {
                           const EdgeInsets.only(left: 30, right: 30, top: 10),
                       padding: const EdgeInsets.only(left: 6),
                       decoration: BoxDecoration(
-                        border: Border.all(color: HexColor(gray4), width: 1),
+                        border: Border.all(color: HexColor(grey4), width: 1),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Container(
-                        // decoration: BoxDecoration(
-                        //   color: Colors.red,
-                        // ),
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: MethodDropDownWidget(<MethodModel>[
                           MethodModel(1, 'Online Wallets'.i18n),
