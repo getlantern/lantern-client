@@ -1,5 +1,6 @@
 package org.getlantern.lantern.test;
 
+import org.getlantern.lantern.MainActivity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +20,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import androidx.test.uiautomator.*;
 
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.LanternFreeActivity;
 import org.getlantern.lantern.activity.UpdateActivity_;
 
   @RunWith(AndroidJUnit4.class)
@@ -27,7 +27,7 @@ import org.getlantern.lantern.activity.UpdateActivity_;
   @LargeTest
   public class UpdateTest {
     @Rule
-    public ActivityTestRule<LanternFreeActivity> mMainActivityRule = new MyActivityTestRule(LanternFreeActivity.class);
+    public ActivityTestRule<MainActivity> mMainActivityRule = new MyActivityTestRule(MainActivity.class);
     @Rule
     public ActivityTestRule<UpdateActivity_> mUpdateActivityRule =
     new MyActivityTestRule(UpdateActivity_.class,

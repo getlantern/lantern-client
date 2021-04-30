@@ -16,8 +16,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.LanternFreeActivity;
 import org.getlantern.mobilesdk.Logger;
 
 import androidx.fragment.app.Fragment;
@@ -51,7 +51,7 @@ public class TitleBar extends Fragment {
                     final ComponentName name = activity.getComponentName();
                     if (name != null && name.toString().contains("PaymentActivity")) {
                         activity.startActivity(new Intent(activity,
-                                    LanternFreeActivity.class));
+                                    MainActivity.class));
                     }
                     activity.finish();
                 }
@@ -109,5 +109,13 @@ public class TitleBar extends Fragment {
         titleHeader = null;
         titleImage = null;
         background = null;
+    }
+
+    public void setTitle(String title) {
+        if (titleHeader != null) {
+            titleHeader.setText(title);
+        } else {
+            this.title = title;
+        }
     }
 }

@@ -1,3 +1,5 @@
+export 'widgets/account/account.dart';
 export 'base_screen.dart';
+export 'widgets/exchange/exchange.dart';
 export 'home.dart';
-export 'vpn.dart';
+export 'widgets/vpn/vpn.dart';

@@ -21,13 +21,31 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@android:color/black</item>
-        <item name="elevation">0dp</item>
-        <item name="android:elevation">0dp</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/accent_white</item>
+        <item name="android:colorBackground">@color/accent_white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:fontFamily">@string/sans_serif</item>
-        <item name="fontFamily">@string/sans_serif</item>
+        <!-- Shape style -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.LargeComponent</item>
+        <!-- Text style -->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MyApp.Headline6</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MyApp.Overline</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MyApp.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MyApp.Body2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MyApp.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MyApp.Headline4</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MyApp.Caption</item>
+        <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
+        <item name="borderlessButtonStyle">@style/Widget.MyApp.Button.TextButton</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.MyApp.Button.OutlinedButton</item>
+        <item name="colorError">@color/red</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/grey_5</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
+        <item name="radioButtonStyle">@style/Widget.MyApp.RadioButton</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -275,4 +293,139 @@
         <item name="fontFamily">@string/sans_serif_black</item>
     </style>
 
+    <style name="TextAppearance.MyApp.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Overline" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Overline.Small">
+        <item name="android:textSize">8sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/black</item>
+        <item name="lineHeight">@dimen/line_height_body2</item>
+    </style>
+
+    <style name="Widget.MyApp.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="backgroundTint">@color/secondary_pink</item>
+        <item name="textColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:minWidth">220dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:minWidth">220dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.TextButton.Small" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:minWidth">220dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="strokeColor">@color/secondary_pink</item>
+        <item name="strokeWidth">@dimen/stroke_large</item>
+    </style>
+
+    <style name="Widget.MyApp.Button.TextButton.Normal" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.MyApp.Dialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.MyApp.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.MyApp.Dialog.NegativeButton</item>
+    </style>
+
+    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+    </style>
+
+    <style name="Widget.MyApp.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="textColor">@color/secondary_pink</item>
+        <item name="android:textColor">@color/secondary_pink</item>
+    </style>
+
+    <style name="Widget.MyApp.Dialog.NegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="textColor">@color/grey_5</item>
+        <item name="android:textColor">@color/grey_5</item>
+    </style>
+
+    <style name="Widget.MyApp.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">@color/tertiary_green</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+        <item name="android:textColorHint">@color/grey_5</item>
+        <item name="startIconTint">@color/black</item>
+        <item name="endIconTint">@color/black</item>
+    </style>
+
+    <style name="Widget.MyApp.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintTextColor">@color/tertiary_green</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+        <item name="android:textColorHint">@color/grey_5</item>
+        <item name="startIconTint">@color/black</item>
+        <item name="endIconTint">@color/black</item>
+    </style>
+
+    <style name="Widget.MyApp.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/button_tint</item>
+    </style>
 </resources>

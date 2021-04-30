@@ -19,7 +19,7 @@ public class ProUser {
     }
 
     @SerializedName("userId")
-    private Integer userId;
+    private Long userId;
 
     @SerializedName("token")
     private String token;
@@ -48,11 +48,11 @@ public class ProUser {
     @SerializedName("devices")
     private List<Device> devices;
 
-    public void setUserId(final Integer userId) {
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

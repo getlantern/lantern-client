@@ -16,6 +16,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WelcomeActivity_;
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_;
 import org.getlantern.lantern.service.BackgroundChecker_;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
 
@@ -152,8 +153,7 @@ public class PaymentHandler {
                         R.string.error_making_purchase);
                 Logger.error(TAG, "Error with purchase request:" + error);
                 dismissDialog();
-                Utils.showUIErrorDialog(getActivity(),
-                        errorMakingPurchase);
+                ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
             }
             @Override
             public void onSuccess(final Response response, final JsonObject result) {

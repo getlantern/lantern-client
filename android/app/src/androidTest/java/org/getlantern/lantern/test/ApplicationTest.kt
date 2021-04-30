@@ -18,6 +18,7 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
 import com.kyleduo.switchbutton.SwitchButton
+import org.getlantern.lantern.MainActivity
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -29,7 +30,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.LanternFreeActivity
 import java.net.HttpURLConnection
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -46,7 +46,7 @@ class ApplicationTest {
 
     @Rule
     @JvmField
-    var mActivityRule = MyActivityTestRule(LanternFreeActivity::class.java)
+    var mActivityRule = MyActivityTestRule(MainActivity::class.java)
 
     lateinit var mDevice: UiDevice
     var mWatchers = UiWatchers()

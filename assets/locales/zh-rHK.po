@@ -1,0 +1,135 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021
+# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021\n"
+"Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
+"Language: zh-Hant\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "每日網路數據用量"
+
+msgid "is"
+msgstr "狀態："
+
+msgid "on"
+msgstr "已連線"
+
+msgid "off"
+msgstr "已中斷連線"
+
+msgid "Disconnecting"
+msgstr "斷線中..."
+
+msgid "Connecting"
+msgstr "連線中..."
+
+msgid "Go Pro Title"
+msgstr "升級至 Pro 版！"
+
+msgid "Go Pro Description"
+msgstr "速度更快，網路數據用量無上限！"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "網路數據用量無上限 + 免費獲得加密隱幣！"
+
+msgid "Server Location"
+msgstr "伺服器位置"
+
+msgid "Server Location Info"
+msgstr "Lantern 採取智慧型伺服器選取機制，將您自動連線至最適合的資料中心。"
+
+msgid "OK"
+msgstr "確定"
+
+msgid "pro_account_management"
+msgstr "Pro 帳號管理"
+
+msgid "add_device"
+msgstr "新增裝置"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "升級到 Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Pro 版授權裝置"
+
+msgid "invite_friends"
+msgstr "邀請好友"
+
+msgid "desktop_version"
+msgstr "桌面版"
+
+msgid "free_yinbi_crypto"
+msgstr "免費加密隱幣"
+
+msgid "yinbi_redemption"
+msgstr "隱幣兌換"
+
+msgid "settings"
+msgstr "設定"
+
+msgid "proxy_all"
+msgstr "全流量 Proxy 開啟"
+
+msgid "language"
+msgstr "語言"
+
+msgid "report_issue"
+msgstr "回報問題"
+
+msgid "title_proxy_all_dialog"
+msgstr "全流量 Proxy"
+
+msgid "description_proxy_all_dialog"
+msgstr "啟用後，所有流量都將透過 Lantern 傳輸 (更安全)。一旦停用，只有遭封鎖的流量會透過 Lantern 傳輸 (速度更快)。"
+
+msgid "Exchange"
+msgstr "交換"
+
+msgid "Account"
+msgstr "帳號"
+
+msgid "In partnership with"
+msgstr "合作夥伴："
+
+msgid "Buy"
+msgstr "購買"
+
+msgid "With"
+msgstr "付款方式："
+
+msgid "Online Wallets"
+msgstr "線上錢包"
+
+msgid "Bank Transfers"
+msgstr "銀行轉帳"
+
+msgid "Gift Cards"
+msgstr "禮品卡"
+
+msgid "Game Cards"
+msgstr "遊戲點數卡"
+
+msgid "Cash Payment"
+msgstr "現金付款"
+
+msgid "Digital Currencies"
+msgstr "數位貨幣"
+
+msgid "Payment Method"
+msgstr "付款方式"
+
+msgid "SHOW BEST DEALS"
+msgstr "顯示最划算的方案"
+
+msgid "VPN Status"
+msgstr "VPN 狀態"
+
+msgid "VPN"
+msgstr "VPN"

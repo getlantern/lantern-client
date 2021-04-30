@@ -20,7 +20,8 @@ class LanternApp extends StatelessWidget {
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => SessionModel()),
         Provider(create: (context) => EventManager('lantern_event_channel')),
-        Provider(create: (context) => const MethodChannel('lantern_method_channel')),
+        Provider(
+            create: (context) => const MethodChannel('lantern_method_channel')),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -28,10 +29,23 @@ class LanternApp extends StatelessWidget {
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: [
+          const Locale('ar', 'EG'),
+          const Locale('fr', 'FR'),
           const Locale('en', 'US'),
-          const Locale('es'),
+          const Locale('fa', 'IR'),
+          const Locale('th', 'TH'),
+          const Locale('ms', 'MY'),
+          const Locale('ru', 'RU'),
+          const Locale('ur', 'IN'),
+          const Locale('zh', 'CN'),
+          const Locale('zh', 'HK'),
+          const Locale('es', 'ES'),
+          const Locale('tr', 'TR'),
+          const Locale('vi', 'VN'),
+          const Locale('my', 'MM'),
         ],
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute<dynamic>(
@@ -56,7 +70,8 @@ class LanternApp extends StatelessWidget {
     return ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.grey,
-      appBarTheme: const AppBarTheme(brightness: Brightness.light),
+      appBarTheme:
+          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       accentColor: Colors.black,
       textTheme: Theme.of(context).textTheme.copyWith(
             headline1: Theme.of(context)

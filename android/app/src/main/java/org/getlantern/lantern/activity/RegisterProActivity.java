@@ -1,10 +1,12 @@
 package org.getlantern.lantern.activity;
 
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
@@ -13,11 +15,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.fragment.ClickSpan;
+import org.getlantern.lantern.model.MaterialUtil;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
-@EActivity(R.layout.reseller_register_pro)
+@EActivity(R.layout.activity_check_out_reseller)
 public class RegisterProActivity extends FragmentActivity {
 
     private static final String TAG = RegisterProActivity.class.getName();
@@ -27,12 +32,23 @@ public class RegisterProActivity extends FragmentActivity {
     private PaymentHandler paymentHandler;
 
     @ViewById
-    EditText emailInput, confirmEmailInput, resellerCodeInput;
+    EditText emailInput, resellerCodeInput;
+
+    @ViewById
+    TextView termsOfServiceText;
+
+    private final ClickSpan.OnClickListener clickSpan = () -> {
+            final Intent intent = new Intent(RegisterProActivity.this,
+                WebViewActivity_.class);
+            intent.putExtra("url", CheckoutActivity.TERMS_OF_SERVICE_URL);
+            startActivity(intent);
+        };
 
     @AfterViews
     void afterViews() {
         paymentHandler = new PaymentHandler(this, PROVIDER);
         addTextWatcherResellerInput();
+        MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
     }
 
     // The reseller code is of the following format:
@@ -71,26 +87,19 @@ public class RegisterProActivity extends FragmentActivity {
     @Click(R.id.continueBtn)
     public void continueClicked(View view) {
         final String email = emailInput.getText().toString().trim();
-        final String confirmEmail = confirmEmailInput.getText().toString().trim();
         final String resellerCode = resellerCodeInput.getText().toString().trim();
 
         // email validation
         if (!Utils.isEmailValid(email)) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.invalid_email));
-            return;
-        }
-
-        if (!email.equalsIgnoreCase(confirmEmail)) {
-            Utils.showErrorDialog(this,
-                    getResources().getString(R.string.emails_do_not_match));
             return;
         }
 
         // reseller code validation
         if (resellerCode.length() != RESELLER_CODE_LEN) {
             // reseller code unexpected length
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.invalid_reseller_code));
             return;
         }

@@ -1,11 +1,17 @@
 package org.getlantern.lantern.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
@@ -16,6 +22,7 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ProgressDialogFragment;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.IntentUtil;
 import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.invite_friends)
@@ -30,13 +37,37 @@ public class InviteActivity extends FragmentActivity {
     @ViewById
     TextView referralCode;
 
-    @ViewById(R.id.referral_code_view)
-    View referralView;
+    @ViewById
+    ImageView imgvCopy;
+
+    @ViewById
+    ImageView imgvChecked;
+
+    @ViewById
+    View bgText;
+
+    @ViewById
+    TextView tvShare;
+
+    private Handler handlerCopyAnim;
 
     @AfterViews
     void afterViews() {
+        imgvChecked.setAlpha(0f);
+        bgText.setAlpha(0f);
         resources = getResources();
         progressFragment = ProgressDialogFragment.newInstance(R.string.progressMessage2);
+        if (LanternApp.getSession().isProUser()) {
+            tvShare.setText(getString(R.string.referral_code_share_description_pro));
+        } else {
+            tvShare.setText(getString(R.string.referral_code_share_description_free));
+        }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        handlerCopyAnim = new Handler();
     }
 
     @Override
@@ -47,6 +78,12 @@ public class InviteActivity extends FragmentActivity {
         referralCode.setText(this.code);
     }
 
+    @Override
+    protected void onDestroy() {
+        handlerCopyAnim.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
     private void startProgress() {
         progressFragment.show(getSupportFragmentManager(), "progress");
     }
@@ -55,58 +92,53 @@ public class InviteActivity extends FragmentActivity {
         progressFragment.dismiss();
     }
 
-    @Click(R.id.referralCode)
+    @Click(R.id.imgvCopy)
     void referralCodeClicked() {
+        handlerCopyAnim.removeCallbacksAndMessages(null);
+        // animate when click the button
+        long animDuration = 300L;
+        long delayDuration = 1000L;
+        imgvCopy.animate().alpha(0f).setDuration(animDuration).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                imgvCopy.setClickable(false);
+            }
+        }).start();
+        bgText.animate().alpha(1f).setDuration(animDuration).start();
+        imgvChecked.animate().alpha(1f).setDuration(animDuration).start();
+
+        handlerCopyAnim.postDelayed(() -> {
+            imgvCopy.animate().alpha(1f).setDuration(animDuration).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    imgvCopy.setClickable(true);
+                }
+            }).start();
+            imgvChecked.animate().alpha(0f).setDuration(animDuration).start();
+            bgText.animate().alpha(0f).setDuration(animDuration).start();
+        }, delayDuration);
+
         final CharSequence referralText = referralCode.getText();
 
         if (referralText == null) {
             return;
         }
 
-        final String shareReferralText = String.format(
-                resources.getString(R.string.share_referral_text),
-                referralText.toString());
         Utils.copyToClipboard(this,
-                "Referral Code",
-                shareReferralText);
+            getString(R.string.referral_code),
+            referralText.toString());
         Utils.showToastMessage(getLayoutInflater(),
-                this,
-                this,
-                resources.getString(R.string.copied_to_clipboard));
+            this,
+            this,
+            resources.getString(R.string.copied_to_clipboard));
     }
 
-    public void textInvite(View view) {
-        Logger.debug(TAG, "Invite friends button clicked!");
-
-        try {
-            final Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-            sendIntent.setData(Uri.parse("sms:"));
-            sendIntent.putExtra("sms_body",
-                    String.format(
-                        resources.getString(R.string.receive_free_month),
-                        this.code));
-            startActivity(sendIntent);
-        } catch (Exception e) {
-            Logger.error(TAG, "Error trying to start SMS Intent", e);
-        }
-    }
-
-    public void emailInvite(View view) {
-        Logger.debug(TAG, "Continue to Pro button clicked!");
-
-        try {
-            final Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                    Uri.fromParts("mailto","", null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-                    resources.getString(R.string.pro_invitation_subject));
-            emailIntent.putExtra(Intent.EXTRA_TEXT,
-                    String.format(
-                        resources.getString(R.string.receive_free_month),
-                        this.code));
-
-            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } catch (Exception e) {
-            Logger.error(TAG, "Error trying to start email Intent", e);
-        }
+    @Click
+    void btnShare() {
+        IntentUtil.INSTANCE.sharePlainText(
+            this,
+            String.format(resources.getString(R.string.receive_free_month), this.code),
+            getString(R.string.referral_code_share_title)
+        );
     }
 }
