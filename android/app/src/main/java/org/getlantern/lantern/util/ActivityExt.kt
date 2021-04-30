@@ -17,7 +17,7 @@ fun Activity.showErrorDialog(
     showAlertDialog(
         title = getString(R.string.validation_errors),
         msg = error
-    );
+    )
 }
 
 @JvmOverloads

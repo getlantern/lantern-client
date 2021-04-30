@@ -5,8 +5,14 @@ import android.os.Handler
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.*
-import io.lantern.db.*
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.lantern.db.DB
+import io.lantern.db.DetailsChangeSet
+import io.lantern.db.DetailsSubscriber
+import io.lantern.db.RawChangeSet
+import io.lantern.db.RawSubscriber
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
@@ -15,9 +21,9 @@ import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
 abstract class BaseModel(
-        private val name: String,
-        flutterEngine: FlutterEngine? = null,
-        val db: DB,
+    private val name: String,
+    flutterEngine: FlutterEngine? = null,
+    val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<String>()
     private val handler = Handler(Looper.getMainLooper())
@@ -45,13 +51,13 @@ abstract class BaseModel(
     init {
         flutterEngine?.let {
             EventChannel(
-                    flutterEngine.dartExecutor,
-                    "${name}_event_channel"
+                flutterEngine.dartExecutor,
+                "${name}_event_channel"
             ).setStreamHandler(this)
 
             MethodChannel(
-                    flutterEngine.dartExecutor.binaryMessenger,
-                    "${name}_method_channel"
+                flutterEngine.dartExecutor.binaryMessenger,
+                "${name}_method_channel"
             ).setMethodCallHandler(this)
         }
     }
@@ -65,7 +71,7 @@ abstract class BaseModel(
             }
         } catch (t: Throwable) {
             result.error("unknownError", t.message, null)
-            Logger.error(TAG, "Unexpected error calling ${call.method}: ${t}")
+            Logger.error(TAG, "Unexpected error calling ${call.method}: $t")
         }
     }
 
@@ -104,9 +110,12 @@ abstract class BaseModel(
                     handler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
-                                    mapOf("s" to subscriberID,
-                                            "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }.toMap(),
-                                            "d" to changes.deletions.toList()))
+                                mapOf(
+                                    "s" to subscriberID,
+                                    "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }.toMap(),
+                                    "d" to changes.deletions.toList()
+                                )
+                            )
                         }
                     }
                 }
@@ -118,9 +127,12 @@ abstract class BaseModel(
                     handler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
-                                    mapOf("s" to subscriberID,
-                                            "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
-                                            "d" to changes.deletions.toList()))
+                                mapOf(
+                                    "s" to subscriberID,
+                                    "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
+                                    "d" to changes.deletions.toList()
+                                )
+                            )
                         }
                     }
                 }
