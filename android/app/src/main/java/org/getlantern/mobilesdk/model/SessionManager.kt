@@ -16,7 +16,6 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import org.getlantern.lantern.BuildConfig
-import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.mobilesdk.Logger
@@ -24,7 +23,8 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
-import java.util.*
+import java.util.Arrays
+import java.util.Locale
 
 abstract class SessionManager(application: Application) : Session {
     // The configs in this map will override the configs in BuildConfig
@@ -51,7 +51,8 @@ abstract class SessionManager(application: Application) : Session {
     fun setStartResult(result: StartResult?) {
         startResult = result
         Logger.debug(
-            TAG, String.format(
+            TAG,
+            String.format(
                 "Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
                 hTTPAddr, sOCKS5Addr
             )
@@ -84,7 +85,7 @@ abstract class SessionManager(application: Application) : Session {
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
-                Arrays.asList(*l).contains(locale)
+            Arrays.asList(*l).contains(locale)
     }
 
     val isEnglishUser: Boolean
@@ -346,8 +347,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun updateStats(
-        city: String, country: String,
-        countryCode: String, httpsUpgrades: Long, adsBlocked: Long,
+        city: String,
+        country: String,
+        countryCode: String,
+        httpsUpgrades: Long,
+        adsBlocked: Long,
     ) {
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
         EventBus.getDefault().post(st)

@@ -14,7 +14,9 @@ import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Currency
+import java.util.Date
+import java.util.Locale
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
     private val TAG = LanternSessionManager::class.java.name
@@ -283,8 +285,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 ""
             } else String.format("%dD", numDays)
         }
-        return String.format("%dMO",
-                numMonths)
+        return String.format(
+            "%dMO",
+            numMonths
+        )
     }
 
     fun numProMonths(): Int {

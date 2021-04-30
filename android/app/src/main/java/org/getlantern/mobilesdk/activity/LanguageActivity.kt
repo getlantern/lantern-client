@@ -11,7 +11,7 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.databinding.LanguagesBinding
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.LocaleInfo
-import java.util.*
+import java.util.Locale
 
 class LanguageActivity : FragmentActivity() {
     private lateinit var languages: ArrayList<String>
@@ -34,7 +34,7 @@ class LanguageActivity : FragmentActivity() {
         languages.sort()
         binding.list.apply {
             this.adapter = LanguageAdapter().apply {
-                callback = object: LanguageAdapter.Callback {
+                callback = object : LanguageAdapter.Callback {
                     override fun onClick(view: View, pos: Int, item: LanguageAdapterModel) {
                         setLocale(item.lang)
                     }
@@ -46,7 +46,7 @@ class LanguageActivity : FragmentActivity() {
             }
             layoutManager = LinearLayoutManager(this@LanguageActivity)
             setHasFixedSize(true)
-            addItemDecoration(object: RecyclerView.ItemDecoration() {
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
                     outRect: Rect,
                     view: View,

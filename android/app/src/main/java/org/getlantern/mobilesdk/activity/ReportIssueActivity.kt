@@ -11,9 +11,9 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.databinding.ActivityReportIssueBinding
 import org.getlantern.lantern.util.showErrorDialog
-import org.getlantern.mobilesdk.model.Utils
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.MailSender
+import org.getlantern.mobilesdk.model.Utils
 
 open class ReportIssueActivity : FragmentActivity() {
     private lateinit var binding: ActivityReportIssueBinding
@@ -36,7 +36,7 @@ open class ReportIssueActivity : FragmentActivity() {
             sendReport(it)
         }
         binding.issue.addTextChangedListener {
-           checkValidField()
+            checkValidField()
         }
         binding.emailInput.addTextChangedListener {
             checkValidField()
@@ -74,8 +74,10 @@ open class ReportIssueActivity : FragmentActivity() {
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
         LanternApp.getSession().setEmail(email)
-        val mailSender = MailSender(this, "user-send-logs", showProgress = true, finish = true, getString(R.string.report_sent),
-        getString(R.string.thank_you_for_reporting_your_issue))
+        val mailSender = MailSender(
+            this, "user-send-logs", showProgress = true, finish = true, getString(R.string.report_sent),
+            getString(R.string.thank_you_for_reporting_your_issue)
+        )
         val report = binding.description.text.toString()
         mailSender.addMergeVar("issue", issue)
         mailSender.addMergeVar("report", report)

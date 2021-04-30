@@ -12,7 +12,6 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import java.util.*
 
 class MailSender @JvmOverloads constructor(
     private val context: Context,
@@ -111,7 +110,8 @@ class MailSender @JvmOverloads constructor(
             (context as Activity).showAlertDialog(
                 title ?: getAppName(),
                 message ?: getResponseMessage(success),
-                finish = finish)
+                finish = finish
+            )
         }
     }
 
