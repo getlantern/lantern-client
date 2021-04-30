@@ -1,8 +1,15 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-
+    <dimen name="activity_horizontal_margin">@dimen/space_normal</dimen>
+    <dimen name="activity_vertical_margin">@dimen/space_normal</dimen>
+    <dimen name="space_large">24dp</dimen>
+    <dimen name="space_above_normal">20dp</dimen>
+    <dimen name="space_small">8dp</dimen>
+    <dimen name="space_normal">16dp</dimen>
+    <dimen name="space_tiny">4dp</dimen>
+    <dimen name="space_pretty_small">12dp</dimen>
+    <dimen name="space_between_text_small">2dp</dimen>
+    <dimen name="space_between_text_large">4dp</dimen>
 
     <dimen name="ksw_md_thumb_ripple_size">42dp</dimen>
     <dimen name="ksw_md_thumb_solid_inset">11dp</dimen>
@@ -31,5 +38,11 @@
 
     <dimen name="adContentPadding">5dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="line_height_body2">23dp</dimen>
+    <dimen name="radius_large">12dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
+    <dimen name="stroke">1dp</dimen>
+    <dimen name="stroke_large">2dp</dimen>
 
 </resources>

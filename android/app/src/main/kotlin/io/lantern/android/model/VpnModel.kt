@@ -3,24 +3,31 @@ package io.lantern.android.model
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 
+import org.getlantern.mobilesdk.Logger
+
 class VpnModel(
         flutterEngine: FlutterEngine? = null,
         private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
 ) : BaseModel("vpn", flutterEngine, masterDB.withSchema("vpn")) {
 
     companion object {
+        private const val TAG = "VpnModel"
+
         const val PATH_VPN_STATUS = "/vpn_status"
         const val PATH_SERVER_INFO = "/server_info"
         const val PATH_BANDWIDTH = "/bandwidth"
     }
 
     init {
+        val start = System.currentTimeMillis()
         db.registerType(20, Vpn.ServerInfo::class.java)
         db.registerType(21, Vpn.Bandwidth::class.java)
+        Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         db.mutate { tx ->
             // initialize vpn status for fresh install
             tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
         }
+        Logger.debug(TAG, "db.mutate finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {

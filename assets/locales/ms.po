@@ -1,0 +1,142 @@
+# 
+# Translators:
+# abuyop <abuyop@gmail.com>, 2021
+# e2f <projects@e2f.com>, 2021
+# Alyssa Chung <lisiachung7@gmail.com>, 2021
+# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021
+# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2021\n"
+"Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
+"Language: ms\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "Penggunaan Data Harian"
+
+msgid "is"
+msgstr "is"
+
+msgid "on"
+msgstr "Telah disambungkan"
+
+msgid "off"
+msgstr "Terputus"
+
+msgid "Disconnecting"
+msgstr "Memutuskan sambungan..."
+
+msgid "Connecting"
+msgstr "Sambungan..."
+
+msgid "Go Pro Title"
+msgstr "Go Pro!"
+
+msgid "Go Pro Description"
+msgstr "Buka kunci kelajuan lebih pantas, dan data tanpa had!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Data tanpa had + mata wang kripto Yinbi percuma!"
+
+msgid "Server Location"
+msgstr "Lokasi Server"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern menggunakan pilihan server pintar untuk menghubungkan anda secara "
+"automatik kepada pusat-pusat data kami yang terbaik."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "pro_account_management"
+msgstr "Akaun Pengurusan Pro"
+
+msgid "add_device"
+msgstr "Tambah Peranti"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Upgrade ke Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Peranti dibenarkan untuk Pro"
+
+msgid "invite_friends"
+msgstr "Menjemput Rakan-Rakan"
+
+msgid "desktop_version"
+msgstr "Versi desktop"
+
+msgid "free_yinbi_crypto"
+msgstr "Mata Wang Kripto Yinbi Percuma"
+
+msgid "yinbi_redemption"
+msgstr "Penebusan Yinbi"
+
+msgid "settings"
+msgstr "Tetapan"
+
+msgid "proxy_all"
+msgstr "Proksi semua DIHIDUPKAN"
+
+msgid "language"
+msgstr "Bahasa"
+
+msgid "report_issue"
+msgstr "Laporkan isu"
+
+msgid "title_proxy_all_dialog"
+msgstr "Proksi Semua"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Sekiranya didayakan, semua trafik akan dihantar melalui Lantern (lebih "
+"selamat). Sekiranya dinyahdayakan, hanya trafik yang disekat akan dihantar "
+"melalui Lantern (lebih pantas)."
+
+msgid "Exchange"
+msgstr "Tukar"
+
+msgid "Account"
+msgstr "Akaun"
+
+msgid "In partnership with"
+msgstr "Secara kerjasama dengan"
+
+msgid "Buy"
+msgstr "Beli"
+
+msgid "With"
+msgstr "Dengan"
+
+msgid "Online Wallets"
+msgstr "Dompet Dalam Talian"
+
+msgid "Bank Transfers"
+msgstr "Pindahan Bank"
+
+msgid "Gift Cards"
+msgstr "Kad Hadiah"
+
+msgid "Game Cards"
+msgstr "Kad Permainan"
+
+msgid "Cash Payment"
+msgstr "Bayaran Tunai"
+
+msgid "Digital Currencies"
+msgstr "Mata Wang Digital"
+
+msgid "Payment Method"
+msgstr "Kaedah Bayaran"
+
+msgid "SHOW BEST DEALS"
+msgstr "TUNJUKKAN TAWARAN TERBAIK"
+
+msgid "VPN Status"
+msgstr "Status VPN"
+
+msgid "VPN"
+msgstr "VPN"

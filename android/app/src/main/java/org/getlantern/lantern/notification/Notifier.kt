@@ -14,8 +14,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.mobilesdk.Logger
 
 /**
@@ -58,7 +58,7 @@ class Notifier : BroadcastReceiver() {
             }
         }
 
-        val resultIntent = Intent(context, LanternFreeActivity::class.java)
+        val resultIntent = Intent(context, MainActivity::class.java)
 
         // For unknown reason, passing this (instead of zero) resumes the
         // existing activity if possible, instead of creating a new one.

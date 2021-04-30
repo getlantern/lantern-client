@@ -2,8 +2,9 @@ package org.getlantern.lantern.activity.yinbi;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.text.Html;
-import android.text.TextUtils;
+import android.text.*;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -44,6 +47,7 @@ import okhttp3.Response;
 public class RedeemBulkCodesActivity extends FragmentActivity implements LanternHttpClient.ProCallback {
     private static final String TAG = RedeemBulkCodesActivity.class.getName();
     private static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.pdf";
+    private static final String RESELLER_LANTERN_URL = "https://reseller.lantern.io";
     private static final String PROVIDER = "reseller-code";
 
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
@@ -53,6 +57,9 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
 
     private final ClickSpan.OnClickListener clickSpan =
         Utils.createClickSpan(RedeemBulkCodesActivity.this, TERMS_OF_SERVICE_URL);
+
+    private final ClickSpan.OnClickListener clickResellerLanternSpan =
+        Utils.createClickSpan(RedeemBulkCodesActivity.this, RESELLER_LANTERN_URL);
 
     @Extra
     String userEmail;
@@ -64,7 +71,16 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
     TextView termsOfServiceText;
 
     @ViewById
-    TextView errorMessage;
+    TextInputLayout bulkCodesContainer;
+
+    @ViewById
+    MaterialButton submitButton;
+
+    @ViewById
+    TextView tvCodeDescription;
+
+    @ViewById
+    TextView tvError;
 
     @AfterViews
     void afterViews() {
@@ -80,8 +96,34 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
         }
         });
 
-        final int color = ContextCompat.getColor(this, R.color.pink);
+        final int color = ContextCompat.getColor(this, R.color.tertiary_green);
         Utils.clickify(termsOfServiceText, getString(R.string.terms_of_service), color, clickSpan);
+        submitButton.setEnabled(false);
+        bulkCodesContainer.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() > 0) {
+                    submitButton.setEnabled(true);
+                } else {
+                    submitButton.setEnabled(false);
+                }
+            }
+        });
+        String textFirstPart = getString(R.string.redeem_code_description_first_part);
+        String textSecondPart = getString(R.string.redeem_code_description_second_part);
+        String text = String.format("%s %s", textFirstPart, textSecondPart);
+        tvCodeDescription.setText(text);
+        Utils.clickify(tvCodeDescription, textSecondPart, color, true, clickResellerLanternSpan);
     }
 
     public void hideSoftKeyboard(View view) {
@@ -159,7 +201,8 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
         // replace any instances of codes that were found to be
         // invalid by changing their color to red
         bulkCodes.setText(Html.fromHtml(result.toString()));
-        errorMessage.setVisibility(View.VISIBLE);
+        bulkCodesContainer.setError(getString(R.string.bulk_codes_error));
+        tvError.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -194,11 +237,6 @@ public class RedeemBulkCodesActivity extends FragmentActivity implements Lantern
     @Click(R.id.submitButton)
     public void redeemBulkCodes(View view) {
         final String codes = bulkCodes.getText().toString();
-        if (codes.equals("")) {
-            Utils.showErrorDialog(this,
-                    getResources().getString(R.string.invalid_bulk_codes));
-            return;
-        }
         if (userEmail == null || userEmail.equals("")) {
             return;
         }

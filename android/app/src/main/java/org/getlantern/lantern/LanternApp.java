@@ -65,7 +65,9 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
   @Override
   public void onCreate() {
+    long start = System.currentTimeMillis();
     super.onCreate();
+    Logger.debug(TAG, "super.onCreate() finished at " + (System.currentTimeMillis() - start));
 
     if (LeakCanary.isInAnalyzerProcess(this)) {
       // Current process is dedicated to LeakCanary for heap analysis.
@@ -73,30 +75,39 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     ProdLogger.enable(getApplicationContext());
+    Logger.debug(TAG, "ProdLogger.enable() finished at " + (System.currentTimeMillis() - start));
 
     registerActivityLifecycleCallbacks(this);
+    Logger.debug(TAG, "registerActivityLifecycleCallbacks finished at " + (System.currentTimeMillis() - start));
 
     // Necessary to locate a back arrow resource we use from the
     // support library. See http://stackoverflow.com/questions/37615470/support-library-vectordrawable-resourcesnotfoundexception
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    Logger.debug(TAG, "setCompatVectorFromResourcesEnabled finished at " + (System.currentTimeMillis() - start));
 
     if (!EventBus.getDefault().isRegistered(this)) {
       // we don't have to unregister an EventBus if its
       // in the Application class
       EventBus.getDefault().register(this);
+      Logger.debug(TAG, "EventBus.register finished at " + (System.currentTimeMillis() - start));
     }
 
     appContext = getApplicationContext();
     session = new LanternSessionManager(this);
+    Logger.debug(TAG, "new LanternSessionManager finished at " + (System.currentTimeMillis() - start));
     if (Utils.isPlayVersion(this)) {
       inAppBilling = new InAppBilling(this);
     }
     lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
         (int) session.getSettings().getHttpProxyPort());
+    Logger.debug(TAG, "new LanternHttpClient finished at " + (System.currentTimeMillis() - start));
     initFirebase();
+    Logger.debug(TAG, "initFirebase() finished at " + (System.currentTimeMillis() - start));
     updateFirebaseConfig();
+    Logger.debug(TAG, "updateFirebaseConfig() finished at " + (System.currentTimeMillis() - start));
 
     LeakCanary.install(this);
+    Logger.debug(TAG, "onCreate() finished at " + (System.currentTimeMillis() - start));
   }
 
   private void initFirebase() {

@@ -189,7 +189,7 @@
                 android:id="@+id/date_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_date"/>
+                android:src="@drawable/ic_date_small"/>
 
             <Spinner 
                 android:id="@+id/expMonth" 
