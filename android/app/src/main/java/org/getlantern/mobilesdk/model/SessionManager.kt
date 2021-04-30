@@ -16,6 +16,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.mobilesdk.Logger
@@ -482,19 +483,25 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     init {
+        val start = System.currentTimeMillis()
         appVersion = Utils.appVersion(application)
+        Logger.debug(TAG, "Utils.appVersion finished at ${System.currentTimeMillis() - start}")
         context = application
         vpnModel = VpnModel()
+        Logger.debug(TAG, "VpnModel() finished at ${System.currentTimeMillis() - start}")
         prefs = BaseModel.masterDB.asSharedPreferences(
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         editor = prefs.edit()
+        Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,
             Context.MODE_PRIVATE
         )
         settings = Settings.init(context)
+        Logger.debug(TAG, "Settings.init() finished at ${System.currentTimeMillis() - start}")
         val configuredLocale = prefs.getString(LANG, null)
+        Logger.debug(TAG, "get configuredLocale finished at ${System.currentTimeMillis() - start}")
         if (!TextUtils.isEmpty(configuredLocale)) {
             Logger.debug(
                 TAG,
@@ -503,10 +510,13 @@ abstract class SessionManager(application: Application) : Session {
             )
             locale = LocaleInfo(context, configuredLocale!!).locale
             Lingver.init(application, locale!!)
+            Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
         } else {
             locale = Lingver.init(application).getLocale()
+            Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             doSetLanguage(locale)
+            Logger.debug(TAG, "doSetLanguage() finished at ${System.currentTimeMillis() - start}")
         }
     }
 }

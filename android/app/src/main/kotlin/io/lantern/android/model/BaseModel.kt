@@ -23,17 +23,22 @@ abstract class BaseModel(
     private val handler = Handler(Looper.getMainLooper())
 
     companion object {
-        private const val TAG = "Model"
+        private const val TAG = "BaseModel"
 
         internal val masterDB: DB
 
         init {
+            val start = System.currentTimeMillis()
             val context = LanternApp.getAppContext()
+            Logger.debug(TAG, "LanternApp.getAppContext() finished at ${System.currentTimeMillis() - start}")
             val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+            Logger.debug(TAG, "getSharedPreferences() finished at ${System.currentTimeMillis() - start}")
             val secrets = Secrets("lanternMasterKey", secretsPreferences)
+            Logger.debug(TAG, "Secrets() finished at ${System.currentTimeMillis() - start}")
             val dbLocation = File(File(context.filesDir, ".lantern"), "db").absolutePath
             val dbPassword = secrets.get("dbPassword", 32)
             masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
+            Logger.debug(TAG, "createOrOpen finished at ${System.currentTimeMillis() - start}")
         }
     }
 

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -48,9 +49,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private lateinit var appVersion: String
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
@@ -62,29 +63,35 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel"
         ).setMethodCallHandler(this)
+        Logger.debug(TAG, "configureFlutterEngine finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
+        Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
 
         val intent = Intent(this, LanternService_::class.java)
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
-
-        appVersion = Utils.appVersion(this)
+        Logger.debug(TAG, "bindService finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onResume() {
+        val start = System.currentTimeMillis()
         updateUserData()
+        Logger.debug(TAG, "updateUserData90 finished at ${System.currentTimeMillis() - start}")
 
         super.onResume()
+        Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
         if (LanternApp.getSession().lanternDidStart()) {
             fetchLoConf()
+            Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
         }
 
         if (Utils.isPlayVersion(this)) {
@@ -101,6 +108,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
         }
+        Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onDestroy() {
@@ -377,7 +385,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val appName = resources.getString(R.string.app_name)
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
-            String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
+            String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
         showAlertDialog(noUpdateTitle, noUpdateMsg)
     }
 
