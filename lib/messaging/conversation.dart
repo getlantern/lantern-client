@@ -11,7 +11,7 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:lantern/messaging/widgets/filepicker_extensions.dart';
-import 'package:lantern/utils/wechat_assets_picker/lib/wechat_assets_picker.dart';
+import 'package:../wechat_assets_picker/wechat_assets_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
