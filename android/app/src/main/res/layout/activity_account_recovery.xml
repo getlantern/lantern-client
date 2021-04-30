@@ -1,147 +1,138 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:background="@color/accent_white"
-    android:layout_gravity="center_vertical"
-    android:id="@+id/linkDeviceView"
-    tools:context=".LinkDeviceActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        lantern:layout_constraintStart_toStartOf="parent"
+        lantern:layout_constraintEnd_toEndOf="parent"
+        lantern:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/authorize_device_pro"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/haveAnotherDevice"
-        android:layout_width="fill_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:textAppearance="@style/MediumText"
-        android:text="@string/i_have_another"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/black"/>
+        android:id="@+id/guideline"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
+        android:text="@string/authorize_with_device_linking_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvPin"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/tvPinSubtitle"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:text="@string/requires_physical_access_to_a_lantern_pro_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvPinSubtitle"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:layout_marginTop="@dimen/space_between_text_large"
+        app:layout_constraintTop_toBottomOf="@+id/tvPin"
+        app:layout_constraintBottom_toTopOf="@+id/linkThisDevice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:text="@string/link_with_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/linkThisDevice"
-        android:layout_height="36dp"
-        android:layout_width="216dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/link_this_device"
-        android:textAppearance="@style/MediumText"
-        android:textSize="14sp"
-        android:elevation="2dp"
-        android:minHeight="48dp"
-        android:textColor="@color/accent_white"
-        android:clickable="true"
-        android:textAllCaps="true"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:background="@drawable/send_btn"
-        android:onClick="linkDevice" /> 
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvPinSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/orText"
-        android:layout_width="fill_parent"
+    <TextView
+        android:text="@string/authorize_device_via_email"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/MediumText"
+        android:id="@+id/tvEmail"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/tvEmailSubtitle"
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:text="@string/requires_access_to_the_email_you_used_to_buy_lantern_pro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvEmailSubtitle"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:layout_marginTop="@dimen/space_between_text_large"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail"
+        app:layout_constraintBottom_toTopOf="@+id/linkEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:text="@string/link_via_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linkEmail"
+        android:layout_marginTop="32dp"
+        style="?attr/materialButtonOutlinedStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
         android:text="@string/or"
-        android:textSize="38sp"
-        android:paddingTop="30dp"
-        android:paddingBottom="30dp"
-        android:gravity="center"
-        android:textColor="@color/black"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/needToRecover"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/MediumText"
-        android:text="@string/need_to_recover"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/black"/>
+        android:id="@+id/tvOr"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline"/>
 
-    <LinearLayout
-        android:id="@+id/auth_device_view"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider"
+        android:id="@+id/divider1"
+        android:background="@color/divider"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvOr"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline"/>
 
-        <EditText
-            android:id="@+id/accountInput"
-            android:layout_width="310dp"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:drawableLeft="@drawable/person"
-            android:drawablePadding="10dip"
-            android:hint="@string/enter_email"
-            android:textColorHint="@color/alipayEditText"
-            android:textColor="@color/black"
-            android:textSize="14dp"
-            android:autoText="false"
-            android:paddingBottom="5dp"
-            android:gravity="fill_horizontal"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:inputType="textEmailAddress" />
-
-        <View
-            android:id="@+id/separator"
-            android:background="@color/edittext_color"
-            android:layout_below="@+id/email"
-            android:layout_width = "275dp"
-            android:layout_gravity="center"
-            android:layout_height="1.5dip"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"
-            />
-    </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/startRecovery"
-        android:layout_height="36dp"
-        android:layout_width="216dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/start_recovery"
-        android:textAppearance="@style/MediumText"
-        android:textSize="14sp"
-        android:elevation="2dp"
-        android:minHeight="48dp"
-        android:textColor="@color/accent_white"
-        android:clickable="true"
-        android:textAllCaps="true"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:background="@drawable/send_btn"
-        android:onClick="linkDevice" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/dontRemember"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:textAppearance="@style/MediumText"
-        android:layout_marginTop="10dp"
-        android:text="@string/dont_remember"
-        android:textSize="14sp"
-        android:paddingTop="10dp"
-        android:gravity="center"
-        android:textColor="@color/black"/>
-
-</LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider"
+        android:id="@+id/divider2"
+        android:background="@color/divider"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvOr"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

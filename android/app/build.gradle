@@ -115,15 +115,15 @@ android {
             versionName "3.0.0"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        ndk {
-            abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
-        }
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     lintOptions {
@@ -381,8 +381,10 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.android.billingclient:billing:3.0.1'
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0-beta01"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-rc01"
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
     implementation 'org.greenrobot:eventbus:3.1.1'
@@ -440,23 +442,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-task buildLibLantern(type: Exec, description: 'Build Go library') {
-    environment "ANDROID_ARCH", androidArch()
-    workingDir '../../../'
-    commandLine 'make', 'android-lib'
-}
-
-task cleanLibLantern(type: Exec, description: 'Clean Go library') {
-    environment "ANDROID_ARCH", androidArch()
-    workingDir '../../../'
-    commandLine 'make', 'clean-android'
-}
-
-// clean.dependsOn 'cleanLibLantern'
-
-//tasks.whenTaskAdded { task ->
-//    if (!task.name.contains("assemble")) {
-//        task.dependsOn buildLibLantern
-//    }
-//}

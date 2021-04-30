@@ -18,6 +18,7 @@ import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.Currency;
@@ -50,7 +51,7 @@ public class TestPaymentActivity extends FragmentActivity implements LanternHttp
     @Override
     public void onFailure(final Throwable throwable, final ProError error) {
         closeDialog();
-        Utils.showUIErrorDialog(TestPaymentActivity.this,
+        ActivityExtKt.showErrorDialog(TestPaymentActivity.this,
                 getResources().getString(R.string.unable_init_test_payment));
     }
 

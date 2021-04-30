@@ -7,8 +7,7 @@ import android.os.ParcelFileDescriptor;
 
 import android.Android; // Lantern's go android package
 
-import org.getlantern.lantern.activity.LanternFreeActivity;
-
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.Locale;
@@ -42,7 +41,7 @@ public class GoTun2SocksProvider implements Provider {
     builder.addRoute("0.0.0.0", 0);
     builder.addDnsServer(dnsIP);
 
-    Intent intent = new Intent(vpnService, LanternFreeActivity.class);
+    Intent intent = new Intent(vpnService, MainActivity.class);
     PendingIntent pendingIntent = PendingIntent.getActivity(vpnService, 0, intent, 0);
     builder.setConfigureIntent(pendingIntent);
 

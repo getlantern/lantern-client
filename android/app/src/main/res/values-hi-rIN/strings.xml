@@ -5,6 +5,8 @@
   <string name="proxy_all_setting">प्रॉक्सी सभी यातायात</string>
   <string name="proxy_all_on_header">चालू (सबसे सुरक्षित विकल्प)</string>
   <string name="proxy_all_off_header">बंद (सबसे तेज विकल्प)</string>
+  <string name="proxy_all_on">इस विकल्प के साथ, आपके डिवाइस की सभी ट्रैफिक को %1$s के माध्यम से भेजा जाएगा</string>
+  <string name="proxy_all_off">इस विकल्प के बंद होने पर, ट्रैफ़िक को केवल ब्लॉक की गई साइटों पर  %1$sके माध्यम से भेजा जाएगा</string>
   <string name="button_text">प्रारंभ</string>
   <string name="drawer_open">दराज खुला</string>
   <string name="drawer_close">दराज बंद</string>
@@ -29,6 +31,14 @@
   <string name="cannot_find_email">उफ़! हम दिक्कत यह है कि ई-मेल पते खोज कर रहे हैं।</string>
   <string name="no_purchase_date">जब आप खरीदा लालटेन प्रो कृपया एक अनुमानित तिथि का चयन</string>
   <string name="purchase_date">खरीद की तारीख</string>
+  <string-array name="common_issue_list">
+    <item>ब्लॉक की गई साइटों को एक्सेस नहीं कर पा रहे</item>
+    <item>ख़रीदारी पूरी नहीं कर पा रहे </item>
+    <item>साइन इन नहीं कर पा रहे </item>
+    <item>स्पिनर लगातार लोड होता है </item>
+    <item>धीरे </item>
+    <item>अन्य</item>
+  </string-array>
   <string name="submit_code">पुष्टि संहिता</string>
   <string name="on_text">चालू</string>
   <string name="off_text">बंद</string>
@@ -36,11 +46,15 @@
   <string name="lantern_on">लालटेन पर है। आप अवरुद्ध साइटों का उपयोग कर सकते हैं।</string>
   <string name="on_desc">अब आप\r\nसाइटों और सेवाओं तक पहुँच प्राप्त कर सकते हैं</string>
   <string name="off_desc">अवरुद्ध साइटों और सेवाओं तक पहुँचने के लिए बटन पर क्लिक करें</string>
+  <string name="service_connected">VPN से कनेक्टेड</string>
   <string name="desktop_option">डेस्कटॉप संस्करण</string>
   <string name="contact_option">संपर्क करें</string>
   <string name="check_for_update">अपडेट के लिये जांचें</string>
   <string name="no_update_available">आप अद्यतित हैं!</string>
+  <string name="error_checking_for_update">%1$sके नए संस्करण के एरर की जांच</string>
   <string name="error_making_purchase">खरीदारी करने में त्रुटि हुई</string>
+  <string name="have_latest_version">सबसे नया संस्करण %1$s%2$s उपलब्ध है.</string>
+  <string name="updating_lantern">%1$sअपडेट किया जा रहा है</string>
   <string name="cancel">रद्द करना</string>
   <string name="newsfeed_option">Lantern फ़ीड आज़माएँ</string>
   <string name="newsfeed_off_option">फ़ीड बंद करें</string>
@@ -62,10 +76,13 @@
   <string name="month">महीना</string>
   <string name="year">वर्ष</string>
   <string name="success_email">Lantern डेस्कटॉप आपको ई-मेल किया गया है!</string>
+  <string name="error_email">आपको %1$s डेस्कटॉप भेजने में समस्या हुई. कृपया बाद में दोबारा कोशिश करें.</string>
   <string name="send_logs">लॉग्स भेजें</string>
   <string name="help_survey">Lantern को बेहतर बनाने में मदद करें, इस एक प्रश्न का सर्वेक्षण अभी करें!</string>
   <string name="take_survey">सर्वेक्षण करें!</string>
   <string name="thanks_survey">हमारा सर्वेक्षण लेने के लिए धन्यवाद!\n</string>
+  <string name="success_log_email">%1$sमें सफलतापूर्वक लॉग सबमिट किए गए!</string>
+  <string name="error_log_email">%1$s में लॉग भेजने में एरर हुई. कृपया बाद में दोबारा कोशिश करें.</string>
   <string name="invalid_email">अमान्य ईमेल पता</string>
   <string name="error_payment_gateway">भुगतान गेटवे से संपर्क करने में त्रुटि</string>
   <string name="emails_do_not_match">ईमेल फ़ील्ड मेल नहीं खाते हैं</string>
@@ -79,6 +96,7 @@
   <string name="contact_email">team@getlantern.org</string>
   <string name="contact_message">मेरी मदद करो</string>
   <string name="contact_subject">Lantern Android</string>
+  <string name="update_available">%1$s का एक नया संस्करण उपलब्ध है! क्या आप अभी अपग्रेड करना चाहेंगे?</string>
   <string name="not_now">अभी नहीं</string>
   <string name="install_update">अपडेट करें</string>
   <string name="error_update">अपडेट डाउनलोड करने में त्रुटि</string>
@@ -105,7 +123,7 @@
   <string name="thanks_purchase">लालटेन प्रो की अपनी खरीद के लिए धन्यवाद!</string>
   <string name="start_inviting">\r\nआमंत्रित करना शुरु करें!</string>
   <string name="sending_request">अनुरोध संसाधित हो रहा है</string>
-  <string name="invite_friends">अपने दोस्तों के साथ साझा करने के लिए एक कोड प्राप्त करने के लिए अपना ई-मेल दर्ज करें। उनके साइन अप करने पर PRO का एक नि:शुल्क महीना प्राप्त करें!</string>
+  <string name="invite_friends">अपने दोस्तों के साथ शेयर करने के लिए एक कोड प्राप्त करने के लिए अपना ईमेल एंटर करें, जब वे साइन अप करें तो एक महीना PRO फ़्री पाएं!</string>
   <string name="invite_friends_welcome">जब आपके दोस्त दो साल की योजना खरीदते हैं, तो आप सबको 3 महीने मुफ्त मिलेंगे, एक साल की योजना में आप सबको 1 महीने में नि:शुल्क मिलेंगे</string>
   <string name="invite_friends_btn">मित्रों को आमंत्रित करें</string>
   <string name="share_friends_text">मुफ्त महीने कमाने के लिए दोस्तों के साथ साझा करें!</string>
@@ -126,7 +144,7 @@
   <string name="email_invite">ईमेल आमंत्रण</string>
   <string name="share_your_referral_code">अपना रेफ़रल कोड साझा करें</string>
   <string name="get_code">कोड प्राप्त करें</string>
-  <string name="get_code_text">अपने दोस्तों के साथ साझा करने के लिए एक कोड प्राप्त करने के लिए अपना ईमेल दर्ज करें, उनके साइन अप करने पर PRO का एक नि:शुल्क महीना प्राप्त करें!</string>
+  <string name="get_code_text">अपने दोस्तों के साथ शेयर करने के लिए एक कोड प्राप्त करने के लिए अपना ईमेल एंटर करें, जब वे साइन अप करें तो एक महीना PRO फ़्री पाएं!</string>
   <string name="enter_your_email">एक रेफरल कोड प्राप्त करने के लिए अपना ईमेल दर्ज करें</string>
   <string name="referral_copied_to_clipboard">रेफरल कोड, क्लिपबोर्ड पर कॉपी किया गया!</string>
   <string name="fastworldpay_text">जब आप खरीदी जारी रखें पर क्लिक करते हैं, तो आपको भुगतान पूरा करने और सक्रिय कोड एकत्र करने के लिए बाहरी साइट पर पुनर्निर्देशित किया जाएगा।</string>
@@ -156,7 +174,7 @@
   <string name="authorize_device_pro">प्रो के लिए डिवाइस अधिकृत करें</string>
   <string name="add_device">डिवाइस जोडे</string>
   <string name="now_authorized">यह उपकरण अब आपके Pro खाते का उपयोग करने के लिए अधिकृत है!</string>
-  <string name="i_have_another">I have another Lantern Pro device</string>
+  <string name="i_have_another">मेरे पास दूसरी Lantern Pro डिवाइस है </string>
   <string name="link_this_device">इस डिवाइस को लिंक करें</string>
   <string name="or">या</string>
   <string name="need_to_recover">मैं अपनी लालटेन प्रो खाते को ठीक करने की जरूरत है</string>
@@ -255,6 +273,9 @@
   <string name="free_month">प्रत्येक साइन अप के लिए प्रो का एक नि:शुल्क महीना प्राप्त करें</string>
   <string name="get_pro_now">अब Pro में चलाएँ</string>
   <string name="inviting_friends">दोस्तों को आमंत्रित करके Pro क्रेडिट प्राप्त करें</string>
+  <string name="data_cap_percent">फ़्री डेटा का %1$sMB बचा है.%2$sपर रिसेट करें.असीमित हाइ स्पीड डेटा के लिए Pro में अपग्रेड करें.</string>
+  <string name="data_cap">आपने अपना सभी Lantern हाई स्पीड डेटा का इस्तेमाल कर लिया है. %1$sपर रिसेट करें. पूरी स्पीड पर Latern का उपयोग जारी रखने के लिए Lantern Pro में अपग्रेड करें.</string>
+  <string name="data_cap_reset">आपका फ़्री Lantern हाई-स्पीड डेटा रीसेट हो गया है. ब्लॉक किये गए साइटों और सेवाओं को ब्राउज़ करना अभी शुरू करें!</string>
   <string name="select">चुनते हैं</string>
   <string name="one_year">1 वर्ष के लिए (गैर आवर्ती)</string>
   <string name="two_years">2 वर्षों के लिए (गैर आवर्ती)</string>
@@ -275,9 +296,10 @@
   <string name="get_lantern_pro">Lantern Pro प्राप्त करें</string>
   <string name="upgrade_to_lantern_pro">लालटेन के लिए प्रो उन्नयन</string>
   <string name="pro_available_for">Windows, Android, Mac और Ubuntu, iOS के लिए जल्द आ रहा है</string>
-  <string name="upgrade_to_pro">असीमित डेटा, तेज़\n गति और अधिक अवरोधक प्रतिरोध के लिए Pro पर अपग्रेड करें!</string>
+  <string name="upgrade_to_pro">असीमित डेटा, तेज़\n गति और ब्लॉक होने से रोकने के लिए Pro में अपग्रेड करें!</string>
   <string name="upgrade_to_pro_yinbi">असीमित डेटा, अधिक तेज गति, अधिक\nअवरोधित प्रतिरोध और निःशुल्क यिनबी क्रिप्टोकरेंसी के लिए Pro में अपग्रेड करें!</string>
   <string name="data_remaining">आपके निःशुल्क मासिक उच्च गति डेटा का %1$s%% शेष है</string>
+  <string name="data_used">फ़्री डेटा का %1$sMB बचा है. \n%2$sपर रिसेट करें.</string>
   <string name="upgrade">अपग्रेड</string>
   <string name="upgrade_pro">Pro में अपग्रेड करें</string>
   <string name="upgrade_now">अभी अपग्रेड करें</string>
@@ -326,7 +348,7 @@
   <string name="confirm_email_address">ईमेल पते की पुष्टि करें</string>
   <string name="register_pro_account">Pro खाता पंजीकृत करें</string>
   <string name="renew_now">अभी नवीनीकृत करें और\n 3 महीने निःशुल्क प्राप्त करें</string>
-  <string name="renew_ends_tomorrow">नवीकरण छूट कल समाप्त होगा!</string>
+  <string name="renew_ends_tomorrow">रिन्यू करने पर मिलने वाली छूट कल ख़त्म होगी!</string>
   <string name="renew_ends_today">3 महीने निःशुल्क के लिए अंतिम मौका!</string>
   <string name="renew_after">अतिरिक्त निःशुल्क 45 दिनों के लिए अभी नवीनीकृत करें!</string>
   <string name="renew_sub">नोट: आपकी नई खरीदी गई योजना समय\n को आपके वर्तमान योजना समय में जोड़\n दिया जाएगा।</string>
@@ -351,6 +373,7 @@
   <string name="creditcard_alipay">क्रेडिट कार्ड/Alipay</string>
   <string name="fastworldpay">फास्ट वर्ल्ड पे (शेटाब)</string>
   <string name="blocked_ads">अवरुद्ध विज्ञापन</string>
+  <string name="upgrade_now_data">असीमित उच्च गति सेवा के लिए अब अपग्रेड करें!</string>
   <string name="renew_your_account">अधिक समय जोड़ने के लिए अपना खाता नवीनीकृत करें</string>
   <string name="turn_on_lantern">अवरुद्ध साइटों और सेवाओं तक तेज़ और सुरक्षित पहुँच सक्षम करने के लिए Lantern चालू करें।</string>
   <string name="lantern_on_text">आप सबसे तेज Lantern सर्वर से जुड़े हैं। ब्राउजिंग शुरू करें!</string>
@@ -391,7 +414,7 @@
   <string name="terms_of_service">सेवा की शर्तें</string>
   <string name="card_info_text">क्रेडिट कार्ड से भुगतान करें</string>
   <string name="enter_lantern_pro_codes">Lantern Pro कोड दर्ज करें</string>
-  <string name="renewal_success">नवीनीकरण सफल हुआ!</string>
+  <string name="renewal_success">रिन्यू करना सफल रहा!</string>
   <string name="thank_you_for_renewing">अपने Lantern Pro\nखाते को नवीनीकृत करने के लिए आपका धन्यवाद</string>
   <string name="yinbi">यिनबी</string>
   <string name="visit_yinbi_website">वेबसाइट पर जाएँ</string>
@@ -425,7 +448,7 @@
   <string name="redemption_code">निष्क्रिय कोड</string>
   <string name="status">स्थिति</string>
   <string name="copy_all_codes">सभी कोड कॉपी करें</string>
-  <string name="visit_yinbi">अपनी YNB को रिडीम करने और अपने\nखाते का बैलेंस जांचने के लिए Yin.bi पर जाएँ। यिनबी निष्क्रिय कोड\nखरीदी के 30 दिन बाद समाप्त होते हैं।</string>
+  <string name="visit_yinbi">अपने YNB को रिडीम करने के लिए Yin.bi पर जाएँ और अपने \nअकाउंट की बची हुई राशि देखें. Yinbi रिडेम्पशन कोड ख़रीदारी के \n30 दिनों के बाद समाप्त हो जाता है.</string>
   <string name="successfully_copied_codes">निष्क्रिय कोड सफलतापूर्वक कॉपी किए गए!</string>
   <string name="no_active_codes">कोई सक्रिय निष्क्रिय कोड नहीं है। बाद में पुन: प्रयास करें!</string>
   <string name="thanks_purchase_yinbi">Lantern Pro की आपकी खरीद के लिए धन्यवाद!\nआज का गिवअवे पूरा हो जाने पर आपका यिनबी\nनिष्क्रिय कोड इस स्क्रीन पर दिखाई देगा। टाइमर पूरा हो जाने पर\nवापस\nदेखें</string>
@@ -454,4 +477,83 @@
   <string name="android.permission.ACCESS_NETWORK_STATE">अपने ट्रैफ़िक का प्रॉक्सी करें</string>
   <string name="privacy_disclosure_title">Lantern गोपनीयता प्रकटीकरण</string>
   <string name="privacy_disclosure_accept">मुझे स्वीकार है</string>
+  <string name="privacy_disclosure_body">Lantern आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध है. हम चाहते हैं कि आप यह समझें कि हम क्या जानकारी  इकट्ठा करते हैं और क्या नहीं, और हम उनका उपयोग कैसे करते हैं, और जानकारी स्टोर करते हैं. हम आपके Lantern Pro अकाउंट से आपकी भुगतान जानकारी को अलग कर देते हैं. हम आपकी गतिविधि के लॉग इकठ्ठा नहीं करते हैं, जिसमें ब्राउज़िंग इतिहास, ट्रैफ़िक गंतव्य, डेटा कंटेंट या DNS प्रश्नों का कोई लॉगिंग शामिल नहीं है. हम कभी भी कनेक्शन लॉग्स को स्टोर नहीं करते हैं, जिसका अर्थ है कि आपके IP पते का कोई लॉग, कनेक्शन टाइमस्टैम्प या सत्र अवधि के साथ जुड़ा हुआ आउटगोइंग Lantern सर्वर IP पता. एक विशिष्ट Latern Pro अकाउंट को देखते हुए, Lantern तकनीकी रूप से उपयोगकर्ता की वास्तविक पहचान के साथ Latern अकाउंट को जोड़ने में असमर्थ है। एक Latern IP पते और एक सटीक समय-टिकट को देखते हुए, Latern तकनीकी रूप से इस IP पते को Latern उपयोगकर्ता या Latern उपयोगकर्ता IP पते की विशेषता देने में असमर्थ है.</string>
+  <string name="referral_code_share_description_free">अपने दोस्तों के साथ अपना कोड  शेयर करें और उनके Pro ख़रीदने पर आप एक महीने की Lantern Pro सेवा फ़्री पाएं!</string>
+  <string name="referral_code_share_description_pro">अपने दोस्तों के साथ अपना कोड शेयर करें और उनके Pro ख़रीदने पर आप और एक  महीने की Lantern Pro सेवा फ़्री पाएं!</string>
+  <string name="referral_code_share">रेफ़रल कोड शेयर करें</string>
+  <string name="referral_code_share_title">अपना रेफ़रल कोड शेयर करें</string>
+  <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
+  <string name="lantern_desktop_share_description">डेस्कटॉप और अन्य सभी प्लेटफार्मों के लिए सबसे हाल का Lantern ऐप, ऊपर दिए गए लिंक पर पाया जा सकता है.</string>
+  <string name="share_link">लिंक शेयर करें</string>
+  <string name="lantern_desktop_link_share_title">Lantern डाउनलोड लिंक शेयर करें</string>
+  <string name="upgrade_to_pro_get_yinbi">Pro में अपग्रेड करें yinbi आज़माएँ</string>
+  <string name="yinbi_description_free">Lantern Pro ख़रीदने वाले सभी लोगों को YNB देने के लिए Lantern ने Yinbi के साथ पार्टनरशिप की है!\nआज के गिवअवे पाने के लिए अभी अपग्रेड करें!\nYinbi के बारे में\n अधिक जानकारी के लिए आधिकारिक साइट पर जाएँ: Yin.bi</string>
+  <string name="yinbi_description_pro">Lantern Pro ख़रीदने वाले सभी लोगों को YNB देने के लिए Lantern ने Yinbi के साथ पार्टनरशिप की है! आज के गिव अवे की पहुँच पाने के लिए रिन्यू करें! Yinbi के बारे में अधिक जानकारी के लिए आधिकारिक साइट देखें: Yin.bi </string>
+  <string name="yinbi_title_free">फ़्री Yinbi क्रिप्टोक्यूरेंसी</string>
+  <string name="yinbi_title_pro">यिनबी निष्क्रय</string>
+  <string name="redeem_lantern_pro_codes">Lantern Pro कोड रिडीम करें</string>
+  <string name="redeem_code_description_first_part">थोक Lantern Pro कोड प्राप्त किया जा सकता है </string>
+  <string name="redeem_code_description_second_part">reseller.lantern.io</string>
+  <string name="lantern_pro_codes">Lantern Pro कोड</string>
+  <string name="redeem_codes">कोड रिडीम करें</string>
+  <string name="terms_of_service_complete_purchase">पूर्ण खरीद पर क्लिक करके, आप हमारी सेवा की शर्तों से सहमत होते हैं</string>
+  <string name="step_1">कदम 1</string>
+  <string name="choose_plan">योजना चुनें</string>
+  <string name="unlimited_data">असीमित डेटा</string>
+  <string name="faster_data_centers">तेज़ डेटा सेंटर्स</string>
+  <string name="no_logs">कोई लॉग नहीं</string>
+  <string name="connect_up_to_3_devices">3 डिवाइस तक कनेक्ट करें</string>
+  <string name="free_yinbi_cryptocurrency">फ़्री Yinbi क्रिप्टोक्यूरेंसी!</string>
+  <string name="yinbi_cryptocurrency">Yinbi क्रिप्टोक्यूरेंसी</string>
+  <string name="the_yinbi_foundation_description">Yinbi फाउंडेशन, Lantern Pro के खरीदारों को विशेष रूप से 888 बिलियन YNB क्रिप्टोकरेंसी दे रही है. YNB को हर दिन के अंत में, उस दिन जारी की गई Yinbi की मात्रा, उन लोगों की संख्या जो अपग्रेड/रिन्यू करते हैं, और आपके द्वारा ख़रीदे जाने वाले वर्षों या अकाउंट की संख्या के आधार पर वितरित किया जाएगा. ख़रीदने के बाद आप Yinbi  रिडेम्पशन स्क्रीन पर अपना YNB इकट्ठा करने के बारे में विवरण पा सकते हैं.</string>
+  <string name="plan_duration">%d सालाना प्लान</string>
+  <string name="total_cost">%s एक बार बिल</string>
+  <string name="discount">%s%%सेव करें</string>
+  <string name="short_month">/हर महीने</string>
+  <string name="most_popular">सबसे लोकप्रिय!</string>
+  <string name="membership_end_soon">आपकी सदस्यता जल्द ही समाप्त हो रही है. अभी रिन्यू करें और %s तक फ़्री पाएं!</string>
+  <string name="membership_ends_today">आपकी सदस्यता आज समाप्त हो रही है. अभी रिन्यू करें और %s तक फ़्री पाएं!</string>
+  <string name="membership_has_expired">आपकी सदस्यता समाप्त हो चुकी है! अभी रिन्यू करें और %s तक फ़्री पाएं!</string>
+  <string name="free_extra_yinbi">2x Yinbi!</string>
+  <string name="step_2">कदम 2</string>
+  <string name="enter_email_short">ईमेल दर्ज करें</string>
+  <string name="mm_yy">महीना/वर्ष</string>
+  <string name="referral_code_optional">रेफ़रल कोड (वैकल्पिक)</string>
+  <string name="enter_payment_details">भुगतान का तरीका एंटर करें</string>
+  <string name="email">ईमेल</string>
+  <string name="authorize_with_device_linking_pin">डिवाइस लिंकिंग पिन से अधिकृत करें</string>
+  <string name="requires_physical_access_to_a_lantern_pro_device">Lantern Pro डिवाइस के लिए सच में एक्सेस की आवश्यकता है </string>
+  <string name="link_with_pin">पिन से लिंक करें</string>
+  <string name="authorize_device_via_email">ईमेल से डिवाइस अधिकृत करें</string>
+  <string name="requires_access_to_the_email_you_used_to_buy_lantern_pro">Lantern Pro ख़रीदने के लिए उपयोग किए गए ईमेल के एक्सेस की आवश्यकता है </string>
+  <string name="link_via_email">ईमेल से लिंक करें</string>
+  <string name="device_linking_pin">डिवाइस लिंकिंग पिन</string>
+  <string name="open_the_add_device_menu_item_on_your_pro_device">अपने Pro डिवाइस पर \'डिवाइस जोड़ें\' मेनू आइटम खोलें.</string>
+  <string name="enter_the_device_linking_pin_and_submit">डिवाइस लिंकिंग पिन एंटर करें, और सबमिट करें.</string>
+  <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">*सुनिश्चित करें कि दोनों डिवाइस Lantern के सबसे हाल के संस्करण को चला रहे हैं.</string>
+  <string name="your_device_linking_pin_has_been_sent">आपका डिवाइस लिंकिंग पिन %sपर भेजा गया है. ईमेल आने में कई घंटे लग सकते हैं. अगर आपको यह नहीं मिला तो कृपया अपना स्पैम फ़ोल्डर देखें.</string>
+  <string name="enter_or_paste_device_linking_pin">डिवाइस लिंकिंग पिन डालें या पेस्ट करें</string>
+  <string name="describe_your_issue">समस्या का विवरण</string>
+  <string name="send_report">रिपोर्ट भेजें</string>
+  <string name="email_optional">ईमेल (वैकल्पिक)</string>
+  <string name="device_added">डिवाइस जोड़ा गया</string>
+  <string name="device_authorized_pro">यह डिवाइस अब आपका Lantern Pro अकाउंट का उपयोग करने के लिए अधिकृत है!</string>
+  <string name="report_sent">सूचना भेजी गई</string>
+  <string name="thank_you_for_reporting_your_issue">आपको हुई समस्या की रिपोर्ट करने के लिए धन्यवाद, अगर आपने अपना ईमेल दिया है तो हम जल्द से जल्द आपसे संपर्क करेंगे.</string>
+  <string name="visit_yin_bi_to_redeem_your_ynb">अपने YNB को रिडीम करने के लिए Yin.bi पर जाएँ और अपने अकाउंट की बची हुई  राशि देखें. Yinbi रिडेम्पशन कोड ख़रीदारी के 30 दिनों के बाद समाप्त हो जाता है.</string>
+  <string name="ynb"># YNB</string>
+  <string name="ynb_distributed">YNB को हर दिन के अंत में, उस दिन जारी की गई Yinbi की मात्रा, उन लोगों की संख्या जो अपग्रेड करते हैं, और आपके द्वारा ख़रीदे जाने वाले वर्षों या अकाउंट की संख्या के आधार पर वितरित किया जाएगा. आज का गिव अवे पूरा होने पर आपका Yinbi रिडेम्पशन कोड इस स्क्रीन पर दिखाई देगा. टाइमर समाप्त होने पर दोबारा देखें.</string>
+  <string name="until_code_and_ynb_will_be_shown">तक कोड और # YNB दिखाया जाएगा</string>
+  <string name="have_a_lantern_pro_activation_code_click_here">एक लालटेन प्रो सक्रियण कोड है? यहाँ क्लिक करें</string>
+  <string name="enter_email_and_activation_code">ईमेल और एक्टिवेशन कोड एंटर करें</string>
+  <string name="activation_code">एक्टिवेशन कोड</string>
+  <string name="by_clicking_register_for_pro_you_agree_to_our_terms_of_service">Pro के लिए रजिस्टर करें पर क्लिक करके आप हमारी सेवा की शर्तों से सहमत होते हैं</string>
+  <string name="register_for_pro">प्रो के लिए रजिस्टर करें</string>
+  <string name="enter_your_device_linking_pin">अपना डिवाइस लिंकिंग पिन डालें</string>
+  <string name="enter_the_linking_code_obtained">चरण 1 से प्राप्त लिंकिंग कोड एंटर करें, और सबमिट करें.</string>
+  <string name="open_authorize_device_for_pro_from_the_menu">आप जिस डिवाइस को लिंक करना चाहते हैं, उस मेनू से Pro के लिए अधिकृत डिवाइस\' खोलें.</string>
+  <string name="email_with_colon">ईमेल:</string>
+  <string name="pro_account_expiration">Pro अकाउंट समाप्ति:</string>
+  <string name="lantern_pro_devices_up_to_3">Lantern pro डिवाइसेज़ (3 तक)</string>
+  <string name="renew_short">नवीनीकृत करें</string>
 </resources>

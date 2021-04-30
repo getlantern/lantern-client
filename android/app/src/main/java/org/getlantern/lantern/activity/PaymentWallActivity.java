@@ -22,7 +22,7 @@ import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.math.BigDecimal;
@@ -75,7 +75,7 @@ public class PaymentWallActivity extends FragmentActivity {
             new LanternHttpClient.ProCallback() {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
-                Utils.showUIErrorDialog(PaymentWallActivity.this,
+                ActivityExtKt.showErrorDialog(PaymentWallActivity.this,
                         res.getString(R.string.error_payment_gateway));
             }
             @Override
@@ -86,7 +86,7 @@ public class PaymentWallActivity extends FragmentActivity {
                 } catch (Exception e) {
                     final String error = "Unable to initiate purchase";
                     Logger.error(TAG, error, e);
-                    Utils.showUIErrorDialog(PaymentWallActivity.this, error);
+                    ActivityExtKt.showErrorDialog(PaymentWallActivity.this, error);
                     return;
                 }
             }

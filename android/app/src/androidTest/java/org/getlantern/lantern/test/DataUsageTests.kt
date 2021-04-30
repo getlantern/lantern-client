@@ -10,8 +10,8 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.mobilesdk.model.SessionManager
 import org.junit.Assert.assertNotNull
@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 class DataUsageTests {
 
     @get:Rule
-    var mainActivityRule = ActivityScenarioRule(LanternFreeActivity::class.java)
+    var mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 

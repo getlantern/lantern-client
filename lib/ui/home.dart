@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
@@ -8,7 +9,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/utils/hex_color.dart';
 
-import 'vpn.dart';
+import 'widgets/vpn/vpn.dart';
 
 class HomePage extends StatefulWidget {
   final String _initialRoute;
@@ -26,11 +27,15 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final String _initialRoute;
 
+  late Future<void> loadAsync;
+
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
     } else if (_initialRoute.startsWith(routeSettings)) {
       _currentIndex = 2;
+    } else if (_initialRoute.startsWith(routeAccount)) {
+      _currentIndex = 3;
     }
   }
 
@@ -40,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     _pageController = PageController(initialPage: _currentIndex);
     final mainMethodChannel = const MethodChannel('lantern_method_channel');
     final eventManager = EventManager('lantern_event_channel');
+    loadAsync = Localization.loadTranslations();
 
     eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -103,29 +109,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onUpdateCurrentIndexPageView(int index) {
-    _pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 100), curve: Curves.bounceIn);
+    _pageController.jumpToPage(index);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        onPageChanged: onPageChange,
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        // TODO: only disable scrolling while we need to detect the drag gesture for the record button
-        children: [
-          MessagesTab(_initialRoute.replaceFirst(routeMessaging, ''),
-              widget._initialRouteArguments),
-          VPNTab(),
-          const Center(child: Text('Need to build this')),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        currentIndex: _currentIndex,
-        updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-      ),
-    );
+    var sessionModel = context.watch<SessionModel>();
+    return FutureBuilder(
+        future: loadAsync,
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return sessionModel
+              .language((BuildContext context, String lang, Widget? child) {
+            Localization.locale = lang;
+            return Scaffold(
+              body: PageView(
+                onPageChanged: onPageChange,
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  MessagesTab(_initialRoute.replaceFirst(routeMessaging, ''),
+                      widget._initialRouteArguments),
+                  VPNTab(),
+                  ExchangeTab(),
+                  AccountTab(),
+                ],
+              ),
+              bottomNavigationBar: CustomBottomBar(
+                currentIndex: _currentIndex,
+                updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+              ),
+            );
+          });
+        });
   }
 }

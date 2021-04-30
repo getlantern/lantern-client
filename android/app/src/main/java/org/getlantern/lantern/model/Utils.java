@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -23,6 +22,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.text.style.UnderlineSpan;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
@@ -45,7 +44,7 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WebViewActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.ErrorDialogFragment;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.reflect.Field;
@@ -126,6 +125,11 @@ public class Utils {
 
     public static void clickify(TextView view, final String clickableText, final int color,
         final ClickSpan.OnClickListener listener) {
+        clickify(view, clickableText, color, false, listener);
+    }
+
+    public static void clickify(TextView view, final String clickableText, final int color, boolean hasUnderline,
+                                final ClickSpan.OnClickListener listener) {
         if (view == null) {
             return;
         }
@@ -141,9 +145,15 @@ public class Utils {
         }
         if (text instanceof Spannable) {
             ((Spannable)text).setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (hasUnderline) {
+                ((Spannable)text).setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         } else {
             SpannableString s = SpannableString.valueOf(text);
             s.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (hasUnderline) {
+                s.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             view.setText(s);
         }
 
@@ -190,31 +200,6 @@ public class Utils {
         }
     }
 
-    public static void showErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-
-        try {
-            DialogFragment fragment = ErrorDialogFragment.newInstance(R.string.validation_errors, error);
-            activity.getFragmentManager().beginTransaction().add(fragment, "error").commitAllowingStateLoss();
-        } catch (Exception e) {
-            Logger.error(TAG, "Unable to show error dialog", e);
-        }
-    }
-
-    public static void showUIErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showErrorDialog(activity, error);
-            }
-        });
-    }
-
     public static boolean isEmailValid(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -248,45 +233,6 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-            CharSequence title, CharSequence msg,
-            final boolean finish) {
-        Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title,
-                                       CharSequence msg,
-                                       CharSequence okLabel,
-                                       final boolean finish,
-                                       Runnable onClick) {
-        Logger.debug(TAG, "Showing alert dialog...");
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-                alertDialog.setTitle(title);
-                alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, okLabel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                if (onClick != null) {
-                                    onClick.run();
-                                }
-                                if (finish) {
-                                    activity.finish();
-                                }
-                            }
-                });
-                if (!activity.isFinishing()) {
-                    alertDialog.show();
-                }
-            }
-        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {
@@ -393,6 +339,12 @@ public class Utils {
      * @return the converted number
      */
     public static String convertEasternArabicToDecimal(final long number) {
+        // format the number to English locale
+        final NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+        return nf.format(number);
+    }
+
+    public static String convertEasternArabicToDecimalFloat(final float number) {
         // format the number to English locale
         final NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
         return nf.format(number);

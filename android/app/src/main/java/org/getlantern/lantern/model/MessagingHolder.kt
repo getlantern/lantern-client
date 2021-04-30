@@ -24,7 +24,7 @@ internal const val defaultNotificationChannelId = "default"
 class MessagingHolder {
     lateinit var messaging: Messaging
     private val contactNotificationIds = HashMap<Model.ContactId, Int>()
-    private var nextNotificationId = 5000;
+    private var nextNotificationId = 5000
 
     fun init(application: Application) {
         val lanternDir = File(application.filesDir, ".lantern")
