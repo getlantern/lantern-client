@@ -87,8 +87,8 @@ class _ConversationState extends State<Conversation> {
       context,
       maxAssets: maxAssetsCount,
       selectedAssets: assets,
-      pickerTheme: ThemeData.dark(),
-      themeColor: currentTheme.accentColor,
+      // pickerTheme: ThemeData.dark(),
+      // themeColor: currentTheme.accentColor,
       textDelegate:
           EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
