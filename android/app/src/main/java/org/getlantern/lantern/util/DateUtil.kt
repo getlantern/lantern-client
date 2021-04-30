@@ -16,4 +16,3 @@ object DateUtil {
         return this?.toLocalDate() == LocalDate.now()
     }
 }
-

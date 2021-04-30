@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
-import androidx.core.graphics.withSave
 import org.getlantern.lantern.R
 import org.getlantern.lantern.util.Util
 

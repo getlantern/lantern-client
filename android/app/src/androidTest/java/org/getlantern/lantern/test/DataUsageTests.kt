@@ -21,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class DataUsageTests {
 
@@ -42,8 +41,10 @@ class DataUsageTests {
     fun WhenDataCapIsHit_AppShouldShowNotification() {
         val bandwidth = Bandwidth(100, 0, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap,
-                bandwidth.expiresAtString);
+        val content = LanternApp.getAppContext().resources.getString(
+            R.string.data_cap,
+            bandwidth.expiresAtString
+        )
         testDataUsageNotification(bandwidth, title, content)
     }
 
@@ -51,9 +52,11 @@ class DataUsageTests {
     fun WhenDataUsageIs50_AppShouldShowNotification() {
         val bandwidth = Bandwidth(50, 500, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
-                bandwidth.remaining,
-                bandwidth.expiresAtString)
+        val content = LanternApp.getAppContext().resources.getString(
+            R.string.data_cap_percent,
+            bandwidth.remaining,
+            bandwidth.expiresAtString
+        )
         testDataUsageNotification(bandwidth, title, content)
     }
 
@@ -61,9 +64,11 @@ class DataUsageTests {
     fun WhenDataUsageIs80_AppShouldShowNotification() {
         val bandwidth = Bandwidth(80, 200, 1000, 3600)
         val title = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
-        val content = LanternApp.getAppContext().resources.getString(R.string.data_cap_percent,
-                bandwidth.remaining,
-                bandwidth.expiresAtString)
+        val content = LanternApp.getAppContext().resources.getString(
+            R.string.data_cap_percent,
+            bandwidth.remaining,
+            bandwidth.expiresAtString
+        )
         testDataUsageNotification(bandwidth, title, content)
     }
 
