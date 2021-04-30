@@ -86,11 +86,9 @@ class _ConversationState extends State<Conversation> {
     return await AssetPicker.pickAssets(
       context,
       maxAssets: maxAssetsCount,
-      gridCount: 2,
-      pathThumbSize: 40,
       selectedAssets: assets,
       pickerTheme: ThemeData.dark(),
-      // themeColor: currentTheme.accentColor,
+      themeColor: currentTheme.accentColor,
       textDelegate:
           EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
@@ -108,7 +106,7 @@ class _ConversationState extends State<Conversation> {
             }
           },
           child: const Center(
-            child: Icon(Icons.camera_enhance, size: 42.0),
+            child: Icon(Icons.camera_alt, size: 30.0),
           ),
         );
       },
