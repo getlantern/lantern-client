@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.LanternFreeActivity;
 
 import org.getlantern.mobilesdk.Logger;
 
@@ -32,9 +32,9 @@ public class Shareable {
 
     final private Resources resources;
     final private PackageManager packageManager;
-    final private LanternFreeActivity activity;
+    final private MainActivity activity;
 
-    public Shareable(final LanternFreeActivity activity) {
+    public Shareable(final MainActivity activity) {
         this.activity = activity;
         this.resources = activity.getResources();
         this.packageManager = activity.getPackageManager();

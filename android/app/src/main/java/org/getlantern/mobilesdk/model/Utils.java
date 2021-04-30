@@ -41,11 +41,10 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WebViewActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.fragment.ErrorDialogFragment;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.reflect.Field;
-import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,31 +170,6 @@ public class Utils {
         }
     }
 
-    public static void showErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-
-        try {
-            DialogFragment fragment = ErrorDialogFragment.newInstance(R.string.validation_errors, error);
-            activity.getFragmentManager().beginTransaction().add(fragment, "error").commitAllowingStateLoss();
-        } catch (Exception e) {
-            Logger.error(TAG, "Unable to show error dialog", e);
-        }
-    }
-
-    public static void showUIErrorDialog(final Activity activity, String error) {
-        if (activity.isDestroyed()) {
-            return;
-        }
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showErrorDialog(activity, error);
-            }
-        });
-    }
-
     public static boolean isEmailValid(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -229,45 +203,6 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-            CharSequence title, CharSequence msg,
-            final boolean finish) {
-        Utils.showAlertDialog(activity, title, msg, "OK", finish, null);
-    }
-
-    public static void showAlertDialog(final Activity activity,
-                                       CharSequence title,
-                                       CharSequence msg,
-                                       CharSequence okLabel,
-                                       final boolean finish,
-                                       Runnable onClick) {
-        Logger.debug(TAG, "Showing alert dialog...");
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-                alertDialog.setTitle(title);
-                alertDialog.setMessage(msg);
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, okLabel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                if (onClick != null) {
-                                    onClick.run();
-                                }
-                                if (finish) {
-                                    activity.finish();
-                                }
-                            }
-                });
-                if (!activity.isFinishing()) {
-                    alertDialog.show();
-                }
-            }
-        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {

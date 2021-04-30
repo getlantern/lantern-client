@@ -1,93 +1,127 @@
 package org.getlantern.lantern.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
 import com.google.gson.JsonObject;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
-
+import okhttp3.HttpUrl;
+import okhttp3.Response;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.NavigatorKt;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.fragment.CardFragment;
-import org.getlantern.lantern.model.LanternHttpClient;
-import org.getlantern.lantern.model.ProError;
-import org.getlantern.lantern.model.ProPlan;
-import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.model.*;
+import org.getlantern.lantern.util.ActivityExtKt;
+import org.getlantern.lantern.util.DateUtil;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
+import org.joda.time.LocalDateTime;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import okhttp3.HttpUrl;
-import okhttp3.Response;
-
-public abstract class PlansActivity extends FragmentActivity {
+@EActivity(R.layout.activity_plan)
+public class PlansActivity extends FragmentActivity {
 
     private static final String TAG = PlansActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    
+
     private ConcurrentHashMap<String, ProPlan> plans = new ConcurrentHashMap<String, ProPlan>();
 
-    protected TextView oneYearCost, twoYearCost, resellerText;
+    @ViewById
+    View itemPlanYear1;
 
-    protected Button oneYearBtn, twoYearBtn;
+    @ViewById
+    View itemPlanYear2;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    @ViewById
+    TextView tvRenew;
 
-        setContentView(getLayoutId());
+    @ViewById
+    TextView tvYinbi;
 
+    @ViewById
+    ImageView imgvYinbiInfo;
+
+    @ViewById
+    View mostPopularYear1;
+
+    @ViewById
+    View mostPopularYear2;
+
+    @ViewById
+    View content;
+
+    private TextView tvOneMonthCostFirst, tvTwoMonthCostSecond, tvDurationFirst, tvDurationSecond, tvTotalCostFirst, tvTotalCostSecond;
+    private AlertDialog yinbiInfoDialog;
+
+    @AfterViews
+    void afterViews() {
         initViews();
         updatePlans();
         setPaymentGateway();
         sendScreenViewEvent();
     }
 
-    private void initViews() {
-        oneYearBtn = (Button)findViewById(R.id.oneYearBtn);
-        twoYearBtn = (Button)findViewById(R.id.twoYearBtn);
-        oneYearCost = (TextView)findViewById(R.id.oneYearCost);
-        twoYearCost = (TextView)findViewById(R.id.twoYearCost);
-        resellerText = (TextView)findViewById(R.id.resellerText);
-        oneYearBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                selectPlan(v);
-            }
-        });
-        twoYearBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                selectPlan(v);
-            }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            twoYearBtn.setStateListAnimator(null);
-        }
+    @Click
+    void itemPlanYear1() {
+        selectPlan(itemPlanYear1);
+    }
 
-        if (Utils.isPlayVersion(this)) {
-            resellerText.setVisibility(View.GONE);
+    @Click
+    void itemPlanYear2() {
+        selectPlan(itemPlanYear2);
+    }
+
+    @Click
+    void imgvClose() {
+        onBackPressed();
+    }
+
+    @Click
+    void imgvYinbiInfo() {
+        ActivityExtKt.showAlertDialog(this, getString(R.string.yinbi_cryptocurrency), getString(R.string.the_yinbi_foundation_description),
+            ContextCompat.getDrawable(this, R.drawable.ic_yinbi_small));
+    }
+
+    private void initViews() {
+        tvOneMonthCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvCost);
+        tvTwoMonthCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvCost);
+        tvTotalCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvTotalCost);
+        tvTotalCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvTotalCost);
+        tvDurationFirst = (TextView) itemPlanYear1.findViewById(R.id.tvDuration);
+        tvDurationSecond = (TextView) itemPlanYear2.findViewById(R.id.tvDuration);
+        View activateCodeContainer = findViewById(R.id.activateCodeContainer);
+        if (LanternApp.getSession().yinbiEnabled()) {
+            tvYinbi.setVisibility(View.VISIBLE);
+            imgvYinbiInfo.setVisibility(View.VISIBLE);
         } else {
-            resellerText.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    resellerButtonClicked(v);
-                }
-            });
+            tvYinbi.setVisibility(View.GONE);
+            imgvYinbiInfo.setVisibility(View.GONE);
+        }
+        if (LanternApp.getSession().isProUser()) {
+            activateCodeContainer.setVisibility(View.GONE);
+        } else {
+            activateCodeContainer.setVisibility(View.VISIBLE);
+            activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this));
         }
     }
 
     private void sendScreenViewEvent() {
         final String screenType;
-        if (getLayoutId() == R.layout.yinbi_pro_plans) {
+        if (!LanternApp.getSession().isPlayVersion() && LanternApp.getSession().yinbiEnabled() && !LanternApp.getSession().isProUser()) {
             screenType = "yinbi_plans_view";
         } else {
             screenType = "plans_view";
@@ -129,24 +163,12 @@ public abstract class PlansActivity extends FragmentActivity {
         });
     }
 
-    protected FragmentPagerItem createCard(@NonNull final int layoutId, final Integer featuresId, final boolean colorLastItem) {
-        final Bundle bundle = new Bundle();
-        bundle.putInt("layoutId", layoutId);
-        if (featuresId != null) {
-            bundle.putInt("featuresId", featuresId);
-        }
-        bundle.putBoolean("colorLastItem", colorLastItem);
-        return FragmentPagerItem.of(getString(R.string.no_title),
-                CardFragment.class, bundle);
-    }
-
     protected void updatePlans() {
-        final Resources res = getResources();
         LanternApp.getPlans(new LanternHttpClient.PlansCallback() {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
                 if (error != null && error.getMessage() != null) {
-                    Utils.showUIErrorDialog(PlansActivity.this, error.getMessage());
+                    ActivityExtKt.showErrorDialog(PlansActivity.this, error.getMessage());
                 }
             }
             @Override
@@ -168,13 +190,62 @@ public abstract class PlansActivity extends FragmentActivity {
         });
     }
 
-    protected abstract void updatePrice(ProPlan plan);
+    protected void updatePrice(ProPlan plan) {
+        content.setVisibility(View.VISIBLE);
+        String bonus = plan.getRenewalBonusExpected(this);
+        CharSequence totalCost = getString(R.string.total_cost, plan.getCostWithoutTaxStr());
+        if (plan.getDiscount() > 0) {
+            totalCost += " - ";
+            int startForegroundPos = totalCost.length();
+            String discount = getString(R.string.discount, String.valueOf(Math.round(plan.getDiscount() * 100)));
+            totalCost += discount;
+            SpannableString totalCostSpanned = new SpannableString(totalCost);
+            totalCostSpanned.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.secondary_pink)), startForegroundPos, totalCost.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            totalCost = totalCostSpanned;
+        }
+        String oneMonth = plan.getFormatterPriceOneMonth();
+        String durationFormat = plan.getFormatPriceWithBonus(this, true);
+        if (plan.numYears() == 1) {
+            itemPlanYear1.setVisibility(View.VISIBLE);
+            tvOneMonthCostFirst.setText(oneMonth);
+            tvTotalCostFirst.setText(totalCost);
+            itemPlanYear1.setTag(plan.getId());
+            tvDurationFirst.setText(durationFormat);
+            if (plan.isBestValue()) {
+                mostPopularYear1.setVisibility(View.VISIBLE);
+                itemPlanYear1.setSelected(true);
+            }
+        } else {
+            itemPlanYear2.setVisibility(View.VISIBLE);
+            tvTwoMonthCostSecond.setText(oneMonth);
+            tvTotalCostSecond.setText(totalCost);
+            itemPlanYear2.setTag(plan.getId());
+            if (LanternApp.getSession().isProUser()) {
+                tvRenew.setVisibility(View.VISIBLE);
+                LocalDateTime localDateTime = LanternApp.getSession().getExpiration();
+                if (DateUtil.INSTANCE.isToday(localDateTime)) {
+                    tvRenew.setText(getString(R.string.membership_ends_today, bonus));
+                } else if (DateUtil.INSTANCE.isBefore(localDateTime)) {
+                    tvRenew.setText(getString(R.string.membership_has_expired, bonus));
+                } else {
+                    tvRenew.setText(getString(R.string.membership_end_soon, bonus));
+                }
+            } else {
+                tvRenew.setVisibility(View.GONE);
+            }
+            if (plan.isBestValue()) {
+                mostPopularYear2.setVisibility(View.VISIBLE);
+                itemPlanYear2.setSelected(true);
+            }
+            tvDurationSecond.setText(durationFormat);
+        }
+    }
 
     private void selectPlan(View view) {
         if (view.getTag() == null) {
             return;
         }
-        final String planId = (String)view.getTag();
+        final String planId = (String) view.getTag();
         Logger.debug(TAG, "Plan selected: " + planId);
 
         final Bundle params = new Bundle();
@@ -185,12 +256,4 @@ public abstract class PlansActivity extends FragmentActivity {
         LanternApp.getSession().setProPlan(plans.get(planId));
         startActivity(new Intent(this, CheckoutActivity_.class));
     }
-
-    private void resellerButtonClicked(final View v) {
-        final Intent intent = new Intent(this,
-                RegisterProActivity_.class);
-        startActivity(intent);
-    }
-
-    protected abstract int getLayoutId();
 }

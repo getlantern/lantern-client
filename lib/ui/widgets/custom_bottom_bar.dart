@@ -1,8 +1,9 @@
-import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/hex_color.dart';
+import 'package:lantern/ui/widgets/custom_badge.dart';
 
-class CustomBottomBar extends StatefulWidget {
+import 'custom_rounded_rectangle_border.dart';
+
+class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
   final Function updateCurrentIndexPageView;
 
@@ -12,18 +13,13 @@ class CustomBottomBar extends StatefulWidget {
       Key? key})
       : super(key: key);
 
-  @override
-  _CustomBottomBarState createState() => _CustomBottomBarState();
-}
-
-class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget activeIcon({bool isActive = false}) {
     return Container(
       margin: const EdgeInsets.only(left: 4),
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(
-        color: isActive ? Colors.green : Colors.red,
+        color: isActive ? HexColor(indicatorGreen) : HexColor(indicatorRed),
         borderRadius: const BorderRadius.all(
           Radius.circular(activeIconSize / 2),
         ),
@@ -42,22 +38,32 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   }
 
   Widget renderBottomTabItem(
-      {required TAB_ENUM tabEnum, required int index, bool isActive = false}) {
+      {required TAB_ENUM tabEnum,
+      required int index,
+      bool isActive = false,
+      required BuildContext context}) {
     String text;
-    late IconData icon;
+    String icon;
+    var sessionModel = context.watch<SessionModel>();
 
+    // Tab(text: 'VPN'.i18n, icon: Icon(Icons.vpn_key)),
+    // Tab(text: 'Account'.i18n, icon: Icon(Icons.person)),
     switch (tabEnum) {
       case TAB_ENUM.MESSAGING:
         text = 'Messaging'.i18n;
-        icon = Icons.message;
+        icon = ImagePaths.messages_icon;
         break;
       case TAB_ENUM.VPN:
         text = 'VPN'.i18n;
-        icon = Icons.vpn_key;
+        icon = ImagePaths.key_icon;
+        break;
+      case TAB_ENUM.EXCHANGE:
+        text = 'Exchange'.i18n;
+        icon = ImagePaths.exchange_icon;
         break;
       case TAB_ENUM.ACCOUNT:
         text = 'Account'.i18n;
-        icon = Icons.account_circle;
+        icon = ImagePaths.account_icon;
         break;
       default:
         throw Exception('unknown tabEnum');
@@ -65,16 +71,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
     return Expanded(
       flex: 1,
       child: InkWell(
-        // customBorder: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.only(
-        //     topLeft: Radius.circular(
-        //       index != 0 ? borderRadius : 0,
-        //     ),
-        //     topRight: Radius.circular(index != TAB_ENUM.values.length - 1 ? borderRadius : 0),
-        //   ),
-        // ),
-        onTap: () => widget.updateCurrentIndexPageView(index),
-        child: ClipRRect(
+        customBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(
               index != 0 ? borderRadius : 0,
@@ -82,51 +79,108 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
             topRight: Radius.circular(
                 index != TAB_ENUM.values.length - 1 ? borderRadius : 0),
           ),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: HexColor(widget.currentIndex == index
-                  ? selectedTabColor
-                  : unselectedTabColor),
-              border: Border(
-                top: BorderSide(
-                  color: widget.currentIndex == index
-                      ? Colors.white
-                      : HexColor(borderColor),
-                  width: 1,
+        ),
+        onTap: () => updateCurrentIndexPageView(index),
+        child: Ink(
+          decoration: ShapeDecoration(
+            color: currentIndex == index
+                ? HexColor(selectedTabColor)
+                : HexColor(unselectedTabColor),
+            shape: CustomRoundedRectangleBorder(
+              topSide: currentIndex == index
+                  ? null
+                  : BorderSide(
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
+              rightSide: currentIndex == index ||
+                      currentIndex == 2 && index == 0 ||
+                      currentIndex == 0 && index == 1
+                  ? null
+                  : BorderSide(
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
+              leftSide: currentIndex == index ||
+                      currentIndex == 0 && index == 2 ||
+                      currentIndex == 2 && index == 1
+                  ? null
+                  : BorderSide(
+                      color: HexColor(borderColor),
+                      width: 1,
+                    ),
+              topLeftCornerSide: BorderSide(
+                color: (currentIndex == 0 && index == 1) ||
+                        (currentIndex == 1 && index == 2)
+                    ? HexColor(borderColor)
+                    : Colors.white,
+              ),
+              topRightCornerSide: BorderSide(
+                color: (currentIndex == 1 && index == 0) ||
+                        (currentIndex == 2 && index == 1)
+                    ? HexColor(borderColor)
+                    : Colors.white,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                  (currentIndex == 0 && index == 1) ||
+                          (currentIndex == 1 && index == 2)
+                      ? borderRadius
+                      : 0,
                 ),
-                right: BorderSide(
-                  color: HexColor(borderColor),
-                  width: 1,
+                topRight: Radius.circular(
+                  (currentIndex == 1 && index == 0) ||
+                          (currentIndex == 2 && index == 1)
+                      ? borderRadius
+                      : 0,
                 ),
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  color: HexColor(widget.currentIndex == index
-                      ? selectedTabLabelColor
-                      : unselectedTabLabelColor),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      text,
-                      style: tsCaption(context)?.copyWith(
-                        color: HexColor(widget.currentIndex == index
-                            ? selectedTabLabelColor
-                            : unselectedTabLabelColor),
-                      ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              tabEnum == TAB_ENUM.ACCOUNT
+                  ? sessionModel.shouldShowYinbiBadge((BuildContext context,
+                      bool shouldShowYinbiBadge, Widget? child) {
+                      return CustomBadge(
+                        count: 1,
+                        fontSize: 8.0,
+                        showBadge: shouldShowYinbiBadge,
+                        child: CustomAssetImage(
+                          path: icon,
+                          size: 24,
+                          color: HexColor(currentIndex == index
+                              ? selectedTabLabelColor
+                              : unselectedTabLabelColor),
+                        ),
+                      );
+                    })
+                  : CustomAssetImage(
+                      path: icon,
+                      size: 24,
+                      color: HexColor(currentIndex == index
+                          ? selectedTabLabelColor
+                          : unselectedTabLabelColor),
                     ),
-                    tabEnum == TAB_ENUM.VPN
-                        ? activeIcon(isActive: isActive)
-                        : Container(),
-                  ],
-                ),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    style: GoogleFonts.roboto().copyWith(
+                      fontSize: 12,
+                      color: HexColor(currentIndex == index
+                          ? selectedTabLabelColor
+                          : unselectedTabLabelColor),
+                    ),
+                  ),
+                  tabEnum == TAB_ENUM.VPN
+                      ? activeIcon(isActive: isActive)
+                      : Container(),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -147,11 +201,11 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                 (index, tabEnum) => MapEntry(
                   index,
                   renderBottomTabItem(
-                    index: index,
-                    tabEnum: tabEnum,
-                    isActive: (vpnStatus == 'connected' ||
-                        vpnStatus == 'disconnecting'),
-                  ),
+                      index: index,
+                      tabEnum: tabEnum,
+                      isActive: (vpnStatus == 'connected' ||
+                          vpnStatus == 'disconnecting'),
+                      context: context),
                 ),
               )
               .values

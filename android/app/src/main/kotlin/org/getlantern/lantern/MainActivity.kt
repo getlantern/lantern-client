@@ -16,7 +16,9 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.MessagingModel
 import io.lantern.android.model.SessionModel
@@ -30,6 +32,7 @@ import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.*
@@ -40,37 +43,22 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
-    private lateinit var vpnModel: VpnModel
     private lateinit var messagingModel: MessagingModel
-    private lateinit var flutterNavigation: MethodChannel
+    private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
+    private lateinit var flutterNavigation: MethodChannel
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private var countDown: AuctionCountDown? = null
-    private lateinit var appVersion: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-
-        val intent = Intent(this, LanternService_::class.java)
-        bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
-
-        appVersion = Utils.appVersion(this)
-    }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
         messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(flutterEngine)
         navigator = Navigator(this, flutterEngine)
         eventManager = EventManager("lantern_event_channel", flutterEngine)
@@ -78,15 +66,7 @@ class MainActivity : FlutterActivity() {
         MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
                 "lantern_method_channel"
-        ).setMethodCallHandler { call, result ->
-            when (call.method) {
-                "showLastSurvey" -> {
-                    showSurvey(lastSurvey)
-                    result.success(true)
-                }
-                else -> result.notImplemented()
-            }
-        }
+        ).setMethodCallHandler(this)
 
         flutterNavigation = MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
@@ -102,6 +82,23 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+
+        Logger.debug(TAG, "configureFlutterEngine finished at ${System.currentTimeMillis() - start}")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val start = System.currentTimeMillis()
+        super.onCreate(savedInstanceState)
+
+        Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+        Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
+
+        val intent = Intent(this, LanternService_::class.java)
+        bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
+        Logger.debug(TAG, "bindService finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -119,22 +116,16 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onResume() {
-        // TODO [issue44] replace this with a notification bubble in the Accounts tab and Yinbi menu item
-//        if (LanternApp.getSession().yinbiEnabled()) {
-//            bulkRenewSection.setVisibility(View.VISIBLE)
-//        } else {
-//            val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB)
-//            if (tab != null) {
-//                tab.visibility = View.GONE
-//            }
-//        }
-
+        val start = System.currentTimeMillis()
         updateUserData()
+        Logger.debug(TAG, "updateUserData90 finished at ${System.currentTimeMillis() - start}")
 
         super.onResume()
+        Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
         if (LanternApp.getSession().lanternDidStart()) {
             fetchLoConf()
+            Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
         }
 
         if (Utils.isPlayVersion(this)) {
@@ -151,19 +142,12 @@ class MainActivity : FlutterActivity() {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // stop auction countdown
-        countDown?.cancel()
-        countDown = null
+        Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         vpnModel.destroy()
-        messagingModel.destroy()
         sessionModel.destroy()
         EventBus.getDefault().unregister(this)
         try {
@@ -182,6 +166,16 @@ class MainActivity : FlutterActivity() {
         }
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {}
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "showLastSurvey" -> {
+                showSurvey(lastSurvey)
+                result.success(true)
+            }
+            else -> result.notImplemented()
+        }
     }
 
     /**
@@ -207,36 +201,11 @@ class MainActivity : FlutterActivity() {
             override fun onSuccess(response: Response, user: ProUser?) {
                 runOnUiThread {
                     user?.let {
-                        val yinbiEnabled = user.yinbiEnabled
-                        if (yinbiEnabled) {
-                            setYinbiAuctionInfo()
-                        }
-                        LanternApp.getSession().setYinbiEnabled(yinbiEnabled)
+                        LanternApp.getSession().setYinbiEnabled(user.yinbiEnabled)
                     }
                 }
             }
         })
-    }
-
-    private fun setYinbiAuctionInfo() {
-        // TODO [issue44] migrate the Yinbi Auction tab to the Yinbi Redemption Screen
-//        val tab = viewPagerTab.getTabAt(Constants.YINBI_AUCTION_TAB) as View
-//            ?: return
-//        val title = tab.findViewById<View>(R.id.tabText) as TextView
-//        if (countDown != null && countDown!!.isRunning) {
-//            return
-//        }
-//        lanternClient.getYinbiAuctionInfo(
-//            AuctionInfoCallback { info ->
-//                if (info == null || info.timeLeft == null) {
-//                    return@AuctionInfoCallback
-//                }
-//                EventBus.getDefault().post(info)
-//                runOnUiThread {
-//                    countDown = AuctionCountDown(info, title)
-//                    countDown!!.start()
-//                }
-//            })
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -424,7 +393,7 @@ class MainActivity : FlutterActivity() {
                         resources.getString(R.string.error_checking_for_update),
                         appName
                 )
-                Utils.showAlertDialog(activity, appName, message, false)
+                activity.showAlertDialog(appName, message)
                 return
             }
             if (url == "") {
@@ -450,8 +419,8 @@ class MainActivity : FlutterActivity() {
         val appName = resources.getString(R.string.app_name)
         val noUpdateTitle = resources.getString(R.string.no_update_available)
         val noUpdateMsg =
-                String.format(resources.getString(R.string.have_latest_version), appName, appVersion)
-        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false)
+                String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+        showAlertDialog(noUpdateTitle, noUpdateMsg)
     }
 
     @Throws(Exception::class)
@@ -511,12 +480,11 @@ class MainActivity : FlutterActivity() {
                         PERMISSIONS_TAG,
                         msg.toString()
                 )
-                Utils.showAlertDialog(this,
-                        getString(R.string.please_allow_lantern_to),
-                        Html.fromHtml(msg.toString()),
-                        getString(R.string.continue_),
-                        false,
-                        Runnable {
+                showAlertDialog(
+                        title = getString(R.string.please_allow_lantern_to),
+                        msg = Html.fromHtml(msg.toString()),
+                        okLabel = getString(R.string.continue_),
+                        onClick = {
                             ActivityCompat.requestPermissions(
                                     this,
                                     neededPermissions,
@@ -681,6 +649,4 @@ class MainActivity : FlutterActivity() {
         val RECORD_AUDIO_PERMISSIONS_REQUEST = 8889
         private val REQUEST_VPN = 7777
     }
-
 }
-

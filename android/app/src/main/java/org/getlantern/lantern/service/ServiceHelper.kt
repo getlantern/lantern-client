@@ -10,8 +10,8 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.Launcher
 import java.util.concurrent.LinkedBlockingDeque
 
 class ServiceHelper(private val service: Service, private val largeIcon: Int, private val smallIcon: Int, private val content: Int) {
@@ -24,8 +24,8 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
                 // If earlier version channel ID is not used
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
             }
-            val openMainActivity = PendingIntent.getActivity(service, 0, Intent(service, Launcher::class.java),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            val openMainActivity = PendingIntent.getActivity(service, 0, Intent(service, MainActivity::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT)
             val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
                     ?: NotificationCompat.Builder(service)
             notificationBuilder.setSmallIcon(smallIcon)

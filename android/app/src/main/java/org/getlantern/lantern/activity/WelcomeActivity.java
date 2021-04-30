@@ -13,6 +13,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.Utils;
@@ -56,6 +57,6 @@ public class WelcomeActivity extends FragmentActivity {
 
     public void continueToPro(View view) {
         Logger.debug(TAG, "Continue to Pro button clicked!");
-        startActivity(new Intent(this, LanternProActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
