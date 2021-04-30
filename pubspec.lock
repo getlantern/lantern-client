@@ -142,7 +142,7 @@ packages:
     source: hosted
     version: "2.0.0"
   extended_image:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: extended_image
       url: "https://pub.dartlang.org"
@@ -678,7 +678,7 @@ packages:
     source: hosted
     version: "2.1.0"
   video_player:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: video_player
       url: "https://pub.dartlang.org"
@@ -729,7 +729,7 @@ packages:
   wechat_assets_picker:
     dependency: "direct main"
     description:
-      path: "lib/utils/wechat_assets_picker"
+      path: "../wechat_assets_picker"
       relative: true
     source: path
     version: "5.1.3"
