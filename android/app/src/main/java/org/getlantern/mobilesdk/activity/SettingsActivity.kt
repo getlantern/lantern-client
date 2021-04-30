@@ -26,11 +26,14 @@ open class SettingsActivity() : FragmentActivity() {
     }
 
     private fun setDescText() {
-        binding.proxyAllDesc.text = Html.fromHtml(String.format(
+        binding.proxyAllDesc.text = Html.fromHtml(
+            String.format(
                 proxyAllDescFmt, getString(R.string.proxy_all_on_header),
                 getStringWithAppName(R.string.proxy_all_on),
                 getString(R.string.proxy_all_off_header),
-                getStringWithAppName(R.string.proxy_all_off)))
+                getStringWithAppName(R.string.proxy_all_off)
+            )
+        )
     }
 
     fun proxyAll(on: Boolean) {

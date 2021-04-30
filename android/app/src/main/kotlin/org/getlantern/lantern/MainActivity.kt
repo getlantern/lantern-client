@@ -8,7 +8,12 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.VpnService
-import android.os.*
+import android.os.AsyncTask
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
 import android.text.Html
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
@@ -16,7 +21,6 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -29,19 +33,25 @@ import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
-import org.getlantern.lantern.model.*
+import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.*
+import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
+import org.getlantern.mobilesdk.model.PopUpAd
+import org.getlantern.mobilesdk.model.Survey
 import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.*
+import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
@@ -269,9 +279,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     return
                 }
             }
-            Handler(Looper.getMainLooper()).postDelayed({
-                showSurveySnackbar(survey)
-            }, 2000)
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    showSurveySnackbar(survey)
+                },
+                2000
+            )
         }
     }
 
@@ -481,19 +494,19 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                         msg.toString()
                 )
                 showAlertDialog(
-                        title = getString(R.string.please_allow_lantern_to),
-                        msg = Html.fromHtml(msg.toString()),
-                        okLabel = getString(R.string.continue_),
-                        onClick = {
-                            ActivityCompat.requestPermissions(
-                                    this,
-                                    neededPermissions,
-                                    FULL_PERMISSIONS_REQUEST
-                            )
-                        })
+                    title = getString(R.string.please_allow_lantern_to),
+                    msg = Html.fromHtml(msg.toString()),
+                    okLabel = getString(R.string.continue_),
+                    onClick = {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            neededPermissions,
+                            FULL_PERMISSIONS_REQUEST
+                        )
+                    }
+                )
                 return
             }
-
 
             // Prompt the user to enable full-device VPN mode
             // Make a VPN connection from the client
@@ -630,9 +643,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         val handler = Handler(Looper.getMainLooper())
         // Force a delay to test the support for connecting/disconnecting state
-        handler.postDelayed({
-            vpnModel.setVpnOn(useVpn)
-        }, 500)
+        handler.postDelayed(
+            {
+                vpnModel.setVpnOn(useVpn)
+            },
+            500
+        )
     }
 
     // Recreate the activity when the language changes

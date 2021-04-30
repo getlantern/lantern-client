@@ -2,11 +2,14 @@ package org.getlantern.lantern
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import org.getlantern.lantern.activity.*
+import org.getlantern.lantern.activity.DesktopActivity_
+import org.getlantern.lantern.activity.InviteActivity_
+import org.getlantern.lantern.activity.PlansActivity_
+import org.getlantern.lantern.activity.ProAccountActivity_
+import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
@@ -73,10 +76,12 @@ class Navigator(
 }
 
 fun Activity.openHome() {
-    startActivity(Intent(this, MainActivity::class.java)
-        .apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        })
+    startActivity(
+        Intent(this, MainActivity::class.java)
+            .apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+    )
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 }
 

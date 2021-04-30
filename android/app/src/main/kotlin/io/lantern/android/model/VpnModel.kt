@@ -2,12 +2,11 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-
 import org.getlantern.mobilesdk.Logger
 
 class VpnModel(
-        flutterEngine: FlutterEngine? = null,
-        private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
+    flutterEngine: FlutterEngine? = null,
+    private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
 ) : BaseModel("vpn", flutterEngine, masterDB.withSchema("vpn")) {
 
     companion object {
