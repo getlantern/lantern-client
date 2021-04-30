@@ -60,7 +60,8 @@ dependencies:
   photo_manager: ^1.1.4
 
   wechat_assets_picker:
-    path: ../wechat_assets_picker
+    # path: ../wechat_assets_picker
+    git: https://github.com/getlantern/wechat_assets_picker.git 
 
   wechat_camera_picker: ^2.1.0
 
