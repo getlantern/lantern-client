@@ -40,7 +40,9 @@ class Survey {
     @SerializedName("button")
     var button: String? = null
     override fun toString(): String {
-        return String.format("URL: %s userType: %s Thanks:%s  Message:%s",
-                url, userType, thanks, message)
+        return String.format(
+            "URL: %s userType: %s Thanks:%s  Message:%s",
+            url, userType, thanks, message
+        )
     }
 }

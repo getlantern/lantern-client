@@ -1,133 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:background="@color/accent_white"
-    android:id="@+id/settingsView"
-    tools:context=".SettingsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <fragment
-        xmlns:lantern="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
-        lantern:titleText="@string/yinbi_redemption"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        class="org.getlantern.lantern.fragment.TitleBar"/>
 
-    <LinearLayout
-        android:id="@+id/renewNowSection"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imgvYinbi"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginTop="@dimen/space_large"
+        android:src="@drawable/ic_yinbi"/>
 
-        <ImageView
-            android:id="@+id/yinbiLogo"
-            android:paddingTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="center"
-            android:paddingBottom="15dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/yinbi_logo_large"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/yinbiDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/yinbi_description_free"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_large"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintTop_toBottomOf="@+id/imgvYinbi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/yinbiDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/yinbiLogo"
-            android:paddingTop="30dp"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:textColor="#7c7c7c"
-            android:letterSpacing="0.01"
-            android:lineSpacingExtra="8sp"
-            android:layout_gravity="center"
-            android:text="@string/lantern_partnered_yinbi"
-            android:gravity="left"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider"
+        android:layout_marginBottom="@dimen/space_large"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:background="@color/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/renewPro"/>
 
-    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/renewPro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upgrade_to_pro_get_yinbi"
+        android:layout_marginBottom="@dimen/space_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/enterProCodes"/>
 
-    <LinearLayout
-        android:id="@+id/bottomSection"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal|bottom"
-        android:gravity="bottom"
-        android:paddingBottom="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/enterProCodes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_lantern_pro_codes"
+        android:layout_marginBottom="@dimen/space_normal"
+        style="?attr/borderlessButtonStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/visitYinbi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:visibility="gone"
-            android:paddingBottom="15dp"
-            android:textStyle="normal"
-            android:textColor="#7c7c7c"
-            android:letterSpacing="0.01"
-            android:lineSpacingExtra="12sp"
-            android:gravity="center_horizontal"
-            android:linksClickable="false"
-            android:textColorLink="@color/pink"
-            android:text="@string/visit_yinbi"/>
-
-        <View android:id="@+id/separator"
-            android:background="@color/black"
-            android:paddingTop="25dp"
-            android:paddingBottom="15dp"
-            android:layout_below="@+id/visitYinbi"
-            android:layout_width = "fill_parent"
-            android:layout_height="1dip"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/enterProCodes"
-            android:layout_height="36dp"
-            android:layout_width="216dp"
-            android:text="@string/enter_bulk_pro_codes"
-            android:layout_marginTop="20dp"
-            android:textAppearance="@style/MediumText"
-            android:textSize="14sp"
-            android:minHeight="48dp"
-            android:textAllCaps="true"
-            android:textColor="@color/accent_white"
-            android:clickable = "true"
-            android:layout_gravity="center"
-            android:background="@color/pink"
-            android:layout_centerInParent="true"
-            android:onClick="enterBulkProCodes" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/renewPro"
-            android:layout_height="36dp"
-            android:layout_width="216dp"
-            android:text="@string/renew_pro_get_yinbi"
-            android:layout_marginTop="20dp"
-            android:textAppearance="@style/MediumText"
-            android:textSize="14sp"
-            android:minHeight="48dp"
-            android:textAllCaps="true"
-            android:textColor="@color/pink"
-            android:layout_gravity="center"
-            android:clickable = "true"
-            android:background="@drawable/text_invite"
-            android:layout_centerInParent="true"
-            android:onClick="resendEmail" />
-
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

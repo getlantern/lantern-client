@@ -9,15 +9,19 @@ buildscript {
         mavenCentral()
         maven { url 'https://maven.google.com' }
         maven { url 'https://jitpack.io' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.2.0-rc01'
         classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufVersion"
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:10.0.0")
     }
 }
 
@@ -31,7 +35,13 @@ ext {
     // see https://github.com/getlantern/lantern-internal/issues/4497
     compileSdkVersion = 29
     targetSdkVersion = 29
+<<<<<<< HEAD
     minSdkVersion = 21 // required by qr_code_scanner
+||||||| 3bde21d
+    minSdkVersion = 20 // required by qr_code_scanner
+=======
+    minSdkVersion = 21
+>>>>>>> ox/messaging
     androidAnnotationsVersion = '4.7.0'
     androidAnnotationsAPIVersion = '4.7.0'
     buildToolsVersion = '30.0.2'
@@ -54,6 +64,8 @@ allprojects {
         mavenCentral()
         jcenter()
     }
+
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
 rootProject.buildDir = '../build'

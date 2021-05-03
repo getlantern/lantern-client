@@ -25,6 +25,7 @@ import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.Currency;
@@ -104,7 +105,7 @@ public class AdyenActivity extends FragmentActivity implements PaymentRequestLis
                     if (AdyenActivity.this.isDestroyed()) {
                         return;
                     }
-                    Utils.showUIErrorDialog(AdyenActivity.this,
+                    ActivityExtKt.showErrorDialog(AdyenActivity.this,
                             getResources().getString(R.string.unable_init_adyen_session));
                 }
                 @Override
@@ -137,7 +138,7 @@ public class AdyenActivity extends FragmentActivity implements PaymentRequestLis
                         if (AdyenActivity.this.isDestroyed()) {
                             return;
                         }
-                        Utils.showUIErrorDialog(AdyenActivity.this,
+                        ActivityExtKt.showErrorDialog(AdyenActivity.this,
                                 getResources().getString(R.string.unable_init_adyen_session));
                     }
                     @Override

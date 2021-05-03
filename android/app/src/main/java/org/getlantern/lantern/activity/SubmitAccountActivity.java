@@ -22,8 +22,10 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringArrayRes;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.model.MailSender;
 
@@ -79,26 +81,26 @@ public class SubmitAccountActivity extends FragmentActivity {
         Logger.debug(TAG, "Starting account recovery for email " + email);
 
         if (!Utils.isEmailValid(email)) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.invalid_email));
             return;
         }
 
         if (!Utils.isNetworkAvailable(this)) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.no_internet_connection));
             return;
         }
 
         if (selectedPaymentMethod == null) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.no_issue_selected));
             return;
         }
 
         if (expMonth.getSelectedItem() == null ||
             expYear.getSelectedItem() == null) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.no_purchase_date));
             return;
         }
@@ -124,7 +126,7 @@ public class SubmitAccountActivity extends FragmentActivity {
         else
             mailSender.execute(toEmail);
 
-        Intent intent = new Intent(this, LanternFreeActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("snackbarMsg", getResources().getString(R.string.thanks_report));
         startActivity(intent);
         finish();

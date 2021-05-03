@@ -1,11 +1,17 @@
 package org.getlantern.lantern.activity;
 
 import android.content.Intent;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.gson.JsonObject;
@@ -15,10 +21,12 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.NavigatorKt;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -42,13 +50,39 @@ public class RecoveryCodeActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        emailWithRecoveryCode.setText(String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email()));
+        String email = LanternApp.getSession().email();
+        String emailText = String.format(getResources().getString(R.string.your_device_linking_pin_has_been_sent), email);
+        int startEmailIndex = emailText.indexOf(email);
+        Spannable emailSpan = new SpannableString(emailText);
+        emailSpan.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.tertiary_green)), startEmailIndex, startEmailIndex + email.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        emailWithRecoveryCode.setText(emailSpan);
+
+        codeInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() >= 6) {
+                    submit.setEnabled(true);
+                } else {
+                    submit.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void showLinkRequestSentAlert() {
         final String title = getResources().getString(R.string.account_recovery);
         final String msg = String.format(getResources().getString(R.string.email_recovery_code), LanternApp.getSession().email());
-        Utils.showAlertDialog(this, title, msg, false);
+        ActivityExtKt.showAlertDialog(this, title, msg);
     }
 
     @Click(R.id.submit)
@@ -56,7 +90,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
         final String code = codeInput.getText().toString();
 
         if (code.equals("") || !code.matches("[0-9]+")) {
-            Utils.showErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.enter_valid_code));
             return;
         }
@@ -90,22 +124,24 @@ public class RecoveryCodeActivity extends FragmentActivity {
         }
         final String errorId = error.getId();
         if (errorId.equals("too-many-devices")) {
-            Utils.showUIErrorDialog(this, getResources().getString(R.string.too_many_devices));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.too_many_devices));
         } else if (error.getMessage() != null) {
-            Utils.showUIErrorDialog(this, error.getMessage());
+            ActivityExtKt.showErrorDialog(this, error.getMessage());
         }
     }
 
     private void linkDevice(final JsonObject result) {
         Logger.debug(TAG, "Successfully validated recovery code");
         // update token and user ID with those returned by the pro server
-        LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsInt(), result.get("token").getAsString());
+        LanternApp.getSession().setUserIdAndToken(result.get("userID").getAsLong(), result.get("token").getAsString());
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
-        Intent intent = new Intent(this, LanternProActivity.class);
-        intent.putExtra("snackbarMsg", getResources().getString(R.string.device_now_linked));
-        startActivity(intent);
-        finish();
+        ActivityExtKt.showAlertDialog(
+            RecoveryCodeActivity.this,
+            getString(R.string.device_added),
+            getString(R.string.device_authorized_pro),
+            ContextCompat.getDrawable(RecoveryCodeActivity.this, R.drawable.ic_filled_check),
+            () -> NavigatorKt.openHome(this));
     }
 
     @Click(R.id.resendEmail)

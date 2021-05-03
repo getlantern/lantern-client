@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -29,13 +28,13 @@ class MainSwitch() : Fragment() {
         super.onCreate(savedInstanceState)
         if (!EventBus.getDefault().isRegistered(this)) {
             Logger.debug(TAG, "Registering with EventBus")
-            EventBus.getDefault().register(this);
+            EventBus.getDefault().register(this)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Logger.debug(TAG, "Unregistering with EventBus");
+        Logger.debug(TAG, "Unregistering with EventBus")
         EventBus.getDefault().unregister(this)
     }
 
@@ -66,7 +65,7 @@ class MainSwitch() : Fragment() {
     public fun onStats(stats: Stats) {
         binding.location = stats.countryCode
     }
-    
+
     private fun updateLayout(on: Boolean) {
         binding.on = on
         binding.powerLantern.setBackColorRes(if (on) R.color.on_color else R.color.off_color)

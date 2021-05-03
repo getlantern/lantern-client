@@ -42,16 +42,7 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
-            <!-- Displays an Android View that continues showing the launch screen
-                 Drawable until Flutter paints its first frame, then this splash
-                 screen fades out. A splash screen is useful to avoid any visual
-                 gap between the end of Android's launch screen and the painting of
-                 Flutter's first frame. -->
-            <meta-data
-              android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/launch_background"
+              android:resource="@style/LaunchTheme"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -80,7 +71,7 @@
             android:theme="@style/FinestWebViewTheme.Light" />
 
         <activity
-            android:name=".activity.AddDeviceActivity_"
+            android:name=".activity.addDevice.AddDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -88,12 +79,18 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.LinkDeviceActivity_"
+            android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".activity.AccountRecoveryActivity_"
+            android:name=".activity.authorizeDevice.LinkEmailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
+        <activity
+            android:name=".activity.authorizeDevice.AccountRecoveryActivity"
             android:screenOrientation="portrait">
         </activity>
 
@@ -148,21 +145,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="org.getlantern.lantern.activity.LanternPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiPlansActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiRenewActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
             android:screenOrientation="portrait"
             />
@@ -204,6 +186,11 @@
 
         <activity
             android:name=".activity.PopUpAdActivity_"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".activity.PlansActivity_"
             android:screenOrientation="portrait"
             />
 

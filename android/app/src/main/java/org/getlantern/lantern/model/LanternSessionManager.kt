@@ -5,20 +5,22 @@ import android.content.res.Resources
 import android.text.TextUtils
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.AddDeviceActivity
-import org.getlantern.lantern.activity.LanternPlansActivity
+import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.activity.yinbi.YinbiPlansActivity
-import org.getlantern.lantern.activity.yinbi.YinbiRenewActivity
+import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Currency
+import java.util.Date
+import java.util.Locale
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
+    private val TAG = LanternSessionManager::class.java.name
+
     private var selectedPlan: ProPlan? = null
 
     // the devices associated with a user's Pro account
@@ -161,15 +163,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun plansActivity(): Class<*>? {
-        return if (!isPlayVersion && yinbiEnabled()) {
-            if (isProUser) {
-                YinbiRenewActivity::class.java
-            } else {
-                YinbiPlansActivity::class.java
-            }
-        } else {
-            LanternPlansActivity::class.java
-        }
+        return PlansActivity_::class.java
     }
 
     fun welcomeActivity(): Class<*>? {
@@ -182,7 +176,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun deviceLinked(): Boolean {
         if (!isDeviceLinked()) {
-            launchActivity(AddDeviceActivity::class.java, false)
+            launchActivity(AddDeviceActivity_::class.java, false)
             return false
         }
         return true
@@ -216,6 +210,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun setYinbiEnabled(enabled: Boolean) {
         editor.putBoolean(YINBI_ENABLED, enabled).commit()
+    }
+
+    fun shouldShowYinbiBadge(): Boolean {
+        return prefs.getBoolean(SHOULD_SHOW_YINBI_BADGE, true)
+    }
+
+    fun setShouldShowYinbiBadge(shouldShow: Boolean) {
+        editor.putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
     }
 
     fun showYinbiThanksPurchase(): Boolean {
@@ -283,8 +285,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 ""
             } else String.format("%dD", numDays)
         }
-        return String.format("%dMO",
-                numMonths)
+        return String.format(
+            "%dMO",
+            numMonths
+        )
     }
 
     fun numProMonths(): Int {
@@ -448,6 +452,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val RENEWAL_LAST_SEEN = "renewalseen"
         private const val PROVIDER = "provider"
         private const val RESELLER_CODE = "resellercode"
+        private const val SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200

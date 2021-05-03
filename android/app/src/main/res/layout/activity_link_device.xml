@@ -1,115 +1,140 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:background="@color/accent_white"
-    android:id="@+id/linkDeviceView"
-    tools:context=".LinkDeviceActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        lantern:layout_constraintStart_toStartOf="parent"
+        lantern:layout_constraintEnd_toEndOf="parent"
+        lantern:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/authorize_device_pro"/>
 
-    <LinearLayout
-        android:id="@+id/top_section"
-        android:layout_width="fill_parent"
+    <TextView
+        android:text="@string/device_linking_pin"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titlebar_fragment"
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:gravity="center"
-        android:background="@color/accent_white">
+        android:id="@+id/textView9"
+        android:layout_marginTop="@dimen/space_large"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageView
-            android:id="@+id/account_management"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="20dp"
-            android:paddingBottom="38dp"
-            android:src="@drawable/account_management"/>
+    <TextView
+        tools:text="826631"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deviceLinkingCode"
+        android:text=" "
+        android:textColor="@color/secondary_pink"
+        android:textAppearance="?attr/textAppearanceHeadline3"
+        android:layout_marginTop="-8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/deviceCodeText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/device_code"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:textColor="@color/gray_device_link"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider"
+        android:id="@+id/view3"
+        android:background="@color/divider"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginHorizontal="@dimen/space_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceLinkingCode"
+        />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/deviceLinkingCode"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/MediumText"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text=""
-            android:textSize="37sp"
-            android:textStyle="bold"
-            android:textColor="@color/buy_pro"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView12"
+        android:src="@drawable/ic_numeric_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginStart="@dimen/space_large"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/linkThisDevice"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/MediumText"
-            android:text="@string/link_this_device_0"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="28dp"
-            android:lineSpacingExtra="5dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+    <TextView
+        android:text="@string/open_the_add_device_menu_item_on_your_pro_device"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView13"
+        android:layout_marginTop="2dp"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintTop_toTopOf="@+id/textView12"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        android:layout_marginStart="@dimen/space_normal"
+        android:layout_marginEnd="@dimen/space_large"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/linkThisDevice1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/link_this_device_1"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="28dp"
-                android:lineSpacingExtra="5dp"
-                android:gravity="left"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/barrier"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="textView12,textView13"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/linkThisDevice2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/link_this_device_2"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_centerHorizontal="true"
-                android:lineSpacingExtra="5dp"
-                android:gravity="left"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView14"
+        android:src="@drawable/ic_numeric_2"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        app:layout_constraintStart_toStartOf="@+id/textView12"
+        android:layout_marginTop="@dimen/space_above_normal"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/makeSureUpdated"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/make_sure_updated"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:lineSpacingExtra="5dp"
-            android:gravity="left"
-            android:textSize="14sp"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:text="@string/enter_the_device_linking_pin_and_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView15"
+        android:layout_marginTop="2dp"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintTop_toTopOf="@+id/textView14"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        android:layout_marginStart="@dimen/space_normal"
+        android:layout_marginEnd="@dimen/space_large"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="textView15,textView14"
+        android:id="@+id/barrier2"
+        app:barrierDirection="bottom"
+        tools:layout_editor_absoluteY="2@dimen/space_large"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider"
+        android:id="@+id/view4"
+        android:background="@color/divider"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginHorizontal="@dimen/space_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier2"
+        />
+
+    <TextView
+        android:text="@string/ensure_both_devices_are_running_the_most_recent_version_of_lantern"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView16"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginStart="@dimen/space_large"
+        android:layout_marginEnd="@dimen/space_large"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
