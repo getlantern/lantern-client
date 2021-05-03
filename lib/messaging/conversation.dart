@@ -32,9 +32,7 @@ class _ConversationState extends State<Conversation> {
   var _totalPanned = 0.0;
 
   // Filepicker vars
-  final int maxAssetsCount = 9;
   List<AssetEntity> assets = <AssetEntity>[];
-  bool isDisplayingDetail = true;
   ThemeData get currentTheme => context.themeData;
 
   @override
@@ -85,10 +83,7 @@ class _ConversationState extends State<Conversation> {
     AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
       context,
-      maxAssets: maxAssetsCount,
       selectedAssets: assets,
-      // pickerTheme: ThemeData.dark(),
-      // themeColor: currentTheme.accentColor,
       textDelegate:
           EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
@@ -106,7 +101,7 @@ class _ConversationState extends State<Conversation> {
             }
           },
           child: const Center(
-            child: Icon(Icons.camera_alt, size: 30.0),
+            child: Icon(Icons.camera),
           ),
         );
       },
