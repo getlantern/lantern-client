@@ -120,7 +120,7 @@ class _ConversationState extends State<Conversation> {
         return;
       }
       //
-      // Here is an example of an AssetEntity:
+      // Here is an example of an AssetEntity object:
       //
       // _latitude:null
       // _longitude:null
@@ -159,8 +159,11 @@ class _ConversationState extends State<Conversation> {
       var attachment = await model.filePickerLoadAttachment(absolutePath);
       _send(_newMessage.value.text, attachments: [attachment]);
     } catch (e) {
-      // TODO: display error pop up
-      print(e);
+      showInfoDialog(
+        context,
+        title: 'Error'.i18n,
+        des: 'Something went wrong while loading the media gallery.'.i18n,
+      );
     }
     AssetPicker.unregisterObserve();
   }
