@@ -21,6 +21,7 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
@@ -45,7 +46,7 @@ import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.widget.TextInputLayout;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
 
-    private static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
+    public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     
     private ProgressDialog dialog;
@@ -80,16 +81,16 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     TextInputLayout emailLayout, cardLayout, expirationLayout, cvcLayout, referralCodeLayout;
 
     @ViewById
-    TextView header, priceWithoutTax, tax, price, productText, togglePaymentMethod, termsOfServiceText;
-
-    @ViewById
-    View taxLine;
+    TextView header, price, productText, togglePaymentMethod, termsOfServiceText;
 
     @ViewById
     View stripeSection;
 
     @ViewById
     Button continueBtn;
+
+    @ViewById
+    TextView tvStepDescription;
 
     @Extra
     String headerText;
@@ -122,22 +123,10 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
-        if (LanternApp.getSession().getSelectedPlan().numYears() == 2) {
-            productText.setText(getResources().getText(R.string.two_years_lantern_pro));
-        } else {
-            productText.setText(getResources().getText(R.string.one_year_lantern_pro));
-        }
+        productText.setText(plan.getFormatPriceWithBonus(this, false));
 
         if (isPlayVersion) {
             continueBtn.setEnabled(false);
-            // Only show tax if there is a tax
-            if (!plan.getCostStr().equals(plan.getCostWithoutTaxStr())) {
-                productText.setText(productText.getText() + ":");
-                priceWithoutTax.setVisibility(View.VISIBLE);
-                taxLine.setVisibility(View.VISIBLE);
-                priceWithoutTax.setText(plan.getCostWithoutTaxStr());
-                tax.setText(plan.getTaxStr());
-            }
         }
 
         // update the screen title with a custom headerText
@@ -190,8 +179,6 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         if (isRenewal) {
             // Don't allow changing email of existing pro user
             emailInput.setEnabled(false);
-            // Don't allow entering a referral code
-            referralCodeInput.setVisibility(View.GONE);
         } else {
             emailInput.addTextChangedListener(validator);
             emailInput.setOnFocusChangeListener(focusListener);
@@ -232,12 +219,18 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         continueBtn.setText(getResources().getText(continueText));
         MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
 
+        // hide the buttons and move the referral code
         if (useStripe) {
             stripeSection.setVisibility(View.VISIBLE);
             togglePaymentMethod.setText(getText(R.string.switch_to_alipay));
+            tvStepDescription.setText(R.string.enter_payment_details);
+            referralCodeLayout.setTranslationY(0);
         } else {
-            stripeSection.setVisibility((View.GONE));
+            stripeSection.setVisibility((View.INVISIBLE));
             togglePaymentMethod.setText(getText(R.string.switch_to_credit_card));
+            tvStepDescription.setText(R.string.enter_email_short);
+            float referralCodeTranslateY = cardLayout.getBottom() - referralCodeLayout.getBottom();
+            referralCodeLayout.setTranslationY(referralCodeTranslateY);
         }
 
         // immediately run validation to enable button if we can
@@ -333,7 +326,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                         closeDialog();
                         Logger.error(TAG, "Error retrieving referral code: " + error);
                         if (error != null && error.getMessage() != null) {
-                            Utils.showUIErrorDialog(activity, error.getMessage());
+                            ActivityExtKt.showErrorDialog(activity, error.getMessage());
                         }
                     }
 
@@ -417,14 +410,14 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
                         public void onError(@NonNull Exception error) {
                             closeDialog();
-                            Utils.showUIErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
+                            ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
                         }
                     }
             );
         } catch (Throwable t) {
             Logger.error(STRIPE_TAG, "Error submitting to stripe", t);
             closeDialog();
-            Utils.showUIErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
         }
     }
 
@@ -439,10 +432,10 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         }
         final String errorId = error.getId();
         if (errorId != null && errorId.equals("existing-email")) {
-            Utils.showUIErrorDialog(this,
+            ActivityExtKt.showErrorDialog(this,
                     getResources().getString(R.string.email_in_use));
         } else if (error.getMessage() != null) {
-            Utils.showUIErrorDialog(this, error.getMessage());
+            ActivityExtKt.showErrorDialog(this, error.getMessage());
         }
     }
 
@@ -461,7 +454,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
         } else {
             if (Utils.isPlayVersion(this)) {
                 if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
-                    Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+                    ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
                 }
                 return;
             }
@@ -499,7 +492,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
             return;
         }
 
@@ -513,7 +506,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
         if (tokens.size() != 1) {
             Logger.error(TAG, "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size());
-            Utils.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
+            ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
             return;
         }
 

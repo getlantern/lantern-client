@@ -1,7 +1,10 @@
 package org.getlantern.lantern.model;
 
+import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 
+import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.Currency;
@@ -26,6 +29,12 @@ public class ProPlan {
     private Map<String, Long> tax;
     @SerializedName("usdPrice")
     private Long usdEquivalentPrice;
+    @SerializedName("renewalBonusExpected")
+    private Map<String, Integer> renewalBonusExpected;
+    @SerializedName("expectedMonthlyPrice")
+    private Map<String, Long> expectedMonthlyPrice;
+    @SerializedName("discount")
+    private float discount;
 
     private String currencyCode;
     private String tag;
@@ -34,7 +43,7 @@ public class ProPlan {
     private String taxStr;
     private Locale locale = Locale.getDefault();
 
-    private static final String PLAN_COST = "%1$s %2$s";
+    private static final String PLAN_COST = "%1$s%2$s";
     private static final String defaultCurrencyCode = "usd";
 
     public ProPlan() {
@@ -62,6 +71,25 @@ public class ProPlan {
 
     public Integer numYears() {
         return duration.get("years");
+    }
+
+    public String getRenewalBonusExpected(Context context) {
+        Integer year = renewalBonusExpected.get("years");
+        Integer month = renewalBonusExpected.get("months");
+        Integer day = renewalBonusExpected.get("days");
+        StringBuilder bonus = new StringBuilder();
+        if (year != null && year > 0) {
+            bonus.append(context.getResources().getQuantityString(R.plurals.year, year, year));
+            bonus.append(" ");
+        }
+        if (month != null && month > 0) {
+            bonus.append(context.getResources().getQuantityString(R.plurals.month, month, month));
+            bonus.append(" ");
+        }
+        if (day != null && day > 0) {
+            bonus.append(context.getResources().getQuantityString(R.plurals.day, day, day));
+        }
+        return bonus.toString().trim();
     }
 
     public Map<String, Long> getPrice() {
@@ -148,13 +176,29 @@ public class ProPlan {
         return getFormattedPrice(price);
     }
 
+    public String getFormatterPriceOneMonth() {
+        return getFormattedPrice(expectedMonthlyPrice, true);
+    }
+
     public String getFormattedPrice(Map<String, Long> price) {
+        return getFormattedPrice(price, false);
+    }
+
+    private String getFormattedPrice(Map<String, Long> price, boolean formatFloat) {
         final String formattedPrice;
         Long currencyPrice = price.get(currencyCode);
         if (currencyCode.equalsIgnoreCase("irr")) {
-            formattedPrice = Utils.convertEasternArabicToDecimal(currencyPrice/100);
+            if (formatFloat) {
+                formattedPrice = Utils.convertEasternArabicToDecimalFloat(currencyPrice / 100f);
+            } else {
+                formattedPrice = Utils.convertEasternArabicToDecimal(currencyPrice / 100);
+            }
         } else {
-            formattedPrice = String.valueOf(currencyPrice/100);
+            if (formatFloat) {
+                formattedPrice = String.valueOf(String.format(Locale.getDefault(), "%.2f", currencyPrice / 100f));
+            } else {
+                formattedPrice = String.valueOf(currencyPrice / 100);
+            }
         }
         return formattedPrice;
     }
@@ -179,5 +223,33 @@ public class ProPlan {
         } else {
             this.costWithoutTaxStr = this.costStr;
         }
+    }
+
+    public String getFormatPriceWithBonus(Context context, boolean useNumber) {
+        String durationFormat = "";
+        if (useNumber) {
+            durationFormat = context.getString(R.string.plan_duration, numYears());
+        } else {
+            if (numYears() == 1) {
+                durationFormat = context.getString(R.string.one_year_lantern_pro);
+            } else {
+                durationFormat = context.getString(R.string.two_years_lantern_pro);
+            }
+        }
+        durationFormat += " + " + getRenewalBonusExpected(context);
+        if (numYears() != 1) {
+            if (isBestValue() && LanternApp.getSession().yinbiEnabled()) {
+                durationFormat += " + " + context.getString(R.string.free_extra_yinbi);
+            }
+        }
+        return durationFormat;
+    }
+
+    public boolean isBestValue() {
+        return bestValue;
+    }
+
+    public float getDiscount() {
+        return discount;
     }
 }

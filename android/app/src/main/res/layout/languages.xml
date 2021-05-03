@@ -1,27 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical"
-    android:baselineAligned="false"
-    android:id="@+id/languagesView"
-    tools:context=".LanguageActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:id="@+id/languagesView"
+              tools:context="org.getlantern.mobilesdk.activity.LanguageActivity">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
         android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/language"/>
 
-    <ListView android:id="@+id/list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/titlebar_fragment"
-        android:background="@color/card_bg"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:drawSelectorOnTop="false"/>
-
+        android:paddingBottom="@dimen/space_large"
+        android:clipToPadding="false"/>
 </LinearLayout>

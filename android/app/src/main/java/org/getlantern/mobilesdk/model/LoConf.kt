@@ -4,14 +4,13 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Response
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpCallback
 import org.getlantern.mobilesdk.util.HttpClient
-import org.getlantern.lantern.BuildConfig
 
 fun interface LoConfCallback {
     fun onSuccess(loconf: LoConf)
@@ -54,21 +53,24 @@ class LoConf {
 
         fun fetch(client: HttpClient, loconfUrl: String, cb: LoConfCallback) {
             val builder = loconfUrl.toHttpUrlOrNull()!!.newBuilder()
-            client.request("GET", builder.build(), object : HttpCallback {
-                override fun onFailure(throwable: Throwable?) {
-                    Logger.error(TAG, "Unable to fetch surveys", throwable)
-                }
+            client.request(
+                "GET", builder.build(),
+                object : HttpCallback {
+                    override fun onFailure(throwable: Throwable?) {
+                        Logger.error(TAG, "Unable to fetch surveys", throwable)
+                    }
 
-                override fun onSuccess(response: Response?, result: JsonObject) {
-                    try {
-                        Logger.debug(TAG, "JSON response$result")
-                        val loconf = Gson().fromJson(result, LoConf::class.java)
-                        cb.onSuccess(loconf)
-                    } catch (e: Exception) {
-                        Logger.error(TAG, "Unable to parse surveys: " + e.message, e)
+                    override fun onSuccess(response: Response?, result: JsonObject) {
+                        try {
+                            Logger.debug(TAG, "JSON response$result")
+                            val loconf = Gson().fromJson(result, LoConf::class.java)
+                            cb.onSuccess(loconf)
+                        } catch (e: Exception) {
+                            Logger.error(TAG, "Unable to parse surveys: " + e.message, e)
+                        }
                     }
                 }
-            })
+            )
         }
     }
 }

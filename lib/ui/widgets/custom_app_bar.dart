@@ -2,9 +2,11 @@ import 'package:lantern/package_store.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? logoTitle;
   final List<Widget>? actions;
 
-  CustomAppBar({required this.title, this.actions, Key? key}) : super(key: key);
+  CustomAppBar({this.title = '', this.logoTitle, this.actions, Key? key})
+      : super(key: key);
 
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
@@ -15,10 +17,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 1,
       backgroundColor: Colors.white,
       centerTitle: true,
-      title: Text(
-        title,
-        style: tsHeadline6(context)?.copyWith(fontWeight: FontWeight.bold),
-      ),
+      title: logoTitle != null
+          ? SvgPicture.asset(
+              logoTitle!,
+              height: 16,
+              fit: BoxFit.contain,
+            )
+          : Text(
+              title,
+              style: tsTitleAppbar(),
+            ),
       actions: actions ?? [],
     );
   }

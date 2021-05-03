@@ -18,6 +18,8 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
 import com.kyleduo.switchbutton.SwitchButton
+import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -28,8 +30,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.LanternFreeActivity
 import java.net.HttpURLConnection
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -46,7 +46,7 @@ class ApplicationTest {
 
     @Rule
     @JvmField
-    var mActivityRule = MyActivityTestRule(LanternFreeActivity::class.java)
+    var mActivityRule = MyActivityTestRule(MainActivity::class.java)
 
     lateinit var mDevice: UiDevice
     var mWatchers = UiWatchers()
@@ -59,7 +59,7 @@ class ApplicationTest {
         conn.requestMethod = "POST"
         conn.connect()
         conn.outputStream.close()
-        if(conn.responseCode != 200) {
+        if (conn.responseCode != 200) {
             throw Exception("Unexpected response code resetting test user: " + conn.responseCode)
         }
     }
@@ -129,20 +129,22 @@ class ApplicationTest {
         fillField(R.id.cvcInput, "123")
         Espresso.onView(ViewMatchers.withId(R.id.cvcInput)).perform(ViewActions.closeSoftKeyboard())
         clickButton(R.id.continueBtn)
-        clickButton(R.id.continueToProBtn, attempts=30, sleep=1000)
+        clickButton(R.id.continueToProBtn, attempts = 30, sleep = 1000)
     }
 
     private fun verifyVPNOn() {
         SystemClock.sleep(1000)
         Espresso.onView(ViewMatchers.withId(R.id.powerLantern)).check(
-                ViewAssertions.matches(withChecked(true)))
+            ViewAssertions.matches(withChecked(true))
+        )
         Assert.assertTrue("System VPN should be on", isSystemVPNConnected)
     }
 
     private fun verifyVPNOff() {
         SystemClock.sleep(1000)
         Espresso.onView(ViewMatchers.withId(R.id.powerLantern)).check(
-                ViewAssertions.matches(withChecked(false)))
+            ViewAssertions.matches(withChecked(false))
+        )
         Assert.assertFalse("System VPN should be off", isSystemVPNConnected)
     }
 
@@ -161,25 +163,32 @@ class ApplicationTest {
         }
     }
 
-    private fun clickButton(id: Int, attempts: Int=10, sleep: Long=500) {
-        doUntilSuccessful(attempts, sleep, {
-            onView(id).perform(ViewActions.click())
-        })
+    private fun clickButton(id: Int, attempts: Int = 10, sleep: Long = 500) {
+        doUntilSuccessful(
+            attempts, sleep,
+            {
+                onView(id).perform(ViewActions.click())
+            }
+        )
     }
 
-    private fun fillField(id: Int, text: String, attempts: Int=10, sleep: Long=500) {
-        doUntilSuccessful(attempts, sleep, {
-            onView(id).perform(
+    private fun fillField(id: Int, text: String, attempts: Int = 10, sleep: Long = 500) {
+        doUntilSuccessful(
+            attempts, sleep,
+            {
+                onView(id).perform(
                     ViewActions.clearText(),
-                    ViewActions.typeText(text))
-        })
+                    ViewActions.typeText(text)
+                )
+            }
+        )
     }
 
     private fun onView(id: Int): ViewInteraction {
         return Espresso.onView(ViewMatchers.withId(id))
     }
 
-    private fun doUntilSuccessful(attempts: Int=10, sleep: Long=500, fn: () -> Unit) {
+    private fun doUntilSuccessful(attempts: Int = 10, sleep: Long = 500, fn: () -> Unit) {
         lateinit var lastException: Throwable
         for (x in 0..attempts) {
             try {
