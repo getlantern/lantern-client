@@ -34,7 +34,7 @@ class _ImageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
+    // TODO(kallirroi): Look into the blinking effect when an image is uploaded to conversation
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING_ENCRYPTION:

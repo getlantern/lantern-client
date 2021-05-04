@@ -100,6 +100,7 @@ class _ConversationState extends State<Conversation> {
               Navigator.of(context).pop(<AssetEntity>[result]);
             }
           },
+          // TODO(kallirroi): Refine the UI/UX
           child: const Center(
             child: Icon(Icons.camera),
           ),
@@ -115,7 +116,7 @@ class _ConversationState extends State<Conversation> {
         return;
       }
       //
-      // Here is an example of an AssetEntity object:
+      // NOTE: An example of an AssetEntity object:
       //
       // _latitude:null
       // _longitude:null
@@ -148,16 +149,18 @@ class _ConversationState extends State<Conversation> {
       // type:AssetType (AssetType.image)
       // videoDuration:Duration (0:00:00.000000)
 
-      var pickedFile = pickedAssets.first;
-      var absolutePath = await pickedFile.originFile
-          .then((file) async => file?.path) as String;
-      var attachment = await model.filePickerLoadAttachment(absolutePath);
-      _send(_newMessage.value.text, attachments: [attachment]);
+      pickedAssets.forEach((el) async {
+        final absolutePath =
+            await el.originFile.then((file) async => file?.path) as String;
+        final attachment = await model.filePickerLoadAttachment(absolutePath);
+        _send(_newMessage.value.text, attachments: [attachment]);
+      });
     } catch (e) {
       showInfoDialog(
         context,
         title: 'Error'.i18n,
-        des: 'Something went wrong while loading the media gallery.'.i18n,
+        // TODO: Add i18n below
+        des: 'Something went wrong while sharing a media file.',
       );
     }
     AssetPicker.unregisterObserve();
@@ -227,6 +230,7 @@ class _ConversationState extends State<Conversation> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Row(children: [
+                // TODO(kallirroi): Refine the UI/UX
                 Expanded(
                   child: TextFormField(
                     textInputAction: TextInputAction.send,
@@ -248,10 +252,12 @@ class _ConversationState extends State<Conversation> {
                     ),
                   ),
                 ),
+                // TODO(kallirroi): Refine the UI/UX
                 GestureDetector(
                   onTap: () => _selectFilesToShare(),
                   child: const Icon(Icons.image),
                 ),
+                // TODO(kallirroi): Refine the UI/UX
                 GestureDetector(
                   onTapDown: (details) {
                     _startRecording();
@@ -264,6 +270,7 @@ class _ConversationState extends State<Conversation> {
               ]),
             ),
           ]),
+          // TODO(kallirroi): Refine the UI/UX
           if (_recording)
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               Flexible(
