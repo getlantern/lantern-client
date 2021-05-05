@@ -1,7 +1,6 @@
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:flutter/services.dart';
 
@@ -25,7 +24,7 @@ class MessageBubble extends StatelessWidget {
         model.markViewed(message);
       }
 
-      var outbound = msg.direction == MessageDirection.IN;
+      var outbound = msg.direction == MessageDirection.OUT;
       var inbound = !outbound;
 
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
@@ -219,13 +218,7 @@ class MessageBubble extends StatelessWidget {
               title: Text('Reply'.i18n),
               onTap: () {},
             ),
-            ListTile(
-              leading: const Icon(Icons.copy),
-              title: Text('Copy Text'.i18n),
-              onTap: () {
-                Clipboard.setData(ClipboardData(text: message.value.text));
-              },
-            ),
+            _CopiedTextWidget(message),
             ListTile(
               leading: const Icon(Icons.delete),
               title: Text('Delete for me'.i18n),
@@ -303,5 +296,43 @@ class MessageBubble extends StatelessWidget {
         child: innerColumn,
       ),
     );
+  }
+}
+
+class _CopiedTextWidget extends StatefulWidget {
+  final PathAndValue<StoredMessage> _message;
+
+  _CopiedTextWidget(this._message);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CopiedTextWidgetState();
+  }
+}
+
+class _CopiedTextWidgetState extends State<_CopiedTextWidget> {
+  var _copied = false;
+
+  void _onPointerDown(_) {
+    setState(() {
+      _copied = true;
+    });
+    Clipboard.setData(ClipboardData(text: widget._message.value.text));
+  }
+
+  void _onPointerUp(_) async {
+    await Future.delayed(
+        const Duration(milliseconds: 600), () => Navigator.of(context).pop());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+        onPointerUp: _onPointerUp,
+        onPointerDown: _onPointerDown,
+        child: ListTile(
+          leading: _copied ? const Icon(Icons.check) : const Icon(Icons.copy),
+          title: Text('Copy Text'.i18n),
+        ));
   }
 }
