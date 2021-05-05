@@ -124,49 +124,49 @@ class MessageBubble extends StatelessWidget {
         isDismissible: true,
         builder: (context) {
           return Wrap(children: [
-            const Padding(
-              padding: EdgeInsets.all(8),
-            ),
+            if (msg.direction == MessageDirection.IN)
+              const Padding(
+                padding: EdgeInsets.all(8),
+              ),
             // Other users' messages
-            // if (msg.direction == MessageDirection.IN)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                '👍',
-                '👎',
-                '😄',
-                '❤',
-                '😢',
-                '...'
-              ] // TODO: render dots as icon
-                  .map((e) => Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color:
-                              Colors.grey.shade200, // TODO generalize in theme
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(999)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: InkWell(
-                            onTap: () {
-                              model.react(message, e);
-                              Navigator.pop(context);
-                            },
-                            child: Transform.scale(
-                                scale: 1.2,
-                                child: Text(e,
-                                    style: const TextStyle(fontSize: 16))),
+            if (msg.direction == MessageDirection.IN)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  '👍',
+                  '👎',
+                  '😄',
+                  '❤',
+                  '😢',
+                  '...'
+                ] // TODO: render dots as icon
+                    .map((e) => Container(
+                          margin: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .grey.shade200, // TODO generalize in theme
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(999)),
                           ),
-                        ),
-                      ))
-                  .toList(growable: false),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Divider(height: 3),
-            ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: InkWell(
+                              onTap: () {
+                                model.react(message, e);
+                                Navigator.pop(context);
+                              },
+                              child: Transform.scale(
+                                  scale: 1.2,
+                                  child: Text(e,
+                                      style: const TextStyle(fontSize: 16))),
+                            ),
+                          ),
+                        ))
+                    .toList(growable: false),
+              ),
+            if (msg.direction == MessageDirection.IN)
+              const Padding(
+                  padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
             ListTile(
               leading: const Icon(Icons.reply),
               title: Text('Reply'.i18n),
