@@ -10,7 +10,6 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
-import 'package:lantern/messaging/widgets/filepicker_extensions.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class Conversation extends StatefulWidget {
@@ -33,7 +32,6 @@ class _ConversationState extends State<Conversation> {
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
-  ThemeData get currentTheme => context.themeData;
 
   @override
   void dispose() {
