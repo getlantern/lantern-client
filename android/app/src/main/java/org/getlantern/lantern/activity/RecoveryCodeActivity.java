@@ -1,5 +1,6 @@
 package org.getlantern.lantern.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.Spannable;
@@ -43,10 +44,12 @@ public class RecoveryCodeActivity extends FragmentActivity {
     EditText codeInput;
 
     @ViewById
-    Button resendEmail, submit;
+    Button resendEmail;
 
     @ViewById
     TextView emailWithRecoveryCode;
+
+    private ProgressDialog dialog;
 
     @AfterViews
     void afterViews() {
@@ -71,9 +74,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() >= 6) {
-                    submit.setEnabled(true);
-                } else {
-                    submit.setEnabled(false);
+                    verifyCode();
                 }
             }
         });
@@ -85,8 +86,7 @@ public class RecoveryCodeActivity extends FragmentActivity {
         ActivityExtKt.showAlertDialog(this, title, msg);
     }
 
-    @Click(R.id.submit)
-    void verifyCode(View view) {
+    void verifyCode() {
         final String code = codeInput.getText().toString();
 
         if (code.equals("") || !code.matches("[0-9]+")) {
@@ -95,6 +95,10 @@ public class RecoveryCodeActivity extends FragmentActivity {
             return;
         }
 
+        dialog = ProgressDialog.show(this,
+                "",
+                "",
+                true, false);
         final RecoveryCodeActivity activity = this;
         final RequestBody formBody = new FormBody.Builder()
             .add("code", code)
@@ -118,6 +122,11 @@ public class RecoveryCodeActivity extends FragmentActivity {
     }
 
     private void showError(final ProError error) {
+        runOnUiThread(() -> {
+            codeInput.setText("");
+            dialog.cancel();
+        });
+
         if (error == null) {
             Logger.error(TAG, "Unable to validate recovery code and no error to show");
             return;

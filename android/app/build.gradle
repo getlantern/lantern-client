@@ -153,7 +153,7 @@ android {
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
-            buildConfigField "boolean", "PAYMENT_TEST_MODE", "true"
+            buildConfigField "boolean", "PAYMENT_TEST_MODE", "false"
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
