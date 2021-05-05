@@ -78,18 +78,6 @@
         android:layout_marginEnd="24dp"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:layout_marginBottom="@dimen/space_normal"
-        android:enabled="false"
-        app:backgroundTint="@color/bg_color_selector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/resendEmail"/>
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/resendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

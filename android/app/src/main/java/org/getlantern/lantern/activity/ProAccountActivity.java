@@ -1,11 +1,13 @@
 package org.getlantern.lantern.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.FragmentActivity;
 
@@ -23,6 +25,7 @@ import org.getlantern.lantern.model.Device;
 import org.getlantern.lantern.model.DeviceView;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
+import org.getlantern.lantern.model.ProUser;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
@@ -48,6 +51,8 @@ public class ProAccountActivity extends FragmentActivity {
     Group addDeviceListGroup;
 
     private boolean onlyOneDevice = false;
+
+    private ProgressDialog dialog;
 
     @AfterViews
     void afterViews() {
@@ -122,10 +127,18 @@ public class ProAccountActivity extends FragmentActivity {
         final RequestBody formBody = new FormBody.Builder()
             .add("deviceID", deviceId)
             .build();
+
+        dialog = ProgressDialog.show(this,
+                "",
+                "",
+                true, false);
+
         lanternClient.post(LanternHttpClient.createProUrl("/user-link-remove"), formBody,
             new LanternHttpClient.ProCallback() {
+
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
+                dialog.cancel();
                 if (error != null) {
                     Logger.error(TAG, "Error removing device:" + error);
                 }
@@ -133,20 +146,36 @@ public class ProAccountActivity extends FragmentActivity {
                 ActivityExtKt.showErrorDialog(ProAccountActivity.this,
                         getResources().getString(R.string.unable_remove_device));
             }
+
             @Override
             public void onSuccess(final Response response, final JsonObject result) {
                 Logger.debug(TAG, "Successfully redeemed voucher code");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        removeDeviceView(deviceId);
                         if (deviceId.equals(LanternApp.getSession().getDeviceID())) {
                             // if one of the devices we removed is the current device
                             // make sure to logout
                             logout(null);
                             return;
                         }
-                        updateDeviceList();
+
+                        lanternClient.userData(new LanternHttpClient.ProUserCallback() {
+                            @Override
+                            public void onSuccess(Response response, ProUser userData) {
+                                Logger.debug(TAG, "Successfully updated userData");
+                                dialog.cancel();
+                                removeDeviceView(deviceId);
+                            }
+
+                            @Override
+                            public void onFailure(@Nullable @org.jetbrains.annotations.Nullable Throwable throwable, @Nullable @org.jetbrains.annotations.Nullable ProError error) {
+                                Logger.error(TAG, "Unable to fetch user data", throwable);
+                                dialog.cancel();
+                                removeDeviceView(deviceId);
+                            }
+                        });
+
                     }
                 });
             }

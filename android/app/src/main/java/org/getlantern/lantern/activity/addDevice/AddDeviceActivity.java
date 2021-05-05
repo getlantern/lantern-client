@@ -1,5 +1,6 @@
 package org.getlantern.lantern.activity.addDevice;
 
+import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,8 +33,7 @@ public class AddDeviceActivity extends FragmentActivity {
     @ViewById
     EditText codeInput;
 
-    @ViewById
-    Button submit;
+    private ProgressDialog dialog;
 
     @AfterViews
     void afterViews() {
@@ -51,16 +51,13 @@ public class AddDeviceActivity extends FragmentActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() >= 6) {
-                    submit.setEnabled(true);
-                } else {
-                    submit.setEnabled(false);
+                    submit();
                 }
             }
         });
     }
 
-    @Click(R.id.submit)
-    void clickSubmitButton(View view) {
+    void submit() {
         final Resources res = getResources();
 
         final String code = codeInput.getText().toString();
@@ -68,6 +65,10 @@ public class AddDeviceActivity extends FragmentActivity {
             return;
         }
 
+        dialog = ProgressDialog.show(this,
+                "",
+                "",
+                true, false);
         final RequestBody formBody = new FormBody.Builder()
             .add("code", code)
             .build();
@@ -77,6 +78,11 @@ public class AddDeviceActivity extends FragmentActivity {
                 @Override
                 public void onFailure(final Throwable throwable, final ProError error) {
                     Logger.error(TAG, "Error retrieving link code: " + error);
+                    runOnUiThread(() -> {
+                        codeInput.setText("");
+                        dialog.cancel();
+                    });
+
                     ActivityExtKt.showErrorDialog(activity,
                         res.getString(R.string.invalid_verification_code));
                 }

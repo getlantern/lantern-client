@@ -247,7 +247,6 @@
             </intent-filter>
         </service>
 
-        <service android:enabled="true" android:name=".service.LinkDeviceService_"/>
         <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
 
         <receiver android:name=".notification.Notifier"
