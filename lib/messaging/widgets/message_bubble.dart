@@ -25,13 +25,56 @@ class MessageBubble extends StatelessWidget {
         model.markViewed(message);
       }
 
-      var outbound = msg.direction == MessageDirection.OUT;
+      var outbound = msg.direction == MessageDirection.IN;
       var inbound = !outbound;
 
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
+      var reactionCount = msg.reactions.values
+          .length; // TODO: correctly calculate the count for every reaction type
       msg.reactions.values.forEach((e) {
-        statusRow.children.add(Padding(
-            padding: const EdgeInsets.only(right: 8), child: Text(e.emoticon)));
+        statusRow.children.add(Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+                onTap: () => showModalBottomSheet(
+                    context: context,
+                    isDismissible: true,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15.0),
+                            topRight: Radius.circular(15.0))),
+                    builder: (context) => Wrap(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(12),
+                            ),
+                            const Center(
+                                child: Text('Reactions',
+                                    style: TextStyle(fontSize: 18.0))),
+                            ListTile(
+                              leading: Text(e.emoticon),
+                              title: const Text(
+                                  'TODO: Match e.reactingToSenderId to name'),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(12),
+                            ),
+                          ],
+                        )),
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200, // TODO generalize in theme
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(999)),
+                    ),
+                    child: Padding(
+                        padding: reactionCount > 1
+                            ? const EdgeInsets.only(
+                                left: 3, top: 3, right: 6, bottom: 3)
+                            : const EdgeInsets.all(3),
+                        child: reactionCount > 1
+                            ? Text(e.emoticon + reactionCount.toString())
+                            : Text(e.emoticon))))));
       });
       statusRow.children.add(Opacity(
         opacity: 0.5,
