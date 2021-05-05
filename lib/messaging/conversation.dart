@@ -195,10 +195,10 @@ class _ConversationState extends State<Conversation> {
             // Conversation subtitle
             Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: buildMessagesLifeExpectancy()),
+                child: _buildMessagesLifeExpectancy()),
             // Message bubbles
             Expanded(
-              child: buildMessageBubbles(),
+              child: _buildMessageBubbles(),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8),
@@ -207,17 +207,17 @@ class _ConversationState extends State<Conversation> {
             // Message bar
             Padding(
               padding: const EdgeInsets.all(8),
-              child: buildMessageBar(),
+              child: _buildMessageBar(),
             ),
           ]),
           // Voice recorder
-          if (_recording) buildVoiceRecorder(),
+          if (_recording) _buildVoiceRecorder(),
         ]),
       ),
     );
   }
 
-  Widget buildMessagesLifeExpectancy() {
+  Widget _buildMessagesLifeExpectancy() {
     return model.singleContact(
         context,
         widget._contact,
@@ -227,7 +227,7 @@ class _ConversationState extends State<Conversation> {
             : Container());
   }
 
-  Widget buildMessageBubbles() {
+  Widget _buildMessageBubbles() {
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       return ListView.builder(
@@ -245,7 +245,7 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  Widget buildMessageBar() {
+  Widget _buildMessageBar() {
     return Row(children: [
       Expanded(
         // Text field
@@ -288,7 +288,7 @@ class _ConversationState extends State<Conversation> {
     ]);
   }
 
-  Widget buildVoiceRecorder() {
+  Widget _buildVoiceRecorder() {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       Flexible(
         child: ColoredBox(
