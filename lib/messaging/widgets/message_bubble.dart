@@ -87,7 +87,7 @@ class MessageBubble extends StatelessWidget {
       var newestMessage = nextMessage == null;
       return InkWell(
         onLongPress: () {
-          _buildActionsPopup(context, msg, model);
+          _buildActionsPopup(outbound, context, msg, model);
         },
         child: _buildRow(outbound, inbound, startOfBlock, endOfBlock,
             newestMessage, innerColumn),
@@ -117,19 +117,23 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Future _buildActionsPopup(
-      BuildContext context, StoredMessage msg, MessagingModel model) {
+  Future _buildActionsPopup(bool outbound, BuildContext context,
+      StoredMessage msg, MessagingModel model) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0),
+                topRight: Radius.circular(15.0))),
         builder: (context) {
           return Wrap(children: [
-            if (msg.direction == MessageDirection.IN)
+            if (!outbound)
               const Padding(
                 padding: EdgeInsets.all(8),
               ),
             // Other users' messages
-            if (msg.direction == MessageDirection.IN)
+            if (!outbound)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -164,7 +168,7 @@ class MessageBubble extends StatelessWidget {
                         ))
                     .toList(growable: false),
               ),
-            if (msg.direction == MessageDirection.IN)
+            if (!outbound)
               const Padding(
                   padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
             ListTile(
@@ -185,7 +189,7 @@ class MessageBubble extends StatelessWidget {
               onTap: () => _showDeleteDialog(context, model, true),
             ),
             // User's own messages
-            if (msg.direction == MessageDirection.OUT)
+            if (outbound)
               ListTile(
                 leading: const Icon(Icons.delete_forever),
                 title: Text('Delete for everyone'.i18n),
