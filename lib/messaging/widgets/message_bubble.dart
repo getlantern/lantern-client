@@ -124,6 +124,7 @@ class MessageBubble extends StatelessWidget {
       );
 
       return InkWell(
+        onDoubleTap: () {},
         onLongPress: () {
           showModalBottomSheet(
               context: context,
