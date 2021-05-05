@@ -1,6 +1,7 @@
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:flutter/services.dart';
 
@@ -181,23 +182,54 @@ class MessageBubble extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.delete),
               title: Text('Delete for me'.i18n),
-              onTap: () {
-                model.deleteLocally(message);
-                Navigator.pop(context);
-              },
+              onTap: () => _showDeleteDialog(context, model, true),
             ),
             // User's own messages
             if (msg.direction == MessageDirection.OUT)
               ListTile(
                 leading: const Icon(Icons.delete_forever),
                 title: Text('Delete for everyone'.i18n),
-                onTap: () {
-                  model.deleteGlobally(message);
-                  Navigator.pop(context);
-                },
+                onTap: () => _showDeleteDialog(context, model, false),
               ),
           ]);
         });
+  }
+
+  Future<void> _showDeleteDialog(context, model, isLocal) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: isLocal
+              ? const Text('Delete for me')
+              : const Text('Delete for everyone'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                isLocal
+                    ? const Text(
+                        'This will delete the message for you only. Everyone else will still be able to see it.')
+                    : const Text(
+                        'This will delete the message for everyone.'), // TODO: i18n
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                isLocal
+                    ? model.deleteLocally(message)
+                    : model.deleteGlobally(message);
+                Navigator.of(context)
+                    .pop(); // TODO: close showModalBottomSheet as well
+              },
+              child: const Text('Delete'),
+            )
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildBubbleUI(bool outbound, bool inbound, bool startOfBlock,
