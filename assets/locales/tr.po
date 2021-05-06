@@ -89,9 +89,6 @@ msgstr "Dil"
 msgid "report_issue"
 msgstr "Sorun bildir"
 
-msgid "title_proxy_all_dialog"
-msgstr "Tümünde Proxy Kullan"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Etkinleştirilirse, bütün trafik Lantern üzerinden gönderilecektir (daha "

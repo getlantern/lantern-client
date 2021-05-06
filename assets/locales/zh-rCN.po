@@ -83,9 +83,6 @@ msgstr "语种"
 msgid "report_issue"
 msgstr "报告问题"
 
-msgid "title_proxy_all_dialog"
-msgstr "全部使用代理"
-
 msgid "description_proxy_all_dialog"
 msgstr "启用该选项后，所有流量都将通过 Lantern 发送（更安全）。禁用该选项后，仅通过 Lantern 发送已阻止的流量（速度更快）。"
 

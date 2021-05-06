@@ -92,9 +92,6 @@ msgstr "Язык"
 msgid "report_issue"
 msgstr "Сообщить о проблеме"
 
-msgid "title_proxy_all_dialog"
-msgstr "Проксировать весь трафик"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Если этот параметр включен, весь трафик будет отправляться через Lantern "

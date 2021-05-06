@@ -2,7 +2,6 @@ package org.getlantern.lantern.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ShareCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import org.androidannotations.annotations.AfterViews;
@@ -29,7 +27,7 @@ import org.getlantern.mobilesdk.Logger;
 public class InviteActivity extends FragmentActivity {
 
     private static final String TAG = InviteActivity.class.getName();
-    
+
     private ProgressDialogFragment progressFragment;
     private Resources resources;
     private String code;
@@ -125,20 +123,16 @@ public class InviteActivity extends FragmentActivity {
         }
 
         Utils.copyToClipboard(this,
-            getString(R.string.referral_code),
-            referralText.toString());
-        Utils.showToastMessage(getLayoutInflater(),
-            this,
-            this,
-            resources.getString(R.string.copied_to_clipboard));
+                getString(R.string.referral_code),
+                referralText.toString());
     }
 
     @Click
     void btnShare() {
         IntentUtil.INSTANCE.sharePlainText(
-            this,
-            String.format(resources.getString(R.string.receive_free_month), this.code),
-            getString(R.string.referral_code_share_title)
+                this,
+                String.format(resources.getString(R.string.receive_free_month), this.code),
+                getString(R.string.referral_code_share_title)
         );
     }
 }

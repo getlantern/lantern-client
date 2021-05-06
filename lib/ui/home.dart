@@ -23,6 +23,8 @@ class _HomePageState extends State<HomePage> {
 
   late Future<void> loadAsync;
 
+  Function()? _cancelEventSubscription;
+
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
@@ -41,7 +43,8 @@ class _HomePageState extends State<HomePage> {
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
-    eventManager.subscribe(Event.All, (eventName, params) {
+    _cancelEventSubscription =
+        eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
       switch (event) {
         case Event.SurveyAvailable:
@@ -53,7 +56,8 @@ class _HomePageState extends State<HomePage> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+            margin:
+                const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),
             // simple way to show indefinitely
             content: Text(message),
             action: SnackBarAction(
@@ -95,6 +99,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _pageController.dispose();
+    if (_cancelEventSubscription != null) {
+      _cancelEventSubscription!();
+    }
     super.dispose();
   }
 

@@ -15,7 +15,7 @@ class CustomBottomBar extends StatelessWidget {
 
   Widget activeIcon({bool isActive = false}) {
     return Container(
-      margin: const EdgeInsets.only(left: 4),
+      margin: const EdgeInsetsDirectional.only(start: 4),
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(

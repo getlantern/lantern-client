@@ -6,7 +6,8 @@ void showInfoDialog(BuildContext context,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+        contentPadding: const EdgeInsetsDirectional.only(
+            start: 20, end: 20, top: 20, bottom: 12),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
@@ -31,7 +32,7 @@ void showInfoDialog(BuildContext context,
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: const EdgeInsetsDirectional.only(
                     top: 16,
                     bottom: 24,
                   ),

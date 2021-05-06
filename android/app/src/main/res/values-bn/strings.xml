@@ -137,7 +137,6 @@
   <string name="get_code">কোড পান</string>
   <string name="get_code_text">আপনার বন্ধুদের সাথে শেয়ার করার জন্য একটি কোড পেতে আপনার ইমেল লিখুন, তারা সাইন আপ করলে আপি PRO এর একটি বিনামূল্যে মাস পাবেন !</string>
   <string name="enter_your_email">রেফারেল কোড পেতে আপনার ইমেইল ঠিকানা লিখুন</string>
-  <string name="referral_copied_to_clipboard">রেফারেল কোড ক্লিপবোর্ডে কপি করা হয়েছে !</string>
   <string name="fastworldpay_text">আপনি ক্রয় চালিয়ে যেতে ক্লিক করলে আপনাকে পেমেন্ট সম্পূর্ণ করতে এবং আপনার অ্যাক্টিভেশন কোড সংগ্রহ করার জন্য একটি বহিরাগত সাইটে পুনঃনির্দেশিত করা হবে।</string>
   <string name="share_referral_text">ক্রয়ের পরে 3 অতিরিক্ত মাস বিনামূল্যে পেতে আমার কোড %1$s ব্যবহার করুন।  Lantern ডাউনলোড করুন https://bit.ly/lanternapk</string>
   <string name="previous_code">আপনি পূর্বে একটি রেফারেল কোড পেয়ে থাকলে, তাহলে একই ইমেইল ঠিকানা ব্যবহার নিশ্চিত করুন।</string>

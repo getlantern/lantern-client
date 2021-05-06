@@ -146,7 +146,6 @@
   <string name="get_code">รับรหัส</string>
   <string name="get_code_text">ใส่อีเมลของคุณเพื่อรับรหัสเพื่อแชร์กับเพื่อน ๆ ของคุณ รับสิทธิ PRO ฟรี 1 เดือนเมื่อลงทะเบียน!</string>
   <string name="enter_your_email">ป้อนอีเมลของคุณเพื่อรับรหัสแนะนำ</string>
-  <string name="referral_copied_to_clipboard">คัดลอกรหัสแนะนำไปยังคลิปบอร์ดแล้ว!</string>
   <string name="fastworldpay_text">เมื่อคุณคลิกดำเนินการซื้อต่อ\nคุณจะได้รับการเปลี่ยนเส้นทางไปยังไซต์ภายนอก\nเพื่อชำระเงินและรับรหัสเปิดใช้งาน</string>
   <string name="share_referral_text">ใช้รหัสของฉัน %1$s เพื่อรับฟรีอีก 3 เดือนหลังจากซื้อ ดาวน์โหลด Lantern ที่ https://bit.ly/lanternapk</string>
   <string name="previous_code">หากคุณเคยได้รับรหัสแนะนำมาก่อนหน้านี้ \r\nโปรดตรวจสอบให้แน่ใจว่าได้ใช้ที่อยู่อีเมลเดียวกัน</string>

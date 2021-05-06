@@ -76,9 +76,6 @@ msgstr "Language"
 msgid "report_issue"
 msgstr "Report an issue"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proxy All"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "If enabled all traffic will be sent through Lantern (more secure). If "

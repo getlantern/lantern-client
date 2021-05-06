@@ -105,7 +105,6 @@
   <string name="get_code">Kód beszerzése</string>
   <string name="get_code_text">Adja meg email címét, hogy elküldhessük kódját, aminek megosztásával ingyen PRO hónapot szerezhet, de előfizet!</string>
   <string name="enter_your_email">Adja meg email címét az ajánló kód eljuttatásához</string>
-  <string name="referral_copied_to_clipboard">Az ajánlókód a vágólapra másolva!</string>
   <string name="payment_plans">Lantern Pro előfizetési lehetőségek</string>
   <string name="features_text">Lantern PRO szolgáltatások</string>
   <string name="checkout">Fizetés</string>

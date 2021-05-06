@@ -87,9 +87,6 @@ msgstr "भाषा"
 msgid "report_issue"
 msgstr "समस्या की रिपोर्ट करें"
 
-msgid "title_proxy_all_dialog"
-msgstr "प्रॉक्सी सभी"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "सक्षम होने पर, सभी ट्रैफ़िक को Latern (सबसे सुरक्षित विकल्प) के माध्यम से "

@@ -87,9 +87,6 @@ msgstr "Bahasa"
 msgid "report_issue"
 msgstr "Laporkan isu"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proksi Semua"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Sekiranya didayakan, semua trafik akan dihantar melalui Lantern (lebih "

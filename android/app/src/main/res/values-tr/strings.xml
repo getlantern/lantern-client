@@ -146,7 +146,6 @@
   <string name="get_code">Kodu Al</string>
   <string name="get_code_text">Arkadaşlarınızla paylaşmak üzere bir referans kodu oluşturmak için e-postanızı girin. Onlar bu kodla hesap açtıklarında bir ay ücretsiz PRO üyeliği kazanın.</string>
   <string name="enter_your_email">Referans kodunuzu almak için e-posta adresinizi girin</string>
-  <string name="referral_copied_to_clipboard">Referans kodu panoya kopyalandı!</string>
   <string name="fastworldpay_text">Satın almak için devam düğmesine bastığınızda,\nödemeyi tamamlamak ve aktivasyon kodunuzu almak için\nharici bir siteye yönlendirileceksiniz.</string>
   <string name="share_referral_text">Benim referans kodumu kullanarak satın aldığında ücretsiz 3 ay daha kazanıyorsun: %1$s . Lantern\'i buradan indirebilirsin: https://bit.ly/lanternapk</string>
   <string name="previous_code">Eğer daha önce bir referans kodu aldıysanız\r\nlütfen aynı e-posta adresini kullanın.</string>

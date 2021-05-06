@@ -104,13 +104,13 @@ class _ExchangeTabState extends State<ExchangeTab> {
                 children: [
                   Text('In partnership with'.i18n),
                   Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsetsDirectional.only(top: 10),
                     child: const CustomAssetImage(
                       path: ImagePaths.paxful_logo,
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 20),
+                    margin: const EdgeInsetsDirectional.only(top: 20),
                     child: DropDown(
                       title: 'Buy'.i18n,
                       onChanged: setBuyItem,

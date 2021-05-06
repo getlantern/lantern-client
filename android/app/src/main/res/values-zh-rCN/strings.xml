@@ -146,7 +146,6 @@
   <string name="get_code">获取验证码</string>
   <string name="get_code_text">输入您的电子邮件即可收到一个可以与您的朋友分享的代码。如果他们注册，即可免费使用专业版一个月！</string>
   <string name="enter_your_email">要收到一个推荐码，请输入您的电子邮件。</string>
-  <string name="referral_copied_to_clipboard">推荐码已复制到剪贴板！</string>
   <string name="fastworldpay_text">当您点击继续购买时，您将被重定向到一个外部网站，以完成\n付款并收集您的激活码。</string>
   <string name="share_referral_text">购买后，使用我的代码%1$s可额外获得 3 个月的免费使用期。如需下载蓝灯，请点击以下链接：https://bit.ly/lanternapk</string>
   <string name="previous_code">如果您之前收到过推荐码，请确保使用相同的电子邮件地址。</string>

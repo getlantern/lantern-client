@@ -84,9 +84,6 @@ msgstr "שפה"
 msgid "report_issue"
 msgstr "דווח על סוגייה"
 
-msgid "title_proxy_all_dialog"
-msgstr "ייפוי כוח בהכול"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "אם מאופשר, כל התעבורה תישלח דרך Lantern (מאובטח יותר). אם מושבת, רק תעבורה "

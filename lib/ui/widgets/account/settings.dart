@@ -9,7 +9,7 @@ class SettingsScreen extends StatelessWidget {
   void openInfoProxyAll(BuildContext context) {
     showInfoDialog(
       context,
-      title: 'title_proxy_all_dialog'.i18n,
+      title: 'proxy_all'.i18n,
       des: 'description_proxy_all_dialog'.i18n,
       icon: ImagePaths.key_icon,
     );
@@ -30,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
     return BaseScreen(
       title: 'settings'.i18n,
       body: ListView(
-        padding: const EdgeInsets.only(
+        padding: const EdgeInsetsDirectional.only(
           bottom: 8,
         ),
         children: [
@@ -56,10 +56,10 @@ class SettingsScreen extends StatelessWidget {
               );
             }),
           ),
-          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
+            showTopDivider: true,
             showArrow: true,
             onTap: changeLanguage,
             child: Padding(
@@ -77,10 +77,10 @@ class SettingsScreen extends StatelessWidget {
               }),
             ),
           ),
-          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,
+            showTopDivider: true,
             showArrow: true,
             onTap: reportIssue,
           )
