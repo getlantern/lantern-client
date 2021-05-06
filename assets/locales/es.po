@@ -2,13 +2,13 @@
 # Translators:
 # strel, 2021
 # Giorgio Maone <giorgio@maone.net>, 2021
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021\n"
+"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -107,6 +107,12 @@ msgstr "En asociación con"
 
 msgid "Buy"
 msgstr "Comprar"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "Con"

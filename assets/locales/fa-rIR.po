@@ -85,7 +85,7 @@ msgid "settings"
 msgstr "تنظیمات"
 
 msgid "proxy_all"
-msgstr "پراکسی کردن تمام ترافیک روشن است"
+msgstr "پراکسی کردن همه چیز"
 
 msgid "language"
 msgstr "زبان"
@@ -113,6 +113,12 @@ msgstr "با شراکت:"
 
 msgid "Buy"
 msgstr "خرید"
+
+msgid "Bitcoin"
+msgstr "بیت‌کوین"
+
+msgid "Tether"
+msgstr "تتر"
 
 msgid "With"
 msgstr "با"

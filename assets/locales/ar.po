@@ -80,7 +80,7 @@ msgid "settings"
 msgstr "الاعدادات"
 
 msgid "proxy_all"
-msgstr "الوسيط قيد التشغيل"
+msgstr "كل شيء على الوكيل"
 
 msgid "language"
 msgstr "لغة"
@@ -108,6 +108,12 @@ msgstr "بالشراكة مع"
 
 msgid "Buy"
 msgstr "الشراء"
+
+msgid "Bitcoin"
+msgstr "بيتكوين"
+
+msgid "Tether"
+msgstr "تيزر"
 
 msgid "With"
 msgstr "من خلال"

@@ -2,9 +2,9 @@
 <resources>
   <string name="app_name">Lantern</string>
   <string name="action_settings">Configuración</string>
-  <string name="proxy_all_setting">Proxyficar todo el tráfico</string>
-  <string name="proxy_all_on_header">ACTIVO (Opción más segura)</string>
-  <string name="proxy_all_off_header">INACTIVO (Opción más rápida)</string>
+  <string name="proxy_all_setting">Proxyficar todo</string>
+  <string name="proxy_all_on_header">ACTIVO </string>
+  <string name="proxy_all_off_header">INACTIVO </string>
   <string name="proxy_all_on">Con esta opción, todo el tráfico de su dispositivo se enviará a través de %1$s</string>
   <string name="proxy_all_off">Con esta opción desactivada, solo se enviará el tráfico a los sitios bloqueados a través de %1$s</string>
   <string name="button_text">Iniciar</string>

@@ -511,7 +511,7 @@ distribués à la fin de chaque jour,\nd’après le nombre de personnes qui\npa
   <string name="most_popular">Le plus populaire</string>
   <string name="membership_end_soon">Votre abonnement se termine bientôt. Renouvelez-le maintenant et obtenez jusqu’à %s gratuits !</string>
   <string name="membership_ends_today">Votre abonnement se termine aujourd’hui. Renouvelez-le maintenant et obtenez jusqu’à %s gratuits !</string>
-  <string name="membership_has_expired">Votre abonnement est expiré. Renouvelez-le maintenant et obtenez jusqu’à f%s gratuits.</string>
+  <string name="membership_has_expired">Votre abonnement est expiré. Renouvelez-le maintenant et obtenez jusqu’à %s gratuits.</string>
   <string name="free_extra_yinbi">2 x Yinbi !</string>
   <string name="step_2">Étape 2</string>
   <string name="enter_email_short">Saisissez votre adresse courriel</string>

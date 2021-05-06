@@ -79,7 +79,7 @@ msgid "settings"
 msgstr "Tetapan"
 
 msgid "proxy_all"
-msgstr "Proksi semua DIHIDUPKAN"
+msgstr "Proksi semua"
 
 msgid "language"
 msgstr "Bahasa"
@@ -107,6 +107,12 @@ msgstr "Secara kerjasama dengan"
 
 msgid "Buy"
 msgstr "Beli"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tambat"
 
 msgid "With"
 msgstr "Dengan"

@@ -75,7 +75,7 @@ msgid "settings"
 msgstr "设置"
 
 msgid "proxy_all"
-msgstr "代理已全部开启"
+msgstr "全部代理"
 
 msgid "language"
 msgstr "语种"
@@ -100,6 +100,12 @@ msgstr "合作对象："
 
 msgid "Buy"
 msgstr "购买"
+
+msgid "Bitcoin"
+msgstr "比特币"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "和"

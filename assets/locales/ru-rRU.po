@@ -84,7 +84,7 @@ msgid "settings"
 msgstr "Настройки"
 
 msgid "proxy_all"
-msgstr "Параметр \"Проксировать весь трафик\" включен"
+msgstr "Проксировать весь трафик"
 
 msgid "language"
 msgstr "Язык"
@@ -112,6 +112,12 @@ msgstr "Совместно с"
 
 msgid "Buy"
 msgstr "Купить"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "С"
