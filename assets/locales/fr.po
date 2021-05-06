@@ -1,13 +1,13 @@
 # 
 # Translators:
-# AO <ao@localizationlab.org>, 2021
 # Derek F <derek@getlantern.org>, 2021
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2021
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2021
+# AO <ao@localizationlab.org>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2021\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -79,7 +79,7 @@ msgid "settings"
 msgstr "Paramètres"
 
 msgid "proxy_all"
-msgstr "Tout le trafic est relayé"
+msgstr "Tout relayer par le mandataire"
 
 msgid "language"
 msgstr "Langue"
@@ -107,6 +107,12 @@ msgstr "En partenariat avec"
 
 msgid "Buy"
 msgstr "Acheter"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "Avec"

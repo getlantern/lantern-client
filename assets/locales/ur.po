@@ -77,7 +77,7 @@ msgid "settings"
 msgstr "سینٹنگ"
 
 msgid "proxy_all"
-msgstr "پراکسی آل آن ہے"
+msgstr "پراکسی سب کُجھ"
 
 msgid "language"
 msgstr "زبان"
@@ -104,6 +104,12 @@ msgstr "کے ساتھ شراکت میں"
 
 msgid "Buy"
 msgstr "خریدیں"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "کے ساتھ"

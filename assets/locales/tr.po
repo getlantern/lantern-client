@@ -81,7 +81,7 @@ msgid "settings"
 msgstr "Ayarlar"
 
 msgid "proxy_all"
-msgstr "Tümünde proxy kullan AÇIK"
+msgstr "Her şeyi proxy'le"
 
 msgid "language"
 msgstr "Dil"
@@ -109,6 +109,12 @@ msgstr "Ortaklığıyla: "
 
 msgid "Buy"
 msgstr "Satın Al"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "İle"

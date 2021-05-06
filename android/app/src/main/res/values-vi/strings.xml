@@ -135,7 +135,7 @@
   <string name="continue_">Tiếp tục</string>
   <string name="complete_purchase">Hoàn tất mua hàng</string>
   <string name="continue_to_payment">Chuyển sang Thanh toán</string>
-  <string name="purchase_voucher">Phiếu mua hàng</string>
+  <string name="purchase_voucher">Mua phiếu</string>
   <string name="skip_to_checkout">Đi ra quầy tính tiền</string>
   <string name="free_pro_credits">Điểm Pro Miễn Phí</string>
   <string name="get_pro_credits">Lấy Điểm Pro Miễn Phí</string>
@@ -299,7 +299,7 @@
   <string name="upgrade_to_pro">Nâng cấp lên Pro để có dữ liệu không giới hạn, tốc độ nhanh hơn và khả năng chống chặn cao hơn!</string>
   <string name="upgrade_to_pro_yinbi">Nâng cấp lên Pro để có dữ liệu không giới hạn, tốc độ nhanh hơn, khả năng chống chặn\ncao hơn và tiền điện tử Yinbi miễn phí!</string>
   <string name="data_remaining">%1$s%% còn lại của dung lượng miễn phí mỗi tháng</string>
-  <string name="data_used">Còn lại %1$s MB Dữ liệu Miễn phí.\nĐặt lại lúc %2$s.</string>
+  <string name="data_used">Còn lại %1$s MB Dữ liệu Miễn phí.\nĐặt lại lúc %2$s</string>
   <string name="upgrade">Nâng Cấp</string>
   <string name="upgrade_pro">Nâng cấp lên Pro</string>
   <string name="upgrade_now">Nâng cấp ngay</string>
@@ -397,7 +397,7 @@
   <string name="processing_payment">Xử lý thanh toán</string>
   <string name="now_converting_to_pro">Đang chuyển đổi sang phiên bản Pro.. Vui lòng chờ...</string>
   <string name="have_an_activation_code">Có mã kích hoạt? Bấm vào đây</string>
-  <string name="yinbi_greeting">Yinbi-một loại tiền điện tử không bị chặn sẽ sớm ra mắt.\nNhấp vào đây để tìm hiểu cách tải miễn phí.</string>
+  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">Trang thanh toán thử nghiệm</string>
   <string name="pay_now">Thanh toán ngay</string>
   <string name="error_bulk_codes">Lỗi khi gửi hàng loạt mã tài khoản Pro</string>

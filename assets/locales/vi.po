@@ -79,7 +79,7 @@ msgid "settings"
 msgstr "Cài đặt"
 
 msgid "proxy_all"
-msgstr "Proxy tất cả đang BẬT"
+msgstr "Proxy tất cả"
 
 msgid "language"
 msgstr "Ngôn ngữ"
@@ -106,6 +106,12 @@ msgstr "Hợp tác với"
 
 msgid "Buy"
 msgstr "Mua"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "Với"

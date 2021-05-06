@@ -79,7 +79,7 @@ msgid "settings"
 msgstr "सेटिंग्स"
 
 msgid "proxy_all"
-msgstr "प्रॉक्सी सभी चालू है"
+msgstr "सब कुछ प्रॉक्सी करें"
 
 msgid "language"
 msgstr "भाषा"
@@ -107,6 +107,12 @@ msgstr "उनके साथ पार्टनरशिप में"
 
 msgid "Buy"
 msgstr "खरीदें"
+
+msgid "Bitcoin"
+msgstr "बिटकॉइन"
+
+msgid "Tether"
+msgstr "टीथर"
 
 msgid "With"
 msgstr " साथ"
