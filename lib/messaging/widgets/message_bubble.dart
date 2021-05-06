@@ -33,33 +33,10 @@ class MessageBubble extends StatelessWidget {
       msg.reactions.values.forEach((e) {
         statusRow.children.add(Container(
             margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: GestureDetector(
-                onTap: () => showModalBottomSheet(
-                    context: context,
-                    isDismissible: true,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15.0),
-                            topRight: Radius.circular(15.0))),
-                    builder: (context) => Wrap(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(12),
-                            ),
-                            const Center(
-                                child: Text('Reactions',
-                                    style: TextStyle(fontSize: 18.0))),
-                            ListTile(
-                              leading: Text(e.emoticon),
-                              title: const Text(
-                                  'TODO: Match e.reactingToSenderId to name'),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(12),
-                            ),
-                          ],
-                        )),
+                // Tap on emoji to bring modal with breakdown of interactions
+                onTap: () => showEmojiBreakdown(context, msg),
                 child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200, // TODO generalize in theme
@@ -137,6 +114,38 @@ class MessageBubble extends StatelessWidget {
     });
   }
 
+  Future<void> showEmojiBreakdown(context, msg) {
+    return showModalBottomSheet(
+        context: context,
+        isDismissible: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0),
+                topRight: Radius.circular(15.0))),
+        builder: (context) => Wrap(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(12),
+                ),
+                const Center(
+                    child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    for (var reaction in msg.reactions.values)
+                      ListTile(
+                        leading: Text(reaction.emoticon),
+                        title: const Text('whoever chose that emoji'),
+                      ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(12),
+                ),
+              ],
+            ));
+  }
+
   Widget _buildRow(bool outbound, bool inbound, bool startOfBlock,
       bool endOfBlock, bool newestMessage, Column innerColumn) {
     return Row(
@@ -175,41 +184,40 @@ class MessageBubble extends StatelessWidget {
                 padding: EdgeInsets.all(8),
               ),
             // Other users' messages
-            if (!outbound)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  '👍',
-                  '👎',
-                  '😄',
-                  '❤',
-                  '😢',
-                  '...'
-                ] // TODO: render dots as icon
-                    .map((e) => Container(
-                          margin: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .grey.shade200, // TODO generalize in theme
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(999)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                '👍',
+                '👎',
+                '😄',
+                '❤',
+                '😢',
+                '...'
+              ] // TODO: render dots as icon
+                  .map((e) => Container(
+                        margin: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.grey.shade200, // TODO generalize in theme
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(999)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: InkWell(
+                            onTap: () {
+                              model.react(message, e);
+                              Navigator.pop(context);
+                            },
+                            child: Transform.scale(
+                                scale: 1.2,
+                                child: Text(e,
+                                    style: const TextStyle(fontSize: 16))),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: InkWell(
-                              onTap: () {
-                                model.react(message, e);
-                                Navigator.pop(context);
-                              },
-                              child: Transform.scale(
-                                  scale: 1.2,
-                                  child: Text(e,
-                                      style: const TextStyle(fontSize: 16))),
-                            ),
-                          ),
-                        ))
-                    .toList(growable: false),
-              ),
+                        ),
+                      ))
+                  .toList(growable: false),
+            ),
             if (!outbound)
               const Padding(
                   padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
