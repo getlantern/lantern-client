@@ -14,11 +14,11 @@ class Button extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              const EdgeInsets.only(top: 15, bottom: 15)),
+              const EdgeInsets.symmetric(vertical: 15)),
           backgroundColor:
               MaterialStateProperty.all<Color>(HexColor(primaryPink))),
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,

@@ -88,9 +88,6 @@ msgstr "لغة"
 msgid "report_issue"
 msgstr "الإبلاغ عن مشكلة"
 
-msgid "title_proxy_all_dialog"
-msgstr "الوسيط للجميع"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "في حال التمكين، يُجرى إرسال نسبة استخدام الشبكة من قبل Lantern (أكثر "

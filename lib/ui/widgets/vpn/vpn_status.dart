@@ -13,7 +13,7 @@ class VPNStatus extends StatelessWidget {
         children: [
           Text(
             'VPN Status'.i18n + ': ',
-            style: tsSubTitle(context)?.copyWith(
+            style: tsTitleHeadVPNItem()?.copyWith(
               color: HexColor(unselectedTabLabelColor),
             ),
           ),
@@ -28,7 +28,7 @@ class VPNStatus extends StatelessWidget {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 12),
+                      padding: EdgeInsetsDirectional.only(start: 12),
                       child: SizedBox(
                         height: 14,
                         width: 14,

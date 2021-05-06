@@ -147,7 +147,6 @@
   <string name="get_code">دریافت کد</string>
   <string name="get_code_text">ایمیل خود را برای دریافت ایمیل و اشتراک گذاری با دوستانتان وارد کنید. هنگامی که آنها عضو شوند شما یک ماه عضویت رایگان ویژه دریافت خواهید کرد.</string>
   <string name="enter_your_email">ایمیل خود را برای دریافت کد ارجاعی وارد کنید.</string>
-  <string name="referral_copied_to_clipboard">متن در کلیپ بورد کپی شد.</string>
   <string name="fastworldpay_text">هنگامی که دکمه تکمیل خرید را کلیک می کنید، برای تکمیل پرداخت و دریافت کد فعالسازی به یک سایت خارجی منتقل می شوید.</string>
   <string name="share_referral_text">از کد  %1$s  استفاده کنید تا از حداکثر 3 ماه عضویت رایگان بعد از خرید استفاده کنید.لینک  فانوس را دانلود کنید https://bit.ly/lanternapk</string>
   <string name="previous_code">اگر قبلا کد ارجاعی را دریافت نموده اید لطفا از آدرس ایمیل یکسان قبلی استفاده کنید</string>

@@ -87,9 +87,6 @@ msgstr "Idioma"
 msgid "report_issue"
 msgstr "Informar de un problema"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proxyficar todo"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Si está habilitado, todo el trafico se enviará a través de Lantern (más "

@@ -93,9 +93,6 @@ msgstr "زبان"
 msgid "report_issue"
 msgstr "گزارش مشکل"
 
-msgid "title_proxy_all_dialog"
-msgstr "پراکسی کردن تمام ترافیک"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "اگر این گزینه فعال باشد همه ترافیک از طریق Lantern (امن‌تر) ارسال خواهد شد. "

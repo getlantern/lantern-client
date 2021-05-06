@@ -2,8 +2,11 @@ class ImagePaths {
   static const account_icon = 'assets/images/account_icon.svg';
   static const key_icon = 'assets/images/key_icon.svg';
   static const crown_icon = 'assets/images/crown_icon.svg';
+  static const crown_icon_monochrome =
+      'assets/images/crown_icon_monochrome.svg';
   static const info_icon = 'assets/images/info_icon.svg';
-  static const keyboard_arrow_right_icon = 'assets/images/keyboard_arrow_right_icon.svg';
+  static const keyboard_arrow_right_icon =
+      'assets/images/keyboard_arrow_right_icon.svg';
   static const location_on_icon = 'assets/images/location_on_icon.svg';
   static const exchange_icon = 'assets/images/exchange_icon.svg';
 

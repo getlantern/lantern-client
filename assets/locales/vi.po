@@ -87,9 +87,6 @@ msgstr "Ngôn ngữ"
 msgid "report_issue"
 msgstr "Báo cáo lỗi"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proxy tất cả"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Nếu được bật, tất cả lưu lượng sẽ được gửi qua Lantern (an toàn hơn). Nếu bị"

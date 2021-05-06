@@ -86,9 +86,6 @@ msgstr "ဘာသာစကား"
 msgid "report_issue"
 msgstr "ပြဿနာတစ်ခုကို သတင်းပို့ပါ"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proxy အားလုံး"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "ဖွင့်ထားပါက traffic အားလုံးကို Lantern မှတစ်ဆင့် ပေးပို့ပါလိမ့်မည် (ပို၍ "

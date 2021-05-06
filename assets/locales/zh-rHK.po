@@ -84,9 +84,6 @@ msgstr "語言"
 msgid "report_issue"
 msgstr "回報問題"
 
-msgid "title_proxy_all_dialog"
-msgstr "全流量 Proxy"
-
 msgid "description_proxy_all_dialog"
 msgstr "啟用後，所有流量都將透過 Lantern 傳輸 (更安全)。一旦停用，只有遭封鎖的流量會透過 Lantern 傳輸 (速度更快)。"
 

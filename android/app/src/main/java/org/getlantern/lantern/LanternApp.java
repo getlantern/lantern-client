@@ -28,7 +28,6 @@ import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
-import org.getlantern.mobilesdk.activity.BaseActivity;
 import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -180,7 +179,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     @Override
     public void onActivityResumed(Activity activity) {
         this.currentActivity = activity;
-        if (activity instanceof BaseActivity) {
+        if (activity instanceof MainActivity) {
             Logger.debug(TAG, "Main activity started");
             isForeground = true;
         }
@@ -199,7 +198,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
     @Override
     public void onActivityStopped(Activity activity) {
-        if (activity instanceof BaseActivity) {
+        if (activity instanceof MainActivity) {
             Logger.debug(TAG, "Main activity stopped");
             isForeground = false;
         }

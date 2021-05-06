@@ -146,7 +146,6 @@
   <string name="get_code">إحصل على رمز</string>
   <string name="get_code_text">أدخل عنوان بريدك الإلكتروني للحصول على كود للمشاركة مع أصدقاءك وإحصل على شهر مجاني عندما يشتركون! </string>
   <string name="enter_your_email">أدخل عنوان بريدك للحصول على رمز إحالة</string>
-  <string name="referral_copied_to_clipboard">نُسخ الكود إلى الحافظة.</string>
   <string name="fastworldpay_text">حين تضغط على متابعة للشراء، سيجري\n توجيهك إلى موقع خارجي لإكمال\n عملية الدفع والحصول على رمز التنشيط الخاص بك.</string>
   <string name="share_referral_text">إستخدم الكود خاصتي %1$s للحصول على ثلاثة أشهر إضافية بعد الشراء. نزل لانترن https://bit.ly/lanternapk</string>
   <string name="previous_code">إذا كنت قد حصلت على كود إحالة من قبل\r\nفالرجاء إستعمال نفس عنوان البريد الإلكتروني.</string>

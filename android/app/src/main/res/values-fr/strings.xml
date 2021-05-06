@@ -146,7 +146,6 @@
   <string name="get_code">Obtenir un code</string>
   <string name="get_code_text">Saisissez votre adresse courriel pour recevoir un code à partager avec vos amis et pour obtenir gratuitement un mois de la version Pro s’ils s’inscrivent.</string>
   <string name="enter_your_email">Saisissez votre adresse courriel pour recevoir un code de parrainage</string>
-  <string name="referral_copied_to_clipboard">Le code de parrainage a été copié dans le presse-papiers.</string>
   <string name="fastworldpay_text">En touchant Continuer pour acheter, vous\n serez redirigé vers un site externe pour achever\nle paiement et récupérer votre code d’activation.</string>
   <string name="share_referral_text">Utilisez mon code %1$s afin d’obtenir jusqu’à mois supplémentaires gratuits après l’achat.
 Télécharger Lantern https://bit.ly/lanternapk</string>

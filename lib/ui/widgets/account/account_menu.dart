@@ -47,7 +47,7 @@ class AccountMenu extends StatelessWidget {
   List<Widget> freeItems(BuildContext context) {
     return [
       SettingsItem(
-        icon: ImagePaths.crown_icon,
+        icon: ImagePaths.crown_icon_monochrome,
         title: 'upgrade_to_lantern_pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
@@ -71,10 +71,10 @@ class AccountMenu extends StatelessWidget {
         title: 'free_yinbi_crypto'.i18n,
         onTap: openFreeYinbiCrypto,
       ),
-      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
+        showTopDivider: true,
         onTap: () {
           openSettings(context);
         },
@@ -90,10 +90,10 @@ class AccountMenu extends StatelessWidget {
         showArrow: true,
         onTap: openProAccountManagement,
       ),
-      CustomDivider(),
       SettingsItem(
           icon: ImagePaths.devices_icon,
           title: 'add_device'.i18n,
+          showTopDivider: true,
           onTap: addDevice),
       SettingsItem(
         icon: ImagePaths.star_icon,
@@ -110,10 +110,10 @@ class AccountMenu extends StatelessWidget {
         title: 'yinbi_redemption'.i18n,
         onTap: openYinbiRedemption,
       ),
-      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
+        showTopDivider: true,
         onTap: () {
           openSettings(context);
         },

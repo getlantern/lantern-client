@@ -146,7 +146,6 @@
   <string name="get_code">Lấy Mã Số</string>
   <string name="get_code_text">Điền email của bạn để nhận mã số chia sẻ với bạn bè. Khi họ đăng ký, bạn sẽ được một tháng Pro miễn phí!</string>
   <string name="enter_your_email">Điền email của bạn để nhận mã số giới thiệu</string>
-  <string name="referral_copied_to_clipboard">Mã số giới thiệu được sao chép vào bảng ghi tạm</string>
   <string name="fastworldpay_text">Khi bạn nhấp vào tiếp tục mua hàng, bạn sẽ\nđược chuyển hướng đến một trang web bên ngoài để hoàn tất\nthanh toán và lấy mã kích hoạt của bạn.</string>
   <string name="share_referral_text">Dùng mã số %1$s của tôi để có thêm 3 tháng miễn phí sau khi mua. Tải Lantern xuống từ https://bit.ly/lanternapk</string>
   <string name="previous_code">Nếu bạn đã từng nhận mã số giới thiệu trước đây\r\nxin vui lòng dùng cùng địa chỉ email.</string>

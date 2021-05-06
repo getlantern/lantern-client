@@ -22,7 +22,7 @@ class CustomDivider extends StatelessWidget {
         Positioned(
           top: 13,
           child: Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             color: Colors.white,
             child: Text(
               label!,

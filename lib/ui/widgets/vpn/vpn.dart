@@ -38,7 +38,8 @@ class VPNTab extends StatelessWidget {
               proUser ? Container() : ProBanner(),
               VPNSwitch(),
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsetsDirectional.only(
+                    start: 16, end: 20, top: 20, bottom: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: HexColor(borderColor),
@@ -51,7 +52,7 @@ class VPNTab extends StatelessWidget {
                 child: Column(
                   children: [
                     VPNStatus(),
-                    const VPNCustomDivider(marginBottom: 4.0),
+                    const VPNCustomDivider(marginBottom: 0),
                     ServerLocationWidget(_openInfoServerLocation),
                     VPNBandwidth(),
                   ],

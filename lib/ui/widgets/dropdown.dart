@@ -18,14 +18,14 @@ class DropDown<T extends DropDownItem> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
-        margin: const EdgeInsets.only(top: 6, left: 8, right: 8),
-        padding: const EdgeInsets.only(left: 6),
+        margin: const EdgeInsetsDirectional.only(top: 6, start: 8, end: 8),
+        padding: const EdgeInsetsDirectional.only(start: 6),
         decoration: BoxDecoration(
           border: Border.all(color: HexColor(grey4), width: 1),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Container(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: DropdownButton(
             itemHeight: 56,
             value: selected ?? items.first,
@@ -44,7 +44,7 @@ class DropDown<T extends DropDownItem> extends StatelessWidget {
               return DropdownMenuItem<T>(
                 value: value,
                 child: ListTile(
-                  contentPadding: const EdgeInsets.only(left: 0, right: 0),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: value.iconPath == null
                       ? null
                       : CustomAssetImage(

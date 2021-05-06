@@ -85,9 +85,6 @@ msgstr "زبان"
 msgid "report_issue"
 msgstr "مسئلہ کو رپورٹ کریں"
 
-msgid "title_proxy_all_dialog"
-msgstr "پراکسی آل"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "فعال ہونے پر تمام ٹریفک کو Lantern کے ذریعہ بھیجا جائے گا (مزید محفوظ)۔ غیر "

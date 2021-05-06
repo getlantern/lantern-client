@@ -4,6 +4,7 @@ class SettingsItem extends StatelessWidget {
   late final String icon;
   late final String title;
   final bool showArrow;
+  final bool showTopDivider;
   late final double inkVerticalPadding;
   final Widget? child;
   final void Function(BuildContext context)? openInfoDialog;
@@ -13,6 +14,7 @@ class SettingsItem extends StatelessWidget {
       {required this.icon,
       required this.title,
       this.showArrow = false,
+      this.showTopDivider = false,
       this.inkVerticalPadding = 16,
       this.openInfoDialog,
       this.onTap,
@@ -20,10 +22,12 @@ class SettingsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        top: 8,
-      ),
+    var item = Container(
+      margin: showTopDivider
+          ? null
+          : const EdgeInsetsDirectional.only(
+              top: 8,
+            ),
       child: InkWell(
         onTap: onTap ?? () {},
         child: Ink(
@@ -35,7 +39,7 @@ class SettingsItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsetsDirectional.only(end: 16),
                 child: CustomAssetImage(
                   path: icon,
                   size: 24,
@@ -94,5 +98,10 @@ class SettingsItem extends StatelessWidget {
         ),
       ),
     );
+
+    if (!showTopDivider) {
+      return item;
+    }
+    return Column(children: [CustomDivider(), item]);
   }
 }
