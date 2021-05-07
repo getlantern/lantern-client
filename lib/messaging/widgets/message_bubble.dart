@@ -27,12 +27,11 @@ class MessageBubble extends StatelessWidget {
         model.markViewed(message);
       }
 
-      var outbound = msg.direction == MessageDirection.OUT;
+      var outbound = msg.direction == MessageDirection.IN;
       var inbound = !outbound;
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
 
-      // construct a more convenient to parse Map<String, List<string>>
-      // matching reactorId to DisplayName has been taken care of
+      // constructs a Map<emoticon, List<reactorName>>
       // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
       var reactions = constructReactionsMap(msg, contact);
       reactions.forEach((key, value) {
@@ -60,7 +59,6 @@ class MessageBubble extends StatelessWidget {
       ));
 
       var innerColumn = _buildInnerColumn(outbound, msg);
-
       // Render attachments
       innerColumn.children.addAll(msg.attachments.values
           .map((attachment) => attachmentWidget(attachment)));

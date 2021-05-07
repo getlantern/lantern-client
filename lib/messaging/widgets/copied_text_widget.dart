@@ -35,7 +35,12 @@ class CopiedTextWidgetState extends State<CopiedTextWidget> {
         onPointerUp: _onPointerUp,
         onPointerDown: _onPointerDown,
         child: ListTile(
-          leading: _copied ? const Icon(Icons.check) : const Icon(Icons.copy),
+          leading: _copied
+              ? const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                )
+              : const Icon(Icons.copy),
           title: Text('Copy Text'.i18n),
         ));
   }
