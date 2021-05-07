@@ -27,7 +27,7 @@ class MessageBubble extends StatelessWidget {
         model.markViewed(message);
       }
 
-      var outbound = msg.direction == MessageDirection.IN;
+      var outbound = msg.direction == MessageDirection.OUT;
       var inbound = !outbound;
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
 
