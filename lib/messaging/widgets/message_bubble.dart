@@ -4,6 +4,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:flutter/services.dart';
 
+import 'reactions.dart';
 import '../messaging_model.dart';
 import 'attachment.dart';
 
@@ -11,8 +12,10 @@ class MessageBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
+  final Contact? contact;
 
-  MessageBubble(this.message, this.priorMessage, this.nextMessage) : super();
+  MessageBubble(this.message, this.priorMessage, this.nextMessage, this.contact)
+      : super();
 
   @override
   Widget build(BuildContext context) {
@@ -28,29 +31,21 @@ class MessageBubble extends StatelessWidget {
       var inbound = !outbound;
 
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
-      var reactionCount = msg.reactions.values
-          .length; // TODO: correctly calculate the count for every reaction type
-      msg.reactions.values.forEach((e) {
-        statusRow.children.add(Container(
-            margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: GestureDetector(
-                // Tap on emoji to bring modal with breakdown of interactions
-                onTap: () => showEmojiBreakdown(context, msg),
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200, // TODO generalize in theme
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(999)),
-                    ),
-                    child: Padding(
-                        padding: reactionCount > 1
-                            ? const EdgeInsets.only(
-                                left: 3, top: 3, right: 6, bottom: 3)
-                            : const EdgeInsets.all(3),
-                        child: reactionCount > 1
-                            ? Text(e.emoticon + reactionCount.toString())
-                            : Text(e.emoticon))))));
+
+      var reactions = constructReactionsMap(msg);
+
+      // TODO: this should not iterate through all emojis, just the ones with reactors
+      reactions.forEach((key, value) {
+        if (value.isNotEmpty) {
+          statusRow.children.add(Container(
+              margin: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: GestureDetector(
+                  // Tap on emoji to bring modal with breakdown of interactions
+                  onTap: () =>
+                      _displayEmojiBreakdownPopup(context, msg, reactions),
+                  child: _displayEmojiCount(reactions, key))));
+        }
       });
       statusRow.children.add(Opacity(
         opacity: 0.5,
@@ -106,7 +101,7 @@ class MessageBubble extends StatelessWidget {
       var newestMessage = nextMessage == null;
       return InkWell(
         onLongPress: () {
-          _buildActionsPopup(outbound, context, msg, model);
+          _buildActionsPopup(outbound, context, msg, model, reactions);
         },
         child: _buildRow(outbound, inbound, startOfBlock, endOfBlock,
             newestMessage, innerColumn),
@@ -114,7 +109,27 @@ class MessageBubble extends StatelessWidget {
     });
   }
 
-  Future<void> showEmojiBreakdown(context, msg) {
+  Container _displayEmojiCount(
+      Map<String, List<dynamic>> reactions, String emoticon) {
+    final currentReactionKey =
+        reactions.keys.firstWhere((key) => key == emoticon);
+    final reactorsToKey = reactions[currentReactionKey]!;
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200, // TODO generalize in theme
+          borderRadius: const BorderRadius.all(Radius.circular(999)),
+        ),
+        child: Padding(
+            padding: reactorsToKey.length > 1
+                ? const EdgeInsets.only(left: 3, top: 3, right: 6, bottom: 3)
+                : const EdgeInsets.all(3),
+            child: reactorsToKey.length > 1
+                ? Text(emoticon + reactorsToKey.length.toString())
+                : Text(emoticon)));
+  }
+
+  Future<void> _displayEmojiBreakdownPopup(BuildContext context,
+      StoredMessage msg, Map<String, List<dynamic>> reactions) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -132,11 +147,12 @@ class MessageBubble extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    for (var reaction in msg.reactions.values)
-                      ListTile(
-                        leading: Text(reaction.emoticon),
-                        title: const Text('whoever chose that emoji'),
-                      ),
+                    for (var reaction in reactions.entries)
+                      if (reaction.value.isNotEmpty)
+                        ListTile(
+                          leading: Text(reaction.key),
+                          title: Text(reaction.value.join(', ')),
+                        ),
                   ],
                 ),
                 const Padding(
@@ -168,8 +184,13 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Future _buildActionsPopup(bool outbound, BuildContext context,
-      StoredMessage msg, MessagingModel model) {
+  Future _buildActionsPopup(
+      bool outbound,
+      BuildContext context,
+      StoredMessage msg,
+      MessagingModel model,
+      Map<String, List<dynamic>> reactions) {
+    var reactionOptions = reactions.keys.toList();
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -186,14 +207,7 @@ class MessageBubble extends StatelessWidget {
             // Other users' messages
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                '👍',
-                '👎',
-                '😄',
-                '❤',
-                '😢',
-                '...'
-              ] // TODO: render dots as icon
+              children: reactionOptions
                   .map((e) => Container(
                         margin: const EdgeInsets.all(4),
                         decoration: BoxDecoration(

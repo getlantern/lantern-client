@@ -239,7 +239,8 @@ class _ConversationState extends State<Conversation> {
               index >= messageRecords.length - 1
                   ? null
                   : messageRecords.elementAt(index + 1).value,
-              index == 0 ? null : messageRecords.elementAt(index - 1).value);
+              index == 0 ? null : messageRecords.elementAt(index - 1).value,
+              widget._contact);
         },
       );
     });
