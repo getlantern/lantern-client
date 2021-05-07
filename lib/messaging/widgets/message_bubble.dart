@@ -12,7 +12,7 @@ class MessageBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
-  final Contact? contact;
+  final Contact contact;
 
   MessageBubble(this.message, this.priorMessage, this.nextMessage, this.contact)
       : super();
@@ -32,10 +32,13 @@ class MessageBubble extends StatelessWidget {
 
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
 
-      var reactions = constructReactionsMap(msg);
+      // construct a more convenient to parse Map<String, List<string>>
+      // matching reactorId to DisplayName has been taken care of
+      // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
+      var reactions = constructReactionsMap(msg, contact);
 
-      // TODO: this should not iterate through all emojis, just the ones with reactors
       reactions.forEach((key, value) {
+        // only render this if the list of [reactorIds] is not empty
         if (value.isNotEmpty) {
           statusRow.children.add(Container(
               margin: const EdgeInsets.only(top: 4),
@@ -111,6 +114,7 @@ class MessageBubble extends StatelessWidget {
 
   Container _displayEmojiCount(
       Map<String, List<dynamic>> reactions, String emoticon) {
+    // identify which Map (key-value) pair corresponds to the emoticton at hand
     final currentReactionKey =
         reactions.keys.firstWhere((key) => key == emoticon);
     final reactorsToKey = reactions[currentReactionKey]!;
