@@ -15,22 +15,24 @@ Map<String, List<dynamic>> constructReactionsMap(
   // create a Map from Iterable<String> and Iterable<Reaction>
   Map.fromIterables(msg.reactions.keys, msg.reactions.values)
       // store reactorID <---> emoticon to disposableMap
-      .forEach((key, value) => disposableMap[key] = value.emoticon);
+      .forEach((reactorId, reaction) =>
+          disposableMap[reactorId] = reaction.emoticon);
 
   // swap keys-values to create emoticon <--> List<reactorId>
-  // TODO: this eats up any duplicate reactorIds
-  disposableMap.forEach((key, value) => reactions[value] = [key]);
+  // TODO: we need to create a String<reactorId> instead of only storing one at a time
+  disposableMap
+      .forEach((reactorId, reaction) => reactions[reaction] = [reactorId]);
 
-  // TODO: match reactorID to DisplayName
-  reactions.forEach(
-      (key, value) => reactions[key] = convertIdToDisplayName(value, contact));
+  reactions.forEach((reaction, reactorIdList) =>
+      reactions[reaction] = convertIdToDisplayName(reactorIdList, contact));
   return reactions;
 }
 
-List<dynamic> convertIdToDisplayName(List<dynamic> value, Contact contact) {
-  if (value.isEmpty) return [];
+List<dynamic> convertIdToDisplayName(
+    List<dynamic> reactorIdList, Contact contact) {
+  if (reactorIdList.isEmpty) return [];
 
-  if (value.contains(contact.contactId.id)) {
+  if (reactorIdList.contains(contact.contactId.id)) {
     return [contact.displayName];
   } else {
     return ['me'];
