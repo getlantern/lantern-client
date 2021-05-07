@@ -29,6 +29,7 @@ class _ConversationState extends State<Conversation> {
   var _recording = false;
   var _willCancelRecording = false;
   var _totalPanned = 0.0;
+  bool _isSendIconVisible = false;
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -207,7 +208,7 @@ class _ConversationState extends State<Conversation> {
             // Message bar
             Padding(
               padding: const EdgeInsets.all(8),
-              child: _buildMessageBar(),
+              child: _buildMessageBar(context),
             ),
           ]),
           // Voice recorder
@@ -246,46 +247,62 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  Widget _buildMessageBar() {
+  Widget _buildMessageBar(context) {
     return Row(children: [
       Expanded(
         // Text field
         child: TextFormField(
           textInputAction: TextInputAction.send,
-          onFieldSubmitted: _send,
+          onFieldSubmitted: (_) {
+            setState(() {
+              _isSendIconVisible = false;
+            });
+            _send(_newMessage.value.text);
+          },
           controller: _newMessage,
+          onChanged: (value) => setState(() {
+            _isSendIconVisible = value.isNotEmpty;
+          }),
           decoration: InputDecoration(
             // Send icon
-            suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () {
-                  var text = _newMessage.value.text;
-                  if (text.isEmpty) {
-                    return;
-                  }
-                  _send(text);
-                }),
+            suffixIcon: _isSendIconVisible
+                ? IconButton(
+                    icon: const Icon(Icons.send, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        _isSendIconVisible = false;
+                      });
+                      _send(_newMessage.value.text);
+                    })
+                : null,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
             hintText: 'Message'.i18n,
+            border: const OutlineInputBorder(),
           ),
         ),
       ),
       // Attachments icon
-      GestureDetector(
-        onTap: () => _selectFilesToShare(),
-        child: const Icon(Icons.image),
-      ),
-      // Recording icon
-      GestureDetector(
-        onTapDown: (details) {
-          _startRecording();
-        },
-        onTapUp: (details) async {
-          await _finishRecording();
-        },
-        child: const Icon(Icons.mic),
-      ),
+      if (!_isSendIconVisible)
+        Container(
+          child: GestureDetector(
+            onTap: () => _selectFilesToShare(),
+            child: const Icon(Icons.add_circle_rounded),
+          ),
+        ),
+      if (!_isSendIconVisible)
+        Container(
+          child: // Recording icon
+              GestureDetector(
+            onTapDown: (details) {
+              _startRecording();
+            },
+            onTapUp: (details) async {
+              await _finishRecording();
+            },
+            child: const Icon(Icons.mic),
+          ),
+        ),
     ]);
   }
 
