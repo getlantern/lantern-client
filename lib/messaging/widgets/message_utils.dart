@@ -1,4 +1,5 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/package_store.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -24,17 +25,29 @@ Map<String, List<dynamic>> constructReactionsMap(
       .forEach((reactorId, reaction) => reactions[reaction] = [reactorId]);
 
   reactions.forEach((reaction, reactorIdList) =>
-      reactions[reaction] = convertIdToDisplayName(reactorIdList, contact));
+      reactions[reaction] = _convertIdToDisplayName(reactorIdList, contact));
   return reactions;
 }
 
-List<dynamic> convertIdToDisplayName(
+List<dynamic> _convertIdToDisplayName(
     List<dynamic> reactorIdList, Contact contact) {
   if (reactorIdList.isEmpty) return [];
 
   if (reactorIdList.contains(contact.contactId.id)) {
     return [contact.displayName];
   } else {
+    // TODO: Add i18next
     return ['me'];
   }
+}
+
+IconData? getStatusIcon(bool inbound, StoredMessage msg) {
+  inbound
+      ? null
+      : msg.status == StoredMessage_DeliveryStatus.SENDING
+          ? Icons.pending_outlined
+          : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_FAILED ||
+                  msg.status == StoredMessage_DeliveryStatus.PARTIALLY_FAILED
+              ? Icons.error_outline
+              : null;
 }
