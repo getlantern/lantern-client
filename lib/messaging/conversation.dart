@@ -269,6 +269,7 @@ class _ConversationState extends State<Conversation> {
             },
             controller: _newMessage,
             onChanged: (value) => setState(() {
+              // TODO: this should fire only once
               _isSendIconVisible = value.isNotEmpty;
             }),
             decoration: InputDecoration(
