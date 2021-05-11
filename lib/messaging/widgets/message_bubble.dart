@@ -214,7 +214,7 @@ class MessageBubble extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(12),
-                          child: InkWell(
+                          child: GestureDetector(
                             onTap: () {
                               model.react(message, e);
                               Navigator.pop(context);
