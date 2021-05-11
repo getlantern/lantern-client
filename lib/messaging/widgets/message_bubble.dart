@@ -2,6 +2,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import '../messaging_model.dart';
 import 'message_utils.dart';
@@ -30,6 +31,7 @@ class MessageBubble extends StatelessWidget {
       var outbound = msg.direction == MessageDirection.OUT;
       var inbound = !outbound;
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
+      var wasDeleted = false; // TODO: infer that from msg
 
       // constructs a Map<emoticon, List<reactorName>>
       // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
@@ -70,12 +72,11 @@ class MessageBubble extends StatelessWidget {
             .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
       }
       return InkWell(
-        onLongPress: () {
-          _buildActionsPopup(outbound, context, msg, model, reactions);
-        },
-        child: _buildRow(
-            outbound, inbound, priorMessage, nextMessage, innerColumn),
-      );
+          onLongPress: () {
+            _buildActionsPopup(outbound, context, msg, model, reactions);
+          },
+          child: _buildRow(outbound, inbound, priorMessage, nextMessage,
+              innerColumn, wasDeleted));
     });
   }
 
@@ -153,8 +154,14 @@ class MessageBubble extends StatelessWidget {
             ));
   }
 
-  Widget _buildRow(bool outbound, bool inbound, StoredMessage? priorMessage,
-      StoredMessage? nextMessages, Column innerColumn) {
+  Widget _buildRow(
+    bool outbound,
+    bool inbound,
+    StoredMessage? priorMessage,
+    StoredMessage? nextMessages,
+    Column innerColumn,
+    bool wasDeleted,
+  ) {
     var startOfBlock = priorMessage == null ||
         priorMessage.direction != message.value.direction;
     var endOfBlock = nextMessage == null ||
@@ -167,14 +174,13 @@ class MessageBubble extends StatelessWidget {
       children: [
         Flexible(
           child: Padding(
-            padding: EdgeInsets.only(
-                left: outbound ? 20 : 4,
-                right: outbound ? 4 : 20,
-                top: 4,
-                bottom: 4),
-            child: _buildBubbleUI(outbound, inbound, startOfBlock, endOfBlock,
-                newestMessage, innerColumn),
-          ),
+              padding: EdgeInsets.only(
+                  left: outbound ? 20 : 4,
+                  right: outbound ? 4 : 20,
+                  top: 4,
+                  bottom: 4),
+              child: _buildBubbleUI(outbound, inbound, startOfBlock, endOfBlock,
+                  newestMessage, innerColumn, wasDeleted)),
         ),
       ],
     );
@@ -198,8 +204,7 @@ class MessageBubble extends StatelessWidget {
           return Wrap(children: [
             if (!outbound)
               const Padding(
-                padding: EdgeInsets.all(8),
-              ),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
             // Other users' messages
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -290,8 +295,32 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildBubbleUI(bool outbound, bool inbound, bool startOfBlock,
-      bool endOfBlock, bool newestMessage, Column innerColumn) {
+  Widget _buildBubbleUI(
+    bool outbound,
+    bool inbound,
+    bool startOfBlock,
+    bool endOfBlock,
+    bool newestMessage,
+    Column innerColumn,
+    bool wasDeleted,
+  ) {
+    if (wasDeleted) {
+      return DottedBorder(
+        color: Colors.black38,
+        radius: const Radius.circular(50),
+        dashPattern: [6],
+        strokeWidth: 1,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: const ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+          child: Padding(
+            padding: EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+            child: Text('This message was deleted'), // TODO: Add i18n
+          ),
+        ),
+      );
+    }
+    ;
     return Container(
       decoration: BoxDecoration(
         color: outbound ? Colors.black38 : Colors.black12,
