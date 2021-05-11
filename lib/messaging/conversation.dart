@@ -269,7 +269,6 @@ class _ConversationState extends State<Conversation> {
             },
             controller: _newMessage,
             onChanged: (value) => setState(() {
-              // TODO: this should fire only once
               _isSendIconVisible = value.isNotEmpty;
             }),
             decoration: InputDecoration(
@@ -295,6 +294,7 @@ class _ConversationState extends State<Conversation> {
       // Attachments icon
       if (!_isSendIconVisible)
         Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: GestureDetector(
             onTap: () => _selectFilesToShare(),
             child: const Icon(Icons.add_circle_rounded),
@@ -302,8 +302,8 @@ class _ConversationState extends State<Conversation> {
         ),
       if (!_isSendIconVisible)
         Container(
-          child: // Recording icon
-              GestureDetector(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: GestureDetector(
             onTapDown: (details) {
               _startRecording();
             },
