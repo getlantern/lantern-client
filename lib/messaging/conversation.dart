@@ -249,36 +249,45 @@ class _ConversationState extends State<Conversation> {
 
   Widget _buildMessageBar(context) {
     return Row(children: [
+      Container(
+        child: GestureDetector(
+          onTap: () => {}, // TODO: Trigger native emoji keyboard
+          child: const Icon(Icons.insert_emoticon),
+        ),
+      ),
       Expanded(
         // Text field
-        child: TextFormField(
-          textInputAction: TextInputAction.send,
-          onFieldSubmitted: (_) {
-            setState(() {
-              _isSendIconVisible = false;
-            });
-            _send(_newMessage.value.text);
-          },
-          controller: _newMessage,
-          onChanged: (value) => setState(() {
-            _isSendIconVisible = value.isNotEmpty;
-          }),
-          decoration: InputDecoration(
-            // Send icon
-            suffixIcon: _isSendIconVisible
-                ? IconButton(
-                    icon: const Icon(Icons.send, color: Colors.black),
-                    onPressed: () {
-                      setState(() {
-                        _isSendIconVisible = false;
-                      });
-                      _send(_newMessage.value.text);
-                    })
-                : null,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            hintText: 'Message'.i18n,
-            border: const OutlineInputBorder(),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: TextFormField(
+            textInputAction: TextInputAction.send,
+            onFieldSubmitted: (_) {
+              setState(() {
+                _isSendIconVisible = false;
+              });
+              _send(_newMessage.value.text);
+            },
+            controller: _newMessage,
+            onChanged: (value) => setState(() {
+              _isSendIconVisible = value.isNotEmpty;
+            }),
+            decoration: InputDecoration(
+              // Send icon
+              suffixIcon: _isSendIconVisible
+                  ? IconButton(
+                      icon: const Icon(Icons.send, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          _isSendIconVisible = false;
+                        });
+                        _send(_newMessage.value.text);
+                      })
+                  : null,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              hintText: 'Message'.i18n,
+              border: const OutlineInputBorder(),
+            ),
           ),
         ),
       ),
