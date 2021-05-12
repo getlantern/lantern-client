@@ -36,8 +36,7 @@ class MessageBubble extends StatelessWidget {
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
       var wasDeleted = false; // TODO: infer that from msg
       var isReply = false; // TODO: infer that from msg
-      var isDate =
-          false; // TODO: calculate that from priorMessage and nextMessage
+      var isDate = false; // TODO: infer from priorMessage and nextMessage
 
       // constructs a Map<emoticon, List<reactorName>>
       // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
@@ -82,7 +81,7 @@ class MessageBubble extends StatelessWidget {
             _buildActionsPopup(outbound, context, msg, model, reactions);
           },
           child: _buildRow(outbound, inbound, priorMessage, nextMessage,
-              innerColumn, wasDeleted, isReply, isDate, msg));
+              innerColumn, wasDeleted, isReply, isDate));
     });
   }
 
@@ -224,7 +223,6 @@ class MessageBubble extends StatelessWidget {
     bool wasDeleted,
     bool isReply,
     bool isDate,
-    StoredMessage msg,
   ) {
     var startOfBlock = priorMessage == null ||
         priorMessage.direction != message.value.direction;
@@ -252,16 +250,16 @@ class MessageBubble extends StatelessWidget {
                   top: 4,
                   bottom: 4),
               child: _buildBubbleUI(
-                  outbound,
-                  inbound,
-                  startOfBlock,
-                  endOfBlock,
-                  newestMessage,
-                  innerColumn,
-                  wasDeleted,
-                  isReply,
-                  isDate,
-                  msg)),
+                outbound,
+                inbound,
+                startOfBlock,
+                endOfBlock,
+                newestMessage,
+                innerColumn,
+                wasDeleted,
+                isReply,
+                isDate,
+              )),
         ),
       ],
     );
@@ -277,9 +275,8 @@ class MessageBubble extends StatelessWidget {
     bool wasDeleted,
     bool isReply,
     bool isDate,
-    StoredMessage msg,
   ) {
-    if (isDate) return DateMarker(msg);
+    if (isDate) return DateMarker();
 
     if (wasDeleted) return const DeletedMessage();
 
