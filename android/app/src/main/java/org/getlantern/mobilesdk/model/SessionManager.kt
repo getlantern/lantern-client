@@ -101,14 +101,15 @@ abstract class SessionManager(application: Application) : Session {
         return DateFormat.getDateTimeInstance().timeZone.id
     }
 
-    fun setLanguage(locale: Locale?) {
-        if (locale != null) {
-            doSetLanguage(locale)
+    fun setLanguage(lang: String?) {
+        if (lang != null) {
+            val locale = LocaleInfo(context, lang).locale
+            setLocale(locale)
             Lingver.getInstance().setLocale(context, locale)
         }
     }
 
-    private fun doSetLanguage(locale: Locale?) {
+    private fun setLocale(locale: Locale?) {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")
             editor.putString(LANG, locale.toString()).commit()
@@ -519,7 +520,7 @@ abstract class SessionManager(application: Application) : Session {
             locale = Lingver.init(application).getLocale()
             Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
-            doSetLanguage(locale)
+            setLocale(locale)
             Logger.debug(TAG, "doSetLanguage() finished at ${System.currentTimeMillis() - start}")
         }
     }

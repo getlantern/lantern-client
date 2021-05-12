@@ -121,21 +121,4 @@
         <item>မြန်မာစာ</item>
     </string-array>
 
-
-    <string-array name="languages" translatable="false">
-        <item>ar_EG</item>
-        <item>fr_FR</item>
-        <item>en_US</item>
-        <item>fa_IR</item>
-        <item>th_TH</item>
-        <item>ms_MY</item>
-        <item>ru_RU</item>
-        <item>ur_IN</item>
-        <item>zh_CN</item>
-        <item>zh_HK</item>
-        <item>es_ES</item>
-        <item>tr_TR</item>
-        <item>vi_VN</item>
-        <item>my_MM</item>
-    </string-array>
 </resources>
