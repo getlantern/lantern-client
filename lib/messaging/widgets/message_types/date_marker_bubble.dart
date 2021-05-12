@@ -2,7 +2,10 @@ import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 
 class DateMarker extends StatelessWidget {
-  final date = DateFormat.yMMMMd('en_US').format(DateTime.now()).toString();
+  final date = DateFormat.yMMMMd('en_US')
+      .format(DateTime.now())
+      .split(',')[0]
+      .toString();
 
   @override
   Widget build(BuildContext context) {
