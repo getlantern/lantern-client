@@ -1,11 +1,9 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/utils/humanize.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
-  var disposableMap = {};
   // hardcode the list of available emoticons in a way that is convenient to parse
   var reactions = {
     '👍': [],
@@ -16,31 +14,31 @@ Map<String, List<dynamic>> constructReactionsMap(
   };
   // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
   // create a Map from Iterable<String> and Iterable<Reaction>
+  var disposableMap = {};
   Map.fromIterables(msg.reactions.keys, msg.reactions.values)
       // store reactorID <---> emoticon to disposableMap
       .forEach((reactorId, reaction) =>
           disposableMap[reactorId] = reaction.emoticon);
 
-  // swap keys-values to create emoticon <--> List<reactorId>
-  // TODO: we need to create a String<reactorId> instead of only storing one at a time
-  disposableMap
-      .forEach((reactorId, reaction) => reactions[reaction] = [reactorId]);
+  // swap key-value pairs to create emoticon <--> List<reactorId>
+  disposableMap.forEach((reactorId, reaction) =>
+      reactions[reaction] = msg.reactions.keys.toList());
 
+  // populate reactions Map with the emoticon as a key
   reactions.forEach((reaction, reactorIdList) =>
       reactions[reaction] = _convertIdToDisplayName(reactorIdList, contact));
+
   return reactions;
 }
 
 List<dynamic> _convertIdToDisplayName(
     List<dynamic> reactorIdList, Contact contact) {
-  if (reactorIdList.isEmpty) return [];
+  var humanizedList = [];
+  if (reactorIdList.isEmpty) return humanizedList;
 
-  if (reactorIdList.contains(contact.contactId.id)) {
-    return [contact.displayName];
-  } else {
-    // TODO: Add i18next
-    return ['me'];
-  }
+  reactorIdList.forEach((reactorId) => humanizedList
+      .add(reactorId == contact.contactId.id ? contact.displayName : 'me'));
+  return humanizedList;
 }
 
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {
