@@ -5,18 +5,25 @@ class Button extends StatelessWidget {
   late final String text;
   late final String? iconPath;
   late final void Function()? onPressed;
+  late final double? width;
+  late final bool inverted;
 
-  Button({required this.text, this.iconPath, this.onPressed});
+  Button(
+      {required this.text,
+      this.iconPath,
+      this.onPressed,
+      this.width,
+      this.inverted = false});
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    var button = OutlinedButton(
       onPressed: onPressed,
-      style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              const EdgeInsets.symmetric(vertical: 15)),
-          backgroundColor:
-              MaterialStateProperty.all<Color>(HexColor(primaryPink))),
+      style: OutlinedButton.styleFrom(
+        backgroundColor: HexColor(inverted ? white : primaryPink),
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        side: BorderSide(width: 2, color: HexColor(primaryPink)),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
@@ -24,8 +31,10 @@ class Button extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              text,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              text.toUpperCase(),
+              style: TextStyle(
+                  color: HexColor(inverted ? primaryPink : white),
+                  fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(width: 5),
@@ -38,5 +47,11 @@ class Button extends StatelessWidget {
         ),
       ),
     );
+
+    if (width != null) {
+      return SizedBox(width: width, child: button);
+    } else {
+      return button;
+    }
   }
 }

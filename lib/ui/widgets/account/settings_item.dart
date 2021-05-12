@@ -33,7 +33,7 @@ class SettingsItem extends StatelessWidget {
         child: Ink(
           padding: EdgeInsets.symmetric(
             vertical: inkVerticalPadding,
-            horizontal: 24,
+            horizontal: 4,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,

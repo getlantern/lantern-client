@@ -94,57 +94,62 @@ class _ExchangeTabState extends State<ExchangeTab> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        title: 'Exchange'.i18n,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-          child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Text('In partnership with'.i18n),
-                  Container(
-                    margin: const EdgeInsetsDirectional.only(top: 10),
-                    child: const CustomAssetImage(
-                      path: ImagePaths.paxful_logo,
-                    ),
+      title: 'Exchange'.i18n,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Spacer(),
+              Text('In partnership with'.i18n),
+              Container(
+                margin: const EdgeInsetsDirectional.only(top: 10),
+                child: const CustomAssetImage(
+                  path: ImagePaths.paxful_logo,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsetsDirectional.only(top: 20),
+                child: DropDown(
+                  title: 'Buy'.i18n,
+                  onChanged: setBuyItem,
+                  selected: buyItem,
+                  items: buyItems,
+                ),
+              ),
+              Flexible(
+                child: CustomDivider(
+                  label: 'With'.i18n,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                ),
+              ),
+              DropDown<PaymentMethodItem>(
+                  title: 'Payment Method'.i18n,
+                  onChanged: setPaymentMethodItem,
+                  selected: paymentMethodItem,
+                  items: paymentMethodItems),
+              const Spacer(),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Button(
+                    text: 'SHOW BEST DEALS'.i18n,
+                    iconPath: ImagePaths.open_in_new_icon,
+                    onPressed: buyItem == null || paymentMethodItem == null
+                        ? null
+                        : launchPaxful,
                   ),
-                  Container(
-                    margin: const EdgeInsetsDirectional.only(top: 20),
-                    child: DropDown(
-                      title: 'Buy'.i18n,
-                      onChanged: setBuyItem,
-                      selected: buyItem,
-                      items: buyItems,
-                    ),
-                  ),
-                  Flexible(
-                    child: CustomDivider(
-                      label: 'With'.i18n,
-                      horizontalMargin: 0,
-                    ),
-                  ),
-                  DropDown<PaymentMethodItem>(
-                      title: 'Payment Method'.i18n,
-                      onChanged: setPaymentMethodItem,
-                      selected: paymentMethodItem,
-                      items: paymentMethodItems),
-                  const Spacer(),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Button(
-                        text: 'SHOW BEST DEALS'.i18n,
-                        iconPath: ImagePaths.open_in_new_icon,
-                        onPressed: buyItem == null || paymentMethodItem == null
-                            ? null
-                            : launchPaxful,
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        ));
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

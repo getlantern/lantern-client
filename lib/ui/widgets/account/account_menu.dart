@@ -15,9 +15,8 @@ class AccountMenu extends StatelessWidget {
         LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
   }
 
-  void authorizeDeviceForPro() {
-    LanternNavigator.startScreen(
-        LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
+  void authorizeDeviceForPro(BuildContext context) {
+    Navigator.pushNamed(context, routeAuthorizeDeviceForPro);
   }
 
   void addDevice() {
@@ -54,7 +53,9 @@ class AccountMenu extends StatelessWidget {
       SettingsItem(
         icon: ImagePaths.devices_icon,
         title: 'authorize_device_for_pro'.i18n,
-        onTap: authorizeDeviceForPro,
+        onTap: () {
+          authorizeDeviceForPro(context);
+        },
       ),
       SettingsItem(
         icon: ImagePaths.star_icon,
@@ -130,6 +131,7 @@ class AccountMenu extends StatelessWidget {
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           children: proUser ? proItems(context) : freeItems(context),
         );
       }),

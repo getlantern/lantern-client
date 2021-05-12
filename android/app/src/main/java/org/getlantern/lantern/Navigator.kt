@@ -11,7 +11,7 @@ import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.ProAccountActivity_
 import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
-import org.getlantern.lantern.activity.authorizeDevice.AccountRecoveryActivity
+import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
 
@@ -26,7 +26,7 @@ class Navigator(
         const val SCREEN_DESKTOP_VERSION = "SCREEN_DESKTOP_VERSION"
         const val SCREEN_FREE_YINBI = "SCREEN_FREE_YINBI"
         const val SCREEN_YINBI_REDEMPTION = "SCREEN_YINBI_REDEMPTION"
-        const val SCREEN_AUTHORIZE_DEVICE_FOR_PRO = "SCREEN_AUTHORIZE_DEVICE_FOR_PRO"
+        const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
         const val SCREEN_ACCOUNT_MANAGEMENT = "SCREEN_ACCOUNT_MANAGEMENT"
         const val SCREEN_ADD_DEVICE = "SCREEN_ADD_DEVICE"
@@ -62,7 +62,7 @@ class Navigator(
             SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
             SCREEN_FREE_YINBI -> YinbiLauncher::class.java
             SCREEN_YINBI_REDEMPTION -> YinbiLauncher::class.java
-            SCREEN_AUTHORIZE_DEVICE_FOR_PRO -> AccountRecoveryActivity::class.java
+            SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             SCREEN_ACCOUNT_MANAGEMENT -> ProAccountActivity_::class.java
             SCREEN_ADD_DEVICE -> AddDeviceActivity_::class.java

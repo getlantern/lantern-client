@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
 
-class LanguageScreen extends StatelessWidget {
+class Language extends StatelessWidget {
   static const languages = [
     'ms_MY',
     'en_US',
@@ -19,7 +19,7 @@ class LanguageScreen extends StatelessWidget {
     'zh_HK',
   ];
 
-  LanguageScreen({Key? key}) : super(key: key);
+  Language({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
