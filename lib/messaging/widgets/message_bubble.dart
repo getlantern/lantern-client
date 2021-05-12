@@ -36,7 +36,6 @@ class MessageBubble extends StatelessWidget {
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
       var wasDeleted = false; // TODO: infer that from msg
       var isReply = false; // TODO: infer that from msg
-      var isDate = false; // TODO: infer from priorMessage and nextMessage
 
       // constructs a Map<emoticon, List<reactorName>>
       // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
@@ -81,7 +80,7 @@ class MessageBubble extends StatelessWidget {
             _buildActionsPopup(outbound, context, msg, model, reactions);
           },
           child: _buildRow(outbound, inbound, priorMessage, nextMessage,
-              innerColumn, wasDeleted, isReply, isDate));
+              innerColumn, wasDeleted, isReply));
     });
   }
 
@@ -222,13 +221,13 @@ class MessageBubble extends StatelessWidget {
     Column innerColumn,
     bool wasDeleted,
     bool isReply,
-    bool isDate,
   ) {
-    var startOfBlock = priorMessage == null ||
+    final startOfBlock = priorMessage == null ||
         priorMessage.direction != message.value.direction;
-    var endOfBlock = nextMessage == null ||
+    final endOfBlock = nextMessage == null ||
         nextMessage!.direction != message.value.direction;
-    var newestMessage = nextMessage == null;
+    final newestMessage = nextMessage == null;
+    final isDate = determineDateSwitch(priorMessage, nextMessage);
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment:
