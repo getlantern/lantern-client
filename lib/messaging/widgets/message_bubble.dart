@@ -2,12 +2,15 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import '../messaging_model.dart';
 import 'message_utils.dart';
 import 'attachment.dart';
 import 'copied_text_widget.dart';
+import 'message_types/deleted_bubble.dart';
+import 'message_types/new_message_bubble.dart';
+import 'message_types/reply_bubble.dart';
+import 'message_types/date_marker_bubble.dart';
 
 class MessageBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
@@ -32,6 +35,9 @@ class MessageBubble extends StatelessWidget {
       var inbound = !outbound;
       var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
       var wasDeleted = false; // TODO: infer that from msg
+      var isReply = false; // TODO: infer that from msg
+      var isDate =
+          false; // TODO: calculate that from priorMessage and nextMessage
 
       // constructs a Map<emoticon, List<reactorName>>
       // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
@@ -45,8 +51,8 @@ class MessageBubble extends StatelessWidget {
               child: GestureDetector(
                   // Tap on emoji to bring modal with breakdown of interactions
                   onTap: () =>
-                      _displayEmojiBreakdownPopup(context, msg, reactions),
-                  child: _displayEmojiCount(reactions, key))));
+                      displayEmojiBreakdownPopup(context, msg, reactions),
+                  child: displayEmojiCount(reactions, key))));
         }
       });
       statusRow.children.add(Opacity(
@@ -76,114 +82,8 @@ class MessageBubble extends StatelessWidget {
             _buildActionsPopup(outbound, context, msg, model, reactions);
           },
           child: _buildRow(outbound, inbound, priorMessage, nextMessage,
-              innerColumn, wasDeleted));
+              innerColumn, wasDeleted, isReply, isDate, msg));
     });
-  }
-
-  Column _buildInnerColumn(bool outbound, StoredMessage msg) {
-    return Column(
-        crossAxisAlignment:
-            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            if (msg.text.isNotEmpty)
-              Flexible(
-                child: Text(
-                  '${msg.text}',
-                  style: TextStyle(
-                    color: outbound ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-          ]),
-        ]);
-  }
-
-  Container _displayEmojiCount(
-      Map<String, List<dynamic>> reactions, String emoticon) {
-    // identify which Map (key-value) pair corresponds to the emoticton at hand
-    final currentReactionKey =
-        reactions.keys.firstWhere((key) => key == emoticon);
-    final reactorsToKey = reactions[currentReactionKey]!;
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200, // TODO generalize in theme
-          borderRadius: const BorderRadius.all(Radius.circular(999)),
-        ),
-        child: Padding(
-            padding: reactorsToKey.length > 1
-                ? const EdgeInsets.only(left: 3, top: 3, right: 6, bottom: 3)
-                : const EdgeInsets.all(3),
-            child: reactorsToKey.length > 1
-                ? Text(emoticon + reactorsToKey.length.toString())
-                : Text(emoticon)));
-  }
-
-  Future<void> _displayEmojiBreakdownPopup(BuildContext context,
-      StoredMessage msg, Map<String, List<dynamic>> reactions) {
-    return showModalBottomSheet(
-        context: context,
-        isDismissible: true,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0))),
-        builder: (context) => Wrap(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                ),
-                const Center(
-                    child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    for (var reaction in reactions.entries)
-                      if (reaction.value.isNotEmpty)
-                        ListTile(
-                          leading: Text(reaction.key),
-                          title: Text(reaction.value.join(', ')),
-                        ),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                ),
-              ],
-            ));
-  }
-
-  Widget _buildRow(
-    bool outbound,
-    bool inbound,
-    StoredMessage? priorMessage,
-    StoredMessage? nextMessages,
-    Column innerColumn,
-    bool wasDeleted,
-  ) {
-    var startOfBlock = priorMessage == null ||
-        priorMessage.direction != message.value.direction;
-    var endOfBlock = nextMessage == null ||
-        nextMessage!.direction != message.value.direction;
-    var newestMessage = nextMessage == null;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment:
-          outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Padding(
-              padding: EdgeInsets.only(
-                  left: outbound ? 20 : 4,
-                  right: outbound ? 4 : 20,
-                  top: 4,
-                  bottom: 4),
-              child: _buildBubbleUI(outbound, inbound, startOfBlock, endOfBlock,
-                  newestMessage, innerColumn, wasDeleted)),
-        ),
-      ],
-    );
   }
 
   Future _buildActionsPopup(
@@ -295,6 +195,78 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  Column _buildInnerColumn(bool outbound, StoredMessage msg) {
+    return Column(
+        crossAxisAlignment:
+            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            if (msg.text.isNotEmpty)
+              Flexible(
+                child: Text(
+                  '${msg.text}',
+                  style: TextStyle(
+                    color: outbound ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+          ]),
+        ]);
+  }
+
+  Widget _buildRow(
+    bool outbound,
+    bool inbound,
+    StoredMessage? priorMessage,
+    StoredMessage? nextMessages,
+    Column innerColumn,
+    bool wasDeleted,
+    bool isReply,
+    bool isDate,
+    StoredMessage msg,
+  ) {
+    var startOfBlock = priorMessage == null ||
+        priorMessage.direction != message.value.direction;
+    var endOfBlock = nextMessage == null ||
+        nextMessage!.direction != message.value.direction;
+    var newestMessage = nextMessage == null;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment:
+          outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Padding(
+              padding: EdgeInsets.only(
+                  left: !isDate
+                      ? outbound
+                          ? 20
+                          : 4
+                      : 4,
+                  right: !isDate
+                      ? outbound
+                          ? 4
+                          : 20
+                      : 4,
+                  top: 4,
+                  bottom: 4),
+              child: _buildBubbleUI(
+                  outbound,
+                  inbound,
+                  startOfBlock,
+                  endOfBlock,
+                  newestMessage,
+                  innerColumn,
+                  wasDeleted,
+                  isReply,
+                  isDate,
+                  msg)),
+        ),
+      ],
+    );
+  }
+
   Widget _buildBubbleUI(
     bool outbound,
     bool inbound,
@@ -303,45 +275,20 @@ class MessageBubble extends StatelessWidget {
     bool newestMessage,
     Column innerColumn,
     bool wasDeleted,
+    bool isReply,
+    bool isDate,
+    StoredMessage msg,
   ) {
-    if (wasDeleted) {
-      return DottedBorder(
-        color: Colors.black38,
-        radius: const Radius.circular(50),
-        dashPattern: [6],
-        strokeWidth: 1,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: const ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-          child: Padding(
-            padding: EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-            child: Text('This message was deleted'), // TODO: Add i18n
-          ),
-        ),
-      );
+    if (isDate) return DateMarker(msg);
+
+    if (wasDeleted) return const DeletedMessage();
+
+    if (isReply) {
+      return ReplyMessage(outbound, inbound, startOfBlock, endOfBlock,
+          newestMessage, innerColumn);
     }
-    ;
-    return Container(
-      decoration: BoxDecoration(
-        color: outbound ? Colors.black38 : Colors.black12,
-        borderRadius: BorderRadius.only(
-          topLeft:
-              inbound && !startOfBlock ? Radius.zero : const Radius.circular(5),
-          topRight: outbound && !startOfBlock
-              ? Radius.zero
-              : const Radius.circular(5),
-          bottomRight: outbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
-              : const Radius.circular(5),
-          bottomLeft: inbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
-              : const Radius.circular(5),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-        child: innerColumn,
-      ),
-    );
+
+    return NewMessage(outbound, inbound, startOfBlock, endOfBlock,
+        newestMessage, innerColumn);
   }
 }
