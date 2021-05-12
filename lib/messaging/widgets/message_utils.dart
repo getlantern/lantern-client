@@ -14,30 +14,33 @@ Map<String, List<dynamic>> constructReactionsMap(
   };
   // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
   // create a Map from Iterable<String> and Iterable<Reaction>
-  var disposableMap = {};
+  var reactor_emoticon_map = {};
   Map.fromIterables(msg.reactions.keys, msg.reactions.values)
-      // store reactorID <---> emoticon to disposableMap
+      // reactorID <---> emoticon to reactor_emoticon_map
       .forEach((reactorId, reaction) =>
-          disposableMap[reactorId] = reaction.emoticon);
+          reactor_emoticon_map[reactorId] = reaction.emoticon);
 
   // swap key-value pairs to create emoticon <--> List<reactorId>
-  disposableMap.forEach((reactorId, reaction) =>
-      reactions[reaction] = msg.reactions.keys.toList());
+  reactor_emoticon_map.forEach((reactorId, reaction) {
+    reactions[reaction] = [...?reactions[reaction], reactorId];
+  });
 
-  // populate reactions Map with the emoticon as a key
+  // humanize reactorIdList
   reactions.forEach((reaction, reactorIdList) =>
-      reactions[reaction] = _convertIdToDisplayName(reactorIdList, contact));
+      reactions[reaction] = _humanizeReactorIdList(reactorIdList, contact));
 
   return reactions;
 }
 
-List<dynamic> _convertIdToDisplayName(
+List<dynamic> _humanizeReactorIdList(
     List<dynamic> reactorIdList, Contact contact) {
   var humanizedList = [];
   if (reactorIdList.isEmpty) return humanizedList;
 
-  reactorIdList.forEach((reactorId) => humanizedList
-      .add(reactorId == contact.contactId.id ? contact.displayName : 'me'));
+  reactorIdList.forEach((reactorId) => humanizedList.add(
+      reactorId == contact.contactId.id
+          ? contact.displayName
+          : 'me')); // TODO: Add i18n
   return humanizedList;
 }
 
@@ -87,10 +90,9 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
 
 Container displayEmojiCount(
     Map<String, List<dynamic>> reactions, String emoticon) {
-  // identify which Map (key-value) pair corresponds to the emoticton at hand
-  final currentReactionKey =
-      reactions.keys.firstWhere((key) => key == emoticon);
-  final reactorsToKey = reactions[currentReactionKey]!;
+  // identify which Map (key-value) pair corresponds to the displayed emoticon
+  final reactionKey = reactions.keys.firstWhere((key) => key == emoticon);
+  final reactorsToKey = reactions[reactionKey]!;
   return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade200, // TODO generalize in theme
