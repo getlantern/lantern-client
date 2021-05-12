@@ -132,3 +132,26 @@ msgstr "VPN Status"
 msgid "VPN"
 msgstr "VPN"
 
+msgid "Authorize Device for Pro"
+msgstr "Authorize Device for Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Authorize with Device Linking Pin"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Requires physical access to a Lantern Pro Device"
+
+msgid "Link with PIN"
+msgstr "Link with PIN"
+
+msgid "OR"
+msgstr "OR"
+
+msgid "Authorize Device via Email"
+msgstr "Authorize Device via Email"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "Requires access to the email you used to buy Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Link via Email"

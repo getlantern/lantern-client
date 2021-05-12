@@ -88,11 +88,6 @@
         </activity>
 
         <activity
-            android:name=".activity.authorizeDevice.AccountRecoveryActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name=".activity.RecoveryCodeActivity_"
             android:screenOrientation="portrait">
         </activity>

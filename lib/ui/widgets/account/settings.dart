@@ -4,8 +4,8 @@ import 'package:lantern/ui/routes.dart';
 
 import 'settings_item.dart';
 
-class SettingsScreen extends StatelessWidget {
-  SettingsScreen({Key? key}) : super(key: key);
+class Settings extends StatelessWidget {
+  Settings({Key? key}) : super(key: key);
 
   void openInfoProxyAll(BuildContext context) {
     showInfoDialog(
@@ -33,6 +33,8 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsetsDirectional.only(
           bottom: 8,
+          start: 20,
+          end: 20,
         ),
         children: [
           SettingsItem(
