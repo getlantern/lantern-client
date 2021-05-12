@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/routes.dart';
 
 import 'settings_item.dart';
 
@@ -15,8 +16,8 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void changeLanguage() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_CHANGE_LANGUAGE);
+  void changeLanguage(BuildContext context) {
+    Navigator.pushNamed(context, routeLanguage);
   }
 
   void reportIssue() {
@@ -61,7 +62,9 @@ class SettingsScreen extends StatelessWidget {
             title: 'language'.i18n,
             showTopDivider: true,
             showArrow: true,
-            onTap: changeLanguage,
+            onTap: () {
+              changeLanguage(context);
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: sessionModel
@@ -69,10 +72,7 @@ class SettingsScreen extends StatelessWidget {
                 return Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: tsTitleItem()?.copyWith(
-                      color: HexColor(
-                    primaryPink,
-                  )),
+                  style: tsSelectedTitleItem(),
                 );
               }),
             ),

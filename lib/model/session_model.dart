@@ -32,4 +32,10 @@ class SessionModel extends Model {
       'on': on,
     }));
   }
+
+  Future<void> setLanguage(String lang) {
+    return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
+      'lang': lang,
+    });
+  }
 }

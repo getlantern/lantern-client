@@ -2,6 +2,7 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
+import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.model.SessionManager
 
 /**
@@ -46,6 +47,9 @@ class SessionModel(
             "switchProxyAll" -> {
                 val on = call.argument<Boolean>("on") ?: false
                 saveProxyAll(on)
+            }
+            "setLanguage" -> {
+                LanternApp.getSession().setLanguage(call.argument("lang"))
             }
             else -> super.doMethodCall(call, notImplemented)
         }
