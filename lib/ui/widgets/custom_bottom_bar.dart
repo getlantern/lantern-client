@@ -68,11 +68,11 @@ class CustomBottomBar extends StatelessWidget {
       flex: 1,
       child: InkWell(
         customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(
+          borderRadius: BorderRadiusDirectional.only(
+            topStart: Radius.circular(
               index != 0 ? borderRadius : 0,
             ),
-            topRight: Radius.circular(
+            topEnd: Radius.circular(
                 index != TAB_ENUM.values.length - 1 ? borderRadius : 0),
           ),
         ),
@@ -89,7 +89,7 @@ class CustomBottomBar extends StatelessWidget {
                       color: HexColor(borderColor),
                       width: 1,
                     ),
-              rightSide: currentIndex == index ||
+              endSide: currentIndex == index ||
                       currentIndex == 2 && index == 0 ||
                       currentIndex == 0 && index == 1
                   ? null
@@ -97,7 +97,7 @@ class CustomBottomBar extends StatelessWidget {
                       color: HexColor(borderColor),
                       width: 1,
                     ),
-              leftSide: currentIndex == index ||
+              startSide: currentIndex == index ||
                       currentIndex == 0 && index == 2 ||
                       currentIndex == 2 && index == 1
                   ? null
@@ -105,26 +105,26 @@ class CustomBottomBar extends StatelessWidget {
                       color: HexColor(borderColor),
                       width: 1,
                     ),
-              topLeftCornerSide: BorderSide(
+              topStartCornerSide: BorderSide(
                 color: (currentIndex == 0 && index == 1) ||
                         (currentIndex == 1 && index == 2)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
-              topRightCornerSide: BorderSide(
+              topEndCornerSide: BorderSide(
                 color: (currentIndex == 1 && index == 0) ||
                         (currentIndex == 2 && index == 1)
                     ? HexColor(borderColor)
                     : Colors.white,
               ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
+              borderRadius: BorderRadiusDirectional.only(
+                topStart: Radius.circular(
                   (currentIndex == 0 && index == 1) ||
                           (currentIndex == 1 && index == 2)
                       ? borderRadius
                       : 0,
                 ),
-                topRight: Radius.circular(
+                topEnd: Radius.circular(
                   (currentIndex == 1 && index == 0) ||
                           (currentIndex == 2 && index == 1)
                       ? borderRadius
