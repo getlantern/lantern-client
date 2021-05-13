@@ -5,6 +5,7 @@ import 'package:lantern/ui/widgets/back_button_respecting_navigator.dart';
 import '../../routes.dart';
 import 'account_menu.dart';
 import 'device_linking/authorize_device_for_pro.dart';
+import 'device_linking/authorize_device_via_email.dart';
 import 'language.dart';
 import 'settings.dart';
 
@@ -26,6 +27,9 @@ class AccountTab extends StatelessWidget {
           break;
         case routeAuthorizeDeviceForPro:
           builder = (BuildContext _) => AuthorizeDeviceForPro();
+          break;
+        case routeAuthorizeDeviceViaEmail:
+          builder = (BuildContext _) => AuthorizeDeviceViaEmail();
           break;
         default:
           throw Exception('unknown route ${settings.name}');
