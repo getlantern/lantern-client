@@ -67,21 +67,7 @@ class AttachmentBubble extends StatelessWidget {
         crossAxisAlignment:
             outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            if (msg.text.isNotEmpty)
-              Flexible(
-                child: Text(
-                  '${msg.text}',
-                  style: TextStyle(
-                    color: outbound
-                        ? Colors.white
-                        : Colors.black, // TODO: generalize in theme
-                  ),
-                ),
-              ),
-          ]),
-        ]);
+        children: []);
 
     // add attachments to contentContainer
     //TODO: This is problematic because it re-renders every time
