@@ -26,12 +26,13 @@ class _ConversationState extends State<Conversation> {
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  var _recording = false;
-  var _willCancelRecording = false;
-  var _totalPanned = 0.0;
-  var _isSendIconVisible = false;
-  var _isReplying = false;
-  var _quotedMessage;
+  bool _recording = false;
+  bool _willCancelRecording = false;
+  double _totalPanned = 0.0;
+  bool _isSendIconVisible = false;
+  bool _isReplying = false;
+  StoredMessage? _quotedMessage;
+  bool _wasReplied = false;
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -250,13 +251,15 @@ class _ConversationState extends State<Conversation> {
             index == 0 ? null : messageRecords.elementAt(index - 1).value,
             widget._contact,
             // callback function
-            (message) {
+            (_message) {
               setState(() {
-                _quotedMessage = message;
+                _isReplying = true;
+                _wasReplied = false; // user might cancel reply
+                _quotedMessage = _message;
               });
-              _buildReplyContainer();
             },
             _quotedMessage,
+            _wasReplied,
           );
         },
       );
@@ -264,50 +267,44 @@ class _ConversationState extends State<Conversation> {
   }
 
   Widget _buildReplyContainer() {
-    setState(() {
-      _isReplying = true;
-    });
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 8),
-          child: Row(
-            children: [
-              Container(
-                color: Colors.green,
-                width: 4,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'sender being replied to',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          _isReplying = false;
-                        }),
-                        child: const Icon(Icons.close, size: 16),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text('message being replied to',
-                      style: TextStyle(color: Colors.black54)),
-                ],
-              )),
-            ],
-          ),
+    final inResponseTo =
+        _quotedMessage!.senderId == widget._contact.contactId.id
+            ? widget._contact.displayName
+            : 'me';
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
         ),
-      ],
-    );
+        child: Row(
+          children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        inResponseTo,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        _isReplying = false;
+                      }),
+                      child: const Icon(Icons.close, size: 16),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(_quotedMessage!.text.toString(),
+                    style: const TextStyle(color: Colors.black54)),
+              ],
+            )),
+          ],
+        ));
   }
 
   Widget _buildMessageBar(context) {
@@ -324,14 +321,6 @@ class _ConversationState extends State<Conversation> {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: TextFormField(
             textInputAction: TextInputAction.send,
-            onFieldSubmitted: (_) {
-              setState(() {
-                _isSendIconVisible = false;
-                _isReplying = false;
-                _quotedMessage = null;
-              });
-              _send(_newMessage.value.text);
-            },
             controller: _newMessage,
             onChanged: (value) => setState(() {
               _isSendIconVisible = value.isNotEmpty;
@@ -342,8 +331,14 @@ class _ConversationState extends State<Conversation> {
                   ? IconButton(
                       icon: const Icon(Icons.send, color: Colors.black),
                       onPressed: () {
+                        if (_isReplying) {
+                          setState(() {
+                            _wasReplied = true;
+                          });
+                        }
                         setState(() {
                           _isSendIconVisible = false;
+                          _isReplying = false;
                         });
                         _send(_newMessage.value.text);
                       })
