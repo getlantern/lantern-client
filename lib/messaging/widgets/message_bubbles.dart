@@ -16,10 +16,9 @@ class MessageBubbles extends StatelessWidget {
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
-  final StoredMessage? quotedMessage;
 
   MessageBubbles(this.message, this.priorMessage, this.nextMessage,
-      this.contact, this.onReply, this.quotedMessage)
+      this.contact, this.onReply)
       : super();
 
   @override
@@ -83,7 +82,6 @@ class MessageBubbles extends StatelessWidget {
                       reactions,
                       msg,
                       message,
-                      quotedMessage,
                     )),
               ),
             ],
@@ -103,7 +101,6 @@ class MessageBubbles extends StatelessWidget {
     Map<String, List<dynamic>> reactions,
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
-    StoredMessage? quotedMessage,
   ) {
     if (isDate) return DateMarker();
 
@@ -115,7 +112,7 @@ class MessageBubbles extends StatelessWidget {
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-        newestMessage, reactions, msg, message);
+        newestMessage, reactions, msg, message, contact);
   }
 }
 

@@ -13,17 +13,19 @@ class TextBubble extends StatelessWidget {
   final Map<String, List<dynamic>> reactions;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
+  final Contact contact;
 
   const TextBubble(
-      this.outbound,
-      this.inbound,
-      this.startOfBlock,
-      this.endOfBlock,
-      this.newestMessage,
-      this.reactions,
-      this.msg,
-      this.message)
-      : super();
+    this.outbound,
+    this.inbound,
+    this.startOfBlock,
+    this.endOfBlock,
+    this.newestMessage,
+    this.reactions,
+    this.msg,
+    this.message,
+    this.contact,
+  ) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -68,36 +70,48 @@ class TextBubble extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(mainAxisSize: MainAxisSize.min, children: [
-            if (!msg.replyToId.isNotEmpty)
+            if (msg.replyToId.isNotEmpty)
               Container(
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  constraints: const BoxConstraints(minWidth: 100),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
                       color: Colors
                           .white), // TODO: this should be different for inbound/outbound
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: Column(
                     children: [
-                      Text(
-                        'in response to',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: !outbound
-                              ? Colors.white
-                              : Colors.black, // TODO: generalize in theme
-                        ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.reply,
+                            size: 14,
+                          ),
+                          Text(
+                            matchIdToDisplayName(msg.replyToSenderId, contact),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: !outbound
+                                  ? Colors.white
+                                  : Colors.black, // TODO: generalize in theme
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'their message',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: !outbound
-                              ? Colors.white
-                              : Colors.black, // TODO: generalize in theme
-                        ),
-                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'their message',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: !outbound
+                                  ? Colors.white
+                                  : Colors.black, // TODO: generalize in theme
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   )),
           ]),

@@ -39,11 +39,16 @@ class MessagingModel extends Model {
   }
 
   Future<void> sendToDirectContact(String identityKey,
-      {String? text, List<Uint8List>? attachments}) {
+      {String? text,
+      List<Uint8List>? attachments,
+      String? replyToSenderId,
+      String? replyToId}) {
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
       'identityKey': identityKey,
       'text': text,
       'attachments': attachments,
+      'replyToSenderId': replyToSenderId,
+      'replyToId': replyToId,
     });
   }
 
