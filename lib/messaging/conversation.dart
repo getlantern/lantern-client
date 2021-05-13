@@ -44,9 +44,15 @@ class _ConversationState extends State<Conversation> {
     super.dispose();
   }
 
-  void _send(String text, {List<Uint8List>? attachments}) {
+  void _send(String text,
+      {List<Uint8List>? attachments,
+      String? replyToSenderId,
+      String? replyToId}) {
     model.sendToDirectContact(widget._contact.contactId.id,
-        text: text, attachments: attachments);
+        text: text,
+        attachments: attachments,
+        replyToSenderId: replyToSenderId,
+        replyToId: replyToId);
     _newMessage.clear();
   }
 
@@ -244,20 +250,23 @@ class _ConversationState extends State<Conversation> {
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubbles(
+            // PathAndValue<StoredMessage> of current message
             messageRecords.elementAt(index),
+            // priorMessage
             index >= messageRecords.length - 1
                 ? null
                 : messageRecords.elementAt(index + 1).value,
+            // nextMessage
             index == 0 ? null : messageRecords.elementAt(index - 1).value,
+            // contact
             widget._contact,
-            // callback function
+            // onReply callback
             (_message) {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
               });
             },
-            _quotedMessage,
           );
         },
       );
@@ -333,7 +342,8 @@ class _ConversationState extends State<Conversation> {
                           _isSendIconVisible = false;
                           _isReplying = false;
                         });
-                        _send(_newMessage.value.text);
+                        _send(_newMessage.value.text,
+                            _newMessage.replyToSenderId, _newMessage.replyToId);
                       })
                   : null,
               enabledBorder: InputBorder.none,
