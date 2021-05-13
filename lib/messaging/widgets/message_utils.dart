@@ -37,11 +37,13 @@ List<dynamic> _humanizeReactorIdList(
   var humanizedList = [];
   if (reactorIdList.isEmpty) return humanizedList;
 
-  reactorIdList.forEach((reactorId) => humanizedList.add(
-      reactorId == contact.contactId.id
-          ? contact.displayName
-          : 'me')); // TODO: Add i18n
+  reactorIdList.forEach((reactorId) =>
+      humanizedList.add(matchIdToDisplayName(reactorId, contact)));
   return humanizedList;
+}
+
+String matchIdToDisplayName(String id, Contact contact) {
+  return id == contact.contactId.id ? contact.displayName : 'me'; // TODO: i18n
 }
 
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {

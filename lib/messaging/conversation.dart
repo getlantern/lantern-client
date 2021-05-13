@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubbles.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -32,7 +33,6 @@ class _ConversationState extends State<Conversation> {
   bool _isSendIconVisible = false;
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
-  bool _wasReplied = false;
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -254,12 +254,10 @@ class _ConversationState extends State<Conversation> {
             (_message) {
               setState(() {
                 _isReplying = true;
-                _wasReplied = false; // user might cancel reply
                 _quotedMessage = _message;
               });
             },
             _quotedMessage,
-            _wasReplied,
           );
         },
       );
@@ -267,10 +265,9 @@ class _ConversationState extends State<Conversation> {
   }
 
   Widget _buildReplyContainer() {
+    // use the message's replyToId to identify who this is in response to
     final inResponseTo =
-        _quotedMessage!.senderId == widget._contact.contactId.id
-            ? widget._contact.displayName
-            : 'me';
+        matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
@@ -299,6 +296,7 @@ class _ConversationState extends State<Conversation> {
                   ],
                 ),
                 const SizedBox(height: 4),
+                // TODO: Add ability to respond to attachment?
                 Text(_quotedMessage!.text.toString(),
                     style: const TextStyle(color: Colors.black54)),
               ],
@@ -331,11 +329,6 @@ class _ConversationState extends State<Conversation> {
                   ? IconButton(
                       icon: const Icon(Icons.send, color: Colors.black),
                       onPressed: () {
-                        if (_isReplying) {
-                          setState(() {
-                            _wasReplied = true;
-                          });
-                        }
                         setState(() {
                           _isSendIconVisible = false;
                           _isReplying = false;
