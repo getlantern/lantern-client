@@ -1,8 +1,8 @@
 import 'package:lantern/package_store.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-class DeletedMessage extends StatelessWidget {
-  const DeletedMessage({Key? key}) : super(key: key);
+class DeletedBubble extends StatelessWidget {
+  const DeletedBubble({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

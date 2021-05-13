@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
-import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/message_bubbles.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -235,7 +235,7 @@ class _ConversationState extends State<Conversation> {
         reverse: true,
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
-          return MessageBubble(
+          return MessageBubbles(
               messageRecords.elementAt(index),
               index >= messageRecords.length - 1
                   ? null
