@@ -5,7 +5,7 @@ import '../attachment.dart';
 import '../message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
 
-class ReplyBubble extends StatelessWidget {
+class AttachmentBubble extends StatelessWidget {
   final bool outbound;
   final bool inbound;
   final bool startOfBlock;
@@ -15,7 +15,7 @@ class ReplyBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
 
-  const ReplyBubble(
+  const AttachmentBubble(
       this.outbound,
       this.inbound,
       this.startOfBlock,
@@ -93,7 +93,7 @@ class ReplyBubble extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: outbound ? Colors.cyan[300] : Colors.pink[300],
+        color: Colors.red,
         borderRadius: BorderRadius.only(
           topLeft:
               inbound && !startOfBlock ? Radius.zero : const Radius.circular(5),
