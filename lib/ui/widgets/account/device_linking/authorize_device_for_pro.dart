@@ -1,28 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/routes.dart';
 
 import '../../button.dart';
 
 class AuthorizeDeviceForPro extends StatelessWidget {
   AuthorizeDeviceForPro({Key? key}) : super(key: key);
 
-  void openInfoProxyAll(BuildContext context) {
-    showInfoDialog(
-      context,
-      title: 'proxy_all'.i18n,
-      des: 'description_proxy_all_dialog'.i18n,
-      icon: ImagePaths.key_icon,
-    );
-  }
-
-  void linkWithPin() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_LINK_PIN);
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'authorize_device_for_pro'.i18n,
+      title: 'Authorize Device for Pro'.i18n,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -45,7 +33,9 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             Button(
               width: 200,
               text: 'Link with PIN'.i18n,
-              onPressed: linkWithPin,
+              onPressed: () {
+                LanternNavigator.startScreen(LanternNavigator.SCREEN_LINK_PIN);
+              },
             ),
             const Spacer(),
             Flexible(
@@ -71,7 +61,9 @@ class AuthorizeDeviceForPro extends StatelessWidget {
               width: 200,
               text: 'Link via Email'.i18n,
               inverted: true,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, routeAuthorizeDeviceViaEmail);
+              },
             ),
             const Spacer(),
           ],

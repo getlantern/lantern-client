@@ -155,3 +155,12 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 
 msgid "Link via Email"
 msgstr "Link via Email"
+
+msgid "Authorize Device via Email"
+msgstr "Authorize Device via Email"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Submit"
+msgstr "Submit"
