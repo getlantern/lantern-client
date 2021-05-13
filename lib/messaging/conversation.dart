@@ -29,7 +29,9 @@ class _ConversationState extends State<Conversation> {
   var _recording = false;
   var _willCancelRecording = false;
   var _totalPanned = 0.0;
-  bool _isSendIconVisible = false;
+  var _isSendIconVisible = false;
+  var _isReplying = false;
+  var _quotedMessage;
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -206,6 +208,11 @@ class _ConversationState extends State<Conversation> {
               child: Divider(height: 3),
             ),
             // Message bar
+            if (_isReplying)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: _buildReplyContainer(),
+              ),
             Padding(
               padding: const EdgeInsets.all(8),
               child: _buildMessageBar(context),
@@ -236,15 +243,71 @@ class _ConversationState extends State<Conversation> {
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubbles(
-              messageRecords.elementAt(index),
-              index >= messageRecords.length - 1
-                  ? null
-                  : messageRecords.elementAt(index + 1).value,
-              index == 0 ? null : messageRecords.elementAt(index - 1).value,
-              widget._contact);
+            messageRecords.elementAt(index),
+            index >= messageRecords.length - 1
+                ? null
+                : messageRecords.elementAt(index + 1).value,
+            index == 0 ? null : messageRecords.elementAt(index - 1).value,
+            widget._contact,
+            // callback function
+            (message) {
+              setState(() {
+                _quotedMessage = message;
+              });
+              _buildReplyContainer();
+            },
+            _quotedMessage,
+          );
         },
       );
     });
+  }
+
+  Widget _buildReplyContainer() {
+    setState(() {
+      _isReplying = true;
+    });
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Container(
+                color: Colors.green,
+                width: 4,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'sender being replied to',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          _isReplying = false;
+                        }),
+                        child: const Icon(Icons.close, size: 16),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text('message being replied to',
+                      style: TextStyle(color: Colors.black54)),
+                ],
+              )),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildMessageBar(context) {
@@ -264,6 +327,8 @@ class _ConversationState extends State<Conversation> {
             onFieldSubmitted: (_) {
               setState(() {
                 _isSendIconVisible = false;
+                _isReplying = false;
+                _quotedMessage = null;
               });
               _send(_newMessage.value.text);
             },
