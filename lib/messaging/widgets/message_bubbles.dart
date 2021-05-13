@@ -18,9 +18,10 @@ class MessageBubbles extends StatelessWidget {
   final Contact contact;
   final Function(StoredMessage?) onReply;
   final StoredMessage? quotedMessage;
+  final bool wasReplied;
 
   MessageBubbles(this.message, this.priorMessage, this.nextMessage,
-      this.contact, this.onReply, this.quotedMessage)
+      this.contact, this.onReply, this.quotedMessage, this.wasReplied)
       : super();
 
   @override
@@ -115,9 +116,9 @@ class MessageBubbles extends StatelessWidget {
           newestMessage, reactions, msg, message);
     }
 
-    if (quotedMessage != null) {
-      return ReplyBubble(outbound, inbound, startOfBlock, endOfBlock,
-          newestMessage, reactions, msg, message, quotedMessage);
+    // TODO: figure out the ID situation
+    if (quotedMessage?.id == msg.replyToId && wasReplied) {
+      return ReplyBubble(outbound, inbound, msg, message, quotedMessage);
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,

@@ -6,21 +6,13 @@ import 'package:lantern/model/model.dart';
 class ReplyBubble extends StatelessWidget {
   final bool outbound;
   final bool inbound;
-  final bool startOfBlock;
-  final bool endOfBlock;
-  final bool newestMessage;
-  final Map<String, List<dynamic>> reactions;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
-  final StoredMessage quotedMessage;
+  final StoredMessage? quotedMessage;
 
   const ReplyBubble(
     this.outbound,
     this.inbound,
-    this.startOfBlock,
-    this.endOfBlock,
-    this.newestMessage,
-    this.reactions,
     this.msg,
     this.message,
     this.quotedMessage,
@@ -29,21 +21,29 @@ class ReplyBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            Flexible(
               child: Text(
-                'quoted text',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                'In response to: ${quotedMessage!.text}',
+                style: TextStyle(color: Colors.cyan // TODO: generalize in theme
+                    ),
+              ),
+            ),
+            Flexible(
+              child: Text(
+                'Response: ${msg.text}',
+                style: TextStyle(color: Colors.pink // TODO: generalize in theme
+                    ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        TextBubble(outbound, inbound, startOfBlock, endOfBlock, newestMessage,
-            reactions, msg, message)
       ],
     );
   }
