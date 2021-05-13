@@ -1,7 +1,6 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
 
@@ -69,6 +68,40 @@ class TextBubble extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(mainAxisSize: MainAxisSize.min, children: [
+            if (!msg.replyToId.isNotEmpty)
+              Container(
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      color: Colors
+                          .white), // TODO: this should be different for inbound/outbound
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        'in response to',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: !outbound
+                              ? Colors.white
+                              : Colors.black, // TODO: generalize in theme
+                        ),
+                      ),
+                      Text(
+                        'their message',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: !outbound
+                              ? Colors.white
+                              : Colors.black, // TODO: generalize in theme
+                        ),
+                      ),
+                    ],
+                  )),
+          ]),
+          Row(mainAxisSize: MainAxisSize.min, children: [
             if (msg.text.isNotEmpty)
               Flexible(
                 child: Text(
@@ -82,11 +115,6 @@ class TextBubble extends StatelessWidget {
               ),
           ]),
         ]);
-
-    // add attachments to contentContainer
-    //TODO: This is problematic because it re-renders every time
-    contentContainer.children.addAll(msg.attachments.values
-        .map((attachment) => attachmentWidget(attachment)));
 
     // add statusRow to contentContainer
     contentContainer.children.add(statusRow);

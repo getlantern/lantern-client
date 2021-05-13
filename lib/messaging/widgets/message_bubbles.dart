@@ -8,7 +8,6 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/copied_text_widget.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 
 class MessageBubbles extends StatelessWidget {
@@ -113,11 +112,6 @@ class MessageBubbles extends StatelessWidget {
     if (isAttachment) {
       return AttachmentBubble(outbound, inbound, startOfBlock, endOfBlock,
           newestMessage, reactions, msg, message);
-    }
-
-    // TODO: figure out the ID situation
-    if (msg.replyToId != '') {
-      return ReplyBubble(outbound, inbound, msg, message, quotedMessage);
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
