@@ -2,23 +2,25 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-import '../messaging_model.dart';
-import 'message_types/attachment_bubble.dart';
-import 'message_utils.dart';
-import 'copied_text_widget.dart';
-import 'message_types/deleted_bubble.dart';
-import 'message_types/text_bubble.dart';
-import 'message_types/reply_bubble.dart';
-import 'message_types/date_marker_bubble.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_types/attachment_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/widgets/copied_text_widget.dart';
+import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 
 class MessageBubbles extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
   final Contact contact;
+  final Function(StoredMessage?) onReply;
+  final StoredMessage? quotedMessage;
 
-  MessageBubbles(
-      this.message, this.priorMessage, this.nextMessage, this.contact)
+  MessageBubbles(this.message, this.priorMessage, this.nextMessage,
+      this.contact, this.onReply, this.quotedMessage)
       : super();
 
   @override
@@ -32,21 +34,23 @@ class MessageBubbles extends StatelessWidget {
       }
       final outbound = msg.direction == MessageDirection.OUT;
       final inbound = !outbound;
-      // constructs a Map<emoticon, List<reactorName>>
-      // example (key-value): ['😢', ['DisplayName1', 'DisplayName2']]
-      final reactions = constructReactionsMap(msg, contact);
-      final isDate = determineDateSwitch(priorMessage, nextMessage);
-
       final startOfBlock = priorMessage == null ||
           priorMessage?.direction != message.value.direction;
       final endOfBlock = nextMessage == null ||
           nextMessage!.direction != message.value.direction;
       final newestMessage = nextMessage == null;
 
+      // constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
+      final reactions = constructReactionsMap(msg, contact);
+      final isDate = determineDateSwitch(priorMessage, nextMessage);
+      // TODO: infer that from msg
+      final wasDeleted = false;
+      final isAttachment = msg.attachments.isNotEmpty;
+
       return InkWell(
           onLongPress: () {
-            _buildActionsPopup(
-                outbound, context, msg, model, reactions, message);
+            _buildActionsPopup(outbound, context, msg, model, reactions,
+                message, isAttachment, onReply);
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -69,15 +73,19 @@ class MessageBubbles extends StatelessWidget {
                         top: 4,
                         bottom: 4),
                     child: _buildBubbleUI(
-                        outbound,
-                        inbound,
-                        startOfBlock,
-                        endOfBlock,
-                        isDate,
-                        newestMessage,
-                        reactions,
-                        msg,
-                        message)),
+                      outbound,
+                      inbound,
+                      startOfBlock,
+                      endOfBlock,
+                      isDate,
+                      wasDeleted,
+                      isAttachment,
+                      newestMessage,
+                      reactions,
+                      msg,
+                      message,
+                      quotedMessage,
+                    )),
               ),
             ],
           ));
@@ -90,16 +98,14 @@ class MessageBubbles extends StatelessWidget {
     bool startOfBlock,
     bool endOfBlock,
     bool isDate,
+    bool wasDeleted,
+    bool isAttachment,
     bool newestMessage,
     Map<String, List<dynamic>> reactions,
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
+    StoredMessage? quotedMessage,
   ) {
-    // TODO: infer that from msg
-    final wasDeleted = false;
-    // TODO: infer that from msg
-    final isReply = false;
-    final isAttachment = msg.attachments.isNotEmpty;
     if (isDate) return DateMarker();
 
     if (wasDeleted) return const DeletedBubble();
@@ -109,9 +115,9 @@ class MessageBubbles extends StatelessWidget {
           newestMessage, reactions, msg, message);
     }
 
-    if (isReply) {
+    if (quotedMessage != null) {
       return ReplyBubble(outbound, inbound, startOfBlock, endOfBlock,
-          newestMessage, reactions, msg, message);
+          newestMessage, reactions, msg, message, quotedMessage);
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
@@ -126,6 +132,8 @@ Future _buildActionsPopup(
   MessagingModel model,
   Map<String, List<dynamic>> reactions,
   PathAndValue<StoredMessage> message,
+  bool isAttachment,
+  Function(StoredMessage?) onReply,
 ) {
   var reactionOptions = reactions.keys.toList();
   return showModalBottomSheet(
@@ -172,20 +180,29 @@ Future _buildActionsPopup(
           ListTile(
             leading: const Icon(Icons.reply),
             title: Text('Reply'.i18n),
-            onTap: () {},
+            onTap: () {
+              onReply(msg);
+              Navigator.of(context).pop();
+            },
           ),
-          CopiedTextWidget(message), // TODO: hide this for attachments
+          if (!isAttachment) CopiedTextWidget(message),
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text('Delete for me'.i18n),
-            onTap: () => _showDeleteDialog(context, model, true, message),
+            onTap: () {
+              _showDeleteDialog(context, model, true, message);
+              Navigator.of(context).pop();
+            },
           ),
           // User's own messages
           if (outbound)
             ListTile(
               leading: const Icon(Icons.delete_forever),
               title: Text('Delete for everyone'.i18n),
-              onTap: () => _showDeleteDialog(context, model, false, message),
+              onTap: () {
+                _showDeleteDialog(context, model, false, message);
+                Navigator.of(context).pop();
+              },
             ),
         ]);
       });
@@ -218,8 +235,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
               isLocal
                   ? model.deleteLocally(message)
                   : model.deleteGlobally(message);
-              Navigator.of(context)
-                  .pop(); // TODO: close showModalBottomSheet as well
+              Navigator.of(context).pop();
             },
             child: const Text('Delete'),
           )
