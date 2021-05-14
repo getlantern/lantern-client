@@ -1,7 +1,7 @@
+import 'package:lantern/messaging/widgets/message_types/quote_bubble.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -31,52 +31,7 @@ class ContentContainer extends StatelessWidget {
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
-                  Container(
-                      constraints: const BoxConstraints(minWidth: 100),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Colors.white),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.reply,
-                                size: 14,
-                              ),
-                              Text(
-                                matchIdToDisplayName(
-                                    msg.replyToSenderId, contact),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: !outbound
-                                      ? Colors.white
-                                      : Colors
-                                          .black, // TODO: generalize in theme
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                getMessageTextById(
-                                    msg.replyToId, quotedMessage)!,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: !outbound
-                                      ? Colors.white
-                                      : Colors
-                                          .black, // TODO: generalize in theme
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      )),
+                  QuoteBubble(outbound, msg, contact, quotedMessage),
               ]),
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.text.isNotEmpty)
