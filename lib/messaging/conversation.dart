@@ -12,6 +12,7 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -33,6 +34,7 @@ class _ConversationState extends State<Conversation> {
   bool _isSendIconVisible = false;
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
+  bool _emojiShowing = false;
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -321,7 +323,9 @@ class _ConversationState extends State<Conversation> {
     return Row(children: [
       Container(
         child: GestureDetector(
-          onTap: () => {}, // TODO: Trigger native emoji keyboard
+          onTap: () => setState(() {
+            _emojiShowing = !_emojiShowing;
+          }),
           child: const Icon(Icons.insert_emoticon),
         ),
       ),
@@ -380,6 +384,44 @@ class _ConversationState extends State<Conversation> {
             child: const Icon(Icons.mic),
           ),
         ),
+      // Offstage(
+      //   offstage: !_emojiShowing,
+      //   child: SizedBox(
+      //     height: 250,
+      //     child: EmojiPicker(
+      //         onEmojiSelected: (Category category, Emoji emoji) {
+      //           _newMessage
+      //             ..text += emoji.emoji
+      //             ..selection = TextSelection.fromPosition(
+      //                 TextPosition(offset: _newMessage.text.length));
+      //         },
+      //         onBackspacePressed: () {
+      //           _newMessage
+      //             ..text = _newMessage.text.characters.skipLast(1).toString()
+      //             ..selection = TextSelection.fromPosition(
+      //                 TextPosition(offset: _newMessage.text.length));
+      //         },
+      //         config: const Config(
+      //           columns: 2,
+      //           emojiSizeMax: 32.0,
+      //           verticalSpacing: 0,
+      //           horizontalSpacing: 0,
+      //           initCategory: Category.RECENT,
+      //           bgColor: Color(0xFFF2F2F2),
+      //           indicatorColor: Colors.blue,
+      //           iconColor: Colors.grey,
+      //           iconColorSelected: Colors.blue,
+      //           progressIndicatorColor: Colors.blue,
+      //           backspaceColor: Colors.blue,
+      //           showRecentsTab: true,
+      //           recentsLimit: 28,
+      //           noRecentsText: 'No Recents',
+      //           noRecentsStyle: TextStyle(fontSize: 20, color: Colors.black26),
+      //           categoryIcons: CategoryIcons(),
+      //           buttonMode: ButtonMode.MATERIAL,
+      //         )),
+      //   ),
+      // ),
     ]);
   }
 

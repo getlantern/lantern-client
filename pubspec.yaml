@@ -73,6 +73,9 @@ dependencies:
 
   dotted_border: ^2.0.0
 
+  emoji_picker_flutter:
+    git: https://github.com/Fintasys/emoji_picker_flutter.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
