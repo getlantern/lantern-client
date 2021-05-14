@@ -61,8 +61,12 @@ class TextBubble extends StatelessWidget {
     // add statusIcon to statusRow
     final statusIcon = getStatusIcon(inbound, msg);
     if (statusIcon != null) {
-      statusRow.children
-          .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
+      statusRow.children.add(Transform.scale(
+          scale: .5,
+          child: Icon(
+            statusIcon,
+            color: Colors.white30,
+          )));
     }
 
     // contains body of message

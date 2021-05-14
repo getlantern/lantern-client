@@ -54,14 +54,17 @@ String? getMessageTextById(String replyToId, StoredMessage? quotedMessage) {
 }
 
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {
-  inbound
+  return inbound
       ? null
-      : msg.status == StoredMessage_DeliveryStatus.SENDING
-          ? Icons.pending_outlined
-          : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_FAILED ||
-                  msg.status == StoredMessage_DeliveryStatus.PARTIALLY_FAILED
-              ? Icons.error_outline
-              : null;
+      : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
+          ? Icons.check_circle_outline_outlined
+          : msg.status == StoredMessage_DeliveryStatus.SENDING
+              ? Icons.pending_outlined
+              : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_FAILED ||
+                      msg.status ==
+                          StoredMessage_DeliveryStatus.PARTIALLY_FAILED
+                  ? Icons.error_outline
+                  : null;
 }
 
 Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
