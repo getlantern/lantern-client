@@ -3,6 +3,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 
 class TextBubble extends StatelessWidget {
   final bool outbound;
@@ -15,6 +16,7 @@ class TextBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
   final Contact contact;
   final StoredMessage? quotedMessage;
+  final String? isDateMarker;
 
   const TextBubble(
     this.outbound,
@@ -27,6 +29,7 @@ class TextBubble extends StatelessWidget {
     this.message,
     this.contact,
     this.quotedMessage,
+    this.isDateMarker,
   ) : super();
 
   @override
@@ -136,27 +139,36 @@ class TextBubble extends StatelessWidget {
     // add statusRow to contentContainer
     contentContainer.children.add(statusRow);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: outbound ? Colors.black38 : Colors.black12,
-        borderRadius: BorderRadius.only(
-          topLeft:
-              inbound && !startOfBlock ? Radius.zero : const Radius.circular(5),
-          topRight: outbound && !startOfBlock
-              ? Radius.zero
-              : const Radius.circular(5),
-          bottomRight: outbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
-              : const Radius.circular(5),
-          bottomLeft: inbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
-              : const Radius.circular(5),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-        child: contentContainer,
-      ),
-    );
+    return Column(
+        crossAxisAlignment:
+            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isDateMarker != null) DateMarker(isDateMarker),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 400),
+            decoration: BoxDecoration(
+              color: outbound ? Colors.black38 : Colors.black12,
+              borderRadius: BorderRadius.only(
+                topLeft: inbound && !startOfBlock
+                    ? Radius.zero
+                    : const Radius.circular(5),
+                topRight: outbound && !startOfBlock
+                    ? Radius.zero
+                    : const Radius.circular(5),
+                bottomRight: outbound && (!endOfBlock || newestMessage)
+                    ? Radius.zero
+                    : const Radius.circular(5),
+                bottomLeft: inbound && (!endOfBlock || newestMessage)
+                    ? Radius.zero
+                    : const Radius.circular(5),
+              ),
+            ),
+            child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                child: contentContainer),
+          ),
+        ]);
   }
 }

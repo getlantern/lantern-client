@@ -1,6 +1,6 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/humanize.dart';
+import 'package:intl/intl.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -122,12 +122,14 @@ String? determineDateSwitch(
     StoredMessage? priorMessage, StoredMessage? nextMessage) {
   if (priorMessage == null || nextMessage == null) return null;
 
-  var currentDateTime = priorMessage.ts.toInt().humanizeDateSwitch();
-  final nextMessageDateTime = nextMessage.ts.toInt().humanizeDateSwitch();
+  var currentDateTime =
+      DateTime.fromMillisecondsSinceEpoch(priorMessage.ts.toInt());
+  var nextMessageDateTime =
+      DateTime.fromMillisecondsSinceEpoch(nextMessage.ts.toInt());
 
-  if (currentDateTime != nextMessageDateTime) {
+  if (nextMessageDateTime.difference(currentDateTime).inDays >= 1) {
     currentDateTime = nextMessageDateTime;
-    return currentDateTime;
+    return DateFormat.yMMMMd('en_US').format(currentDateTime);
   }
 
   return null;
