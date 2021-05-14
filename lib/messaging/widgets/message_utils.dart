@@ -1,6 +1,7 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -42,8 +43,14 @@ List<dynamic> _humanizeReactorIdList(
   return humanizedList;
 }
 
-String matchIdToDisplayName(String id, Contact contact) {
-  return id == contact.contactId.id ? contact.displayName : 'me'; // TODO: i18n
+String matchIdToDisplayName(String replyToSenderId, Contact contact) {
+  return replyToSenderId == contact.contactId.id
+      ? contact.displayName
+      : 'me'; // TODO: i18n
+}
+
+String? getMessageTextById(String replyToId, StoredMessage? quotedMessage) {
+  return quotedMessage?.id == replyToId ? quotedMessage?.text : '';
 }
 
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {
