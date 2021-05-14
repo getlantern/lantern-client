@@ -14,6 +14,7 @@ class TextBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
+  final StoredMessage? quotedMessage;
 
   const TextBubble(
     this.outbound,
@@ -25,6 +26,7 @@ class TextBubble extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
+    this.quotedMessage,
   ) : super();
 
   @override
@@ -101,7 +103,7 @@ class TextBubble extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'their message',
+                            getMessageTextById(msg.replyToId, quotedMessage)!,
                             style: TextStyle(
                               fontSize: 12,
                               color: !outbound
