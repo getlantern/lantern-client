@@ -8,7 +8,6 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/copied_text_widget.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 
 class MessageBubbles extends StatelessWidget {
   final PathAndValue<StoredMessage> message;

@@ -1,3 +1,5 @@
+import 'package:lantern/messaging/widgets/message_types/content_container.dart';
+import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
@@ -34,141 +36,39 @@ class TextBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Row that holds the reactions (if any) and the timestamp
-    var statusRow = Row(mainAxisSize: MainAxisSize.min, children: []);
-    // add reactions to statusRow
-    reactions.forEach((key, value) {
-      // only render this if the list of [reactorIds] is not empty
-      if (value.isNotEmpty) {
-        statusRow.children.add(Container(
-            margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: GestureDetector(
-                // Tap on emoji to bring modal with breakdown of interactions
-                onTap: () =>
-                    displayEmojiBreakdownPopup(context, msg, reactions),
-                child: displayEmojiCount(reactions, key))));
-      }
-    });
-    // add timestamp to statusRow
-    statusRow.children.add(Opacity(
-      opacity: 0.5,
-      child: Text(
-        message.value.ts.toInt().humanizeDate(),
-        style: TextStyle(
-          color: outbound
-              ? Colors.white
-              : Colors.black, // TODO: consolidate colors here
-          fontSize: 12,
-        ),
-      ),
-    ));
-    // add statusIcon to statusRow
-    final statusIcon = getStatusIcon(inbound, msg);
-    if (statusIcon != null) {
-      statusRow.children
-          .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
-    }
-
-    // contains body of message
-    var contentContainer = Column(
-        crossAxisAlignment:
-            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            if (msg.replyToId.isNotEmpty)
-              Container(
-                  constraints: const BoxConstraints(minWidth: 100),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: Colors.white),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.reply,
-                            size: 14,
-                          ),
-                          Text(
-                            matchIdToDisplayName(msg.replyToSenderId, contact),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: !outbound
-                                  ? Colors.white
-                                  : Colors.black, // TODO: generalize in theme
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            getMessageTextById(msg.replyToId, quotedMessage)!,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: !outbound
-                                  ? Colors.white
-                                  : Colors.black, // TODO: generalize in theme
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )),
-          ]),
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            if (msg.text.isNotEmpty)
-              Flexible(
-                child: Text(
-                  '${msg.text}',
-                  style: TextStyle(
-                    color: outbound
-                        ? Colors.white
-                        : Colors.black, // TODO: generalize in theme
-                  ),
-                ),
-              ),
-          ]),
-        ]);
-
-    // add statusRow to contentContainer
-    contentContainer.children.add(statusRow);
-
     return Column(
         crossAxisAlignment:
             outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          // TODO: in theory this should appear before an attachment or deleted file as well
           if (isDateMarker != null) DateMarker(isDateMarker),
           Container(
-            constraints: const BoxConstraints(maxWidth: 400),
-            decoration: BoxDecoration(
-              color: outbound ? Colors.black38 : Colors.black12,
-              borderRadius: BorderRadius.only(
-                topLeft: inbound && !startOfBlock
-                    ? Radius.zero
-                    : const Radius.circular(5),
-                topRight: outbound && !startOfBlock
-                    ? Radius.zero
-                    : const Radius.circular(5),
-                bottomRight: outbound && (!endOfBlock || newestMessage)
-                    ? Radius.zero
-                    : const Radius.circular(5),
-                bottomLeft: inbound && (!endOfBlock || newestMessage)
-                    ? Radius.zero
-                    : const Radius.circular(5),
+              constraints: const BoxConstraints(maxWidth: 400),
+              decoration: BoxDecoration(
+                color: outbound ? Colors.black38 : Colors.black12,
+                borderRadius: BorderRadius.only(
+                  topLeft: inbound && !startOfBlock
+                      ? Radius.zero
+                      : const Radius.circular(5),
+                  topRight: outbound && !startOfBlock
+                      ? Radius.zero
+                      : const Radius.circular(5),
+                  bottomRight: outbound && (!endOfBlock || newestMessage)
+                      ? Radius.zero
+                      : const Radius.circular(5),
+                  bottomLeft: inbound && (!endOfBlock || newestMessage)
+                      ? Radius.zero
+                      : const Radius.circular(5),
+                ),
               ),
-            ),
-            child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-                child: contentContainer),
-          ),
+              child: Column(
+                children: [
+                  ContentContainer(
+                      outbound, inbound, msg, message, contact, quotedMessage),
+                  StatusRow(outbound, inbound, reactions, msg, message)
+                ],
+              )),
         ]);
   }
 }
