@@ -53,7 +53,9 @@ class TextBubble extends StatelessWidget {
       child: Text(
         message.value.ts.toInt().humanizeDate(),
         style: TextStyle(
-          color: outbound ? Colors.white : Colors.black,
+          color: outbound
+              ? Colors.white
+              : Colors.black, // TODO: consolidate colors here
           fontSize: 12,
         ),
       ),
@@ -61,12 +63,8 @@ class TextBubble extends StatelessWidget {
     // add statusIcon to statusRow
     final statusIcon = getStatusIcon(inbound, msg);
     if (statusIcon != null) {
-      statusRow.children.add(Transform.scale(
-          scale: .5,
-          child: Icon(
-            statusIcon,
-            color: Colors.white30,
-          )));
+      statusRow.children
+          .add(Transform.scale(scale: .5, child: Icon(statusIcon)));
     }
 
     // contains body of message
