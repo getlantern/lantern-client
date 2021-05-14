@@ -75,8 +75,7 @@ class TextBubble extends StatelessWidget {
                   constraints: const BoxConstraints(minWidth: 100),
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: Colors
-                          .white), // TODO: this should be different for inbound/outbound
+                      color: Colors.white),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: Column(

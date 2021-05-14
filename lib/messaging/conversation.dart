@@ -48,11 +48,13 @@ class _ConversationState extends State<Conversation> {
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) {
-    model.sendToDirectContact(widget._contact.contactId.id,
-        text: text,
-        attachments: attachments,
-        replyToSenderId: replyToSenderId,
-        replyToId: replyToId);
+    model.sendToDirectContact(
+      widget._contact.contactId.id,
+      text: text,
+      attachments: attachments,
+      replyToId: replyToId,
+      replyToSenderId: replyToSenderId,
+    );
     _newMessage.clear();
   }
 
@@ -343,7 +345,8 @@ class _ConversationState extends State<Conversation> {
                           _isReplying = false;
                         });
                         _send(_newMessage.value.text,
-                            _newMessage.replyToSenderId, _newMessage.replyToId);
+                            replyToSenderId: _quotedMessage?.senderId,
+                            replyToId: _quotedMessage?.id);
                       })
                   : null,
               enabledBorder: InputBorder.none,
