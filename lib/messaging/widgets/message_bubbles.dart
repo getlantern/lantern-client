@@ -41,7 +41,7 @@ class MessageBubbles extends StatelessWidget {
 
       // constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
       final reactions = constructReactionsMap(msg, contact);
-      final isDate = determineDateSwitch(priorMessage, nextMessage);
+      final isDateMarker = determineDateSwitch(priorMessage, nextMessage);
       // TODO: infer that from msg
       final wasDeleted = false;
       final isAttachment = msg.attachments.isNotEmpty;
@@ -59,12 +59,12 @@ class MessageBubbles extends StatelessWidget {
               Flexible(
                 child: Padding(
                     padding: EdgeInsets.only(
-                        left: !isDate
+                        left: isDateMarker != null
                             ? outbound
                                 ? 20
                                 : 4
                             : 4,
-                        right: !isDate
+                        right: isDateMarker != null
                             ? outbound
                                 ? 4
                                 : 20
@@ -76,7 +76,7 @@ class MessageBubbles extends StatelessWidget {
                       inbound,
                       startOfBlock,
                       endOfBlock,
-                      isDate,
+                      isDateMarker,
                       wasDeleted,
                       isAttachment,
                       newestMessage,
@@ -96,7 +96,7 @@ class MessageBubbles extends StatelessWidget {
     bool inbound,
     bool startOfBlock,
     bool endOfBlock,
-    bool isDate,
+    String? isDateMarker,
     bool wasDeleted,
     bool isAttachment,
     bool newestMessage,
@@ -105,7 +105,7 @@ class MessageBubbles extends StatelessWidget {
     PathAndValue<StoredMessage> message,
     StoredMessage? quotedMessage,
   ) {
-    if (isDate) return DateMarker();
+    if (isDateMarker != null) return DateMarker(isDateMarker);
 
     if (wasDeleted) return const DeletedBubble();
 

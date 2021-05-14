@@ -26,7 +26,14 @@ extension Humanize on int {
       var weekday = DateFormat('EEEE').format(localDateTime);
       return '$weekday, $roughTimeString';
     }
+    // TODO: Something is wrong with the year here
     return '${DateFormat('yMd').format(dateTime)}, $roughTimeString';
+  }
+
+  String humanizeDateSwitch() {
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(this);
+    final monthYear = DateFormat.yMMMMd('en_US').format(dateTime);
+    return monthYear.split(',')[0];
   }
 
   String humanizeSeconds({bool longForm = false}) {

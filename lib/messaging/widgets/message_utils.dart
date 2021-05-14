@@ -1,7 +1,6 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:intl/intl.dart';
-import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/utils/humanize.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -119,19 +118,17 @@ Container displayEmojiCount(
               : Text(emoticon)));
 }
 
-bool determineDateSwitch(
+String? determineDateSwitch(
     StoredMessage? priorMessage, StoredMessage? nextMessage) {
-  if (priorMessage == null || nextMessage == null) return false;
+  if (priorMessage == null || nextMessage == null) return null;
 
-  var currentDateTime = DateFormat.yMMMMd('en_US')
-      .format(DateTime.fromMicrosecondsSinceEpoch(priorMessage.ts.toInt()));
-  final nextMessageDateTime = DateFormat.yMMMMd('en_US')
-      .format(DateTime.fromMicrosecondsSinceEpoch(nextMessage.ts.toInt()));
+  var currentDateTime = priorMessage.ts.toInt().humanizeDateSwitch();
+  final nextMessageDateTime = nextMessage.ts.toInt().humanizeDateSwitch();
 
   if (currentDateTime != nextMessageDateTime) {
     currentDateTime = nextMessageDateTime;
-    return true;
+    return currentDateTime;
   }
 
-  return false;
+  return null;
 }
