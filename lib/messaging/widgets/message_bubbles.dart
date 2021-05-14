@@ -105,8 +105,6 @@ class MessageBubbles extends StatelessWidget {
     PathAndValue<StoredMessage> message,
     StoredMessage? quotedMessage,
   ) {
-    if (isDateMarker != null) return DateMarker(isDateMarker);
-
     if (wasDeleted) return const DeletedBubble();
 
     if (isAttachment) {
@@ -114,8 +112,18 @@ class MessageBubbles extends StatelessWidget {
           newestMessage, reactions, msg, message);
     }
 
-    return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-        newestMessage, reactions, msg, message, contact, quotedMessage);
+    return TextBubble(
+        outbound,
+        inbound,
+        startOfBlock,
+        endOfBlock,
+        newestMessage,
+        reactions,
+        msg,
+        message,
+        contact,
+        quotedMessage,
+        isDateMarker);
   }
 }
 

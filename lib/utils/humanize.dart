@@ -30,12 +30,6 @@ extension Humanize on int {
     return '${DateFormat('yMd').format(dateTime)}, $roughTimeString';
   }
 
-  String humanizeDateSwitch() {
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(this);
-    final monthYear = DateFormat.yMMMMd('en_US').format(dateTime);
-    return monthYear.split(',')[0];
-  }
-
   String humanizeSeconds({bool longForm = false}) {
     // TODO: unit test this
     // TODO: localize the string portions of the below
