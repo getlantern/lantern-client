@@ -14,7 +14,7 @@ class VPNStatus extends StatelessWidget {
           Text(
             'VPN Status'.i18n + ': ',
             style: tsTitleHeadVPNItem()?.copyWith(
-              color: HexColor(unselectedTabLabelColor),
+              color: unselectedTabLabelColor,
             ),
           ),
           (vpnStatus == 'connecting' || vpnStatus == 'disconnecting')

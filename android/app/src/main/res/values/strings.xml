@@ -185,11 +185,6 @@
     <string name="too_many_devices">The limit of devices that can be linked to your Pro account has been reached.</string>
     <string name="check_spam_folder">* Please check your spam folder if you do not receive the email</string>
     <string name="by_referral">Received Pro by Referring a Friend</string>
-    <string-array name="payment_method_list">
-        <item>Alipay</item>
-        <item>Credit Card</item>
-        <item>Received Pro by Referring a Friend</item>
-    </string-array>
     <string name="payment_method">Payment method</string>
     <string name="payment_account">Payment account</string>
     <string name="oops_having_trouble">Oops! We\'re having trouble finding that email address. Please provide the information below to help us locate your account.</string>

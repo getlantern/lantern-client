@@ -334,14 +334,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         editor.putString(PROVIDER, provider).commit()
     }
 
-    fun setAccountId(accountId: String?) {
-        editor.putString(ACCOUNT_ID, accountId).commit()
-    }
-
-    fun accountId(): String? {
-        return prefs.getString(ACCOUNT_ID, "")
-    }
-
     override fun code(): String? {
         return prefs.getString(REFERRAL_CODE, "")
     }

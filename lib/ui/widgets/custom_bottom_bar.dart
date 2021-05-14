@@ -19,7 +19,7 @@ class CustomBottomBar extends StatelessWidget {
       height: activeIconSize,
       width: activeIconSize,
       decoration: BoxDecoration(
-        color: isActive ? HexColor(indicatorGreen) : HexColor(indicatorRed),
+        color: isActive ? indicatorGreen : indicatorRed,
         borderRadius: const BorderRadius.all(
           Radius.circular(activeIconSize / 2),
         ),
@@ -79,14 +79,13 @@ class CustomBottomBar extends StatelessWidget {
         onTap: () => updateCurrentIndexPageView(index),
         child: Ink(
           decoration: ShapeDecoration(
-            color: currentIndex == index
-                ? HexColor(selectedTabColor)
-                : HexColor(unselectedTabColor),
+            color:
+                currentIndex == index ? selectedTabColor : unselectedTabColor,
             shape: CustomRoundedRectangleBorder(
               topSide: currentIndex == index
                   ? null
                   : BorderSide(
-                      color: HexColor(borderColor),
+                      color: borderColor,
                       width: 1,
                     ),
               endSide: currentIndex == index ||
@@ -94,7 +93,7 @@ class CustomBottomBar extends StatelessWidget {
                       currentIndex == 0 && index == 1
                   ? null
                   : BorderSide(
-                      color: HexColor(borderColor),
+                      color: borderColor,
                       width: 1,
                     ),
               startSide: currentIndex == index ||
@@ -102,19 +101,19 @@ class CustomBottomBar extends StatelessWidget {
                       currentIndex == 2 && index == 1
                   ? null
                   : BorderSide(
-                      color: HexColor(borderColor),
+                      color: borderColor,
                       width: 1,
                     ),
               topStartCornerSide: BorderSide(
                 color: (currentIndex == 0 && index == 1) ||
                         (currentIndex == 1 && index == 2)
-                    ? HexColor(borderColor)
+                    ? borderColor
                     : Colors.white,
               ),
               topEndCornerSide: BorderSide(
                 color: (currentIndex == 1 && index == 0) ||
                         (currentIndex == 2 && index == 1)
-                    ? HexColor(borderColor)
+                    ? borderColor
                     : Colors.white,
               ),
               borderRadius: BorderRadiusDirectional.only(
@@ -146,18 +145,18 @@ class CustomBottomBar extends StatelessWidget {
                         child: CustomAssetImage(
                           path: icon,
                           size: 24,
-                          color: HexColor(currentIndex == index
+                          color: currentIndex == index
                               ? selectedTabLabelColor
-                              : unselectedTabLabelColor),
+                              : unselectedTabLabelColor,
                         ),
                       );
                     })
                   : CustomAssetImage(
                       path: icon,
                       size: 24,
-                      color: HexColor(currentIndex == index
+                      color: currentIndex == index
                           ? selectedTabLabelColor
-                          : unselectedTabLabelColor),
+                          : unselectedTabLabelColor,
                     ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -166,9 +165,9 @@ class CustomBottomBar extends StatelessWidget {
                     text,
                     style: GoogleFonts.roboto().copyWith(
                       fontSize: 12,
-                      color: HexColor(currentIndex == index
+                      color: currentIndex == index
                           ? selectedTabLabelColor
-                          : unselectedTabLabelColor),
+                          : unselectedTabLabelColor,
                     ),
                   ),
                   tabEnum == TAB_ENUM.VPN

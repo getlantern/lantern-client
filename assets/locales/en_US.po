@@ -164,3 +164,24 @@ msgstr "Email"
 
 msgid "Submit"
 msgstr "Submit"
+
+msgid "Please enter a valid email address"
+msgstr "Please enter a valid email address"
+
+msgid "Re-send Email"
+msgstr "Re-send Email"
+
+msgid "Paste from clipboard?"
+msgstr "Paste from clipboard?"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Enter your device linking PIN"
+msgstr "Enter your device linking PIN"
+
+msgid "recovery_email_sent"
+msgstr "An email with a recovery code has been sent to %s if this account exists. Input the code from that email above. This email may take several hours to arrive."

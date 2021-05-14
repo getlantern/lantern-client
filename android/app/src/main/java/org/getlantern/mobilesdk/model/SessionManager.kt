@@ -457,16 +457,16 @@ abstract class SessionManager(application: Application) : Session {
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
-        protected val USER_ID = "userid"
+        val USER_ID = "userid"
 
         @JvmStatic
-        protected val TOKEN = "token"
+        val TOKEN = "token"
         protected const val PROXY_ALL = "proxyAll"
         protected const val LANG = "lang"
         protected const val SHOW_ADS_AFTER_DAYS = "showadsafterdays"
 
         @JvmStatic
-        protected val EMAIL_ADDRESS = "emailAddress"
+        val EMAIL_ADDRESS = "emailAddress"
         protected const val PREF_USE_VPN = "pref_vpn"
         protected const val PREF_BOOTUP_VPN = "pref_bootup_vpn"
         protected const val ACCEPTED_TERMS_VERSION = "accepted_terms_version"

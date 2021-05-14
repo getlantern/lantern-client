@@ -20,9 +20,9 @@ class Button extends StatelessWidget {
     var button = OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        backgroundColor: HexColor(inverted ? white : primaryPink),
+        backgroundColor: inverted ? white : primaryPink,
         padding: const EdgeInsets.symmetric(vertical: 15),
-        side: BorderSide(width: 2, color: HexColor(primaryPink)),
+        side: BorderSide(width: 2, color: primaryPink),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -33,8 +33,7 @@ class Button extends StatelessWidget {
             Text(
               text.toUpperCase(),
               style: TextStyle(
-                  color: HexColor(inverted ? primaryPink : white),
-                  fontSize: 14),
+                  color: inverted ? primaryPink : white, fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(width: 5),

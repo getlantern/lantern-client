@@ -6,6 +6,7 @@ import '../../routes.dart';
 import 'account_menu.dart';
 import 'device_linking/authorize_device_for_pro.dart';
 import 'device_linking/authorize_device_via_email.dart';
+import 'device_linking/authorize_device_via_email_pin.dart';
 import 'language.dart';
 import 'settings.dart';
 
@@ -30,6 +31,9 @@ class AccountTab extends StatelessWidget {
           break;
         case routeAuthorizeDeviceViaEmail:
           builder = (BuildContext _) => AuthorizeDeviceViaEmail();
+          break;
+        case routeAuthorizeDeviceViaEmailPin:
+          builder = (BuildContext _) => AuthorizeDeviceViaEmailPin();
           break;
         default:
           throw Exception('unknown route ${settings.name}');

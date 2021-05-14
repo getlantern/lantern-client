@@ -38,4 +38,21 @@ class SessionModel extends Model {
       'lang': lang,
     });
   }
+
+  Future<String> authorizeViaEmail(String emailAddress) {
+    return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
+      'emailAddress': emailAddress,
+    }).then((value) => value as String);
+  }
+
+  Future<String> validateRecoveryCode(String code) {
+    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+      'code': code,
+    }).then((value) => value as String);
+  }
+
+  Future<void> resendRecoveryCode() {
+    return methodChannel
+        .invokeMethod('resendRecoveryCode', <String, dynamic>{});
+  }
 }

@@ -14,7 +14,7 @@ class VPNCustomDivider extends StatelessWidget {
       margin: EdgeInsetsDirectional.only(top: marginTop, bottom: marginBottom),
       height: 1,
       width: double.infinity,
-      color: HexColor(borderColor),
+      color: borderColor,
     );
   }
 }

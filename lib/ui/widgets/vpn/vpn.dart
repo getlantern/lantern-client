@@ -1,6 +1,5 @@
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/hex_color.dart';
 import 'package:provider/provider.dart';
 
 import 'vpn_bandwidth.dart';
@@ -42,7 +41,7 @@ class VPNTab extends StatelessWidget {
                     start: 16, end: 20, top: 20, bottom: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: HexColor(borderColor),
+                    color: borderColor,
                     width: 1,
                   ),
                   borderRadius: const BorderRadius.all(

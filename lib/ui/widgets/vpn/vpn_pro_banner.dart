@@ -19,9 +19,9 @@ class _ProBannerState extends State<ProBanner> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: HexColor(unselectedTabColor),
+          color: unselectedTabColor,
           border: Border.all(
-            color: HexColor(borderColor),
+            color: borderColor,
             width: 1,
           ),
           borderRadius: const BorderRadius.all(
