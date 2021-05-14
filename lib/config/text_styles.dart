@@ -45,8 +45,7 @@ TextStyle? tsTitleAppbar() => GoogleFonts.roboto().copyWith(
 TextStyle? tsTitleItem() =>
     GoogleFonts.roboto().copyWith(fontWeight: FontWeight.w500, fontSize: 16);
 
-TextStyle? tsSelectedTitleItem() =>
-    tsTitleItem()?.copyWith(color: HexColor(primaryPink));
+TextStyle? tsSelectedTitleItem() => tsTitleItem()?.copyWith(color: primaryPink);
 
 TextStyle? tsTitleHeadVPNItem() =>
     GoogleFonts.roboto().copyWith(fontWeight: FontWeight.w400, fontSize: 14);

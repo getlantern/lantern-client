@@ -66,7 +66,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         super.configureFlutterEngine(flutterEngine)
 
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        sessionModel = SessionModel(flutterEngine)
+        sessionModel = SessionModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {

@@ -86,7 +86,7 @@ class _ExchangeTabState extends State<ExchangeTab> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: HexColor(indicatorRed),
+        backgroundColor: indicatorRed,
         textColor: Colors.white,
         fontSize: 16.0);
   }

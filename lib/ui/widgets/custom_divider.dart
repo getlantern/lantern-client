@@ -17,7 +17,7 @@ class CustomDivider extends StatelessWidget {
         children: [
           Center(
             child: Container(
-              color: HexColor(borderColor),
+              color: borderColor,
               height: 1,
             ),
           ),

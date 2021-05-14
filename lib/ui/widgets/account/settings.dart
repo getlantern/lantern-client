@@ -51,8 +51,8 @@ class Settings extends StatelessWidget {
                 padding: 2,
                 toggleSize: 18.0,
                 value: proxyAll,
-                activeColor: HexColor(indicatorGreen),
-                inactiveColor: HexColor(offSwitchColor),
+                activeColor: indicatorGreen,
+                inactiveColor: offSwitchColor,
                 onToggle: (bool newValue) {
                   sessionModel.switchProxyAll(newValue);
                 },

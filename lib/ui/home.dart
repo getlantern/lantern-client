@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
-import 'package:lantern/utils/hex_color.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             // simple way to show indefinitely
             content: Text(message),
             action: SnackBarAction(
-              textColor: HexColor(secondaryPink),
+              textColor: secondaryPink,
               label: buttonText.toUpperCase(),
               onPressed: () {
                 mainMethodChannel.invokeMethod('showLastSurvey');

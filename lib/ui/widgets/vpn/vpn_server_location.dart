@@ -28,7 +28,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
             Text(
               'Server Location'.i18n + ': ',
               style: tsTitleHeadVPNItem()?.copyWith(
-                color: HexColor(unselectedTabLabelColor),
+                color: unselectedTabLabelColor,
               ),
             ),
             Container(
@@ -40,7 +40,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
                   width: 48,
                   child: Icon(
                     Icons.info_outline_rounded,
-                    color: HexColor(unselectedTabLabelColor),
+                    color: unselectedTabLabelColor,
                     size: 16,
                   ),
                 ),

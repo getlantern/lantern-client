@@ -25,7 +25,7 @@ class CustomBadge extends StatelessWidget {
       ),
       showBadge: showBadge,
       animationType: BadgeAnimationType.fade,
-      badgeColor: HexColor(primaryPink),
+      badgeColor: primaryPink,
       badgeContent: Text(
         count.toString(),
         style: GoogleFonts.roboto().copyWith(
