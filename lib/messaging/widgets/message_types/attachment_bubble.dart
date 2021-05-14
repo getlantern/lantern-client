@@ -79,7 +79,7 @@ class AttachmentBubble extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: outbound ? Colors.black38 : Colors.black12,
         borderRadius: BorderRadius.only(
           topLeft:
               inbound && !startOfBlock ? Radius.zero : const Radius.circular(5),
@@ -95,7 +95,7 @@ class AttachmentBubble extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: contentContainer,
       ),
     );
