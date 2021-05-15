@@ -121,9 +121,9 @@ Container displayEmojiCount(
               : Text(emoticon)));
 }
 
-String? determineDateSwitch(
+String determineDateSwitch(
     StoredMessage? priorMessage, StoredMessage? nextMessage) {
-  if (priorMessage == null || nextMessage == null) return null;
+  if (priorMessage == null || nextMessage == null) return '';
 
   var currentDateTime =
       DateTime.fromMillisecondsSinceEpoch(priorMessage.ts.toInt());
@@ -135,5 +135,5 @@ String? determineDateSwitch(
     return DateFormat.yMMMMd('en_US').format(currentDateTime);
   }
 
-  return null;
+  return '';
 }

@@ -40,7 +40,6 @@ class TextBubble extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // TODO: in theory this should appear before an attachment or deleted file as well
-          if (isDateMarker != null) DateMarker(isDateMarker),
           Container(
               decoration: BoxDecoration(
                 color: outbound ? Colors.black38 : Colors.black12,
