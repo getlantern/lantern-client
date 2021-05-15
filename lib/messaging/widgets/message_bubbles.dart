@@ -1,3 +1,4 @@
+import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -58,12 +59,12 @@ class MessageBubbles extends StatelessWidget {
               Flexible(
                 child: Padding(
                     padding: EdgeInsets.only(
-                        left: isDateMarker != null
+                        left: isDateMarker != ''
                             ? outbound
                                 ? 20
                                 : 4
                             : 4,
-                        right: isDateMarker != null
+                        right: isDateMarker != ''
                             ? outbound
                                 ? 4
                                 : 20
@@ -105,6 +106,8 @@ class MessageBubbles extends StatelessWidget {
     StoredMessage? quotedMessage,
   ) {
     if (wasDeleted) return const DeletedBubble();
+
+    if (isDateMarker != '') return DateMarker(isDateMarker);
 
     if (isAttachment) {
       return AttachmentBubble(outbound, inbound, startOfBlock, endOfBlock,

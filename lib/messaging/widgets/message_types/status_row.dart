@@ -36,7 +36,7 @@ class StatusRow extends StatelessWidget {
     });
 
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        padding: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 4),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.min,
