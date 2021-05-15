@@ -9,7 +9,6 @@ class ContentContainer extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
-  final StoredMessage? quotedMessage;
 
   const ContentContainer(
     this.outbound,
@@ -17,7 +16,6 @@ class ContentContainer extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
-    this.quotedMessage,
   ) : super();
 
   @override
@@ -31,7 +29,7 @@ class ContentContainer extends StatelessWidget {
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
-                  QuoteBubble(outbound, msg, contact, quotedMessage),
+                  QuoteBubble(outbound, msg, contact),
               ]),
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.text.isNotEmpty)

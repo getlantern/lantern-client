@@ -48,13 +48,6 @@ String matchIdToDisplayName(String replyToSenderId, Contact contact) {
       : 'me'; // TODO: i18n
 }
 
-// TODO: we should be identifying which message has been quoted via id and then rendering the text, not using quoted.text since thats always the latest message to be quoted
-String? getMessageTextById(String replyToId, StoredMessage? quotedMessage) {
-  return quotedMessage?.id == replyToId
-      ? quotedMessage?.text
-      : 'something went wrong when matching quoteMessage.id to replyId';
-}
-
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {
   return inbound
       ? null

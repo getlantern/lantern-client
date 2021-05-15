@@ -271,7 +271,6 @@ class _ConversationState extends State<Conversation> {
                 _quotedMessage = _message;
               });
             },
-            _quotedMessage,
           );
         },
       );
