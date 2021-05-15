@@ -42,7 +42,6 @@ class TextBubble extends StatelessWidget {
           // TODO: in theory this should appear before an attachment or deleted file as well
           if (isDateMarker != null) DateMarker(isDateMarker),
           Container(
-              constraints: const BoxConstraints(maxWidth: 400),
               decoration: BoxDecoration(
                 color: outbound ? Colors.black38 : Colors.black12,
                 borderRadius: BorderRadius.only(
@@ -61,6 +60,10 @@ class TextBubble extends StatelessWidget {
                 ),
               ),
               child: Column(
+                crossAxisAlignment: outbound
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   ContentContainer(
                       outbound, inbound, msg, message, contact, quotedMessage),
