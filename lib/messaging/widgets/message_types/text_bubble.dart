@@ -15,7 +15,6 @@ class TextBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
-  final StoredMessage? quotedMessage;
   final String? isDateMarker;
 
   const TextBubble(
@@ -28,7 +27,6 @@ class TextBubble extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
-    this.quotedMessage,
     this.isDateMarker,
   ) : super();
 
@@ -67,8 +65,7 @@ class TextBubble extends StatelessWidget {
                     : CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ContentContainer(
-                      outbound, inbound, msg, message, contact, quotedMessage),
+                  ContentContainer(outbound, inbound, msg, message, contact),
                   StatusRow(outbound, inbound, reactions, msg, message)
                 ],
               )),
