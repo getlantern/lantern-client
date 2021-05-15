@@ -24,6 +24,8 @@ class QuoteBubble extends StatelessWidget {
             color: Colors.white),
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -33,6 +35,7 @@ class QuoteBubble extends StatelessWidget {
                 ),
                 Text(
                   matchIdToDisplayName(msg.replyToSenderId, contact),
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -47,6 +50,7 @@ class QuoteBubble extends StatelessWidget {
               children: [
                 Text(
                   getMessageTextById(msg.replyToId, quotedMessage)!,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
                     color: !outbound

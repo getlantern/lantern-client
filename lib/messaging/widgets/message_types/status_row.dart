@@ -26,7 +26,6 @@ class StatusRow extends StatelessWidget {
     reactions.forEach((key, value) {
       if (value.isNotEmpty) {
         reactionsList.add(Container(
-            margin: const EdgeInsets.only(top: 4),
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: GestureDetector(
                 // Tap on emoji to bring modal with breakdown of interactions
@@ -37,22 +36,33 @@ class StatusRow extends StatelessWidget {
     });
 
     return Container(
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-      ...reactionsList,
-      Opacity(
-        opacity: 0.5,
-        child: Text(
-          message.value.ts.toInt().humanizeDate(),
-          style: TextStyle(
-            color: outbound
-                ? Colors.white
-                : Colors.black, // TODO: consolidate colors here
-            fontSize: 12,
-          ),
-        ),
-      ),
-      if (statusIcon != null)
-        Transform.scale(scale: .5, child: Icon(statusIcon)),
-    ]));
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ...reactionsList,
+              Opacity(
+                opacity: 0.5,
+                child: Text(
+                  message.value.ts.toInt().humanizeDate(),
+                  style: TextStyle(
+                    color: outbound
+                        ? Colors.white
+                        : Colors.black, // TODO: consolidate colors here
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              if (statusIcon != null)
+                Opacity(
+                    opacity: 0.5,
+                    child: Transform.scale(
+                        scale: .5,
+                        child: Icon(
+                          statusIcon,
+                          color: outbound ? Colors.white : Colors.black,
+                        ))),
+            ]));
   }
 }
