@@ -224,6 +224,7 @@ class _ConversationState extends State<Conversation> {
                 padding: const EdgeInsets.all(8),
                 child: _buildReplyContainer(),
               ),
+            if (_emojiShowing) _buildEmojiKeyboard(),
             Padding(
               padding: const EdgeInsets.all(8),
               child: _buildMessageBar(context),
@@ -383,45 +384,48 @@ class _ConversationState extends State<Conversation> {
             child: const Icon(Icons.mic),
           ),
         ),
-      // Offstage(
-      //   offstage: !_emojiShowing,
-      //   child: SizedBox(
-      //     height: 250,
-      //     child: EmojiPicker(
-      //         onEmojiSelected: (Category category, Emoji emoji) {
-      //           _newMessage
-      //             ..text += emoji.emoji
-      //             ..selection = TextSelection.fromPosition(
-      //                 TextPosition(offset: _newMessage.text.length));
-      //         },
-      //         onBackspacePressed: () {
-      //           _newMessage
-      //             ..text = _newMessage.text.characters.skipLast(1).toString()
-      //             ..selection = TextSelection.fromPosition(
-      //                 TextPosition(offset: _newMessage.text.length));
-      //         },
-      //         config: const Config(
-      //           columns: 2,
-      //           emojiSizeMax: 32.0,
-      //           verticalSpacing: 0,
-      //           horizontalSpacing: 0,
-      //           initCategory: Category.RECENT,
-      //           bgColor: Color(0xFFF2F2F2),
-      //           indicatorColor: Colors.blue,
-      //           iconColor: Colors.grey,
-      //           iconColorSelected: Colors.blue,
-      //           progressIndicatorColor: Colors.blue,
-      //           backspaceColor: Colors.blue,
-      //           showRecentsTab: true,
-      //           recentsLimit: 28,
-      //           noRecentsText: 'No Recents',
-      //           noRecentsStyle: TextStyle(fontSize: 20, color: Colors.black26),
-      //           categoryIcons: CategoryIcons(),
-      //           buttonMode: ButtonMode.MATERIAL,
-      //         )),
-      //   ),
-      // ),
     ]);
+  }
+
+  Offstage _buildEmojiKeyboard() {
+    return Offstage(
+      offstage: !_emojiShowing,
+      child: Container(
+        height: 250,
+        child: EmojiPicker(
+            onEmojiSelected: (Category category, Emoji emoji) {
+              _newMessage
+                ..text += emoji.emoji
+                ..selection = TextSelection.fromPosition(
+                    TextPosition(offset: _newMessage.text.length));
+            },
+            onBackspacePressed: () {
+              _newMessage
+                ..text = _newMessage.text.characters.skipLast(1).toString()
+                ..selection = TextSelection.fromPosition(
+                    TextPosition(offset: _newMessage.text.length));
+            },
+            config: const Config(
+              columns: 10,
+              emojiSizeMax: 20.0,
+              verticalSpacing: 0,
+              horizontalSpacing: 0,
+              initCategory: Category.RECENT,
+              bgColor: Color(0xFFF2F2F2),
+              indicatorColor: Colors.black, // TODO: generalize in theme
+              iconColor: Colors.grey,
+              iconColorSelected: Colors.black,
+              progressIndicatorColor: Colors.black,
+              backspaceColor: Colors.black,
+              showRecentsTab: true,
+              recentsLimit: 28,
+              noRecentsText: 'No Recents',
+              noRecentsStyle: TextStyle(fontSize: 16, color: Colors.black26),
+              categoryIcons: CategoryIcons(),
+              buttonMode: ButtonMode.MATERIAL,
+            )),
+      ),
+    );
   }
 
   Widget _buildVoiceRecorder() {
