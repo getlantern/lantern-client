@@ -348,6 +348,7 @@ class _ConversationState extends State<Conversation> {
                         setState(() {
                           _isSendIconVisible = false;
                           _isReplying = false;
+                          _emojiShowing = false;
                         });
                         _send(_newMessage.value.text,
                             replyToSenderId: _quotedMessage?.senderId,
@@ -394,6 +395,9 @@ class _ConversationState extends State<Conversation> {
         height: 250,
         child: EmojiPicker(
             onEmojiSelected: (Category category, Emoji emoji) {
+              setState(() {
+                _isSendIconVisible = true;
+              });
               _newMessage
                 ..text += emoji.emoji
                 ..selection = TextSelection.fromPosition(
