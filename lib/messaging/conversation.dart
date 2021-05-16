@@ -251,6 +251,8 @@ class _ConversationState extends State<Conversation> {
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       return ListView.builder(
+        // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         reverse: true,
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {

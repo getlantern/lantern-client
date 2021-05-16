@@ -31,6 +31,7 @@ class ContentContainer extends StatelessWidget {
                 if (msg.replyToId.isNotEmpty)
                   QuoteBubble(outbound, msg, contact),
               ]),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.text.isNotEmpty)
                   Flexible(
