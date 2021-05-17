@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:video_player/video_player.dart';
-import 'dart:io';
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
@@ -71,33 +72,27 @@ class _ImageAttachment extends StatelessWidget {
 
 class _VideoAttachment extends StatefulWidget {
   final StoredAttachment _attachment;
+
   _VideoAttachment(this._attachment);
+
   @override
   _VideoAttachmentState createState() => _VideoAttachmentState();
 }
 
 class _VideoAttachmentState extends State<_VideoAttachment> {
-  late VideoPlayerController _controller;
-  File _videoFile = File('');
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(_videoFile)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
   }
 
   Future<void> _playVideo() async {
-    if (mounted) {
-      _controller = VideoPlayerController.file(_videoFile);
-      setState(() {
-        _controller.value.isPlaying ? _controller.pause() : _controller.play();
-      });
-      setState(() {});
-    }
+    setState(() {
+      _controller?.value?.isPlaying ?? false
+          ? _controller?.pause()
+          : _controller?.play();
+    });
   }
 
   @override
@@ -115,7 +110,7 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
         // successful download, onto decrypting
         return Container(
           child: FutureBuilder(
-              future: model.decryptAttachment(widget._attachment),
+              future: model.thumbnail(widget._attachment),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
@@ -124,29 +119,53 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
                     }
-                    setState(() {
-                      _videoFile = File(snapshot.data).readAsBytes() as File;
-                    });
-                    return Stack(children: <Widget>[
-                      Center(
-                        child: _controller.value.isInitialized
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        _controller?.value?.isPlaying ?? false
                             ? AspectRatio(
-                                aspectRatio: _controller.value.aspectRatio,
-                                child: VideoPlayer(_controller),
+                                aspectRatio: _controller!.value.aspectRatio,
+                                child: VideoPlayer(_controller!),
                               )
-                            : Container(),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () async => await _playVideo(),
-                        child: Icon(
-                          _controller.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                        ),
-                      ),
-                    ]);
+                            : Image.memory(snapshot.data,
+                                filterQuality: FilterQuality.high, scale: 3),
+                        IconButton(
+                            iconSize: 96,
+                            icon: Icon(_controller?.value?.isPlaying ?? false
+                                ? Icons.stop_circle_outlined
+                                : Icons.play_circle_outline),
+                            onPressed: () {
+                              if (_controller?.value?.isPlaying ?? false) {
+                                setState(() {
+                                  _controller?.pause();
+                                });
+                                return;
+                              }
+
+                              // TODO: properly handle resumption of paused video
+                              // dispose existing video controller if necessary
+                              _controller?.dispose();
+                              model
+                                  .decryptVideoForPlayback(widget._attachment)
+                                  .then((videoFilename) {
+                                setState(() {
+                                  _controller = VideoPlayerController.file(
+                                      File(videoFilename))
+                                    ..initialize().then((_) {
+                                      setState(() {
+                                        _controller?.play().then((_) {
+                                          // update UI after playing stops
+                                          setState(() {});
+                                        });
+                                      });
+                                    });
+                                });
+                              });
+                            }),
+                      ],
+                    );
                   default:
-                    return Container();
+                    return const Icon(Icons.image);
                 }
               }),
         );
@@ -156,7 +175,7 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _controller?.dispose();
   }
 }
 
@@ -205,10 +224,11 @@ class _AudioAttachmentState extends State<_AudioAttachment> {
                   });
                 });
                 var bytes = await model.decryptAttachment(widget._attachment);
-                // TODO: playBytes only works on Android 23+. For older platforms, we need to find another
-                // way to expose the data, perhaps as a temp file or through a
-                // local HTTPS server (one that uses disposable tokens for
-                // authentication so that other apps can't access our content).
+                // TODO: playBytes only works on Android 23+. For older
+                // platforms, we need to find another way to expose the data,
+                // perhaps as a temp file or through a local HTTPS server (one
+                // that uses disposable tokens for authentication so that other
+                // apps can't access our content).
                 unawaited(audioPlayer.playBytes(bytes).then((value) {
                   setState(() {
                     _playing = true;
