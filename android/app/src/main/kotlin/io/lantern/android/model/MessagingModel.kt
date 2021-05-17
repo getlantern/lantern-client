@@ -64,7 +64,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "filePickerLoadAttachment" -> {
                 val filePath = call.argument<String>("filePath")
                 val file = File(filePath!!)
-                return messaging.createAttachment(file).toByteArray()
+                val metadata = call.argument<Map<String, String>?>("metadata")
+                return messaging.createAttachment(file, "", metadata).toByteArray()
             }
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)

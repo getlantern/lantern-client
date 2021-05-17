@@ -26,10 +26,11 @@ class VoiceMemoState extends State<VoiceMemo> {
 
     switch (widget.attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
+      case StoredAttachment_Status.PENDING_ENCRYPTION:
         return const Icon(Icons.pending_outlined);
       case StoredAttachment_Status.FAILED:
         return const Icon(Icons.error_outlined);
-      default:
+      case StoredAttachment_Status.DONE:
         return Transform.scale(
           scale: 1.5,
           child: IconButton(
@@ -63,6 +64,8 @@ class VoiceMemoState extends State<VoiceMemo> {
             },
           ),
         );
+      default:
+        return Container();
     }
   }
 }

@@ -18,6 +18,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'audio/mp3':
     case 'audio/flac':
     case 'audio/mpeg':
+      final attachmentTitle = attachment.attachment.metadata['title'];
       return Flexible(
           child: Column(
         children: [
@@ -38,7 +39,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Text(
-              'Audio file', // TODO: add i18n
+              attachmentTitle as String,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
