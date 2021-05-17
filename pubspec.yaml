@@ -63,6 +63,8 @@ dependencies:
 
   wechat_camera_picker: ^2.1.0
 
+  video_player: ^2.1.1
+
   flutter_svg: ^0.21.0-nullsafety.0
 
   url_launcher: ^6.0.3
@@ -70,6 +72,7 @@ dependencies:
   fluttertoast: ^8.0.3
 
   badges: ^2.0.0-nullsafety.1
+
 
 dev_dependencies:
   flutter_test:
