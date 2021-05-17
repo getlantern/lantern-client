@@ -105,6 +105,13 @@ class MessagingModel extends Model {
     }).then((value) => value as Uint8List);
   }
 
+  Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {
+    return methodChannel
+        .invokeMethod('decryptVideoForPlayback', <String, dynamic>{
+      'attachment': attachment.writeToBuffer(),
+    }).then((value) => value as String);
+  }
+
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));
