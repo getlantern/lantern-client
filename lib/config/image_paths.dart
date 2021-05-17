@@ -29,4 +29,7 @@ class ImagePaths {
   static const foreign_icon = 'assets/images/foreign_icon.svg';
   static const dropdown_icon = 'assets/images/dropdown_icon.svg';
   static const open_in_new_icon = 'assets/images/open_in_new_icon.svg';
+
+  static const number_1 = 'assets/images/number_1.svg';
+  static const number_2 = 'assets/images/number_2.svg';
 }

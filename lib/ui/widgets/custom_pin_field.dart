@@ -19,7 +19,7 @@ class CustomPinField extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        Clipboard.getData("text/plain").then((valueFromClipboard) {
+        Clipboard.getData('text/plain').then((valueFromClipboard) {
           if (valueFromClipboard != null &&
               valueFromClipboard.text!.length == length) {
             showDialog(

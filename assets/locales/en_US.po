@@ -180,8 +180,18 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
-msgid "Enter your device linking PIN"
-msgstr "Enter your device linking PIN"
+msgid "Enter or paste device linking PIN"
+msgstr "Enter or paste device linking PIN"
 
 msgid "recovery_email_sent"
 msgstr "An email with a recovery code has been sent to %s if this account exists. Input the code from that email above. This email may take several hours to arrive."
+
+msgid "Add Device"
+msgstr "Add Device"
+
+msgid "approve_device_step_1"
+msgstr "Open 'Authorize Device for Pro' from the account menu on the device you wish to link, then select 'Link with PIN'.
+
+msgid "approve_device_step_2"
+msgstr "Enter the linking code obtained from step 1"
+
