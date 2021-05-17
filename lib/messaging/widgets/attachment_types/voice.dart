@@ -5,18 +5,18 @@ import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
 
 /// An attachment that shows an audio player.
-class AudioAttachment extends StatefulWidget {
+class VoiceMemo extends StatefulWidget {
   final StoredAttachment attachment;
 
-  AudioAttachment(this.attachment);
+  VoiceMemo(this.attachment);
 
   @override
   State<StatefulWidget> createState() {
-    return AudioAttachmentState();
+    return VoiceMemoState();
   }
 }
 
-class AudioAttachmentState extends State<AudioAttachment> {
+class VoiceMemoState extends State<VoiceMemo> {
   var _playing = false;
 
   @override
@@ -31,7 +31,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
         return const Icon(Icons.error_outlined);
       default:
         return Transform.scale(
-          scale: 1,
+          scale: 1.5,
           child: IconButton(
             icon: Icon(_playing
                 ? Icons.stop_circle_outlined
