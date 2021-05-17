@@ -16,8 +16,8 @@ import android.os.Build;
 import android.os.IBinder;
 
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.Launcher;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.service.ServiceHelper;

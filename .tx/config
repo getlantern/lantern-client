@@ -2,9 +2,17 @@
 host = https://www.transifex.com
 
 [lantern.lantern-android]
-file_filter = app/src/main/res/values-<lang>/strings.xml
-lang_map = sl_SI:sl, fr_FR:fr-rFR, pt_BR:pt-rBR, zh_TW:zh-rTW, zh_CN:zh-rCN, ru_RU:ru-rRU, bn_IN:bn-rIN, tk_TM:tk-rTM, zh_HK:zh-rHK, lt_LT:lt-rLT, hi_IN:hi-rIN, he_IL:he-rIL, fa_IR:fa-rIR, bg_BG:bg-rBG, bs_BA:bs-rBA, en_GB:en-rGB, ku_IQ:ku-rIQ, pl_PL:pl-rPL, pt_PT:pt-rPT, uk_UA:uk-rUA
-source_file = app/src/main/res/values/strings.xml
+file_filter = android/app/src/main/res/values-<lang>/strings.xml
+lang_map = sl_SI:sl, fr_FR:fr-rFR, pt_BR:pt-rBR, zh-Hans:zh-rCN, zh-Hant:zh-rHK, zh_TW:zh-rTW, ru_RU:ru-rRU, bn_IN:bn-rIN, tk_TM:tk-rTM, lt_LT:lt-rLT, hi_IN:hi-rIN, he_IL:he-rIL, fa_IR:fa-rIR, bg_BG:bg-rBG, bs_BA:bs-rBA, en_GB:en-rGB, ku_IQ:ku-rIQ, pl_PL:pl-rPL, pt_PT:pt-rPT, uk_UA:uk-rUA, my_MM:my-rMM
+minimum_perc = 100
+source_file = android/app/src/main/res/values/strings.xml
 source_lang = en_US
 type = ANDROID
 
+[lantern.lantern-flutter]
+file_filter = assets/locales/<lang>.po
+lang_map = sl_SI:sl, fr_FR:fr-rFR, pt_BR:pt-rBR, zh-Hans:zh-rCN, zh-Hant:zh-rHK, zh_TW:zh-rTW, ru_RU:ru-rRU, bn_IN:bn-rIN, tk_TM:tk-rTM, lt_LT:lt-rLT, hi_IN:hi-rIN, he_IL:he-rIL, fa_IR:fa-rIR, bg_BG:bg-rBG, bs_BA:bs-rBA, en_GB:en-rGB, ku_IQ:ku-rIQ, pl_PL:pl-rPL, pt_PT:pt-rPT, uk_UA:uk-rUA, my_MM:my-rMM
+minimum_perc = 100
+source_file = assets/locales/en_US.po
+source_lang = en_US
+type = PO

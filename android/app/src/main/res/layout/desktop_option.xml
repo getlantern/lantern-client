@@ -1,108 +1,64 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" 
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:id="@+id/desktopView"
-    android:background="@color/accent_white"
-    tools:context=".DesktopActivity">
+    android:layout_height="match_parent">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        lantern:layout_constraintStart_toStartOf="parent"
+        lantern:layout_constraintEnd_toEndOf="parent"
+        lantern:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/lantern_desktop"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_lantern_bg"
+        android:layout_marginTop="@dimen/space_large"/>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/titlebar_fragment"
-                android:layout_marginTop="36dp"      
-                android:layout_weight="1"
-                android:padding="15dp"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_vertical"> 
+    <TextView
+        android:text="@string/lantern_desktop_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:textColor="@color/tertiary_green"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
 
+    <com.google.android.material.textview.MaterialTextView
+        android:text="@string/lantern_desktop_share_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginHorizontal="@dimen/space_large"/>
 
-                <ImageView
-                    android:id="@+id/desktop_graphic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/laptop"
-                    />                                  
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/receive_lantern"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/receive_lantern"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-                <EditText
-                    android:id="@+id/emailInput"
-                    android:layout_width="270dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="@string/email_hint"
-                    android:ems="10"
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
-                    android:drawableLeft="@drawable/email_active"
-                    android:drawablePadding="5dp"
-                    android:paddingLeft="8dp"
-                    android:singleLine="true"
-                    android:autoText="false"
-                    android:layout_marginTop="25dp"
-                    android:layout_gravity="center"   
-                    android:gravity="left"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:inputType="textEmailAddress" />
-
-                <View
-                    android:id="@+id/separator"
-                    android:background="@color/black"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_below="@+id/emailInput"
-                    android:layout_width = "220dp"
-                    android:layout_height="1dip"
-                    android:layout_gravity="center"
-                    android:layout_centerVertical ="true"
-                    android:layout_alignParentTop="true"
-                    />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sendBtn"
-                    android:layout_height="41.5dp"
-                    android:layout_width="250dp"
-                    android:layout_marginTop="40dp"
-                    android:text="@string/send_desktop"
-                    android:textAppearance="@style/MediumText" 
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="true"
-                    android:elevation="2dp"
-                    android:minHeight="48dp"
-                    android:layout_gravity="center"
-                    android:layout_centerHorizontal ="true"
-                    android:textColor="@color/accent_white"
-                    android:clickable = "true"
-                    android:background="@drawable/send_btn"
-                    android:onClick="sendDesktopVersion" />
-            </LinearLayout>
-    </RelativeLayout>
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/share_link"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,144 @@
+# 
+# Translators:
+# Aşkın Yollu <askin@askin.ws>, 2021
+# Volkan Gezer <volkangezer@gmail.com>, 2021
+# Derek F <derek@getlantern.org>, 2021
+# efe kerem sözeri <eksozeri@hotmail.com>, 2021
+# Alexander B. <road2monstercat@gmail.com>, 2021
+# Teo Westbrook, 2021
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021\n"
+"Language-Team: Turkish (https://www.transifex.com/lantern-1/teams/94371/tr/)\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "Günlük Veri Kullanımı"
+
+msgid "is"
+msgstr ":"
+
+msgid "on"
+msgstr "Bağlandı"
+
+msgid "off"
+msgstr "Bağlantıyı kes"
+
+msgid "Disconnecting"
+msgstr "Bağlantı kesiliyor..."
+
+msgid "Connecting"
+msgstr "Bağlanılıyor..."
+
+msgid "Go Pro Title"
+msgstr "Pro'ya Yükseltin!"
+
+msgid "Go Pro Description"
+msgstr "Daha yüksek hızlara ve sınırsız veriye ulaşın!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Sınırsız veri + ücretsiz Yinbi kripto para!"
+
+msgid "Server Location"
+msgstr "Sunucu Konumu"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern, sizi en iyi veri merkezlerimize otomatik olarak bağlamak için "
+"akıllı sunucu seçimini kullanır."
+
+msgid "OK"
+msgstr "TAMAM"
+
+msgid "pro_account_management"
+msgstr "Pro Hesap Yönetimi"
+
+msgid "add_device"
+msgstr "Hesap Ekle"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Lantern Pro'ya Yükseltin"
+
+msgid "authorize_device_for_pro"
+msgstr "Cihazı Pro Hesabına Dahil Et"
+
+msgid "invite_friends"
+msgstr "Arkadaşlarını Davet Et"
+
+msgid "desktop_version"
+msgstr "Masaüstü sürümü"
+
+msgid "free_yinbi_crypto"
+msgstr "Ücretsiz Yinbi Kripto Para"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi Kullanımı"
+
+msgid "settings"
+msgstr "Ayarlar"
+
+msgid "proxy_all"
+msgstr "Tümünde proxy kullan AÇIK"
+
+msgid "language"
+msgstr "Dil"
+
+msgid "report_issue"
+msgstr "Sorun bildir"
+
+msgid "title_proxy_all_dialog"
+msgstr "Tümünde Proxy Kullan"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Etkinleştirilirse, bütün trafik Lantern üzerinden gönderilecektir (daha "
+"güvenli). Devre dışı bırakılırsa, yalnızca engellenen trafik Lantern "
+"üzerinden gönderilecektir (daha hızlı)."
+
+msgid "Exchange"
+msgstr "Değiştir"
+
+msgid "Account"
+msgstr "Hesap"
+
+msgid "In partnership with"
+msgstr "Ortaklığıyla: "
+
+msgid "Buy"
+msgstr "Satın Al"
+
+msgid "With"
+msgstr "İle"
+
+msgid "Online Wallets"
+msgstr "Çevrimiçi Cüzdanlar"
+
+msgid "Bank Transfers"
+msgstr "Banka Havaleleri"
+
+msgid "Gift Cards"
+msgstr "Hediye Kartları"
+
+msgid "Game Cards"
+msgstr "Oyun Kartları"
+
+msgid "Cash Payment"
+msgstr "Nakit Ödeme"
+
+msgid "Digital Currencies"
+msgstr "Dijital Para Birimleri"
+
+msgid "Payment Method"
+msgstr "Ödeme Yöntemi"
+
+msgid "SHOW BEST DEALS"
+msgstr "EN İYİ FIRSATLARI GÖSTER"
+
+msgid "VPN Status"
+msgstr "VPN Durumu"
+
+msgid "VPN"
+msgstr "VPN"

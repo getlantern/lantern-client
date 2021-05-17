@@ -1,0 +1,140 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021\n"
+"Language-Team: Burmese (https://www.transifex.com/lantern-1/teams/94371/my/)\n"
+"Language: my\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "နေ့စဉ် ဒေတာအသုံးပြုမှု"
+
+msgid "is"
+msgstr "သည်"
+
+msgid "on"
+msgstr "ချိတ်ဆက်ထားသည်"
+
+msgid "off"
+msgstr "အဆက်ပြတ်"
+
+msgid "Disconnecting"
+msgstr "ချိတ်ဆက်မှု ဖြုတ်နေသည်..."
+
+msgid "Connecting"
+msgstr "ချိတ်ဆက်နေသည် ..."
+
+msgid "Go Pro Title"
+msgstr "Pro သို့ သွားပါ။"
+
+msgid "Go Pro Description"
+msgstr ""
+"ပိုမိုမြန်ဆန်သော အမြန်နှုန်းများနှင့် အကန့်အသတ်မရှိသော ဒေတာကို လော့ဖွင့်ပါ!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "ဒေတာ အကန့်အသတ်မရှိ + အခမဲ့ Yinbi cryptocurrency!"
+
+msgid "Server Location"
+msgstr "ဆာဗာတည်နေရာ"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern သည် ကျွန်ုပ်တို့၏ အကောင်းဆုံး ဒေတာစင်တာများနှင့် အလိုအလျောက် "
+"ချိတ်ဆက်ရန်အတွက် စမတ် ဆာဗာ ရွေးချယ်ရေးကို အသုံးပြုသည်။"
+
+msgid "OK"
+msgstr "အိုကေ"
+
+msgid "pro_account_management"
+msgstr "Pro အကောင့်စီမံခန့်ခွဲမှု"
+
+msgid "add_device"
+msgstr "ကိရိယာထည့်ပါ"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Lantern Pro ကိုအဆင့်မြှင့်တင်ပါ"
+
+msgid "authorize_device_for_pro"
+msgstr "Pro အတွက် ကိရိယာကို ခွင့်ပြုပါ"
+
+msgid "invite_friends"
+msgstr "သူငယ်ချင်းများကိုဖိတ်ကြားသည်"
+
+msgid "desktop_version"
+msgstr "ဒပ်စတော့ ဗားရှင်း"
+
+msgid "free_yinbi_crypto"
+msgstr "အခမဲ့ Yinbi Cryptocurrency"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi လဲလှယ်ရယူခြင်း"
+
+msgid "settings"
+msgstr "ချိန်ညှိချက်များ"
+
+msgid "proxy_all"
+msgstr "Proxy အားလုံးကို ဖွင့်ပါ"
+
+msgid "language"
+msgstr "ဘာသာစကား"
+
+msgid "report_issue"
+msgstr "ပြဿနာတစ်ခုကို သတင်းပို့ပါ"
+
+msgid "title_proxy_all_dialog"
+msgstr "Proxy အားလုံး"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"ဖွင့်ထားပါက traffic အားလုံးကို Lantern မှတစ်ဆင့် ပေးပို့ပါလိမ့်မည် (ပို၍ "
+"လုံခြုံစိတ်ချ)။ ပိတ်ထားပါက ပိတ်ပင်ထားသော traffic ကိုသာ Lantern မှတစ်ဆင့် "
+"ပေးပို့ပါလိမ့်မည် (ပို၍ မြန်ဆန်)။"
+
+msgid "Exchange"
+msgstr "လဲလှယ်ခြင်း"
+
+msgid "Account"
+msgstr "အကောင့်"
+
+msgid "In partnership with"
+msgstr "နှင့် ပူးပေါင်း"
+
+msgid "Buy"
+msgstr "ဝယ်ပါ"
+
+msgid "With"
+msgstr "နှင့်"
+
+msgid "Online Wallets"
+msgstr "အွန်လိုင်း ပိုက်ဆံအိတ်များ"
+
+msgid "Bank Transfers"
+msgstr "ဘဏ်ငွေလွှဲပြောင်းခြင်းများ"
+
+msgid "Gift Cards"
+msgstr "လက်ဆောင်ကဒ်များ"
+
+msgid "Game Cards"
+msgstr "ဂိမ်းကဒ်များ"
+
+msgid "Cash Payment"
+msgstr "ငွေသားပေးချေမှု"
+
+msgid "Digital Currencies"
+msgstr "ဒစ်ဂျစ်တယ်ငွေကြေး"
+
+msgid "Payment Method"
+msgstr "ငွေပေးချေမှုနည်းလမ်း"
+
+msgid "SHOW BEST DEALS"
+msgstr "အကောင်းဆုံး သဘောတူညီမှုများကို ပြပါ"
+
+msgid "VPN Status"
+msgstr "VPN အခြေအနေ"
+
+msgid "VPN"
+msgstr "VPN"

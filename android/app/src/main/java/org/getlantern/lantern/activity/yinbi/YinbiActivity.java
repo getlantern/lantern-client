@@ -41,9 +41,6 @@ public abstract class YinbiActivity extends FragmentActivity {
 
         renewPro = (Button)findViewById(R.id.renewPro);
         enterProCodes = (Button)findViewById(R.id.enterProCodes);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            enterProCodes.setStateListAnimator(null);
-        }
         yinbiDesc = (TextView)findViewById(R.id.yinbiDesc);
         visitYinbi = (TextView)findViewById(R.id.visitYinbi);
 
@@ -60,8 +57,10 @@ public abstract class YinbiActivity extends FragmentActivity {
     }
 
     protected void highlightWebsite(final ClickSpan.OnClickListener clickSpan, final TextView desc) {
-        final int color = ContextCompat.getColor(this, R.color.pink);
-        Utils.clickify(desc, getString(R.string.yinbi_website), color, clickSpan);
+        final int color = ContextCompat.getColor(this, R.color.tertiary_green);
+        Utils.clickify(desc, getString(R.string.yinbi_website), color, true, clickSpan);
+        // add underline divider on this text
+
     }
 
     @Override

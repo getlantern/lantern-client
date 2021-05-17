@@ -1,13 +1,13 @@
 package org.getlantern.lantern.model
 
 import java.text.DateFormat
-import java.util.*
+import java.util.Calendar
 
 class Bandwidth(
-        val percent: Long, // [0, 100]
-        val remaining: Long, // in MB
-        val allowed: Long, // in MB
-        val ttlSeconds: Long // number of seconds left before data reset
+    val percent: Long, // [0, 100]
+    val remaining: Long, // in MB
+    val allowed: Long, // in MB
+    val ttlSeconds: Long // number of seconds left before data reset
 ) {
 
     val used: Long
@@ -21,12 +21,14 @@ class Bandwidth(
         calendar.add(Calendar.SECOND, ttlSeconds.toInt())
         calendar[Calendar.SECOND] = 0
 
-        val format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        expiresAtString = format.format(calendar.time);
+        val format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+        expiresAtString = format.format(calendar.time)
     }
 
     override fun toString(): String {
-        return String.format("Bandwidth update: %d/%d (%d). TTL: %d (seconds) Expires At: %s",
-                remaining, allowed, percent, ttlSeconds, expiresAtString)
+        return String.format(
+            "Bandwidth update: %d/%d (%d). TTL: %d (seconds) Expires At: %s",
+            remaining, allowed, percent, ttlSeconds, expiresAtString
+        )
     }
 }

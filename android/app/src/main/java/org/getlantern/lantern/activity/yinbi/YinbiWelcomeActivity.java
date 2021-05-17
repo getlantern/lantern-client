@@ -11,8 +11,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.LanternProActivity;
 
 @EActivity(R.layout.welcome_yinbi)
 public class YinbiWelcomeActivity extends FragmentActivity {
@@ -39,6 +39,6 @@ public class YinbiWelcomeActivity extends FragmentActivity {
 
     @Click(R.id.continueToLanternPro)
     void continueToPro(View view) {
-        startActivity(new Intent(this, LanternProActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
