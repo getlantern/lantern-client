@@ -391,6 +391,7 @@ class _ConversationState extends State<Conversation> {
   }
 
   Offstage _buildEmojiKeyboard() {
+    // https://github.com/Fintasys/emoji_picker_flutter
     return Offstage(
       offstage: !_emojiShowing,
       child: Container(
