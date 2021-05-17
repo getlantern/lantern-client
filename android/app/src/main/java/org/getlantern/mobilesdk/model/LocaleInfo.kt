@@ -3,7 +3,7 @@ package org.getlantern.mobilesdk.model
 import android.content.Context
 import org.getlantern.lantern.R
 import java.text.Collator
-import java.util.*
+import java.util.Locale
 
 class LocaleInfo(var label: String, val language: String, var country: String) : Comparable<LocaleInfo> {
 
@@ -44,11 +44,7 @@ class LocaleInfo(var label: String, val language: String, var country: String) :
         }
 
         private fun toTitleCase(s: String): String {
-            return if (s.length == 0) {
-                s
-            } else Character.toUpperCase(s[0]).toString() + s.substring(1)
+            return if (s.isEmpty()) s else Character.toUpperCase(s[0]).toString() + s.substring(1)
         }
     }
-
 }
-

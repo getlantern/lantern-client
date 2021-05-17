@@ -9,11 +9,18 @@ import android.os.AsyncTask
 import android.os.Build
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.util.showAlertDialog
+import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import java.util.*
 
-
-class MailSender(private val context: Context, private val template: String, private val showProgress: Boolean, private val finish: Boolean) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
+class MailSender @JvmOverloads constructor(
+    private val context: Context,
+    private val template: String,
+    private val showProgress: Boolean,
+    private val finish: Boolean,
+    private val title: String? = null,
+    private val message: String? = null
+) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
     private var dialog: ProgressDialog? = null
     private val userEmail: String
     private val appVersion: String
@@ -25,7 +32,7 @@ class MailSender(private val context: Context, private val template: String, pri
 
     override fun onError(message: String) {
         try {
-            Utils.showUIErrorDialog(context as Activity, message)
+            (context as Activity).showErrorDialog(message)
         } catch (e: Exception) {
             Logger.error(TAG, "Unable to show error message sending email: ", e)
         }
@@ -100,7 +107,11 @@ class MailSender(private val context: Context, private val template: String, pri
             }
         }
         if (showProgress) {
-            Utils.showAlertDialog(context as Activity, getAppName(), getResponseMessage(success), finish)
+            (context as Activity).showAlertDialog(
+                title ?: getAppName(),
+                message ?: getResponseMessage(success),
+                finish = finish
+            )
         }
     }
 

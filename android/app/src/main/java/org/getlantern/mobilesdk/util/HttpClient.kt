@@ -2,8 +2,15 @@ package org.getlantern.mobilesdk.util
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import okhttp3.*
+import okhttp3.CacheControl
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.Headers.Companion.toHeaders
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import okio.Buffer
 import org.getlantern.mobilesdk.Logger
 import java.io.IOException
@@ -25,23 +32,29 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
      * @param proxyHost The host of the local proxy.
      * @param proxyPort The port of the local proxy.
      */
-    constructor(proxyHost: String, proxyPort: Int) : this(OkHttpClient.Builder()
+    constructor(proxyHost: String, proxyPort: Int) : this(
+        OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(proxyHost, proxyPort)))
-            .build())
+            .build()
+    )
 
     fun request(method: String, url: HttpUrl, cb: HttpCallback) {
         request(method, url, null, null, cb)
     }
 
-    fun request(method: String, url: HttpUrl,
-                headers: Map<String, String>?,
-                _body: RequestBody?, cb: HttpCallback) {
+    fun request(
+        method: String,
+        url: HttpUrl,
+        headers: Map<String, String>?,
+        _body: RequestBody?,
+        cb: HttpCallback
+    ) {
         var body = _body
         var builder = Request.Builder()
-                .cacheControl(CacheControl.FORCE_NETWORK)
+            .cacheControl(CacheControl.FORCE_NETWORK)
         if (headers != null) {
             builder = builder.headers(headers.toHeaders())
         }
@@ -54,8 +67,13 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
         }
         val request = builder.build()
         if (headers != null) {
-            Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                    method, url, request.headers))
+            Logger.debug(
+                TAG,
+                String.format(
+                    "Sending a %s request to %s (Headers: %s)",
+                    method, url, request.headers
+                )
+            )
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url))
         }

@@ -38,23 +38,22 @@ class _ImageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment() in the FutureBuilder
+    // TODO(kallirroi): Look into the blinking effect when an image is uploaded to conversation
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
+      case StoredAttachment_Status.PENDING_ENCRYPTION:
         // pending download
         return const CircularProgressIndicator();
       case StoredAttachment_Status.FAILED:
         // error with download
         return const Icon(Icons.error_outlined);
-      default:
+      case StoredAttachment_Status.DONE:
         // successful download, onto decrypting
         return Container(
           child: FutureBuilder(
               future: model.thumbnail(attachment),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator();
                   case ConnectionState.done:
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
@@ -62,10 +61,12 @@ class _ImageAttachment extends StatelessWidget {
                     return Image.memory(snapshot.data,
                         filterQuality: FilterQuality.high, scale: 3);
                   default:
-                    return const Icon(Icons.image);
+                    return const CircularProgressIndicator();
                 }
               }),
         );
+      default:
+        return Container();
     }
   }
 }

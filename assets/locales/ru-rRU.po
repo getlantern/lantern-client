@@ -1,0 +1,147 @@
+# 
+# Translators:
+# Lowrider <pams@imail.ru>, 2021
+# sayanvd <sayanvd@yandex.ru>, 2021
+# Derek F <derek@getlantern.org>, 2021
+# IvanLykov <chabib@list.ru>, 2021
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2021
+# Helen R <helen.russel88@gmail.com>, 2021
+# Helen Russel <coo@workogram.com>, 2021
+# e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2021
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2021\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "Daily Data Usage"
+msgstr "Ежедневное использование данных"
+
+msgid "is"
+msgstr "это"
+
+msgid "on"
+msgstr "Подключён"
+
+msgid "off"
+msgstr "Отключен"
+
+msgid "Disconnecting"
+msgstr "Отключение…"
+
+msgid "Connecting"
+msgstr "Подключение..."
+
+msgid "Go Pro Title"
+msgstr "Перейдите на версию Pro!"
+
+msgid "Go Pro Description"
+msgstr ""
+"Наслаждайтесь более высокой скоростью и неограниченным объемом данных!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Неограниченный объем данных + бесплатная криптовалюта Yinbi!"
+
+msgid "Server Location"
+msgstr "Местоположение сервера"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern использует технологию умного выбора серверов, чтобы автоматически "
+"подключать вас к нашим лучшим дата-центрам."
+
+msgid "OK"
+msgstr "Ок"
+
+msgid "pro_account_management"
+msgstr "Управление аккаунтом Pro"
+
+msgid "add_device"
+msgstr "Добавить устройство"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Обновление до Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Авторизовать устр. для Pro"
+
+msgid "invite_friends"
+msgstr "Пригласи друзей "
+
+msgid "desktop_version"
+msgstr "Версия для компьютера"
+
+msgid "free_yinbi_crypto"
+msgstr "Бесплатная криптовалюта Yinbi"
+
+msgid "yinbi_redemption"
+msgstr "Получение Yinbi"
+
+msgid "settings"
+msgstr "Настройки"
+
+msgid "proxy_all"
+msgstr "Параметр \"Проксировать весь трафик\" включен"
+
+msgid "language"
+msgstr "Язык"
+
+msgid "report_issue"
+msgstr "Сообщить о проблеме"
+
+msgid "title_proxy_all_dialog"
+msgstr "Проксировать весь трафик"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Если этот параметр включен, весь трафик будет отправляться через Lantern "
+"(более безопасный вариант). Если этот параметр отключен, через Lantern будет"
+" отправляться только заблокированный трафик (более быстрый вариант)."
+
+msgid "Exchange"
+msgstr "Обмен"
+
+msgid "Account"
+msgstr "Аккаунт"
+
+msgid "In partnership with"
+msgstr "Совместно с"
+
+msgid "Buy"
+msgstr "Купить"
+
+msgid "With"
+msgstr "С"
+
+msgid "Online Wallets"
+msgstr "Онлайн-кошельки"
+
+msgid "Bank Transfers"
+msgstr "Банковские переводы"
+
+msgid "Gift Cards"
+msgstr "Подарочные карты"
+
+msgid "Game Cards"
+msgstr "Игровые карточки"
+
+msgid "Cash Payment"
+msgstr "Платеж наличными"
+
+msgid "Digital Currencies"
+msgstr "Криптовалюты"
+
+msgid "Payment Method"
+msgstr "Способ оплаты"
+
+msgid "SHOW BEST DEALS"
+msgstr "ПОКАЗАТЬ ЛУЧШИЕ ПРЕДЛОЖЕНИЯ"
+
+msgid "VPN Status"
+msgstr "Статус VPN"
+
+msgid "VPN"
+msgstr "VPN"

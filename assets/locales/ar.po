@@ -1,0 +1,143 @@
+# 
+# Translators:
+# lamine Kacimi <k_lamine27@yahoo.fr>, 2021
+# Derek F <derek@getlantern.org>, 2021
+# Rima Sghaier, 2021
+# Amin Jobran, 2021
+# Abed Abedd <abderrahman.younis@gmail.com>, 2021
+# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2021
+# e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021\n"
+"Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "Daily Data Usage"
+msgstr "الاستخدام اليومي للبيانات"
+
+msgid "is"
+msgstr "يتم الآن"
+
+msgid "on"
+msgstr "موصول"
+
+msgid "off"
+msgstr "مفصول"
+
+msgid "Disconnecting"
+msgstr "قطع الاتصال"
+
+msgid "Connecting"
+msgstr "ربط ..."
+
+msgid "Go Pro Title"
+msgstr "Go Pro!"
+
+msgid "Go Pro Description"
+msgstr "احصل على سرعات فائقة وبيانات غير محدودة!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "بيانات غير محدودة + عملة Yinbi المشفرة المجانية."
+
+msgid "Server Location"
+msgstr "موقع الخادم"
+
+msgid "Server Location Info"
+msgstr ""
+"تستخدم Lantern باقة خادم ذكي لربطك تلقائيًا بأفضل مراكز البيانات لدينا."
+
+msgid "OK"
+msgstr "حسناً"
+
+msgid "pro_account_management"
+msgstr "إدارة حساب برو"
+
+msgid "add_device"
+msgstr "أضف جهاز"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "الترقية الى لاتيرن برو"
+
+msgid "authorize_device_for_pro"
+msgstr "منح إذن للجهاز لحساب برو"
+
+msgid "invite_friends"
+msgstr "ادعو أصدقائك"
+
+msgid "desktop_version"
+msgstr "إصدار سطح المكتب"
+
+msgid "free_yinbi_crypto"
+msgstr "عملة Yinbi المشفرة المجانية"
+
+msgid "yinbi_redemption"
+msgstr "استرداد Yinbi"
+
+msgid "settings"
+msgstr "الاعدادات"
+
+msgid "proxy_all"
+msgstr "الوسيط قيد التشغيل"
+
+msgid "language"
+msgstr "لغة"
+
+msgid "report_issue"
+msgstr "الإبلاغ عن مشكلة"
+
+msgid "title_proxy_all_dialog"
+msgstr "الوسيط للجميع"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"في حال التمكين، يُجرى إرسال نسبة استخدام الشبكة من قبل Lantern (أكثر "
+"أمانًا). في حال عدم التمكين، يُجرى إرسال نسبة استخدام الشبكة المحظورة من قبل"
+" Lantern (أسرع)."
+
+msgid "Exchange"
+msgstr "التبادل"
+
+msgid "Account"
+msgstr "حساب"
+
+msgid "In partnership with"
+msgstr "بالشراكة مع"
+
+msgid "Buy"
+msgstr "الشراء"
+
+msgid "With"
+msgstr "من خلال"
+
+msgid "Online Wallets"
+msgstr "المَحافظ الإلكترونية"
+
+msgid "Bank Transfers"
+msgstr " التحويلات البنكية"
+
+msgid "Gift Cards"
+msgstr "بطاقات الهدايا"
+
+msgid "Game Cards"
+msgstr "بطاقات الألعاب"
+
+msgid "Cash Payment"
+msgstr "الدفع النقدي"
+
+msgid "Digital Currencies"
+msgstr "العملات الرقمية"
+
+msgid "Payment Method"
+msgstr "وسيلة الدفع"
+
+msgid "SHOW BEST DEALS"
+msgstr "إظهار أفضل المعاملات"
+
+msgid "VPN Status"
+msgstr "حالة VPN"
+
+msgid "VPN"
+msgstr "VPN"

@@ -47,6 +47,7 @@ import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.Constants;
 import org.getlantern.lantern.model.ListAdapter;
 import org.getlantern.lantern.model.NavItem;
+import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.vpn.LanternVpnService;
@@ -337,7 +338,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         String appName = getResources().getString(R.string.app_name);
         String noUpdateTitle = getResources().getString(R.string.no_update_available);
         String noUpdateMsg = String.format(getResources().getString(R.string.have_latest_version), appName, appVersion);
-        Utils.showAlertDialog(this, noUpdateTitle, noUpdateMsg, false);
+        ActivityExtKt.showAlertDialog(this, noUpdateTitle, noUpdateMsg);
     }
 
     @Override
@@ -551,7 +552,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (url == null) {
                 String appName = getResources().getString(R.string.app_name);
                 String message = String.format(getResources().getString(R.string.error_checking_for_update), appName);
-                Utils.showAlertDialog(activity, appName, message, false);
+                ActivityExtKt.showAlertDialog(activity, appName, message);
                 return;
             }
             if (url.equals("")) {
@@ -606,17 +607,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 Logger.debug(PERMISSIONS_TAG, msg.toString());
 
-                Utils.showAlertDialog(this,
-                        getString(R.string.please_allow_lantern_to),
-                        Html.fromHtml(msg.toString()),
-                        getString(R.string.continue_),
-                        false,
-                        new Runnable() {
-                    @Override
-                    public void run() {
-                        ActivityCompat.requestPermissions(BaseActivity.this, neededPermissions, FULL_PERMISSIONS_REQUEST);
-                    }
-                });
+                ActivityExtKt.showAlertDialog(this,
+                    getString(R.string.please_allow_lantern_to),
+                    Html.fromHtml(msg.toString()),
+                    null,
+                    () -> ActivityCompat.requestPermissions(BaseActivity.this, neededPermissions, FULL_PERMISSIONS_REQUEST),
+                    getString(R.string.continue_));
                 return;
             }
 

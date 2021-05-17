@@ -1,145 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/accent_white"
-    android:baselineAligned="false"
-    android:id="@+id/inviteView"
-    tools:context=".InviteActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <fragment
         xmlns:lantern="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/titlebar_fragment"
-        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        lantern:layout_constraintStart_toStartOf="parent"
+        lantern:layout_constraintEnd_toEndOf="parent"
+        lantern:layout_constraintTop_toTopOf="parent"
         class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleBackgroundColor="@drawable/nav_background_white"
         lantern:titleText="@string/invite_friends_btn"/>
 
-    <RelativeLayout
-        android:id="@+id/credits_left"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/codeTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:elevation="2dp">
+        android:layout_marginStart="@dimen/space_large"
+        android:text="@string/referral_code"
+        android:layout_marginTop="@dimen/space_large"
+        android:textAllCaps="true"
+        android:textAppearance="?attr/textAppearanceOverline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
-        <ImageView
-            android:id="@+id/invite_friends"
-            android:paddingTop="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/coins"/>
-    </RelativeLayout>
+    <View
+        android:id="@+id/bgText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/light_grey"
+        app:layout_constraintEnd_toEndOf="@+id/referralCode"
+        app:layout_constraintStart_toStartOf="@+id/referralCode"
+        app:layout_constraintTop_toTopOf="@+id/referralCode"
+        app:layout_constraintBottom_toBottomOf="@+id/referralCode"/>
 
-    <RelativeLayout
-        android:id="@+id/invite_bottom_sheet"
-        android:layout_width="fill_parent"
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/codeTitle"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_height="@dimen/divider"
+        android:layout_marginTop="@dimen/space_small"
+        android:background="@color/divider"/>
+
+    <ImageView
+        android:id="@+id/imgvStar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/accent_white"
-        android:paddingBottom="15dp"
-        android:layout_weight="1"
-        android:padding="8dp">
+        android:src="@drawable/ic_star"
+        android:layout_marginTop="@dimen/space_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        android:layout_marginStart="@dimen/space_large"/>
 
-        <LinearLayout
-            android:id="@+id/referral_code_view"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/referralCode"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/space_small"
+        android:paddingHorizontal="@dimen/space_small"
+        tools:text="8DDDDD"
+        android:gravity="center_vertical"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintEnd_toStartOf="@+id/imgvCopy"
+        app:layout_constraintStart_toEndOf="@+id/imgvStar"
+        app:layout_constraintTop_toTopOf="@+id/divider1"
+        app:layout_constraintBottom_toBottomOf="@+id/divider2"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/share_with_friends"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/MediumText"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:lineSpacingExtra="5dp"
-                android:text="@string/share_friends_text"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:textColor="@color/black"/>
+    <ImageView
+        android:id="@+id/imgvCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_copy"
+        android:padding="@dimen/space_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgvStar"
+        app:layout_constraintBottom_toBottomOf="@+id/imgvStar"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"/>
 
+    <ImageView
+        android:id="@+id/imgvChecked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_filled_check"
+        android:padding="@dimen/space_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgvStar"
+        app:layout_constraintBottom_toBottomOf="@+id/imgvStar"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"/>
 
-         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/invite_friends_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:padding="10dp"
-            android:lineSpacingExtra="5dp"
-            android:text="@string/invite_friends_welcome"
-            android:textSize="14sp"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:textColor="@color/black"/>
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgvStar"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_height="@dimen/divider"
+        android:layout_marginTop="@dimen/space_large"
+        android:background="@color/divider"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/your_referral_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/share_your_referral_code"
-            android:textAllCaps="true"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:textColor="@color/black"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvShare"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/referral_code_share_description_pro"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_large"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/referralCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="LRC5TWCX5"
-            android:textAllCaps="true"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:alpha=".87"
-            android:gravity="center"
-            android:textColor="@color/pro_blue_color"
-            />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/textInviteBtn"
-                android:layout_height="36dp"
-                android:layout_width="216dp"
-                android:text="@string/text_invite"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
-                android:minHeight="48dp"
-                android:textAllCaps="true"
-                android:textColor="@color/pink"
-                android:clickable = "true"
-                android:background="@drawable/text_invite"
-                android:layout_centerInParent="true"
-                android:onClick="textInvite" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/emailInviteBtn"
-                android:layout_height="36dp"
-                android:layout_width="216dp"
-                android:text="@string/email_invite"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="14sp"
-                android:elevation="2dp"
-                android:minHeight="48dp"
-                android:textAllCaps="true"
-                android:textColor="@color/accent_white"
-                android:clickable = "true"
-                android:layout_marginTop="10dp"
-                android:background="@color/pink"
-                android:layout_centerInParent="true"
-                android:onClick="emailInvite" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/referral_code_share"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

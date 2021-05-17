@@ -14,8 +14,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.LanternFreeActivity
 import org.getlantern.mobilesdk.Logger
 
 /**
@@ -32,8 +32,8 @@ class Notifier : BroadcastReceiver() {
 
         // See http://developer.android.com/guide/topics/ui/notifiers/notifications.html
         val builder = NotificationCompat.Builder(context)
-                .setContentTitle(resources.getString(R.string.lantern_notification))
-                .setAutoCancel(true)
+            .setContentTitle(resources.getString(R.string.lantern_notification))
+            .setAutoCancel(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.drawable.icon_alert_white)
@@ -58,16 +58,17 @@ class Notifier : BroadcastReceiver() {
             }
         }
 
-        val resultIntent = Intent(context, LanternFreeActivity::class.java)
+        val resultIntent = Intent(context, MainActivity::class.java)
 
         // For unknown reason, passing this (instead of zero) resumes the
         // existing activity if possible, instead of creating a new one.
         val requestCode = System.currentTimeMillis().toInt()
         val resultPendingIntent = PendingIntent.getActivity(
-                context,
-                requestCode,
-                resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            context,
+            requestCode,
+            resultIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         builder.setContentIntent(resultPendingIntent)
         val notification = builder.build()
 
@@ -112,7 +113,8 @@ class Notifier : BroadcastReceiver() {
 
             // create a channel for data usage notifications
             notificationManager.createNotificationChannel(
-                    NotificationChannel(CHANNEL_DATA_USAGE, CHANNEL_DATA_USAGE, NotificationManager.IMPORTANCE_DEFAULT))
+                NotificationChannel(CHANNEL_DATA_USAGE, CHANNEL_DATA_USAGE, NotificationManager.IMPORTANCE_DEFAULT)
+            )
 
             // create other notification channels
         }

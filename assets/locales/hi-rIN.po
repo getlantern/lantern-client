@@ -1,0 +1,142 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# Kalyan Dikshit <dikshitrocks93@gmail.com>, 2021
+# E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2021
+# tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2021
+# tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2021\n"
+"Language-Team: Hindi (India) (https://www.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
+"Language: hi_IN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "हर दिन का डेटा उपयोग"
+
+msgid "is"
+msgstr "है"
+
+msgid "on"
+msgstr "कनेक्टेड"
+
+msgid "off"
+msgstr "डिस्कनेक्ट किया गया"
+
+msgid "Disconnecting"
+msgstr "डिस्कनेक्ट किया गया..."
+
+msgid "Connecting"
+msgstr "कनेक्ट हो रहा है..."
+
+msgid "Go Pro Title"
+msgstr "Pro आज़माएँ!"
+
+msgid "Go Pro Description"
+msgstr "तेज गति, और असीमित डेटा अनलॉक करें!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "असीमित डेटा + फ़्री Yinbi क्रिप्टोक्यूरेंसी!"
+
+msgid "Server Location"
+msgstr "सर्वर स्थान"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern आपको हमारे सर्वश्रेष्ठ डेटा केंद्रों से अपने आप जोड़ने के लिए "
+"स्मार्ट सर्वर चयन का उपयोग करता है."
+
+msgid "OK"
+msgstr "ठीक है"
+
+msgid "pro_account_management"
+msgstr "Pro खाता प्रबंधन"
+
+msgid "add_device"
+msgstr "डिवाइस जोडे"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "लालटेन के लिए प्रो उन्नयन"
+
+msgid "authorize_device_for_pro"
+msgstr "प्रो के लिए डिवाइस अधिकृत करें"
+
+msgid "invite_friends"
+msgstr "मित्रों को आमंत्रित करें"
+
+msgid "desktop_version"
+msgstr "डेस्कटॉप संस्करण"
+
+msgid "free_yinbi_crypto"
+msgstr "फ़्री Yinbi क्रिप्टोक्यूरेंसी"
+
+msgid "yinbi_redemption"
+msgstr "यिनबी निष्क्रय"
+
+msgid "settings"
+msgstr "सेटिंग्स"
+
+msgid "proxy_all"
+msgstr "प्रॉक्सी सभी चालू है"
+
+msgid "language"
+msgstr "भाषा"
+
+msgid "report_issue"
+msgstr "समस्या की रिपोर्ट करें"
+
+msgid "title_proxy_all_dialog"
+msgstr "प्रॉक्सी सभी"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"सक्षम होने पर, सभी ट्रैफ़िक को Latern (सबसे सुरक्षित विकल्प) के माध्यम से "
+"भेजा जाएगा. यदि डिसेबल किया जाता है, तो केवल Latern (तेज) के माध्यम से केवल "
+"ब्लॉक की गई ट्रैफिक को भेजा जाएगा."
+
+msgid "Exchange"
+msgstr "एक्सचेंज"
+
+msgid "Account"
+msgstr "अकाउंट"
+
+msgid "In partnership with"
+msgstr "उनके साथ पार्टनरशिप में"
+
+msgid "Buy"
+msgstr "खरीदें"
+
+msgid "With"
+msgstr " साथ"
+
+msgid "Online Wallets"
+msgstr "ऑनलाइन वॉलेट"
+
+msgid "Bank Transfers"
+msgstr "बैंक ट्रांसफर"
+
+msgid "Gift Cards"
+msgstr "गिफ़्ट कार्ड"
+
+msgid "Game Cards"
+msgstr "गेम कार्ड"
+
+msgid "Cash Payment"
+msgstr "कैश पेमेंट"
+
+msgid "Digital Currencies"
+msgstr "डिजिटल करेंसी"
+
+msgid "Payment Method"
+msgstr "भुगतान का तरीका"
+
+msgid "SHOW BEST DEALS"
+msgstr "सबसे बढ़िया डील दिखाएँ"
+
+msgid "VPN Status"
+msgstr "VPN स्थिति"
+
+msgid "VPN"
+msgstr "VPN"

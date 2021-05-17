@@ -9,9 +9,9 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:lantern/messaging/widgets/filepicker_extensions.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -32,9 +32,7 @@ class _ConversationState extends State<Conversation> {
   var _totalPanned = 0.0;
 
   // Filepicker vars
-  final int maxAssetsCount = 9;
   List<AssetEntity> assets = <AssetEntity>[];
-  bool isDisplayingDetail = true;
   ThemeData get currentTheme => context.themeData;
 
   @override
@@ -85,12 +83,9 @@ class _ConversationState extends State<Conversation> {
     AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
       context,
-      maxAssets: maxAssetsCount,
-      gridCount: 2,
-      pathThumbSize: 80,
       selectedAssets: assets,
-      themeColor: currentTheme.accentColor,
-      // textDelegate: DefaultTextDelegate(),
+      textDelegate:
+          EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
       specialItemPosition: SpecialItemPosition.prepend,
       specialItemBuilder: (BuildContext context) {
@@ -105,8 +100,9 @@ class _ConversationState extends State<Conversation> {
               Navigator.of(context).pop(<AssetEntity>[result]);
             }
           },
+          // TODO(kallirroi): Refine the UI/UX
           child: const Center(
-            child: Icon(Icons.camera_enhance, size: 42.0),
+            child: Icon(Icons.camera),
           ),
         );
       },
@@ -120,7 +116,7 @@ class _ConversationState extends State<Conversation> {
         return;
       }
       //
-      // Here is an example of an AssetEntity:
+      // NOTE: An example of an AssetEntity object:
       //
       // _latitude:null
       // _longitude:null
@@ -153,14 +149,19 @@ class _ConversationState extends State<Conversation> {
       // type:AssetType (AssetType.image)
       // videoDuration:Duration (0:00:00.000000)
 
-      var pickedFile = pickedAssets.first;
-      var absolutePath = await pickedFile.originFile
-          .then((file) async => file?.path) as String;
-      var attachment = await model.filePickerLoadAttachment(absolutePath);
-      _send(_newMessage.value.text, attachments: [attachment]);
+      pickedAssets.forEach((el) async {
+        final absolutePath =
+            await el.originFile.then((file) async => file?.path) as String;
+        final attachment = await model.filePickerLoadAttachment(absolutePath);
+        _send(_newMessage.value.text, attachments: [attachment]);
+      });
     } catch (e) {
-      // TODO: display error pop up
-      print(e);
+      showInfoDialog(
+        context,
+        title: 'Error'.i18n,
+        // TODO: Add i18n below
+        des: 'Something went wrong while sharing a media file.',
+      );
     }
     AssetPicker.unregisterObserve();
   }
@@ -229,6 +230,7 @@ class _ConversationState extends State<Conversation> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Row(children: [
+                // TODO(kallirroi): Refine the UI/UX
                 Expanded(
                   child: TextFormField(
                     textInputAction: TextInputAction.send,
@@ -250,10 +252,12 @@ class _ConversationState extends State<Conversation> {
                     ),
                   ),
                 ),
+                // TODO(kallirroi): Refine the UI/UX
                 GestureDetector(
                   onTap: () => _selectFilesToShare(),
                   child: const Icon(Icons.image),
                 ),
+                // TODO(kallirroi): Refine the UI/UX
                 GestureDetector(
                   onTapDown: (details) {
                     _startRecording();
@@ -266,6 +270,7 @@ class _ConversationState extends State<Conversation> {
               ]),
             ),
           ]),
+          // TODO(kallirroi): Refine the UI/UX
           if (_recording)
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               Flexible(
