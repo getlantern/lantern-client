@@ -88,10 +88,12 @@ class MessagingModel extends Model {
         .then((value) => value as Uint8List);
   }
 
-  Future<Uint8List> filePickerLoadAttachment(String filePath) async {
+  Future<Uint8List> filePickerLoadAttachment(
+      String filePath, Map<String, String> metadata) async {
     return methodChannel.invokeMethod(
         'filePickerLoadAttachment', <String, dynamic>{
-      'filePath': filePath
+      'filePath': filePath,
+      'metadata': metadata
     }).then((value) => value as Uint8List);
   }
 
