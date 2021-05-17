@@ -56,11 +56,6 @@ public class ProAccountActivity extends FragmentActivity {
 
     @AfterViews
     void afterViews() {
-        if (!LanternApp.getSession().deviceLinked()) {
-            finish();
-            return;
-        }
-
         proAccountText.setText(LanternApp.getSession().getExpirationStr());
 
         updateDeviceList();
@@ -71,11 +66,6 @@ public class ProAccountActivity extends FragmentActivity {
     @Click(R.id.renewProBtn)
     void onClickRenewProBtn(View v) {
         renewPro(v);
-    }
-
-    @Click(R.id.addDeviceBtn)
-    void onClickAddDeviceBtn(View v) {
-        NavigatorKt.openAddDevice(this);
     }
 
     public void updateDeviceList() {

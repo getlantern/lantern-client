@@ -7,7 +7,6 @@ import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -172,14 +171,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         } else {
             WelcomeActivity_::class.java
         }
-    }
-
-    fun deviceLinked(): Boolean {
-        if (!isDeviceLinked()) {
-            launchActivity(AddDeviceActivity_::class.java, false)
-            return false
-        }
-        return true
     }
 
     fun setVerifyCode(code: String) {

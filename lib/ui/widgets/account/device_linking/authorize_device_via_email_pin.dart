@@ -41,8 +41,8 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 Container(
                   margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                   alignment: Alignment.center,
-                  child:
-                      Text('Enter your device linking PIN'.i18n.toUpperCase()),
+                  child: Text(
+                      'Enter or paste device linking PIN'.i18n.toUpperCase()),
                 ),
                 CustomPinField(
                   length: 6,

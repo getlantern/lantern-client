@@ -66,6 +66,7 @@ class SessionModel(
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
+            "approveDevice" -> approveDevice(call.argument("code")!!, result)
             else -> super.onMethodCall(call, result)
         }
     }
@@ -202,6 +203,28 @@ class SessionModel(
                         LanternApp.getSession().setIsProUser(true)
                         activity.showAlertDialog(activity.getString(R.string.device_added), activity.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check), { activity.openHome() })
                     }
+                }
+            }
+        )
+    }
+
+    private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
+        val formBody: RequestBody? = FormBody.Builder()
+            .add("code", code)
+            .build()
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/link-code-approve"), formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Error approving device link code: $error")
+                    activity.runOnUiThread {
+                        methodCallResult.error("errorApprovingDevice", t?.message, null)
+                    }
+                    activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
+                }
+
+                override fun onSuccess(response: Response, result: JsonObject) {
+                    activity.showAlertDialog(activity.resources.getString(R.string.device_added), activity.resources.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check), Runnable { activity.openHome() })
                 }
             }
         )

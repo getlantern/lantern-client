@@ -17,7 +17,6 @@ class LanternNavigator {
   static const String SCREEN_LINK_PIN = 'SCREEN_LINK_PIN';
   static const String SCREEN_SCREEN_REPORT_ISSUE = 'SCREEN_SCREEN_REPORT_ISSUE';
   static const String SCREEN_ACCOUNT_MANAGEMENT = 'SCREEN_ACCOUNT_MANAGEMENT';
-  static const String SCREEN_ADD_DEVICE = 'SCREEN_ADD_DEVICE';
   static const String SCREEN_UPGRADE_TO_LANTERN_PRO =
       'SCREEN_UPGRADE_TO_LANTERN_PRO';
 }

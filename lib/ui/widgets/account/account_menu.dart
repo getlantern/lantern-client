@@ -19,10 +19,6 @@ class AccountMenu extends StatelessWidget {
     Navigator.pushNamed(context, routeAuthorizeDeviceForPro);
   }
 
-  void addDevice() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_ADD_DEVICE);
-  }
-
   void inviteFriends() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
   }
@@ -95,7 +91,9 @@ class AccountMenu extends StatelessWidget {
           icon: ImagePaths.devices_icon,
           title: 'add_device'.i18n,
           showTopDivider: true,
-          onTap: addDevice),
+          onTap: () {
+            Navigator.pushNamed(context, routeApproveDevice);
+          }),
       SettingsItem(
         icon: ImagePaths.star_icon,
         title: 'invite_friends'.i18n,

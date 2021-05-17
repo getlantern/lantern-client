@@ -51,6 +51,12 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<String> approveDevice(String code) {
+    return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
+      'code': code,
+    }).then((value) => value as String);
+  }
+
   Future<void> resendRecoveryCode() {
     return methodChannel
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});

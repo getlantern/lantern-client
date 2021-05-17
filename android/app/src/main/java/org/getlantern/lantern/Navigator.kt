@@ -10,7 +10,6 @@ import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.ProAccountActivity_
 import org.getlantern.lantern.activity.RegisterProActivity_
-import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
@@ -29,7 +28,6 @@ class Navigator(
         const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
         const val SCREEN_ACCOUNT_MANAGEMENT = "SCREEN_ACCOUNT_MANAGEMENT"
-        const val SCREEN_ADD_DEVICE = "SCREEN_ADD_DEVICE"
         const val SCREEN_UPGRADE_TO_LANTERN_PRO = "SCREEN_UPGRADE_TO_LANTERN_PRO"
     }
 
@@ -65,7 +63,6 @@ class Navigator(
             SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             SCREEN_ACCOUNT_MANAGEMENT -> ProAccountActivity_::class.java
-            SCREEN_ADD_DEVICE -> AddDeviceActivity_::class.java
             SCREEN_UPGRADE_TO_LANTERN_PRO -> PlansActivity_::class.java
             else -> null
         }
@@ -84,8 +81,4 @@ fun Activity.openHome() {
 
 fun Activity.openCheckOutReseller() {
     startActivity(Intent(this, RegisterProActivity_::class.java))
-}
-
-fun Activity.openAddDevice() {
-    startActivity(Intent(this, AddDeviceActivity_::class.java))
 }
