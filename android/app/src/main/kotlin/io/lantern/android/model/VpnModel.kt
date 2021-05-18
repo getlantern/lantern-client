@@ -20,8 +20,8 @@ class VpnModel(
 
     init {
         val start = System.currentTimeMillis()
-        db.registerType(20, Vpn.ServerInfo::class.java)
-        db.registerType(21, Vpn.Bandwidth::class.java)
+        db.registerType(1000, Vpn.ServerInfo::class.java)
+        db.registerType(1001, Vpn.Bandwidth::class.java)
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         db.mutate { tx ->
             // initialize vpn status for fresh install

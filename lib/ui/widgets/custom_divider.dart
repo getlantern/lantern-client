@@ -3,7 +3,7 @@ import 'package:lantern/package_store.dart';
 class CustomDivider extends StatelessWidget {
   late final String? label;
   late final TextStyle? labelStyle;
-  late final EdgeInsets? padding;
+  late final EdgeInsetsGeometry? padding;
 
   CustomDivider({Key? key, this.label, this.labelStyle, this.padding})
       : super(key: key);

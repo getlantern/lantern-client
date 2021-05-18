@@ -8,10 +8,10 @@ msgstr "Daily Data Usage"
 msgid "is"
 msgstr "is"
 
-msgid "on"
+msgid "connected"
 msgstr "Connected"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Disconnected"
 
 msgid "Disconnecting"
@@ -195,3 +195,17 @@ msgstr "Open 'Authorize Device for Pro' from the account menu on the device you 
 msgid "approve_device_step_2"
 msgstr "Enter the linking code obtained from step 1"
 
+msgid "Pro Account Expiration"
+msgstr "Pro Account Expiration"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro Devices (Up to 3)"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Log Out"
+msgstr "Log Out"
+
+msgid "confirm_remove_device"
+msgstr "Are you sure you want to unlink this device from your Pro account?"

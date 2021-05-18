@@ -13,12 +13,13 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
+import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.SessionManager
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -27,7 +28,7 @@ import org.getlantern.mobilesdk.model.SessionManager
 class SessionModel(
     private val activity: Activity,
     flutterEngine: FlutterEngine? = null,
-) : BaseModel("session", flutterEngine, masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA)) {
+) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     companion object {
@@ -67,6 +68,7 @@ class SessionModel(
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
+            "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             else -> super.onMethodCall(call, result)
         }
     }
@@ -178,7 +180,7 @@ class SessionModel(
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to validate link code", t)
                     activity.runOnUiThread {
-                        methodCallResult.error("unableToVerifyRecoveryCode", t?.message, null)
+                        methodCallResult.error("unableToVerifyRecoveryCode", t?.message, error?.message)
                     }
                     if (error == null) {
                         Logger.error(TAG, "Unable to validate recovery code and no error to show")
@@ -209,22 +211,86 @@ class SessionModel(
     }
 
     private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody? = FormBody.Builder()
+        val formBody: RequestBody = FormBody.Builder()
             .add("code", code)
             .build()
+
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-approve"), formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error approving device link code: $error")
                     activity.runOnUiThread {
-                        methodCallResult.error("errorApprovingDevice", t?.message, null)
+                        methodCallResult.error("errorApprovingDevice", t?.message, error?.message)
                     }
                     activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
                 }
 
                 override fun onSuccess(response: Response, result: JsonObject) {
-                    activity.showAlertDialog(activity.resources.getString(R.string.device_added), activity.resources.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check), Runnable { activity.openHome() })
+                    lanternClient.userData(object : ProUserCallback {
+                        override fun onSuccess(response: Response, userData: ProUser) {
+                            Logger.debug(TAG, "Successfully updated userData")
+                            activity.runOnUiThread {
+                                methodCallResult.success("approvedDevice")
+                            }
+                            activity.showAlertDialog(activity.resources.getString(R.string.device_added), activity.resources.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check))
+                        }
+
+                        override fun onFailure(t: Throwable?, error: ProError?) {
+                            Logger.error(TAG, "Unable to fetch user data: $t.message")
+                            methodCallResult.error("errorUpdatingUserData", t?.message, error?.message)
+                        }
+                    })
+                }
+            }
+        )
+    }
+
+    private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
+        Logger.debug(TAG, "Removing device $deviceId")
+        val formBody: RequestBody = FormBody.Builder()
+            .add("deviceID", deviceId)
+            .build()
+
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/user-link-remove"), formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error != null) {
+                        Logger.error(TAG, "Error removing device: $error")
+                    }
+                    activity.runOnUiThread {
+                        methodCallResult.error("errorApprovingDevice", t?.message, error?.message)
+                    }
+                    // encountered some issue removing the device; display an error
+                    activity.showErrorDialog(activity.resources.getString(R.string.unable_remove_device))
+                }
+
+                override fun onSuccess(response: Response, result: JsonObject) {
+                    Logger.debug(TAG, "Successfully removed device")
+
+                    if (deviceId == LanternApp.getSession().deviceID) {
+                        // if one of the devices we removed is the current device
+                        // make sure to logout
+                        Logger.debug(TAG, "Logging out")
+                        LanternApp.getSession().unlinkDevice()
+                        activity.openHome()
+                        return
+                    }
+
+                    lanternClient.userData(object : ProUserCallback {
+                        override fun onSuccess(response: Response, userData: ProUser) {
+                            Logger.debug(TAG, "Successfully updated userData")
+                            activity.runOnUiThread {
+                                methodCallResult.success("removedDevice")
+                            }
+                        }
+
+                        override fun onFailure(t: Throwable?, error: ProError?) {
+                            Logger.error(TAG, "Unable to fetch user data: $t.message")
+                            methodCallResult.error("errorUpdatingUserData", t?.message, error?.message)
+                        }
+                    })
                 }
             }
         )

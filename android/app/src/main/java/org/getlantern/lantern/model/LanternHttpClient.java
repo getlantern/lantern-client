@@ -304,9 +304,6 @@ public class LanternHttpClient extends HttpClient {
                     if (user != null) {
                         Logger.debug(TAG, "User ID is " + user.getUserId());
                         LanternApp.getSession().storeUserData(user);
-                        for (Device device: user.getDevices()) {
-                            LanternApp.getSession().addDevice(device);
-                        }
                     }
                     if (cb != null) {
                         cb.onSuccess(response, user);

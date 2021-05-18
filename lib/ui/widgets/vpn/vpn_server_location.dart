@@ -68,7 +68,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
               );
             } else {
               return Text(
-                'N/A',
+                'n/a'.i18n,
                 style: tsTitleTrailVPNItem(),
               );
             }

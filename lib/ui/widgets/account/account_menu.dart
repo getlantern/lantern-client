@@ -6,10 +6,6 @@ import 'settings_item.dart';
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
-  void openProAccountManagement() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_ACCOUNT_MANAGEMENT);
-  }
-
   void upgradeToLanternPro() {
     LanternNavigator.startScreen(
         LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
@@ -85,7 +81,9 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.account_icon,
         title: 'pro_account_management'.i18n,
         showArrow: true,
-        onTap: openProAccountManagement,
+        onTap: () {
+          Navigator.pushNamed(context, routeProAccount);
+        },
       ),
       SettingsItem(
           icon: ImagePaths.devices_icon,
