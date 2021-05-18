@@ -40,6 +40,9 @@ class ProAccount extends StatelessWidget {
                 icon: ImagePaths.clock_icon,
                 title: expirationDate,
                 inkVerticalPadding: 4,
+                onTap: () {
+                  LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
+                },
                 child: Text('Renew'.i18n.toUpperCase(),
                     style: TextStyle(
                         color: primaryPink, fontWeight: FontWeight.w500)),
