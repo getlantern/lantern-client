@@ -22,9 +22,9 @@ class ApproveDevice extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: Container(
-            margin: const EdgeInsetsDirectional.only(top: 4),
-            child: Text(text),
+          child: Text(
+            text,
+            style: tsExplanation(),
           ),
         ),
       ],
@@ -51,7 +51,9 @@ class ApproveDevice extends StatelessWidget {
                   margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                   alignment: Alignment.center,
                   child: Text(
-                      'Enter or paste device linking PIN'.i18n.toUpperCase()),
+                    'Enter or paste device linking PIN'.i18n.toUpperCase(),
+                    style: tsPinLabel(),
+                  ),
                 ),
                 CustomPinField(
                   length: 6,

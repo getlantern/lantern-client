@@ -52,3 +52,7 @@ TextStyle? tsTitleHeadVPNItem() =>
 
 TextStyle? tsTitleTrailVPNItem() =>
     GoogleFonts.roboto().copyWith(fontWeight: FontWeight.w600, fontSize: 14);
+
+TextStyle? tsPinLabel() => const TextStyle(fontSize: 10);
+
+TextStyle? tsExplanation() => const TextStyle(height: 1.6);

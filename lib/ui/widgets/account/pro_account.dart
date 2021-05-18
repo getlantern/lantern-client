@@ -110,7 +110,7 @@ class ProAccount extends StatelessWidget {
 
           if (devices.devices.length < 3) {
             items.add(SettingsItem(
-              title: "",
+              title: '',
               inkVerticalPadding: 4,
               showTopDivider: true,
               onTap: () {

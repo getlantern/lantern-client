@@ -17,40 +17,38 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var button = OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        backgroundColor: inverted ? white : primaryPink,
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        side: BorderSide(width: 2, color: primaryPink),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              text.toUpperCase(),
-              style: TextStyle(
-                  color: inverted ? primaryPink : white, fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(width: 5),
-            if (iconPath != null)
-              CustomAssetImage(
-                path: iconPath!,
-                color: Colors.white,
-              )
-          ],
+    return SizedBox(
+      height: 56,
+      width: width,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: inverted ? white : primaryPink,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          side: BorderSide(width: 2, color: primaryPink),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                text.toUpperCase(),
+                style: TextStyle(
+                    color: inverted ? primaryPink : white, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              if (iconPath != null) const SizedBox(width: 5),
+              if (iconPath != null)
+                CustomAssetImage(
+                  path: iconPath!,
+                  color: Colors.white,
+                )
+            ],
+          ),
         ),
       ),
     );
-
-    if (width != null) {
-      return SizedBox(width: width, child: button);
-    } else {
-      return button;
-    }
   }
 }
