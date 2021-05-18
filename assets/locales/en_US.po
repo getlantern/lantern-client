@@ -195,6 +195,9 @@ msgstr "Enter the linking code obtained from step 1"
 msgid "Pro Account Expiration"
 msgstr "Pro Account Expiration"
 
+msgid "Renew"
+msgstr "Renew"
+
 msgid "pro_devices_header"
 msgstr "Lantern Pro Devices (Up to 3)"
 
