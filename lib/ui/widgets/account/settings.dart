@@ -32,6 +32,7 @@ class Settings extends StatelessWidget {
       title: 'settings'.i18n,
       body: ListView(
         padding: const EdgeInsetsDirectional.only(
+          top: 2,
           bottom: 8,
           start: 20,
           end: 20,
@@ -40,7 +41,6 @@ class Settings extends StatelessWidget {
           SettingsItem(
             icon: ImagePaths.key_icon,
             title: 'proxy_all'.i18n,
-            inkVerticalPadding: 4,
             openInfoDialog: openInfoProxyAll,
             child: sessionModel
                 .proxyAll((BuildContext context, bool proxyAll, Widget? child) {
@@ -62,7 +62,6 @@ class Settings extends StatelessWidget {
           SettingsItem(
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
-            showTopDivider: true,
             showArrow: true,
             onTap: () {
               changeLanguage(context);
@@ -82,7 +81,6 @@ class Settings extends StatelessWidget {
           SettingsItem(
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,
-            showTopDivider: true,
             showArrow: true,
             onTap: reportIssue,
           )

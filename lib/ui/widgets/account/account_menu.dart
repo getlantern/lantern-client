@@ -67,7 +67,6 @@ class AccountMenu extends StatelessWidget {
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
-        showTopDivider: true,
         onTap: () {
           openSettings(context);
         },
@@ -88,7 +87,6 @@ class AccountMenu extends StatelessWidget {
       SettingsItem(
           icon: ImagePaths.devices_icon,
           title: 'add_device'.i18n,
-          showTopDivider: true,
           onTap: () {
             Navigator.pushNamed(context, routeApproveDevice);
           }),
@@ -110,7 +108,6 @@ class AccountMenu extends StatelessWidget {
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
-        showTopDivider: true,
         onTap: () {
           openSettings(context);
         },
@@ -127,7 +124,7 @@ class AccountMenu extends StatelessWidget {
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
           children: proUser ? proItems(context) : freeItems(context),
         );
       }),
