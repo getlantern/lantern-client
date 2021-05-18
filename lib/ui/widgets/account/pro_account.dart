@@ -109,6 +109,7 @@ class ProAccount extends StatelessWidget {
             items.add(SettingsItem(
               title: "",
               inkVerticalPadding: 4,
+              showTopDivider: true,
               onTap: () {
                 Navigator.pushNamed(context, routeApproveDevice);
               },
