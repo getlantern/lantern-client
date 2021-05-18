@@ -4,14 +4,16 @@ class CustomDivider extends StatelessWidget {
   late final String? label;
   late final TextStyle? labelStyle;
   late final EdgeInsetsGeometry? padding;
+  late final double height;
 
-  CustomDivider({Key? key, this.label, this.labelStyle, this.padding})
+  CustomDivider(
+      {Key? key, this.label, this.labelStyle, this.padding, this.height = 20})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var divider = SizedBox(
-      height: 20,
+      height: height,
       child: Stack(
         alignment: Alignment.center,
         children: [

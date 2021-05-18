@@ -2,7 +2,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-import '../section_header.dart';
+import '../settings_section_header.dart';
 import 'settings_item.dart';
 
 class ProAccount extends StatelessWidget {
@@ -19,7 +19,7 @@ class ProAccount extends StatelessWidget {
         return sessionModel
             .devices((BuildContext context, Devices devices, Widget? child) {
           var items = [
-            SectionHeader(
+            SettingsSectionHeader(
               label: 'Email'.i18n,
             ),
             sessionModel.emailAddress(
@@ -28,10 +28,9 @@ class ProAccount extends StatelessWidget {
                 icon: ImagePaths.email_icon,
                 iconColor: Colors.black,
                 title: emailAddress,
-                inkVerticalPadding: 4,
               );
             }),
-            SectionHeader(
+            SettingsSectionHeader(
               label: 'Pro Account Expiration'.i18n,
             ),
             sessionModel.expiryDate(
@@ -39,7 +38,6 @@ class ProAccount extends StatelessWidget {
               return SettingsItem(
                 icon: ImagePaths.clock_icon,
                 title: expirationDate,
-                inkVerticalPadding: 4,
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
                 },
@@ -48,7 +46,7 @@ class ProAccount extends StatelessWidget {
                         color: primaryPink, fontWeight: FontWeight.w500)),
               );
             }),
-            SectionHeader(
+            SettingsSectionHeader(
               label: 'pro_devices_header'.i18n,
             )
           ];
@@ -59,7 +57,6 @@ class ProAccount extends StatelessWidget {
 
             return SettingsItem(
               title: device.name,
-              inkVerticalPadding: 14,
               onTap: !allowRemoval
                   ? null
                   : () {
@@ -111,8 +108,6 @@ class ProAccount extends StatelessWidget {
           if (devices.devices.length < 3) {
             items.add(SettingsItem(
               title: '',
-              inkVerticalPadding: 4,
-              showTopDivider: true,
               onTap: () {
                 Navigator.pushNamed(context, routeApproveDevice);
               },
