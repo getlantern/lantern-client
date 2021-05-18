@@ -26,8 +26,8 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
       );
     }
 
-    return sessionModel.subscribedSingleValueBuilder('emailAddress',
-        builder: (BuildContext context, String emailAddress, Widget? child) {
+    return sessionModel.emailAddress(
+        (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
         title: 'Authorize Device via Email'.i18n,
         body: Padding(

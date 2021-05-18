@@ -35,8 +35,8 @@ class ApproveDevice extends StatelessWidget {
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
 
-    return sessionModel.subscribedSingleValueBuilder('emailAddress',
-        builder: (BuildContext context, String emailAddress, Widget? child) {
+    return sessionModel.emailAddress(
+        (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
         title: 'Add Device'.i18n,
         body: Padding(
@@ -61,6 +61,7 @@ class ApproveDevice extends StatelessWidget {
                     sessionModel.approveDevice(code).then((value) {
                       pinCodeController.text = '';
                       context.loaderOverlay.hide();
+                      Navigator.pop(context);
                     }).onError((error, stackTrace) {
                       pinCodeController.text = '';
                       context.loaderOverlay.hide();

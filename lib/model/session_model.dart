@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:pedantic/pedantic.dart';
 
 import '../package_store.dart';
@@ -25,6 +27,27 @@ class SessionModel extends Model {
 
   Widget language(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('lang', builder: builder);
+  }
+
+  Widget emailAddress(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('emailAddress',
+        builder: builder);
+  }
+
+  Widget expiryDate(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('expirydatestr',
+        builder: builder);
+  }
+
+  Widget deviceId(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
+  }
+
+  Widget devices(ValueWidgetBuilder<Devices> builder) {
+    return subscribedSingleValueBuilder<Devices>('devices', builder: builder,
+        deserialize: (Uint8List serialized) {
+      return Devices.fromBuffer(serialized);
+    });
   }
 
   Future<void> switchProxyAll<T>(bool on) async {
@@ -55,6 +78,12 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
       'code': code,
     }).then((value) => value as String);
+  }
+
+  Future<void> removeDevice(String deviceId) {
+    return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
+      'deviceId': deviceId,
+    });
   }
 
   Future<void> resendRecoveryCode() {

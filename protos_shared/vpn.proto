@@ -13,3 +13,13 @@ message Bandwidth {
   int64 allowed = 3; // in MB
   int64 ttlSeconds = 4; // number of seconds left before data reset
 }
+
+message Device {
+  string id = 1;
+  string name = 2;
+  int64 created = 3;
+}
+
+message Devices {
+  repeated Device devices = 1;
+}

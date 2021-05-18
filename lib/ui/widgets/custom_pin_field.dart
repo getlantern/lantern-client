@@ -72,6 +72,7 @@ class CustomPinField extends StatelessWidget {
         pinBoxWidth: 44,
         pinBoxHeight: 64,
         wrapAlignment: WrapAlignment.spaceAround,
+        textDirection: Directionality.of(context),
         pinBoxBorderWidth: 2,
         pinBoxRadius: 4,
         pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,

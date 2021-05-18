@@ -15,6 +15,8 @@ import com.yariksoffice.lingver.Lingver
 import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
+import io.lantern.db.DB
+import io.lantern.db.SharedPreferencesAdapter
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -37,6 +39,7 @@ abstract class SessionManager(application: Application) : Session {
     protected val context: Context
     protected val prefs: SharedPreferences
     protected val editor: SharedPreferences.Editor
+    val db: DB
     protected val vpnModel: VpnModel
 
     // dynamic settings passed to internal services
@@ -445,7 +448,7 @@ abstract class SessionManager(application: Application) : Session {
     companion object {
         private val TAG = SessionManager::class.java.name
         const val CONFIG_PAYMENT_TEST_MODE = "config_payment_test_mode"
-        const val PREFERENCES_SCHEMA = "session"
+        private const val PREFERENCES_SCHEMA = "session"
 
         // shared preferences
         protected const val PREF_NAME = "LanternSession"
@@ -494,10 +497,14 @@ abstract class SessionManager(application: Application) : Session {
         context = application
         vpnModel = VpnModel()
         Logger.debug(TAG, "VpnModel() finished at ${System.currentTimeMillis() - start}")
-        prefs = BaseModel.masterDB.asSharedPreferences(
+        val prefsAdapter = BaseModel.masterDB.asSharedPreferences(
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
-        editor = prefs.edit()
+        prefs = prefsAdapter
+        editor = prefsAdapter.edit()
+        db = prefsAdapter.db
+        db.registerType(2000, Vpn.Device::class.java)
+        db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,

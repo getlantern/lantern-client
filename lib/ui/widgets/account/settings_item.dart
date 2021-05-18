@@ -1,8 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:lantern/package_store.dart';
 
 class SettingsItem extends StatelessWidget {
-  late final String icon;
-  late final String title;
+  late final String? icon;
+  late final Color? iconColor;
+  late final String? title;
   final bool showArrow;
   final bool showTopDivider;
   late final double inkVerticalPadding;
@@ -11,8 +14,9 @@ class SettingsItem extends StatelessWidget {
   final void Function()? onTap;
 
   SettingsItem(
-      {required this.icon,
-      required this.title,
+      {this.icon,
+      this.iconColor,
+      this.title,
       this.showArrow = false,
       this.showTopDivider = false,
       this.inkVerticalPadding = 16,
@@ -38,28 +42,31 @@ class SettingsItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 16),
-                child: CustomAssetImage(
-                  path: icon,
-                  size: 24,
+              if (icon != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 16),
+                  child: CustomAssetImage(
+                    path: icon!,
+                    size: 24,
+                    color: iconColor,
+                  ),
                 ),
-              ),
               Flexible(
                 fit: FlexFit.tight,
                 child: Container(
                   child: Row(
                     children: [
-                      Flexible(
-                        child: Tooltip(
-                          message: title,
-                          child: Text(
-                            title,
-                            overflow: TextOverflow.ellipsis,
-                            style: tsTitleItem(),
+                      if (title != null)
+                        Flexible(
+                          child: Tooltip(
+                            message: title!,
+                            child: Text(
+                              title!,
+                              overflow: TextOverflow.ellipsis,
+                              style: tsTitleItem(),
+                            ),
                           ),
                         ),
-                      ),
                       if (openInfoDialog != null)
                         Container(
                           transform: Matrix4.translationValues(-8.0, 0.0, 0.0),
@@ -87,9 +94,16 @@ class SettingsItem extends StatelessWidget {
                     children: [
                       if (child != null) child!,
                       if (showArrow)
-                        const CustomAssetImage(
-                          path: ImagePaths.keyboard_arrow_right_icon,
-                          size: 24,
+                        Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(
+                              Directionality.of(context) == TextDirection.rtl
+                                  ? math.pi
+                                  : 0),
+                          child: const CustomAssetImage(
+                            path: ImagePaths.keyboard_arrow_right_icon,
+                            size: 24,
+                          ),
                         ),
                     ]),
               ),

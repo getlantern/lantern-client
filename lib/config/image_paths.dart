@@ -16,6 +16,9 @@ class ImagePaths {
   static const yinbi_icon = 'assets/images/yinbi_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
 
+  static const email_icon = 'assets/images/email_icon.svg';
+  static const clock_icon = 'assets/images/clock_icon.svg';
+
   static const alert_icon = 'assets/images/alert_icon.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';
 

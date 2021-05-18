@@ -29,6 +29,7 @@ import org.getlantern.lantern.model.ProUser;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -72,7 +73,7 @@ public class ProAccountActivity extends FragmentActivity {
         if (deviceList != null && deviceList.getChildCount() > 0)
             deviceList.removeAllViews();
 
-        Map<String, Device> devices = LanternApp.getSession().getDevices();
+        Map<String, Device> devices = new HashMap();
         if (devices == null || devices.isEmpty()) {
             addDeviceListGroup.setVisibility(View.GONE);
             return;

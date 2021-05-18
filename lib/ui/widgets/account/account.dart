@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/account/pro_account.dart';
 import 'package:lantern/ui/widgets/back_button_respecting_navigator.dart';
 
 import '../../routes.dart';
@@ -20,6 +21,9 @@ class AccountTab extends StatelessWidget {
       switch (settings.name) {
         case '/':
           builder = (BuildContext _) => AccountMenu();
+          break;
+        case routeProAccount:
+          builder = (BuildContext _) => ProAccount();
           break;
         case routeSettings:
           builder = (BuildContext _) => Settings();
