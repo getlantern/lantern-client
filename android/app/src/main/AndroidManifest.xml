@@ -181,10 +181,6 @@
             />
 
         <activity
-            android:name=".activity.ProAccountActivity_"
-            android:screenOrientation="portrait"
-            />
-        <activity
             android:name=".activity.UpdateActivity_"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Blank.Dialog">
