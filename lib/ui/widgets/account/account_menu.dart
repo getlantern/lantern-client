@@ -79,8 +79,8 @@ class AccountMenu extends StatelessWidget {
     return [
       SettingsItem(
         icon: ImagePaths.account_icon,
+        iconColor: Colors.black,
         title: 'pro_account_management'.i18n,
-        showArrow: true,
         onTap: () {
           Navigator.pushNamed(context, routeProAccount);
         },

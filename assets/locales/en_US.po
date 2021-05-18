@@ -177,11 +177,11 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
-msgid "Enter or paste device linking PIN"
-msgstr "Enter or paste device linking PIN"
+msgid "Enter or paste linking code"
+msgstr "Enter or paste linking code"
 
 msgid "recovery_email_sent"
-msgstr "An email with a recovery code has been sent to %s if this account exists. Input the code from that email above. This email may take several hours to arrive."
+msgstr "A Linking PIN has been sent to %s if this account exists. Input the PIN from that email above. The email may take several hours to arrive."
 
 msgid "Add Device"
 msgstr "Add Device"

@@ -80,7 +80,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
-                  width: 2,
+                  width: 1,
                   color: grey4,
                 ),
               ),
