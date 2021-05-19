@@ -164,7 +164,9 @@ class _ConversationState extends State<Conversation> {
       pickedAssets.forEach((el) async {
         final absolutePath =
             await el.originFile.then((file) async => file?.path) as String;
-        final attachment = await model.filePickerLoadAttachment(absolutePath);
+        final metadata = {'title': el.title as String};
+        final attachment =
+            await model.filePickerLoadAttachment(absolutePath, metadata);
         _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
