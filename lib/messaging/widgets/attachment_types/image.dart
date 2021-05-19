@@ -14,7 +14,8 @@ class ImageAttachment extends StatelessWidget {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING_ENCRYPTION:
         // pending download
-        return const CircularProgressIndicator();
+        return Transform.scale(
+            scale: 0.5, child: const CircularProgressIndicator());
       case StoredAttachment_Status.FAILED:
         // error with download
         return const Icon(Icons.error_outlined);
@@ -32,7 +33,8 @@ class ImageAttachment extends StatelessWidget {
                     return Image.memory(snapshot.data,
                         filterQuality: FilterQuality.high, scale: 3);
                   default:
-                    return const CircularProgressIndicator();
+                    return Transform.scale(
+                        scale: 0.5, child: const CircularProgressIndicator());
                 }
               }),
         );
