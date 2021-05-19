@@ -14,7 +14,6 @@ import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -22,11 +21,14 @@ import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
+    private val videoFile = File(activity.cacheDir, "_playingvideo") // TODO: would be nice to expose this via a MediaDataSource instead
     private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
+
     init {
-        // delete any lingering data in voiceMemoFile (e.g. if we crashed during recording)
+        // delete any lingering data in temporary media files (e.g. if we crashed during recording)
         voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
+        videoFile.delete()
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
@@ -52,17 +54,19 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     stopRecordingVoiceMemo()
                     val duration = (System.currentTimeMillis() - started).toDouble() / 1000.0
                     return messaging.createAttachment(
-                            voiceMemoFile,
-                            "audio/ogg",
-                            mapOf("duration" to duration.toString(), "role" to "voiceMemo")).toByteArray()
+                        voiceMemoFile,
+                        "audio/ogg",
+                        mapOf("duration" to duration.toString(), "role" to "voiceMemo")
+                    ).toByteArray()
                 } finally {
                     voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
                 }
             }
             "filePickerLoadAttachment" -> {
                 val filePath = call.argument<String>("filePath")
-                val file = File(filePath)
-                return messaging.createAttachment(file).toByteArray() 
+                val file = File(filePath!!)
+                val metadata = call.argument<Map<String, String>?>("metadata")
+                return messaging.createAttachment(file, "", metadata).toByteArray()
             }
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
@@ -73,6 +77,16 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     return output.toByteArray()
                 }
             }
+            "decryptVideoForPlayback" -> {
+                val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
+                videoFile.delete()
+                videoFile.outputStream().use { output ->
+                    attachment.inputStream.use { input ->
+                        Util.copy(input, output)
+                    }
+                }
+                return videoFile.absolutePath
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -80,9 +94,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     private fun startRecordingVoiceMemo(): Boolean {
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && activity.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
-                    MainActivity.RECORD_AUDIO_PERMISSIONS_REQUEST
+                activity,
+                arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                MainActivity.RECORD_AUDIO_PERMISSIONS_REQUEST
             )
             false
         } else {
@@ -93,8 +107,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     private fun doStartRecordingVoiceMemo() {
         startedRecording.set(System.currentTimeMillis())
-        stopRecording.set(OpusRecorder.startRecording(voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000, object : OpusRecorder.EffectsInitializer {
-            override fun init(audioSessionId: Int) {
+        stopRecording.set(
+            OpusRecorder.startRecording(
+                voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000
+            ) { audioSessionId ->
                 if (AutomaticGainControl.isAvailable()) {
                     try {
                         val automaticGainControl = AutomaticGainControl.create(audioSessionId)
@@ -112,21 +128,17 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     }
                 }
             }
-        }))
+        )
     }
 
     private fun stopRecordingVoiceMemo(): ByteArray? {
         return stopRecording.get()?.let {
             it.run()
             val bytes = ByteArray(voiceMemoFile.length().toInt())
-            val out = ByteArrayInputStream(bytes)
-            val input = FileInputStream(voiceMemoFile)
-            try {
+            FileInputStream(voiceMemoFile).use { input ->
                 input.read(bytes)
-            } finally {
-                input.close()
             }
             bytes
-        } ?: null
+        }
     }
 }
