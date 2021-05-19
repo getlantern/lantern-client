@@ -418,16 +418,18 @@ class _ConversationState extends State<Conversation> {
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.RECENT,
-              bgColor: Color(0xFFF2F2F2),
+              bgColor: Color(0xFFF2F2F2), // TODO: generalize in theme
               indicatorColor: Colors.black, // TODO: generalize in theme
               iconColor: Colors.grey,
-              iconColorSelected: Colors.black,
-              progressIndicatorColor: Colors.black,
-              backspaceColor: Colors.black,
+              iconColorSelected: Colors.black, // TODO: generalize in theme
+              progressIndicatorColor: Colors.black, // TODO: generalize in theme
+              backspaceColor: Colors.black, // TODO: generalize in theme
               showRecentsTab: true,
               recentsLimit: 28,
               noRecentsText: 'No Recents',
-              noRecentsStyle: TextStyle(fontSize: 16, color: Colors.black26),
+              noRecentsStyle: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black26), // TODO: generalize in theme
               categoryIcons: CategoryIcons(),
               buttonMode: ButtonMode.MATERIAL,
             )),

@@ -57,13 +57,13 @@ class MessageBubbles extends StatelessWidget {
             children: [
               Flexible(
                 child: Padding(
-                    padding: EdgeInsets.only(
-                        left: isDateMarker != ''
+                    padding: EdgeInsetsDirectional.only(
+                        start: isDateMarker != ''
                             ? outbound
                                 ? 20
                                 : 4
                             : 4,
-                        right: isDateMarker != ''
+                        end: isDateMarker != ''
                             ? outbound
                                 ? 4
                                 : 20
