@@ -151,11 +151,9 @@ packages:
   emoji_picker_flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "2927f83ad58ae085d09c70a630e9001a31c1272e"
-      url: "https://github.com/Fintasys/emoji_picker_flutter.git"
-    source: git
+      name: emoji_picker_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.5"
   equatable:
     dependency: transitive

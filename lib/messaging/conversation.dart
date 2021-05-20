@@ -418,7 +418,7 @@ class _ConversationState extends State<Conversation> {
     return Offstage(
       offstage: !_emojiShowing,
       child: Container(
-        height: 250,
+        height: 200,
         child: EmojiPicker(
             onEmojiSelected: (Category category, Emoji emoji) {
               setState(() {
@@ -436,7 +436,7 @@ class _ConversationState extends State<Conversation> {
                     TextPosition(offset: _newMessage.text.length));
             },
             config: const Config(
-              columns: 10,
+              columns: 12,
               emojiSizeMax: 15.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
