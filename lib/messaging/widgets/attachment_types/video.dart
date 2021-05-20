@@ -53,7 +53,15 @@ class VideoAttachmentState extends State<VideoAttachment> {
                         _controller?.value.isPlaying ?? false
                             ? AspectRatio(
                                 aspectRatio: _controller!.value.aspectRatio,
-                                child: VideoPlayer(_controller!),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: <Widget>[
+                                    // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                                    VideoPlayer(_controller!),
+                                    VideoProgressIndicator(_controller!,
+                                        allowScrubbing: true),
+                                  ],
+                                ),
                               )
                             : Image.memory(snapshot.data,
                                 filterQuality: FilterQuality.high, scale: 3),

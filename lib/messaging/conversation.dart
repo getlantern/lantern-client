@@ -35,6 +35,7 @@ class _ConversationState extends State<Conversation> {
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
   bool _emojiShowing = false;
+  FocusNode _focusNode = FocusNode();
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -43,6 +44,7 @@ class _ConversationState extends State<Conversation> {
   void dispose() {
     _newMessage.dispose();
     _stopWatchTimer.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -178,6 +180,14 @@ class _ConversationState extends State<Conversation> {
       );
     }
     AssetPicker.unregisterObserve();
+  }
+
+  void showKeyboard() {
+    _focusNode.requestFocus();
+  }
+
+  void dismissKeyboard() {
+    _focusNode.unfocus();
   }
 
   @override
@@ -327,9 +337,12 @@ class _ConversationState extends State<Conversation> {
     return Row(children: [
       Container(
         child: GestureDetector(
-          onTap: () => setState(() {
-            _emojiShowing = !_emojiShowing;
-          }),
+          onTap: () {
+            setState(() {
+              _emojiShowing = !_emojiShowing;
+            });
+            dismissKeyboard();
+          },
           child: const Icon(Icons.insert_emoticon),
         ),
       ),
@@ -338,11 +351,18 @@ class _ConversationState extends State<Conversation> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: TextFormField(
+            autofocus: true,
+            focusNode: _focusNode,
             textInputAction: TextInputAction.send,
             controller: _newMessage,
-            onChanged: (value) => setState(() {
-              _isSendIconVisible = value.isNotEmpty;
+            onTap: () => setState(() {
+              _emojiShowing = false;
             }),
+            onChanged: (value) {
+              setState(() {
+                _isSendIconVisible = value.isNotEmpty;
+              });
+            },
             decoration: InputDecoration(
               // Send icon
               suffixIcon: _isSendIconVisible
@@ -357,6 +377,7 @@ class _ConversationState extends State<Conversation> {
                         _send(_newMessage.value.text,
                             replyToSenderId: _quotedMessage?.senderId,
                             replyToId: _quotedMessage?.id);
+                        dismissKeyboard();
                       })
                   : null,
               enabledBorder: InputBorder.none,
@@ -416,7 +437,7 @@ class _ConversationState extends State<Conversation> {
             },
             config: const Config(
               columns: 10,
-              emojiSizeMax: 20.0,
+              emojiSizeMax: 15.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.RECENT,
