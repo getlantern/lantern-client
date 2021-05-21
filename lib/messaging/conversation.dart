@@ -236,11 +236,11 @@ class _ConversationState extends State<Conversation> {
                 padding: const EdgeInsets.all(8),
                 child: _buildReplyContainer(),
               ),
-            if (_emojiShowing) _buildEmojiKeyboard(),
             Padding(
               padding: const EdgeInsets.all(8),
               child: _buildMessageBar(context),
             ),
+            if (_emojiShowing) _buildEmojiKeyboard(),
           ]),
           // Voice recorder
           if (_recording) _buildVoiceRecorder(),
@@ -284,6 +284,7 @@ class _ConversationState extends State<Conversation> {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
+                showKeyboard();
               });
             },
           );
@@ -351,7 +352,7 @@ class _ConversationState extends State<Conversation> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: TextFormField(
-            autofocus: true,
+            autofocus: false,
             focusNode: _focusNode,
             textInputAction: TextInputAction.send,
             controller: _newMessage,
@@ -436,11 +437,11 @@ class _ConversationState extends State<Conversation> {
                     TextPosition(offset: _newMessage.text.length));
             },
             config: const Config(
-              columns: 12,
-              emojiSizeMax: 15.0,
+              columns: 10,
+              emojiSizeMax: 18.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
-              initCategory: Category.RECENT,
+              initCategory: Category.SMILEYS,
               bgColor: Color(0xFFF2F2F2), // TODO: generalize in theme
               indicatorColor: Colors.black, // TODO: generalize in theme
               iconColor: Colors.grey,
