@@ -10,15 +10,15 @@ import 'package:lantern/messaging/widgets/copied_text_widget.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
 
-class MessageBubbles extends StatelessWidget {
+class MessageBubble extends StatelessWidget {
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
 
-  MessageBubbles(this.message, this.priorMessage, this.nextMessage,
-      this.contact, this.onReply)
+  MessageBubble(this.message, this.priorMessage, this.nextMessage, this.contact,
+      this.onReply)
       : super();
 
   @override
@@ -136,9 +136,8 @@ Future _buildActionsPopup(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
       builder: (context) {
         return Wrap(children: [
-          if (!outbound)
-            const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
+          const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
           // Other users' messages
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
