@@ -59,6 +59,7 @@ class _ConversationState extends State<Conversation> {
       replyToId: replyToId,
       replyToSenderId: replyToSenderId,
     );
+    dismissKeyboard();
     _newMessage.clear();
   }
 
