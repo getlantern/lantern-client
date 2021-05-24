@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:lantern/package_store.dart';
 
 class DropDown<T extends DropDownItem> extends StatelessWidget {
@@ -21,7 +19,7 @@ class DropDown<T extends DropDownItem> extends StatelessWidget {
         margin: const EdgeInsetsDirectional.only(top: 6, start: 8, end: 8),
         padding: const EdgeInsetsDirectional.only(start: 6),
         decoration: BoxDecoration(
-          border: Border.all(color: HexColor(grey4), width: 1),
+          border: Border.all(color: grey4, width: 1),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Container(

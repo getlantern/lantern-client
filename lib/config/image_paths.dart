@@ -16,6 +16,9 @@ class ImagePaths {
   static const yinbi_icon = 'assets/images/yinbi_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
 
+  static const email_icon = 'assets/images/email_icon.svg';
+  static const clock_icon = 'assets/images/clock_icon.svg';
+
   static const alert_icon = 'assets/images/alert_icon.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';
 
@@ -29,4 +32,7 @@ class ImagePaths {
   static const foreign_icon = 'assets/images/foreign_icon.svg';
   static const dropdown_icon = 'assets/images/dropdown_icon.svg';
   static const open_in_new_icon = 'assets/images/open_in_new_icon.svg';
+
+  static const number_1 = 'assets/images/number_1.svg';
+  static const number_2 = 'assets/images/number_2.svg';
 }

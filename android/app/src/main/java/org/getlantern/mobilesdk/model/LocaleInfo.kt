@@ -26,11 +26,6 @@ class LocaleInfo(var label: String, val language: String, var country: String) :
     companion object {
         val sCollator = Collator.getInstance()
 
-        fun list(context: Context): List<LocaleInfo> {
-            val locales = context.resources.getStringArray(R.array.languages)
-            return locales.map { LocaleInfo(context, it) }
-        }
-
         private fun getDisplayName(context: Context, l: Locale): String {
             val code = l.toString()
             val specialLocaleCodes = context.resources.getStringArray(R.array.special_locale_codes)

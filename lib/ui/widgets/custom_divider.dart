@@ -2,34 +2,47 @@ import 'package:lantern/package_store.dart';
 
 class CustomDivider extends StatelessWidget {
   late final String? label;
-  late final double horizontalMargin;
+  late final TextStyle? labelStyle;
+  late final EdgeInsetsGeometry? padding;
+  late final double height;
 
-  CustomDivider({Key? key, this.label, this.horizontalMargin = 20})
+  CustomDivider(
+      {Key? key, this.label, this.labelStyle, this.padding, this.height = 20})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.center, children: [
-      Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: horizontalMargin,
-          vertical: label != null ? 20 : 8,
-        ),
-        color: HexColor(borderColor),
-        height: 1,
-      ),
-      if (label != null)
-        Positioned(
-          top: 13,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            color: Colors.white,
-            child: Text(
-              label!,
-              style: const TextStyle(color: Colors.black, fontSize: 12),
+    var divider = SizedBox(
+      height: height,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(
+            child: Container(
+              color: borderColor,
+              height: 1,
             ),
           ),
-        ),
-    ]);
+          if (label != null)
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                color: Colors.white,
+                child: Text(
+                  label!,
+                  style: labelStyle ??
+                      const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+
+    if (padding != null) {
+      return Container(padding: padding, child: divider);
+    } else {
+      return divider;
+    }
   }
 }

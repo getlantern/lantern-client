@@ -437,7 +437,7 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:3ac588e'
-    implementation 'com.github.getlantern:db-android:7949495a48'
+    implementation 'com.github.getlantern:db-android:806f292832'
 }
 
 apply plugin: 'com.google.gms.google-services'

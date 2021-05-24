@@ -69,36 +69,11 @@
             android:theme="@style/FinestWebViewTheme.Light" />
 
         <activity
-            android:name=".activity.addDevice.AddDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.authorizeDevice.LinkDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.authorizeDevice.LinkEmailActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-
-        <activity
-            android:name=".activity.authorizeDevice.AccountRecoveryActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.RecoveryCodeActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.SubmitAccountActivity_"
             android:screenOrientation="portrait">
         </activity>
 
@@ -116,13 +91,11 @@
             android:noHistory="true">
         </activity>
 
-
         <activity
             android:name=".activity.AdyenSuccessActivity_"
             android:screenOrientation="portrait"
             android:noHistory="true">
         </activity>
-
 
         <activity
             android:name=".activity.WelcomeActivity_"
@@ -207,14 +180,6 @@
             android:screenOrientation="portrait"
             />
 
-        <activity
-            android:name=".activity.ProAccountActivity_"
-            android:screenOrientation="portrait"
-            />
-        <activity
-            android:name="org.getlantern.mobilesdk.activity.LanguageActivity"
-            android:screenOrientation="portrait"
-            />
         <activity
             android:name=".activity.UpdateActivity_"
             android:windowSoftInputMode="adjustResize"
