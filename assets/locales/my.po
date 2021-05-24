@@ -1,12 +1,12 @@
 # 
 # Translators:
+# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2021
 # e2f <projects@e2f.com>, 2021
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021
-# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2021\n"
+"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021\n"
 "Language-Team: Burmese (https://www.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -142,3 +142,88 @@ msgstr "VPN အခြေအနေ"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Pro အတွက် ကိရိယာကို ခွင့်ပြုပါ"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "ကိရိယာချိတ်ဆက်မှု ပင်နံပါတ်ဖြင့် ခွင့်ပြုပါ"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Lantern Pro ကိရိယာသို့ ဝင်ရောက်အသုံးပြုရန် လိုအပ်သည်"
+
+msgid "Link with PIN"
+msgstr "PIN ဖြင့်လင့်ခ်ချိတ်ပါ"
+
+msgid "OR"
+msgstr "သို့မဟုတ်"
+
+msgid "Authorize Device via Email"
+msgstr "ကိရိယာကို အီးမေးလ်မှတစ်ဆင့် ခွင့်ပြုပါ"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"Lantern Pro ကို ဝယ်ယူခဲ့သည့် အီးမေးလ်ကို ဝင်ရောက်အသုံးပြုရန် လိုအပ်သည် "
+
+msgid "Link via Email"
+msgstr "အီးမေးလ်မှတဆင့်လင့်ခ်ချိတ်ပါ"
+
+msgid "Email"
+msgstr "အီးမေးလ်"
+
+msgid "Submit"
+msgstr "တင်သွင်းပါ"
+
+msgid "Please enter a valid email address"
+msgstr "မှန်ကန်သော အီးမေးလ်လိပ်စာထည့်ပါ"
+
+msgid "Re-send Email"
+msgstr "အီးမေးလ်ပြန်ပို့ပါ"
+
+msgid "Paste from clipboard?"
+msgstr "ကလစ်ဘုတ်မှ ကူးယူမလား။"
+
+msgid "Yes"
+msgstr "ဟုတ်တယ်"
+
+msgid "No"
+msgstr "မဟုတ်ဘူး"
+
+msgid "Enter or paste linking code"
+msgstr "လင့်ခ်ကုဒ်ကို ထည့်သွင်းပါ သို့မဟုတ် ကူးယူပါ"
+
+msgid "recovery_email_sent"
+msgstr ""
+"ဤအကောင့်ရှိပါက လင့်ခ်ချိတ်ထားသည့် PIN ကို %s သို့ပို့ပြီးပါပြီ။ "
+"အထက်ပါအီးမေးလ်မှ PIN ကိုရိုက်ထည့်ပါ။ အီးမေးလ်ရောက်ရှိရန် "
+"နာရီပေါင်းများစွာကြာနိုင်သည်။"
+
+msgid "Add Device"
+msgstr "ကိရိယာထည့်ပါ"
+
+msgid "approve_device_step_1"
+msgstr ""
+"သင်ချိတ်ဆက်လိုသည့်ကိရိယာပေါ်ရှိ အကောင့်မီနူးမှ 'ပရိုအတွက် ကိရိယာကို "
+"သုံးခွင့်ပြုပါ' ကိုဖွင့်ပါ၊ ထို့နောက် 'PIN ဖြင့်လင့်ခ်ချိတ်ပါ' "
+"ကိုရွေးချယ်ပါ။"
+
+msgid "approve_device_step_2"
+msgstr "အဆင့် 1 မှရရှိသော လင့်ခ်ချိတ်သည့်ကုဒ်ကို ထည့်သွင်းပါ"
+
+msgid "Pro Account Expiration"
+msgstr "Pro အကောင့်သက်တမ်းကုန်ဆုံးခြင်း"
+
+msgid "Renew"
+msgstr "သက်တမ်းတိုး"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro ကိရိယာများ (3 အထိ)"
+
+msgid "Remove"
+msgstr "ဖယ်ရှားပါ"
+
+msgid "Log Out"
+msgstr "လော့အောက်ထွက်ပါ"
+
+msgid "confirm_remove_device"
+msgstr "ဤပစ္စည်းအားသင်၏ Pro အကောင့်မှသင်ပြန်ဖွင့်လိုသည်မှာသေချာပါသလား။"

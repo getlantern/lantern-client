@@ -1,10 +1,11 @@
 # 
 # Translators:
+# Alexander B. <road2monstercat@gmail.com>, 2021
 # Aşkın Yollu <askin@askin.ws>, 2021
+# Zeynel Cebeci <cebeciz@gmail.com>, 2021
 # Volkan Gezer <volkangezer@gmail.com>, 2021
 # Derek F <derek@getlantern.org>, 2021
 # efe kerem sözeri <eksozeri@hotmail.com>, 2021
-# Alexander B. <road2monstercat@gmail.com>, 2021
 # Teo Westbrook, 2021
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021
 # 
@@ -96,7 +97,7 @@ msgstr ""
 "üzerinden gönderilecektir (daha hızlı)."
 
 msgid "Exchange"
-msgstr "Değiştir"
+msgstr "Borsa"
 
 msgid "Account"
 msgstr "Hesap"
@@ -145,3 +146,86 @@ msgstr "VPN Durumu"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Cihazı Pro Hesabına Dahil Et"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Cihaz Bağlama Pini İle Yetkilendir"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Lantern Pro Cihazına fiziksel erişim gereklidir"
+
+msgid "Link with PIN"
+msgstr "PIN ile Bağla"
+
+msgid "OR"
+msgstr "VEYA"
+
+msgid "Authorize Device via Email"
+msgstr "Cihazı E-Posta Üzerinden Yetkilendir"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"Lantern Pro satın almak için kullandığınız e-postaya erişim gereklidir"
+
+msgid "Link via Email"
+msgstr "E-Posta Aracılığıyla Bağla"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Submit"
+msgstr "Gönder"
+
+msgid "Please enter a valid email address"
+msgstr "Lütfen geçerli bir e-posta adresi girin"
+
+msgid "Re-send Email"
+msgstr "E-postayı Tekrar Gönder"
+
+msgid "Paste from clipboard?"
+msgstr "Panodan yapıştırılsın mı?"
+
+msgid "Yes"
+msgstr "Evet"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "Enter or paste linking code"
+msgstr "Bağlama kodunu girin veya yapıştırın"
+
+msgid "recovery_email_sent"
+msgstr ""
+"Bu hesap mevcutsa %s adresine bir Bağlama PIN'i gönderildi. Yukarıdaki alana"
+" e-postadaki PIN'i girin. Bu e-postanın ulaşması birkaç saat alabilir."
+
+msgid "Add Device"
+msgstr "Hesap Ekle"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Bağlamak istediğiniz cihazda hesap menüsünden \"Cihazı Pro İçin "
+"Yetkilendir\"i açın ve ardından \"PIN ile Bağla\" seçeneğini belirleyin"
+
+msgid "approve_device_step_2"
+msgstr "1. adımdan elde edilen bağlama kodunu girin"
+
+msgid "Pro Account Expiration"
+msgstr "Pro Hesap Süre Dolumu"
+
+msgid "Renew"
+msgstr "Yenile"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro Cihazları (En fazla 3)"
+
+msgid "Remove"
+msgstr "Kaldır"
+
+msgid "Log Out"
+msgstr "Oturumu Kapat"
+
+msgid "confirm_remove_device"
+msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
