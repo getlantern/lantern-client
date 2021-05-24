@@ -35,7 +35,7 @@ class _ConversationState extends State<Conversation> {
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
   bool _emojiShowing = false;
-  FocusNode _focusNode = FocusNode();
+  final _focusNode = FocusNode();
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -285,7 +285,7 @@ class _ConversationState extends State<Conversation> {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
-                showKeyboard();
+                showKeyboard(); // TODO: this is clashing with Navigator.pop(context);
               });
             },
           );
