@@ -28,7 +28,8 @@ class VideoAttachmentState extends State<VideoAttachment> {
     switch (widget.attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
-        return const CircularProgressIndicator();
+        return Transform.scale(
+            scale: 0.5, child: const CircularProgressIndicator());
       case StoredAttachment_Status.FAILED:
         // error with download
         return const Icon(Icons.error_outlined);
@@ -40,7 +41,8 @@ class VideoAttachmentState extends State<VideoAttachment> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return const CircularProgressIndicator();
+                    return Transform.scale(
+                        scale: 0.5, child: const CircularProgressIndicator());
                   case ConnectionState.done:
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outlined);
@@ -51,7 +53,15 @@ class VideoAttachmentState extends State<VideoAttachment> {
                         _controller?.value.isPlaying ?? false
                             ? AspectRatio(
                                 aspectRatio: _controller!.value.aspectRatio,
-                                child: VideoPlayer(_controller!),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: <Widget>[
+                                    // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                                    VideoPlayer(_controller!),
+                                    VideoProgressIndicator(_controller!,
+                                        allowScrubbing: true),
+                                  ],
+                                ),
                               )
                             : Image.memory(snapshot.data,
                                 filterQuality: FilterQuality.high, scale: 3),

@@ -73,6 +73,9 @@ dependencies:
 
   badges: ^2.0.0-nullsafety.1
 
+  dotted_border: ^2.0.0
+
+  emoji_picker_flutter: ^1.0.5
 
 dev_dependencies:
   flutter_test:

@@ -38,10 +38,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)
             "sendToDirectContact" ->
                 messaging.sendToDirectContact(
-                    call.argument("identityKey")!!,
-                    text = call.argument("text"),
-                    attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray()
-                )
+                        call.argument("identityKey")!!,
+                        text = call.argument("text"),
+                        attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
+                        replyToId = call.argument("replyToId"),
+                        replyToSenderId = call.argument("replyToSenderId"))
             "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
