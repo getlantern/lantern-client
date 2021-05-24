@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -11,6 +12,7 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -26,9 +28,14 @@ class _ConversationState extends State<Conversation> {
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  var _recording = false;
-  var _willCancelRecording = false;
-  var _totalPanned = 0.0;
+  bool _recording = false;
+  bool _willCancelRecording = false;
+  double _totalPanned = 0.0;
+  bool _isSendIconVisible = false;
+  bool _isReplying = false;
+  StoredMessage? _quotedMessage;
+  bool _emojiShowing = false;
+  final _focusNode = FocusNode();
 
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
@@ -37,12 +44,22 @@ class _ConversationState extends State<Conversation> {
   void dispose() {
     _newMessage.dispose();
     _stopWatchTimer.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
-  void _send(String text, {List<Uint8List>? attachments}) {
-    model.sendToDirectContact(widget._contact.contactId.id,
-        text: text, attachments: attachments);
+  void _send(String text,
+      {List<Uint8List>? attachments,
+      String? replyToSenderId,
+      String? replyToId}) {
+    model.sendToDirectContact(
+      widget._contact.contactId.id,
+      text: text,
+      attachments: attachments,
+      replyToId: replyToId,
+      replyToSenderId: replyToSenderId,
+    );
+    dismissKeyboard();
     _newMessage.clear();
   }
 
@@ -166,10 +183,19 @@ class _ConversationState extends State<Conversation> {
     AssetPicker.unregisterObserve();
   }
 
+  void showKeyboard() {
+    _focusNode.requestFocus();
+  }
+
+  void dismissKeyboard() {
+    _focusNode.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
     return BaseScreen(
+      // Conversation title (contact name)
       title: widget._contact.displayName.isEmpty
           ? widget._contact.contactId.id
           : widget._contact.displayName,
@@ -190,162 +216,321 @@ class _ConversationState extends State<Conversation> {
         onPanEnd: (details) async {
           await _finishRecording();
         },
+        // Conversation body
         child: Stack(children: [
           Column(children: [
+            // Conversation subtitle
             Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: model.singleContact(
-                    context,
-                    widget._contact,
-                    (context, contact, child) => contact
-                                .messagesDisappearAfterSeconds >
-                            0
-                        ? Text(
-                            'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}')
-                        : Container())),
+                child: _buildMessagesLifeExpectancy()),
+            // Message bubbles
             Expanded(
-              child: model.contactMessages(widget._contact, builder: (context,
-                  Iterable<PathAndValue<StoredMessage>> messageRecords,
-                  Widget? child) {
-                return ListView.builder(
-                  reverse: true,
-                  itemCount: messageRecords.length,
-                  itemBuilder: (context, index) {
-                    return MessageBubble(
-                        messageRecords.elementAt(index),
-                        index >= messageRecords.length - 1
-                            ? null
-                            : messageRecords.elementAt(index + 1).value,
-                        index == 0
-                            ? null
-                            : messageRecords.elementAt(index - 1).value);
-                  },
-                );
-              }),
+              child: _buildMessageBubbles(),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8),
               child: Divider(height: 3),
             ),
+            // Message bar
+            if (_isReplying)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: _buildReplyContainer(),
+              ),
             Padding(
               padding: const EdgeInsets.all(8),
-              child: Row(children: [
-                // TODO(kallirroi): Refine the UI/UX
-                Expanded(
-                  child: TextFormField(
-                    textInputAction: TextInputAction.send,
-                    onFieldSubmitted: _send,
-                    controller: _newMessage,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: () {
-                            var text = _newMessage.value.text;
-                            if (text.isEmpty) {
-                              return;
-                            }
-                            _send(text);
-                          }),
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      hintText: 'Message'.i18n,
-                    ),
-                  ),
-                ),
-                // TODO(kallirroi): Refine the UI/UX
-                GestureDetector(
-                  onTap: () => _selectFilesToShare(),
-                  child: const Icon(Icons.image),
-                ),
-                // TODO(kallirroi): Refine the UI/UX
-                GestureDetector(
-                  onTapDown: (details) {
-                    _startRecording();
-                  },
-                  onTapUp: (details) async {
-                    await _finishRecording();
-                  },
-                  child: const Icon(Icons.mic),
-                ),
-              ]),
+              child: _buildMessageBar(context),
             ),
+            if (_emojiShowing) _buildEmojiKeyboard(),
           ]),
-          // TODO(kallirroi): Refine the UI/UX
-          if (_recording)
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Flexible(
-                child: ColoredBox(
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16, bottom: 17),
-                        child: Icon(Icons.circle, color: Colors.red),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16, bottom: 22),
-                        child: StreamBuilder<int>(
-                          stream: _stopWatchTimer.rawTime,
-                          initialData:
-                              _stopWatchTimer.rawTime.valueWrapper?.value,
-                          builder: (context, snap) {
-                            final value = snap.data;
-                            final displayTime = StopWatchTimer.getDisplayTime(
-                                value ?? 0,
-                                minute: true,
-                                second: true,
-                                hours: false,
-                                milliSecond: false);
-                            return Text(displayTime,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold));
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 63,
-                          child: Padding(
-                              padding: const EdgeInsets.only(right: 24),
-                              child: Text(
-                                  _willCancelRecording
-                                      ? 'will cancel'.i18n
-                                      : '< ' + 'swipe to cancel'.i18n,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold))),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTapUp: (details) async {
-                          await _finishRecording();
-                        },
-                        child: Transform.scale(
-                          scale: 2,
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(38)),
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15, top: 15, right: 4, bottom: 4),
-                              child: Icon(Icons.mic_none),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ]),
+          // Voice recorder
+          if (_recording) _buildVoiceRecorder(),
         ]),
       ),
     );
+  }
+
+  Widget _buildMessagesLifeExpectancy() {
+    return model.singleContact(
+        context,
+        widget._contact,
+        (context, contact, child) => contact.messagesDisappearAfterSeconds > 0
+            ? Text(
+                'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}')
+            : Container());
+  }
+
+  Widget _buildMessageBubbles() {
+    return model.contactMessages(widget._contact, builder: (context,
+        Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
+      return ListView.builder(
+        // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        reverse: true,
+        itemCount: messageRecords.length,
+        itemBuilder: (context, index) {
+          return MessageBubble(
+            // PathAndValue<StoredMessage> of current message
+            messageRecords.elementAt(index),
+            // priorMessage
+            index >= messageRecords.length - 1
+                ? null
+                : messageRecords.elementAt(index + 1).value,
+            // nextMessage
+            index == 0 ? null : messageRecords.elementAt(index - 1).value,
+            // contact
+            widget._contact,
+            // onReply callback
+            (_message) {
+              setState(() {
+                _isReplying = true;
+                _quotedMessage = _message;
+                showKeyboard(); // TODO: this is clashing with Navigator.pop(context);
+              });
+            },
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildReplyContainer() {
+    // use the message's replyToId to identify who this is in response to
+    final inResponseTo =
+        matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        inResponseTo,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        _isReplying = false;
+                      }),
+                      child: const Icon(Icons.close, size: 16),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 4),
+                // TODO: Add ability to respond to attachment?
+                Text(_quotedMessage!.text.toString(),
+                    style: const TextStyle(color: Colors.black54)),
+              ],
+            )),
+          ],
+        ));
+  }
+
+  Widget _buildMessageBar(context) {
+    return Row(children: [
+      Container(
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              _emojiShowing = !_emojiShowing;
+            });
+            dismissKeyboard();
+          },
+          child: const Icon(Icons.insert_emoticon),
+        ),
+      ),
+      Expanded(
+        // Text field
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: TextFormField(
+            autofocus: false,
+            focusNode: _focusNode,
+            textInputAction: TextInputAction.send,
+            controller: _newMessage,
+            onTap: () => setState(() {
+              _emojiShowing = false;
+            }),
+            onChanged: (value) {
+              setState(() {
+                _isSendIconVisible = value.isNotEmpty;
+              });
+            },
+            decoration: InputDecoration(
+              // Send icon
+              suffixIcon: _isSendIconVisible
+                  ? IconButton(
+                      icon: const Icon(Icons.send, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          _isSendIconVisible = false;
+                          _isReplying = false;
+                          _emojiShowing = false;
+                        });
+                        _send(_newMessage.value.text,
+                            replyToSenderId: _quotedMessage?.senderId,
+                            replyToId: _quotedMessage?.id);
+                        dismissKeyboard();
+                      })
+                  : null,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              hintText: 'Message'.i18n,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+        ),
+      ),
+      // Attachments icon
+      if (!_isSendIconVisible)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: GestureDetector(
+            onTap: () => _selectFilesToShare(),
+            child: const Icon(Icons.add_circle_rounded),
+          ),
+        ),
+      if (!_isSendIconVisible)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: GestureDetector(
+            onTapDown: (details) {
+              _startRecording();
+            },
+            onTapUp: (details) async {
+              await _finishRecording();
+            },
+            child: const Icon(Icons.mic),
+          ),
+        ),
+    ]);
+  }
+
+  Offstage _buildEmojiKeyboard() {
+    // https://github.com/Fintasys/emoji_picker_flutter
+    return Offstage(
+      offstage: !_emojiShowing,
+      child: Container(
+        height: 200,
+        child: EmojiPicker(
+            onEmojiSelected: (Category category, Emoji emoji) {
+              setState(() {
+                _isSendIconVisible = true;
+              });
+              _newMessage
+                ..text += emoji.emoji
+                ..selection = TextSelection.fromPosition(
+                    TextPosition(offset: _newMessage.text.length));
+            },
+            onBackspacePressed: () {
+              _newMessage
+                ..text = _newMessage.text.characters.skipLast(1).toString()
+                ..selection = TextSelection.fromPosition(
+                    TextPosition(offset: _newMessage.text.length));
+            },
+            config: const Config(
+              columns: 10,
+              emojiSizeMax: 18.0,
+              verticalSpacing: 0,
+              horizontalSpacing: 0,
+              initCategory: Category.SMILEYS,
+              bgColor: Color(0xFFF2F2F2), // TODO: generalize in theme
+              indicatorColor: Colors.black, // TODO: generalize in theme
+              iconColor: Colors.grey,
+              iconColorSelected: Colors.black, // TODO: generalize in theme
+              progressIndicatorColor: Colors.black, // TODO: generalize in theme
+              backspaceColor: Colors.black, // TODO: generalize in theme
+              showRecentsTab: true,
+              recentsLimit: 28,
+              noRecentsText: 'No Recents',
+              noRecentsStyle: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black26), // TODO: generalize in theme
+              categoryIcons: CategoryIcons(),
+              buttonMode: ButtonMode.MATERIAL,
+            )),
+      ),
+    );
+  }
+
+  Widget _buildVoiceRecorder() {
+    return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Flexible(
+        child: ColoredBox(
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 16, bottom: 17),
+                child: Icon(Icons.circle, color: Colors.red),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 22),
+                child: StreamBuilder<int>(
+                  stream: _stopWatchTimer.rawTime,
+                  initialData: _stopWatchTimer.rawTime.valueWrapper?.value,
+                  builder: (context, snap) {
+                    final value = snap.data;
+                    final displayTime = StopWatchTimer.getDisplayTime(
+                        value ?? 0,
+                        minute: true,
+                        second: true,
+                        hours: false,
+                        milliSecond: false);
+                    return Text(displayTime,
+                        style: const TextStyle(fontWeight: FontWeight.bold));
+                  },
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 63,
+                  child: Padding(
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Text(
+                          _willCancelRecording
+                              ? 'will cancel'.i18n
+                              : '< ' + 'swipe to cancel'.i18n,
+                          style: const TextStyle(fontWeight: FontWeight.bold))),
+                ),
+              ),
+              GestureDetector(
+                onTapUp: (details) async {
+                  await _finishRecording();
+                },
+                child: Transform.scale(
+                  scale: 2,
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(38)),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, top: 15, right: 4, bottom: 4),
+                      child: Icon(Icons.mic_none),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ]);
   }
 }
