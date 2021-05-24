@@ -25,10 +25,10 @@ msgstr "مصرف داده روزانه"
 msgid "is"
 msgstr "در حال"
 
-msgid "on"
+msgid "connected"
 msgstr "متصل شد"
 
-msgid "off"
+msgid "disconnected"
 msgstr "قطع شده است"
 
 msgid "Disconnecting"

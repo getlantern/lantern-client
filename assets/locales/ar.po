@@ -21,10 +21,10 @@ msgstr "الاستخدام اليومي للبيانات"
 msgid "is"
 msgstr "يتم الآن"
 
-msgid "on"
+msgid "connected"
 msgstr "موصول"
 
-msgid "off"
+msgid "disconnected"
 msgstr "مفصول"
 
 msgid "Disconnecting"

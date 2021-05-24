@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/continue_arrow.dart';
 
 class ProBanner extends StatefulWidget {
   @override
@@ -63,10 +64,7 @@ class _ProBannerState extends State<ProBanner> {
                 ),
               ),
             ),
-            const CustomAssetImage(
-              path: ImagePaths.keyboard_arrow_right_icon,
-              size: 24,
-            ),
+            const ContinueArrow(),
           ],
         ),
       ),

@@ -19,10 +19,10 @@ msgstr "Penggunaan Data Harian"
 msgid "is"
 msgstr "is"
 
-msgid "on"
+msgid "connected"
 msgstr "Telah disambungkan"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Terputus"
 
 msgid "Disconnecting"

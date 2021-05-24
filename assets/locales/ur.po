@@ -17,10 +17,10 @@ msgstr "روزانہ ڈیٹا کا استعمال"
 msgid "is"
 msgstr "منقطع"
 
-msgid "on"
+msgid "connected"
 msgstr "کنیکٹ ہو چکا ہے"
 
-msgid "off"
+msgid "disconnected"
 msgstr "منقطع"
 
 msgid "Disconnecting"

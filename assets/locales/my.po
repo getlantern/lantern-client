@@ -17,10 +17,10 @@ msgstr "နေ့စဉ် ဒေတာအသုံးပြုမှု"
 msgid "is"
 msgstr "သည်"
 
-msgid "on"
+msgid "connected"
 msgstr "ချိတ်ဆက်ထားသည်"
 
-msgid "off"
+msgid "disconnected"
 msgstr "အဆက်ပြတ်"
 
 msgid "Disconnecting"
