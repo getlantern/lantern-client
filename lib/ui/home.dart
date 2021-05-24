@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
-import 'package:lantern/utils/hex_color.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeSettings)) {
+    } else if (_initialRoute.startsWith(routeExchange)) {
       _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
       _currentIndex = 3;
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             // simple way to show indefinitely
             content: Text(message),
             action: SnackBarAction(
-              textColor: HexColor(secondaryPink),
+              textColor: secondaryPink,
               label: buttonText.toUpperCase(),
               onPressed: () {
                 mainMethodChannel.invokeMethod('showLastSurvey');
@@ -87,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       }
       return Future.value(null);
     });
-    navigationChannel.invokeMethod('ready');
+    // navigationChannel.invokeMethod('ready');
   }
 
   void onPageChange(int index) {

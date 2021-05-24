@@ -2,13 +2,13 @@
 # Translators:
 # abuyop <abuyop@gmail.com>, 2021
 # e2f <projects@e2f.com>, 2021
+# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2021
 # Alyssa Chung <lisiachung7@gmail.com>, 2021
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021
-# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2021\n"
+"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2021\n"
 "Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -19,10 +19,10 @@ msgstr "Penggunaan Data Harian"
 msgid "is"
 msgstr "is"
 
-msgid "on"
+msgid "connected"
 msgstr "Telah disambungkan"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Terputus"
 
 msgid "Disconnecting"
@@ -143,3 +143,88 @@ msgstr "Status VPN"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Peranti dibenarkan untuk Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Memberikan Kebenaran dengan Pin Pautan Peranti"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Memerlukan akses fizikal kepada Peranti Lantern Pro"
+
+msgid "Link with PIN"
+msgstr "Pautkan dengan PIN"
+
+msgid "OR"
+msgstr "ATAU"
+
+msgid "Authorize Device via Email"
+msgstr "Berikan Kebenaran kepada Peranti melalui E-mel"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"Memerlukan akses kepada e-mel yang anda gunakan untuk membeli Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Pautkan melalui E-mel"
+
+msgid "Email"
+msgstr "Emel"
+
+msgid "Submit"
+msgstr "Hantar"
+
+msgid "Please enter a valid email address"
+msgstr "Sila masukkan alamat e-mel yang sah"
+
+msgid "Re-send Email"
+msgstr "Emel Dihantar semula"
+
+msgid "Paste from clipboard?"
+msgstr "Tampal daripada papan klip?"
+
+msgid "Yes"
+msgstr "Ya"
+
+msgid "No"
+msgstr "Tidak"
+
+msgid "Enter or paste linking code"
+msgstr "Masukkan atau tampal kod pemautan"
+
+msgid "recovery_email_sent"
+msgstr ""
+"PIN Pemautan telah dihantar ke %s sekiranya akaun ini wujud. Masukkan PIN "
+"daripada e-mel di atas. E-mel mungkin mengambil masa beberapa jam untuk "
+"sampai."
+
+msgid "Add Device"
+msgstr "Tambah Peranti"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Buka ‘Berikan Keizinan kepada Peranti untuk Pro’ daripada menu akaun pada "
+"peranti yang ingin anda pautkan, kemudian pilih 'Pautkan dengan PIN'"
+
+msgid "approve_device_step_2"
+msgstr "Masukkan kod pemautan yang diperoleh daripada langkah 1"
+
+msgid "Pro Account Expiration"
+msgstr "Tamat Tempoh Akaun Pro"
+
+msgid "Renew"
+msgstr "Memperbaharui"
+
+msgid "pro_devices_header"
+msgstr "Peranti Lantern Pro (Sehingga 3)"
+
+msgid "Remove"
+msgstr "Keluarkan"
+
+msgid "Log Out"
+msgstr "Log Keluar"
+
+msgid "confirm_remove_device"
+msgstr ""
+"Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?"

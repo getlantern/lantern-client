@@ -3,11 +3,11 @@ package org.getlantern.lantern.model
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
+import io.lantern.android.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.activity.addDevice.AddDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -19,22 +19,13 @@ import java.util.Date
 import java.util.Locale
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
-    private val TAG = LanternSessionManager::class.java.name
-
     private var selectedPlan: ProPlan? = null
-
-    // the devices associated with a user's Pro account
-    private var devices: java.util.HashMap<String?, Device?> = HashMap()
 
     private var referral: String? = null
     private var verifyCode: String? = null
 
     override fun isProUser(): Boolean {
         return prefs.getBoolean(PRO_USER, false)
-    }
-
-    private fun isDeviceLinked(): Boolean {
-        return prefs.getBoolean(DEVICE_LINKED, false)
     }
 
     fun isExpired(): Boolean {
@@ -142,18 +133,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(PW_SIGNATURE, "")
     }
 
-    fun addDevice(device: Device) {
-        devices.put(device.id, device)
-    }
-
-    fun removeDevice(id: String?) {
-        devices.remove(id)
-    }
-
-    fun getDevices(): Map<String?, Device?>? {
-        return devices
-    }
-
     fun setStripePubKey(key: String?) {
         editor.putString(STRIPE_API_KEY, key).commit()
     }
@@ -172,14 +151,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         } else {
             WelcomeActivity_::class.java
         }
-    }
-
-    fun deviceLinked(): Boolean {
-        if (!isDeviceLinked()) {
-            launchActivity(AddDeviceActivity_::class.java, false)
-            return false
-        }
-        return true
     }
 
     fun setVerifyCode(code: String) {
@@ -334,14 +305,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         editor.putString(PROVIDER, provider).commit()
     }
 
-    fun setAccountId(accountId: String?) {
-        editor.putString(ACCOUNT_ID, accountId).commit()
-    }
-
-    fun accountId(): String? {
-        return prefs.getString(ACCOUNT_ID, "")
-    }
-
     override fun code(): String? {
         return prefs.getString(REFERRAL_CODE, "")
     }
@@ -375,10 +338,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun unlinkDevice() {
-        devices.clear()
         setIsProUser(false)
         editor.putBoolean(PRO_USER, false)
         editor.putBoolean(DEVICE_LINKED, false)
+        editor.remove(DEVICES)
         editor.remove(TOKEN)
         editor.remove(EMAIL_ADDRESS)
         editor.remove(USER_ID)
@@ -415,6 +378,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
+        val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
+        db.mutate { tx ->
+            tx.put(DEVICES, devices)
+        }
+
         if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
             editor.putInt(PRO_MONTHS_LEFT, user.monthsLeft()).commit()
@@ -427,10 +395,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // shared preferences
         private const val PRO_USER = "prouser"
+        private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"
-        private const val ACCOUNT_ID = "accountid"
         private const val EXPIRY_DATE = "expirydate"
         private const val PRO_MONTHS_LEFT = "promonthsleft"
         private const val PRO_DAYS_LEFT = "prodaysleft"
