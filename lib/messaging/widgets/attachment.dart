@@ -1,78 +1,70 @@
-import 'package:audioplayers/audioplayers.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:pedantic/pedantic.dart';
+
+import 'attachment_types/voice.dart';
+import 'attachment_types/image.dart';
+import 'attachment_types/video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
+  // https://developer.android.com/guide/topics/media/media-formats
   switch (attachment.attachment.mimeType) {
+    case 'application/ogg':
     case 'audio/ogg':
-      return Flexible(child: _AudioAttachment(attachment));
-    default:
-      // TODO: handle other types of attachments
-      return Flexible(child: Container());
-  }
-}
-
-/// An attachment that shows an audio player.
-class _AudioAttachment extends StatefulWidget {
-  final StoredAttachment _attachment;
-
-  _AudioAttachment(this._attachment);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _AudioAttachmentState();
-  }
-}
-
-class _AudioAttachmentState extends State<_AudioAttachment> {
-  var _playing = false;
-
-  @override
-  Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-    var audioPlayer = context.watch<AudioPlayer>();
-
-    switch (widget._attachment.status) {
-      case StoredAttachment_Status.PENDING:
-        return const Icon(Icons.pending_outlined);
-      case StoredAttachment_Status.FAILED:
-        return const Icon(Icons.error_outlined);
-      default:
-        return Transform.scale(
-          scale: 2,
-          child: IconButton(
-            icon: Icon(_playing
-                ? Icons.stop_circle_outlined
-                : Icons.play_circle_outline),
-            onPressed: () async {
-              if (_playing) {
-                await audioPlayer.stop();
-                setState(() {
-                  _playing = false;
-                });
-              } else {
-                audioPlayer.onPlayerCompletion.listen((event) {
-                  setState(() {
-                    _playing = false;
-                  });
-                });
-                var bytes = await model.decryptAttachment(widget._attachment);
-                // TODO: playBytes only works on Android 23+. For older platforms, we need to find another
-                // way to expose the data, perhaps as a temp file or through a
-                // local HTTPS server (one that uses disposable tokens for
-                // authentication so that other apps can't access our content).
-                unawaited(audioPlayer.playBytes(bytes).then((value) {
-                  setState(() {
-                    _playing = true;
-                  });
-                }));
-              }
-            },
+      return Flexible(child: VoiceMemo(attachment));
+    case 'audio/mp4':
+    case 'audio/m4a':
+    case 'audio/mkv':
+    case 'audio/mp3':
+    case 'audio/flac':
+    case 'audio/mpeg':
+      final attachmentTitle = attachment.attachment.metadata['title'];
+      return Flexible(
+          child: Column(
+        children: [
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: HexColor(borderColor),
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(borderRadius),
+                ),
+                color: Colors.white,
+              ),
+              child: const Icon(Icons.audiotrack_rounded)),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Text(
+              attachmentTitle as String,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
           ),
-        );
-    }
+        ],
+      ));
+    case 'image/jpeg':
+    case 'image/png':
+    case 'image/bpm':
+    case 'image/gif':
+    case 'image/webp':
+    case 'image/wav':
+    // TODO: check older platforms for HEIF
+    case 'image/heif':
+      return Flexible(child: ImageAttachment(attachment));
+    case 'video/mp4':
+    case 'video/mkv':
+    case 'video/mov':
+    case 'video/quicktime':
+    case 'video/3gp':
+    case 'video/webm':
+      return Flexible(child: VideoAttachment(attachment));
+    default:
+      return Container();
   }
 }

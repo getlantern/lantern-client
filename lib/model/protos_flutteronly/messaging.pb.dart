@@ -345,8 +345,10 @@ class StoredAttachment extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoredAttachment', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'guid')
     ..aOM<Attachment>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachment', subBuilder: Attachment.create)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'filePath', protoName: 'filePath')
-    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'encryptedFilePath', protoName: 'encryptedFilePath')
+    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING_ENCRYPTION, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'plainTextFilePath', protoName: 'plainTextFilePath')
+    ..aOM<StoredAttachment>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnail', subBuilder: StoredAttachment.create)
     ..hasRequiredFields = false
   ;
 
@@ -354,8 +356,10 @@ class StoredAttachment extends $pb.GeneratedMessage {
   factory StoredAttachment({
     $core.String? guid,
     Attachment? attachment,
-    $core.String? filePath,
+    $core.String? encryptedFilePath,
     StoredAttachment_Status? status,
+    $core.String? plainTextFilePath,
+    StoredAttachment? thumbnail,
   }) {
     final _result = create();
     if (guid != null) {
@@ -364,11 +368,17 @@ class StoredAttachment extends $pb.GeneratedMessage {
     if (attachment != null) {
       _result.attachment = attachment;
     }
-    if (filePath != null) {
-      _result.filePath = filePath;
+    if (encryptedFilePath != null) {
+      _result.encryptedFilePath = encryptedFilePath;
     }
     if (status != null) {
       _result.status = status;
+    }
+    if (plainTextFilePath != null) {
+      _result.plainTextFilePath = plainTextFilePath;
+    }
+    if (thumbnail != null) {
+      _result.thumbnail = thumbnail;
     }
     return _result;
   }
@@ -414,13 +424,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
   Attachment ensureAttachment() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  $core.String get filePath => $_getSZ(2);
+  $core.String get encryptedFilePath => $_getSZ(2);
   @$pb.TagNumber(3)
-  set filePath($core.String v) { $_setString(2, v); }
+  set encryptedFilePath($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasFilePath() => $_has(2);
+  $core.bool hasEncryptedFilePath() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFilePath() => clearField(3);
+  void clearEncryptedFilePath() => clearField(3);
 
   @$pb.TagNumber(4)
   StoredAttachment_Status get status => $_getN(3);
@@ -430,6 +440,91 @@ class StoredAttachment extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
   void clearStatus() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get plainTextFilePath => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set plainTextFilePath($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasPlainTextFilePath() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPlainTextFilePath() => clearField(5);
+
+  @$pb.TagNumber(6)
+  StoredAttachment get thumbnail => $_getN(5);
+  @$pb.TagNumber(6)
+  set thumbnail(StoredAttachment v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasThumbnail() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearThumbnail() => clearField(6);
+  @$pb.TagNumber(6)
+  StoredAttachment ensureThumbnail() => $_ensure(5);
+}
+
+class AttachmentWithThumbnail extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AttachmentWithThumbnail', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOM<Attachment>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachment', subBuilder: Attachment.create)
+    ..aOM<Attachment>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnail', subBuilder: Attachment.create)
+    ..hasRequiredFields = false
+  ;
+
+  AttachmentWithThumbnail._() : super();
+  factory AttachmentWithThumbnail({
+    Attachment? attachment,
+    Attachment? thumbnail,
+  }) {
+    final _result = create();
+    if (attachment != null) {
+      _result.attachment = attachment;
+    }
+    if (thumbnail != null) {
+      _result.thumbnail = thumbnail;
+    }
+    return _result;
+  }
+  factory AttachmentWithThumbnail.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AttachmentWithThumbnail.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AttachmentWithThumbnail clone() => AttachmentWithThumbnail()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AttachmentWithThumbnail copyWith(void Function(AttachmentWithThumbnail) updates) => super.copyWith((message) => updates(message as AttachmentWithThumbnail)) as AttachmentWithThumbnail; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AttachmentWithThumbnail create() => AttachmentWithThumbnail._();
+  AttachmentWithThumbnail createEmptyInstance() => create();
+  static $pb.PbList<AttachmentWithThumbnail> createRepeated() => $pb.PbList<AttachmentWithThumbnail>();
+  @$core.pragma('dart2js:noInline')
+  static AttachmentWithThumbnail getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AttachmentWithThumbnail>(create);
+  static AttachmentWithThumbnail? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Attachment get attachment => $_getN(0);
+  @$pb.TagNumber(1)
+  set attachment(Attachment v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAttachment() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAttachment() => clearField(1);
+  @$pb.TagNumber(1)
+  Attachment ensureAttachment() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  Attachment get thumbnail => $_getN(1);
+  @$pb.TagNumber(2)
+  set thumbnail(Attachment v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasThumbnail() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearThumbnail() => clearField(2);
+  @$pb.TagNumber(2)
+  Attachment ensureThumbnail() => $_ensure(1);
 }
 
 class Message extends $pb.GeneratedMessage {
@@ -438,7 +533,7 @@ class Message extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToSenderId', $pb.PbFieldType.OY, protoName: 'replyToSenderId')
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'replyToId', $pb.PbFieldType.OY, protoName: 'replyToId')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
-    ..m<$core.int, Attachment>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'Message.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: Attachment.create, packageName: const $pb.PackageName('model'))
+    ..m<$core.int, AttachmentWithThumbnail>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'Message.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttachmentWithThumbnail.create, packageName: const $pb.PackageName('model'))
     ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'disappearAfterSeconds')
     ..hasRequiredFields = false
   ;
@@ -449,7 +544,7 @@ class Message extends $pb.GeneratedMessage {
     $core.List<$core.int>? replyToSenderId,
     $core.List<$core.int>? replyToId,
     $core.String? text,
-    $core.Map<$core.int, Attachment>? attachments,
+    $core.Map<$core.int, AttachmentWithThumbnail>? attachments,
     $core.int? disappearAfterSeconds,
   }) {
     final _result = create();
@@ -531,7 +626,7 @@ class Message extends $pb.GeneratedMessage {
   void clearText() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.Map<$core.int, Attachment> get attachments => $_getMap(4);
+  $core.Map<$core.int, AttachmentWithThumbnail> get attachments => $_getMap(4);
 
   @$pb.TagNumber(6)
   $core.int get disappearAfterSeconds => $_getIZ(5);
@@ -559,6 +654,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..e<StoredMessage_DeliveryStatus>(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredMessage_DeliveryStatus.SENDING, valueOf: StoredMessage_DeliveryStatus.valueOf, enumValues: StoredMessage_DeliveryStatus.values)
     ..aInt64(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstViewedAt', protoName: 'firstViewedAt')
     ..aInt64(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAt', protoName: 'disappearAt')
+    ..m<$core.int, $core.int>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnails', entryClassName: 'StoredMessage.ThumbnailsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.O3, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
@@ -578,6 +674,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     StoredMessage_DeliveryStatus? status,
     $fixnum.Int64? firstViewedAt,
     $fixnum.Int64? disappearAt,
+    $core.Map<$core.int, $core.int>? thumbnails,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -621,6 +718,9 @@ class StoredMessage extends $pb.GeneratedMessage {
     }
     if (disappearAt != null) {
       _result.disappearAt = disappearAt;
+    }
+    if (thumbnails != null) {
+      _result.thumbnails.addAll(thumbnails);
     }
     return _result;
   }
@@ -760,6 +860,9 @@ class StoredMessage extends $pb.GeneratedMessage {
   $core.bool hasDisappearAt() => $_has(13);
   @$pb.TagNumber(14)
   void clearDisappearAt() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.Map<$core.int, $core.int> get thumbnails => $_getMap(14);
 }
 
 class Reaction extends $pb.GeneratedMessage {
@@ -1170,6 +1273,7 @@ class InboundAttachment extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messageId', protoName: 'messageId')
     ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ts')
     ..a<$core.int>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachmentId', $pb.PbFieldType.O3, protoName: 'attachmentId')
+    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isThumbnail', protoName: 'isThumbnail')
     ..hasRequiredFields = false
   ;
 
@@ -1179,6 +1283,7 @@ class InboundAttachment extends $pb.GeneratedMessage {
     $core.String? messageId,
     $fixnum.Int64? ts,
     $core.int? attachmentId,
+    $core.bool? isThumbnail,
   }) {
     final _result = create();
     if (senderId != null) {
@@ -1192,6 +1297,9 @@ class InboundAttachment extends $pb.GeneratedMessage {
     }
     if (attachmentId != null) {
       _result.attachmentId = attachmentId;
+    }
+    if (isThumbnail != null) {
+      _result.isThumbnail = isThumbnail;
     }
     return _result;
   }
@@ -1251,5 +1359,14 @@ class InboundAttachment extends $pb.GeneratedMessage {
   $core.bool hasAttachmentId() => $_has(3);
   @$pb.TagNumber(4)
   void clearAttachmentId() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get isThumbnail => $_getBF(4);
+  @$pb.TagNumber(5)
+  set isThumbnail($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasIsThumbnail() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIsThumbnail() => clearField(5);
 }
 

@@ -25,8 +25,8 @@ message Contact {
   ContactId contactId = 1;
   repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
   string displayName = 3; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
-  int64 createdTs = 4; // the nanosecond unix timestamp when this contact was created
-  int64 mostRecentMessageTs = 5; // the nanosecond unix timestamp of the most recent message with this contact
+  int64 createdTs = 4; // the millisecond unix timestamp when this contact was created
+  int64 mostRecentMessageTs = 5; // the millisecond unix timestamp of the most recent message with this contact
   MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
   string mostRecentMessageText = 7; // the text of the most recent message with this contact
   string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
@@ -46,15 +46,24 @@ message Attachment {
 // A locally stored Attachment
 message StoredAttachment {
   enum Status {
-    PENDING = 0; // attachment has not yet been uploaded/downloaded
-    DONE = 1; // attachment has been uploaded/downloaded
-    FAILED = 2; // attachment permanently failed to upload/download
+    PENDING_ENCRYPTION = 0; // attachment has not yet been encrypted
+    PENDING_UPLOAD = 1; // attachment has not yet been uploaded/downloaded
+    DONE = 2; // attachment has been uploaded/downloaded
+    FAILED = 3; // attachment permanently failed to encrypt or upload/download
   }
 
   string guid = 1; // a globally unique ID for the attachment
   Attachment attachment = 2; // the Attachment
-  string filePath = 3; // path to the on-disk location of this attachment
+  string plainTextFilePath = 5; // path to the on-disk location of the plain text version of this attachment
+  string encryptedFilePath = 3; // path to the on-disk location of encrypted version of this attachment
   Status status = 4; // the status of the upload/download
+  StoredAttachment thumbnail = 6; // an optional thumbnail of this attachment
+}
+
+// An attachment with optional associated Thumbnail
+message AttachmentWithThumbnail {
+  Attachment attachment = 1;
+  Attachment thumbnail = 2;
 }
 
 // A text message with attachments, the primary type of message exchanged by users.
@@ -63,7 +72,7 @@ message Message {
   bytes replyToSenderId = 2; // if this message is a reply to another message, this contains the ID of the sender of that message
   bytes replyToId = 3; // if this message is a reply to another message, this contains the ID of that message
   string text = 4;
-  map<int32, Attachment> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
+  map<int32, AttachmentWithThumbnail> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
   int32 disappearAfterSeconds = 6; // if > 0, message should disappear within this many seconds of first being viewed
 }
 
@@ -80,17 +89,18 @@ message StoredMessage {
   ContactId contactId = 1; // the ContactId that identifies the conversation to which this message belongs (either a direct conversation with a person, or messages in a group)
   string senderId = 2; // the id of the person who sent this message (will match the conversation.id for direct conversations)
   string id = 3; // the id of the message (same as on Message), encoded in base32
-  int64 ts = 4; // The unix timestamp in nanoseconds for when the message was sent (for OUT) or received (for IN)
+  int64 ts = 4; // The unix timestamp in milliseconds for when the message was sent (for OUT) or received (for IN)
   string replyToSenderId = 5; // if this message is a reply to another message, this contains the ID of the sender of that message
   string replyToId = 6; // if this message is a reply to another message, this contains the ID of that message
   string text = 7;
   int32 disappearAfterSeconds = 8;
-  map<int32, StoredAttachment> attachments = 9; // attachments keyed to unique IDs for each attachment within this message
+  map<int32, StoredAttachment> attachments = 9; // attachments keyed to unique IDs for each attachment within this message (excluding thumbnails)
+  map<int32, int32> thumbnails = 15; // maps the id of a thumbnail attachment to the attachment for which it is a thumbnail
   MessageDirection direction = 10; // direction in which the message is going/came
   map<string, Reaction> reactions = 11; // reactions by the id of the reacter
   DeliveryStatus status = 12; // for outgoing messages, the status of its sending and delivery
-  int64 firstViewedAt = 13; // the unix timestamp in nanoseconds of when this message was first viewed on the current device
-  int64 disappearAt = 14; // the unix timestamp in nanoseconds of when this message will automatically disappear
+  int64 firstViewedAt = 13; // the unix timestamp in milliseconds of when this message was first viewed on the current device
+  int64 disappearAt = 14; // the unix timestamp in milliseconds of when this message will automatically disappear
 }
 
 // A reaction to a message
@@ -125,7 +135,7 @@ message OutboundMessage {
   string id = 1; // a unique identifier for this
   string senderId = 2; // the id of who sent this message (same as on StoredMessage)
   string recipientId = 3; // the id of the recipient
-  int64 sent = 4; // The unix timestamp in nanoseconds for when the message was sent
+  int64 sent = 4; // The unix timestamp in millisecond for when the message was sent
   map<string, SubDeliveryStatus> subDeliveryStatuses = 5; // Statuses of subdeliveries to specific deviceIds
   oneof content {
     string messageId = 31; // the id of the message (same as on Message), encoded in base32
@@ -139,6 +149,7 @@ message OutboundMessage {
 message InboundAttachment {
   string senderId = 1; // the id of who sent the message associated to the attachment
   string messageId = 2; // the id of the StoredMessage, encoded in base32
-  int64 ts = 3; // The unix timestamp in nanoseconds for when the message was received (has to match what's on the StoredMessage
+  int64 ts = 3; // The unix timestamp in milliseconds for when the message was received (has to match what's on the StoredMessage
   int32 attachmentId = 4; // The id of the attachment within the Message
+  bool isThumbnail = 5; // indicates if this is a download of a thumbnail
 }
