@@ -235,3 +235,6 @@ msgstr "خروج از سیستم"
 msgid "confirm_remove_device"
 msgstr ""
 "آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
+
+msgid "n/a"
+msgstr ""

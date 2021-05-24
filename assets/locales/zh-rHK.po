@@ -215,3 +215,6 @@ msgstr "登出"
 
 msgid "confirm_remove_device"
 msgstr "是否確定要將此裝置從群組中移除？"
+
+msgid "n/a"
+msgstr ""

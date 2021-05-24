@@ -215,3 +215,6 @@ msgstr "注销"
 
 msgid "confirm_remove_device"
 msgstr "您是否确定要从您的专业版帐户中取消链接此设备？"
+
+msgid "n/a"
+msgstr ""
