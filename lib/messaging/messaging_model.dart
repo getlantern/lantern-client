@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
@@ -8,7 +9,19 @@ import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
 
 class MessagingModel extends Model {
-  MessagingModel() : super('messaging');
+  late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
+
+  MessagingModel() : super('messaging') {
+    _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
+        100,
+        (attachment) =>
+            methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
+              'attachment': (attachment.hasThumbnail()
+                      ? attachment.thumbnail
+                      : attachment)
+                  .writeToBuffer(),
+            }).then((value) => value as Uint8List));
+  }
 
   Future<void> setMyDisplayName<T>(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
@@ -25,12 +38,19 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> sendToDirectContact(String identityKey,
-      {String? text, List<Uint8List>? attachments}) {
+  Future<void> sendToDirectContact(
+    String identityKey, {
+    String? text,
+    List<Uint8List>? attachments,
+    String? replyToId,
+    String? replyToSenderId,
+  }) {
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
       'identityKey': identityKey,
       'text': text,
       'attachments': attachments,
+      'replyToId': replyToId,
+      'replyToSenderId': replyToSenderId,
     });
   }
 
@@ -75,10 +95,30 @@ class MessagingModel extends Model {
         .then((value) => value as Uint8List);
   }
 
+  Future<Uint8List> filePickerLoadAttachment(
+      String filePath, Map<String, String> metadata) async {
+    return methodChannel.invokeMethod(
+        'filePickerLoadAttachment', <String, dynamic>{
+      'filePath': filePath,
+      'metadata': metadata
+    }).then((value) => value as Uint8List);
+  }
+
+  Future<Uint8List> thumbnail(StoredAttachment attachment) async {
+    return _thumbnailCache.get(attachment);
+  }
+
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       'attachment': attachment.writeToBuffer(),
     }).then((value) => value as Uint8List);
+  }
+
+  Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {
+    return methodChannel
+        .invokeMethod('decryptVideoForPlayback', <String, dynamic>{
+      'attachment': attachment.writeToBuffer(),
+    }).then((value) => value as String);
   }
 
   Future<Contact?> getContact(String contactPath) async {
