@@ -1,22 +1,23 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/routes.dart';
 
 import 'settings_item.dart';
 
-class SettingsScreen extends StatelessWidget {
-  SettingsScreen({Key? key}) : super(key: key);
+class Settings extends StatelessWidget {
+  Settings({Key? key}) : super(key: key);
 
   void openInfoProxyAll(BuildContext context) {
     showInfoDialog(
       context,
-      title: 'title_proxy_all_dialog'.i18n,
+      title: 'proxy_all'.i18n,
       des: 'description_proxy_all_dialog'.i18n,
       icon: ImagePaths.key_icon,
     );
   }
 
-  void changeLanguage() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_CHANGE_LANGUAGE);
+  void changeLanguage(BuildContext context) {
+    Navigator.pushNamed(context, routeLanguage);
   }
 
   void reportIssue() {
@@ -30,14 +31,16 @@ class SettingsScreen extends StatelessWidget {
     return BaseScreen(
       title: 'settings'.i18n,
       body: ListView(
-        padding: const EdgeInsets.only(
+        padding: const EdgeInsetsDirectional.only(
+          top: 2,
           bottom: 8,
+          start: 20,
+          end: 20,
         ),
         children: [
           SettingsItem(
             icon: ImagePaths.key_icon,
             title: 'proxy_all'.i18n,
-            inkVerticalPadding: 4,
             openInfoDialog: openInfoProxyAll,
             child: sessionModel
                 .proxyAll((BuildContext context, bool proxyAll, Widget? child) {
@@ -48,20 +51,21 @@ class SettingsScreen extends StatelessWidget {
                 padding: 2,
                 toggleSize: 18.0,
                 value: proxyAll,
-                activeColor: HexColor(indicatorGreen),
-                inactiveColor: HexColor(offSwitchColor),
+                activeColor: indicatorGreen,
+                inactiveColor: offSwitchColor,
                 onToggle: (bool newValue) {
                   sessionModel.switchProxyAll(newValue);
                 },
               );
             }),
           ),
-          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.translate_icon,
             title: 'language'.i18n,
             showArrow: true,
-            onTap: changeLanguage,
+            onTap: () {
+              changeLanguage(context);
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: sessionModel
@@ -69,15 +73,11 @@ class SettingsScreen extends StatelessWidget {
                 return Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: tsTitleItem()?.copyWith(
-                      color: HexColor(
-                    primaryPink,
-                  )),
+                  style: tsSelectedTitleItem(),
                 );
               }),
             ),
           ),
-          CustomDivider(),
           SettingsItem(
             icon: ImagePaths.alert_icon,
             title: 'report_issue'.i18n,

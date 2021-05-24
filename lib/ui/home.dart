@@ -7,7 +7,6 @@ import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
-import 'package:lantern/utils/hex_color.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -29,10 +28,12 @@ class _HomePageState extends State<HomePage> {
 
   late Future<void> loadAsync;
 
+  Function()? _cancelEventSubscription;
+
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeSettings)) {
+    } else if (_initialRoute.startsWith(routeExchange)) {
       _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
       _currentIndex = 3;
@@ -47,7 +48,8 @@ class _HomePageState extends State<HomePage> {
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
-    eventManager.subscribe(Event.All, (eventName, params) {
+    _cancelEventSubscription =
+        eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
       switch (event) {
         case Event.SurveyAvailable:
@@ -59,11 +61,12 @@ class _HomePageState extends State<HomePage> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+            margin:
+                const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),
             // simple way to show indefinitely
             content: Text(message),
             action: SnackBarAction(
-              textColor: HexColor(secondaryPink),
+              textColor: secondaryPink,
               label: buttonText.toUpperCase(),
               onPressed: () {
                 mainMethodChannel.invokeMethod('showLastSurvey');
@@ -93,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       }
       return Future.value(null);
     });
-    navigationChannel.invokeMethod('ready');
+    // navigationChannel.invokeMethod('ready');
   }
 
   void onPageChange(int index) {
@@ -105,6 +108,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _pageController.dispose();
+    if (_cancelEventSubscription != null) {
+      _cancelEventSubscription!();
+    }
     super.dispose();
   }
 

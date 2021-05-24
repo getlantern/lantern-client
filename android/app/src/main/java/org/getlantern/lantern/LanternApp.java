@@ -29,7 +29,6 @@ import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
-import org.getlantern.mobilesdk.activity.BaseActivity;
 import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +46,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     private static LanternSessionManager session;
     private static InAppBilling inAppBilling;
     private static boolean isForeground;
-    private static boolean supportsPro;
     private FirebaseRemoteConfig firebaseRemoteConfig;
 
     private static final String FIREBASE_BACKEND_HEADER_PREFIX = "x_lantern_";
@@ -62,7 +60,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }});
 
     private Activity currentActivity;
-    private WelcomeDialog welcome;
     public final MessagingHolder messaging = new MessagingHolder();
 
     @Override
@@ -184,7 +181,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     @Override
     public void onActivityResumed(Activity activity) {
         this.currentActivity = activity;
-        if (activity instanceof BaseActivity) {
+        if (activity instanceof MainActivity) {
             Logger.debug(TAG, "Main activity started");
             isForeground = true;
         }
@@ -203,7 +200,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
     @Override
     public void onActivityStopped(Activity activity) {
-        if (activity instanceof BaseActivity) {
+        if (activity instanceof MainActivity) {
             Logger.debug(TAG, "Main activity stopped");
             isForeground = false;
         }
@@ -248,7 +245,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
             return;
         }
 
-        welcome = WelcomeDialog_.builder().layout(experiment).build();
+        WelcomeDialog welcome = WelcomeDialog_.builder().layout(experiment).build();
         if (welcome == null) {
             Logger.error(TAG, "Could not create welcome screen dialog");
             return;

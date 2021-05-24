@@ -1,14 +1,15 @@
 # 
 # Translators:
-# strel, 2021
 # Giorgio Maone <giorgio@maone.net>, 2021
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021
+# e2f <projects@e2f.com>, 2021
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
+# strel, 2021
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021\n"
+"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -19,10 +20,10 @@ msgstr "Uso de datos diario"
 msgid "is"
 msgstr "está"
 
-msgid "on"
+msgid "connected"
 msgstr "Conectado"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Desconectado"
 
 msgid "Disconnecting"
@@ -87,9 +88,6 @@ msgstr "Idioma"
 msgid "report_issue"
 msgstr "Informar de un problema"
 
-msgid "title_proxy_all_dialog"
-msgstr "Proxyficar todo"
-
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Si está habilitado, todo el trafico se enviará a través de Lantern (más "
@@ -97,7 +95,7 @@ msgstr ""
 "través de Lantern (más rápido)."
 
 msgid "Exchange"
-msgstr "Intercambiar"
+msgstr "Cambiar"
 
 msgid "Account"
 msgstr "Cuenta"
@@ -107,6 +105,12 @@ msgstr "En asociación con"
 
 msgid "Buy"
 msgstr "Comprar"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
 
 msgid "With"
 msgstr "Con"
@@ -140,3 +144,89 @@ msgstr "Estado de la VPN"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Autorizar dispositivo para Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Autorizar con el PIN de vinculación del dispositivo"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Requiere acceso físico a un dispositivo con Lantern Pro"
+
+msgid "Link with PIN"
+msgstr "Vincular con PIN"
+
+msgid "OR"
+msgstr "O"
+
+msgid "Authorize Device via Email"
+msgstr "Autorizar el dispositivo por correo electrónico"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"Requiere tener acceso al correo electrónico que utilizó para adquirir "
+"Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Vincular con correo electrónico"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Please enter a valid email address"
+msgstr "Introduzca una dirección de correo electrónico válida"
+
+msgid "Re-send Email"
+msgstr "Re-enviar correo"
+
+msgid "Paste from clipboard?"
+msgstr "¿Copiar del portapapeles?"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Enter or paste linking code"
+msgstr "Introduzca o pegue el código de vinculación"
+
+msgid "recovery_email_sent"
+msgstr ""
+"Se ha enviado un PIN de vinculación a %1$s, si es que existe tal cuenta. "
+"Introduzca el PIN de ese correo arriba. El correo electrónico puede tardar "
+"varias horas en llegar."
+
+msgid "Add Device"
+msgstr "Añadir dispositivo"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Abra \"Autorizar dispositivo para Pro\" en el menú de cuenta del otro "
+"dispositivo que desea vincular y seleccione \"Vincular con PIN\""
+
+msgid "approve_device_step_2"
+msgstr "Introduzca el código de vinculación obtenido en el paso 1"
+
+msgid "Pro Account Expiration"
+msgstr "Caducidad de la cuenta Pro"
+
+msgid "Renew"
+msgstr "Renovar"
+
+msgid "pro_devices_header"
+msgstr "Dispositivos Lantern Pro (hasta 3)"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Log Out"
+msgstr "Cerrar sesión"
+
+msgid "confirm_remove_device"
+msgstr ""
+"¿Está seguro de que quiere desvincular este dispositivo de su cuenta Pro?"

@@ -27,7 +27,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: HexColor(borderColor),
+                  color: borderColor,
                   width: 1,
                 ),
                 borderRadius: const BorderRadius.all(

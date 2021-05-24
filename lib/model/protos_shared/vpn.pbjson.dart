@@ -33,3 +33,25 @@ const Bandwidth$json = const {
 
 /// Descriptor for `Bandwidth`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bandwidthDescriptor = $convert.base64Decode('CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIcCglyZW1haW5pbmcYAiABKANSCXJlbWFpbmluZxIYCgdhbGxvd2VkGAMgASgDUgdhbGxvd2VkEh4KCnR0bFNlY29uZHMYBCABKANSCnR0bFNlY29uZHM=');
+@$core.Deprecated('Use deviceDescriptor instead')
+const Device$json = const {
+  '1': 'Device',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'created', '3': 3, '4': 1, '5': 3, '10': 'created'},
+  ],
+};
+
+/// Descriptor for `Device`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deviceDescriptor = $convert.base64Decode('CgZEZXZpY2USDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSGAoHY3JlYXRlZBgDIAEoA1IHY3JlYXRlZA==');
+@$core.Deprecated('Use devicesDescriptor instead')
+const Devices$json = const {
+  '1': 'Devices',
+  '2': const [
+    const {'1': 'devices', '3': 1, '4': 3, '5': 11, '6': '.Device', '10': 'devices'},
+  ],
+};
+
+/// Descriptor for `Devices`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List devicesDescriptor = $convert.base64Decode('CgdEZXZpY2VzEiEKB2RldmljZXMYASADKAsyBy5EZXZpY2VSB2RldmljZXM=');

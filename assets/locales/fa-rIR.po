@@ -2,14 +2,16 @@
 # Translators:
 # Lantern, 2021
 # Derek F <derek@getlantern.org>, 2021
+# Amir Moezzi <amirreza.mz@yahoo.com>, 2021
+# b0b47d46632b78a09a40de799fda9a65, 2021
 # NoProfile, 2021
 # Evan <alireza.firoozi68@gmail.com>, 2021
+# Mokah <unfilternet@getlantern.org>, 2021
 # Sina <sina@asl19.org>, 2021
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2021
-# Amir Moezzi <amirreza.mz@yahoo.com>, 2021
 # Vaseto Nora <n.nouri67@gmail.com>, 2021
 # Mary Sol <salar.adlparvar@gmail.com>, 2021
-# b0b47d46632b78a09a40de799fda9a65, 2021
+# Pedram Azizallahi <pedram672004@yahoo.com>, 2021
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2021
 # 
 msgid ""
@@ -23,12 +25,12 @@ msgid "Daily Data Usage"
 msgstr "مصرف داده روزانه"
 
 msgid "is"
-msgstr "در حال"
+msgstr "وضعیت:"
 
-msgid "on"
+msgid "connected"
 msgstr "متصل شد"
 
-msgid "off"
+msgid "disconnected"
 msgstr "قطع شده است"
 
 msgid "Disconnecting"
@@ -38,7 +40,7 @@ msgid "Connecting"
 msgstr "درحال اتصال..."
 
 msgid "Go Pro Title"
-msgstr "به نسخه Pro بروید!"
+msgstr "به نسخه حرفه‌ای بروید!"
 
 msgid "Go Pro Description"
 msgstr "به سرعت‌های بالاتر و داده‌های نامحدود دسترسی پیدا کنید!"
@@ -85,16 +87,13 @@ msgid "settings"
 msgstr "تنظیمات"
 
 msgid "proxy_all"
-msgstr "پراکسی کردن تمام ترافیک روشن است"
+msgstr "پراکسی کردن همه چیز"
 
 msgid "language"
 msgstr "زبان"
 
 msgid "report_issue"
 msgstr "گزارش مشکل"
-
-msgid "title_proxy_all_dialog"
-msgstr "پراکسی کردن تمام ترافیک"
 
 msgid "description_proxy_all_dialog"
 msgstr ""
@@ -113,6 +112,12 @@ msgstr "با شراکت:"
 
 msgid "Buy"
 msgstr "خرید"
+
+msgid "Bitcoin"
+msgstr "بیت‌کوین"
+
+msgid "Tether"
+msgstr "تتر"
 
 msgid "With"
 msgstr "با"
@@ -146,3 +151,90 @@ msgstr "وضعیت VPN"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "تایید دستگاه برای نسخه حرفه ای"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "تأیید با «پین اتصال دستگاه»"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "نیاز به دسترسی فیزیکی به «دستگاه Lantern Pro»"
+
+msgid "Link with PIN"
+msgstr "پیوند با پین"
+
+msgid "OR"
+msgstr "یا"
+
+msgid "Authorize Device via Email"
+msgstr "تأیید دستگاه از طریق ایمیل"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"نیاز به دسترسی به ایمیلی که برای خرید Lantern Pro از آن استفاده کردید "
+
+msgid "Link via Email"
+msgstr "پیوند از طریق ایمیل"
+
+msgid "Email"
+msgstr "ایمیل"
+
+msgid "Submit"
+msgstr "ثبت اطلاعات"
+
+msgid "Please enter a valid email address"
+msgstr "لطفاً آدرس ایمیل معتبری وارد کنید"
+
+msgid "Re-send Email"
+msgstr "ارسال دوباره ایمیل"
+
+msgid "Paste from clipboard?"
+msgstr "چسباندن از کلیپ‌بورد؟"
+
+msgid "Yes"
+msgstr "بله"
+
+msgid "No"
+msgstr "خیر"
+
+msgid "Enter or paste linking code"
+msgstr "کد پیوند دهنده را وارد کنید یا بچسبانید"
+
+msgid "recovery_email_sent"
+msgstr ""
+"در صورت وجود این حساب، پین پیوند دهنده به %s ارسال شده است. پین را از ایمیل "
+"بالا وارد کنید. ممکن است دریافت چندین ساعت طول بکشد."
+
+msgid "Add Device"
+msgstr "افزودن دستگاه جدید"
+
+msgid "approve_device_step_1"
+msgstr ""
+"\"مجاز کردن دستگاه برای Pro\" را از فهرست حساب دستگاهی که می خواهید پیوند "
+"دهید باز کنید، سپس \"پیوند با پین\" را انتخاب کنید"
+
+msgid "approve_device_step_2"
+msgstr "کد پیوند دهنده دریافت شده در مرحله ۱ را وارد کنید"
+
+msgid "Pro Account Expiration"
+msgstr "انقضای حساب Pro"
+
+msgid "Renew"
+msgstr "تمدید مجدد"
+
+msgid "pro_devices_header"
+msgstr "دستگاه‌های Lantern Pro (حداکثر ۳ تا)"
+
+msgid "Remove"
+msgstr "حذف"
+
+msgid "Log Out"
+msgstr "خروج از سیستم"
+
+msgid "confirm_remove_device"
+msgstr ""
+"آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
+
+msgid "n/a"
+msgstr ""

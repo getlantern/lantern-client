@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.MessagingModel
@@ -69,9 +70,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        sessionModel = SessionModel(flutterEngine)
+        sessionModel = SessionModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        eventManager = EventManager("lantern_event_channel", flutterEngine)
+        eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
+            override fun onListen(event: Event) {
+                if (LanternApp.getSession().lanternDidStart()) {
+                    fetchLoConf()
+                    Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
+                }
+            }
+        }
 
         MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
@@ -132,11 +140,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
-
-        if (LanternApp.getSession().lanternDidStart()) {
-            fetchLoConf()
-            Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
-        }
 
         if (Utils.isPlayVersion(this)) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
@@ -279,12 +282,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     return
                 }
             }
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    showSurveySnackbar(survey)
-                },
-                2000
-            )
+            showSurveySnackbar(survey)
         }
     }
 

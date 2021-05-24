@@ -16,10 +16,10 @@ msgstr "שימוש יומי בנתונים"
 msgid "is"
 msgstr "הוא"
 
-msgid "on"
+msgid "connected"
 msgstr "מחובר"
 
-msgid "off"
+msgid "disconnected"
 msgstr "מנותק"
 
 msgid "Disconnecting"
@@ -83,9 +83,6 @@ msgstr "שפה"
 
 msgid "report_issue"
 msgstr "דווח על סוגייה"
-
-msgid "title_proxy_all_dialog"
-msgstr "ייפוי כוח בהכול"
 
 msgid "description_proxy_all_dialog"
 msgstr ""

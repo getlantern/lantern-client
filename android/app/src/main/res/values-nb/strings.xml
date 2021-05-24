@@ -132,7 +132,6 @@
   <string name="get_code">Hent kode</string>
   <string name="get_code_text">Skriv inn din e-postadresse for å motta en kode å dele med dine venner. Få en gratismåned med Pro når de melder seg på.</string>
   <string name="enter_your_email">Skriv inn din e-postadresse for å motta en referent-kode</string>
-  <string name="referral_copied_to_clipboard">Referent-kode kopiert til utklippstavle.</string>
   <string name="share_referral_text">Bruk min kode %1$s for å få opptil 3 ekstramåneder gratis etter betaling. Last ned Lantern https://bit.ly/lanternapk</string>
   <string name="previous_code">Hvis du tidligere har mottat en referent-kode\r\husk å bruke samme e-postadresse.</string>
   <string name="payment_plans">Lantern Pro-betalingsplaner</string>

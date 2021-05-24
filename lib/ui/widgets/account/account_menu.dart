@@ -6,22 +6,13 @@ import 'settings_item.dart';
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
-  void openProAccountManagement() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_ACCOUNT_MANAGEMENT);
-  }
-
   void upgradeToLanternPro() {
     LanternNavigator.startScreen(
         LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
   }
 
-  void authorizeDeviceForPro() {
-    LanternNavigator.startScreen(
-        LanternNavigator.SCREEN_AUTHORIZE_DEVICE_FOR_PRO);
-  }
-
-  void addDevice() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_ADD_DEVICE);
+  void authorizeDeviceForPro(BuildContext context) {
+    Navigator.pushNamed(context, routeAuthorizeDeviceForPro);
   }
 
   void inviteFriends() {
@@ -47,14 +38,16 @@ class AccountMenu extends StatelessWidget {
   List<Widget> freeItems(BuildContext context) {
     return [
       SettingsItem(
-        icon: ImagePaths.crown_icon,
+        icon: ImagePaths.crown_icon_monochrome,
         title: 'upgrade_to_lantern_pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
       SettingsItem(
         icon: ImagePaths.devices_icon,
         title: 'authorize_device_for_pro'.i18n,
-        onTap: authorizeDeviceForPro,
+        onTap: () {
+          authorizeDeviceForPro(context);
+        },
       ),
       SettingsItem(
         icon: ImagePaths.star_icon,
@@ -71,7 +64,6 @@ class AccountMenu extends StatelessWidget {
         title: 'free_yinbi_crypto'.i18n,
         onTap: openFreeYinbiCrypto,
       ),
-      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
@@ -86,15 +78,18 @@ class AccountMenu extends StatelessWidget {
     return [
       SettingsItem(
         icon: ImagePaths.account_icon,
+        iconColor: Colors.black,
         title: 'pro_account_management'.i18n,
-        showArrow: true,
-        onTap: openProAccountManagement,
+        onTap: () {
+          Navigator.pushNamed(context, routeProAccount);
+        },
       ),
-      CustomDivider(),
       SettingsItem(
           icon: ImagePaths.devices_icon,
           title: 'add_device'.i18n,
-          onTap: addDevice),
+          onTap: () {
+            Navigator.pushNamed(context, routeApproveDevice);
+          }),
       SettingsItem(
         icon: ImagePaths.star_icon,
         title: 'invite_friends'.i18n,
@@ -110,7 +105,6 @@ class AccountMenu extends StatelessWidget {
         title: 'yinbi_redemption'.i18n,
         onTap: openYinbiRedemption,
       ),
-      CustomDivider(),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
@@ -130,6 +124,7 @@ class AccountMenu extends StatelessWidget {
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return ListView(
+          padding: const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
           children: proUser ? proItems(context) : freeItems(context),
         );
       }),

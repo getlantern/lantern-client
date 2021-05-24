@@ -7,8 +7,10 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -77,19 +79,17 @@ public class ProPlan {
         Integer year = renewalBonusExpected.get("years");
         Integer month = renewalBonusExpected.get("months");
         Integer day = renewalBonusExpected.get("days");
-        StringBuilder bonus = new StringBuilder();
+        List<String> bonusParts = new ArrayList();
         if (year != null && year > 0) {
-            bonus.append(context.getResources().getQuantityString(R.plurals.year, year, year));
-            bonus.append(" ");
+            bonusParts.add(context.getResources().getQuantityString(R.plurals.year, year, year));
         }
         if (month != null && month > 0) {
-            bonus.append(context.getResources().getQuantityString(R.plurals.month, month, month));
-            bonus.append(" ");
+            bonusParts.add(context.getResources().getQuantityString(R.plurals.month, month, month));
         }
         if (day != null && day > 0) {
-            bonus.append(context.getResources().getQuantityString(R.plurals.day, day, day));
+            bonusParts.add(context.getResources().getQuantityString(R.plurals.day, day, day));
         }
-        return bonus.toString().trim();
+        return String.join(" ", bonusParts);
     }
 
     public Map<String, Long> getPrice() {
@@ -200,7 +200,7 @@ public class ProPlan {
                 formattedPrice = String.valueOf(currencyPrice / 100);
             }
         }
-        return formattedPrice;
+        return String.format(PLAN_COST, getSymbol(), formattedPrice);
     }
 
     public String getSymbol() {
@@ -214,12 +214,10 @@ public class ProPlan {
         }
         Map.Entry<String,Long> entry = price.entrySet().iterator().next();
         this.currencyCode = entry.getKey();
-        final Currency currency = getCurrencyObj();
-        final String symbol = getSymbol();
-        this.costStr = String.format(PLAN_COST, symbol, getFormattedPrice(price));
+        this.costStr = getFormattedPrice(price);
         if (priceWithoutTax != null) {
-            this.costWithoutTaxStr = String.format(PLAN_COST, symbol, getFormattedPrice(priceWithoutTax));
-            this.taxStr = String.format(PLAN_COST, symbol, getFormattedPrice(tax));
+            this.costWithoutTaxStr = getFormattedPrice(priceWithoutTax);
+            this.taxStr = getFormattedPrice(tax);
         } else {
             this.costWithoutTaxStr = this.costStr;
         }
@@ -236,7 +234,11 @@ public class ProPlan {
                 durationFormat = context.getString(R.string.two_years_lantern_pro);
             }
         }
-        durationFormat += " + " + getRenewalBonusExpected(context);
+
+        String bonus = getRenewalBonusExpected(context);
+        if (!bonus.isEmpty()) {
+            durationFormat += " + " + getRenewalBonusExpected(context);
+        }
         if (numYears() != 1) {
             if (isBestValue() && LanternApp.getSession().yinbiEnabled()) {
                 durationFormat += " + " + context.getString(R.string.free_extra_yinbi);
