@@ -17,10 +17,10 @@ msgstr "每日数据用量"
 msgid "is"
 msgstr "是"
 
-msgid "on"
+msgid "connected"
 msgstr "已连接"
 
-msgid "off"
+msgid "disconnected"
 msgstr "断线"
 
 msgid "Disconnecting"

@@ -1,6 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:lantern/package_store.dart';
+
+import '../continue_arrow.dart';
 
 class SettingsItem extends StatelessWidget {
   late final String? icon;
@@ -80,23 +80,13 @@ class SettingsItem extends StatelessWidget {
                 ),
                 Container(
                   child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (child != null) child!,
-                        if (showArrow)
-                          Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.rotationY(
-                                Directionality.of(context) == TextDirection.rtl
-                                    ? math.pi
-                                    : 0),
-                            child: const CustomAssetImage(
-                              path: ImagePaths.keyboard_arrow_right_icon,
-                              size: 24,
-                            ),
-                          ),
-                      ]),
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (child != null) child!,
+                      if (showArrow) const ContinueArrow(),
+                    ],
+                  ),
                 ),
               ],
             ),

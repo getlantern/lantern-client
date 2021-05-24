@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       }
       return Future.value(null);
     });
-    navigationChannel.invokeMethod('ready');
+    // navigationChannel.invokeMethod('ready');
   }
 
   void onPageChange(int index) {

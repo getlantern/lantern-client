@@ -21,10 +21,10 @@ msgstr "Günlük Veri Kullanımı"
 msgid "is"
 msgstr ":"
 
-msgid "on"
+msgid "connected"
 msgstr "Bağlandı"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Bağlantıyı kes"
 
 msgid "Disconnecting"

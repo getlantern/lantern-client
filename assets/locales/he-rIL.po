@@ -16,10 +16,10 @@ msgstr "שימוש יומי בנתונים"
 msgid "is"
 msgstr "הוא"
 
-msgid "on"
+msgid "connected"
 msgstr "מחובר"
 
-msgid "off"
+msgid "disconnected"
 msgstr "מנותק"
 
 msgid "Disconnecting"

@@ -18,10 +18,10 @@ msgstr "Données quotidiennes utilisées"
 msgid "is"
 msgstr "est"
 
-msgid "on"
+msgid "connected"
 msgstr "Connectée"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Déconnecté"
 
 msgid "Disconnecting"

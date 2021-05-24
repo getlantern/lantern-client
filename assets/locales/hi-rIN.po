@@ -19,10 +19,10 @@ msgstr "हर दिन का डेटा उपयोग"
 msgid "is"
 msgstr "है"
 
-msgid "on"
+msgid "connected"
 msgstr "कनेक्टेड"
 
-msgid "off"
+msgid "disconnected"
 msgstr "डिस्कनेक्ट किया गया"
 
 msgid "Disconnecting"

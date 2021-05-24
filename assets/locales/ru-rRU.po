@@ -23,10 +23,10 @@ msgstr "Ежедневное использование данных"
 msgid "is"
 msgstr "это"
 
-msgid "on"
+msgid "connected"
 msgstr "Подключён"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Отключен"
 
 msgid "Disconnecting"

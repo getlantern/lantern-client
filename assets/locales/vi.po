@@ -19,10 +19,10 @@ msgstr "Sử dụng dữ liệu hàng ngày"
 msgid "is"
 msgstr "là"
 
-msgid "on"
+msgid "connected"
 msgstr "Đã kết nối"
 
-msgid "off"
+msgid "disconnected"
 msgstr "Đã ngắt kết nối"
 
 msgid "Disconnecting"

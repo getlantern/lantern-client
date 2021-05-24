@@ -18,10 +18,10 @@ msgstr "每日網路數據用量"
 msgid "is"
 msgstr "狀態："
 
-msgid "on"
+msgid "connected"
 msgstr "已連線"
 
-msgid "off"
+msgid "disconnected"
 msgstr "已中斷連線"
 
 msgid "Disconnecting"
