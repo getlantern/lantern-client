@@ -32,7 +32,7 @@ msgid "Connecting"
 msgstr "Đang kết nối..."
 
 msgid "Go Pro Title"
-msgstr "Đến Pro!"
+msgstr "Lên Pro!"
 
 msgid "Go Pro Description"
 msgstr "Mở khóa tốc độ nhanh hơn và dữ liệu không giới hạn!"
@@ -93,7 +93,7 @@ msgstr ""
 " tắt, chỉ lưu lượng bị chặn mới được gửi qua Lantern (nhanh hơn)."
 
 msgid "Exchange"
-msgstr "Trao đổi"
+msgstr "Giao dịch"
 
 msgid "Account"
 msgstr "Tài khoản"
@@ -142,3 +142,85 @@ msgstr "Trạng thái VPN"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Cho Phép Máy dùng bản Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Ủy quyền bằng Mã pin liên kết thiết bị"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Yêu cầu quyền truy cập vật lý vào Thiết bị Lantern Pro"
+
+msgid "Link with PIN"
+msgstr "Liên kết bằng mã PIN"
+
+msgid "OR"
+msgstr "HOẶC"
+
+msgid "Authorize Device via Email"
+msgstr "Cấp phép thiết bị qua email"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "Yêu cầu quyền truy cập vào email bạn đã sử dụng để mua Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Liên kết qua Email"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Submit"
+msgstr "Nộp"
+
+msgid "Please enter a valid email address"
+msgstr "Vui lòng nhập địa chỉ email hợp lệ"
+
+msgid "Re-send Email"
+msgstr "Gửi lại Email"
+
+msgid "Paste from clipboard?"
+msgstr "Dán từ khay nhớ tạm?"
+
+msgid "Yes"
+msgstr "Có"
+
+msgid "No"
+msgstr "Không"
+
+msgid "Enter or paste linking code"
+msgstr "Nhập hoặc dán mã liên kết"
+
+msgid "recovery_email_sent"
+msgstr ""
+"Mã PIN Liên kết đã được gửi đến %s nếu tài khoản này tồn tại. Nhập mã PIN từ"
+" email đó ở trên. Có thể mất vài giờ để nhận được email."
+
+msgid "Add Device"
+msgstr "Thêm Máy"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Mở 'Cho phép thiết bị dùng bản Pro' từ menu tài khoản trên thiết bị bạn muốn"
+" liên kết, sau đó chọn 'Liên kết bằng mã PIN'"
+
+msgid "approve_device_step_2"
+msgstr "Nhập mã liên kết có được từ bước 1"
+
+msgid "Pro Account Expiration"
+msgstr "Tài khoản Pro hết hạn"
+
+msgid "Renew"
+msgstr "Làm mới"
+
+msgid "pro_devices_header"
+msgstr "Thiết bị Lantern Pro (tối đa 3)"
+
+msgid "Remove"
+msgstr "Xóa bỏ"
+
+msgid "Log Out"
+msgstr "Đăng xuất"
+
+msgid "confirm_remove_device"
+msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"

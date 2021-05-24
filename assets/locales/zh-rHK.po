@@ -1,13 +1,13 @@
 # 
 # Translators:
+# e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
 # e2f <projects@e2f.com>, 2021
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021
-# e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021\n"
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021\n"
 "Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -16,7 +16,7 @@ msgid "Daily Data Usage"
 msgstr "每日網路數據用量"
 
 msgid "is"
-msgstr "狀態："
+msgstr "連線狀態："
 
 msgid "connected"
 msgstr "已連線"
@@ -88,7 +88,7 @@ msgid "description_proxy_all_dialog"
 msgstr "啟用後，所有流量都將透過 Lantern 傳輸 (更安全)。一旦停用，只有遭封鎖的流量會透過 Lantern 傳輸 (速度更快)。"
 
 msgid "Exchange"
-msgstr "交換"
+msgstr "交易平台"
 
 msgid "Account"
 msgstr "帳號"
@@ -137,3 +137,81 @@ msgstr "VPN 狀態"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Pro 版授權裝置"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "透過裝置連結碼進行授權"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "需要實際存取 Lantern Pro 裝置"
+
+msgid "Link with PIN"
+msgstr "使用連結碼來連結"
+
+msgid "OR"
+msgstr "或"
+
+msgid "Authorize Device via Email"
+msgstr "透過電子郵件授權裝置"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "需要存取您用來購買 Lantern Pro 版的電子郵件"
+
+msgid "Link via Email"
+msgstr "透過電子郵件來連結"
+
+msgid "Email"
+msgstr "電子郵件"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Please enter a valid email address"
+msgstr "請輸入有效的電子郵件地址"
+
+msgid "Re-send Email"
+msgstr "重新傳送電子郵件"
+
+msgid "Paste from clipboard?"
+msgstr "要從剪貼簿貼上嗎？"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Enter or paste linking code"
+msgstr "輸入或貼上連結碼"
+
+msgid "recovery_email_sent"
+msgstr "系統已將連結碼傳送給 %s (如果這個帳號仍在使用中)。電子郵件可能需要幾個小時才會寄達，屆時請輸入電子郵件中提供的連結碼。"
+
+msgid "Add Device"
+msgstr "新增裝置"
+
+msgid "approve_device_step_1"
+msgstr "使用您希望連結的裝置，從帳號選單中開啟「授權裝置使用 Pro」，接著選取「使用連結碼來連結」"
+
+msgid "approve_device_step_2"
+msgstr "請輸入您在步驟 1 取得的連結碼 "
+
+msgid "Pro Account Expiration"
+msgstr "Pro 帳號到期日"
+
+msgid "Renew"
+msgstr "續訂"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro 裝置 (最多 3 部)"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Log Out"
+msgstr "登出"
+
+msgid "confirm_remove_device"
+msgstr "是否確定要將此裝置從群組中移除？"

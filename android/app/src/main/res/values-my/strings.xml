@@ -178,11 +178,6 @@
   <string name="too_many_devices">သင်၏ Pro အကောင့်နှင့်ချိတ်ဆက်နိုင်သည့် ကိရိယာအရေအတွက်ကန့်သတ်ချက် ပြည့်ပါပြီ။</string>
   <string name="check_spam_folder">* အီးမေးလ်ကိုသင်မရရှိသေးပါက ကျေးဇူးပြု၍ သင်၏ spam ဖိုင်တွဲကိုစစ်ဆေးပါ</string>
   <string name="by_referral">မိတ်ဆွေတစ်ဦးကို ညွှန်းပေးခြင်းဖြင့် Pro ကိုလက်ခံရရှိခဲ့သည်</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item> အကြွေးဝယ်ကဒ်</item>
-    <item> မိတ်ဆွေတစ်ဦးကို ညွှန်းပေးခြင်းဖြင့် Pro ကိုလက်ခံရရှိခဲ့သည်</item>
-  </string-array>
   <string name="payment_method">ငွေပေးချေစနစ်</string>
   <string name="payment_account">ငွေပေးချေမှုအကောင့်</string>
   <string name="oops_having_trouble">အိုး! ဒီအီးမေးလ်လိပ်စာကိုရှာရတာအခက်တွေ့နေတယ်။ ကျေးဇူးပြု၍ သင်၏အကောင့်ကိုရှာဖွေရန်အောက်ပါအချက်အလက်များကိုပေးပါ။</string>
@@ -526,7 +521,7 @@
   <string name="send_report">အစီရင်ခံစာ ပို့ပါ</string>
   <string name="email_optional">အီးမေးလ် (မဖြစ်မနေမဟုတ်)</string>
   <string name="device_added">ကိရိယာ ပေါင်းထည့်ပြီး</string>
-  <string name="device_authorized_pro">ဤကိရိယာသည် သင်၏ Lantern Pro အကောင့်ကို အသုံးပြုရန် ယခု ခွင့်ပြုချက်ရပြီဖြစ်သည်။</string>
+  <string name="device_authorized_pro">သင်၏ကိရိယာအသစ်ကို သင်၏ Pro အကောင့်ကိုအသုံးပြုရန် ယခုတရားဝင်ခွင့်ပြုထားသည်။ အပြောင်းအလဲများအကျိုးသက်ရောက်ရန် မိနစ်အနည်းငယ်စောင့်ပါ။</string>
   <string name="report_sent">ပို့ပြီးပါပြီ</string>
   <string name="thank_you_for_reporting_your_issue">သင်၏ပြဿနာကို တင်ပြသည့်အတွက် ကျေးဇူးတင်ပါသည်။ သင့်အီးမေးလ်ကို ပံ့ပိုးပေးပါက ကျွန်ုပ်တို့ တတ်နိုင်သမျှ အမြန်ဆုံး အကြောင်းပြန်ပါမည်။</string>
   <string name="visit_yin_bi_to_redeem_your_ynb">သင်၏ YNB ကို ရွေးရန်နှင့် သင်၏ အကောင့် လက်ကျန်ကို စစ်ရန် Yin.bi သို့ သွားပါ။ Yinbi ရွေးနှုတ်ခြင်းကုဒ်များသည် ဝယ်ပြီးနောက် ရက်ပေါင်း 30 အတွင်း သက်တမ်းကုန်ဆုံးမည်။</string>

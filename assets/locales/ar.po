@@ -1,11 +1,12 @@
 # 
 # Translators:
-# lamine Kacimi <k_lamine27@yahoo.fr>, 2021
 # Derek F <derek@getlantern.org>, 2021
+# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2021
+# lamine Kacimi <k_lamine27@yahoo.fr>, 2021
+# محيي الدين <tx99h4@hotmail.com>, 2021
 # Rima Sghaier, 2021
 # Amin Jobran, 2021
 # Abed Abedd <abderrahman.younis@gmail.com>, 2021
-# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2021
 # e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021
 # 
 msgid ""
@@ -34,7 +35,7 @@ msgid "Connecting"
 msgstr "ربط ..."
 
 msgid "Go Pro Title"
-msgstr "Go Pro!"
+msgstr "الترقية إلى النسخة الاحترافية!"
 
 msgid "Go Pro Description"
 msgstr "احصل على سرعات فائقة وبيانات غير محدودة!"
@@ -80,7 +81,7 @@ msgid "settings"
 msgstr "الاعدادات"
 
 msgid "proxy_all"
-msgstr "كل شيء على الوكيل"
+msgstr "كل شيء على البروكسي"
 
 msgid "language"
 msgstr "لغة"
@@ -144,3 +145,86 @@ msgstr "حالة VPN"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "منح إذن للجهاز لحساب برو"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "المصادقة مع رقم التعريف الشخصي لربط الجهاز"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "يحتاج إلى وصول فعلي إلى جهاز لانترن برو"
+
+msgid "Link with PIN"
+msgstr "ربط من خلال PIN"
+
+msgid "OR"
+msgstr "أو"
+
+msgid "Authorize Device via Email"
+msgstr "مصادقة الجهاز عبر البريد الإلكتروني"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "يحتاج إلى الوصول إلى البريد الإلكتروني الذي تستخدمه لشراء لانترن برو"
+
+msgid "Link via Email"
+msgstr "ربط عبر البريد الإلكتروني"
+
+msgid "Email"
+msgstr "البريد الاكتروني"
+
+msgid "Submit"
+msgstr "ارسال"
+
+msgid "Please enter a valid email address"
+msgstr "يرجى إدخال عنوان بريد إلكتروني صالح"
+
+msgid "Re-send Email"
+msgstr "إعادة إرسال البريد الإلكتروني"
+
+msgid "Paste from clipboard?"
+msgstr "لصق من الحافظة؟"
+
+msgid "Yes"
+msgstr "نعم"
+
+msgid "No"
+msgstr "لا"
+
+msgid "Enter or paste linking code"
+msgstr "أدخل أو الصق رمز الربط"
+
+msgid "recovery_email_sent"
+msgstr ""
+"تم إرسال رمز PIN للربط إلى %s إذا كان هذا الحساب موجودًا. أدخل رقم التعريف "
+"الشخصي من هذا البريد الإلكتروني أعلاه. قد يستغرق البريد الإلكتروني عدة ساعات"
+" للوصول."
+
+msgid "Add Device"
+msgstr "أضف جهاز"
+
+msgid "approve_device_step_1"
+msgstr ""
+"افتح \"تخويل الجهاز لـ Pro\" من قائمة الحساب على الجهاز الذي ترغب في ربطه، "
+"ثم حدد \"ربط مع PIN\""
+
+msgid "approve_device_step_2"
+msgstr "أدخل رمز الربط الذي تم الحصول عليه من الخطوة 1"
+
+msgid "Pro Account Expiration"
+msgstr "انتهاء صلاحية حساب Pro"
+
+msgid "Renew"
+msgstr "اعادة التجديد"
+
+msgid "pro_devices_header"
+msgstr "أجهزة Lantern Pro (تصل إلى 3)"
+
+msgid "Remove"
+msgstr "ازالة"
+
+msgid "Log Out"
+msgstr "تسجيل الخروج"
+
+msgid "confirm_remove_device"
+msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
