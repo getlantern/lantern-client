@@ -2,9 +2,9 @@
 <resources>
   <string name="app_name">Lantern</string>
   <string name="action_settings">Configuración</string>
-  <string name="proxy_all_setting">Proxyficar todo el tráfico</string>
-  <string name="proxy_all_on_header">ACTIVO (Opción más segura)</string>
-  <string name="proxy_all_off_header">INACTIVO (Opción más rápida)</string>
+  <string name="proxy_all_setting">Proxyficar todo</string>
+  <string name="proxy_all_on_header">ACTIVO </string>
+  <string name="proxy_all_off_header">INACTIVO </string>
   <string name="proxy_all_on">Con esta opción, todo el tráfico de su dispositivo se enviará a través de %1$s</string>
   <string name="proxy_all_off">Con esta opción desactivada, solo se enviará el tráfico a los sitios bloqueados a través de %1$s</string>
   <string name="button_text">Iniciar</string>
@@ -146,7 +146,6 @@
   <string name="get_code">Obtener código</string>
   <string name="get_code_text">Introduzca su correo electrónico para recibir un código para compartir con sus amigos, ¡obtenga un mes de PRO cuando se registren!</string>
   <string name="enter_your_email">Introduzca su correo electrónico para recibir un código de referencia</string>
-  <string name="referral_copied_to_clipboard">¡Código de referencia copiado al portapapeles!</string>
   <string name="fastworldpay_text">Cuando haga clic en Continuar con la compra,\nse le redirigirá a un sitio externo para completar\nel pago y obtener su código de activación.</string>
   <string name="share_referral_text">Use mi código %1$s para conseguir hasta 3 meses gratuitos adicionales tras la compra. Descargue Lantern https://bit.ly/lanternapk</string>
   <string name="previous_code">Si previamente ha recibido un código de referencia,\r\npor favor, asegúrese de usar la misma direccion de correo electrónico.</string>

@@ -8,7 +8,7 @@ import java.util.EnumMap
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
 
-class EventManager(
+abstract class EventManager(
     private val name: String,
     flutterEngine: FlutterEngine? = null
 ) : EventChannel.StreamHandler {
@@ -62,7 +62,10 @@ class EventManager(
         val subscribers = activeSubscribers[event] ?: ConcurrentSkipListSet<Int>()
         subscribers.add(subscriberID)
         activeSubscribers[event] = subscribers
+        onListen(event)
     }
+
+    abstract fun onListen(event: Event)
 
     override fun onCancel(arguments: Any?) {
         if (arguments == null) {

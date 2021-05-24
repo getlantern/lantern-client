@@ -119,7 +119,6 @@
   <string name="get_code">Kodu al</string>
   <string name="get_code_text">Email ünvanınızı qeyd edin ki, dostlarınızla paylaşasınız və PRO ilə pulsuz aylar alasınız. </string>
   <string name="enter_your_email">Məsləhət kodu almaq üçün emailinizi qeyd edin</string>
-  <string name="referral_copied_to_clipboard">Məsləhət kodu kopyalandı!</string>
   <string name="share_referral_text">Mənim kodum %1$s üç ay əlavə pulsuz əldə etməyə imkan verir. Lanterni yüklə https://bit.ly/lanternapk</string>
   <string name="previous_code">Əgər əvvəllər məsləhət kodu\r\n almısınızsa, əmin oliun ki eyni emaildən istifadə edirsiniz.</string>
   <string name="payment_plans">Lantern PRO ödəniş planları</string>

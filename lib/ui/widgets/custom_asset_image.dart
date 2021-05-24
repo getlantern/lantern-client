@@ -5,8 +5,7 @@ class CustomAssetImage extends StatelessWidget {
   final double? size;
   final Color? color;
 
-  const CustomAssetImage(
-      {required this.path, this.size, this.color, Key? key})
+  const CustomAssetImage({required this.path, this.size, this.color, Key? key})
       : super(key: key);
 
   @override

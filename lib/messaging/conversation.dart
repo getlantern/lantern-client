@@ -479,7 +479,7 @@ class _ConversationState extends State<Conversation> {
                 padding: const EdgeInsets.only(left: 16, bottom: 22),
                 child: StreamBuilder<int>(
                   stream: _stopWatchTimer.rawTime,
-                  initialData: _stopWatchTimer.rawTime.valueWrapper?.value,
+                  initialData: _stopWatchTimer.rawTime.value,
                   builder: (context, snap) {
                     final value = snap.data;
                     final displayTime = StopWatchTimer.getDisplayTime(

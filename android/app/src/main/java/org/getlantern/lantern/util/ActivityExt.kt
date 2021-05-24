@@ -26,7 +26,7 @@ fun Activity.showAlertDialog(
     msg: CharSequence?,
     icon: Drawable? = null,
     onClick: Runnable? = null,
-    okLabel: CharSequence? = "OK",
+    okLabel: CharSequence? = getString(R.string.ok),
     finish: Boolean = false,
     negativeLabel: CharSequence? = null
 ) {

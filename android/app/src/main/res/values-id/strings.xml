@@ -132,7 +132,6 @@
   <string name="get_code">Dapatkan Kode</string>
   <string name="get_code_text">Masukkan email anda untuk menerima kode untuk dibagikan dengan teman anda, dapatkan bulan gratis PRO saat mereka mendaftar!</string>
   <string name="enter_your_email">Masukkan email anda untuk menerima kode referal</string>
-  <string name="referral_copied_to_clipboard">Kode referal disalin ke clipboard!</string>
   <string name="share_referral_text">Gunakan kode saya %1$s untuk mendapatkan hingga 3 bulan tambahan setelah pembelian. Unduh Lantern https://bit.ly/lanternapk</string>
   <string name="previous_code">Jika sebelumnya anda telah menerima kode referal\r\npastikan untuk menggunakan alamat email yang sama.</string>
   <string name="payment_plans">Rencana Pembayaran Lantern PRO</string>

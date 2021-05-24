@@ -69,13 +69,21 @@ dependencies:
 
   url_launcher: ^6.0.3
 
-  fluttertoast: ^8.0.3
+  fluttertoast: 8.0.6
 
   badges: ^2.0.0-nullsafety.1
 
   dotted_border: ^2.0.0
 
   emoji_picker_flutter: ^1.0.5
+
+  email_validator: '^2.0.1'
+
+  hexcolor: ^2.0.3
+
+  pin_code_text_field: ^1.8.0
+
+  styled_text: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 # 
 # Translators:
 # e2f <projects@e2f.com>, 2021
+# Lantern, 2021
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2021
 # E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2021
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2021
@@ -19,10 +20,10 @@ msgstr "हर दिन का डेटा उपयोग"
 msgid "is"
 msgstr "है"
 
-msgid "on"
+msgid "connected"
 msgstr "कनेक्टेड"
 
-msgid "off"
+msgid "disconnected"
 msgstr "डिस्कनेक्ट किया गया"
 
 msgid "Disconnecting"
@@ -79,16 +80,13 @@ msgid "settings"
 msgstr "सेटिंग्स"
 
 msgid "proxy_all"
-msgstr "प्रॉक्सी सभी चालू है"
+msgstr "सब कुछ प्रॉक्सी करें"
 
 msgid "language"
 msgstr "भाषा"
 
 msgid "report_issue"
 msgstr "समस्या की रिपोर्ट करें"
-
-msgid "title_proxy_all_dialog"
-msgstr "प्रॉक्सी सभी"
 
 msgid "description_proxy_all_dialog"
 msgstr ""
@@ -107,6 +105,12 @@ msgstr "उनके साथ पार्टनरशिप में"
 
 msgid "Buy"
 msgstr "खरीदें"
+
+msgid "Bitcoin"
+msgstr "बिटकॉइन"
+
+msgid "Tether"
+msgstr "टीथर"
 
 msgid "With"
 msgstr " साथ"
@@ -140,3 +144,85 @@ msgstr "VPN स्थिति"
 
 msgid "VPN"
 msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "प्रो के लिए डिवाइस अधिकृत करें"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "डिवाइस लिंकिंग पिन से अधिकृत करें"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Lantern Pro डिवाइस के लिए सच में एक्सेस की आवश्यकता है "
+
+msgid "Link with PIN"
+msgstr " पिन से लिंक करें"
+
+msgid "OR"
+msgstr "या"
+
+msgid "Authorize Device via Email"
+msgstr "ईमेल से डिवाइस अधिकृत करें"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "Lantern Pro ख़रीदने के लिए उपयोग किए गए ईमेल के एक्सेस की आवश्यकता है "
+
+msgid "Link via Email"
+msgstr "ईमेल से लिंक करें"
+
+msgid "Email"
+msgstr "ईमेल"
+
+msgid "Submit"
+msgstr "जमा करें"
+
+msgid "Please enter a valid email address"
+msgstr "कृपया एक मान्य ईमेल पता एंटर करें"
+
+msgid "Re-send Email"
+msgstr "पुन: ईमेल भेजें"
+
+msgid "Paste from clipboard?"
+msgstr "क्लिपबोर्ड से पेस्ट करें?"
+
+msgid "Yes"
+msgstr "हाँ"
+
+msgid "No"
+msgstr "नहीं"
+
+msgid "Enter or paste linking code"
+msgstr "लिंकिंग कोड डालें या पेस्ट करें"
+
+msgid "recovery_email_sent"
+msgstr ""
+"यदि यह अकाउंट मौजूद है तो %s पर एक लिंकिंग पिन भेजा गया है. ऊपर दिए ईमेल से "
+"पिन डालें. ईमेल आने में कई घंटे लग सकते हैं."
+
+msgid "Add Device"
+msgstr "डिवाइस जोडे"
+
+msgid "approve_device_step_1"
+msgstr ""
+"जिस डिवाइस को आप लिंक करना चाहते हैं, उस डिवाइस के अकाउंट मेनू से 'Pro के "
+"लिए अधिकृत' डिवाइस' खोलें, फिर 'पिन के साथ लिंक' चुनें"
+
+msgid "approve_device_step_2"
+msgstr "चरण 1 से प्राप्त लिंकिंग कोड एंटर करें"
+
+msgid "Pro Account Expiration"
+msgstr "प्रो अकाउंट समाप्ति"
+
+msgid "Renew"
+msgstr "नवीनीकृत करें"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro डिवाइसेज़ (3 तक)"
+
+msgid "Remove"
+msgstr "हटाएँ"
+
+msgid "Log Out"
+msgstr "लॉग आउट "
+
+msgid "confirm_remove_device"
+msgstr "क्या आप वाकई इस डिवाइस को अपने Pro खाते से अनलिंक करना चाहते हैं?"

@@ -17,7 +17,7 @@ class VPNBandwidth extends StatelessWidget {
                     Text(
                       'Daily Data Usage'.i18n + ': ',
                       style: tsTitleHeadVPNItem()?.copyWith(
-                        color: HexColor(unselectedTabLabelColor),
+                        color: unselectedTabLabelColor,
                       ),
                     ),
                     Expanded(
@@ -35,9 +35,9 @@ class VPNBandwidth extends StatelessWidget {
                 Container(
                   height: 12,
                   decoration: BoxDecoration(
-                    color: HexColor(unselectedTabColor),
+                    color: unselectedTabColor,
                     border: Border.all(
-                      color: HexColor(borderColor),
+                      color: borderColor,
                       width: 1,
                     ),
                     borderRadius: const BorderRadius.all(
@@ -50,7 +50,7 @@ class VPNBandwidth extends StatelessWidget {
                         flex: (bandwidth.allowed - bandwidth.remaining).toInt(),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: HexColor(usedDataBarColor),
+                            color: usedDataBarColor,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(borderRadius),
                             ),

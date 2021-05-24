@@ -3,6 +3,8 @@ class ImagePaths {
   static const account_icon = 'assets/images/account_icon.svg';
   static const key_icon = 'assets/images/key_icon.svg';
   static const crown_icon = 'assets/images/crown_icon.svg';
+  static const crown_icon_monochrome =
+      'assets/images/crown_icon_monochrome.svg';
   static const info_icon = 'assets/images/info_icon.svg';
   static const keyboard_arrow_right_icon =
       'assets/images/keyboard_arrow_right_icon.svg';
@@ -14,6 +16,9 @@ class ImagePaths {
   static const desktop_icon = 'assets/images/desktop_icon.svg';
   static const yinbi_icon = 'assets/images/yinbi_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
+
+  static const email_icon = 'assets/images/email_icon.svg';
+  static const clock_icon = 'assets/images/clock_icon.svg';
 
   static const alert_icon = 'assets/images/alert_icon.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';
@@ -29,4 +34,7 @@ class ImagePaths {
   static const dropdown_icon = 'assets/images/dropdown_icon.svg';
   static const open_in_new_icon = 'assets/images/open_in_new_icon.svg';
   static const delete_icon = 'assets/images/delete_icon.svg';
+
+  static const number_1 = 'assets/images/number_1.svg';
+  static const number_2 = 'assets/images/number_2.svg';
 }

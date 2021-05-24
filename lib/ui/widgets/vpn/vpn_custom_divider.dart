@@ -11,10 +11,10 @@ class VPNCustomDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
+      margin: EdgeInsetsDirectional.only(top: marginTop, bottom: marginBottom),
       height: 1,
       width: double.infinity,
-      color: HexColor(borderColor),
+      color: borderColor,
     );
   }
 }
