@@ -1,8 +1,6 @@
 // From https://raw.githubusercontent.com/lekanbar/custom_rounded_rectangle_border/master/lib/custom_rounded_rectangle_border.dart,
 // modified for null safety.
 
-library custom_rounded_rectangle_border;
-
 import 'dart:math';
 
 import 'package:flutter/painting.dart';

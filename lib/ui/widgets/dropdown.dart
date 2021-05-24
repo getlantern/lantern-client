@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:lantern/package_store.dart';
 
 class DropDown<T extends DropDownItem> extends StatelessWidget {

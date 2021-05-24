@@ -209,3 +209,6 @@ msgstr "Log Out"
 
 msgid "confirm_remove_device"
 msgstr "Are you sure you want to unlink this device from your Pro account?"
+
+msgid "n/a"
+msgstr "n/a"
