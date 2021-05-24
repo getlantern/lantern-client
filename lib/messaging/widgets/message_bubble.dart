@@ -6,7 +6,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_types/attachment_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:lantern/messaging/widgets/copied_text_widget.dart';
+import 'package:lantern/ui/widgets/copied_text_widget.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
 
@@ -102,7 +102,8 @@ class MessageBubble extends StatelessWidget {
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
   ) {
-    if (wasDeleted) return const DeletedBubble();
+    if (wasDeleted)
+      return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
 
     if (isDateMarker != '') return DateMarker(isDateMarker);
 
@@ -168,14 +169,15 @@ Future _buildActionsPopup(
           if (!outbound)
             const Padding(
                 padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
-          ListTile(
-            leading: const Icon(Icons.reply),
-            title: Text('Reply'.i18n),
-            onTap: () {
-              onReply(msg);
-              Navigator.of(context).pop();
-            },
-          ),
+          if (!isAttachment)
+            ListTile(
+              leading: const Icon(Icons.reply),
+              title: Text('Reply'.i18n),
+              onTap: () {
+                onReply(msg);
+                Navigator.of(context).pop();
+              },
+            ),
           if (!isAttachment) CopiedTextWidget(message),
           ListTile(
             leading: const Icon(Icons.delete),
