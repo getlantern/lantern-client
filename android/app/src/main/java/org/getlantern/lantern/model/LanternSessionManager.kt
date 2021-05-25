@@ -1,6 +1,7 @@
 package org.getlantern.lantern.model
 
 import android.app.Application
+import android.content.Context
 import android.content.res.Resources
 import android.text.TextUtils
 import io.lantern.android.model.Vpn
@@ -14,6 +15,7 @@ import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
+import java.util.Arrays
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
@@ -45,22 +47,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return Currency.getInstance("USD")
     }
 
-    /**
-     * When Stripe Checkout is used, this determines whether or not Bitcoin
-     * should be enabled. Currently only enabled for Iranian users.
-     */
-    fun useBitcoin(): Boolean {
-        return isIranianUser
-    }
-
-    /**
-     * When Stripe Checkout is used, this determines whether or not Alipay
-     * should be enabled. Currently only enabled for Chinese users.
-     */
-    fun useAlipay(): Boolean {
-        return isChineseUser
-    }
-
     override fun currency(): String? {
         val plan = selectedPlan
         return if (plan != null) {
@@ -84,7 +70,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return DEFAULT_ONE_YEAR_COST
     }
 
-    fun getReferralArray(res: Resources): Array<String?>? {
+    fun getReferralArray(res: Resources): Array<String?> {
         val plan = getSelectedPlan()
         if (plan == null) {
             Logger.debug(TAG, "Selected plan is null. Returning default referral instructions")
@@ -141,11 +127,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(STRIPE_API_KEY, "")
     }
 
-    fun plansActivity(): Class<*>? {
+    fun plansActivity(): Class<*> {
         return PlansActivity_::class.java
     }
 
-    fun welcomeActivity(): Class<*>? {
+    fun welcomeActivity(): Class<*> {
         return if (yinbiEnabled()) {
             YinbiWelcomeActivity_::class.java
         } else {
@@ -171,7 +157,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(DEVICE_LINKING_CODE, "")
     }
 
-    fun getDeviceExp(): Long? {
+    fun getDeviceExp(): Long {
         return prefs.getLong(DEVICE_CODE_EXP, 0)
     }
 
@@ -183,20 +169,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         editor.putBoolean(YINBI_ENABLED, enabled).commit()
     }
 
-    fun shouldShowYinbiBadge(): Boolean {
-        return prefs.getBoolean(SHOULD_SHOW_YINBI_BADGE, true)
-    }
-
     fun setShouldShowYinbiBadge(shouldShow: Boolean) {
         editor.putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
-    }
-
-    fun showYinbiThanksPurchase(): Boolean {
-        return prefs.getBoolean(YINBI_THANKS_PURCHASE, false)
-    }
-
-    fun setThanksPurchase(v: Boolean) {
-        editor.putBoolean(YINBI_THANKS_PURCHASE, v).commit()
     }
 
     fun showYinbiRedemptionTable(): Boolean {
@@ -207,7 +181,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         editor.putBoolean(SHOW_YINBI_REDEMPTION, v).commit()
     }
 
-    fun getProDaysLeft(): Int? {
+    fun getProDaysLeft(): Int {
         return getInt(PRO_DAYS_LEFT, 0)
     }
 
@@ -230,36 +204,18 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         } else LocalDateTime(expiration * 1000)
     }
 
-    fun getExpirationStr(): String? {
-        return prefs.getString(EXPIRY_DATE_STR, "")
-    }
-
     fun showWelcomeScreen(): Boolean {
         if (isExpired()) {
             return showRenewalPref()
         }
         if (isProUser) {
-            val daysLeft = getProDaysLeft() ?: return false
+            val daysLeft = getProDaysLeft()
             return daysLeft < 45 && showRenewalPref()
         }
 
         // Show only once to free users. (If set, don't show)
         // Also, if the install isn't new-ish, we won't start showing them a welcome.
         return isRecentInstall && prefs.getLong(WELCOME_LAST_SEEN, 0) == 0L
-    }
-
-    fun getProTimeLeft(): String? {
-        val numMonths = numProMonths()
-        if (numMonths < 1) {
-            val numDays = getInt(PRO_DAYS_LEFT, 0)
-            return if (numDays == 0) {
-                ""
-            } else String.format("%dD", numDays)
-        }
-        return String.format(
-            "%dMO",
-            numMonths
-        )
     }
 
     fun numProMonths(): Int {
@@ -390,6 +346,27 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
+    // isPlayVersion checks whether or not the user installed Lantern via
+    // the Google Play store
+    override fun isPlayVersion(): Boolean {
+        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
+            return true
+        }
+        try {
+            val validInstallers: List<String> = ArrayList(Arrays.asList("com.android.vending", "com.google.android.feedback"))
+            val installer = context.packageManager
+                .getInstallerPackageName(context.packageName)
+            return installer != null && validInstallers.contains(installer)
+        } catch (e: java.lang.Exception) {
+            Logger.error(TAG, "Error fetching package information: " + e.message)
+        }
+        return false
+    }
+
+    fun setPlayVersion(playVersion: Boolean) {
+        editor.putBoolean(PLAY_VERSION, playVersion).commit()
+    }
+
     companion object {
         private val TAG = LanternSessionManager::class.java.name
 
@@ -411,8 +388,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PW_SIGNATURE = "pwsignature"
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"
         private const val DEVICE_CODE_EXP = "devicecodeexp"
-        private const val YINBI_ENABLED = "yinbienabled"
-        private const val YINBI_THANKS_PURCHASE = "showyinbithankspurchase"
         private const val SHOW_YINBI_REDEMPTION = "showyinbiredemption"
         private const val REMOTE_CONFIG_PAYMENT_PROVIDER = "remoteConfigPaymentProvider"
         private const val USER_PAYMENT_GATEWAY = "userPaymentGateway"

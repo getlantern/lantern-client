@@ -86,28 +86,6 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
     }
 
-    // isPlayVersion checks whether or not the user installed Lantern via
-    // the Google Play store
-    public static boolean isPlayVersion(Context context) {
-        if (BuildConfig.PLAY_VERSION) {
-            return true;
-        }
-        
-        try {
-            final List<String> validInstallers =
-              new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
-
-            final String installer = context.getPackageManager()
-                .getInstallerPackageName(context.getPackageName());
-
-            return installer != null && validInstallers.contains(installer);
-        } catch (Exception e) {
-            Logger.error(TAG, "Error fetching package information: " + e.getMessage());
-        }
-
-        return false;
-    }
-
     public static void clickify(TextView view, final String clickableText,
         final ClickSpan.OnClickListener listener) {
         clickify(view, clickableText, -1, listener);
@@ -171,11 +149,11 @@ public class Utils {
     }
 
     public static void openPrivacyPolicy(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf")));
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL)));
     }
 
     public static void openTermsOfService(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://s3.amazonaws.com/lantern/Lantern-TOS.pdf")));
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.TERMS_OF_SERVICE_URL)));
     }
 
     // getResId returns the corresponding resource ID given its name

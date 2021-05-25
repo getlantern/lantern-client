@@ -1,1 +1,0 @@
-enum TAB_ENUM { VPN, EXCHANGE, ACCOUNT }

@@ -75,12 +75,27 @@ class SessionModel(
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-            "switchProxyAll" -> {
-                val on = call.argument<Boolean>("on") ?: false
+            "setProxyAll" -> {
+                val on = call.argument("on") ?: false
                 saveProxyAll(on)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
+            }
+            "setPaymentTestMode" -> {
+                LanternApp.getSession().setPaymentTestMode(call.argument("on") ?: false)
+                activity.openHome()
+            }
+            "setYinbiEnabled" -> {
+                LanternApp.getSession().setYinbiEnabled(call.argument("on") ?: false)
+                activity.openHome()
+            }
+            "setPlayVersion" -> {
+                LanternApp.getSession().isPlayVersion = call.argument("on") ?: false
+                activity.openHome()
+            }
+            "setForceCountry" -> {
+                LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
             }
             else -> super.doMethodCall(call, notImplemented)
         }

@@ -22,7 +22,6 @@ import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.SessionModel
@@ -38,6 +37,7 @@ import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.showAlertDialog
@@ -47,7 +47,6 @@ import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.PopUpAd
 import org.getlantern.mobilesdk.model.Survey
-import org.getlantern.mobilesdk.model.Utils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -107,7 +106,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
-        if (Utils.isPlayVersion(this)) {
+        if (LanternApp.getSession().isPlayVersion()) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
                 startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
             }
@@ -321,7 +320,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun runCheckUpdate(checkUpdate: CheckUpdate) {
         val userInitiated = checkUpdate.userInitiated
-        if (Utils.isPlayVersion(this)) {
+        if (LanternApp.getSession().isPlayVersion()) {
             Logger.debug(TAG, "App installed via Play; not checking for update")
             if (userInitiated) {
                 // If the user installed the app via Google Play,
