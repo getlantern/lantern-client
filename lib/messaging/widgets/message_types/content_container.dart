@@ -9,6 +9,7 @@ class ContentContainer extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
+  final Function(StoredMessage) onTapReply;
 
   const ContentContainer(
     this.outbound,
@@ -16,6 +17,7 @@ class ContentContainer extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
+    this.onTapReply,
   ) : super();
 
   @override
@@ -29,7 +31,10 @@ class ContentContainer extends StatelessWidget {
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
-                  ReplyBubble(outbound, msg, contact),
+                  GestureDetector(
+                    onTap: () => onTapReply(msg),
+                    child: ReplyBubble(outbound, msg, contact),
+                  ),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               Row(mainAxisSize: MainAxisSize.min, children: [

@@ -14,6 +14,7 @@ class TextBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
+  final Function(StoredMessage) onTapReply;
 
   const TextBubble(
     this.outbound,
@@ -25,6 +26,7 @@ class TextBubble extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
+    this.onTapReply,
   ) : super();
 
   @override
@@ -62,7 +64,8 @@ class TextBubble extends StatelessWidget {
                     : CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ContentContainer(outbound, inbound, msg, message, contact),
+                  ContentContainer(
+                      outbound, inbound, msg, message, contact, onTapReply),
                   StatusRow(outbound, inbound, reactions, msg, message)
                 ],
               )),
