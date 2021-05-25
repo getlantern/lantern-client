@@ -1,11 +1,10 @@
-import 'dart:io';
+import 'dart:ui';
+
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-
-import '../../../model/protos_flutteronly/messaging.pbserver.dart';
 
 class ReplyBubble extends StatelessWidget {
   final bool outbound;
@@ -74,38 +73,48 @@ class ReplyBubble extends StatelessWidget {
                     if (quotedMessage.value.attachments.isNotEmpty)
                       Row(
                         children: [
-                          Text(quotedMessage
-                              .value.attachments[0]!.attachment.mimeType
-                              .split('/')[0]),
+                          Text(
+                              quotedMessage
+                                  .value.attachments[0]!.attachment.mimeType
+                                  .split('/')[0],
+                              style:
+                                  const TextStyle(fontStyle: FontStyle.italic)),
                           Container(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10.0),
-                              // child: Image.file(
-                              //     File(quotedMessage
-                              //         .value.attachments[0]!.plainTextFilePath),
-                              //     filterQuality: FilterQuality.high,
-                              //     scale: 10)),
-                              child: FutureBuilder(
-                                  future: model.thumbnail(quotedMessage.value
-                                      .attachments[0] as StoredAttachment),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.done:
-                                        if (snapshot.hasError) {
-                                          return const Icon(
-                                              Icons.error_outlined);
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  FutureBuilder(
+                                      future: model.thumbnail(quotedMessage
+                                          .value
+                                          .attachments[0] as StoredAttachment),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.done:
+                                            if (snapshot.hasError) {
+                                              return const Icon(
+                                                  Icons.error_outlined);
+                                            }
+                                            return Image.memory(snapshot.data,
+                                                filterQuality:
+                                                    FilterQuality.high,
+                                                scale: 10);
+                                          default:
+                                            return Transform.scale(
+                                                scale: 0.5,
+                                                child:
+                                                    const CircularProgressIndicator());
                                         }
-                                        return Image.memory(snapshot.data,
-                                            filterQuality: FilterQuality.high,
-                                            scale: 10);
-                                      default:
-                                        return Transform.scale(
-                                            scale: 0.5,
-                                            child:
-                                                const CircularProgressIndicator());
-                                    }
-                                  })),
+                                      }),
+                                  if (quotedMessage
+                                      .value.attachments[0]!.attachment.mimeType
+                                      .contains('video'))
+                                    const Icon(Icons.play_circle_outline,
+                                        color: Colors.white, size: 30)
+                                ],
+                              )),
                         ],
                       )
                   ],
