@@ -4,12 +4,12 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-class QuoteBubble extends StatelessWidget {
+class ReplyBubble extends StatelessWidget {
   final bool outbound;
   final StoredMessage msg;
   final Contact contact;
 
-  const QuoteBubble(
+  const ReplyBubble(
     this.outbound,
     this.msg,
     this.contact,
