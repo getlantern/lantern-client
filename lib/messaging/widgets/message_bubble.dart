@@ -18,6 +18,7 @@ class MessageBubble extends StatelessWidget {
     required this.nextMessage,
     required this.contact,
     required this.onReply,
+    required this.onTapReply,
   }) : super(key: key);
 
   final PathAndValue<StoredMessage> message;
@@ -25,6 +26,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
+  final Function(StoredMessage) onTapReply;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +89,7 @@ class MessageBubble extends StatelessWidget {
                       reactions,
                       msg,
                       message,
+                      onTapReply,
                     )),
               ),
             ],
@@ -106,6 +109,7 @@ class MessageBubble extends StatelessWidget {
     Map<String, List<dynamic>> reactions,
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
+    Function onTapReply,
   ) {
     if (wasDeleted)
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
@@ -118,7 +122,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-        newestMessage, reactions, msg, message, contact);
+        newestMessage, reactions, msg, message, contact, onTapReply);
   }
 }
 

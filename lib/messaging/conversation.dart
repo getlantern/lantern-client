@@ -316,6 +316,10 @@ class _ConversationState extends State<Conversation> {
                 showKeyboard(); // TODO: this is clashing with Navigator.pop(context);
               });
             },
+            onTapReply: (_tappedMessage) {
+              // scroll to tapped element
+              debugPrint(_tappedMessage.id);
+            },
           );
         },
       );
