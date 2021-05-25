@@ -40,6 +40,7 @@ class _ConversationState extends State<Conversation> {
   StoredMessage? _quotedMessage;
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
+  final _scrollController = ItemScrollController();
 
   @override
   void initState() {
@@ -295,12 +296,10 @@ class _ConversationState extends State<Conversation> {
   }
 
   Widget _buildMessageBubbles() {
-    final _scrollController = ItemScrollController();
-
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
+      // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       return ScrollablePositionedList.builder(
-        // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
         itemScrollController: _scrollController,
         reverse: true,
         itemCount: messageRecords.length,
@@ -321,10 +320,14 @@ class _ConversationState extends State<Conversation> {
               });
             },
             onTapReply: (_tappedMessage) {
-              // interesting discussion on ListView and scrolling https://stackoverflow.com/a/58924218
-              debugPrint(_tappedMessage.id);
-              _scrollController.scrollTo(
-                  index: 2, duration: const Duration(seconds: 1));
+              final _scrollToIndex =
+                  messageRecords.toList().indexOf(_tappedMessage);
+              if (_scrollToIndex != -1) {
+                _scrollController.scrollTo(
+                    index: _scrollToIndex,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOutCubic);
+              }
             },
           );
         },

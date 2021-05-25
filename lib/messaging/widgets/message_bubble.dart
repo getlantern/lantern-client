@@ -26,7 +26,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
-  final Function(StoredMessage) onTapReply;
+  final Function(PathAndValue<StoredMessage>) onTapReply;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class MessageBubble extends StatelessWidget {
     Map<String, List<dynamic>> reactions,
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
-    Function(StoredMessage) onTapReply,
+    Function(PathAndValue<StoredMessage>) onTapReply,
   ) {
     if (wasDeleted)
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready

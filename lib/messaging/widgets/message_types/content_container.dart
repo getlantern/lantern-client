@@ -9,7 +9,7 @@ class ContentContainer extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
-  final Function(StoredMessage) onTapReply;
+  final Function(PathAndValue<StoredMessage>) onTapReply;
 
   const ContentContainer(
     this.outbound,
@@ -32,7 +32,7 @@ class ContentContainer extends StatelessWidget {
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
                   GestureDetector(
-                    onTap: () => onTapReply(msg),
+                    onTap: () => onTapReply(message),
                     child: ReplyBubble(outbound, msg, contact),
                   ),
               ]),
