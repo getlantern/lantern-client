@@ -37,7 +37,7 @@ class TextBubble extends StatelessWidget {
           // TODO: in theory this should appear before an attachment or deleted file as well
           Container(
               constraints: const BoxConstraints(
-                minWidth: 90,
+                minWidth: 120,
               ),
               decoration: BoxDecoration(
                 color: outbound ? Colors.black38 : Colors.black12,
