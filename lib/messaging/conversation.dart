@@ -346,15 +346,20 @@ class _ConversationState extends State<Conversation> {
                   ],
                 ),
                 const SizedBox(height: 4),
-                if (_quotedMessage!.attachments.isEmpty)
-                  Text(_quotedMessage!.text.toString(),
-                      style: const TextStyle(color: Colors.black54)),
-                if (_quotedMessage!.attachments.isNotEmpty)
-                  ReplyToAttachmentUI(
-                      quotedMessage: _quotedMessage as StoredMessage,
-                      outbound:
-                          _quotedMessage!.direction == MessageDirection.OUT,
-                      model: model),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(_quotedMessage!.text.toString(),
+                          style: const TextStyle(color: Colors.black54)),
+                      if (_quotedMessage!.attachments.isNotEmpty)
+                        ReplyToAttachmentUI(
+                            quotedMessage: _quotedMessage as StoredMessage,
+                            outbound: _quotedMessage!.direction ==
+                                MessageDirection.OUT,
+                            model: model),
+                    ])
               ],
             )),
           ],
