@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.mobilesdk.Logger;
@@ -19,12 +18,9 @@ import org.getlantern.mobilesdk.util.HttpClient;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.CacheControl;
 import okhttp3.Call;
@@ -45,13 +41,6 @@ import okio.Buffer;
 */
 public class LanternHttpClient extends HttpClient {
     private static final String TAG = LanternHttpClient.class.getName();
-    private static final String API_ADDR = getApiAddr();
-
-    private static final String LOCONF_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json";
-    private static final String LOCONF_STAGING_URL = "https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json";
-
-    private static final String PRO_API_PROD = "https://api.getiantem.org";
-    private static final String PRO_API_STAGING = "https://api-staging.getiantem.org";
 
     // the standard user headers sent with most Pro requests
     private static final String DEVICE_ID_HEADER = "X-Lantern-Device-Id";
@@ -80,20 +69,6 @@ public class LanternHttpClient extends HttpClient {
         super(httpClient);
     }
 
-    /**
-     * Determines the pro server address this client will make requests to
-     * @return the pro server address
-     */
-    private static String getApiAddr() {
-        if (!BuildConfig.PRO_SERVER_URL.equals("")) {
-            return BuildConfig.PRO_SERVER_URL;
-        } else if (BuildConfig.STAGING) {
-            Logger.debug(TAG, "Using staging pro server");
-            return PRO_API_STAGING;
-        }
-        return PRO_API_PROD;
-    }
-
     public static HttpUrl createProUrl(final String uri) {
         return createProUrl(uri, null);
     }
@@ -117,22 +92,14 @@ public class LanternHttpClient extends HttpClient {
 
     /**
      * The HTTP headers expected with Pro requests for a user
-     * @param extra extra headers to merge with the user headers
      */
-    private Map<String, String> userHeaders(final Map<String, String> extra) {
+    private Map<String, String> userHeaders() {
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(DEVICE_ID_HEADER, LanternApp.getSession().getDeviceID());
         headers.put(PRO_TOKEN_HEADER, LanternApp.getSession().getToken());
         headers.put(USER_ID_HEADER, String.valueOf(LanternApp.getSession().getUserID()));
         headers.putAll(LanternApp.getSession().getInternalHeaders());
-        if (extra != null) {
-            headers.putAll(extra);
-        }
         return headers;
-    }
-
-    private Map<String, String> userHeaders() {
-        return userHeaders(null);
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
