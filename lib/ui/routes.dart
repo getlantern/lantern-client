@@ -1,6 +1,7 @@
 const routeVPN = '/vpn';
 const routeExchange = '/exchange';
 const routeAccount = '/account';
+const routeDeveloperSettings = '/developer_settings';
 const routeProAccount = '/pro_account';
 const routeSettings = '/settings';
 const routeLanguage = '/language';

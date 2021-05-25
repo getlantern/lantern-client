@@ -119,7 +119,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     @AfterViews
     void afterViews() {
-        boolean isPlayVersion = Utils.isPlayVersion(this);
+        boolean isPlayVersion = LanternApp.getSession().isPlayVersion();
         useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
@@ -452,7 +452,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
         } else {
-            if (Utils.isPlayVersion(this)) {
+            if (LanternApp.getSession().isPlayVersion()) {
                 if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
                     ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
                 }

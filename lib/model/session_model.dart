@@ -16,6 +16,12 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('yinbienabled', builder: builder);
   }
 
+  Future<void> setYinbiEnabled(bool on) {
+    return methodChannel.invokeMethod('setYinbiEnabled', <String, dynamic>{
+      'on': on,
+    });
+  }
+
   Widget shouldShowYinbiBadge(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('should_show_yinbi_badge',
         builder: builder);
@@ -23,6 +29,43 @@ class SessionModel extends Model {
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
+  }
+
+  Widget developmentMode(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('developmentMode',
+        builder: builder);
+  }
+
+  Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('paymentTestMode',
+        builder: builder);
+  }
+
+  Future<void> setPaymentTestMode(bool on) {
+    return methodChannel.invokeMethod('setPaymentTestMode', <String, dynamic>{
+      'on': on,
+    });
+  }
+
+  Widget playVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  }
+
+  Future<void> setPlayVersion(bool on) {
+    return methodChannel.invokeMethod('setPlayVersion', <String, dynamic>{
+      'on': on,
+    });
+  }
+
+  Widget forceCountry(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('forceCountry',
+        builder: builder);
+  }
+
+  Future<void> setForceCountry(String countryCode) {
+    return methodChannel.invokeMethod('setForceCountry', <String, dynamic>{
+      'countryCode': countryCode,
+    });
   }
 
   Widget language(ValueWidgetBuilder<String> builder) {
@@ -50,8 +93,8 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> switchProxyAll<T>(bool on) async {
-    unawaited(methodChannel.invokeMethod('switchProxyAll', <String, dynamic>{
+  Future<void> setProxyAll<T>(bool on) async {
+    unawaited(methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
       'on': on,
     }));
   }
