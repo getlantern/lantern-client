@@ -13,6 +13,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -37,6 +38,12 @@ class _ConversationState extends State<Conversation> {
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(_interceptBackButton);
+  }
+
   // Filepicker vars
   List<AssetEntity> assets = <AssetEntity>[];
 
@@ -45,7 +52,19 @@ class _ConversationState extends State<Conversation> {
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
+    BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
+  }
+
+  bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (_emojiShowing) {
+      setState(() {
+        _emojiShowing = false;
+      });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void _send(String text,
