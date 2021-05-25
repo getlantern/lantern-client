@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -15,6 +16,7 @@ import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -293,11 +295,13 @@ class _ConversationState extends State<Conversation> {
   }
 
   Widget _buildMessageBubbles() {
+    final _scrollController = ItemScrollController();
+
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
-      return ListView.builder(
-        // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      return ScrollablePositionedList.builder(
+        // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
+        itemScrollController: _scrollController,
         reverse: true,
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
@@ -317,8 +321,10 @@ class _ConversationState extends State<Conversation> {
               });
             },
             onTapReply: (_tappedMessage) {
-              // scroll to tapped element
+              // interesting discussion on ListView and scrolling https://stackoverflow.com/a/58924218
               debugPrint(_tappedMessage.id);
+              _scrollController.scrollTo(
+                  index: 2, duration: const Duration(seconds: 1));
             },
           );
         },
