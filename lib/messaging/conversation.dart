@@ -320,8 +320,9 @@ class _ConversationState extends State<Conversation> {
               });
             },
             onTapReply: (_tappedMessage) {
-              final _scrollToIndex =
-                  messageRecords.toList().indexOf(_tappedMessage);
+              final _scrollToIndex = messageRecords.toList().indexWhere(
+                  (element) =>
+                      element.value.id == _tappedMessage.value.replyToId);
               if (_scrollToIndex != -1) {
                 _scrollController.scrollTo(
                     index: _scrollToIndex,
