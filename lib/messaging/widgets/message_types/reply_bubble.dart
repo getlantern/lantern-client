@@ -5,6 +5,8 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
+import '../../../model/protos_flutteronly/messaging.pbserver.dart';
+
 class ReplyBubble extends StatelessWidget {
   final bool outbound;
   final StoredMessage msg;
@@ -73,13 +75,37 @@ class ReplyBubble extends StatelessWidget {
                       Row(
                         children: [
                           Text(quotedMessage
-                              .value.attachments[0]!.attachment.mimeType),
+                              .value.attachments[0]!.attachment.mimeType
+                              .split('/')[0]),
                           Container(
-                              child: Image.file(
-                                  File(quotedMessage
-                                      .value.attachments[0]!.plainTextFilePath),
-                                  filterQuality: FilterQuality.high,
-                                  scale: 10))
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              // child: Image.file(
+                              //     File(quotedMessage
+                              //         .value.attachments[0]!.plainTextFilePath),
+                              //     filterQuality: FilterQuality.high,
+                              //     scale: 10)),
+                              child: FutureBuilder(
+                                  future: model.thumbnail(quotedMessage.value
+                                      .attachments[0] as StoredAttachment),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.done:
+                                        if (snapshot.hasError) {
+                                          return const Icon(
+                                              Icons.error_outlined);
+                                        }
+                                        return Image.memory(snapshot.data,
+                                            filterQuality: FilterQuality.high,
+                                            scale: 10);
+                                      default:
+                                        return Transform.scale(
+                                            scale: 0.5,
+                                            child:
+                                                const CircularProgressIndicator());
+                                    }
+                                  })),
                         ],
                       )
                   ],
