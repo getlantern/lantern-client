@@ -14,7 +14,7 @@ class TextBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
-  final Function(StoredMessage) onTapReply;
+  final Function(PathAndValue<StoredMessage>) onTapReply;
 
   const TextBubble(
     this.outbound,
