@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/widgets/message_types/quote_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
@@ -29,7 +29,7 @@ class ContentContainer extends StatelessWidget {
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
-                  QuoteBubble(outbound, msg, contact),
+                  ReplyBubble(outbound, msg, contact),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               Row(mainAxisSize: MainAxisSize.min, children: [
