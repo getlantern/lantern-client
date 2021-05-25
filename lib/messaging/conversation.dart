@@ -211,6 +211,18 @@ class _ConversationState extends State<Conversation> {
     _focusNode.unfocus();
   }
 
+  void _handleSubmit(TextEditingController _newMessage) {
+    setState(() {
+      _isSendIconVisible = false;
+      _isReplying = false;
+      _emojiShowing = false;
+    });
+    _send(_newMessage.value.text,
+        replyToSenderId: _quotedMessage?.senderId,
+        replyToId: _quotedMessage?.id);
+    dismissKeyboard();
+  }
+
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
@@ -396,22 +408,14 @@ class _ConversationState extends State<Conversation> {
                 _isSendIconVisible = value.isNotEmpty;
               });
             },
+            //
+            onFieldSubmitted: (value) => _handleSubmit(_newMessage),
             decoration: InputDecoration(
               // Send icon
               suffixIcon: _isSendIconVisible
                   ? IconButton(
                       icon: const Icon(Icons.send, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          _isSendIconVisible = false;
-                          _isReplying = false;
-                          _emojiShowing = false;
-                        });
-                        _send(_newMessage.value.text,
-                            replyToSenderId: _quotedMessage?.senderId,
-                            replyToId: _quotedMessage?.id);
-                        dismissKeyboard();
-                      })
+                      onPressed: () => _handleSubmit(_newMessage))
                   : null,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
