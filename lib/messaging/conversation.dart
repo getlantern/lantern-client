@@ -302,18 +302,14 @@ class _ConversationState extends State<Conversation> {
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubble(
-            // PathAndValue<StoredMessage> of current message
-            messageRecords.elementAt(index),
-            // priorMessage
-            index >= messageRecords.length - 1
+            message: messageRecords.elementAt(index),
+            priorMessage: index >= messageRecords.length - 1
                 ? null
                 : messageRecords.elementAt(index + 1).value,
-            // nextMessage
-            index == 0 ? null : messageRecords.elementAt(index - 1).value,
-            // contact
-            widget._contact,
-            // onReply callback
-            (_message) {
+            nextMessage:
+                index == 0 ? null : messageRecords.elementAt(index - 1).value,
+            contact: widget._contact,
+            onReply: (_message) {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
@@ -353,7 +349,7 @@ class _ConversationState extends State<Conversation> {
                       onTap: () => setState(() {
                         _isReplying = false;
                       }),
-                      child: const Icon(Icons.close, size: 16),
+                      child: const Icon(Icons.close, size: 20),
                     )
                   ],
                 ),
