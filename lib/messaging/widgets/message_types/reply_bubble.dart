@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:lantern/messaging/widgets/message_types/reply_attachment_ui.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -55,70 +56,10 @@ class ReplyBubble extends StatelessWidget {
                   Widget? child) {
                 final quotedMessage = messageRecords
                     .firstWhere((element) => element.value.id == msg.replyToId);
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (quotedMessage.value.attachments.isEmpty)
-                      Text(
-                        quotedMessage.value.text,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: !outbound
-                              ? Colors.white
-                              : Colors.black, // TODO: generalize in theme
-                        ),
-                      ),
-                    if (quotedMessage.value.attachments.isNotEmpty)
-                      Row(
-                        children: [
-                          Text(
-                              quotedMessage
-                                  .value.attachments[0]!.attachment.mimeType
-                                  .split('/')[0],
-                              style:
-                                  const TextStyle(fontStyle: FontStyle.italic)),
-                          Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  FutureBuilder(
-                                      future: model.thumbnail(quotedMessage
-                                          .value
-                                          .attachments[0] as StoredAttachment),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot snapshot) {
-                                        switch (snapshot.connectionState) {
-                                          case ConnectionState.done:
-                                            if (snapshot.hasError) {
-                                              return const Icon(
-                                                  Icons.error_outlined);
-                                            }
-                                            return Image.memory(snapshot.data,
-                                                filterQuality:
-                                                    FilterQuality.high,
-                                                scale: 10);
-                                          default:
-                                            return Transform.scale(
-                                                scale: 0.5,
-                                                child:
-                                                    const CircularProgressIndicator());
-                                        }
-                                      }),
-                                  if (quotedMessage
-                                      .value.attachments[0]!.attachment.mimeType
-                                      .contains('video'))
-                                    const Icon(Icons.play_circle_outline,
-                                        color: Colors.white, size: 30)
-                                ],
-                              )),
-                        ],
-                      )
-                  ],
-                );
+                return ReplyToAttachmentUI(
+                    quotedMessage: quotedMessage.value,
+                    outbound: outbound,
+                    model: model);
               }),
             )
           ],
