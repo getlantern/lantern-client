@@ -113,7 +113,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-        newestMessage, reactions, msg, message, contact, isDateMarker);
+        newestMessage, reactions, msg, message, contact);
   }
 }
 
@@ -169,15 +169,14 @@ Future _buildActionsPopup(
           if (!outbound)
             const Padding(
                 padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
-          if (!isAttachment)
-            ListTile(
-              leading: const Icon(Icons.reply),
-              title: Text('Reply'.i18n),
-              onTap: () {
-                onReply(msg);
-                Navigator.of(context).pop();
-              },
-            ),
+          ListTile(
+            leading: const Icon(Icons.reply),
+            title: Text('Reply'.i18n),
+            onTap: () {
+              onReply(msg);
+              Navigator.of(context).pop();
+            },
+          ),
           if (!isAttachment) CopiedTextWidget(message),
           ListTile(
             leading: const Icon(Icons.delete),

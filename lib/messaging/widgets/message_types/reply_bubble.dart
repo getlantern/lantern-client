@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -47,25 +48,43 @@ class ReplyBubble extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
-                model.contactMessages(contact, builder: (context,
-                    Iterable<PathAndValue<StoredMessage>> messageRecords,
-                    Widget? child) {
-                  final quotedMessage = messageRecords.firstWhere(
-                      (element) => element.value.id == msg.replyToId);
-                  return Text(
-                    quotedMessage.value.text,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: !outbound
-                          ? Colors.white
-                          : Colors.black, // TODO: generalize in theme
-                    ),
-                  );
-                }),
-              ],
+            Container(
+              child: model.contactMessages(contact, builder: (context,
+                  Iterable<PathAndValue<StoredMessage>> messageRecords,
+                  Widget? child) {
+                final quotedMessage = messageRecords
+                    .firstWhere((element) => element.value.id == msg.replyToId);
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (quotedMessage.value.attachments.isEmpty)
+                      Text(
+                        quotedMessage.value.text,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: !outbound
+                              ? Colors.white
+                              : Colors.black, // TODO: generalize in theme
+                        ),
+                      ),
+                    if (quotedMessage.value.attachments.isNotEmpty)
+                      Row(
+                        children: [
+                          Text(quotedMessage
+                              .value.attachments[0]!.attachment.mimeType),
+                          Container(
+                              child: Image.file(
+                                  File(quotedMessage
+                                      .value.attachments[0]!.plainTextFilePath),
+                                  filterQuality: FilterQuality.high,
+                                  scale: 10))
+                        ],
+                      )
+                  ],
+                );
+              }),
             )
           ],
         ));

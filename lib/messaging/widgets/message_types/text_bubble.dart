@@ -3,7 +3,6 @@ import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 
 class TextBubble extends StatelessWidget {
   final bool outbound;
@@ -15,7 +14,6 @@ class TextBubble extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
-  final String? isDateMarker;
 
   const TextBubble(
     this.outbound,
@@ -27,7 +25,6 @@ class TextBubble extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
-    this.isDateMarker,
   ) : super();
 
   @override
