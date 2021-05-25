@@ -1,6 +1,8 @@
 package org.getlantern.lantern.model;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.getlantern.lantern.LanternApp;
@@ -39,7 +41,6 @@ public class ProPlan {
     private float discount;
 
     private String currencyCode;
-    private String tag;
     private String costStr;
     private String costWithoutTaxStr;
     private String taxStr;
@@ -57,6 +58,10 @@ public class ProPlan {
         this.price = price;
         this.priceWithoutTax = priceWithoutTax;
         this.tax = new HashMap<String, Long>();
+        this.renewalBonusExpected = new HashMap<>();
+        this.expectedMonthlyPrice = new HashMap<>();
+        this.bestValue = bestValue;
+        this.duration = duration;
         for (Map.Entry<String, Long> entry : this.price.entrySet()) {
             String currency = entry.getKey();
             Long priceWithTax = entry.getValue();
@@ -65,9 +70,8 @@ public class ProPlan {
                 specificPriceWithoutTax = priceWithTax;
             }
             this.tax.put(currency, priceWithTax - specificPriceWithoutTax);
+            this.expectedMonthlyPrice.put(currency, priceWithTax / numYears() / 12);
         }
-        this.bestValue = bestValue;
-        this.duration = duration;
         this.formatCost(); // this will set the currency code for us
     }
 
@@ -89,7 +93,7 @@ public class ProPlan {
         if (day != null && day > 0) {
             bonusParts.add(context.getResources().getQuantityString(R.plurals.day, day, day));
         }
-        return String.join(" ", bonusParts);
+        return TextUtils.join(" ", bonusParts);
     }
 
     public Map<String, Long> getPrice() {
