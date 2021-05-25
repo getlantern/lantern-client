@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_attachment_ui.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -332,7 +333,7 @@ class _ConversationState extends State<Conversation> {
                   children: [
                     Expanded(
                       child: Text(
-                        inResponseTo,
+                        'Replying to $inResponseTo', //TODO: Add i18n
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -345,9 +346,15 @@ class _ConversationState extends State<Conversation> {
                   ],
                 ),
                 const SizedBox(height: 4),
-                // TODO: Add ability to respond to attachment?
-                Text(_quotedMessage!.text.toString(),
-                    style: const TextStyle(color: Colors.black54)),
+                if (_quotedMessage!.attachments.isEmpty)
+                  Text(_quotedMessage!.text.toString(),
+                      style: const TextStyle(color: Colors.black54)),
+                if (_quotedMessage!.attachments.isNotEmpty)
+                  ReplyToAttachmentUI(
+                      quotedMessage: _quotedMessage as StoredMessage,
+                      outbound:
+                          _quotedMessage!.direction == MessageDirection.OUT,
+                      model: model),
               ],
             )),
           ],
