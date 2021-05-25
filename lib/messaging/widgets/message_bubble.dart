@@ -11,15 +11,20 @@ import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
 
 class MessageBubble extends StatelessWidget {
+  const MessageBubble({
+    Key? key,
+    required this.message,
+    required this.priorMessage,
+    required this.nextMessage,
+    required this.contact,
+    required this.onReply,
+  }) : super(key: key);
+
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
-
-  MessageBubble(this.message, this.priorMessage, this.nextMessage, this.contact,
-      this.onReply)
-      : super();
 
   @override
   Widget build(BuildContext context) {
