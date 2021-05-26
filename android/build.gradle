@@ -1,0 +1,75 @@
+buildscript {
+    ext.kotlin_version = '1.4.31'
+    ext.signal_version = '2.8.1'
+    ext.protobufVersion = '0.8.10'
+
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:4.2.0-rc01'
+        classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufVersion"
+        classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:10.0.0")
+    }
+}
+
+ext {
+    commonPlugins = new File(projectDir, 'common-plugins.gradle')
+    internalScript = new File(projectDir, 'internal.gradle')
+
+    enableTestCodeCoverage = true
+
+    // WARNING! compileSdkVersion and targetSdkVersion must not be set to 30
+    // see https://github.com/getlantern/lantern-internal/issues/4497
+    compileSdkVersion = 29
+    targetSdkVersion = 29
+    minSdkVersion = 21
+    androidAnnotationsVersion = '4.7.0'
+    androidAnnotationsAPIVersion = '4.7.0'
+    buildToolsVersion = '30.0.2'
+    buildNumber = 'dev'
+    espressoVersion = '3.0.0'
+    supportLibVersion = '28.0.0'
+    supportTestVersion = '1.0'
+
+    lanternDir = projectDir.parentFile.parentFile
+    qualityScript = new File(lanternDir, 'quality.gradle')
+    deployScript = new File(lanternDir, 'deploy.gradle')
+
+    libs = fileTree(dir: 'libs', include: ['*.jar'])
+    mavenAntTasks = 'org.apache.maven:maven-ant-tasks:2.1.3'
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

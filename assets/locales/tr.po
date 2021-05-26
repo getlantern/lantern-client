@@ -1,0 +1,231 @@
+# 
+# Translators:
+# Alexander B. <road2monstercat@gmail.com>, 2021
+# Aşkın Yollu <askin@askin.ws>, 2021
+# Zeynel Cebeci <cebeciz@gmail.com>, 2021
+# Volkan Gezer <volkangezer@gmail.com>, 2021
+# Derek F <derek@getlantern.org>, 2021
+# efe kerem sözeri <eksozeri@hotmail.com>, 2021
+# Teo Westbrook, 2021
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021\n"
+"Language-Team: Turkish (https://www.transifex.com/lantern-1/teams/94371/tr/)\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Daily Data Usage"
+msgstr "Günlük Veri Kullanımı"
+
+msgid "is"
+msgstr ":"
+
+msgid "connected"
+msgstr "Bağlandı"
+
+msgid "disconnected"
+msgstr "Bağlantıyı kes"
+
+msgid "Disconnecting"
+msgstr "Bağlantı kesiliyor..."
+
+msgid "Connecting"
+msgstr "Bağlanılıyor..."
+
+msgid "Go Pro Title"
+msgstr "Pro'ya Yükseltin!"
+
+msgid "Go Pro Description"
+msgstr "Daha yüksek hızlara ve sınırsız veriye ulaşın!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Sınırsız veri + ücretsiz Yinbi kripto para!"
+
+msgid "Server Location"
+msgstr "Sunucu Konumu"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern, sizi en iyi veri merkezlerimize otomatik olarak bağlamak için "
+"akıllı sunucu seçimini kullanır."
+
+msgid "OK"
+msgstr "TAMAM"
+
+msgid "pro_account_management"
+msgstr "Pro Hesap Yönetimi"
+
+msgid "add_device"
+msgstr "Hesap Ekle"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Lantern Pro'ya Yükseltin"
+
+msgid "authorize_device_for_pro"
+msgstr "Cihazı Pro Hesabına Dahil Et"
+
+msgid "invite_friends"
+msgstr "Arkadaşlarını Davet Et"
+
+msgid "desktop_version"
+msgstr "Masaüstü sürümü"
+
+msgid "free_yinbi_crypto"
+msgstr "Ücretsiz Yinbi Kripto Para"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi Kullanımı"
+
+msgid "settings"
+msgstr "Ayarlar"
+
+msgid "proxy_all"
+msgstr "Her şeyi proxy'le"
+
+msgid "language"
+msgstr "Dil"
+
+msgid "report_issue"
+msgstr "Sorun bildir"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Etkinleştirilirse, bütün trafik Lantern üzerinden gönderilecektir (daha "
+"güvenli). Devre dışı bırakılırsa, yalnızca engellenen trafik Lantern "
+"üzerinden gönderilecektir (daha hızlı)."
+
+msgid "Exchange"
+msgstr "Borsa"
+
+msgid "Account"
+msgstr "Hesap"
+
+msgid "In partnership with"
+msgstr "Ortaklığıyla: "
+
+msgid "Buy"
+msgstr "Satın Al"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
+
+msgid "With"
+msgstr "İle"
+
+msgid "Online Wallets"
+msgstr "Çevrimiçi Cüzdanlar"
+
+msgid "Bank Transfers"
+msgstr "Banka Havaleleri"
+
+msgid "Gift Cards"
+msgstr "Hediye Kartları"
+
+msgid "Game Cards"
+msgstr "Oyun Kartları"
+
+msgid "Cash Payment"
+msgstr "Nakit Ödeme"
+
+msgid "Digital Currencies"
+msgstr "Dijital Para Birimleri"
+
+msgid "Payment Method"
+msgstr "Ödeme Yöntemi"
+
+msgid "SHOW BEST DEALS"
+msgstr "EN İYİ FIRSATLARI GÖSTER"
+
+msgid "VPN Status"
+msgstr "VPN Durumu"
+
+msgid "VPN"
+msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Cihazı Pro Hesabına Dahil Et"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Cihaz Bağlama Pini İle Yetkilendir"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Lantern Pro Cihazına fiziksel erişim gereklidir"
+
+msgid "Link with PIN"
+msgstr "PIN ile Bağla"
+
+msgid "OR"
+msgstr "VEYA"
+
+msgid "Authorize Device via Email"
+msgstr "Cihazı E-Posta Üzerinden Yetkilendir"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr ""
+"Lantern Pro satın almak için kullandığınız e-postaya erişim gereklidir"
+
+msgid "Link via Email"
+msgstr "E-Posta Aracılığıyla Bağla"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Submit"
+msgstr "Gönder"
+
+msgid "Please enter a valid email address"
+msgstr "Lütfen geçerli bir e-posta adresi girin"
+
+msgid "Re-send Email"
+msgstr "E-postayı Tekrar Gönder"
+
+msgid "Paste from clipboard?"
+msgstr "Panodan yapıştırılsın mı?"
+
+msgid "Yes"
+msgstr "Evet"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "Enter or paste linking code"
+msgstr "Bağlama kodunu girin veya yapıştırın"
+
+msgid "recovery_email_sent"
+msgstr ""
+"Bu hesap mevcutsa %s adresine bir Bağlama PIN'i gönderildi. Yukarıdaki alana"
+" e-postadaki PIN'i girin. Bu e-postanın ulaşması birkaç saat alabilir."
+
+msgid "Add Device"
+msgstr "Hesap Ekle"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Bağlamak istediğiniz cihazda hesap menüsünden \"Cihazı Pro İçin "
+"Yetkilendir\"i açın ve ardından \"PIN ile Bağla\" seçeneğini belirleyin"
+
+msgid "approve_device_step_2"
+msgstr "1. adımdan elde edilen bağlama kodunu girin"
+
+msgid "Pro Account Expiration"
+msgstr "Pro Hesap Süre Dolumu"
+
+msgid "Renew"
+msgstr "Yenile"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro Cihazları (En fazla 3)"
+
+msgid "Remove"
+msgstr "Kaldır"
+
+msgid "Log Out"
+msgstr "Oturumu Kapat"
+
+msgid "confirm_remove_device"
+msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
