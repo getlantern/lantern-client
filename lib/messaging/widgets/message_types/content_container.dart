@@ -51,7 +51,7 @@ class ContentContainer extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
         constraints: const BoxConstraints(
-          minWidth: 150,
+          minWidth: 140,
           maxWidth: 350, // TODO: move both these to a responsive sizes file
         ),
         decoration: BoxDecoration(
@@ -98,6 +98,7 @@ class ContentContainer extends StatelessWidget {
                   ),
               ]),
               ...attachments,
+              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               ...reactionsList,
             ]));
   }
