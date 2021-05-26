@@ -47,6 +47,17 @@ class SessionModel extends Model {
     });
   }
 
+  Widget forceCountry(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('forceCountry',
+        builder: builder);
+  }
+
+  Future<void> setForceCountry(String? countryCode) {
+    return methodChannel.invokeMethod('setForceCountry', <String, dynamic>{
+      'countryCode': countryCode,
+    });
+  }
+
   Widget playVersion(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
   }
@@ -54,17 +65,6 @@ class SessionModel extends Model {
   Future<void> setPlayVersion(bool on) {
     return methodChannel.invokeMethod('setPlayVersion', <String, dynamic>{
       'on': on,
-    });
-  }
-
-  Widget forceCountry(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('forceCountry',
-        builder: builder);
-  }
-
-  Future<void> setForceCountry(String countryCode) {
-    return methodChannel.invokeMethod('setForceCountry', <String, dynamic>{
-      'countryCode': countryCode,
     });
   }
 

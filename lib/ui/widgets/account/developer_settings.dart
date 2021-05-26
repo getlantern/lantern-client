@@ -19,6 +19,11 @@ class DeveloperSettingsTab extends StatelessWidget {
           end: 20,
         ),
         children: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            child: const Text(
+                'These settings are for development use only. Changing any setting will automatically stop and restart the application'),
+          ),
           SettingsItem(
             title: 'Payment Test Mode'.i18n,
             child: sessionModel.paymentTestMode(
@@ -67,6 +72,34 @@ class DeveloperSettingsTab extends StatelessWidget {
                 onToggle: (bool newValue) {
                   sessionModel.setPaymentTestMode(newValue);
                 },
+              );
+            }),
+          ),
+          SettingsItem(
+            title: 'Force Country'.i18n,
+            child: sessionModel.forceCountry(
+                (BuildContext context, String value, Widget? child) {
+              return DropdownButton<String>(
+                value: value,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? newValue) {
+                  sessionModel
+                      .setForceCountry(newValue == '' ? null : newValue);
+                },
+                items: <String>['', 'CN', 'IR', 'US']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               );
             }),
           ),
