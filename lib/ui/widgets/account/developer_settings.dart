@@ -24,6 +24,11 @@ class DeveloperSettingsTab extends StatelessWidget {
             child: const Text(
                 'These settings are for development use only. Changing any setting will automatically stop and restart the application'),
           ),
+          Container(
+            margin: const EdgeInsets.all(8),
+            child: const Text(
+                'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.'),
+          ),
           SettingsItem(
             title: 'Payment Test Mode'.i18n,
             child: sessionModel.paymentTestMode(
