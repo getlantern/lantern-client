@@ -4,7 +4,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/message_types/attachment_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/ui/widgets/copied_text_widget.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
@@ -115,11 +114,6 @@ class MessageBubble extends StatelessWidget {
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
 
     if (isDateMarker != '') return DateMarker(isDateMarker);
-
-    if (isAttachment) {
-      return AttachmentBubble(outbound, inbound, startOfBlock, endOfBlock,
-          newestMessage, reactions, msg, message);
-    }
 
     return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
         newestMessage, reactions, msg, message, contact, onTapReply);
