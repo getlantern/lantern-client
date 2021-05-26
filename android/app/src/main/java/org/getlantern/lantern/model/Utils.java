@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -35,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
@@ -201,6 +203,51 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+            CharSequence title, CharSequence msg,
+            final boolean finish) {
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, true);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title, CharSequence msg,
+                                       final boolean finish, Boolean cancelable) {
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, cancelable);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title,
+                                       CharSequence msg,
+                                       CharSequence okLabel,
+                                       final boolean finish,
+                                       Runnable onClick,
+                                       Boolean cancelable) {
+        Logger.debug(TAG, "Showing alert dialog...");
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+                alertDialog.setTitle(title);
+                alertDialog.setMessage(msg);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, okLabel,
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            if (onClick != null) {
+                                onClick.run();
+                            }
+                            if (finish) {
+                                activity.finish();
+                            }
+                        });
+                if (!activity.isFinishing()) {
+                    alertDialog.show();
+                }
+                alertDialog.setCancelable(cancelable);
+            }
+        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {

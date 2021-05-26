@@ -15,7 +15,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.text.Html
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
@@ -32,6 +36,7 @@ import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
+import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
@@ -51,6 +56,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
+import kotlin.collections.ArrayList
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
@@ -58,6 +64,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
+    private lateinit var accountInitDialog: AlertDialog
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -162,6 +169,48 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
      */
     private fun fetchLoConf() {
         fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun onInitializingAccount(status: AccountInitializationStatus) {
+        val appName = getString(R.string.app_name)
+
+        when (status.status) {
+            AccountInitializationStatus.Status.PROCESSING -> {
+                accountInitDialog = AlertDialog.Builder(this).create()
+                accountInitDialog.setCancelable(false)
+                val inflater: LayoutInflater = this.layoutInflater
+                val dialogView = inflater.inflate(R.layout.init_account_dialog, null)
+                accountInitDialog.setView(dialogView)
+                val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
+                tvMessage.setText(getString(R.string.init_account, appName))
+                dialogView.findViewById<View>(R.id.btnCancel).setOnClickListener(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        EventBus.getDefault().removeStickyEvent(status)
+                        accountInitDialog.dismiss()
+                        finish()
+                    }
+                })
+                accountInitDialog.show()
+            }
+            AccountInitializationStatus.Status.SUCCESS -> {
+                EventBus.getDefault().removeStickyEvent(status)
+                if (accountInitDialog != null) {
+                    accountInitDialog.dismiss()
+                }
+            }
+            AccountInitializationStatus.Status.FAILURE -> {
+                EventBus.getDefault().removeStickyEvent(status)
+                if (accountInitDialog != null) {
+                    accountInitDialog.dismiss()
+                }
+                Utils.showAlertDialog(
+                    this, getString(R.string.connection_error),
+                    getString(R.string.reopen_to_try, appName),
+                    getString(R.string.ok), true, null, false
+                )
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
