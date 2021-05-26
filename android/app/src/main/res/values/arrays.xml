@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="free_side_menu_options">
+        <item>@string/get_lantern_pro</item>
+        <item>@string/invite_friends_btn</item>
+        <item>@string/authorize_device_pro</item>
+        <item>@string/check_for_update</item>
+        <item>@string/yinbi_redemption</item>
+        <item>@string/desktop_option</item>
+        <item>@string/language</item>
+        <item>@string/action_settings</item>
+        <item>@string/report_an_issue</item>
+    </string-array>
+
+    <array name="free_side_menu_ids">
+        <item>@id/get_lantern_pro</item>
+        <item>@id/invite_friends</item>
+        <item>@id/authorize_device_pro</item>
+        <item>@id/check_for_update</item>
+        <item>@id/yinbi_redemption</item>
+        <item>@id/desktop_option</item>
+        <item>@id/language</item>
+        <item>@id/action_settings</item>
+        <item>@id/report_an_issue</item>
+    </array>
+
+    <integer-array name="free_side_menu_icons">
+        <item>@drawable/pro_now</item>
+        <item>@drawable/get_free</item>
+        <item>@drawable/sign_in</item>
+        <item>@drawable/ic_update</item>
+        <item>@drawable/yinbi_menu_icon</item>
+        <item>@drawable/ic_desktop</item>
+        <item>@drawable/language</item>
+        <item>@drawable/settings</item>
+        <item>@drawable/ic_logs</item>
+    </integer-array>
+
+    <string-array name="pro_side_menu_options">
+        <item>@string/pro_account_header</item>
+        <item>@string/invite_friends_btn</item>
+        <item>@string/add_device</item>
+        <item>@string/check_for_update</item>
+        <item>@string/yinbi_redemption</item>
+        <item>@string/desktop_option</item>
+        <item>@string/language</item>
+        <item>@string/action_settings</item>
+        <item>@string/report_an_issue</item>
+    </string-array>
+
+    <array name="pro_side_menu_ids">
+        <item>@id/pro_account</item>
+        <item>@id/invite_friends</item>
+        <item>@id/add_device</item>
+        <item>@id/check_for_update</item>
+        <item>@id/yinbi_redemption</item>
+        <item>@id/desktop_option</item>
+        <item>@id/language</item>
+        <item>@id/action_settings</item>
+        <item>@id/report_an_issue</item>
+    </array>
+
+    <integer-array name="pro_side_menu_icons">
+        <item>@drawable/sign_in</item>
+        <item>@drawable/get_free</item>
+        <item>@drawable/sign_in</item>
+        <item>@drawable/ic_update</item>
+        <item>@drawable/yinbi_menu_icon</item>
+        <item>@drawable/ic_desktop</item>
+        <item>@drawable/language</item>
+        <item>@drawable/settings</item>
+        <item>@drawable/ic_logs</item>
+    </integer-array>
+
+    <string-array name="year_array">
+        <item>@string/year</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+    </string-array>
+
+    <string-array name="latest_year_array">
+        <item>@string/year</item>
+        <item>2017</item>
+    </string-array>
+
+    <string-array name="month_array">
+        <item>@string/month</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array translatable="false" name="special_locale_codes">
+        <item>ar_EG</item>
+        <item>fa_IR</item>
+        <item>zh_CN</item>
+        <item>zh_HK</item>
+        <item>my_MM</item>
+    </string-array>
+
+    <string-array translatable="false" name="special_locale_names">
+        <item>العربية</item>
+        <item>فارسی-</item>
+        <item>中文 (简体)</item>
+        <item>中文 (繁體)</item>
+        <item>မြန်မာစာ</item>
+    </string-array>
+
+</resources>

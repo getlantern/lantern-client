@@ -1,0 +1,220 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2021
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2021\n"
+"Language-Team: Chinese Simplified (https://www.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
+"Language: zh-Hans\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "每日数据用量"
+
+msgid "is"
+msgstr "是"
+
+msgid "connected"
+msgstr "已连接"
+
+msgid "disconnected"
+msgstr "断线"
+
+msgid "Disconnecting"
+msgstr "正在断开连接..."
+
+msgid "Connecting"
+msgstr "正在连接..."
+
+msgid "Go Pro Title"
+msgstr "专业互联！"
+
+msgid "Go Pro Description"
+msgstr "解锁流畅网速，数据不限量！"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "数据不限量 + 免费赠送加密货币隐币！"
+
+msgid "Server Location"
+msgstr "服务器位置"
+
+msgid "Server Location Info"
+msgstr "Lantern 使用智能服务器选项，自动为您连接最佳数据中心。"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "pro_account_management"
+msgstr "专业客户管理"
+
+msgid "add_device"
+msgstr "添加设备"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "升级到蓝灯专业版"
+
+msgid "authorize_device_for_pro"
+msgstr "授权设备使用专业版"
+
+msgid "invite_friends"
+msgstr "邀请朋友"
+
+msgid "desktop_version"
+msgstr "桌面版"
+
+msgid "free_yinbi_crypto"
+msgstr "免费加密货币隐币"
+
+msgid "yinbi_redemption"
+msgstr "隐币兑换"
+
+msgid "settings"
+msgstr "设置"
+
+msgid "proxy_all"
+msgstr "全部代理"
+
+msgid "language"
+msgstr "语种"
+
+msgid "report_issue"
+msgstr "报告问题"
+
+msgid "description_proxy_all_dialog"
+msgstr "启用该选项后，所有流量都将通过 Lantern 发送（更安全）。禁用该选项后，仅通过 Lantern 发送已阻止的流量（速度更快）。"
+
+msgid "Exchange"
+msgstr "交换"
+
+msgid "Account"
+msgstr "账户"
+
+msgid "In partnership with"
+msgstr "合作对象："
+
+msgid "Buy"
+msgstr "购买"
+
+msgid "Bitcoin"
+msgstr "比特币"
+
+msgid "Tether"
+msgstr "Tether"
+
+msgid "With"
+msgstr "和"
+
+msgid "Online Wallets"
+msgstr "线上钱包"
+
+msgid "Bank Transfers"
+msgstr "银行转账"
+
+msgid "Gift Cards"
+msgstr "礼品卡"
+
+msgid "Game Cards"
+msgstr "游戏卡"
+
+msgid "Cash Payment"
+msgstr "现金支付"
+
+msgid "Digital Currencies"
+msgstr "数字货币"
+
+msgid "Payment Method"
+msgstr "支付方式"
+
+msgid "SHOW BEST DEALS"
+msgstr "显示最优惠组合"
+
+msgid "VPN Status"
+msgstr "VPN 状态"
+
+msgid "VPN"
+msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "授权设备使用专业版"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "用设备连接码进行授权"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "需要实际访问蓝灯专业版设备。"
+
+msgid "Link with PIN"
+msgstr "使用 PIN 码连接"
+
+msgid "OR"
+msgstr "或"
+
+msgid "Authorize Device via Email"
+msgstr "通过电子邮件授权设备"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "需要访问您购买蓝灯专业版时用的电子邮件。"
+
+msgid "Link via Email"
+msgstr "通过电子邮件连接"
+
+msgid "Email"
+msgstr "电子邮件"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Please enter a valid email address"
+msgstr "请输入有效的电子邮件地址"
+
+msgid "Re-send Email"
+msgstr "重新发送电子邮件"
+
+msgid "Paste from clipboard?"
+msgstr "从剪贴板粘贴？"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Enter or paste linking code"
+msgstr "输入或粘贴连接码"
+
+msgid "recovery_email_sent"
+msgstr ""
+"系统已将具有连接 PIN 码的电子邮件发送到 %s（如果这个账户存在）。请输入上述电子邮件中提供的 PIN 码。这个电子邮件可能需要几个小时才会收到。"
+
+msgid "Add Device"
+msgstr "添加设备"
+
+msgid "approve_device_step_1"
+msgstr "从要连接的设备上的账户菜单打开“授权设备使用专业版”，然后选择“使用 PIN 码连接”"
+
+msgid "approve_device_step_2"
+msgstr "输入从第 1 步获得的连接码，然后提交"
+
+msgid "Pro Account Expiration"
+msgstr "专业版账户到期时间"
+
+msgid "Renew"
+msgstr "续费"
+
+msgid "pro_devices_header"
+msgstr "蓝灯专业版设备（最多 3 个）"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Log Out"
+msgstr "注销"
+
+msgid "confirm_remove_device"
+msgstr "您是否确定要从您的专业版帐户中取消链接此设备？"
+
+msgid "n/a"
+msgstr ""

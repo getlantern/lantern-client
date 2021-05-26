@@ -1,0 +1,226 @@
+# 
+# Translators:
+# e2f <projects@e2f.com>, 2021
+# Anh Phan <vietnamesel10n@gmail.com>, 2021
+# Nathan Tran, 2021
+# Yen Le Van <yenlevanbk@gmail.com>, 2021
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021\n"
+"Language-Team: Vietnamese (https://www.transifex.com/lantern-1/teams/94371/vi/)\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Daily Data Usage"
+msgstr "Sử dụng dữ liệu hàng ngày"
+
+msgid "is"
+msgstr "là"
+
+msgid "connected"
+msgstr "Đã kết nối"
+
+msgid "disconnected"
+msgstr "Đã ngắt kết nối"
+
+msgid "Disconnecting"
+msgstr "Đang ngắt kết nối..."
+
+msgid "Connecting"
+msgstr "Đang kết nối..."
+
+msgid "Go Pro Title"
+msgstr "Lên Pro!"
+
+msgid "Go Pro Description"
+msgstr "Mở khóa tốc độ nhanh hơn và dữ liệu không giới hạn!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Dữ liệu không giới hạn + tiền điện tử Yinbi miễn phí!"
+
+msgid "Server Location"
+msgstr "Địa chỉ Server"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern sử dụng lựa chọn máy chủ thông minh để tự động kết nối bạn với các "
+"trung tâm dữ liệu tốt nhất của chúng tôi."
+
+msgid "OK"
+msgstr "ĐỒNG Ý"
+
+msgid "pro_account_management"
+msgstr "Quản Trị Tài Khoản Pro"
+
+msgid "add_device"
+msgstr "Thêm Máy"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Nâng Cấp lên Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Cho Phép Máy dùng bản Pro"
+
+msgid "invite_friends"
+msgstr "Mời Bạn Bè"
+
+msgid "desktop_version"
+msgstr "Phiên bản Để Bàn"
+
+msgid "free_yinbi_crypto"
+msgstr "Tiền điện tử Yinbi miễn phí"
+
+msgid "yinbi_redemption"
+msgstr "Đổi thưởng Yinbi"
+
+msgid "settings"
+msgstr "Cài đặt"
+
+msgid "proxy_all"
+msgstr "Proxy tất cả"
+
+msgid "language"
+msgstr "Ngôn ngữ"
+
+msgid "report_issue"
+msgstr "Báo cáo lỗi"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"Nếu được bật, tất cả lưu lượng sẽ được gửi qua Lantern (an toàn hơn). Nếu bị"
+" tắt, chỉ lưu lượng bị chặn mới được gửi qua Lantern (nhanh hơn)."
+
+msgid "Exchange"
+msgstr "Giao dịch"
+
+msgid "Account"
+msgstr "Tài khoản"
+
+msgid "In partnership with"
+msgstr "Hợp tác với"
+
+msgid "Buy"
+msgstr "Mua"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
+
+msgid "With"
+msgstr "Với"
+
+msgid "Online Wallets"
+msgstr "Các ví trực tuyến"
+
+msgid "Bank Transfers"
+msgstr "Chuyển khoản ngân hàng"
+
+msgid "Gift Cards"
+msgstr "Thẻ quà tặng"
+
+msgid "Game Cards"
+msgstr "Thẻ Game"
+
+msgid "Cash Payment"
+msgstr "Thanh toán tiền mặt"
+
+msgid "Digital Currencies"
+msgstr "Tiền kỹ thuật số"
+
+msgid "Payment Method"
+msgstr "Phương thức Trả tiền"
+
+msgid "SHOW BEST DEALS"
+msgstr "HIỂN THỊ CÁC ĐỀ XUẤT TỐT NHẤT"
+
+msgid "VPN Status"
+msgstr "Trạng thái VPN"
+
+msgid "VPN"
+msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Cho Phép Máy dùng bản Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Ủy quyền bằng Mã pin liên kết thiết bị"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Yêu cầu quyền truy cập vật lý vào Thiết bị Lantern Pro"
+
+msgid "Link with PIN"
+msgstr "Liên kết bằng mã PIN"
+
+msgid "OR"
+msgstr "HOẶC"
+
+msgid "Authorize Device via Email"
+msgstr "Cấp phép thiết bị qua email"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "Yêu cầu quyền truy cập vào email bạn đã sử dụng để mua Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Liên kết qua Email"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Submit"
+msgstr "Nộp"
+
+msgid "Please enter a valid email address"
+msgstr "Vui lòng nhập địa chỉ email hợp lệ"
+
+msgid "Re-send Email"
+msgstr "Gửi lại Email"
+
+msgid "Paste from clipboard?"
+msgstr "Dán từ khay nhớ tạm?"
+
+msgid "Yes"
+msgstr "Có"
+
+msgid "No"
+msgstr "Không"
+
+msgid "Enter or paste linking code"
+msgstr "Nhập hoặc dán mã liên kết"
+
+msgid "recovery_email_sent"
+msgstr ""
+"Mã PIN Liên kết đã được gửi đến %s nếu tài khoản này tồn tại. Nhập mã PIN từ"
+" email đó ở trên. Có thể mất vài giờ để nhận được email."
+
+msgid "Add Device"
+msgstr "Thêm Máy"
+
+msgid "approve_device_step_1"
+msgstr ""
+"Mở 'Cho phép thiết bị dùng bản Pro' từ menu tài khoản trên thiết bị bạn muốn"
+" liên kết, sau đó chọn 'Liên kết bằng mã PIN'"
+
+msgid "approve_device_step_2"
+msgstr "Nhập mã liên kết có được từ bước 1"
+
+msgid "Pro Account Expiration"
+msgstr "Tài khoản Pro hết hạn"
+
+msgid "Renew"
+msgstr "Làm mới"
+
+msgid "pro_devices_header"
+msgstr "Thiết bị Lantern Pro (tối đa 3)"
+
+msgid "Remove"
+msgstr "Xóa bỏ"
+
+msgid "Log Out"
+msgstr "Đăng xuất"
+
+msgid "confirm_remove_device"
+msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"

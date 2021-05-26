@@ -1,0 +1,230 @@
+# 
+msgid ""
+msgstr ""
+
+msgid "Daily Data Usage"
+msgstr "Daily Data Usage"
+
+msgid "is"
+msgstr "is"
+
+msgid "connected"
+msgstr "Connected"
+
+msgid "disconnected"
+msgstr "Disconnected"
+
+msgid "Disconnecting"
+msgstr "Disconnecting..."
+
+msgid "Connecting"
+msgstr "Connecting..."
+
+msgid "Go Pro Title"
+msgstr "Go Pro!"
+
+msgid "Go Pro Description"
+msgstr "Unlock faster speeds, and unlimited data!"
+
+msgid "Go Pro Description With Yinbi"
+msgstr "Unlimited data + free Yinbi cryptocurrency!"
+
+msgid "Server Location"
+msgstr "Server Location"
+
+msgid "Server Location Info"
+msgstr ""
+"Lantern uses smart server selection to automatically connect you to our best"
+" data centers."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "pro_account_management"
+msgstr "Pro Account Management"
+
+msgid "add_device"
+msgstr "Add Device"
+
+msgid "upgrade_to_lantern_pro"
+msgstr "Upgrade to Lantern Pro"
+
+msgid "authorize_device_for_pro"
+msgstr "Authorize Device for Pro"
+
+msgid "invite_friends"
+msgstr "Invite Friends"
+
+msgid "desktop_version"
+msgstr "Desktop version"
+
+msgid "free_yinbi_crypto"
+msgstr "Free Yinbi Cryptocurrency"
+
+msgid "yinbi_redemption"
+msgstr "Yinbi Redemption"
+
+msgid "settings"
+msgstr "Settings"
+
+msgid "proxy_all"
+msgstr "Proxy everything"
+
+msgid "language"
+msgstr "Language"
+
+msgid "report_issue"
+msgstr "Report an issue"
+
+msgid "description_proxy_all_dialog"
+msgstr ""
+"If enabled all traffic will be sent through Lantern (more secure). If "
+"disabled, only blocked traffic will be sent through Lantern (faster)."
+
+msgid "Exchange"
+msgstr "Exchange"
+
+msgid "Account"
+msgstr "Account"
+
+msgid "In partnership with"
+msgstr "In partnership with"
+
+msgid "Buy"
+msgstr "Buy"
+
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+msgid "Tether"
+msgstr "Tether"
+
+msgid "With"
+msgstr "With"
+
+msgid "Online Wallets"
+msgstr "Online Wallets"
+
+msgid "Bank Transfers"
+msgstr "Bank Transfers"
+
+msgid "Gift Cards"
+msgstr "Gift Cards"
+
+msgid "Game Cards"
+msgstr "Game Cards"
+
+msgid "Cash Payment"
+msgstr "Cash Payment"
+
+msgid "Digital Currencies"
+msgstr "Digital Currencies"
+
+msgid "Payment Method"
+msgstr "Payment Method"
+
+msgid "SHOW BEST DEALS"
+msgstr "SHOW BEST DEALS"
+
+msgid "VPN Status"
+msgstr "VPN Status"
+
+msgid "VPN"
+msgstr "VPN"
+
+msgid "Authorize Device for Pro"
+msgstr "Authorize Device for Pro"
+
+msgid "Authorize with Device Linking Pin"
+msgstr "Authorize with Device Linking Pin"
+
+msgid "Requires physical access to a Lantern Pro Device"
+msgstr "Requires physical access to a Lantern Pro Device"
+
+msgid "Link with PIN"
+msgstr "Link with PIN"
+
+msgid "OR"
+msgstr "OR"
+
+msgid "Authorize Device via Email"
+msgstr "Authorize Device via Email"
+
+msgid "Requires access to the email you used to buy Lantern Pro"
+msgstr "Requires access to the email you used to buy Lantern Pro"
+
+msgid "Link via Email"
+msgstr "Link via Email"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Please enter a valid email address"
+msgstr "Please enter a valid email address"
+
+msgid "Re-send Email"
+msgstr "Re-send Email"
+
+msgid "Paste from clipboard?"
+msgstr "Paste from clipboard?"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Enter or paste linking code"
+msgstr "Enter or paste linking code"
+
+msgid "recovery_email_sent"
+msgstr "A Linking PIN has been sent to %s if this account exists. Input the PIN from that email above. The email may take several hours to arrive."
+
+msgid "Add Device"
+msgstr "Add Device"
+
+msgid "approve_device_step_1"
+msgstr "Open 'Authorize Device for Pro' from the account menu on the device you wish to link, then select 'Link with PIN'.
+
+msgid "approve_device_step_2"
+msgstr "Enter the linking code obtained from step 1"
+
+msgid "Pro Account Expiration"
+msgstr "Pro Account Expiration"
+
+msgid "Renew"
+msgstr "Renew"
+
+msgid "pro_devices_header"
+msgstr "Lantern Pro Devices (Up to 3)"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Log Out"
+msgstr "Log Out"
+
+msgid "confirm_remove_device"
+msgstr "Are you sure you want to unlink this device from your Pro account?"
+
+msgid "n/a"
+msgstr "n/a"
+
+msgid "Developer Settings"
+msgstr "Developer Settings"
+
+msgid "Developer"
+msgstr "Developer"
+
+msgid "Payment Test Mode"
+msgstr "Payment Test Mode"
+
+msgid "Play Version"
+msgstr "Play Version"
+
+msgid "Yinbi Enabled"
+msgstr "Yinbi Enabled"
+
