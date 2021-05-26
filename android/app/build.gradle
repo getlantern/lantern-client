@@ -182,7 +182,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "false"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
