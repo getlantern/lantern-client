@@ -236,6 +236,7 @@ class _ConversationState extends State<Conversation> {
           : widget._contact.displayName,
       actions: [DisappearingTimerAction(widget._contact)],
       body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onPanUpdate: (details) {
           _totalPanned += details.delta.dx;
           if (!_willCancelRecording && _totalPanned < -19) {
@@ -356,6 +357,7 @@ class _ConversationState extends State<Conversation> {
                 ),
               ),
               GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () => setState(() {
                   _isReplying = false;
                 }),
@@ -383,6 +385,7 @@ class _ConversationState extends State<Conversation> {
     return Row(children: [
       Container(
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
             setState(() {
               _emojiShowing = !_emojiShowing;
@@ -431,6 +434,7 @@ class _ConversationState extends State<Conversation> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () => _selectFilesToShare(),
             child: const Icon(Icons.add_circle_rounded),
           ),
@@ -439,6 +443,7 @@ class _ConversationState extends State<Conversation> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTapDown: (details) {
               _startRecording();
             },
@@ -543,6 +548,7 @@ class _ConversationState extends State<Conversation> {
                 ),
               ),
               GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTapUp: (details) async {
                   await _finishRecording();
                 },
