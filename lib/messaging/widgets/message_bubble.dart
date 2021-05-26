@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -137,8 +136,6 @@ class MessageBubble extends StatelessWidget {
     if (wasDeleted)
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
 
-    if (isDateMarker != '') return DateMarker(isDateMarker);
-
     return FocusedMenuHolder(
         // menuWidth: MediaQuery.of(context).size.width * 0.5,
         menuItems: [
@@ -185,8 +182,18 @@ class MessageBubble extends StatelessWidget {
         duration: const Duration(seconds: 0),
         animateMenuItems: false,
         onPressed: () {},
-        child: TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-            newestMessage, reactions, msg, message, contact, onTapReply));
+        child: TextBubble(
+            outbound,
+            inbound,
+            startOfBlock,
+            endOfBlock,
+            newestMessage,
+            reactions,
+            msg,
+            message,
+            contact,
+            onTapReply,
+            isDateMarker));
   }
 }
 

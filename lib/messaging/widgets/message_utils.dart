@@ -145,7 +145,7 @@ void showSnackbar(BuildContext context, String text) {
         )),
       ],
     ),
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.green,
     duration: const Duration(milliseconds: 700),
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
     behavior: SnackBarBehavior.floating,
