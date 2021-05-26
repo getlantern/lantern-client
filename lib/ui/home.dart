@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
+import 'package:lantern/ui/widgets/account/developer_settings.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -31,6 +32,8 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
       _currentIndex = 3;
+    } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
+      _currentIndex = 4;
     }
   }
 
@@ -114,24 +117,29 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder(
         future: loadAsync,
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return sessionModel
-              .language((BuildContext context, String lang, Widget? child) {
-            Localization.locale = lang;
-            return Scaffold(
-              body: PageView(
-                onPageChanged: onPageChange,
-                controller: _pageController,
-                children: [
-                  VPNTab(),
-                  ExchangeTab(),
-                  AccountTab(),
-                ],
-              ),
-              bottomNavigationBar: CustomBottomBar(
-                currentIndex: _currentIndex,
-                updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-              ),
-            );
+          return sessionModel.developmentMode(
+              (BuildContext context, bool developmentMode, Widget? child) {
+            return sessionModel
+                .language((BuildContext context, String lang, Widget? child) {
+              Localization.locale = lang;
+              return Scaffold(
+                body: PageView(
+                  onPageChanged: onPageChange,
+                  controller: _pageController,
+                  children: [
+                    VPNTab(),
+                    ExchangeTab(),
+                    AccountTab(),
+                    if (developmentMode) DeveloperSettingsTab(),
+                  ],
+                ),
+                bottomNavigationBar: CustomBottomBar(
+                  currentIndex: _currentIndex,
+                  showDeveloperSettings: developmentMode,
+                  updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+                ),
+              );
+            });
           });
         });
   }

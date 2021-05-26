@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -81,10 +82,10 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
     TextInputLayout emailLayout, cardLayout, expirationLayout, cvcLayout, referralCodeLayout;
 
     @ViewById
-    TextView header, price, productText, togglePaymentMethod, termsOfServiceText;
+    TextView header, price, priceWithoutTax, tax, productText, togglePaymentMethod, termsOfServiceText;
 
     @ViewById
-    View stripeSection;
+    View stripeSection, taxLabel;
 
     @ViewById
     Button continueBtn;
@@ -119,10 +120,19 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     @AfterViews
     void afterViews() {
-        boolean isPlayVersion = Utils.isPlayVersion(this);
+        boolean isPlayVersion = LanternApp.getSession().isPlayVersion();
         useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
+        String taxString = plan.getTaxStr();
+        if (!TextUtils.isEmpty(taxString)) {
+            tax.setText(taxString);
+            priceWithoutTax.setText(plan.getCostWithoutTaxStr());
+        } else {
+            tax.setVisibility(View.GONE);
+            priceWithoutTax.setVisibility(View.GONE);
+            taxLabel.setVisibility(View.GONE);
+        }
         productText.setText(plan.getFormatPriceWithBonus(this, false));
 
         if (isPlayVersion) {
@@ -452,7 +462,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
         } else {
-            if (Utils.isPlayVersion(this)) {
+            if (LanternApp.getSession().isPlayVersion()) {
                 if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
                     ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
                 }
