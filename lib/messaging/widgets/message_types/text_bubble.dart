@@ -38,39 +38,25 @@ class TextBubble extends StatelessWidget {
         children: [
           // TODO: in theory this should appear before an attachment or deleted file as well
           Container(
-              constraints: const BoxConstraints(
-                minWidth: 120,
-                maxWidth:
-                    350, // TODO: move both these to a responsive sizes file
-              ),
-              decoration: BoxDecoration(
-                color: outbound ? Colors.black38 : Colors.black12,
-                borderRadius: BorderRadius.only(
-                  topLeft: inbound && !startOfBlock
-                      ? Radius.zero
-                      : const Radius.circular(5),
-                  topRight: outbound && !startOfBlock
-                      ? Radius.zero
-                      : const Radius.circular(5),
-                  bottomRight: outbound && (!endOfBlock || newestMessage)
-                      ? Radius.zero
-                      : const Radius.circular(5),
-                  bottomLeft: inbound && (!endOfBlock || newestMessage)
-                      ? Radius.zero
-                      : const Radius.circular(5),
-                ),
-              ),
               child: Column(
-                crossAxisAlignment: outbound
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ContentContainer(
-                      outbound, inbound, msg, message, contact, onTapReply),
-                  StatusRow(outbound, inbound, reactions, msg, message)
-                ],
-              )),
+            crossAxisAlignment:
+                outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ContentContainer(
+                  outbound,
+                  inbound,
+                  msg,
+                  message,
+                  contact,
+                  onTapReply,
+                  startOfBlock,
+                  endOfBlock,
+                  newestMessage,
+                  reactions),
+              StatusRow(outbound, inbound, msg, message)
+            ],
+          )),
         ]);
   }
 }
