@@ -90,18 +90,18 @@ class CustomBottomBar extends StatelessWidget {
                       color: borderColor,
                       width: 1,
                     ),
-              endSide: tabIsLast || selected
-                  ? null
-                  : BorderSide(
+              endSide: selectedIsNext
+                  ? BorderSide(
                       color: borderColor,
                       width: 1,
-                    ),
-              startSide: !selectedIsPrior || selected
-                  ? null
-                  : BorderSide(
+                    )
+                  : null,
+              startSide: selectedIsPrior
+                  ? BorderSide(
                       color: borderColor,
                       width: 1,
-                    ),
+                    )
+                  : null,
               topStartCornerSide: BorderSide(
                 color: selectedIsPrior ? borderColor : Colors.white,
               ),
