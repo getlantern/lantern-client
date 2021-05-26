@@ -51,7 +51,7 @@ class ContentContainer extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
         constraints: const BoxConstraints(
-          minWidth: 140,
+          minWidth: 70,
           maxWidth: 350, // TODO: move both these to a responsive sizes file
         ),
         decoration: BoxDecoration(
