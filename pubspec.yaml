@@ -88,6 +88,8 @@ dependencies:
   back_button_interceptor: ^5.0.0
 
   scrollable_positioned_list: ^0.2.0-nullsafety.0
+
+  focused_menu: ^1.0.5
   
 dev_dependencies:
   flutter_test:
