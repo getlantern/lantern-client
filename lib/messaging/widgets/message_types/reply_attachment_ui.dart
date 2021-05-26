@@ -28,9 +28,7 @@ class ReplyToAttachmentUI extends StatelessWidget {
                 softWrap: true,
                 style: TextStyle(
                   fontSize: 12,
-                  color: !outbound
-                      ? Colors.white
-                      : Colors.black, // TODO: generalize in theme
+                  color: Colors.black, // TODO: generalize in theme
                 ),
               )),
         if (quotedMessage.attachments.isNotEmpty)
