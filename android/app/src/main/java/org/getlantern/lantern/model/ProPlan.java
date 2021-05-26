@@ -68,7 +68,10 @@ public class ProPlan {
             if (specificPriceWithoutTax == null) {
                 specificPriceWithoutTax = priceWithTax;
             }
-            this.tax.put(currency, priceWithTax - specificPriceWithoutTax);
+            Long tax = priceWithTax - specificPriceWithoutTax;
+            if (tax > 0) {
+                this.tax.put(currency, tax);
+            }
         }
         calculateExpectedMonthlyPrice();
         this.formatCost(); // this will set the currency code for us
@@ -222,6 +225,9 @@ public class ProPlan {
     private String getFormattedPrice(Map<String, Long> price, boolean formatFloat) {
         final String formattedPrice;
         Long currencyPrice = price.get(currencyCode);
+        if (currencyPrice == null) {
+            return "";
+        }
         if (currencyCode.equalsIgnoreCase("irr")) {
             if (formatFloat) {
                 formattedPrice = Utils.convertEasternArabicToDecimalFloat(currencyPrice / 100f);
