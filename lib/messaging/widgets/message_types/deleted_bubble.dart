@@ -12,7 +12,7 @@ class DeletedBubble extends StatelessWidget {
       radius: const Radius.circular(50),
       dashPattern: [6],
       strokeWidth: 1,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: const ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(50)),
         child: Padding(
