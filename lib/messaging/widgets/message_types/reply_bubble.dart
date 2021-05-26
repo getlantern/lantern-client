@@ -50,18 +50,16 @@ class ReplyBubble extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              child: model.contactMessages(contact, builder: (context,
-                  Iterable<PathAndValue<StoredMessage>> messageRecords,
-                  Widget? child) {
-                final quotedMessage = messageRecords
-                    .firstWhere((element) => element.value.id == msg.replyToId);
-                return ReplyToAttachmentUI(
-                    quotedMessage: quotedMessage.value,
-                    outbound: outbound,
-                    model: model);
-              }),
-            )
+            model.contactMessages(contact, builder: (context,
+                Iterable<PathAndValue<StoredMessage>> messageRecords,
+                Widget? child) {
+              final quotedMessage = messageRecords
+                  .firstWhere((element) => element.value.id == msg.replyToId);
+              return ReplyToAttachmentUI(
+                  quotedMessage: quotedMessage.value,
+                  outbound: outbound,
+                  model: model);
+            }),
           ],
         ));
   }

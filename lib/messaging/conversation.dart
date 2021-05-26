@@ -341,51 +341,42 @@ class _ConversationState extends State<Conversation> {
     final inResponseTo =
         matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-        ),
-        child: Row(
-          children: [
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Replying to $inResponseTo', //TODO: Add i18n
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => setState(() {
-                        _isReplying = false;
-                      }),
-                      child: const Icon(Icons.close, size: 20),
-                    )
-                  ],
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Replying to $inResponseTo', //TODO: Add i18n
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 4),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(_quotedMessage!.text.toString(),
-                          style: const TextStyle(color: Colors.black54)),
-                      if (_quotedMessage!.attachments.isNotEmpty)
-                        ReplyToAttachmentUI(
-                            quotedMessage: _quotedMessage as StoredMessage,
-                            outbound: _quotedMessage!.direction ==
-                                MessageDirection.OUT,
-                            model: model),
-                    ])
-              ],
-            )),
-          ],
-        ));
+              ),
+              GestureDetector(
+                onTap: () => setState(() {
+                  _isReplying = false;
+                }),
+                child: const Icon(Icons.close, size: 20),
+              )
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(children: [
+            Expanded(
+                child: Text(_quotedMessage!.text.toString(),
+                    style: const TextStyle(color: Colors.black54))),
+            if (_quotedMessage!.attachments.isNotEmpty)
+              ReplyToAttachmentUI(
+                  quotedMessage: _quotedMessage as StoredMessage,
+                  outbound: _quotedMessage!.direction == MessageDirection.OUT,
+                  model: model),
+          ])
+        ],
+      ),
+    );
   }
 
   Widget _buildMessageBar(context) {

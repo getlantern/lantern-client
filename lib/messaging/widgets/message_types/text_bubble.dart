@@ -40,6 +40,8 @@ class TextBubble extends StatelessWidget {
           Container(
               constraints: const BoxConstraints(
                 minWidth: 120,
+                maxWidth:
+                    350, // TODO: move both these to a responsive sizes file
               ),
               decoration: BoxDecoration(
                 color: outbound ? Colors.black38 : Colors.black12,
