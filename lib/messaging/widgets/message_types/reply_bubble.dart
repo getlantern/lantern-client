@@ -43,9 +43,7 @@ class ReplyBubble extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
-                    color: !outbound
-                        ? Colors.white
-                        : Colors.black, // TODO: generalize in theme
+                    color: Colors.black, // TODO: generalize in theme
                   ),
                 ),
               ],
