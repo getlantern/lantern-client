@@ -38,7 +38,7 @@ import okio.Buffer;
 
 /**
  * An OkHttp-based HTTP client.
-*/
+ */
 public class LanternHttpClient extends HttpClient {
     private static final String TAG = LanternHttpClient.class.getName();
 
@@ -48,7 +48,7 @@ public class LanternHttpClient extends HttpClient {
     private static final String PRO_TOKEN_HEADER = "X-Lantern-Pro-Token";
 
     private static final MediaType JSON
-        = MediaType.parse("application/json; charset=utf-8");
+            = MediaType.parse("application/json; charset=utf-8");
 
     /**
      * Creates a new HTTP client
@@ -75,7 +75,8 @@ public class LanternHttpClient extends HttpClient {
 
     /**
      * Constructs a url for a request to the pro server
-     * @param uri the requested resource
+     *
+     * @param uri    the requested resource
      * @param params any query params to include with the url
      * @return a URL
      */
@@ -103,18 +104,18 @@ public class LanternHttpClient extends HttpClient {
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
-            final HttpCallback cb) {
+                        final HttpCallback cb) {
         request(method, url, null, null, cb);
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
-            final ProCallback cb) {
+                        final ProCallback cb) {
         proRequest(method, url, null, null, cb);
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
-            final boolean addProHeaders,
-            RequestBody body, final HttpCallback cb) {
+                        final boolean addProHeaders,
+                        RequestBody body, final HttpCallback cb) {
         if (addProHeaders) {
             request(method, url, userHeaders(), body, cb);
         } else {
@@ -123,7 +124,7 @@ public class LanternHttpClient extends HttpClient {
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
-            RequestBody body, final ProCallback cb) {
+                        RequestBody body, final ProCallback cb) {
         proRequest(method, url, userHeaders(), body, cb);
     }
 
@@ -131,7 +132,7 @@ public class LanternHttpClient extends HttpClient {
      * GET request.
      *
      * @param url request URL
-     * @param cb for notifying the caller of an HTTP response or failure
+     * @param cb  for notifying the caller of an HTTP response or failure
      */
     public void get(@NonNull final HttpUrl url, final ProCallback cb) {
         proRequest("GET", url, userHeaders(), null, cb);
@@ -140,23 +141,24 @@ public class LanternHttpClient extends HttpClient {
     /**
      * POST request.
      *
-     * @param url request URL
+     * @param url  request URL
      * @param body the data enclosed with the HTTP message
-     * @param cb the callback responded with an HTTP response or failure
+     * @param cb   the callback responded with an HTTP response or failure
      */
     public void post(@NonNull final HttpUrl url,
-            final RequestBody body, @NonNull final ProCallback cb) {
+                     final RequestBody body, @NonNull final ProCallback cb) {
         proRequest("POST", url, userHeaders(), body, cb);
     }
 
-    private void processPlans(final JsonObject result, final PlansCallback cb) {
-        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+    private void processPlans(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+        Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
         final Gson gson = new Gson();
         String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
         LanternApp.getSession().setStripePubKey(stripePubKey);
-        Type listType = new TypeToken<List<ProPlan>>(){}.getType();
+        Type listType = new TypeToken<List<ProPlan>>() {
+        }.getType();
         Logger.debug(TAG, "Plans: " + result.get("plans"));
-        final List<ProPlan> fetched = (List<ProPlan>)gson.fromJson(result.get("plans"), listType);
+        final List<ProPlan> fetched = (List<ProPlan>) gson.fromJson(result.get("plans"), listType);
         Logger.debug(TAG, "Pro plans: " + fetched);
         for (ProPlan plan : fetched) {
             if (plan != null) {
@@ -165,10 +167,28 @@ public class LanternHttpClient extends HttpClient {
                 plans.put(plan.getId(), plan);
             }
         }
+        if (inAppBilling != null) {
+            // this means we're in the play store, use the configured plans from there but with the
+            // renewal bonus from the server side plans
+            Map<String, ProPlan> regularPlans = new HashMap<>();
+            for (Map.Entry<String, ProPlan> entry : plans.entrySet()) {
+                // Plans from the pro server have a version suffix, like '1y-usd-9' but plans from
+                // the Play Store don't, like '1y-usd'. So we normalize by dropping the version
+                // suffix.
+                regularPlans.put(entry.getKey().substring(0, entry.getKey().lastIndexOf("-")), entry.getValue());
+            }
+            plans = inAppBilling.getPlans();
+            for (Map.Entry<String, ProPlan> entry : plans.entrySet()) {
+                ProPlan regularPlan = regularPlans.get(entry.getKey());
+                if (regularPlan != null) {
+                    entry.getValue().updateRenewalBonusExpected(regularPlan.getRenewalBonusExpected());
+                }
+            }
+        }
         cb.onSuccess(plans);
     }
 
-    public void getPlans(final PlansCallback cb) {
+    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("locale", LanternApp.getSession().getLanguage());
         params.put("countrycode", LanternApp.getSession().getCountryCode());
@@ -180,11 +200,12 @@ public class LanternHttpClient extends HttpClient {
                 Logger.error(TAG, "Unable to fetch plans", throwable);
                 cb.onFailure(throwable, error);
             }
+
             @Override
             public void onSuccess(final Response response, final JsonObject result) {
                 try {
                     Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
-                    processPlans(result, cb);
+                    processPlans(result, cb, inAppBilling);
                 } catch (Exception e) {
                     Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
                 }
@@ -213,29 +234,30 @@ public class LanternHttpClient extends HttpClient {
     public void sendLinkRequest(final ProCallback cb) {
         final HttpUrl url = createProUrl("/user-link-request");
         final RequestBody formBody = new FormBody.Builder()
-            .add("email", LanternApp.getSession().email())
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build();
+                .add("email", LanternApp.getSession().email())
+                .add("deviceName", LanternApp.getSession().deviceName())
+                .build();
 
         Logger.debug(TAG, "Sending link request...");
         post(url, formBody,
                 new LanternHttpClient.ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                if (cb != null) {
-                    cb.onFailure(throwable, error);
-                }
-            }
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                if (result.get("error") != null) {
-                    onFailure(null, new ProError(result));
-                }
-                if (cb != null) {
-                    cb.onSuccess(response, result);
-                }
-            }
-        });
+                    @Override
+                    public void onFailure(final Throwable throwable, final ProError error) {
+                        if (cb != null) {
+                            cb.onFailure(throwable, error);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(final Response response, final JsonObject result) {
+                        if (result.get("error") != null) {
+                            onFailure(null, new ProError(result));
+                        }
+                        if (cb != null) {
+                            cb.onSuccess(response, result);
+                        }
+                    }
+                });
     }
 
     public void openBulkProCodes(final Context context) {
@@ -263,6 +285,7 @@ public class LanternHttpClient extends HttpClient {
                     cb.onFailure(throwable, error);
                 }
             }
+
             @Override
             public void onSuccess(final Response response, final JsonObject result) {
                 try {
@@ -285,6 +308,7 @@ public class LanternHttpClient extends HttpClient {
 
     /**
      * Convert a JsonObject json into a RequestBody that transmits content
+     *
      * @param json the JsonObject to be converted
      */
     public static RequestBody createJsonBody(final JsonObject json) {
@@ -305,10 +329,10 @@ public class LanternHttpClient extends HttpClient {
     }
 
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
-            final Map<String, String> headers,
-            RequestBody body, final HttpCallback cb) {
+                        final Map<String, String> headers,
+                        RequestBody body, final HttpCallback cb) {
         Request.Builder builder = new Request.Builder()
-            .cacheControl(CacheControl.FORCE_NETWORK);
+                .cacheControl(CacheControl.FORCE_NETWORK);
         if (headers != null) {
             builder = builder.headers(Headers.of(headers));
         }
@@ -323,7 +347,7 @@ public class LanternHttpClient extends HttpClient {
         final Request request = builder.build();
         if (headers != null) {
             Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                        method, url, request.headers()));
+                    method, url, request.headers()));
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url));
         }
@@ -356,17 +380,18 @@ public class LanternHttpClient extends HttpClient {
 
     /**
      * Creates a new HTTP request to be enqueued for later execution
-     * @param method the HTTP method
-     * @param url the URL target of this request
+     *
+     * @param method  the HTTP method
+     * @param url     the URL target of this request
      * @param headers the HTTP header fields to add to the request
-     * @param body the body of a POST request
-     * @param cb to notify the caller of an HTTP response or failure
+     * @param body    the body of a POST request
+     * @param cb      to notify the caller of an HTTP response or failure
      */
     private void proRequest(@NonNull final String method, @NonNull final HttpUrl url,
-            final Map<String, String> headers,
-            RequestBody body, final ProCallback cb) {
+                            final Map<String, String> headers,
+                            RequestBody body, final ProCallback cb) {
         Request.Builder builder = new Request.Builder()
-            .cacheControl(CacheControl.FORCE_NETWORK);
+                .cacheControl(CacheControl.FORCE_NETWORK);
         if (headers != null) {
             builder = builder.headers(Headers.of(headers));
         }
@@ -381,7 +406,7 @@ public class LanternHttpClient extends HttpClient {
         final Request request = builder.build();
         if (headers != null) {
             Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                        method, url, request.headers()));
+                    method, url, request.headers()));
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url));
         }
@@ -404,7 +429,7 @@ public class LanternHttpClient extends HttpClient {
                     if (body != null) {
                         Logger.error(TAG, "Body: " + body.string());
                     }
-                    final ProError error = new ProError("","Unexpected response code from server");
+                    final ProError error = new ProError("", "Unexpected response code from server");
                     cb.onFailure(null, error);
                     return;
                 }
@@ -435,11 +460,13 @@ public class LanternHttpClient extends HttpClient {
 
     public interface ProCallback {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
+
         public void onSuccess(Response response, JsonObject result);
     }
 
     public interface ProUserCallback {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
+
         public void onSuccess(Response response, final ProUser userData);
     }
 
@@ -449,11 +476,13 @@ public class LanternHttpClient extends HttpClient {
 
     public interface HttpCallback {
         public void onFailure(@Nullable Throwable throwable);
+
         public void onSuccess(Response response);
     }
 
     public interface PlansCallback {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
+
         public void onSuccess(Map<String, ProPlan> plans);
     }
 }

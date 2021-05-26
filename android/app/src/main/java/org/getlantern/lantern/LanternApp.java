@@ -294,11 +294,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     public static void getPlans(LanternHttpClient.PlansCallback cb) {
-        if (LanternApp.getSession().isPlayVersion()) {
-            Map<String, ProPlan> plans = inAppBilling.getPlans();
-            cb.onSuccess(plans);
-        } else {
-            lanternHttpClient.getPlans(cb);
-        }
+        lanternHttpClient.getPlans(cb, inAppBilling);
     }
 }
