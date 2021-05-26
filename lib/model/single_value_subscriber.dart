@@ -9,8 +9,8 @@ import 'model_event_channel.dart';
 /// A ValueNotifier that updates a single value based on subscribing to a path
 /// in the database.
 class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
-  SubscribedSingleValueNotifier(
-      path, T defaultValue, ModelEventChannel channel, void Function() removeFromCache,
+  SubscribedSingleValueNotifier(path, T defaultValue, ModelEventChannel channel,
+      void Function() removeFromCache,
       {bool details = false, T Function(Uint8List serialized)? deserialize})
       : super(defaultValue, removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
