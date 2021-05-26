@@ -484,7 +484,7 @@ class _ConversationState extends State<Conversation> {
             },
             config: const Config(
               columns: 10,
-              emojiSizeMax: 18.0,
+              emojiSizeMax: 17.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.SMILEYS,
