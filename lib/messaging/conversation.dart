@@ -4,8 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_content_row.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -269,7 +268,7 @@ class _ConversationState extends State<Conversation> {
             if (_isReplying)
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: _buildReplyContainer(),
+                child: _buildStagingContainer(),
               ),
             Padding(
               padding: const EdgeInsets.all(8),
@@ -335,47 +334,15 @@ class _ConversationState extends State<Conversation> {
     });
   }
 
-  Widget _buildReplyContainer() {
-    // use the message's replyToId to identify who this is in response to
-    final inResponseTo =
-        matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Replying to $inResponseTo', //TODO: Add i18n
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              GestureDetector(
-                onTap: () => setState(() {
-                  _isReplying = false;
-                }),
-                child: const Icon(Icons.close, size: 20),
-              )
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(children: [
-            Expanded(
-                child: Text(_quotedMessage!.text.toString(),
-                    style: const TextStyle(color: Colors.black54))),
-            if (_quotedMessage!.attachments.isNotEmpty)
-              ReplyContentRow(
-                  quotedMessage: _quotedMessage as StoredMessage,
-                  outbound: _quotedMessage!.direction == MessageDirection.OUT,
-                  model: model),
-          ])
-        ],
-      ),
-    );
+  Widget _buildStagingContainer() {
+    // This will contain the response preview while replying to a message, as well as the thumbnails when sharing attachments
+    return StagingContainerItem(
+        quotedMessage: _quotedMessage,
+        model: model,
+        contact: widget._contact,
+        onCloseListener: () => setState(() {
+              _isReplying = false;
+            }));
   }
 
   Widget _buildMessageBar(context) {
