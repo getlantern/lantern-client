@@ -3,8 +3,8 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-class ReplyToAttachmentUI extends StatelessWidget {
-  const ReplyToAttachmentUI({
+class ReplyContentRow extends StatelessWidget {
+  const ReplyContentRow({
     Key? key,
     required this.quotedMessage,
     required this.outbound,
@@ -19,14 +19,15 @@ class ReplyToAttachmentUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (quotedMessage.attachments.isEmpty)
+        if (quotedMessage.attachments
+            .isEmpty) // TODO: right now we either have an attachment or a text, which we will update at some point.
           Container(
               constraints: const BoxConstraints(
                   maxWidth: 300), // TODO: move this to a responsive sizes file
               child: Text(
                 quotedMessage.text,
                 softWrap: true,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.black, // TODO: generalize in theme
                 ),

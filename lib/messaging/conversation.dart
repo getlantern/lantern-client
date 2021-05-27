@@ -1,12 +1,11 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_attachment_ui.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -271,7 +270,13 @@ class _ConversationState extends State<Conversation> {
             if (_isReplying)
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: _buildReplyContainer(),
+                child: StagingContainerItem(
+                    quotedMessage: _quotedMessage,
+                    model: model,
+                    contact: widget._contact,
+                    onCloseListener: () => setState(() {
+                          _isReplying = false;
+                        })),
               ),
             Padding(
               padding: const EdgeInsets.all(8),
@@ -280,7 +285,14 @@ class _ConversationState extends State<Conversation> {
             if (_emojiShowing) _buildEmojiKeyboard(),
           ]),
           // Voice recorder
-          if (_recording) _buildVoiceRecorder(),
+          if (_recording)
+            VoiceRecorder(
+              stopWatchTimer: _stopWatchTimer,
+              willCancelRecording: _willCancelRecording,
+              onTapUpListener: () async {
+                await _finishRecording();
+              },
+            ),
         ]),
       ),
     );
@@ -335,50 +347,6 @@ class _ConversationState extends State<Conversation> {
         },
       );
     });
-  }
-
-  Widget _buildReplyContainer() {
-    // use the message's replyToId to identify who this is in response to
-    final inResponseTo =
-        matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Replying to $inResponseTo', //TODO: Add i18n
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () => setState(() {
-                  _isReplying = false;
-                }),
-                child: const Icon(Icons.close, size: 20),
-              )
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(children: [
-            Expanded(
-                child: Text(_quotedMessage!.text.toString(),
-                    style: const TextStyle(color: Colors.black54))),
-            if (_quotedMessage!.attachments.isNotEmpty)
-              ReplyToAttachmentUI(
-                  quotedMessage: _quotedMessage as StoredMessage,
-                  outbound: _quotedMessage!.direction == MessageDirection.OUT,
-                  model: model),
-          ])
-        ],
-      ),
-    );
   }
 
   Widget _buildMessageBar(context) {
@@ -501,78 +469,5 @@ class _ConversationState extends State<Conversation> {
             )),
       ),
     );
-  }
-
-  Widget _buildVoiceRecorder() {
-    return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-      Flexible(
-        child: ColoredBox(
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16, bottom: 17),
-                child: Icon(Icons.circle, color: Colors.red),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, bottom: 22),
-                child: StreamBuilder<int>(
-                  stream: _stopWatchTimer.rawTime,
-                  initialData: _stopWatchTimer.rawTime.value,
-                  builder: (context, snap) {
-                    final value = snap.data;
-                    final displayTime = StopWatchTimer.getDisplayTime(
-                        value ?? 0,
-                        minute: true,
-                        second: true,
-                        hours: false,
-                        milliSecond: false);
-                    return Text(displayTime,
-                        style: const TextStyle(fontWeight: FontWeight.bold));
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 63,
-                  child: Padding(
-                      padding: const EdgeInsets.only(right: 24),
-                      child: Text(
-                          _willCancelRecording
-                              ? 'will cancel'.i18n
-                              : '< ' + 'swipe to cancel'.i18n,
-                          style: const TextStyle(fontWeight: FontWeight.bold))),
-                ),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTapUp: (details) async {
-                  await _finishRecording();
-                },
-                child: Transform.scale(
-                  scale: 2,
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(38)),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                          left: 15, top: 15, right: 4, bottom: 4),
-                      child: Icon(Icons.mic_none),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ]);
   }
 }
