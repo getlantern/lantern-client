@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/voice_recorder.dart';
+import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
