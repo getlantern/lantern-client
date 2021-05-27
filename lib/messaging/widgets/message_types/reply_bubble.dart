@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_attachment_ui.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_content_row.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -55,7 +55,7 @@ class ReplyBubble extends StatelessWidget {
               try {
                 final quotedMessage = messageRecords
                     .firstWhere((element) => element.value.id == msg.replyToId);
-                return ReplyToAttachmentUI(
+                return ReplyContentRow(
                     quotedMessage: quotedMessage.value,
                     outbound: outbound,
                     model: model);
