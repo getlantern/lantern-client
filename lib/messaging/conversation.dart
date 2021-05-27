@@ -1,11 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_attachment_ui.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_content_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -369,7 +368,7 @@ class _ConversationState extends State<Conversation> {
                 child: Text(_quotedMessage!.text.toString(),
                     style: const TextStyle(color: Colors.black54))),
             if (_quotedMessage!.attachments.isNotEmpty)
-              ReplyToAttachmentUI(
+              ReplyContentRow(
                   quotedMessage: _quotedMessage as StoredMessage,
                   outbound: _quotedMessage!.direction == MessageDirection.OUT,
                   model: model),
