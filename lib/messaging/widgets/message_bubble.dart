@@ -118,8 +118,10 @@ class MessageBubble extends StatelessWidget {
     final reactionOptions = reactions.keys.toList();
     final reactionArray = reactionOptions
         .map((e) => Container(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                 child: GestureDetector(
                   onTap: () {
                     model.react(message, e);
@@ -133,14 +135,13 @@ class MessageBubble extends StatelessWidget {
             ))
         .toList(growable: false);
 
-    if (wasDeleted)
+    if (wasDeleted) {
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
+    }
 
     return FocusedMenuHolder(
-        // menuWidth: MediaQuery.of(context).size.width * 0.5,
         menuItems: [
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.emoji_emotions_outlined),
             title: Row(children: [...reactionArray]),
             onPressed: () {},
           ),
