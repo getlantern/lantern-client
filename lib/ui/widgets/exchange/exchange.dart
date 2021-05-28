@@ -100,7 +100,7 @@ class _ExchangeTabState extends State<ExchangeTab> {
           SliverFillRemaining(
             hasScrollBody: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 alignment: Alignment.center,
@@ -123,11 +123,9 @@ class _ExchangeTabState extends State<ExchangeTab> {
                         items: buyItems,
                       ),
                     ),
-                    Flexible(
-                      child: CustomDivider(
-                        label: 'With'.i18n,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                      ),
+                    CustomDivider(
+                      label: 'With'.i18n,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
                     DropDown<PaymentMethodItem>(
                         title: 'Payment Method'.i18n,
