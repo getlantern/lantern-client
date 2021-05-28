@@ -25,7 +25,7 @@ class LanternApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Lantern Messenger',
+        title: 'Lantern'.i18n,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
