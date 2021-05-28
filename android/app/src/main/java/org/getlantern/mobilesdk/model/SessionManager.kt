@@ -2,6 +2,7 @@ package org.getlantern.mobilesdk.model
 
 import android.AdSettings
 import android.Session
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -25,7 +26,7 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
-import java.util.*
+import java.util.Locale
 import kotlin.collections.HashMap
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
@@ -35,6 +36,7 @@ import kotlin.collections.iterator
 import kotlin.collections.listOf
 import kotlin.collections.set
 
+@SuppressLint("ApplySharedPref")
 abstract class SessionManager(application: Application) : Session {
     // whether or not to configure Lantern to use
     // staging environment
@@ -42,7 +44,6 @@ abstract class SessionManager(application: Application) : Session {
     val settings: Settings
     protected val context: Context
     protected val prefs: SharedPreferences
-    protected val editor: SharedPreferences.Editor get() = prefs.edit()
     val db: DB
     protected val vpnModel: VpnModel
 
@@ -116,7 +117,7 @@ abstract class SessionManager(application: Application) : Session {
     private fun setLocale(locale: Locale?) {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")
-            editor.putString(LANG, locale.toString()).commit()
+            prefs.edit().putString(LANG, locale.toString()).commit()
             if (locale.language != oldLocale) {
                 EventBus.getDefault().post(locale)
             }
@@ -128,7 +129,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun acceptTerms() {
-        editor.putInt(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION).commit()
+        prefs.edit().putInt(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION).commit()
     }
 
     override fun deviceOS(): String {
@@ -150,7 +151,7 @@ abstract class SessionManager(application: Application) : Session {
     var showAdsAfterDays: Long
         get() = prefs.getLong(SHOW_ADS_AFTER_DAYS, 0L)
         set(days) {
-            editor.putLong(SHOW_ADS_AFTER_DAYS, days).commit()
+            prefs.edit().putLong(SHOW_ADS_AFTER_DAYS, days).commit()
         }
 
     /**
@@ -195,7 +196,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setProxyAll(proxyAll: Boolean) {
-        editor.putBoolean(PROXY_ALL, proxyAll).commit()
+        prefs.edit().putBoolean(PROXY_ALL, proxyAll).commit()
     }
 
     val serverCountry: String?
@@ -213,7 +214,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setForceCountry(countryCode: String) {
-        editor.putString(FORCE_COUNTRY, countryCode).commit()
+        prefs.edit().putString(FORCE_COUNTRY, countryCode).commit()
     }
 
     override fun appVersion(): String {
@@ -225,7 +226,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setEmail(email: String?) {
-        editor.putString(EMAIL_ADDRESS, email).commit()
+        prefs.edit().putString(EMAIL_ADDRESS, email).commit()
     }
 
     fun setUserIdAndToken(userId: Long, token: String) {
@@ -234,12 +235,12 @@ abstract class SessionManager(application: Application) : Session {
             return
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        editor.putLong(USER_ID, userId).putString(TOKEN, token).commit()
+        prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).commit()
         FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
     private fun setDeviceId(deviceId: String?) {
-        editor.putString(DEVICE_ID, deviceId).commit()
+        prefs.edit().putString(DEVICE_ID, deviceId).commit()
     }
 
     override fun getDeviceID(): String {
@@ -279,15 +280,15 @@ abstract class SessionManager(application: Application) : Session {
         get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
-        editor.putBoolean(PAYMENT_TEST_MODE, true).commit()
+        prefs.edit().putBoolean(PAYMENT_TEST_MODE, true).commit()
     }
 
     fun updateVpnPreference(useVpn: Boolean) {
-        editor.putBoolean(PREF_USE_VPN, useVpn).commit()
+        prefs.edit().putBoolean(PREF_USE_VPN, useVpn).commit()
     }
 
     fun updateBootUpVpnPreference(boot: Boolean) {
-        editor.putBoolean(PREF_BOOTUP_VPN, boot).commit()
+        prefs.edit().putBoolean(PREF_BOOTUP_VPN, boot).commit()
     }
 
     override fun locale(): String {
@@ -296,7 +297,7 @@ abstract class SessionManager(application: Application) : Session {
 
     private fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
-        editor.putString(LATEST_BANDWIDTH, amount).commit()
+        prefs.edit().putString(LATEST_BANDWIDTH, amount).commit()
         vpnModel.saveBandwidth(
             Vpn.Bandwidth.newBuilder()
                 .setPercent(update.percent)
@@ -318,7 +319,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setSurveyLinkOpened(url: String?) {
-        editor.putBoolean(url, true).commit()
+        prefs.edit().putBoolean(url, true).commit()
     }
 
     fun surveyLinkOpened(url: String?): Boolean {
@@ -334,7 +335,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun setCountry(country: String) {
-        editor.putString(GEO_COUNTRY_CODE, country).commit()
+        prefs.edit().putString(GEO_COUNTRY_CODE, country).commit()
     }
 
     override fun updateStats(
@@ -348,9 +349,9 @@ abstract class SessionManager(application: Application) : Session {
         EventBus.getDefault().post(st)
 
         // save last location received
-        editor.putString(SERVER_COUNTRY, country).commit()
-        editor.putString(SERVER_CITY, city).commit()
-        editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
+        prefs.edit().putString(SERVER_COUNTRY, country)
+            .putString(SERVER_CITY, city)
+            .putString(SERVER_COUNTRY_CODE, countryCode).commit()
         vpnModel.saveServerInfo(
             Vpn.ServerInfo.newBuilder()
                 .setCity(city)
@@ -405,7 +406,7 @@ abstract class SessionManager(application: Application) : Session {
      */
     fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
-        editor.putLong(name, currentMilliseconds + numSeconds * 1000).commit()
+        prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).commit()
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -495,7 +496,7 @@ abstract class SessionManager(application: Application) : Session {
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
-        editor.putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
+        prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
             .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
             .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
