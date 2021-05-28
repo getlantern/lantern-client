@@ -1,7 +1,7 @@
 package org.getlantern.lantern.model
 
+import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.content.res.Resources
 import android.text.TextUtils
 import io.lantern.android.model.Vpn
@@ -20,6 +20,7 @@ import java.util.Currency
 import java.util.Date
 import java.util.Locale
 
+@SuppressLint("ApplySharedPref")
 class LanternSessionManager(application: Application) : SessionManager(application) {
     private var selectedPlan: ProPlan? = null
 
@@ -96,7 +97,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
-        editor.putString(REMOTE_CONFIG_PAYMENT_PROVIDER, provider).commit()
+        prefs.edit().putString(REMOTE_CONFIG_PAYMENT_PROVIDER, provider).commit()
     }
 
     fun getRemoteConfigPaymentProvider(): String? {
@@ -104,7 +105,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPaymentProvider(provider: String?) {
-        editor.putString(USER_PAYMENT_GATEWAY, provider).commit()
+        prefs.edit().putString(USER_PAYMENT_GATEWAY, provider).commit()
     }
 
     fun getPaymentProvider(): String? {
@@ -112,7 +113,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setSignature(sig: String?) {
-        editor.putString(PW_SIGNATURE, sig).commit()
+        prefs.edit().putString(PW_SIGNATURE, sig).commit()
     }
 
     fun getPwSignature(): String? {
@@ -120,7 +121,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setStripePubKey(key: String?) {
-        editor.putString(STRIPE_API_KEY, key).commit()
+        prefs.edit().putString(STRIPE_API_KEY, key).commit()
     }
 
     fun stripePubKey(): String? {
@@ -149,8 +150,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setDeviceCode(code: String?, expiration: Long) {
-        editor.putLong(DEVICE_CODE_EXP, expiration * 1000).commit()
-        editor.putString(DEVICE_LINKING_CODE, code).commit()
+        prefs.edit().putLong(DEVICE_CODE_EXP, expiration * 1000)
+            .putString(DEVICE_LINKING_CODE, code)
+            .commit()
     }
 
     fun deviceCode(): String? {
@@ -166,11 +168,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setYinbiEnabled(enabled: Boolean) {
-        editor.putBoolean(YINBI_ENABLED, enabled).commit()
+        prefs.edit().putBoolean(YINBI_ENABLED, enabled).commit()
     }
 
     fun setShouldShowYinbiBadge(shouldShow: Boolean) {
-        editor.putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
+        prefs.edit().putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
     }
 
     fun showYinbiRedemptionTable(): Boolean {
@@ -178,7 +180,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setShowRedemptionTable(v: Boolean) {
-        editor.putBoolean(SHOW_YINBI_REDEMPTION, v).commit()
+        prefs.edit().putBoolean(SHOW_YINBI_REDEMPTION, v).commit()
     }
 
     fun getProDaysLeft(): Int {
@@ -193,8 +195,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val dateFormat = SimpleDateFormat("MM/dd/yyyy")
         val dateToStr = dateFormat.format(expiry)
         Logger.debug(TAG, "Lantern pro expiration date: $dateToStr")
-        editor.putLong(EXPIRY_DATE, expiration)
-        editor.putString(EXPIRY_DATE_STR, dateToStr).commit()
+        prefs.edit().putLong(EXPIRY_DATE, expiration)
+            .putString(EXPIRY_DATE_STR, dateToStr)
+            .commit()
     }
 
     fun getExpiration(): LocalDateTime? {
@@ -224,21 +227,15 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun setWelcomeLastSeen() {
         val name = if (isProUser) RENEWAL_LAST_SEEN else WELCOME_LAST_SEEN
-        editor.putLong(name, System.currentTimeMillis()).commit()
+        prefs.edit().putLong(name, System.currentTimeMillis()).commit()
     }
 
     fun setRenewalPref(dontShow: Boolean) {
-        editor.putBoolean(SHOW_RENEWAL_PREF, dontShow).commit()
+        prefs.edit().putBoolean(SHOW_RENEWAL_PREF, dontShow).commit()
     }
 
     fun showRenewalPref(): Boolean {
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
-    }
-
-    fun proUserStatus(status: String) {
-        if (status == "active") {
-            editor.putBoolean(PRO_USER, true).commit()
-        }
     }
 
     fun setProPlan(plan: ProPlan?) {
@@ -246,19 +243,19 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setIsProUser(isProUser: Boolean) {
-        editor.putBoolean(PRO_USER, isProUser).commit()
+        prefs.edit().putBoolean(PRO_USER, isProUser).commit()
     }
 
     fun setExpired(expired: Boolean) {
-        editor.putBoolean(PRO_EXPIRED, expired).commit()
+        prefs.edit().putBoolean(PRO_EXPIRED, expired).commit()
     }
 
     fun setResellerCode(code: String?) {
-        editor.putString(RESELLER_CODE, code).commit()
+        prefs.edit().putString(RESELLER_CODE, code).commit()
     }
 
     fun setProvider(provider: String?) {
-        editor.putString(PROVIDER, provider).commit()
+        prefs.edit().putString(PROVIDER, provider).commit()
     }
 
     override fun code(): String? {
@@ -266,11 +263,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     override fun setCode(referral: String?) {
-        editor.putString(REFERRAL_CODE, referral).commit()
+        prefs.edit().putString(REFERRAL_CODE, referral).commit()
     }
 
     fun setStripeToken(token: String?) {
-        editor.putString(STRIPE_TOKEN, token).commit()
+        prefs.edit().putString(STRIPE_TOKEN, token).commit()
     }
 
     fun stripeToken(): String? {
@@ -293,23 +290,21 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return referral
     }
 
-    fun unlinkDevice() {
-        setIsProUser(false)
-        editor.putBoolean(PRO_USER, false)
-        editor.putBoolean(DEVICE_LINKED, false)
-        editor.remove(DEVICES)
-        editor.remove(TOKEN)
-        editor.remove(EMAIL_ADDRESS)
-        editor.remove(USER_ID)
-        editor.remove(DEVICE_CODE_EXP)
-        editor.remove(DEVICE_LINKING_CODE)
-        editor.remove(PRO_PLAN)
-        editor.commit()
+    fun logout() {
+        prefs.edit().putBoolean(PRO_USER, false)
+            .putBoolean(DEVICE_LINKED, false)
+            .remove(DEVICES)
+            .remove(TOKEN)
+            .remove(EMAIL_ADDRESS)
+            .remove(USER_ID)
+            .remove(DEVICE_CODE_EXP)
+            .remove(DEVICE_LINKING_CODE)
+            .remove(PRO_PLAN)
+            .commit()
     }
 
     fun linkDevice() {
-        editor.putBoolean(DEVICE_LINKED, true)
-        editor.commit()
+        prefs.edit().putBoolean(DEVICE_LINKED, true).commit()
     }
 
     fun storeUserData(user: ProUser?) {
@@ -341,8 +336,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
-            editor.putInt(PRO_MONTHS_LEFT, user.monthsLeft()).commit()
-            editor.putInt(PRO_DAYS_LEFT, user.daysLeft()).commit()
+            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
+                .putInt(PRO_DAYS_LEFT, user.daysLeft())
+                .commit()
         }
     }
 
@@ -364,7 +360,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPlayVersion(playVersion: Boolean) {
-        editor.putBoolean(PLAY_VERSION, playVersion).commit()
+        prefs.edit().putBoolean(PLAY_VERSION, playVersion).commit()
     }
 
     companion object {
