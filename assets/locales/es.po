@@ -4,15 +4,18 @@
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021
 # e2f <projects@e2f.com>, 2021
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
-# strel, 2021
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
+# strel, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021\n"
+"Last-Translator: strel, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "app_name"
+msgstr "Lantern"
 
 msgid "Daily Data Usage"
 msgstr "Uso de datos diario"
@@ -230,3 +233,21 @@ msgstr "Cerrar sesión"
 msgid "confirm_remove_device"
 msgstr ""
 "¿Está seguro de que quiere desvincular este dispositivo de su cuenta Pro?"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""

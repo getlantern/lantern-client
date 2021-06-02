@@ -1,15 +1,18 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2021
-# Diversity83 83, 2021
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2021
+# Diversity83 83, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2021\n"
+"Last-Translator: Diversity83 83, 2021\n"
 "Language-Team: Urdu (https://www.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "app_name"
+msgstr "لینٹرن"
 
 msgid "Daily Data Usage"
 msgstr "روزانہ ڈیٹا کا استعمال"
@@ -224,3 +227,21 @@ msgstr "لاگ آؤٹ کریں"
 
 msgid "confirm_remove_device"
 msgstr "کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""
