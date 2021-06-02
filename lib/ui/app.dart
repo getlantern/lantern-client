@@ -23,45 +23,50 @@ class LanternApp extends StatelessWidget {
         Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Lantern Messenger',
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('ar', 'EG'),
-          const Locale('fr', 'FR'),
-          const Locale('en', 'US'),
-          const Locale('fa', 'IR'),
-          const Locale('th', 'TH'),
-          const Locale('ms', 'MY'),
-          const Locale('ru', 'RU'),
-          const Locale('ur', 'IN'),
-          const Locale('zh', 'CN'),
-          const Locale('zh', 'HK'),
-          const Locale('es', 'ES'),
-          const Locale('tr', 'TR'),
-          const Locale('vi', 'VN'),
-          const Locale('my', 'MM'),
-        ],
-        onGenerateRoute: (RouteSettings settings) {
-          return MaterialPageRoute<dynamic>(
-            builder: (context) {
-              return LoaderOverlay(
-                useDefaultLoading: true,
-                child: I18n(
-                  initialLocale: const Locale('en', 'US'),
-                  child: HomePage(settings.name!, settings.arguments),
-                ),
+      child: FutureBuilder(
+        future: Localization.loadTranslations(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'app_name'.i18n,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('ar', 'EG'),
+              const Locale('fr', 'FR'),
+              const Locale('en', 'US'),
+              const Locale('fa', 'IR'),
+              const Locale('th', 'TH'),
+              const Locale('ms', 'MY'),
+              const Locale('ru', 'RU'),
+              const Locale('ur', 'IN'),
+              const Locale('zh', 'CN'),
+              const Locale('zh', 'HK'),
+              const Locale('es', 'ES'),
+              const Locale('tr', 'TR'),
+              const Locale('vi', 'VN'),
+              const Locale('my', 'MM'),
+            ],
+            onGenerateRoute: (RouteSettings settings) {
+              return MaterialPageRoute<dynamic>(
+                builder: (context) {
+                  return LoaderOverlay(
+                    useDefaultLoading: true,
+                    child: I18n(
+                      initialLocale: const Locale('en', 'US'),
+                      child: HomePage(settings.name!, settings.arguments),
+                    ),
+                  );
+                },
+                settings: settings,
               );
             },
-            settings: settings,
+            theme: buildTheme(context),
           );
         },
-        theme: buildTheme(context),
       ),
     );
   }

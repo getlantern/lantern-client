@@ -5,7 +5,7 @@ import 'package:lantern/package_store.dart';
 extension Localization on String {
   static String locale = 'en_US';
 
-  static TranslationsByLocale translations = Translations.byLocale('en');
+  static TranslationsByLocale translations = Translations.byLocale(locale);
 
   static Future<void> loadTranslations() async {
     translations +=
