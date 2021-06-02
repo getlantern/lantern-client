@@ -16,29 +16,33 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
-import io.lantern.db.SharedPreferencesAdapter
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
+import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
-import java.util.Arrays
-import java.util.Locale
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
+import kotlin.collections.listOf
+import kotlin.collections.set
 
 abstract class SessionManager(application: Application) : Session {
-    // The configs in this map will override the configs in BuildConfig
-    private val configMap = HashMap<String, Any>()
-
     // whether or not to configure Lantern to use
     // staging environment
     private var staging = false
     val settings: Settings
     protected val context: Context
     protected val prefs: SharedPreferences
-    protected val editor: SharedPreferences.Editor
+    protected val editor: SharedPreferences.Editor get() = prefs.edit()
     val db: DB
     protected val vpnModel: VpnModel
 
@@ -47,9 +51,6 @@ abstract class SessionManager(application: Application) : Session {
     private val appVersion: String
     private var startResult: StartResult? = null
     private var locale: Locale? = null
-    fun overrideConfig(configKey: String, configValue: Any) {
-        configMap[configKey] = configValue
-    }
 
     fun setStartResult(result: StartResult?) {
         startResult = result
@@ -84,11 +85,11 @@ abstract class SessionManager(application: Application) : Session {
      * it returns true if the country code matches c or if the default locale
      * is contained in a list of locales
      */
-    fun isFrom(c: String?, l: Array<Locale?>): Boolean {
+    private fun isFrom(c: String?, l: Array<Locale?>): Boolean {
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
-            Arrays.asList(*l).contains(locale)
+            listOf(*l).contains(locale)
     }
 
     val isEnglishUser: Boolean
@@ -172,8 +173,8 @@ abstract class SessionManager(application: Application) : Session {
      */
     override fun getDNSServer(): String {
         try {
-            val SystemProperties = Class.forName("android.os.SystemProperties")
-            val method = SystemProperties.getMethod("get", String::class.java)
+            val systemProperties = Class.forName("android.os.SystemProperties")
+            val method = systemProperties.getMethod("get", String::class.java)
             for (name in arrayOf("net.dns1", "net.dns2", "net.dns3", "net.dns4")) {
                 val value = method.invoke(null, name) as String
                 if ("" != value) {
@@ -189,10 +190,6 @@ abstract class SessionManager(application: Application) : Session {
         return settings.defaultDnsServer()
     }
 
-    override fun isPlayVersion(): Boolean {
-        return Utils.isPlayVersion(context)
-    }
-
     override fun proxyAll(): Boolean {
         return prefs.getBoolean(PROXY_ALL, false)
     }
@@ -201,22 +198,22 @@ abstract class SessionManager(application: Application) : Session {
         editor.putBoolean(PROXY_ALL, proxyAll).commit()
     }
 
-    val serverCountryCode: String?
-        get() = prefs.getString(SERVER_COUNTRY_CODE, "N/A")
     val serverCountry: String?
         get() = prefs.getString(SERVER_COUNTRY, "")
-    val serverCity: String?
-        get() = prefs.getString(SERVER_CITY, "")
 
     override fun getCountryCode(): String {
         val forceCountry = forcedCountryCode
-        return if (!forceCountry.isEmpty()) {
+        return if (forceCountry.isNotEmpty()) {
             forceCountry
         } else prefs.getString(GEO_COUNTRY_CODE, "")!!
     }
 
     override fun getForcedCountryCode(): String {
-        return BuildConfig.FORCE_COUNTRY.trim { it <= ' ' }
+        return prefs.getString(FORCE_COUNTRY, "")!!
+    }
+
+    fun setForceCountry(countryCode: String) {
+        editor.putString(FORCE_COUNTRY, countryCode).commit()
     }
 
     override fun appVersion(): String {
@@ -278,25 +275,15 @@ abstract class SessionManager(application: Application) : Session {
         } else prefs.getString(TOKEN, "")!!
     }
 
-    val isPaymentTestMode: Boolean
-        get() = if (configMap.containsKey(CONFIG_PAYMENT_TEST_MODE) && configMap[CONFIG_PAYMENT_TEST_MODE] is Boolean) {
-            configMap[CONFIG_PAYMENT_TEST_MODE] as Boolean
-        } else BuildConfig.PAYMENT_TEST_MODE
+    private val isPaymentTestMode: Boolean
+        get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
-    fun useVpn(): Boolean {
-        return prefs.getBoolean(PREF_USE_VPN, false)
+    fun setPaymentTestMode(mode: Boolean) {
+        editor.putBoolean(PAYMENT_TEST_MODE, true).commit()
     }
 
     fun updateVpnPreference(useVpn: Boolean) {
         editor.putBoolean(PREF_USE_VPN, useVpn).commit()
-    }
-
-    fun clearVpnPreference() {
-        editor.putBoolean(PREF_USE_VPN, false).commit()
-    }
-
-    fun bootUpVpn(): Boolean {
-        return prefs.getBoolean(PREF_BOOTUP_VPN, false)
     }
 
     fun updateBootUpVpnPreference(boot: Boolean) {
@@ -307,7 +294,7 @@ abstract class SessionManager(application: Application) : Session {
         return Locale.getDefault().toString()
     }
 
-    fun saveLatestBandwidth(update: Bandwidth) {
+    private fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
         editor.putString(LATEST_BANDWIDTH, amount).commit()
         vpnModel.saveBandwidth(
@@ -387,7 +374,7 @@ abstract class SessionManager(application: Application) : Session {
         }
     }
 
-    protected fun getLong(name: String?, defaultValue: Long): Long {
+    private fun getLong(name: String?, defaultValue: Long): Long {
         return try {
             prefs.getLong(name, defaultValue)
         } catch (e: ClassCastException) {
@@ -447,7 +434,6 @@ abstract class SessionManager(application: Application) : Session {
 
     companion object {
         private val TAG = SessionManager::class.java.name
-        const val CONFIG_PAYMENT_TEST_MODE = "config_payment_test_mode"
         private const val PREFERENCES_SCHEMA = "session"
 
         // shared preferences
@@ -476,7 +462,15 @@ abstract class SessionManager(application: Application) : Session {
         protected const val RECENT_INSTALL_THRESHOLD_DAYS: Long = 5
         protected const val CURRENT_TERMS_VERSION = 1
         protected const val INTERNAL_HEADERS_PREF_NAME = "LanternMeta"
-        private val enLocale = Locale("en", "US")
+
+        @JvmStatic
+        val YINBI_ENABLED = "yinbienabled"
+        protected const val DEVELOPMENT_MODE = "developmentMode"
+        private const val PAYMENT_TEST_MODE = "paymentTestMode"
+        protected const val FORCE_COUNTRY = "forceCountry"
+        @JvmStatic
+        val PLAY_VERSION = "playVersion"
+
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
             Locale("zh", "TW")
@@ -501,7 +495,11 @@ abstract class SessionManager(application: Application) : Session {
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
-        editor = prefsAdapter.edit()
+        editor.putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
+            .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
+            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
+            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
+            .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).commit()
         db = prefsAdapter.db
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)

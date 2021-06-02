@@ -33,7 +33,7 @@ class DataUsageTests {
 
     @Before
     fun setUp() {
-        LanternApp.getSession().overrideConfig(SessionManager.CONFIG_PAYMENT_TEST_MODE, false)
+        LanternApp.getSession().setPaymentTestMode(true)
         notificationManager.cancelAll()
     }
 

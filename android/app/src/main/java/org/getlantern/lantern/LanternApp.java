@@ -96,7 +96,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         Logger.debug(TAG, "messaging.init() finished at " + (System.currentTimeMillis() - start));
         session = new LanternSessionManager(this);
         Logger.debug(TAG, "new LanternSessionManager finished at " + (System.currentTimeMillis() - start));
-        if (Utils.isPlayVersion(this)) {
+        if (LanternApp.getSession().isPlayVersion()) {
             inAppBilling = new InAppBilling(this);
         }
         lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
@@ -294,11 +294,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     public static void getPlans(LanternHttpClient.PlansCallback cb) {
-        if (Utils.isPlayVersion(appContext)) {
-            Map<String, ProPlan> plans = inAppBilling.getPlans();
-            cb.onSuccess(plans);
-        } else {
-            lanternHttpClient.getPlans(cb);
-        }
+        lanternHttpClient.getPlans(cb, inAppBilling);
     }
 }

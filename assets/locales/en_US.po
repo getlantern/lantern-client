@@ -212,3 +212,19 @@ msgstr "Are you sure you want to unlink this device from your Pro account?"
 
 msgid "n/a"
 msgstr "n/a"
+
+msgid "Developer Settings"
+msgstr "Developer Settings"
+
+msgid "Developer"
+msgstr "Developer"
+
+msgid "Payment Test Mode"
+msgstr "Payment Test Mode"
+
+msgid "Play Version"
+msgstr "Play Version"
+
+msgid "Yinbi Enabled"
+msgstr "Yinbi Enabled"
+

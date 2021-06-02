@@ -197,6 +197,66 @@
                 app:layout_constraintTop_toBottomOf="@+id/togglePaymentMethod"/>
 
             <TextView
+                android:id="@+id/productText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_large"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="TWO YEARS LANTERN PRO + 2x FREE YINBI"
+                android:layout_marginTop="@dimen/space_normal"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textAllCaps="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                />
+
+            <TextView
+                android:id="@+id/priceWithoutTax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_large"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="$4 USD"
+                android:textAppearance="?attr/textAppearanceOverline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/productText"/>
+
+            <TextView
+                android:id="@+id/taxLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_large"
+                android:textColor="?android:attr/textColorSecondary"
+                android:text="@string/tax"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textAllCaps="true"
+                android:layout_marginTop="@dimen/space_between_text_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productText" />
+
+            <TextView
+                android:id="@+id/tax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_large"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="$4 USD"
+                android:textAppearance="?attr/textAppearanceOverline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/taxLabel"/>
+
+            <TextView
+                android:id="@+id/tvTotalPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_large"
+                android:text="@string/total"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:layout_marginTop="@dimen/space_between_text_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/taxLabel"/>
+
+            <TextView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -208,31 +268,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvTotalPrimary"/>
 
-            <TextView
-                android:id="@+id/tvTotalPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_large"
-                android:text="@string/total"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:layout_marginTop="@dimen/space_normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"/>
-
-            <TextView
-                android:id="@+id/productText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_large"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:text="TWO YEARS LANTERN PRO + 2x FREE YINBI"
-                android:layout_marginTop="@dimen/space_between_text_small"
-                android:textAppearance="?attr/textAppearanceOverline"
-                android:textAllCaps="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTotalPrimary"
-                />
-
             <View
                 android:id="@+id/divider1"
                 android:layout_width="0dp"
@@ -242,7 +277,7 @@
                 android:layout_marginHorizontal="@dimen/space_normal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productText"/>
+                app:layout_constraintTop_toBottomOf="@+id/tvTotalPrimary"/>
 
             <TextView
                 android:text="@string/terms_of_service_complete_purchase"
