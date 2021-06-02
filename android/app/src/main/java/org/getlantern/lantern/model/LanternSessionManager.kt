@@ -1,6 +1,5 @@
 package org.getlantern.lantern.model
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
@@ -15,12 +14,10 @@ import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
-import java.util.Arrays
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
 
-@SuppressLint("ApplySharedPref")
 class LanternSessionManager(application: Application) : SessionManager(application) {
     private var selectedPlan: ProPlan? = null
 
@@ -39,7 +36,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         try {
             val lang = language
             val parts = lang.split("_".toRegex()).toTypedArray()
-            return if (parts.size > 0) {
+            return if (parts.isNotEmpty()) {
                 Currency.getInstance(Locale(parts[0], parts[1]))
             } else Currency.getInstance(Locale.getDefault())
         } catch (e: Exception) {
@@ -48,11 +45,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return Currency.getInstance("USD")
     }
 
-    override fun currency(): String? {
-        val plan = selectedPlan
-        return if (plan != null) {
-            plan.currency
-        } else DEFAULT_CURRENCY_CODE
+    override fun currency(): String {
+        return selectedPlan?.currency ?: DEFAULT_CURRENCY_CODE
     }
 
     fun getSelectedPlan(): ProPlan? {
@@ -97,7 +91,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
-        prefs.edit().putString(REMOTE_CONFIG_PAYMENT_PROVIDER, provider).commit()
+        prefs.edit().putString(REMOTE_CONFIG_PAYMENT_PROVIDER, provider).apply()
     }
 
     fun getRemoteConfigPaymentProvider(): String? {
@@ -105,7 +99,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPaymentProvider(provider: String?) {
-        prefs.edit().putString(USER_PAYMENT_GATEWAY, provider).commit()
+        prefs.edit().putString(USER_PAYMENT_GATEWAY, provider).apply()
     }
 
     fun getPaymentProvider(): String? {
@@ -113,7 +107,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setSignature(sig: String?) {
-        prefs.edit().putString(PW_SIGNATURE, sig).commit()
+        prefs.edit().putString(PW_SIGNATURE, sig).apply()
     }
 
     fun getPwSignature(): String? {
@@ -121,7 +115,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setStripePubKey(key: String?) {
-        prefs.edit().putString(STRIPE_API_KEY, key).commit()
+        prefs.edit().putString(STRIPE_API_KEY, key).apply()
     }
 
     fun stripePubKey(): String? {
@@ -152,7 +146,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     fun setDeviceCode(code: String?, expiration: Long) {
         prefs.edit().putLong(DEVICE_CODE_EXP, expiration * 1000)
             .putString(DEVICE_LINKING_CODE, code)
-            .commit()
+            .apply()
     }
 
     fun deviceCode(): String? {
@@ -168,11 +162,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setYinbiEnabled(enabled: Boolean) {
-        prefs.edit().putBoolean(YINBI_ENABLED, enabled).commit()
+        prefs.edit().putBoolean(YINBI_ENABLED, enabled).apply()
     }
 
     fun setShouldShowYinbiBadge(shouldShow: Boolean) {
-        prefs.edit().putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).commit()
+        prefs.edit().putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).apply()
     }
 
     fun showYinbiRedemptionTable(): Boolean {
@@ -180,7 +174,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setShowRedemptionTable(v: Boolean) {
-        prefs.edit().putBoolean(SHOW_YINBI_REDEMPTION, v).commit()
+        prefs.edit().putBoolean(SHOW_YINBI_REDEMPTION, v).apply()
     }
 
     fun getProDaysLeft(): Int {
@@ -197,7 +191,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         Logger.debug(TAG, "Lantern pro expiration date: $dateToStr")
         prefs.edit().putLong(EXPIRY_DATE, expiration)
             .putString(EXPIRY_DATE_STR, dateToStr)
-            .commit()
+            .apply()
     }
 
     fun getExpiration(): LocalDateTime? {
@@ -227,11 +221,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun setWelcomeLastSeen() {
         val name = if (isProUser) RENEWAL_LAST_SEEN else WELCOME_LAST_SEEN
-        prefs.edit().putLong(name, System.currentTimeMillis()).commit()
+        prefs.edit().putLong(name, System.currentTimeMillis()).apply()
     }
 
     fun setRenewalPref(dontShow: Boolean) {
-        prefs.edit().putBoolean(SHOW_RENEWAL_PREF, dontShow).commit()
+        prefs.edit().putBoolean(SHOW_RENEWAL_PREF, dontShow).apply()
     }
 
     fun showRenewalPref(): Boolean {
@@ -243,19 +237,19 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setIsProUser(isProUser: Boolean) {
-        prefs.edit().putBoolean(PRO_USER, isProUser).commit()
+        prefs.edit().putBoolean(PRO_USER, isProUser).apply()
     }
 
     fun setExpired(expired: Boolean) {
-        prefs.edit().putBoolean(PRO_EXPIRED, expired).commit()
+        prefs.edit().putBoolean(PRO_EXPIRED, expired).apply()
     }
 
     fun setResellerCode(code: String?) {
-        prefs.edit().putString(RESELLER_CODE, code).commit()
+        prefs.edit().putString(RESELLER_CODE, code).apply()
     }
 
     fun setProvider(provider: String?) {
-        prefs.edit().putString(PROVIDER, provider).commit()
+        prefs.edit().putString(PROVIDER, provider).apply()
     }
 
     override fun code(): String? {
@@ -263,11 +257,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     override fun setCode(referral: String?) {
-        prefs.edit().putString(REFERRAL_CODE, referral).commit()
+        prefs.edit().putString(REFERRAL_CODE, referral).apply()
     }
 
     fun setStripeToken(token: String?) {
-        prefs.edit().putString(STRIPE_TOKEN, token).commit()
+        prefs.edit().putString(STRIPE_TOKEN, token).apply()
     }
 
     fun stripeToken(): String? {
@@ -300,11 +294,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             .remove(DEVICE_CODE_EXP)
             .remove(DEVICE_LINKING_CODE)
             .remove(PRO_PLAN)
-            .commit()
+            .apply()
     }
 
     fun linkDevice() {
-        prefs.edit().putBoolean(DEVICE_LINKED, true).commit()
+        prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
     fun storeUserData(user: ProUser?) {
@@ -338,7 +332,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
             prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
                 .putInt(PRO_DAYS_LEFT, user.daysLeft())
-                .commit()
+                .apply()
         }
     }
 
@@ -349,7 +343,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             return true
         }
         try {
-            val validInstallers: List<String> = ArrayList(Arrays.asList("com.android.vending", "com.google.android.feedback"))
+            val validInstallers: List<String> = ArrayList(listOf("com.android.vending", "com.google.android.feedback"))
             val installer = context.packageManager
                 .getInstallerPackageName(context.packageName)
             return installer != null && validInstallers.contains(installer)
@@ -360,7 +354,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPlayVersion(playVersion: Boolean) {
-        prefs.edit().putBoolean(PLAY_VERSION, playVersion).commit()
+        prefs.edit().putBoolean(PLAY_VERSION, playVersion).apply()
     }
 
     companion object {
