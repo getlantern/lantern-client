@@ -1,20 +1,12 @@
 package org.getlantern.lantern.service;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.text.TextUtils;
-
-import androidx.core.app.NotificationCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -27,6 +19,8 @@ import org.getlantern.lantern.model.CheckUpdate;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
 import org.getlantern.lantern.model.LanternStatus.Status;
+import org.getlantern.lantern.model.AccountInitializationStatus;
+import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
 import org.getlantern.mobilesdk.Lantern;
@@ -34,7 +28,6 @@ import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
-import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.mobilesdk.model.LoConfCallback;
 import org.greenrobot.eventbus.EventBus;
 
@@ -87,7 +80,7 @@ public class LanternService extends Service implements Runnable {
     @Override
     public void run() {
         // move the current thread of the service to the background
-//        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         final String locale = LanternApp.getSession().getLanguage();
         final Settings settings = LanternApp.getSession().getSettings();
@@ -110,6 +103,7 @@ public class LanternService extends Service implements Runnable {
     private void afterStart() {
         if (LanternApp.getSession().userId() == 0) {
             // create a user if no user id is stored
+            EventBus.getDefault().post(new AccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING));
             createUser(0);
         }
 
@@ -135,7 +129,7 @@ public class LanternService extends Service implements Runnable {
         createUserHandler.postDelayed(createUserRunnable, timeOut);
     }
 
-    private class InvalidUserException extends RuntimeException {
+    private static class InvalidUserException extends RuntimeException {
         public InvalidUserException(String message) {
             super(message);
         }
@@ -163,7 +157,7 @@ public class LanternService extends Service implements Runnable {
                 final String errorMsg = "Max. number of tries made to create Pro user";
                 final InvalidUserException e = new InvalidUserException(errorMsg);
                 Logger.error(TAG, errorMsg, e);
-                throw e;
+                EventBus.getDefault().postSticky(new AccountInitializationStatus(AccountInitializationStatus.Status.FAILURE));
             }
         }
 
@@ -182,6 +176,7 @@ public class LanternService extends Service implements Runnable {
                 LanternApp.getSession().setCode(referral);
             }
             EventBus.getDefault().post(new LanternStatus(Status.ON));
+            EventBus.getDefault().postSticky(new AccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS));
         }
     }
 

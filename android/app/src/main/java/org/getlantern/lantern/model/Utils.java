@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -35,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
@@ -84,28 +86,6 @@ public class Utils {
         });
         ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
-    }
-
-    // isPlayVersion checks whether or not the user installed Lantern via
-    // the Google Play store
-    public static boolean isPlayVersion(Context context) {
-        if (BuildConfig.PLAY_VERSION) {
-            return true;
-        }
-        
-        try {
-            final List<String> validInstallers =
-              new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
-
-            final String installer = context.getPackageManager()
-                .getInstallerPackageName(context.getPackageName());
-
-            return installer != null && validInstallers.contains(installer);
-        } catch (Exception e) {
-            Logger.error(TAG, "Error fetching package information: " + e.getMessage());
-        }
-
-        return false;
     }
 
     public static void clickify(TextView view, final String clickableText,
@@ -171,11 +151,11 @@ public class Utils {
     }
 
     public static void openPrivacyPolicy(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf")));
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL)));
     }
 
     public static void openTermsOfService(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://s3.amazonaws.com/lantern/Lantern-TOS.pdf")));
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.TERMS_OF_SERVICE_URL)));
     }
 
     // getResId returns the corresponding resource ID given its name
@@ -223,6 +203,51 @@ public class Utils {
             }
         };
         emailInput.setOnFocusChangeListener(focusListener);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+            CharSequence title, CharSequence msg,
+            final boolean finish) {
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, true);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title, CharSequence msg,
+                                       final boolean finish, Boolean cancelable) {
+        Utils.showAlertDialog(activity, title, msg, "OK", finish, null, cancelable);
+    }
+
+    public static void showAlertDialog(final Activity activity,
+                                       CharSequence title,
+                                       CharSequence msg,
+                                       CharSequence okLabel,
+                                       final boolean finish,
+                                       Runnable onClick,
+                                       Boolean cancelable) {
+        Logger.debug(TAG, "Showing alert dialog...");
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+                alertDialog.setTitle(title);
+                alertDialog.setMessage(msg);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, okLabel,
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            if (onClick != null) {
+                                onClick.run();
+                            }
+                            if (finish) {
+                                activity.finish();
+                            }
+                        });
+                if (!activity.isFinishing()) {
+                    alertDialog.show();
+                }
+                alertDialog.setCancelable(cancelable);
+            }
+        });
     }
 
     public static Snackbar formatSnackbar(Snackbar snackbar) {

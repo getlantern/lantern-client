@@ -3,15 +3,36 @@ import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'custom_rounded_rectangle_border.dart';
 
+class TabItem {
+  final int index;
+  final String title;
+  final String icon;
+
+  TabItem({required this.index, required this.title, required this.icon});
+}
+
 class CustomBottomBar extends StatelessWidget {
   final int currentIndex;
+  final bool showDeveloperSettings;
   final Function updateCurrentIndexPageView;
+  final List<TabItem> tabs = [
+    TabItem(index: 0, title: 'Messaging', icon: ImagePaths.messages_icon),
+    TabItem(index: 1, title: 'VPN', icon: ImagePaths.key_icon),
+    TabItem(index: 2, title: 'Exchange', icon: ImagePaths.exchange_icon),
+    TabItem(index: 3, title: 'Account', icon: ImagePaths.account_icon),
+  ];
 
   CustomBottomBar(
       {this.currentIndex = 0,
+      this.showDeveloperSettings = false,
       required this.updateCurrentIndexPageView,
       Key? key})
-      : super(key: key);
+      : super(key: key) {
+    if (showDeveloperSettings) {
+      tabs.add(TabItem(
+          index: 4, title: 'Developer'.i18n, icon: ImagePaths.devices_icon));
+    }
+  }
 
   Widget activeIcon({bool isActive = false}) {
     return Container(
@@ -38,100 +59,62 @@ class CustomBottomBar extends StatelessWidget {
   }
 
   Widget renderBottomTabItem(
-      {required TAB_ENUM tabEnum,
-      required int index,
+      {required TabItem tab,
       bool isActive = false,
       required BuildContext context}) {
-    String text;
-    String icon;
     var sessionModel = context.watch<SessionModel>();
+    var selected = currentIndex == tab.index;
+    var tabIsFirst = tab.index == 0;
+    var tabIsLast = tab.index == tabs.length - 1;
+    var selectedIsPrior = currentIndex == tab.index - 1;
+    var selectedIsNext = currentIndex == tab.index + 1;
 
-    // Tab(text: 'VPN'.i18n, icon: Icon(Icons.vpn_key)),
-    // Tab(text: 'Account'.i18n, icon: Icon(Icons.person)),
-    switch (tabEnum) {
-      case TAB_ENUM.MESSAGING:
-        text = 'Messaging'.i18n;
-        icon = ImagePaths.messages_icon;
-        break;
-      case TAB_ENUM.VPN:
-        text = 'VPN'.i18n;
-        icon = ImagePaths.key_icon;
-        break;
-      case TAB_ENUM.EXCHANGE:
-        text = 'Exchange'.i18n;
-        icon = ImagePaths.exchange_icon;
-        break;
-      case TAB_ENUM.ACCOUNT:
-        text = 'Account'.i18n;
-        icon = ImagePaths.account_icon;
-        break;
-      default:
-        throw Exception('unknown tabEnum');
-    }
     return Expanded(
       flex: 1,
       child: InkWell(
         customBorder: RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.only(
             topStart: Radius.circular(
-              index != 0 ? borderRadius : 0,
+              !tabIsFirst ? borderRadius : 0,
             ),
-            topEnd: Radius.circular(
-                index != TAB_ENUM.values.length - 1 ? borderRadius : 0),
+            topEnd: Radius.circular(!tabIsLast ? borderRadius : 0),
           ),
         ),
-        onTap: () => updateCurrentIndexPageView(index),
+        onTap: () => updateCurrentIndexPageView(tab.index),
         child: Ink(
           decoration: ShapeDecoration(
-            color:
-                currentIndex == index ? selectedTabColor : unselectedTabColor,
+            color: selected ? selectedTabColor : unselectedTabColor,
             shape: CustomRoundedRectangleBorder(
-              topSide: currentIndex == index
+              topSide: selected
                   ? null
                   : BorderSide(
                       color: borderColor,
                       width: 1,
                     ),
-              endSide: currentIndex == index ||
-                      currentIndex == 2 && index == 0 ||
-                      currentIndex == 0 && index == 1
-                  ? null
-                  : BorderSide(
+              endSide: selectedIsNext
+                  ? BorderSide(
                       color: borderColor,
                       width: 1,
-                    ),
-              startSide: currentIndex == index ||
-                      currentIndex == 0 && index == 2 ||
-                      currentIndex == 2 && index == 1
-                  ? null
-                  : BorderSide(
+                    )
+                  : null,
+              startSide: selectedIsPrior
+                  ? BorderSide(
                       color: borderColor,
                       width: 1,
-                    ),
+                    )
+                  : null,
               topStartCornerSide: BorderSide(
-                color: (currentIndex == 0 && index == 1) ||
-                        (currentIndex == 1 && index == 2)
-                    ? borderColor
-                    : Colors.white,
+                color: selectedIsPrior ? borderColor : Colors.white,
               ),
               topEndCornerSide: BorderSide(
-                color: (currentIndex == 1 && index == 0) ||
-                        (currentIndex == 2 && index == 1)
-                    ? borderColor
-                    : Colors.white,
+                color: selectedIsNext ? borderColor : Colors.white,
               ),
               borderRadius: BorderRadiusDirectional.only(
                 topStart: Radius.circular(
-                  (currentIndex == 0 && index == 1) ||
-                          (currentIndex == 1 && index == 2)
-                      ? borderRadius
-                      : 0,
+                  selectedIsPrior ? borderRadius : 0,
                 ),
                 topEnd: Radius.circular(
-                  (currentIndex == 1 && index == 0) ||
-                          (currentIndex == 2 && index == 1)
-                      ? borderRadius
-                      : 0,
+                  selectedIsNext ? borderRadius : 0,
                 ),
               ),
             ),
@@ -139,7 +122,7 @@ class CustomBottomBar extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              tabEnum == TAB_ENUM.ACCOUNT
+              tab.title == 'Account'
                   ? sessionModel.shouldShowYinbiBadge((BuildContext context,
                       bool shouldShowYinbiBadge, Widget? child) {
                       return CustomBadge(
@@ -147,18 +130,18 @@ class CustomBottomBar extends StatelessWidget {
                         fontSize: 8.0,
                         showBadge: shouldShowYinbiBadge,
                         child: CustomAssetImage(
-                          path: icon,
+                          path: tab.icon,
                           size: 24,
-                          color: currentIndex == index
+                          color: selected
                               ? selectedTabLabelColor
                               : unselectedTabLabelColor,
                         ),
                       );
                     })
                   : CustomAssetImage(
-                      path: icon,
+                      path: tab.icon,
                       size: 24,
-                      color: currentIndex == index
+                      color: selected
                           ? selectedTabLabelColor
                           : unselectedTabLabelColor,
                     ),
@@ -166,15 +149,15 @@ class CustomBottomBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    text,
+                    tab.title.i18n,
                     style: GoogleFonts.roboto().copyWith(
                       fontSize: 12,
-                      color: currentIndex == index
+                      color: selected
                           ? selectedTabLabelColor
                           : unselectedTabLabelColor,
                     ),
                   ),
-                  tabEnum == TAB_ENUM.VPN
+                  tab.title == 'VPN'
                       ? activeIcon(isActive: isActive)
                       : Container(),
                 ],
@@ -194,20 +177,14 @@ class CustomBottomBar extends StatelessWidget {
       child: vpnModel
           .vpnStatus((BuildContext context, String? vpnStatus, Widget? child) {
         return Row(
-          children: TAB_ENUM.values
-              .asMap()
+          children: tabs
               .map(
-                (index, tabEnum) => MapEntry(
-                  index,
-                  renderBottomTabItem(
-                      index: index,
-                      tabEnum: tabEnum,
-                      isActive: (vpnStatus == 'connected' ||
-                          vpnStatus == 'disconnecting'),
-                      context: context),
-                ),
+                (tab) => renderBottomTabItem(
+                    tab: tab,
+                    isActive: (vpnStatus == 'connected' ||
+                        vpnStatus == 'disconnecting'),
+                    context: context),
               )
-              .values
               .toList(),
         );
       }),
