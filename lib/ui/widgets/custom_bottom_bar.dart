@@ -17,8 +17,7 @@ class CustomBottomBar extends StatelessWidget {
   final Function updateCurrentIndexPageView;
   final List<TabItem> tabs = [
     TabItem(index: 0, title: 'VPN', icon: ImagePaths.key_icon),
-    TabItem(index: 1, title: 'Exchange', icon: ImagePaths.exchange_icon),
-    TabItem(index: 2, title: 'Account', icon: ImagePaths.account_icon),
+    TabItem(index: 1, title: 'Account', icon: ImagePaths.account_icon),
   ];
 
   CustomBottomBar(
@@ -29,7 +28,7 @@ class CustomBottomBar extends StatelessWidget {
       : super(key: key) {
     if (showDeveloperSettings) {
       tabs.add(TabItem(
-          index: 3, title: 'Developer'.i18n, icon: ImagePaths.devices_icon));
+          index: 2, title: 'Developer'.i18n, icon: ImagePaths.devices_icon));
     }
   }
 
