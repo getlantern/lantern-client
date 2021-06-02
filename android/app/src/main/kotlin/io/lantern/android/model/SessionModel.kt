@@ -1,7 +1,6 @@
 package io.lantern.android.model
 
 import android.app.Activity
-import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
@@ -285,12 +284,13 @@ class SessionModel(
                 override fun onSuccess(response: Response, result: JsonObject) {
                     Logger.debug(TAG, "Successfully removed device")
 
-                    if (deviceId == LanternApp.getSession().deviceID) {
+                    val isLogout = deviceId == LanternApp.getSession().deviceID
+                    if (isLogout) {
                         // if one of the devices we removed is the current device
                         // make sure to logout
                         Logger.debug(TAG, "Logging out")
-                        LanternApp.getSession().unlinkDevice()
-                        activity.openHome()
+                        LanternApp.getSession().logout()
+                        activity.restartApp()
                         return
                     }
 

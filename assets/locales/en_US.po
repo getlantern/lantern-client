@@ -2,6 +2,9 @@
 msgid ""
 msgstr ""
 
+msgid "app_name"
+msgstr "Lantern"
+
 msgid "Daily Data Usage"
 msgstr "Daily Data Usage"
 
