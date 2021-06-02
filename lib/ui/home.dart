@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
     _pageController = PageController(initialPage: _currentIndex);
     final mainMethodChannel = const MethodChannel('lantern_method_channel');
     final eventManager = EventManager('lantern_event_channel');
-    loadAsync = Localization.loadTranslations();
 
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
@@ -114,33 +113,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
-    return FutureBuilder(
-        future: loadAsync,
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return sessionModel.developmentMode(
-              (BuildContext context, bool developmentMode, Widget? child) {
-            return sessionModel
-                .language((BuildContext context, String lang, Widget? child) {
-              Localization.locale = lang;
-              return Scaffold(
-                body: PageView(
-                  onPageChanged: onPageChange,
-                  controller: _pageController,
-                  children: [
-                    VPNTab(),
-                    ExchangeTab(),
-                    AccountTab(),
-                    if (developmentMode) DeveloperSettingsTab(),
-                  ],
-                ),
-                bottomNavigationBar: CustomBottomBar(
-                  currentIndex: _currentIndex,
-                  showDeveloperSettings: developmentMode,
-                  updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-                ),
-              );
-            });
-          });
-        });
+    return sessionModel.developmentMode(
+        (BuildContext context, bool developmentMode, Widget? child) {
+      return sessionModel
+          .language((BuildContext context, String lang, Widget? child) {
+        Localization.locale = lang;
+        return Scaffold(
+          body: PageView(
+            onPageChanged: onPageChange,
+            controller: _pageController,
+            children: [
+              VPNTab(),
+              AccountTab(),
+              if (developmentMode) DeveloperSettingsTab(),
+            ],
+          ),
+          bottomNavigationBar: CustomBottomBar(
+            currentIndex: _currentIndex,
+            showDeveloperSettings: developmentMode,
+            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+          ),
+        );
+      });
+    });
   }
 }
