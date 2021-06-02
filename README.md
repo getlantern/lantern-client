@@ -47,7 +47,7 @@ You'll need the liblantern-all.aar containing the Go back-end code in order for 
 2. Select **Android SDK**
 3. Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
 4. Go to **SDK Tools** and check the option **Show Package Details**
-5. On the Android SDK Build-Tools, check from: SDK 27.0.0 up to the latest at the moment.
+5. On the Android SDK Build-Tools, check from: SDK 30 up to the latest at the moment. (is optional if you wish to add more SDK alternatives such as 27.0, 28 or 29).
 6. On the NDK(Side by side) check from 20.1 up to the latest at the moment.
 7. Make sure that you have the latest **Android SDK Command-line Tools**
 8. Finally select the following:
