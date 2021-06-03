@@ -655,6 +655,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..aInt64(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstViewedAt', protoName: 'firstViewedAt')
     ..aInt64(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAt', protoName: 'disappearAt')
     ..m<$core.int, $core.int>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnails', entryClassName: 'StoredMessage.ThumbnailsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.O3, packageName: const $pb.PackageName('model'))
+    ..aInt64(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deletedBySenderAt', protoName: 'deletedBySenderAt')
     ..hasRequiredFields = false
   ;
 
@@ -675,6 +676,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     $fixnum.Int64? firstViewedAt,
     $fixnum.Int64? disappearAt,
     $core.Map<$core.int, $core.int>? thumbnails,
+    $fixnum.Int64? deletedBySenderAt,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -721,6 +723,9 @@ class StoredMessage extends $pb.GeneratedMessage {
     }
     if (thumbnails != null) {
       _result.thumbnails.addAll(thumbnails);
+    }
+    if (deletedBySenderAt != null) {
+      _result.deletedBySenderAt = deletedBySenderAt;
     }
     return _result;
   }
@@ -863,6 +868,15 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(15)
   $core.Map<$core.int, $core.int> get thumbnails => $_getMap(14);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get deletedBySenderAt => $_getI64(15);
+  @$pb.TagNumber(16)
+  set deletedBySenderAt($fixnum.Int64 v) { $_setInt64(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasDeletedBySenderAt() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearDeletedBySenderAt() => clearField(16);
 }
 
 class Reaction extends $pb.GeneratedMessage {
