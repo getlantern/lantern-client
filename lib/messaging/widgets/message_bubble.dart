@@ -1,7 +1,8 @@
-import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -52,47 +53,49 @@ class MessageBubble extends StatelessWidget {
       final isAttachment = msg.attachments.isNotEmpty;
 
       return InkWell(
-          onLongPress: () {
-            _buildActionsPopup(outbound, context, msg, model, reactions,
-                message, isAttachment, onReply);
-          },
+          // onLongPress: () {
+          //   _buildActionsPopup(outbound, context, msg, model, reactions,
+          //       message, isAttachment, onReply);
+          // },
           child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment:
-                outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        start: isDateMarker != ''
-                            ? outbound
-                                ? 20
-                                : 4
-                            : 4,
-                        end: isDateMarker != ''
-                            ? outbound
-                                ? 4
-                                : 20
-                            : 4,
-                        top: 4,
-                        bottom: 4),
-                    child: _buildBubbleUI(
-                      outbound,
-                      inbound,
-                      startOfBlock,
-                      endOfBlock,
-                      isDateMarker,
-                      wasDeleted,
-                      isAttachment,
-                      newestMessage,
-                      reactions,
-                      msg,
-                      message,
-                      onTapReply,
-                    )),
-              ),
-            ],
-          ));
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment:
+            outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Padding(
+                padding: EdgeInsetsDirectional.only(
+                    start: isDateMarker != ''
+                        ? outbound
+                            ? 20
+                            : 4
+                        : 4,
+                    end: isDateMarker != ''
+                        ? outbound
+                            ? 4
+                            : 20
+                        : 4,
+                    top: 4,
+                    bottom: 4),
+                child: _buildBubbleUI(
+                  outbound,
+                  inbound,
+                  startOfBlock,
+                  endOfBlock,
+                  isDateMarker,
+                  wasDeleted,
+                  isAttachment,
+                  newestMessage,
+                  reactions,
+                  msg,
+                  message,
+                  onTapReply,
+                  context,
+                  model,
+                )),
+          ),
+        ],
+      ));
     });
   }
 
@@ -109,98 +112,90 @@ class MessageBubble extends StatelessWidget {
     StoredMessage msg,
     PathAndValue<StoredMessage> message,
     Function(PathAndValue<StoredMessage>) onTapReply,
+    BuildContext context,
+    MessagingModel model,
   ) {
-    if (wasDeleted)
+    final reactionOptions = reactions.keys.toList();
+    final reactionArray = reactionOptions
+        .map((e) => Container(
+              margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                child: GestureDetector(
+                  onTap: () {
+                    model.react(message, e);
+                    Navigator.pop(context);
+                  },
+                  child: Transform.scale(
+                      scale: 1.3,
+                      child: Text(e, style: const TextStyle(fontSize: 16))),
+                ),
+              ),
+            ))
+        .toList(growable: false);
+
+    if (wasDeleted) {
       return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
+    }
 
-    if (isDateMarker != '') return DateMarker(isDateMarker);
-
-    return TextBubble(outbound, inbound, startOfBlock, endOfBlock,
-        newestMessage, reactions, msg, message, contact, onTapReply);
-  }
-}
-
-Future _buildActionsPopup(
-  bool outbound,
-  BuildContext context,
-  StoredMessage msg,
-  MessagingModel model,
-  Map<String, List<dynamic>> reactions,
-  PathAndValue<StoredMessage> message,
-  bool isAttachment,
-  Function(StoredMessage?) onReply,
-) {
-  var reactionOptions = reactions.keys.toList();
-  return showModalBottomSheet(
-      context: context,
-      isDismissible: true,
-      enableDrag: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
-      builder: (context) {
-        return Wrap(children: [
-          const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-          // Other users' messages
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: reactionOptions
-                .map((e) => Container(
-                      margin: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200, // TODO generalize in theme
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(999)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: GestureDetector(
-                          onTap: () {
-                            model.react(message, e);
-                            Navigator.pop(context);
-                          },
-                          child: Transform.scale(
-                              scale: 1.2,
-                              child: Text(e,
-                                  style: const TextStyle(fontSize: 16))),
-                        ),
-                      ),
-                    ))
-                .toList(growable: false),
+    return FocusedMenuHolder(
+        menuItems: [
+          FocusedMenuItem(
+            title: Row(children: [...reactionArray]),
+            onPressed: () {},
           ),
-          if (!outbound)
-            const Padding(
-                padding: EdgeInsets.only(top: 8), child: Divider(height: 3)),
-          ListTile(
-            leading: const Icon(Icons.reply),
+          FocusedMenuItem(
+            trailingIcon: const Icon(Icons.reply),
             title: Text('Reply'.i18n),
-            onTap: () {
+            onPressed: () {
               onReply(msg);
-              Navigator.of(context).pop();
             },
           ),
-          if (!isAttachment) CopiedTextWidget(message),
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: Text('Delete for me'.i18n),
-            onTap: () {
-              _showDeleteDialog(context, model, true, message);
-              Navigator.of(context).pop();
-            },
-          ),
-          // User's own messages
-          if (outbound)
-            ListTile(
-              leading: const Icon(Icons.delete_forever),
-              title: Text('Delete for everyone'.i18n),
-              onTap: () {
-                _showDeleteDialog(context, model, false, message);
-                Navigator.of(context).pop();
+          if (!isAttachment)
+            FocusedMenuItem(
+              trailingIcon: const Icon(Icons.copy),
+              title: Text('Copy Text'.i18n),
+              onPressed: () {
+                showSnackbar(context, 'Text copied'.i18n);
+                Clipboard.setData(ClipboardData(text: message.value.text));
               },
             ),
-        ]);
-      });
+          FocusedMenuItem(
+            trailingIcon: const Icon(Icons.delete),
+            title: Text('Delete for me'.i18n),
+            onPressed: () {
+              _showDeleteDialog(context, model, true, message);
+            },
+          ),
+          FocusedMenuItem(
+            trailingIcon: const Icon(Icons.delete_forever),
+            title: Text('Delete for everyone'.i18n),
+            onPressed: () {
+              _showDeleteDialog(context, model, false, message);
+            },
+          ),
+        ],
+        blurBackgroundColor: Colors.blueGrey[900],
+        menuOffset: 10,
+        menuItemExtent: 60,
+        openWithTap: false,
+        duration: const Duration(seconds: 0),
+        animateMenuItems: false,
+        onPressed: () {},
+        child: TextBubble(
+            outbound,
+            inbound,
+            startOfBlock,
+            endOfBlock,
+            newestMessage,
+            reactions,
+            msg,
+            message,
+            contact,
+            onTapReply,
+            isDateMarker));
+  }
 }
 
 Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,

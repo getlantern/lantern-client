@@ -37,8 +37,9 @@ class ContentContainer extends StatelessWidget {
       if (value.isNotEmpty) {
         reactionsList.add(Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
+            // Tap on emoji to bring modal with breakdown of interactions
             child: GestureDetector(
-                // Tap on emoji to bring modal with breakdown of interactions
+                behavior: HitTestBehavior.translucent,
                 onTap: () =>
                     displayEmojiBreakdownPopup(context, msg, reactions),
                 child: displayEmojiCount(reactions, key))));
@@ -51,7 +52,7 @@ class ContentContainer extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
         constraints: const BoxConstraints(
-          minWidth: 140,
+          minWidth: 70,
           maxWidth: 350, // TODO: move both these to a responsive sizes file
         ),
         decoration: BoxDecoration(
@@ -79,6 +80,7 @@ class ContentContainer extends StatelessWidget {
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () => onTapReply(message),
                     child: ReplyBubble(outbound, msg, contact),
                   ),
