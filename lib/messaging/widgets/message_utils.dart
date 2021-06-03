@@ -130,3 +130,27 @@ String determineDateSwitch(
 
   return '';
 }
+
+void showSnackbar(BuildContext context, String text) {
+  final snackBar = SnackBar(
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.check_circle, color: Colors.white),
+        Expanded(
+            child: Text(
+          text,
+          style: const TextStyle(fontSize: 14, color: Colors.white),
+          textAlign: TextAlign.center,
+        )),
+      ],
+    ),
+    backgroundColor: Colors.green,
+    duration: const Duration(milliseconds: 700),
+    margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+    behavior: SnackBarBehavior.floating,
+    elevation: 1,
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
