@@ -9,6 +9,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.Messaging
 import io.lantern.messaging.Model
+import io.lantern.android.model.Receptor
 import io.lantern.messaging.dbPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
@@ -31,8 +32,15 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         videoFile.delete()
     }
 
+
+    /// Set the receptor of the current chat, into a singleton variable named Receptor.
+    private fun setupReceptorObject(receptorId: String) =
+        Receptor.receptorId = receptorId ?: ""
+
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+            "setReceptorId" -> setupReceptorObject(call.arguments as String)
+            "cleanReceptorId" -> setupReceptorObject("")
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
             "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)
