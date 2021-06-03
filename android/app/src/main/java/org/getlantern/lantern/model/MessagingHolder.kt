@@ -12,6 +12,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
 import io.lantern.messaging.*
+import io.lantern.android.model.Receptor
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -41,10 +42,14 @@ class MessagingHolder {
                         val msg = messaging.db.get<Model.StoredMessage>(messagePath)
                         msg?.let {
                             if (msg.direction == Model.MessageDirection.OUT) {
-                                return
+                                return@let
                             }
                             val contact = messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
                             contact?.let {
+                                var contactIdentifier = contact.displayName ?: contact.contactId.id
+                                if(contactIdentifier == Receptor.receptorId){
+                                    return@let
+                                }
                                 var notificationId = contactNotificationIds[contact.contactId]
                                 if (notificationId == null) {
                                     notificationId = nextNotificationId++
