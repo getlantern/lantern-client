@@ -5,6 +5,6 @@ package io.lantern.android.model
  * This is handled as an object due to the advantage of being static and also being a singleton.
  * Refers: https://stackoverflow.com/questions/54493959/what-is-difference-between-object-and-data-class-in-kotlin
  */
-object Receptor {
-    var receptorId: String = ""
+object CurrentConversationContact {
+    var activeConversationId: String = ""
 }

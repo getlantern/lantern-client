@@ -55,8 +55,6 @@ dependencies:
 
   pedantic: ^1.11.0
 
-  permission_handler: ^7.1.0
-
   photo_manager: ^1.1.4
 
   wechat_assets_picker:

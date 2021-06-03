@@ -54,7 +54,7 @@ class _ConversationState extends State<Conversation> {
 
   @override
   void dispose() async {
-    await model.cleanReceptorId();
+    await model.cleanCurrentConversationContact();
     _newMessage.dispose();
     await _stopWatchTimer.dispose();
     _focusNode.dispose();
@@ -219,7 +219,8 @@ class _ConversationState extends State<Conversation> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    unawaited(model.setReceptor(displayName));
+    unawaited(
+        model.setCurrentConversationContact(widget._contact.contactId.id));
     return BaseScreen(
       // Conversation title (contact name)
       title: displayName,

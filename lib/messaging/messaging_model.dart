@@ -121,11 +121,14 @@ class MessagingModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> setReceptor(String receptor) async =>
-      await methodChannel.invokeMethod('setReceptorId', receptor);
+  Future<void> setCurrentConversationContact(
+          String currentConversationContact) async =>
+      methodChannel.invokeMethod(
+          'setCurrentConversationContact', currentConversationContact);
 
-  Future<void> cleanReceptorId() async => await methodChannel.invokeMethod(
-        'cleanReceptorId',
+  Future<void> cleanCurrentConversationContact() async =>
+      methodChannel.invokeMethod(
+        'cleanCurrentConversationContact',
       );
 
   Future<Contact?> getContact(String contactPath) async {
