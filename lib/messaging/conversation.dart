@@ -53,10 +53,10 @@ class _ConversationState extends State<Conversation> {
   List<AssetEntity> assets = <AssetEntity>[];
 
   @override
-  void dispose() async {
-    await model.cleanCurrentConversationContact();
+  void dispose() {
+    model.cleanCurrentConversationContact();
     _newMessage.dispose();
-    await _stopWatchTimer.dispose();
+    _stopWatchTimer.dispose();
     _focusNode.dispose();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
