@@ -149,50 +149,44 @@ android {
             shrinkResources false
             debuggable true
             // Run code coverage reports by default on debug builds.
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
-            buildConfigField "boolean", "PAYMENT_TEST_MODE", "false"
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
             buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
-
-//            buildConfigField "String", "FORCE_COUNTRY", '"CN"' // we can force the build to act as if it's in a specific country like '"CN"' or '"IR"'
-            buildConfigField "String", "FORCE_COUNTRY", '""'
         }
 
         profile {
             minifyEnabled false
             shrinkResources false
             debuggable false
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
-            buildConfigField "boolean", "PAYMENT_TEST_MODE", "true"
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
             buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
-
-//            buildConfigField "String", "FORCE_COUNTRY", '"CN"' // we can force the build to act as if it's in a specific country like '"CN"' or '"IR"'
-            buildConfigField "String", "FORCE_COUNTRY", '""'
         }
 
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "false"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
-            buildConfigField "boolean", "PAYMENT_TEST_MODE", "false"
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -202,7 +196,6 @@ android {
 
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "FORCE_COUNTRY", '""'
 
             firebaseCrashlytics {
                 // Enable processing and uploading of native symbols to Crashlytics servers.
@@ -437,7 +430,7 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     implementation 'com.github.getlantern:secrets-android:66a9adb621'
-    implementation 'com.github.getlantern:messaging-android:8bb93a5edc'
+    implementation 'com.github.getlantern:messaging-android:787d74d9eb'
 
     // from https://github.com/getlantern/opus_android
     implementation(name:'opuslib-release', ext: 'aar')

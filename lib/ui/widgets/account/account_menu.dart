@@ -1,5 +1,6 @@
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
+import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'settings_item.dart';
 
@@ -35,7 +36,7 @@ class AccountMenu extends StatelessWidget {
     Navigator.pushNamed(context, routeSettings);
   }
 
-  List<Widget> freeItems(BuildContext context) {
+  List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
       SettingsItem(
         icon: ImagePaths.crown_icon_monochrome,
@@ -59,11 +60,19 @@ class AccountMenu extends StatelessWidget {
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      SettingsItem(
-        icon: ImagePaths.yinbi_icon,
-        title: 'free_yinbi_crypto'.i18n,
-        onTap: openFreeYinbiCrypto,
-      ),
+      sessionModel.shouldShowYinbiBadge(
+          (BuildContext context, bool shouldShowYinbiBadge, Widget? child) {
+        return SettingsItem(
+          icon: ImagePaths.yinbi_icon,
+          title: 'free_yinbi_crypto'.i18n,
+          onTap: openFreeYinbiCrypto,
+          child: CustomBadge(
+            count: 1,
+            fontSize: 14,
+            showBadge: shouldShowYinbiBadge,
+          ),
+        );
+      }),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
@@ -125,7 +134,8 @@ class AccountMenu extends StatelessWidget {
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return ListView(
           padding: const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
-          children: proUser ? proItems(context) : freeItems(context),
+          children:
+              proUser ? proItems(context) : freeItems(context, sessionModel),
         );
       }),
     );

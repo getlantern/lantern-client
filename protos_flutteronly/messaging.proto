@@ -101,6 +101,7 @@ message StoredMessage {
   DeliveryStatus status = 12; // for outgoing messages, the status of its sending and delivery
   int64 firstViewedAt = 13; // the unix timestamp in milliseconds of when this message was first viewed on the current device
   int64 disappearAt = 14; // the unix timestamp in milliseconds of when this message will automatically disappear
+  int64 deletedBySenderAt = 16; // the unix timestamp in milliseconds of when the sender remotely deleted this message (will be 0 if the message hasn't been remotely deleted)
 }
 
 // A reaction to a message

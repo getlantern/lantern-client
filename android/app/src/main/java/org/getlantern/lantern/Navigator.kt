@@ -1,6 +1,9 @@
 package org.getlantern.lantern
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -12,6 +15,7 @@ import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
+import kotlin.system.exitProcess
 
 class Navigator(
     private val activity: Activity,
@@ -74,6 +78,15 @@ fun Activity.openHome() {
             }
     )
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+}
+
+fun Activity.restartApp() {
+    val mStartActivity = Intent(this, MainActivity::class.java)
+    val mPendingIntentId = 123456
+    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT)
+    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+    exitProcess(0)
 }
 
 fun Activity.openCheckOutReseller() {

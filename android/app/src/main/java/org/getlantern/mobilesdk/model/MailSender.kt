@@ -9,6 +9,7 @@ import android.os.AsyncTask
 import android.os.Build
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
