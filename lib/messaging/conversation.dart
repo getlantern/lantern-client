@@ -9,6 +9,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -35,12 +36,16 @@ class _ConversationState extends State<Conversation> {
   bool _isSendIconVisible = false;
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
+  var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    displayName = widget._contact.displayName.isEmpty
+        ? widget._contact.contactId.id
+        : widget._contact.displayName;
     BackButtonInterceptor.add(_interceptBackButton);
   }
 
@@ -48,9 +53,10 @@ class _ConversationState extends State<Conversation> {
   List<AssetEntity> assets = <AssetEntity>[];
 
   @override
-  void dispose() {
+  void dispose() async {
+    await model.cleanReceptorId();
     _newMessage.dispose();
-    _stopWatchTimer.dispose();
+    await _stopWatchTimer.dispose();
     _focusNode.dispose();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
@@ -213,11 +219,10 @@ class _ConversationState extends State<Conversation> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
+    unawaited(model.setReceptor(displayName));
     return BaseScreen(
       // Conversation title (contact name)
-      title: widget._contact.displayName.isEmpty
-          ? widget._contact.contactId.id
-          : widget._contact.displayName,
+      title: displayName,
       actions: [DisappearingTimerAction(widget._contact)],
       body: GestureDetector(
         onPanUpdate: (details) {
