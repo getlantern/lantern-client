@@ -121,6 +121,13 @@ class MessagingModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> setReceptor(String receptor) async =>
+      await methodChannel.invokeMethod('setReceptorId', receptor);
+
+  Future<void> cleanReceptorId() async => await methodChannel.invokeMethod(
+        'cleanReceptorId',
+      );
+
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));
