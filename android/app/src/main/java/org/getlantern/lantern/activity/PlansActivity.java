@@ -192,7 +192,7 @@ public class PlansActivity extends FragmentActivity {
 
     protected void updatePrice(ProPlan plan) {
         content.setVisibility(View.VISIBLE);
-        String bonus = plan.getRenewalBonusExpected(this);
+        String bonus = plan.formatRenewalBonusExpected(this);
         CharSequence totalCost = getString(R.string.total_cost, plan.getCostWithoutTaxStr());
         if (plan.getDiscount() > 0) {
             totalCost += " - ";

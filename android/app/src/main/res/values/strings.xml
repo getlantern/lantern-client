@@ -551,4 +551,7 @@
     <string name="pro_account_expiration">Pro account expiration:</string>
     <string name="lantern_pro_devices_up_to_3">Lantern pro devices (up to 3)</string>
     <string name="renew_short">Renew</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="reopen_to_try">Please re-open %1$s to try again.</string>
+    <string name="init_account">%1$s is initializing your account, this may take a moment.</string>
 </resources>

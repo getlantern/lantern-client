@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.databinding.ActivityReportIssueBinding
+import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.MailSender
-import org.getlantern.mobilesdk.model.Utils
 
 open class ReportIssueActivity : FragmentActivity() {
     private lateinit var binding: ActivityReportIssueBinding

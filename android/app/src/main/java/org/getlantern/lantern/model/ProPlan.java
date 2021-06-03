@@ -1,6 +1,8 @@
 package org.getlantern.lantern.model;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.getlantern.lantern.LanternApp;
@@ -39,7 +41,6 @@ public class ProPlan {
     private float discount;
 
     private String currencyCode;
-    private String tag;
     private String costStr;
     private String costWithoutTaxStr;
     private String taxStr;
@@ -57,6 +58,9 @@ public class ProPlan {
         this.price = price;
         this.priceWithoutTax = priceWithoutTax;
         this.tax = new HashMap<String, Long>();
+        this.renewalBonusExpected = new HashMap<>();
+        this.bestValue = bestValue;
+        this.duration = duration;
         for (Map.Entry<String, Long> entry : this.price.entrySet()) {
             String currency = entry.getKey();
             Long priceWithTax = entry.getValue();
@@ -64,32 +68,62 @@ public class ProPlan {
             if (specificPriceWithoutTax == null) {
                 specificPriceWithoutTax = priceWithTax;
             }
-            this.tax.put(currency, priceWithTax - specificPriceWithoutTax);
+            Long tax = priceWithTax - specificPriceWithoutTax;
+            if (tax > 0) {
+                this.tax.put(currency, tax);
+            }
         }
-        this.bestValue = bestValue;
-        this.duration = duration;
+        calculateExpectedMonthlyPrice();
         this.formatCost(); // this will set the currency code for us
+    }
+
+    public void updateRenewalBonusExpected(Map<String, Integer> renewalBonusExpected) {
+        this.renewalBonusExpected = renewalBonusExpected;
+        calculateExpectedMonthlyPrice();
+    }
+
+    public Map<String, Integer> getRenewalBonusExpected() {
+        return renewalBonusExpected;
+    }
+
+    /**
+     * The formula in here matches the calculation in the pro-servers /plans endpoint
+     */
+    private void calculateExpectedMonthlyPrice() {
+        this.expectedMonthlyPrice = new HashMap<>();
+        final Integer monthsPerYear = 12;
+        final Integer daysPerMonth = 30;
+        Integer bonusMonths = renewalBonusExpected.get("months");
+        Integer bonusDays = renewalBonusExpected.get("days");
+        if (bonusMonths == null) {
+            bonusMonths = 0;
+        }
+        if (bonusDays == null) {
+            bonusDays = 0;
+        }
+        Double expectedMonths = (numYears() * monthsPerYear) + bonusMonths + (bonusDays.doubleValue() / daysPerMonth.doubleValue());
+        for (Map.Entry<String, Long> entry : this.price.entrySet()) {
+            String currency = entry.getKey();
+            Long priceWithTax = entry.getValue();
+            this.expectedMonthlyPrice.put(currency, new Double(priceWithTax / expectedMonths).longValue());
+        }
     }
 
     public Integer numYears() {
         return duration.get("years");
     }
 
-    public String getRenewalBonusExpected(Context context) {
-        Integer year = renewalBonusExpected.get("years");
-        Integer month = renewalBonusExpected.get("months");
-        Integer day = renewalBonusExpected.get("days");
+    public String formatRenewalBonusExpected(Context context) {
+        Integer bonusMonths = renewalBonusExpected.get("months");
+        Integer bonusDays = renewalBonusExpected.get("days");
         List<String> bonusParts = new ArrayList();
-        if (year != null && year > 0) {
-            bonusParts.add(context.getResources().getQuantityString(R.plurals.year, year, year));
+        if (bonusMonths != null && bonusMonths > 0) {
+            bonusParts.add(context.getResources().getQuantityString(R.plurals.month, bonusMonths, bonusMonths));
         }
-        if (month != null && month > 0) {
-            bonusParts.add(context.getResources().getQuantityString(R.plurals.month, month, month));
+        if (bonusDays != null && bonusDays > 0) {
+            bonusParts.add(context.getResources().getQuantityString(R.plurals.day, bonusDays, bonusDays));
         }
-        if (day != null && day > 0) {
-            bonusParts.add(context.getResources().getQuantityString(R.plurals.day, day, day));
-        }
-        return String.join(" ", bonusParts);
+        return TextUtils.join(" ", bonusParts);
     }
 
     public Map<String, Long> getPrice() {
@@ -139,9 +173,13 @@ public class ProPlan {
         return costStr;
     }
 
-    public String getCostWithoutTaxStr() { return costWithoutTaxStr; }
+    public String getCostWithoutTaxStr() {
+        return costWithoutTaxStr;
+    }
 
-    public String getTaxStr() { return taxStr; }
+    public String getTaxStr() {
+        return taxStr;
+    }
 
     public String getCurrency() {
         return currencyCode;
@@ -187,6 +225,9 @@ public class ProPlan {
     private String getFormattedPrice(Map<String, Long> price, boolean formatFloat) {
         final String formattedPrice;
         Long currencyPrice = price.get(currencyCode);
+        if (currencyPrice == null) {
+            return "";
+        }
         if (currencyCode.equalsIgnoreCase("irr")) {
             if (formatFloat) {
                 formattedPrice = Utils.convertEasternArabicToDecimalFloat(currencyPrice / 100f);
@@ -212,7 +253,7 @@ public class ProPlan {
         if (price == null || price.entrySet() == null) {
             return;
         }
-        Map.Entry<String,Long> entry = price.entrySet().iterator().next();
+        Map.Entry<String, Long> entry = price.entrySet().iterator().next();
         this.currencyCode = entry.getKey();
         this.costStr = getFormattedPrice(price);
         if (priceWithoutTax != null) {
@@ -235,9 +276,9 @@ public class ProPlan {
             }
         }
 
-        String bonus = getRenewalBonusExpected(context);
+        String bonus = formatRenewalBonusExpected(context);
         if (!bonus.isEmpty()) {
-            durationFormat += " + " + getRenewalBonusExpected(context);
+            durationFormat += " + " + formatRenewalBonusExpected(context);
         }
         if (numYears() != 1) {
             if (isBestValue() && LanternApp.getSession().yinbiEnabled()) {
