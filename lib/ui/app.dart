@@ -8,7 +8,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/providers/permission_provider.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'home.dart';
@@ -24,7 +23,6 @@ class LanternApp extends StatelessWidget {
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => AudioPlayer()),
         Provider(create: (context) => SessionModel()),
-        Provider(create: (context) => PermissionProvider()),
         Provider(create: (context) => EventManager('lantern_event_channel')),
         Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),
