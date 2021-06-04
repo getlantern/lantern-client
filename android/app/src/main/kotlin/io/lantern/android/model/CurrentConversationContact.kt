@@ -7,4 +7,5 @@ package io.lantern.android.model
  */
 object CurrentConversationContact {
     var id: String = ""
+    var notificationArrival: DateTime = null
 }
