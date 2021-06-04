@@ -47,7 +47,7 @@ class MessagingHolder {
                             val contact = messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
                             contact?.let {
                                 var contactIdentifier = contact.displayName ?: contact.contactId.id
-                                if(contact.contactId.id == CurrentConversationContact.activeConversationId){
+                                if(contact.contactId.id == CurrentConversationContact.id){
                                     return@let
                                 }
                                 var notificationId = contactNotificationIds[contact.contactId]
