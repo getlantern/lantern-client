@@ -6,5 +6,5 @@ package io.lantern.android.model
  * Refers: https://stackoverflow.com/questions/54493959/what-is-difference-between-object-and-data-class-in-kotlin
  */
 object CurrentConversationContact {
-    var activeConversationId: String = ""
+    var id: String = ""
 }
