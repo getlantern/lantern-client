@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class InAppBilling implements PurchasesUpdatedListener, BillingClientStateListener, ConsumeResponseListener {
     private static final String TAG = InAppBilling.class.getName();
@@ -82,8 +85,13 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
             return;
         }
 
-        updateSkus();
-        checkForUnacknowledgedPurchases();
+        schedule(this::updateSkus);
+        schedule(this::checkForUnacknowledgedPurchases);
+    }
+
+    private void schedule(fetcher fe) {
+        final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
+        exec.scheduleWithFixedDelay(() -> fe.fetch(() -> exec.shutdown()), 5, 5, TimeUnit.SECONDS);
     }
 
     @Override
@@ -93,70 +101,72 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
         startConnection();
     }
 
+    private interface fetchedListener {
+        void onFetched();
+    }
+
+    private interface fetcher {
+        void fetch(fetchedListener fl);
+    }
+
     /**
      * This pulls down the pricing for our 1y and 2y plans from the Play Store. This will reflect
      * whatever Play Store region the user is currently in. Unlike our usual purchases, this has
      * nothing to do with the user's language settings inside of the Lantern app.
      */
-    private void updateSkus() {
+    private void updateSkus(final fetchedListener fetchedListener) {
         Logger.debug(TAG, "Updating SKUs");
-        List<String> skuList = new ArrayList<>();
+        final List<String> skuList = new ArrayList<>();
         skuList.add("1y");
         skuList.add("2y");
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+        final SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
         params.setSkusList(skuList).setType(SkuType.INAPP);
-        billingClient.querySkuDetailsAsync(
-                params.build(),
-                new SkuDetailsResponseListener() {
-                    @Override
-                    public void onSkuDetailsResponse(
-                            BillingResult billingResult, List<SkuDetails> skuDetailsList) {
-                        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-                            if (isRetriable(billingResult)) {
-                                new Timer()
-                                        .schedule(
-                                                new TimerTask() {
-                                                    @Override
-                                                    public void run() {
-                                                        updateSkus();
-                                                    }
-                                                },
-                                                5000);
-                            }
-                            return;
-                        }
-                        Logger.debug(TAG, "Got skus: " + skuDetailsList.size());
 
-                        synchronized (this) {
-                            plans.clear();
-                            skus.clear();
-                            for (SkuDetails skuDetails : skuDetailsList) {
-                                String currency = skuDetails.getPriceCurrencyCode().toLowerCase();
-                                String id = String.format("%s-%s", skuDetails.getSku(), currency);
-                                String years = skuDetails.getSku().substring(0, 1);
-
-                                Map<String, Integer> duration = new HashMap<String, Integer>();
-                                duration.put("years", Integer.parseInt(years));
-
-                                Map<String, Long> price = new HashMap<String, Long>();
-                                price.put(currency, skuDetails.getPriceAmountMicros() / 10000);
-
-                                Map<String, Long> priceWithoutTax = new HashMap<String, Long>();
-                                priceWithoutTax.put(currency, skuDetails.getOriginalPriceAmountMicros() / 10000);
-
-                                ProPlan plan = new ProPlan(
-                                        id,
-                                        price,
-                                        priceWithoutTax,
-                                        "2".equals(years),
-                                        duration);
-
-                                plans.put(id, plan);
-                                skus.put(id, skuDetails);
-                            }
-                        }
+        billingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(
+                    BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+                if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                    if (isRetriable(billingResult)) {
+                        // Keep trying
+                        return;
+                    } else {
+                        fetchedListener.onFetched();
                     }
-                });
+                }
+                Logger.debug(TAG, "Got skus: " + skuDetailsList.size());
+
+                synchronized (this) {
+                    plans.clear();
+                    skus.clear();
+                    for (SkuDetails skuDetails : skuDetailsList) {
+                        String currency = skuDetails.getPriceCurrencyCode().toLowerCase();
+                        String id = String.format("%s-%s", skuDetails.getSku(), currency);
+                        String years = skuDetails.getSku().substring(0, 1);
+
+                        Map<String, Integer> duration = new HashMap<String, Integer>();
+                        duration.put("years", Integer.parseInt(years));
+
+                        Map<String, Long> price = new HashMap<String, Long>();
+                        price.put(currency, skuDetails.getPriceAmountMicros() / 10000);
+
+                        Map<String, Long> priceWithoutTax = new HashMap<String, Long>();
+                        priceWithoutTax.put(currency, skuDetails.getOriginalPriceAmountMicros() / 10000);
+
+                        ProPlan plan = new ProPlan(
+                                id,
+                                price,
+                                priceWithoutTax,
+                                "2".equals(years),
+                                duration);
+
+                        plans.put(id, plan);
+                        skus.put(id, skuDetails);
+                    }
+                }
+                fetchedListener.onFetched();
+            }
+        });
     }
 
     /**
@@ -171,27 +181,22 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
      * In either case, we'll let the pro-server know about the purchase to make sure that it gets
      * correctly applied to the user's account.
      */
-    private void checkForUnacknowledgedPurchases() {
+    private void checkForUnacknowledgedPurchases(final fetchedListener fetchedListener) {
         Logger.debug(TAG, "Checking for pending purchases");
         Purchase.PurchasesResult purchases = billingClient.queryPurchases(SkuType.INAPP);
         BillingResult billingResult = purchases.getBillingResult();
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             if (isRetriable(billingResult)) {
-                new Timer()
-                        .schedule(
-                                new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        checkForUnacknowledgedPurchases();
-                                    }
-                                },
-                                5000);
+                // Keep trying
+                return;
+            } else {
+                fetchedListener.onFetched();
             }
-            return;
         }
 
         Logger.debug(TAG, "Got purchases: " + purchases.getPurchasesList().size());
         handleAcknowledgedPurchases(purchases.getPurchasesList());
+        fetchedListener.onFetched();
     }
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
