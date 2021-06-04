@@ -6,9 +6,9 @@ import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/repository/tab_repository.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
-import 'package:pedantic/pedantic.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -28,8 +28,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final String _initialRoute;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
-  final messagingMethodChannel =
-      const MethodChannel('messaging_method_channel');
+  late final TabRepository tabRepository;
 
   late Future<void> loadAsync;
 
@@ -51,6 +50,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    tabRepository = TabRepository(pageController: _pageController);
+    _pageController.addListener(() => tabRepository.tabListener());
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
@@ -106,10 +107,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onPageChange(int index) {
-    if (index != 0) {
-      unawaited(messagingMethodChannel
-          .invokeMethod('cleanCurrentConversationContact'));
-    }
     setState(() {
       _currentIndex = index;
     });

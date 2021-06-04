@@ -25,7 +25,8 @@ class Conversation extends StatefulWidget {
   _ConversationState createState() => _ConversationState();
 }
 
-class _ConversationState extends State<Conversation> {
+class _ConversationState extends State<Conversation>
+    with WidgetsBindingObserver {
   late MessagingModel model;
 
   final TextEditingController _newMessage = TextEditingController();
@@ -41,6 +42,22 @@ class _ConversationState extends State<Conversation> {
   final _focusNode = FocusNode();
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        model.cleanCurrentConversationContact();
+        break;
+      case AppLifecycleState.resumed:
+      default:
+        model.setCurrentConversationContact(widget._contact.contactId.id);
+        break;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     displayName = widget._contact.displayName.isEmpty
@@ -54,7 +71,7 @@ class _ConversationState extends State<Conversation> {
 
   @override
   void dispose() {
-    model.cleanCurrentConversationContact();
+    WidgetsBinding.instance!.removeObserver(this);
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
