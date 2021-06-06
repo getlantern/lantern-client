@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
+  late final Icon? suffixIcon;
   late final TextInputType? keyboardType;
 
   CustomTextField({
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
     required this.label,
     this.helperText,
     this.prefixIcon,
+    this.suffixIcon,
     this.validator,
     this.keyboardType,
   });
@@ -85,6 +87,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
               prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.suffixIcon,
             ),
           ),
         ),

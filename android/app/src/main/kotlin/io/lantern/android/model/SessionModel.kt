@@ -64,6 +64,9 @@ class SessionModel(
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "login" -> login(call.argument("username")!!, call.argument("password")!!, result)
+            "createAccount" -> createAccount(call.argument("password")!!, result)
+            "setUsername" -> setUsername(call.argument("username")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -105,6 +108,24 @@ class SessionModel(
         db.mutate { tx ->
             tx.put(PATH_PROXY_ALL, on)
         }
+    }
+
+    private fun login(username: String, password: String, methodCallResult: MethodChannel.Result) {
+        Logger.debug(TAG, "Received new login request from username $username")
+
+        activity.openHome()
+    }
+
+    private fun setUsername(username: String, methodCallResult: MethodChannel.Result) {
+        Logger.debug(TAG, "Setting username to $username")
+        LanternApp.getSession().setUsername(username)
+        //activity.openHome()
+    }
+
+    private fun createAccount(password: String, methodCallResult: MethodChannel.Result) {
+        val username = LanternApp.getSession().username()
+        Logger.debug(TAG, "Received new create account request from $username")
+        //activity.openHome()
     }
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {

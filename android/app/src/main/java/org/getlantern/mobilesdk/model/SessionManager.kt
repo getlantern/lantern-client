@@ -227,6 +227,14 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(EMAIL_ADDRESS, email).apply()
     }
 
+    fun username(): String {
+        return prefs.getString(USERNAME, "")!!
+    }
+
+    fun setUsername(username: String?) {
+        prefs.edit().putString(USERNAME, username).apply()
+    }
+
     fun setUserIdAndToken(userId: Long, token: String) {
         if (userId == 0L || TextUtils.isEmpty(token)) {
             Logger.debug(TAG, "Not setting invalid user ID $userId or token $token")
@@ -455,6 +463,7 @@ abstract class SessionManager(application: Application) : Session {
 
         @JvmStatic
         val EMAIL_ADDRESS = "emailAddress"
+        val USERNAME      = "username"
         protected const val PREF_USE_VPN = "pref_vpn"
         protected const val PREF_BOOTUP_VPN = "pref_bootup_vpn"
         protected const val ACCEPTED_TERMS_VERSION = "accepted_terms_version"

@@ -18,6 +18,7 @@ Color grey5 = HexColor('#707070');
 Color indicatorRed = HexColor('#D5001F');
 Color indicatorGreen = HexColor('#00A83E');
 Color overlayBlack = HexColor('#000000CB');
+Color transparent = HexColor('#00FFFFFF');
 
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;

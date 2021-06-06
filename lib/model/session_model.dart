@@ -77,6 +77,11 @@ class SessionModel extends Model {
         builder: builder);
   }
 
+  Widget username(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('username',
+        builder: builder);
+  }
+
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('expirydatestr',
         builder: builder);
@@ -103,6 +108,25 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
     });
+  }
+
+  Future<String> login(String username, String password) {
+    return methodChannel.invokeMethod('login', <String, dynamic>{
+      'username': username,
+      'password': password,
+    }).then((value) => value as String);
+  }
+
+  Future<String> setUsername(String username) {
+    return methodChannel.invokeMethod('setUsername', <String, dynamic>{
+      'username': username,
+    }).then((value) => value as String);
+  }
+
+  Future<String> createAccount(String password) {
+    return methodChannel.invokeMethod('createAccount', <String, dynamic>{
+      'password': password,
+    }).then((value) => value as String);
   }
 
   Future<String> authorizeViaEmail(String emailAddress) {

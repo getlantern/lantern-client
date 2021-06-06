@@ -10,7 +10,9 @@ import '../button.dart';
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
 
+  final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -34,10 +36,27 @@ class Login extends StatelessWidget {
                   label: 'Username'.i18n,
                   keyboardType: TextInputType.text,
                   prefixIcon: const Icon(
-                     Icons.account_circle_rounded,
+                    Icons.person,
                     color: Colors.black,
                   ),
                   validator: Validators.usernameValidator(),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsetsDirectional.only(top: 32),
+                child: CustomTextField(
+                  controller: passwordController,
+                  label: 'Password'.i18n,
+                  keyboardType: TextInputType.text,
+                  prefixIcon: const Icon(
+                    Icons.lock_outline,
+                    color: Colors.black,
+                  ),
+                  suffixIcon: const Icon(
+                    Icons.visibility,
+                    color: Colors.black,
+                  ),
+                  validator: Validators.passwordValidator(),
                 ),
               ),
               const Spacer(),
@@ -45,7 +64,21 @@ class Login extends StatelessWidget {
                 margin: const EdgeInsetsDirectional.only(bottom: 32),
                 child: Button(
                   width: 200,
-                  text: 'Submit'.i18n,
+                  text: 'Sign In'.i18n,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      context.loaderOverlay.show();
+                      sessionModel
+                          .login(usernameController.value.text,
+                            passwordController.value.text)
+                          .then((result) {
+                        context.loaderOverlay.hide();
+                        Navigator.pop(context);
+                      }).onError((error, stackTrace) {
+                        context.loaderOverlay.hide();
+                      });
+                    }
+                  },
                 ),
               ),
             ],

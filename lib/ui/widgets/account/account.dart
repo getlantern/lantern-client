@@ -3,6 +3,8 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/account/pro_account.dart';
 import 'package:lantern/ui/widgets/back_button_respecting_navigator.dart';
 import 'package:lantern/ui/widgets/auth/login.dart';
+import 'package:lantern/ui/widgets/auth/register/step_one.dart';
+import 'package:lantern/ui/widgets/auth/register/step_two.dart';
 
 import '../../routes.dart';
 import 'account_menu.dart';
@@ -32,6 +34,12 @@ class AccountTab extends StatelessWidget {
           break;
         case routeAuthSignIn:
           builder = (BuildContext _) => Login();
+          break;
+        case routeAuthRegisterStepOne:
+          builder = (BuildContext _) => StepOne();
+          break;
+        case routeAuthRegisterStepTwo:
+          builder = (BuildContext _) => StepTwo();
           break;
         case routeLanguage:
           builder = (BuildContext _) => Language();

@@ -11,3 +11,6 @@ const routeAuthorizeDeviceViaEmailPin = '/authorize_device_via_email_pin';
 const routeApproveDevice = '/add_device';
 const routeAuthRegister  = '/auth/register';
 const routeAuthSignIn    = '/auth/sign_in';
+const routeAuthRegisterStepOne = '/auth/register/1';
+const routeAuthRegisterStepTwo = '/auth/register/2';
+const routeAuthSuccess = '/auth/success';

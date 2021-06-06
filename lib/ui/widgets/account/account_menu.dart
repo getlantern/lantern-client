@@ -20,8 +20,12 @@ class AccountMenu extends StatelessWidget {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
   }
 
-  void login() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_LOGIN);
+  void login(BuildContext context) {
+    Navigator.pushNamed(context, routeAuthSignIn);
+  }
+
+  void createAccount(BuildContext context) {
+    Navigator.pushNamed(context, routeAuthRegisterStepOne);
   }
 
   void openDesktopVersion() {
@@ -56,8 +60,17 @@ class AccountMenu extends StatelessWidget {
       ),
       SettingsItem(
         icon: ImagePaths.settings_icon,
-        title: 'sign_in'.i18n,
-        onTap: login,
+        title: 'Create Account'.i18n,
+        onTap: () {
+          createAccount(context);
+        },
+      ),
+      SettingsItem(
+        icon: ImagePaths.settings_icon,
+        title: 'Sign In'.i18n,
+        onTap: () {
+          login(context);
+        },
       ),
       SettingsItem(
         icon: ImagePaths.star_icon,
