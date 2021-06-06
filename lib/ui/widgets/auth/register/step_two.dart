@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
+import 'package:lantern/ui/widgets/auth/register/password_requirements.dart';
 import 'package:lantern/ui/widgets/auth/validators.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-
 import '../../button.dart';
 
 class StepTwo extends StatelessWidget {
