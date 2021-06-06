@@ -2,6 +2,8 @@ package org.getlantern.lantern.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.SkuType;
@@ -33,6 +35,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
     private final Map<String, ProPlan> plans = Collections.synchronizedMap(new HashMap<String, ProPlan>());
     private final Map<String, SkuDetails> skus = Collections.synchronizedMap(new HashMap<String, SkuDetails>());
     private volatile PurchasesUpdatedListener onPurchasesUpdated = null;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public InAppBilling(Context context) {
         Logger.debug(TAG, "Creating InAppBilling");
@@ -68,16 +71,10 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
     public void onBillingSetupFinished(BillingResult billingResult) {
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             if (isRetriable(billingResult)) {
-                new Timer()
-                        .schedule(
-                                new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        billingClient.endConnection();
-                                        startConnection();
-                                    }
-                                },
-                                5000);
+                handler.postDelayed(() -> {
+                    billingClient.endConnection();
+                    startConnection();
+                },5000);
             }
             return;
         }
@@ -113,15 +110,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
                             BillingResult billingResult, List<SkuDetails> skuDetailsList) {
                         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
                             if (isRetriable(billingResult)) {
-                                new Timer()
-                                        .schedule(
-                                                new TimerTask() {
-                                                    @Override
-                                                    public void run() {
-                                                        updateSkus();
-                                                    }
-                                                },
-                                                5000);
+                                handler.postDelayed(() -> updateSkus(), 5000);
                             }
                             return;
                         }
