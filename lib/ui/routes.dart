@@ -9,3 +9,5 @@ const routeAuthorizeDeviceForPro = '/authorize_device_for_pro';
 const routeAuthorizeDeviceViaEmail = '/authorize_device_via_email';
 const routeAuthorizeDeviceViaEmailPin = '/authorize_device_via_email_pin';
 const routeApproveDevice = '/add_device';
+const routeAuthRegister  = '/auth/register';
+const routeAuthSignIn    = '/auth/sign_in';

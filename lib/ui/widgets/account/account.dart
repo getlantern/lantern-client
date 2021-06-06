@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/account/pro_account.dart';
 import 'package:lantern/ui/widgets/back_button_respecting_navigator.dart';
+import 'package:lantern/ui/widgets/auth/login.dart';
 
 import '../../routes.dart';
 import 'account_menu.dart';
@@ -11,6 +12,7 @@ import 'device_linking/authorize_device_via_email.dart';
 import 'device_linking/authorize_device_via_email_pin.dart';
 import 'language.dart';
 import 'settings.dart';
+
 
 class AccountTab extends StatelessWidget {
   @override
@@ -27,6 +29,9 @@ class AccountTab extends StatelessWidget {
           break;
         case routeSettings:
           builder = (BuildContext _) => Settings();
+          break;
+        case routeAuthSignIn:
+          builder = (BuildContext _) => Login();
           break;
         case routeLanguage:
           builder = (BuildContext _) => Language();

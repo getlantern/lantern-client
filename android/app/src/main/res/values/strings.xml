@@ -125,6 +125,7 @@
     <string name="invite_friends">Enter your e-mail to receive a code to share with your friends. Get a free month of PRO when they sign up!</string>
     <string name="invite_friends_welcome">When your friends purchase the two-year plan you will each get 3 months free, the one-year plan gets you each 1 month free</string>
     <string name="invite_friends_btn">Invite Friends</string>
+    <string name="sign_in">Sign In</string>
     <string name="share_friends_text">Share with friends to earn free months!</string>
     <string name="email_address">Email Address</string>
     <string name="switch_to_alipay">Switch to Alipay</string>

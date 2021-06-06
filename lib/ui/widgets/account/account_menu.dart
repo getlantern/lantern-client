@@ -20,6 +20,10 @@ class AccountMenu extends StatelessWidget {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
   }
 
+  void login() {
+    LanternNavigator.startScreen(LanternNavigator.SCREEN_LOGIN);
+  }
+
   void openDesktopVersion() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
   }
@@ -49,6 +53,11 @@ class AccountMenu extends StatelessWidget {
         onTap: () {
           authorizeDeviceForPro(context);
         },
+      ),
+      SettingsItem(
+        icon: ImagePaths.settings_icon,
+        title: 'sign_in'.i18n,
+        onTap: login,
       ),
       SettingsItem(
         icon: ImagePaths.star_icon,

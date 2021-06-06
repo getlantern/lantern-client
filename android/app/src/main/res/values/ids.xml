@@ -18,6 +18,7 @@
     <item name="invite_friends" type="id"/>
     <item name="pro_account" type="id"/>
     <item name="add_device" type="id"/>
+    <item name="sign_in" type="id"/>
     <item name="authorize_device_pro" type="id"/>
     <item name="check_for_update" type="id"/>
     <item name="yinbi_redemption" type="id"/>
