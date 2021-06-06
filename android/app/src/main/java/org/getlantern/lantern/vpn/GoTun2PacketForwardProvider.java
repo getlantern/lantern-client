@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 
-import android.Android; // Lantern's go android package
+import internalsdk.Internalsdk; // Lantern's go android package
 
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
@@ -64,7 +64,7 @@ public class GoTun2PacketForwardProvider implements Provider {
     final Locale defaultLocale = Locale.getDefault();
     try {
       ParcelFileDescriptor intf = createBuilder(vpnService, builder);
-      Android.tun2PacketForward((long) intf.getFd(), (long) VPN_MTU);
+      Internalsdk.tun2PacketForward((long) intf.getFd(), (long) VPN_MTU);
     } catch (Throwable t) {
       Logger.e(TAG, "Exception while handling TUN device", t);
     } finally {
@@ -74,7 +74,7 @@ public class GoTun2PacketForwardProvider implements Provider {
 
   public synchronized void stop() throws Exception {
     Logger.d(TAG, "stop");
-    Android.stopTun2PacketForward();
+    Internalsdk.stopTun2PacketForward();
     if (mInterface != null) {
       Logger.d(TAG, "closing interface");
       mInterface.close();

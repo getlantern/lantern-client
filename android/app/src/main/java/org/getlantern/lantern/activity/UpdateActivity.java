@@ -1,7 +1,7 @@
 package org.getlantern.lantern.activity;
 
-import android.Android;
-import android.Updater;
+import internalsdk.Internalsdk;
+import internalsdk.Updater;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -195,7 +195,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                 };
 
                 apkDir.mkdirs();
-                Android.downloadUpdate(updateUrl,
+                Internalsdk.downloadUpdate(updateUrl,
                         apkPath.getAbsolutePath(), updater);
 
                 return true;

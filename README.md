@@ -13,6 +13,10 @@ This project uses some shared code from a submodule that needs to be initialized
 
 `git submodule update --init`
 
+## Protocol Buffers
+If you update the protocol buffer definitions in protos_shared, make sure to run `make protos` to
+update the generated dart code.
+
 ## Building from Command Line
 ---
 
