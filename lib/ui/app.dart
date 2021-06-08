@@ -8,6 +8,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/valueNotifier/position_notifier.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'home.dart';
@@ -19,6 +20,7 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => PositionNotifier()),
         Provider(create: (context) => MessagingModel()),
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => AudioPlayer()),

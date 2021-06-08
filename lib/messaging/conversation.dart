@@ -9,6 +9,8 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:lantern/valueNotifier/inherited_position.dart';
+import 'package:lantern/valueNotifier/position_notifier.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
@@ -40,6 +42,7 @@ class _ConversationState extends State<Conversation>
   var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
+  final PositionNotifier _positionNotifier = PositionNotifier();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -72,6 +75,7 @@ class _ConversationState extends State<Conversation>
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
+    _positionNotifier.dispose();
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
@@ -238,6 +242,11 @@ class _ConversationState extends State<Conversation>
     model = context.watch<MessagingModel>();
     unawaited(
         model.setCurrentConversationContact(widget._contact.contactId.id));
+    final position =
+        context.dependOnInheritedWidgetOfExactType<InheritedPosition>();
+    if (position!.position != 0) {
+      unawaited(model.clearCurrentConversationContact());
+    }
     return BaseScreen(
       // Conversation title (contact name)
       title: displayName,
