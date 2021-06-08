@@ -63,6 +63,7 @@ class _ConversationState extends State<Conversation>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     displayName = widget._contact.displayName.isEmpty
         ? widget._contact.contactId.id
         : widget._contact.displayName;
