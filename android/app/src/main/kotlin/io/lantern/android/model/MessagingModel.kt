@@ -9,6 +9,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.Messaging
 import io.lantern.messaging.Model
+import io.lantern.android.model.CurrentConversationContact
 import io.lantern.messaging.dbPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
@@ -33,6 +34,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+            "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
+            "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
             "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)

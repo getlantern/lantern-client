@@ -121,6 +121,16 @@ class MessagingModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> setCurrentConversationContact(
+          String currentConversationContact) async =>
+      methodChannel.invokeMethod(
+          'setCurrentConversationContact', currentConversationContact);
+
+  Future<void> clearCurrentConversationContact() async =>
+      methodChannel.invokeMethod(
+        'clearCurrentConversationContact',
+      );
+
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));
