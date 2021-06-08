@@ -159,20 +159,22 @@ class MessageBubble extends StatelessWidget {
                 Clipboard.setData(ClipboardData(text: message.value.text));
               },
             ),
-          FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete),
-            title: Text('Delete for me'.i18n),
-            onPressed: () {
-              _showDeleteDialog(context, model, true, message);
-            },
-          ),
-          FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete_forever),
-            title: Text('Delete for everyone'.i18n),
-            onPressed: () {
-              _showDeleteDialog(context, model, false, message);
-            },
-          ),
+          if (outbound)
+            FocusedMenuItem(
+              trailingIcon: const Icon(Icons.delete),
+              title: Text('Delete for me'.i18n),
+              onPressed: () {
+                _showDeleteDialog(context, model, true, message);
+              },
+            ),
+          if (outbound)
+            FocusedMenuItem(
+              trailingIcon: const Icon(Icons.delete_forever),
+              title: Text('Delete for everyone'.i18n),
+              onPressed: () {
+                _showDeleteDialog(context, model, false, message);
+              },
+            ),
         ],
         blurBackgroundColor: Colors.blueGrey[900],
         menuOffset: 10,
@@ -211,7 +213,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
             children: <Widget>[
               isLocal
                   ? const Text(
-                      'This will delete the message for you only. Everyone else will still be able to see it.')
+                      'This will delete the message for you only. Everyone else will still be able to see it.') // TODO: i18n
                   : const Text(
                       'This will delete the message for everyone.'), // TODO: i18n
             ],
