@@ -3,6 +3,7 @@ liblantern-*.aar
 local.properties
 .gradle
 .idea
+.vscode
 build/
 libs/
 obj/
