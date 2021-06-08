@@ -83,6 +83,9 @@ class _ConversationState extends State<Conversation> {
     );
     dismissKeyboard();
     _newMessage.clear();
+    setState(() {
+      _quotedMessage = null;
+    });
   }
 
   void _startRecording() {

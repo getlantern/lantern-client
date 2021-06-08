@@ -131,6 +131,10 @@ String determineDateSwitch(
   return '';
 }
 
+bool determineDeletionStatus(StoredMessage msg) {
+  return msg.deletedBySenderAt != 0; // is 0 if message hasn't been deleted
+}
+
 void showSnackbar(BuildContext context, String text) {
   final snackBar = SnackBar(
     content: Row(
