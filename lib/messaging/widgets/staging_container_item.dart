@@ -35,7 +35,7 @@ class StagingContainerItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              if (quotedMessage != '')
+              if (quotedMessage != null)
                 Expanded(
                   child: Text(
                     'Replying to $inResponseTo', //TODO: Add i18n
