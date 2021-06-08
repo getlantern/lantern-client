@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
@@ -24,8 +25,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
-  int _currentIndex = 0;
   final String _initialRoute;
+  int _currentIndex = 0;
+  final mainMethodChannel = const MethodChannel('lantern_method_channel');
 
   late Future<void> loadAsync;
 
@@ -47,7 +49,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-    final mainMethodChannel = const MethodChannel('lantern_method_channel');
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
@@ -102,11 +103,7 @@ class _HomePageState extends State<HomePage> {
     // navigationChannel.invokeMethod('ready');
   }
 
-  void onPageChange(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  void onPageChange(int index) => setState(() => _currentIndex = index);
 
   @override
   void dispose() {
@@ -137,8 +134,13 @@ class _HomePageState extends State<HomePage> {
                   onPageChanged: onPageChange,
                   controller: _pageController,
                   children: [
-                    MessagesTab(_initialRoute.replaceFirst(routeMessaging, ''),
-                        widget._initialRouteArguments),
+                    TabStatusProvider(
+                      pageController: _pageController,
+                      index: 0,
+                      child: MessagesTab(
+                          _initialRoute.replaceFirst(routeMessaging, ''),
+                          widget._initialRouteArguments),
+                    ),
                     VPNTab(),
                     ExchangeTab(),
                     AccountTab(),

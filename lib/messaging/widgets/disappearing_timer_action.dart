@@ -25,10 +25,16 @@ class DisappearingTimerAction extends StatelessWidget {
         },
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Column(children: [
-            const Icon(Icons.timer),
-            if (contact.messagesDisappearAfterSeconds > 0)
-              Text(contact.messagesDisappearAfterSeconds.humanizeSeconds()),
+          child: Flex(direction: Axis.vertical, children: [
+            const Flexible(
+              child: Icon(Icons.timer),
+            ),
+            contact.messagesDisappearAfterSeconds > 0
+                ? Flexible(
+                    child: Text(contact.messagesDisappearAfterSeconds
+                        .humanizeSeconds()),
+                  )
+                : const SizedBox.shrink()
           ]),
         ),
       ),
