@@ -131,7 +131,10 @@ class MessageBubble extends StatelessWidget {
         .toList(growable: false);
 
     if (wasDeleted) {
-      return const DeletedBubble(); //TODO: needs to be completed when https://github.com/getlantern/android-lantern/issues/105 is ready
+      final humanizedSenderName =
+          matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
+      return DeletedBubble(
+          '$humanizedSenderName deleted this message for everyone'); // TODO: Add i18n
     }
 
     return FocusedMenuHolder(

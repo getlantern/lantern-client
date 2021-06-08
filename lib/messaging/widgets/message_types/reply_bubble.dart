@@ -41,7 +41,7 @@ class ReplyBubble extends StatelessWidget {
                 Text(
                   matchIdToDisplayName(msg.replyToSenderId, contact),
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     color: Colors.black, // TODO: generalize in theme
@@ -53,6 +53,7 @@ class ReplyBubble extends StatelessWidget {
                 Iterable<PathAndValue<StoredMessage>> messageRecords,
                 Widget? child) {
               try {
+                // TODO: this should not be a try-catch statement
                 final quotedMessage = messageRecords
                     .firstWhere((element) => element.value.id == msg.replyToId);
                 return ReplyContentRow(
@@ -62,7 +63,8 @@ class ReplyBubble extends StatelessWidget {
               } catch (e) {
                 return const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    child: DeletedBubble());
+                    // TODO: Outbound/inbound should see different messages here
+                    child: DeletedBubble('Deleted message')); //TODO: Add i18n
               }
             }),
           ],
