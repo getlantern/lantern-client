@@ -7,6 +7,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:collection/collection.dart';
 
 class ReplyBubble extends StatelessWidget {
   final bool outbound;
@@ -52,19 +53,28 @@ class ReplyBubble extends StatelessWidget {
             model.contactMessages(contact, builder: (context,
                 Iterable<PathAndValue<StoredMessage>> messageRecords,
                 Widget? child) {
-              try {
-                // TODO: this should not be a try-catch statement
-                final quotedMessage = messageRecords
-                    .firstWhere((element) => element.value.id == msg.replyToId);
+              final quotedMessage = messageRecords.firstWhereOrNull(
+                  (element) => element.value.id == msg.replyToId);
+
+              // if it has not been remotely deleted
+              if (quotedMessage != null &&
+                  quotedMessage.value.remotelyDeletedAt == 0) {
                 return ReplyContentRow(
                     quotedMessage: quotedMessage.value,
                     outbound: outbound,
                     model: model);
-              } catch (e) {
-                return const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    // TODO: Outbound/inbound should see different messages here
-                    child: DeletedBubble('Deleted message')); //TODO: Add i18n
+              } else {
+                // display deleted bubble
+                final humanizedSenderName =
+                    matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
+                return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
+                    child: outbound
+                        ? const DeletedBubble(
+                            'Deleted message') //TODO: Add i18n
+                        : DeletedBubble(
+                            '$humanizedSenderName deleted this message for everyone')); //TODO: dd i18n
               }
             }),
           ],
