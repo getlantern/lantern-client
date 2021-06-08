@@ -74,7 +74,7 @@ class ReplyBubble extends StatelessWidget {
                         ? const DeletedBubble(
                             'Deleted message') //TODO: Add i18n
                         : DeletedBubble(
-                            '$humanizedSenderName deleted this message for everyone')); //TODO: dd i18n
+                            '$humanizedSenderName deleted this message for everyone')); //TODO: Add i18n
               }
             }),
           ],
