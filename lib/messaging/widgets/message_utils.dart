@@ -42,8 +42,8 @@ List<dynamic> _humanizeReactorIdList(
   return humanizedList;
 }
 
-String matchIdToDisplayName(String replyToSenderId, Contact contact) {
-  return replyToSenderId == contact.contactId.id
+String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
+  return contactIdToMatch == contact.contactId.id
       ? contact.displayName
       : 'me'; // TODO: i18n
 }
@@ -132,7 +132,7 @@ String determineDateSwitch(
 }
 
 bool determineDeletionStatus(StoredMessage msg) {
-  return msg.deletedBySenderAt != 0; // is 0 if message hasn't been deleted
+  return msg.remotelyDeletedAt != 0; // is 0 if message hasn't been deleted
 }
 
 void showSnackbar(BuildContext context, String text) {
