@@ -48,15 +48,10 @@ class MessageBubble extends StatelessWidget {
       // constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
       final reactions = constructReactionsMap(msg, contact);
       final isDateMarker = determineDateSwitch(priorMessage, nextMessage);
-      // TODO: infer that from msg
-      final wasDeleted = false;
+      final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
 
       return InkWell(
-          // onLongPress: () {
-          //   _buildActionsPopup(outbound, context, msg, model, reactions,
-          //       message, isAttachment, onReply);
-          // },
           child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:

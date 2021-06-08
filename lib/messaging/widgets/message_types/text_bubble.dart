@@ -39,7 +39,6 @@ class TextBubble extends StatelessWidget {
             outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // TODO: in theory this should appear before an attachment or deleted file as well
           Container(
               child: Column(
             crossAxisAlignment:
