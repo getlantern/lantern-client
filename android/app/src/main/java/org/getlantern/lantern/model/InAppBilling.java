@@ -166,15 +166,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
         BillingResult billingResult = purchases.getBillingResult();
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             if (isRetriable(billingResult)) {
-                new Timer()
-                        .schedule(
-                                new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        checkForUnacknowledgedPurchases();
-                                    }
-                                },
-                                5000);
+                handler.postDelayed(() -> checkForUnacknowledgedPurchases(), 5000);
             }
             return;
         }
