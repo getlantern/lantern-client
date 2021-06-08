@@ -35,7 +35,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
             "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
-            "cleanCurrentConversationContact" -> CurrentConversationContact.id = ""
+            "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
             "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)

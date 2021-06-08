@@ -126,9 +126,9 @@ class MessagingModel extends Model {
       methodChannel.invokeMethod(
           'setCurrentConversationContact', currentConversationContact);
 
-  Future<void> cleanCurrentConversationContact() async =>
+  Future<void> clearCurrentConversationContact() async =>
       methodChannel.invokeMethod(
-        'cleanCurrentConversationContact',
+        'clearCurrentConversationContact',
       );
 
   Future<Contact?> getContact(String contactPath) async {

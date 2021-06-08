@@ -48,7 +48,7 @@ class _ConversationState extends State<Conversation>
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        model.cleanCurrentConversationContact();
+        model.clearCurrentConversationContact();
         break;
       case AppLifecycleState.resumed:
       default:
