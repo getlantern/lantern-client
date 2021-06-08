@@ -1,5 +1,8 @@
 import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -7,16 +10,13 @@ import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
-import 'package:lantern/valueNotifier/inherited_position.dart';
-import 'package:lantern/valueNotifier/position_notifier.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -42,7 +42,6 @@ class _ConversationState extends State<Conversation>
   var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
-  final PositionNotifier _positionNotifier = PositionNotifier();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -68,6 +67,7 @@ class _ConversationState extends State<Conversation>
         ? widget._contact.contactId.id
         : widget._contact.displayName;
     BackButtonInterceptor.add(_interceptBackButton);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   // Filepicker vars
@@ -76,7 +76,6 @@ class _ConversationState extends State<Conversation>
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    _positionNotifier.dispose();
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
@@ -146,8 +145,8 @@ class _ConversationState extends State<Conversation>
     return await AssetPicker.pickAssets(
       context,
       selectedAssets: assets,
-      textDelegate:
-          EnglishTextDelegate(), // DefaultAssetsPickerTextDelegate for Chinese
+      textDelegate: EnglishTextDelegate(),
+      // DefaultAssetsPickerTextDelegate for Chinese
       requestType: RequestType.all,
       specialItemPosition: SpecialItemPosition.prepend,
       specialItemBuilder: (BuildContext context) {
@@ -241,11 +240,11 @@ class _ConversationState extends State<Conversation>
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    unawaited(
-        model.setCurrentConversationContact(widget._contact.contactId.id));
-    final position =
-        context.dependOnInheritedWidgetOfExactType<InheritedPosition>();
-    if (position!.position != 0) {
+    var tabStatus = context.watch<TabStatus>();
+    if (tabStatus.active) {
+      unawaited(
+          model.setCurrentConversationContact(widget._contact.contactId.id));
+    } else {
       unawaited(model.clearCurrentConversationContact());
     }
     return BaseScreen(
@@ -495,18 +494,22 @@ class _ConversationState extends State<Conversation>
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.SMILEYS,
-              bgColor: Color(0xFFF2F2F2), // TODO: generalize in theme
-              indicatorColor: Colors.black, // TODO: generalize in theme
+              bgColor: Color(0xFFF2F2F2),
+              // TODO: generalize in theme
+              indicatorColor: Colors.black,
+              // TODO: generalize in theme
               iconColor: Colors.grey,
-              iconColorSelected: Colors.black, // TODO: generalize in theme
-              progressIndicatorColor: Colors.black, // TODO: generalize in theme
-              backspaceColor: Colors.black, // TODO: generalize in theme
+              iconColorSelected: Colors.black,
+              // TODO: generalize in theme
+              progressIndicatorColor: Colors.black,
+              // TODO: generalize in theme
+              backspaceColor: Colors.black,
+              // TODO: generalize in theme
               showRecentsTab: true,
               recentsLimit: 28,
               noRecentsText: 'No Recents',
-              noRecentsStyle: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black26), // TODO: generalize in theme
+              noRecentsStyle: TextStyle(fontSize: 16, color: Colors.black26),
+              // TODO: generalize in theme
               categoryIcons: CategoryIcons(),
               buttonMode: ButtonMode.MATERIAL,
             )),
