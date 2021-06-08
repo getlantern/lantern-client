@@ -370,7 +370,7 @@ android-lib: $(MOBILE_ANDROID_LIB)
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -b $(MOBILE_DIR)/app/build.gradle :app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) lib/model/protos_shared/vpn.pb.dart
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	YINBI_ENABLED="$$YINBI_ENABLED" && \
