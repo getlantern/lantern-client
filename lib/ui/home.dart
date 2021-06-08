@@ -5,11 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
-import 'package:lantern/valueNotifier/inherited_position.dart';
-import 'package:lantern/valueNotifier/position_notifier.dart';
 
 import 'widgets/vpn/vpn.dart';
 
@@ -27,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
   final String _initialRoute;
-  final PositionNotifier _positionNotifier = PositionNotifier();
+  int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
 
   late Future<void> loadAsync;
@@ -36,20 +35,20 @@ class _HomePageState extends State<HomePage> {
 
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
-      _positionNotifier.changePage(1);
+      _currentIndex = 1;
     } else if (_initialRoute.startsWith(routeExchange)) {
-      _positionNotifier.changePage(2);
+      _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
-      _positionNotifier.changePage(3);
+      _currentIndex = 3;
     } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
-      _positionNotifier.changePage(4);
+      _currentIndex = 4;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _positionNotifier.page);
+    _pageController = PageController(initialPage: _currentIndex);
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
@@ -104,8 +103,7 @@ class _HomePageState extends State<HomePage> {
     // navigationChannel.invokeMethod('ready');
   }
 
-  void onPageChange(int index) =>
-      setState(() => _positionNotifier.changePage(index));
+  void onPageChange(int index) => setState(() => _currentIndex = index);
 
   @override
   void dispose() {
@@ -132,24 +130,25 @@ class _HomePageState extends State<HomePage> {
                 .language((BuildContext context, String lang, Widget? child) {
               Localization.locale = lang;
               return Scaffold(
-                body: InheritedPosition(
-                  position: _positionNotifier.page,
-                  child: PageView(
-                    onPageChanged: onPageChange,
-                    controller: _pageController,
-                    children: [
-                      MessagesTab(
+                body: PageView(
+                  onPageChanged: onPageChange,
+                  controller: _pageController,
+                  children: [
+                    TabStatusProvider(
+                      pageController: _pageController,
+                      index: 0,
+                      child: MessagesTab(
                           _initialRoute.replaceFirst(routeMessaging, ''),
                           widget._initialRouteArguments),
-                      VPNTab(),
-                      ExchangeTab(),
-                      AccountTab(),
-                      if (developmentMode) DeveloperSettingsTab(),
-                    ],
-                  ),
+                    ),
+                    VPNTab(),
+                    ExchangeTab(),
+                    AccountTab(),
+                    if (developmentMode) DeveloperSettingsTab(),
+                  ],
                 ),
                 bottomNavigationBar: CustomBottomBar(
-                  currentIndex: _positionNotifier.page,
+                  currentIndex: _currentIndex,
                   showDeveloperSettings: developmentMode,
                   updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
                 ),
