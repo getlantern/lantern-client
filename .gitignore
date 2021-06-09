@@ -1,5 +1,6 @@
 libflashlight.aar
 liblantern-*.aar
+liblantern-*-sources.jar
 local.properties
 .gradle
 .idea
@@ -49,3 +50,6 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+gradle.properties.user
+gradle.properties
