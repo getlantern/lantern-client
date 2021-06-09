@@ -2,7 +2,9 @@ import 'package:lantern/package_store.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class DeletedBubble extends StatelessWidget {
-  const DeletedBubble({Key? key}) : super(key: key);
+  final String deletedBubbleContent;
+
+  const DeletedBubble(this.deletedBubbleContent) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +14,11 @@ class DeletedBubble extends StatelessWidget {
       radius: const Radius.circular(50),
       dashPattern: [6],
       strokeWidth: 1,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: const ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(50)),
         child: Padding(
-          padding: EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
-          child: Text('This message was deleted'), // TODO: Add i18n
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Text(deletedBubbleContent), // TODO: Add i18n
         ),
       ),
     );

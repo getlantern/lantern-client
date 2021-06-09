@@ -1,7 +1,9 @@
-import 'package:lantern/messaging/widgets/message_types/quote_bubble.dart';
+import 'package:lantern/messaging/widgets/attachment.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -9,6 +11,11 @@ class ContentContainer extends StatelessWidget {
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
   final Contact contact;
+  final Function(PathAndValue<StoredMessage>) onTapReply;
+  final bool startOfBlock;
+  final bool endOfBlock;
+  final bool newestMessage;
+  final Map<String, List<dynamic>> reactions;
 
   const ContentContainer(
     this.outbound,
@@ -16,12 +23,55 @@ class ContentContainer extends StatelessWidget {
     this.msg,
     this.message,
     this.contact,
+    this.onTapReply,
+    this.startOfBlock,
+    this.endOfBlock,
+    this.newestMessage,
+    this.reactions,
   ) : super();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+    final reactionsList = [];
+    reactions.forEach((key, value) {
+      if (value.isNotEmpty) {
+        reactionsList.add(Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            // Tap on emoji to bring modal with breakdown of interactions
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () =>
+                    displayEmojiBreakdownPopup(context, msg, reactions),
+                child: displayEmojiCount(reactions, key))));
+      }
+    });
+
+    final attachments = msg.attachments.values
+        .map((attachment) => attachmentWidget(attachment));
+
+    return Container(
+        padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
+        constraints: const BoxConstraints(
+          minWidth: 70,
+          maxWidth: 350, // TODO: move both these to a responsive sizes file
+        ),
+        decoration: BoxDecoration(
+          color: outbound ? Colors.black38 : Colors.black12,
+          borderRadius: BorderRadius.only(
+            topLeft: inbound && !startOfBlock
+                ? Radius.zero
+                : const Radius.circular(5),
+            topRight: outbound && !startOfBlock
+                ? Radius.zero
+                : const Radius.circular(5),
+            bottomRight: outbound && (!endOfBlock || newestMessage)
+                ? Radius.zero
+                : const Radius.circular(5),
+            bottomLeft: inbound && (!endOfBlock || newestMessage)
+                ? Radius.zero
+                : const Radius.circular(5),
+          ),
+        ),
         child: Column(
             crossAxisAlignment:
                 outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -29,7 +79,11 @@ class ContentContainer extends StatelessWidget {
             children: [
               Row(mainAxisSize: MainAxisSize.min, children: [
                 if (msg.replyToId.isNotEmpty)
-                  QuoteBubble(outbound, msg, contact),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => onTapReply(message),
+                    child: ReplyBubble(outbound, msg, contact),
+                  ),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               Row(mainAxisSize: MainAxisSize.min, children: [
@@ -45,6 +99,9 @@ class ContentContainer extends StatelessWidget {
                     ),
                   ),
               ]),
+              ...attachments,
+              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+              ...reactionsList,
             ]));
   }
 }

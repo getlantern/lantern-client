@@ -5,9 +5,10 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/model/tab_status.dart';
@@ -16,6 +17,9 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
@@ -42,6 +46,7 @@ class _ConversationState extends State<Conversation>
   var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
+  final _scrollController = ItemScrollController();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -107,6 +112,9 @@ class _ConversationState extends State<Conversation>
     );
     dismissKeyboard();
     _newMessage.clear();
+    setState(() {
+      _quotedMessage = null;
+    });
   }
 
   void _startRecording() {
@@ -237,6 +245,18 @@ class _ConversationState extends State<Conversation>
     _focusNode.unfocus();
   }
 
+  void _handleSubmit(TextEditingController _newMessage) {
+    setState(() {
+      _isSendIconVisible = false;
+      _isReplying = false;
+      _emojiShowing = false;
+    });
+    _send(_newMessage.value.text,
+        replyToSenderId: _quotedMessage?.senderId,
+        replyToId: _quotedMessage?.id);
+    dismissKeyboard();
+  }
+
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
@@ -252,6 +272,7 @@ class _ConversationState extends State<Conversation>
       title: displayName,
       actions: [DisappearingTimerAction(widget._contact)],
       body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onPanUpdate: (details) {
           _totalPanned += details.delta.dx;
           if (!_willCancelRecording && _totalPanned < -19) {
@@ -286,7 +307,13 @@ class _ConversationState extends State<Conversation>
             if (_isReplying)
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: _buildReplyContainer(),
+                child: StagingContainerItem(
+                    quotedMessage: _quotedMessage,
+                    model: model,
+                    contact: widget._contact,
+                    onCloseListener: () => setState(() {
+                          _isReplying = false;
+                        })),
               ),
             Padding(
               padding: const EdgeInsets.all(8),
@@ -295,7 +322,14 @@ class _ConversationState extends State<Conversation>
             if (_emojiShowing) _buildEmojiKeyboard(),
           ]),
           // Voice recorder
-          if (_recording) _buildVoiceRecorder(),
+          if (_recording)
+            VoiceRecorder(
+              stopWatchTimer: _stopWatchTimer,
+              willCancelRecording: _willCancelRecording,
+              onTapUpListener: () async {
+                await _finishRecording();
+              },
+            ),
         ]),
       ),
     );
@@ -314,30 +348,37 @@ class _ConversationState extends State<Conversation>
   Widget _buildMessageBubbles() {
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
-      return ListView.builder(
-        // Dismiss native keyboard when scrolling (dragging) https://api.flutter.dev/flutter/widgets/ScrollViewKeyboardDismissBehavior-class.html
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
+      return ScrollablePositionedList.builder(
+        itemScrollController: _scrollController,
         reverse: true,
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubble(
-            // PathAndValue<StoredMessage> of current message
-            messageRecords.elementAt(index),
-            // priorMessage
-            index >= messageRecords.length - 1
+            message: messageRecords.elementAt(index),
+            priorMessage: index >= messageRecords.length - 1
                 ? null
                 : messageRecords.elementAt(index + 1).value,
-            // nextMessage
-            index == 0 ? null : messageRecords.elementAt(index - 1).value,
-            // contact
-            widget._contact,
-            // onReply callback
-            (_message) {
+            nextMessage:
+                index == 0 ? null : messageRecords.elementAt(index - 1).value,
+            contact: widget._contact,
+            onReply: (_message) {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
                 showKeyboard(); // TODO: this is clashing with Navigator.pop(context);
               });
+            },
+            onTapReply: (_tappedMessage) {
+              final _scrollToIndex = messageRecords.toList().indexWhere(
+                  (element) =>
+                      element.value.id == _tappedMessage.value.replyToId);
+              if (_scrollToIndex != -1) {
+                _scrollController.scrollTo(
+                    index: _scrollToIndex,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOutCubic);
+              }
             },
           );
         },
@@ -345,51 +386,11 @@ class _ConversationState extends State<Conversation>
     });
   }
 
-  Widget _buildReplyContainer() {
-    // use the message's replyToId to identify who this is in response to
-    final inResponseTo =
-        matchIdToDisplayName(_quotedMessage!.senderId, widget._contact);
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-        ),
-        child: Row(
-          children: [
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        inResponseTo,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => setState(() {
-                        _isReplying = false;
-                      }),
-                      child: const Icon(Icons.close, size: 16),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 4),
-                // TODO: Add ability to respond to attachment?
-                Text(_quotedMessage!.text.toString(),
-                    style: const TextStyle(color: Colors.black54)),
-              ],
-            )),
-          ],
-        ));
-  }
-
   Widget _buildMessageBar(context) {
     return Row(children: [
       Container(
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
             setState(() {
               _emojiShowing = !_emojiShowing;
@@ -416,22 +417,14 @@ class _ConversationState extends State<Conversation>
                 _isSendIconVisible = value.isNotEmpty;
               });
             },
+            //
+            onFieldSubmitted: (value) => _handleSubmit(_newMessage),
             decoration: InputDecoration(
               // Send icon
               suffixIcon: _isSendIconVisible
                   ? IconButton(
                       icon: const Icon(Icons.send, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          _isSendIconVisible = false;
-                          _isReplying = false;
-                          _emojiShowing = false;
-                        });
-                        _send(_newMessage.value.text,
-                            replyToSenderId: _quotedMessage?.senderId,
-                            replyToId: _quotedMessage?.id);
-                        dismissKeyboard();
-                      })
+                      onPressed: () => _handleSubmit(_newMessage))
                   : null,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
@@ -446,6 +439,7 @@ class _ConversationState extends State<Conversation>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () => _selectFilesToShare(),
             child: const Icon(Icons.add_circle_rounded),
           ),
@@ -454,6 +448,7 @@ class _ConversationState extends State<Conversation>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTapDown: (details) {
               _startRecording();
             },
@@ -490,7 +485,7 @@ class _ConversationState extends State<Conversation>
             },
             config: const Config(
               columns: 10,
-              emojiSizeMax: 18.0,
+              emojiSizeMax: 17.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.SMILEYS,
@@ -515,77 +510,5 @@ class _ConversationState extends State<Conversation>
             )),
       ),
     );
-  }
-
-  Widget _buildVoiceRecorder() {
-    return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-      Flexible(
-        child: ColoredBox(
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16, bottom: 17),
-                child: Icon(Icons.circle, color: Colors.red),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, bottom: 22),
-                child: StreamBuilder<int>(
-                  stream: _stopWatchTimer.rawTime,
-                  initialData: _stopWatchTimer.rawTime.value,
-                  builder: (context, snap) {
-                    final value = snap.data;
-                    final displayTime = StopWatchTimer.getDisplayTime(
-                        value ?? 0,
-                        minute: true,
-                        second: true,
-                        hours: false,
-                        milliSecond: false);
-                    return Text(displayTime,
-                        style: const TextStyle(fontWeight: FontWeight.bold));
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 63,
-                  child: Padding(
-                      padding: const EdgeInsets.only(right: 24),
-                      child: Text(
-                          _willCancelRecording
-                              ? 'will cancel'.i18n
-                              : '< ' + 'swipe to cancel'.i18n,
-                          style: const TextStyle(fontWeight: FontWeight.bold))),
-                ),
-              ),
-              GestureDetector(
-                onTapUp: (details) async {
-                  await _finishRecording();
-                },
-                child: Transform.scale(
-                  scale: 2,
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(38)),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                          left: 15, top: 15, right: 4, bottom: 4),
-                      child: Icon(Icons.mic_none),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ]);
   }
 }
