@@ -13,12 +13,10 @@ This project uses some shared code from a submodule that needs to be initialized
 
 `git submodule update --init`
 
-## Building from Command Line
----
+## Protocol Buffers
+If you update the protocol buffer definitions in protos_shared, make sure to run `make protos` to
+update the generated dart code.
 
-See https://github.com/getlantern/lantern-build for instructions on how to build from the command line
-
-\n
 ## Building from Android Studio
 
 #### Prerequisites
@@ -110,6 +108,131 @@ If you like that VSCode start running the project without the need of be constan
 
 
 <p>&nbsp;</p>
+
+## Building from Command Line
+
+### Go Android Library
+
+The core Lantern functionality can be packaged into a native Android library
+with:
+
+```
+make android-lib
+```
+
+Note: if you're running the first time, you have to run this command first:
+
+```
+make vendor
+```
+
+### Known issues when building the project:
+
+**Gradle could not start your build:**
+
+```
+> Could not create service of type FileAccessTimeJournal using GradleUserHomeScopeServices.createFileAccessTimeJournal().
+   > Timeout waiting to lock journal cache (/Users/<username>/.gradle/caches/journal-1). It is currently in use by another Gradle instance.
+```
+
+Just simply restart your computer.
+
+**Android Studio tries to access proxy server**
+If you're running Lantern when you start Android Studio, and then turn off Lantern, Android Studio will keep trying to access resources via the proxy (which is no longer running).
+To fix this, restart Android Studio.
+
+### Lantern Mobile App
+
+#### Debug
+
+To create a debug build of the full lantern mobile app:
+
+```
+make android-debug
+```
+
+To install on the default device:
+
+```
+make android-debug-install
+```
+
+or
+
+```
+make android-release-install
+```
+
+#### Staging
+
+To build mobile for staging, use the STAGING command line argument:
+
+```
+STAGING=true make android-debug android-install
+```
+
+#### Release
+
+The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab)
+for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
+all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
+
+To create a release build, add the following to your
+`~/.gradle/gradle.properties` file:
+
+```
+KEYSTORE_PWD=$KEYSTORE_PASSWORD
+KEYSTORE_FILE=keystore.release.jks
+KEY_PWD=$KEY_PASSWORD
+```
+
+You can find the exact values to add to your gradle.properties under the "Android" entry in 1Password.
+
+Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to
+Google Play.
+
+##### Testing Auto-Update with Release Builds
+Sometimes you may need to make a release bulid with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
+
+```
+APP=lantern VERSION_CODE=1 VERSION=1.0.0 make android-release
+```
+
+##### APKs
+
+For side-loading, we currently only support a 32 bit ARM APK, which you can build like this:
+
+```sh
+SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+```
+
+You can actually omit ANDROID_ARCH since arm32 is the default:
+
+```sh
+SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+```
+
+To build APKs for individual architectures, you can run this:
+
+```sh
+ANDROID_ARCH=arm32 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+ANDROID_ARCH=arm64 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+ANDROID_ARCH=x86 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+ANDROID_ARCH=amd64 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+```
+
+You can build APKs containing 32 and 64 bit versions of ARM and Intel respectively like this:
+
+```sh
+ANDROID_ARCH=arm SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
+```
+
+##### App Bundle
+
+```sh
+SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
+```
 
 ## Testing Google Play Payments
 ---
