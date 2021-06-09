@@ -11,7 +11,7 @@ import java.io.File
 
 interface ApkRepository {
     fun getApkDetail(context: Context, file: File): ApplicationInfo?
-    fun getSignatures(packageManager: PackageManager, file: File): ApkSignature?
+    fun getSignatures(context: Context, file: File): ApkSignature?
 }
 
 class ApkRepositoryImplement: ApkRepository{
@@ -25,7 +25,8 @@ class ApkRepositoryImplement: ApkRepository{
         return applicationInfo
     }
 
-    override fun getSignatures(packageManager: PackageManager, file: File): ApkSignature? {
+    override fun getSignatures(context: Context, file: File): ApkSignature? {
+        val packageManager =  context.packageManager
         val apkSignature = ApkSignature()
         var info: PackageInfo?
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P){
@@ -35,12 +36,12 @@ class ApkRepositoryImplement: ApkRepository{
             }
             if(info == null) return null
             val signingInfo: SigningInfo? = info.signingInfo
-            val signatures: Array<android.content.pm.Signature> =
+            val signatures: Array<android.content.pm.Signature>? =
                 if (signingInfo == null) info.signatures else signingInfo.apkContentsSigners
             if (signatures != null) {
-                apkSignature.md5 = Array(signatures.size){i -> ""}
-                apkSignature.sha1 = Array(signatures.size){i -> ""}
-                apkSignature.sha256 = Array(signatures.size){i -> ""}
+                apkSignature.md5 = Array(signatures.size){ ""}
+                apkSignature.sha1 = Array(signatures.size){ ""}
+                apkSignature.sha256 = Array(signatures.size){ ""}
                 for (i in signatures.indices) {
                     val data = signatures[i].toByteArray()
                     apkSignature.md5[i] = SignUtil.getMD5(data)
@@ -49,12 +50,12 @@ class ApkRepositoryImplement: ApkRepository{
                 }
             }
         }else{
-            info = packageManager.getPackageArchiveInfo(file.absolutePath, PackageManager.GET_SIGNING_CERTIFICATES)
+            info = packageManager.getPackageArchiveInfo(file.absolutePath, PackageManager.GET_SIGNATURES)
             val signatures = info.signatures
             if (signatures != null) {
-                apkSignature.md5 = Array(signatures.size){i -> ""}
-                apkSignature.sha1 = Array(signatures.size){i -> ""}
-                apkSignature.sha256 = Array(signatures.size){i -> ""}
+                apkSignature.md5 = Array(signatures.size){ ""}
+                apkSignature.sha1 = Array(signatures.size){ ""}
+                apkSignature.sha256 = Array(signatures.size){ ""}
                 for (i in signatures.indices) {
                     val data = signatures[i].toByteArray()
                     apkSignature.md5[i] = SignUtil.getMD5(data)
