@@ -7,11 +7,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
-import io.lantern.android.model.CurrentConversationContact
-import io.lantern.messaging.dbPath
-import io.lantern.messaging.inputStream
+import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
@@ -37,15 +33,22 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
             "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(call.argument("identityKey")!!, call.argument("displayName")!!)
-            "setDisappearSettings" -> messaging.setDisappearSettings(call.argument("contactId")!!, call.argument("seconds")!!)
+            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
+                call.argument("identityKey")!!,
+                call.argument("displayName")!!
+            )
+            "setDisappearSettings" -> messaging.setDisappearSettings(
+                call.argument<String>("contactId")!!.directContactPath,
+                call.argument("seconds")!!
+            )
             "sendToDirectContact" ->
                 messaging.sendToDirectContact(
-                        call.argument("identityKey")!!,
-                        text = call.argument("text"),
-                        attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
-                        replyToId = call.argument("replyToId"),
-                        replyToSenderId = call.argument("replyToSenderId"))
+                    call.argument("identityKey")!!,
+                    text = call.argument("text"),
+                    attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
+                    replyToId = call.argument("replyToId"),
+                    replyToSenderId = call.argument("replyToSenderId")
+                )
             "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
