@@ -346,7 +346,7 @@ class StoredAttachment extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'guid')
     ..aOM<Attachment>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachment', subBuilder: Attachment.create)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'encryptedFilePath', protoName: 'encryptedFilePath')
-    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING_ENCRYPTION, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
+    ..e<StoredAttachment_Status>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: StoredAttachment_Status.PENDING, valueOf: StoredAttachment_Status.valueOf, enumValues: StoredAttachment_Status.values)
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'plainTextFilePath', protoName: 'plainTextFilePath')
     ..aOM<StoredAttachment>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnail', subBuilder: StoredAttachment.create)
     ..hasRequiredFields = false

@@ -40,13 +40,13 @@ class ContactType extends $pb.ProtobufEnum {
 }
 
 class StoredAttachment_Status extends $pb.ProtobufEnum {
-  static const StoredAttachment_Status PENDING_ENCRYPTION = StoredAttachment_Status._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING_ENCRYPTION');
+  static const StoredAttachment_Status PENDING = StoredAttachment_Status._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING');
   static const StoredAttachment_Status PENDING_UPLOAD = StoredAttachment_Status._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING_UPLOAD');
   static const StoredAttachment_Status DONE = StoredAttachment_Status._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DONE');
   static const StoredAttachment_Status FAILED = StoredAttachment_Status._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'FAILED');
 
   static const $core.List<StoredAttachment_Status> values = <StoredAttachment_Status> [
-    PENDING_ENCRYPTION,
+    PENDING,
     PENDING_UPLOAD,
     DONE,
     FAILED,
