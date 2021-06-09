@@ -67,9 +67,12 @@ class VideoAttachmentState extends State<VideoAttachment> {
                                 filterQuality: FilterQuality.high, scale: 3),
                         IconButton(
                             iconSize: 96,
-                            icon: Icon(_controller?.value.isPlaying ?? false
-                                ? Icons.stop_circle_outlined
-                                : Icons.play_circle_outline),
+                            icon: Icon(
+                                _controller?.value.isPlaying ?? false
+                                    ? Icons.stop_circle_outlined
+                                    : Icons.play_circle_outline,
+                                color: Colors.white,
+                                size: 60),
                             onPressed: () {
                               if (_controller?.value.isPlaying ?? false) {
                                 setState(() {

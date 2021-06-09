@@ -655,6 +655,8 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..aInt64(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstViewedAt', protoName: 'firstViewedAt')
     ..aInt64(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAt', protoName: 'disappearAt')
     ..m<$core.int, $core.int>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnails', entryClassName: 'StoredMessage.ThumbnailsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.O3, packageName: const $pb.PackageName('model'))
+    ..aInt64(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remotelyDeletedAt', protoName: 'remotelyDeletedAt')
+    ..aOM<ContactId>(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remotelyDeletedBy', protoName: 'remotelyDeletedBy', subBuilder: ContactId.create)
     ..hasRequiredFields = false
   ;
 
@@ -675,6 +677,8 @@ class StoredMessage extends $pb.GeneratedMessage {
     $fixnum.Int64? firstViewedAt,
     $fixnum.Int64? disappearAt,
     $core.Map<$core.int, $core.int>? thumbnails,
+    $fixnum.Int64? remotelyDeletedAt,
+    ContactId? remotelyDeletedBy,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -721,6 +725,12 @@ class StoredMessage extends $pb.GeneratedMessage {
     }
     if (thumbnails != null) {
       _result.thumbnails.addAll(thumbnails);
+    }
+    if (remotelyDeletedAt != null) {
+      _result.remotelyDeletedAt = remotelyDeletedAt;
+    }
+    if (remotelyDeletedBy != null) {
+      _result.remotelyDeletedBy = remotelyDeletedBy;
     }
     return _result;
   }
@@ -863,6 +873,26 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(15)
   $core.Map<$core.int, $core.int> get thumbnails => $_getMap(14);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get remotelyDeletedAt => $_getI64(15);
+  @$pb.TagNumber(16)
+  set remotelyDeletedAt($fixnum.Int64 v) { $_setInt64(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasRemotelyDeletedAt() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearRemotelyDeletedAt() => clearField(16);
+
+  @$pb.TagNumber(17)
+  ContactId get remotelyDeletedBy => $_getN(16);
+  @$pb.TagNumber(17)
+  set remotelyDeletedBy(ContactId v) { setField(17, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasRemotelyDeletedBy() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearRemotelyDeletedBy() => clearField(17);
+  @$pb.TagNumber(17)
+  ContactId ensureRemotelyDeletedBy() => $_ensure(16);
 }
 
 class Reaction extends $pb.GeneratedMessage {
