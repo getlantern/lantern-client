@@ -6,7 +6,7 @@ import kotlin.experimental.and
 
 object SignUtil {
 
-    val hexDigits = charArrayOf(
+    private val hexDigits = charArrayOf(
         '0',
         '1',
         '2',
@@ -27,7 +27,6 @@ object SignUtil {
 
     private fun bytes2Hex(src: ByteArray): String {
         val res = CharArray(src.size * 2)
-
         var i = 0
         var j = 0
         while (i < src.size) {
@@ -37,19 +36,6 @@ object SignUtil {
         }
         return String(res)
     }
-
-//    private fun bytes2Hex(byteArray: ByteArray): String {
-//        val sb = StringBuffer()
-//        for (b in byteArray) {
-//            val i: Int = b.toInt() and 0xff
-//            var hexString = Integer.toHexString(i)
-//            if (hexString.length < 2) {
-//                hexString = "0$hexString"
-//            }
-//            sb.append(hexString)
-//        }
-//        return sb.toString()
-//    }
 
     @kotlin.jvm.JvmStatic
     fun getMD5(data: ByteArray?): String {
