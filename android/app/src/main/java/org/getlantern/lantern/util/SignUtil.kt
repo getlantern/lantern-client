@@ -2,20 +2,54 @@ package org.getlantern.lantern.util
 
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import kotlin.experimental.and
 
 object SignUtil {
-    private fun bytes2Hex(byteArray: ByteArray): String {
-        val sb = StringBuffer()
-        for (b in byteArray) {
-            val i: Int = b.toInt() and 0xff
-            var hexString = Integer.toHexString(i)
-            if (hexString.length < 2) {
-                hexString = "0$hexString"
-            }
-            sb.append(hexString)
+
+    val hexDigits = charArrayOf(
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f'
+    )
+
+    private fun bytes2Hex(src: ByteArray): String {
+        val res = CharArray(src.size * 2)
+
+        var i = 0
+        var j = 0
+        while (i < src.size) {
+            res[j++] = hexDigits[src[i].toInt().ushr(4) and 0x0f]
+            res[j++] = hexDigits[(src[i].toInt() and 0x0f).toInt()]
+            i++
         }
-        return sb.toString()
+        return String(res)
     }
+
+//    private fun bytes2Hex(byteArray: ByteArray): String {
+//        val sb = StringBuffer()
+//        for (b in byteArray) {
+//            val i: Int = b.toInt() and 0xff
+//            var hexString = Integer.toHexString(i)
+//            if (hexString.length < 2) {
+//                hexString = "0$hexString"
+//            }
+//            sb.append(hexString)
+//        }
+//        return sb.toString()
+//    }
 
     @kotlin.jvm.JvmStatic
     fun getMD5(data: ByteArray?): String {

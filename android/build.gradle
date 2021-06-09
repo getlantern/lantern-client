@@ -16,7 +16,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:4.2.0-rc01'
+        classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufVersion"
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
