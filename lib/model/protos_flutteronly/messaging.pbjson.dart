@@ -103,7 +103,7 @@ const StoredAttachment$json = const {
 const StoredAttachment_Status$json = const {
   '1': 'Status',
   '2': const [
-    const {'1': 'PENDING_ENCRYPTION', '2': 0},
+    const {'1': 'PENDING', '2': 0},
     const {'1': 'PENDING_UPLOAD', '2': 1},
     const {'1': 'DONE', '2': 2},
     const {'1': 'FAILED', '2': 3},
@@ -111,7 +111,7 @@ const StoredAttachment_Status$json = const {
 };
 
 /// Descriptor for `StoredAttachment`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storedAttachmentDescriptor = $convert.base64Decode('ChBTdG9yZWRBdHRhY2htZW50EhIKBGd1aWQYASABKAlSBGd1aWQSMQoKYXR0YWNobWVudBgCIAEoCzIRLm1vZGVsLkF0dGFjaG1lbnRSCmF0dGFjaG1lbnQSLAoRcGxhaW5UZXh0RmlsZVBhdGgYBSABKAlSEXBsYWluVGV4dEZpbGVQYXRoEiwKEWVuY3J5cHRlZEZpbGVQYXRoGAMgASgJUhFlbmNyeXB0ZWRGaWxlUGF0aBI2CgZzdGF0dXMYBCABKA4yHi5tb2RlbC5TdG9yZWRBdHRhY2htZW50LlN0YXR1c1IGc3RhdHVzEjUKCXRodW1ibmFpbBgGIAEoCzIXLm1vZGVsLlN0b3JlZEF0dGFjaG1lbnRSCXRodW1ibmFpbCJKCgZTdGF0dXMSFgoSUEVORElOR19FTkNSWVBUSU9OEAASEgoOUEVORElOR19VUExPQUQQARIICgRET05FEAISCgoGRkFJTEVEEAM=');
+final $typed_data.Uint8List storedAttachmentDescriptor = $convert.base64Decode('ChBTdG9yZWRBdHRhY2htZW50EhIKBGd1aWQYASABKAlSBGd1aWQSMQoKYXR0YWNobWVudBgCIAEoCzIRLm1vZGVsLkF0dGFjaG1lbnRSCmF0dGFjaG1lbnQSLAoRcGxhaW5UZXh0RmlsZVBhdGgYBSABKAlSEXBsYWluVGV4dEZpbGVQYXRoEiwKEWVuY3J5cHRlZEZpbGVQYXRoGAMgASgJUhFlbmNyeXB0ZWRGaWxlUGF0aBI2CgZzdGF0dXMYBCABKA4yHi5tb2RlbC5TdG9yZWRBdHRhY2htZW50LlN0YXR1c1IGc3RhdHVzEjUKCXRodW1ibmFpbBgGIAEoCzIXLm1vZGVsLlN0b3JlZEF0dGFjaG1lbnRSCXRodW1ibmFpbCI/CgZTdGF0dXMSCwoHUEVORElORxAAEhIKDlBFTkRJTkdfVVBMT0FEEAESCAoERE9ORRACEgoKBkZBSUxFRBAD');
 @$core.Deprecated('Use attachmentWithThumbnailDescriptor instead')
 const AttachmentWithThumbnail$json = const {
   '1': 'AttachmentWithThumbnail',

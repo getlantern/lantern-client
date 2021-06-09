@@ -46,8 +46,8 @@ message Attachment {
 // A locally stored Attachment
 message StoredAttachment {
   enum Status {
-    PENDING_ENCRYPTION = 0; // attachment has not yet been encrypted
-    PENDING_UPLOAD = 1; // attachment has not yet been uploaded/downloaded
+    PENDING = 0; // attachment has not yet been encrypted
+    PENDING_UPLOAD = 1; // attachment has not yet been uploaded
     DONE = 2; // attachment has been uploaded/downloaded
     FAILED = 3; // attachment permanently failed to encrypt or upload/download
   }
