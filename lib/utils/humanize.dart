@@ -26,22 +26,29 @@ extension Humanize on int {
       var weekday = DateFormat('EEEE').format(localDateTime);
       return '$weekday, $roughTimeString';
     }
-    // TODO: Something is wrong with the year here
     return '${DateFormat('yMd').format(dateTime)}, $roughTimeString';
   }
 
   String humanizeSeconds({bool longForm = false}) {
     // TODO: unit test this
-    // TODO: localize the string portions of the below
     if (this < 60) {
-      return toString() + (longForm ? ' seconds' : 's');
+      return toString() + (longForm ? ' seconds' : 's'); // TODO: add i18n
     }
     if (this < 3600) {
-      return (this ~/ 60).toString() + (longForm ? ' minutes' : 'm');
+      return (this ~/ 60).toString() +
+          (longForm
+              ? ' minute${(this ~/ 60) > 1 ? 's' : ''}'
+              : 'm'); // TODO: add i18n
     }
     if (this < 86400) {
-      return (this ~/ 3600).toString() + (longForm ? ' hours' : 'h');
+      return (this ~/ 3600).toString() +
+          (longForm
+              ? ' hour${(this ~/ 3600) > 1 ? 's' : ''}'
+              : 'h'); // TODO: add i18n
     }
-    return (this ~/ 86400).toString() + (longForm ? ' days' : 'd');
+    return (this ~/ 86400).toString() +
+        (longForm
+            ? ' day${(this ~/ 86400) > 1 ? 's' : ''}'
+            : 'd'); // TODO: add i18n
   }
 }
