@@ -5,21 +5,19 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
+import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
@@ -110,7 +108,6 @@ class _ConversationState extends State<Conversation>
       replyToId: replyToId,
       replyToSenderId: replyToSenderId,
     );
-    dismissKeyboard();
     _newMessage.clear();
     setState(() {
       _quotedMessage = null;
@@ -254,7 +251,6 @@ class _ConversationState extends State<Conversation>
     _send(_newMessage.value.text,
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
-    dismissKeyboard();
   }
 
   @override
@@ -483,13 +479,13 @@ class _ConversationState extends State<Conversation>
                 ..selection = TextSelection.fromPosition(
                     TextPosition(offset: _newMessage.text.length));
             },
-            config: const Config(
+            config: Config(
               columns: 10,
               emojiSizeMax: 17.0,
               verticalSpacing: 0,
               horizontalSpacing: 0,
               initCategory: Category.SMILEYS,
-              bgColor: Color(0xFFF2F2F2),
+              bgColor: const Color(0xFFF2F2F2),
               // TODO: generalize in theme
               indicatorColor: Colors.black,
               // TODO: generalize in theme
@@ -502,10 +498,11 @@ class _ConversationState extends State<Conversation>
               // TODO: generalize in theme
               showRecentsTab: true,
               recentsLimit: 28,
-              noRecentsText: 'No Recents',
-              noRecentsStyle: TextStyle(fontSize: 16, color: Colors.black26),
+              noRecentsText: 'No Recents'.i18n,
+              noRecentsStyle:
+                  const TextStyle(fontSize: 16, color: Colors.black26),
               // TODO: generalize in theme
-              categoryIcons: CategoryIcons(),
+              categoryIcons: const CategoryIcons(),
               buttonMode: ButtonMode.MATERIAL,
             )),
       ),
