@@ -154,7 +154,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getDeviceExp(): Long {
-        return prefs.getLong(DEVICE_CODE_EXP, 0)
+        return getLong(DEVICE_CODE_EXP, 0)
     }
 
     fun yinbiEnabled(): Boolean {
@@ -195,7 +195,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getExpiration(): LocalDateTime? {
-        val expiration = prefs.getLong(EXPIRY_DATE, 0L)
+        val expiration = getLong(EXPIRY_DATE, 0L)
         return if (expiration == 0L) {
             null
         } else LocalDateTime(expiration * 1000)
@@ -212,7 +212,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // Show only once to free users. (If set, don't show)
         // Also, if the install isn't new-ish, we won't start showing them a welcome.
-        return isRecentInstall && prefs.getLong(WELCOME_LAST_SEEN, 0) == 0L
+        return isRecentInstall && getLong(WELCOME_LAST_SEEN, 0) == 0L
     }
 
     fun numProMonths(): Int {
