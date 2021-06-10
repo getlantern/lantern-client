@@ -167,12 +167,12 @@ vendor: $(GO_VENDOR_SOURCES)
 .PHONY: tag
 tag: require-version
 	@(git diff-index --quiet HEAD -- || (echo "Attempted to tag dirty working tree" && exit 1)) && \
+	echo "Tagging..." && \
+	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
 	echo "Updating $(CHANGELOG_NAME)" && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated lantern changelog for $$VERSION" && \
-	echo "Tagging..." && \
-	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
 	git push --tags --force-with-lease
 
 define check-go-version
