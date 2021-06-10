@@ -28,6 +28,7 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.ApkSignature;
+import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.repository.ApkRepository;
 import org.getlantern.lantern.util.SignUtil;
 import org.getlantern.mobilesdk.Logger;
@@ -211,39 +212,6 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             return false;
         }
 
-        // show an alert when the update fails
-        // and mention where the user can download the latest version
-        // this also dismisses the current updater activity
-        private void displayError() {
-
-            AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-            alertDialog.setTitle(context.getString(R.string.error_update));
-            alertDialog.setMessage(context.getString(R.string.manual_update));
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            activity.finish();
-                        }
-                    });
-            alertDialog.show();
-        }
-
-        // show an alert notifying the user that the downloaded apk has been tampered
-        private void displayTamperedApk() {
-            AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-            alertDialog.setTitle(context.getString(R.string.error_update));
-            alertDialog.setMessage(context.getString(R.string.tampered_apk));
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            activity.finish();
-                        }
-                    });
-            alertDialog.show();
-        }
-
         /**
          * Updating progress bar
          */
@@ -271,19 +239,19 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
             if (!result) {
                 Logger.debug(TAG, "Error trying to install Lantern update");
-                displayError();
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
                 return;
             }
 
             Logger.debug(TAG, "About to install new version of Lantern Android");
             if (!apkPath.isFile()) {
                 Logger.error(TAG, "Error loading APK; not found at " + apkPath);
-                displayError();
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
                 return;
             }
             final ApkSignature apkSignatures = apkRepository.getApkSignature(this.context, apkPath);
             if(!apkRepository.isSignatureValid(apkSignatures)){
-                displayTamperedApk();
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.tampered_apk), false);
                 return;
             }
             Intent i = new Intent();
@@ -298,9 +266,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                         apkPath);
             }
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
-
             this.context.startActivity(i);
-
             activity.finish();
         }
     }
