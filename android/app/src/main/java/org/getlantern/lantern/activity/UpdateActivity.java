@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,6 +27,9 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.ApkSignature;
+import org.getlantern.lantern.repository.ApkRepository;
+import org.getlantern.lantern.util.SignUtil;
 import org.getlantern.mobilesdk.Logger;
 
 import java.io.File;
@@ -145,6 +149,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         private final Context context;
         private final File apkDir;
         private final File apkPath;
+        private ApkRepository apkRepository = new ApkRepository();
 
         public UpdaterTask(final UpdateActivity activity) {
             context = activity.getApplicationContext();
@@ -224,6 +229,21 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             alertDialog.show();
         }
 
+        // show an alert notifying the user that the downloaded apk has been tampered
+        private void displayTamperedApk() {
+            AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+            alertDialog.setTitle(context.getString(R.string.error_update));
+            alertDialog.setMessage(context.getString(R.string.tampered_apk));
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            activity.finish();
+                        }
+                    });
+            alertDialog.show();
+        }
+
         /**
          * Updating progress bar
          */
@@ -261,7 +281,11 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                 displayError();
                 return;
             }
-
+            final ApkSignature apkSignatures = apkRepository.getApkSignature(this.context, apkPath);
+            if(!apkRepository.isSignatureValid(apkSignatures)){
+                displayTamperedApk();
+                return;
+            }
             Intent i = new Intent();
             i.setAction(Intent.ACTION_VIEW);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -273,7 +297,6 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                         "org.getlantern.lantern.fileProvider",
                         apkPath);
             }
-            ;
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
 
             this.context.startActivity(i);

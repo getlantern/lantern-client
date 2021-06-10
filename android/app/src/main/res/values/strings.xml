@@ -553,4 +553,5 @@
     <string name="connection_error">Connection Error</string>
     <string name="reopen_to_try">Please re-open %1$s to try again.</string>
     <string name="init_account">%1$s is initializing your account, this may take a moment.</string>
+    <string name="tampered_apk">The downloaded apk has been compromised, please download the official version</string>
 </resources>
