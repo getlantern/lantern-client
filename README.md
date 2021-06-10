@@ -191,6 +191,28 @@ You can find the exact values to add to your gradle.properties under the "Androi
 Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to
 Google Play.
 
+To build all release packages, run:
+
+##### Building Release Packages
+
+```
+VERSION=<version here> make package-android
+```
+
+##### Tagging a Release
+
+This creates a git tag and updates CHANGELOG.md for the currently checked out code.
+
+```
+VERSION=<version here> make tag
+```
+
+##### Deploying a Release to QA
+
+```
+VERSION=<version here> make release-qa
+```
+
 ##### Testing Auto-Update with Release Builds
 Sometimes you may need to make a release bulid with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
 

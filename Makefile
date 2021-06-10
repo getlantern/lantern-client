@@ -164,23 +164,16 @@ $(GO_VENDOR_SOURCES): go.mod go.sum
 
 vendor: $(GO_VENDOR_SOURCES)
 
-# This tags the current version, both with an app-specific tag and with a global tag.
-define tagrepo
-	echo "Tagging..." && \
-	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
-	git push --tags -f
-endef
-
-# This creates a changelog to the specified tag.
-define changelog
-	git checkout develmaster && \
-	git pull && \
+.PHONY: tag
+tag: require-version
+	@(git diff-index --quiet HEAD -- || (echo "Attempted to tag dirty working tree" && exit 1)) && \
+	echo "Updating $(CHANGELOG_NAME)" && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated lantern changelog for $$VERSION" && \
-	git push origin master && \
-	git checkout -
-endef
+	echo "Tagging..." && \
+	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
+	git push --tags --force-with-lease
 
 define check-go-version
     if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
