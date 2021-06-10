@@ -1,31 +1,20 @@
 package org.getlantern.lantern.repository
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.pm.SigningInfo
+import android.content.pm.*
 import org.getlantern.lantern.model.ApkSignature
 import org.getlantern.lantern.util.SignUtil
 import java.io.File
+import org.getlantern.lantern.BuildConfig
 
-interface ApkRepository {
-    fun getApkDetail(context: Context, file: File): ApplicationInfo?
-    fun getSignatures(context: Context, file: File): ApkSignature?
-}
+class ApkRepository {
 
-class ApkRepositoryImplement: ApkRepository{
-    override fun getApkDetail(context: Context, file: File): ApplicationInfo? {
-        val packageManager = context.packageManager
-        val realPath: String = file.absolutePath
-        val info: PackageInfo = packageManager.getPackageArchiveInfo(realPath, 0) ?: return null
-        val applicationInfo: ApplicationInfo = info.applicationInfo
-        applicationInfo.sourceDir = realPath
-        applicationInfo.publicSourceDir = realPath
-        return applicationInfo
+    fun isSignatureValid(apkSignature: ApkSignature?): Boolean{
+        if(apkSignature == null || apkSignature.sha256 == null || apkSignature.sha256.isEmpty()) return false
+    return apkSignature.concatSHA256() == BuildConfig.SIGNIN_CERTIFICATE_SHA256
     }
 
-    override fun getSignatures(context: Context, file: File): ApkSignature? {
+     fun getApkSignature(context: Context, file: File): ApkSignature? {
         val packageManager =  context.packageManager
         val apkSignature = ApkSignature()
         var info: PackageInfo?
@@ -36,16 +25,12 @@ class ApkRepositoryImplement: ApkRepository{
             }
             if(info == null) return null
             val signingInfo: SigningInfo? = info.signingInfo
-            val signatures: Array<android.content.pm.Signature>? =
+            val signatures: Array<Signature>? =
                 if (signingInfo == null) info.signatures else signingInfo.apkContentsSigners
             if (signatures != null) {
-                apkSignature.md5 = Array(signatures.size){ ""}
-                apkSignature.sha1 = Array(signatures.size){ ""}
                 apkSignature.sha256 = Array(signatures.size){ ""}
                 for (i in signatures.indices) {
                     val data = signatures[i].toByteArray()
-                    apkSignature.md5[i] = SignUtil.getMD5(data)
-                    apkSignature.sha1[i] = SignUtil.getSHA1(data)
                     apkSignature.sha256[i] = SignUtil.getSHA256(data)
                 }
             }
@@ -53,13 +38,9 @@ class ApkRepositoryImplement: ApkRepository{
             info = packageManager.getPackageArchiveInfo(file.absolutePath, PackageManager.GET_SIGNATURES)
             val signatures = info.signatures
             if (signatures != null) {
-                apkSignature.md5 = Array(signatures.size){ ""}
-                apkSignature.sha1 = Array(signatures.size){ ""}
                 apkSignature.sha256 = Array(signatures.size){ ""}
                 for (i in signatures.indices) {
                     val data = signatures[i].toByteArray()
-                    apkSignature.md5[i] = SignUtil.getMD5(data)
-                    apkSignature.sha1[i] = SignUtil.getSHA1(data)
                     apkSignature.sha256[i] = SignUtil.getSHA256(data)
                 }
             }
