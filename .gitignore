@@ -56,3 +56,5 @@ gradle.properties
 *.apk
 *.aab
 *.bz2
+*.sha256
+version-qa.txt
