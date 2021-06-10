@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import android.Session;
+import internalsdk.Session;
 
 
 /**
@@ -40,7 +40,7 @@ public abstract class Lantern {
      * @param locale
      * @param config
      * @param settings
-     * @return the {@link android.Lantern.StartResult} with port information about the started
+     * @return the {@link internalsdk.Lantern.StartResult} with port information about the started
      * lantern
      */
     public static StartResult enable(final Context context,
@@ -150,7 +150,7 @@ public abstract class Lantern {
      */
     public static void addLoggingMetadata(
             final String key, final String value) {
-        android.Android.addLoggingMetadata(key, value);
+        internalsdk.Internalsdk.addLoggingMetadata(key, value);
     }
 
     private static void trackStartSession(final Context context) {
