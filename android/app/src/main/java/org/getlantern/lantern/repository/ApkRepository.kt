@@ -10,8 +10,8 @@ import java.io.File
 class ApkRepository {
 
     fun isSignatureValid(apkSignature: ApkSignature?): Boolean {
-        if (apkSignature == null || apkSignature.sha256 == null || apkSignature.sha256.isEmpty()) return false
-        return apkSignature.concatSHA256() == BuildConfig.SIGNIN_CERTIFICATE_SHA256
+        if (apkSignature?.sha256 == null || apkSignature.sha256.isEmpty()) return false
+        return apkSignature.concatSHA256() == BuildConfig.SIGNING_CERTIFICATE_SHA256
     }
 
     fun getApkSignature(context: Context, file: File): ApkSignature? {
