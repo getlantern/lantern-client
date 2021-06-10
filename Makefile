@@ -11,7 +11,7 @@ lib/model/protos_shared/vpn.pb.dart: protos_shared/*.proto
 
 GO_VERSION := 1.16
 
-TAG ?= lantern-$$VERSION
+TAG ?= $$VERSION
 INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
@@ -174,7 +174,7 @@ tag: require-version
 	echo "Updating $(CHANGELOG_NAME)" && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
 	git add $(CHANGELOG_NAME) && \
-	git commit -m "Updated lantern changelog for $$VERSION" && \
+	git commit -m "Updated changelog for $$VERSION" && \
 	git push
 
 define check-go-version
@@ -264,7 +264,7 @@ release-qa: require-version require-s3cmd require-changelog
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
-	
+
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-beta.txt" && \
