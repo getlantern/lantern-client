@@ -1,4 +1,10 @@
 
+<a name="6.7.1"></a>
+## [6.7.1](https://github.com/getlantern/android-lantern/compare/lantern-6.7.1...6.7.1)
+
+> 2021-06-10
+
+
 <a name="lantern-6.7.1"></a>
 ## [lantern-6.7.1](https://github.com/getlantern/android-lantern/compare/lantern-6.7.0...lantern-6.7.1)
 
