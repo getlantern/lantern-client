@@ -53,3 +53,6 @@ app.*.map.json
 
 gradle.properties.user
 gradle.properties
+*.apk
+*.aab
+*.bz2
