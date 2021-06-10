@@ -263,9 +263,8 @@ release-qa: require-version require-s3cmd require-changelog
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
-	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
-	$(call changelog,android-lantern)
-
+	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
+	
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-beta.txt" && \
