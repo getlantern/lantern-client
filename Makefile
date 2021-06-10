@@ -167,6 +167,7 @@ vendor: $(GO_VENDOR_SOURCES)
 .PHONY: tag
 tag: require-version
 	@(git diff-index --quiet HEAD -- || (echo "Attempted to tag dirty working tree" && exit 1)) && \
+	git pull && \
 	echo "Tagging..." && \
 	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
 	echo "Updating $(CHANGELOG_NAME)" && \
