@@ -170,11 +170,12 @@ tag: require-version
 	git pull && \
 	echo "Tagging..." && \
 	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
+	git push --force-with-lease origin $(TAG) && \
 	echo "Updating $(CHANGELOG_NAME)" && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated lantern changelog for $$VERSION" && \
-	git push --tags --force-with-lease
+	git push
 
 define check-go-version
     if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
