@@ -9,7 +9,7 @@ protos: lib/model/protos_shared/vpn.pb.dart
 lib/model/protos_shared/vpn.pb.dart: protos_shared/*.proto
 	@mkdir -p lib/model && protoc --dart_out=./lib/model --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/*.proto
 
-GO_VERSION := 1.15
+GO_VERSION := 1.16
 
 TAG ?= lantern-$$VERSION
 INSTALLER_NAME ?= lantern-installer
