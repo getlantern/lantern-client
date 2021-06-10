@@ -51,7 +51,7 @@ BRANCH ?= master
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-ANDROID_S3_BUCKET ?= lantern-android
+S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
@@ -173,12 +173,12 @@ endef
 
 # This creates a changelog to the specified tag.
 define changelog
-	git checkout devel && \
+	git checkout develmaster && \
 	git pull && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated lantern changelog for $$VERSION" && \
-	git push origin devel && \
+	git push origin master && \
 	git checkout -
 endef
 
@@ -248,6 +248,7 @@ release-qa: require-version require-s3cmd require-changelog
 	rm -f $$BASE_NAME* && \
 	cp $(INSTALLER_NAME)-arm32.apk $$BASE_NAME.apk && \
 	cp lantern-all.aab $$BASE_NAME.aab && \
+	echo "Uploading installer packages and shasums" && \
 	for NAME in $$(ls -1 $$BASE_NAME*.*); do \
 		shasum -a 256 $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
 		echo "Uploading SHA-256 `cat $$NAME.sha256`" && \
@@ -261,6 +262,7 @@ release-qa: require-version require-s3cmd require-changelog
 		echo "Copied $$VERSIONED ... setting acl to public" && \
 		$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
 	done && \
+	echo "Setting content types for installer packages" && \
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
 		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
