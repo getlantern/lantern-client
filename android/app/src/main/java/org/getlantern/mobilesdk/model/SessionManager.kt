@@ -1,7 +1,5 @@
 package org.getlantern.mobilesdk.model
 
-import android.AdSettings
-import android.Session
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -12,6 +10,8 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
+import internalsdk.AdSettings
+import internalsdk.Session
 import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
