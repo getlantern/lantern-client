@@ -19,7 +19,6 @@ import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 
-
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
  * settings can be observed.
