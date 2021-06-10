@@ -123,7 +123,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun hasAcceptedTerms(): Boolean {
-        return prefs.getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
+        return getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
     }
 
     fun acceptTerms() {
@@ -147,7 +147,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     var showAdsAfterDays: Long
-        get() = prefs.getLong(SHOW_ADS_AFTER_DAYS, 0L)
+        get() = getLong(SHOW_ADS_AFTER_DAYS, 0L)
         set(days) {
             prefs.edit().putLong(SHOW_ADS_AFTER_DAYS, days).apply()
         }
@@ -363,7 +363,7 @@ abstract class SessionManager(application: Application) : Session {
         return try {
             prefs.getInt(name, defaultValue)
         } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
+            Logger.debug(TAG, e.message)
             try {
                 prefs.getLong(name, defaultValue.toLong()).toInt()
             } catch (e2: ClassCastException) {
@@ -373,11 +373,11 @@ abstract class SessionManager(application: Application) : Session {
         }
     }
 
-    private fun getLong(name: String?, defaultValue: Long): Long {
+    protected fun getLong(name: String?, defaultValue: Long): Long {
         return try {
             prefs.getLong(name, defaultValue)
         } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
+            Logger.debug(TAG, e.message)
             try {
                 prefs.getInt(name, defaultValue.toInt()).toLong()
             } catch (e2: ClassCastException) {
@@ -394,7 +394,7 @@ abstract class SessionManager(application: Application) : Session {
      * before, false is returned.
      */
     fun hasPrefExpired(name: String?): Boolean {
-        val expires = prefs.getLong(name, 0)
+        val expires = getLong(name, 0)
         return System.currentTimeMillis() >= expires
     }
 
