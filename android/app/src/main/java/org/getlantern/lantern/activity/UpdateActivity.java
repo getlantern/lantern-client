@@ -1,14 +1,11 @@
 package org.getlantern.lantern.activity;
 
-import internalsdk.Internalsdk;
-import internalsdk.Updater;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,7 +13,6 @@ import android.provider.Settings;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -26,14 +22,17 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.ApkSignature;
 import org.getlantern.lantern.model.Utils;
-import org.getlantern.lantern.repository.ApkRepository;
-import org.getlantern.lantern.util.SignUtil;
+import org.getlantern.lantern.util.ApkSignatureVerifier;
+import org.getlantern.lantern.util.SignatureVerificationException;
 import org.getlantern.mobilesdk.Logger;
 
 import java.io.File;
+
+import internalsdk.Internalsdk;
+import internalsdk.Updater;
 
 @EActivity(R.layout.activity_updater)
 public class UpdateActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -139,7 +138,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Logger.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+            Logger.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
             installUpdate();
         }
     }
@@ -150,7 +149,6 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         private final Context context;
         private final File apkDir;
         private final File apkPath;
-        private ApkRepository apkRepository = new ApkRepository();
 
         public UpdaterTask(final UpdateActivity activity) {
             context = activity.getApplicationContext();
@@ -212,6 +210,26 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             return false;
         }
 
+        // show an alert when the update fails
+        // and mention where the user can download the latest version
+        // this also dismisses the current updater activity
+        private void displayError() {
+            Utils.showAlertDialog(
+                    activity,
+                    context.getString(R.string.error_update),
+                    context.getString(R.string.tampered_apk),
+                    true);
+        }
+
+        // show an alert notifying the user that the downloaded apk has been tampered
+        private void displayTamperedApk() {
+            Utils.showAlertDialog(
+                    activity,
+                    context.getString(R.string.error_install_update),
+                    context.getString(R.string.manual_update),
+                    true);
+        }
+
         /**
          * Updating progress bar
          */
@@ -249,9 +267,14 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                 Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
                 return;
             }
-            final ApkSignature apkSignatures = apkRepository.getApkSignature(this.context, apkPath);
-            if(!apkRepository.isSignatureValid(apkSignatures)){
-                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.tampered_apk), false);
+            try {
+                ApkSignatureVerifier.verify(
+                        context,
+                        apkPath,
+                        BuildConfig.SIGNING_CERTIFICATE_SHA256);
+            } catch (SignatureVerificationException sfe) {
+                Logger.error(TAG, "Error installing update", sfe);
+                displayTamperedApk();
                 return;
             }
             Intent i = new Intent();
