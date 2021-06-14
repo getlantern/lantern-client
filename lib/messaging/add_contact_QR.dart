@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/button.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -20,6 +21,7 @@ class _AddViaQRState extends State<AddViaQR> {
   TextEditingController displayName = TextEditingController();
 
   var scanning = false;
+  var isVerified = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -50,6 +52,9 @@ class _AddViaQRState extends State<AddViaQR> {
         var contact = Contact.fromJson(scanData.code);
         contactId.text = contact.contactId.id;
         displayName.text = contact.displayName;
+        setState(() {
+          isVerified = true;
+        });
       } finally {
         qrController?.pauseCamera();
         setState(() {
@@ -83,96 +88,43 @@ class _AddViaQRState extends State<AddViaQR> {
         child: Column(
           children: [
             Container(
-              height: 200,
+              height: 400,
               child: QRView(
                 key: _qrKey,
                 onQRViewCreated: _onQRViewCreated,
               ),
             ),
-            Form(
-              key: _formKey,
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (scanning) {
-                        await qrController?.pauseCamera();
-                        setState(() {
-                          scanning = false;
-                        });
-                      } else {
-                        await qrController?.resumeCamera();
-                        setState(() {
-                          scanning = true;
-                        });
-                      }
-                    },
-                    child: Text(
-                        scanning ? 'Stop Scanning'.i18n : 'Scan QR Code'.i18n),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    controller: contactId,
-                    minLines: 2,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      labelText: 'Messenger ID'.i18n,
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value?.length != 52) {
-                        return 'Please enter a 52 digit Messenger ID'.i18n;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    controller: displayName,
-                    decoration: InputDecoration(
-                      labelText: 'Name'.i18n,
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name for this contact'.i18n;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+            Column(children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                    'To start a message with your friend, scan each others QR code.  This process will verify the security and end-to-end encryption of your conversation.'
+                        .i18n),
+              ),
+              if (isVerified)
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
+                        Button(
+                          text: 'Continue to message'.i18n,
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              context.loaderOverlay.show();
-                              try {
-                                await model.addOrUpdateDirectContact(
-                                    contactId.value.text,
-                                    displayName.value.text);
-                                // Navigator.pushNamedAndRemoveUntil(
-                                //     context, 'conversations', (r) => false);
-                                Navigator.pop(context);
-                              } finally {
-                                context.loaderOverlay.hide();
-                              }
+                            context.loaderOverlay.show();
+                            try {
+                              await model.addOrUpdateDirectContact(
+                                  contactId.value.text, displayName.value.text);
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //     context, 'conversations', (r) => false);
+                              Navigator.pop(context);
+                            } finally {
+                              context.loaderOverlay.hide();
                             }
                           },
-                          child: Text('Continue'.i18n),
                         ),
                       ]),
                 )
-              ]),
-            ),
+            ]),
           ],
         ),
       ),
