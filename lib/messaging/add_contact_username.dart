@@ -1,5 +1,8 @@
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/button.dart';
+import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaUsername extends StatefulWidget {
@@ -9,9 +12,9 @@ class AddViaUsername extends StatefulWidget {
 
 class _AddViaUsernameState extends State<AddViaUsername> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'Contact Form');
+  Contact? contact;
 
-  TextEditingController contactId = TextEditingController();
-  TextEditingController displayName = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,73 +31,58 @@ class _AddViaUsernameState extends State<AddViaUsername> {
             }),
       ],
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    controller: contactId,
-                    minLines: 2,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      labelText: 'Messenger ID'.i18n,
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value?.length != 52) {
-                        return 'Please enter a 52 digit Messenger ID'.i18n;
-                      }
-                      return null;
-                    },
+        child: Form(
+          key: _formKey,
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: CustomTextField(
+                  controller: usernameController,
+                  label: 'Username'.i18n,
+                  helperText:
+                      'Enter a username to start a message conversation'.i18n,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const Icon(
+                    Icons.email,
+                    color: Colors.black,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    controller: displayName,
-                    decoration: InputDecoration(
-                      labelText: 'Name'.i18n,
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name for this contact'.i18n;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              context.loaderOverlay.show();
-                              try {
-                                await model.addOrUpdateDirectContact(
-                                    contactId.value.text,
-                                    displayName.value.text);
-                                // Navigator.pushNamedAndRemoveUntil(
-                                //     context, 'conversations', (r) => false);
-                                Navigator.pop(context);
-                              } finally {
-                                context.loaderOverlay.hide();
-                              }
-                            }
-                          },
-                          child: Text('Continue'.i18n),
-                        ),
-                      ]),
-                )
-              ]),
+                  validator: (value) {
+                    try {
+                      setState(() {
+                        contact = model.getContactFromUsername(
+                            usernameController.value.text) as Contact;
+                      });
+                    } catch (e) {
+                      return 'Username not found'.i18n;
+                    }
+                  }),
             ),
-          ],
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Button(
+                  width: 200,
+                  text: 'Start Message'.i18n,
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      context.loaderOverlay.show();
+                      try {
+                        await model.addOrUpdateDirectContact(
+                            contact!.contactId.id,
+                            usernameController.value.text);
+                        // Navigator.pushNamedAndRemoveUntil(
+                        //     context, 'conversations', (r) => false);
+                        Navigator.pop(context);
+                      } finally {
+                        context.loaderOverlay.hide();
+                      }
+                    }
+                  },
+                ),
+              ]),
+            )
+          ]),
         ),
       ),
     );
