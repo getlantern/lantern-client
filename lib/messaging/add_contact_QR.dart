@@ -6,12 +6,12 @@ import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class AddContact extends StatefulWidget {
+class AddViaQR extends StatefulWidget {
   @override
-  _AddContactState createState() => _AddContactState();
+  _AddViaQRState createState() => _AddViaQRState();
 }
 
-class _AddContactState extends State<AddContact> {
+class _AddViaQRState extends State<AddViaQR> {
   final _qrKey = GlobalKey(debugLabel: 'QR');
   final _formKey = GlobalKey<FormState>(debugLabel: 'Contact Form');
 

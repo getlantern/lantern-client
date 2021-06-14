@@ -187,7 +187,7 @@ msgid "Add Device"
 msgstr "Add Device"
 
 msgid "approve_device_step_1"
-msgstr "Open 'Authorize Device for Pro' from the account menu on the device you wish to link, then select 'Link with PIN'.
+msgstr "Open 'Authorize Device for Pro' from the account menu on the device you wish to link, then select 'Link with PIN'."
 
 msgid "approve_device_step_2"
 msgstr "Enter the linking code obtained from step 1"
