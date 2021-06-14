@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
@@ -315,7 +316,7 @@ class _ConversationState extends State<Conversation>
               padding: const EdgeInsets.all(8),
               child: _buildMessageBar(context),
             ),
-            if (_emojiShowing) _buildEmojiKeyboard(),
+            _buildEmojiKeyboard(width: 150.0),
           ]),
           // Voice recorder
           if (_recording)
@@ -457,55 +458,22 @@ class _ConversationState extends State<Conversation>
     ]);
   }
 
-  Offstage _buildEmojiKeyboard() {
-    // https://github.com/Fintasys/emoji_picker_flutter
-    return Offstage(
-      offstage: !_emojiShowing,
-      child: Container(
-        height: 200,
-        child: EmojiPicker(
-            onEmojiSelected: (Category category, Emoji emoji) {
-              setState(() {
-                _isSendIconVisible = true;
-              });
-              _newMessage
-                ..text += emoji.emoji
-                ..selection = TextSelection.fromPosition(
-                    TextPosition(offset: _newMessage.text.length));
-            },
-            onBackspacePressed: () {
-              _newMessage
-                ..text = _newMessage.text.characters.skipLast(1).toString()
-                ..selection = TextSelection.fromPosition(
-                    TextPosition(offset: _newMessage.text.length));
-            },
-            config: Config(
-              columns: 10,
-              emojiSizeMax: 17.0,
-              verticalSpacing: 0,
-              horizontalSpacing: 0,
-              initCategory: Category.SMILEYS,
-              bgColor: const Color(0xFFF2F2F2),
-              // TODO: generalize in theme
-              indicatorColor: Colors.black,
-              // TODO: generalize in theme
-              iconColor: Colors.grey,
-              iconColorSelected: Colors.black,
-              // TODO: generalize in theme
-              progressIndicatorColor: Colors.black,
-              // TODO: generalize in theme
-              backspaceColor: Colors.black,
-              // TODO: generalize in theme
-              showRecentsTab: true,
-              recentsLimit: 28,
-              noRecentsText: 'No Recents'.i18n,
-              noRecentsStyle:
-                  const TextStyle(fontSize: 16, color: Colors.black26),
-              // TODO: generalize in theme
-              categoryIcons: const CategoryIcons(),
-              buttonMode: ButtonMode.MATERIAL,
-            )),
-      ),
-    );
-  }
+  Widget _buildEmojiKeyboard({required double width}) => MessagingEmojiPicker(
+        showEmojis: _emojiShowing,
+        emptySuggestions: 'No Recents'.i18n,
+        width: width,
+        onBackspacePressed: () {
+          _newMessage
+            ..text = _newMessage.text.characters.skipLast(1).toString()
+            ..selection = TextSelection.fromPosition(
+                TextPosition(offset: _newMessage.text.length));
+        },
+        onEmojiSelected: (category, emoji) {
+          setState(() => _isSendIconVisible = true);
+          _newMessage
+            ..text += emoji.emoji
+            ..selection = TextSelection.fromPosition(
+                TextPosition(offset: _newMessage.text.length));
+        },
+      );
 }
