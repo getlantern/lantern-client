@@ -136,6 +136,13 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
+  Future<Contact?> getContactFromUsername<T>(String username) {
+    return methodChannel
+        .invokeMethod('getContactFromUsername', <String, dynamic>{
+      'username': username,
+    });
+  }
+
   Widget contactsByActivity(
       {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
     return subscribedListBuilder<Contact>('/cba/',

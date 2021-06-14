@@ -883,9 +883,11 @@ packages:
   wechat_assets_picker:
     dependency: "direct main"
     description:
-      path: "../wechat_assets_picker"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "0c1cfba1e098ed2a9b6cfcce62318cdb22dd4f88"
+      url: "https://github.com/getlantern/wechat_assets_picker.git"
+    source: git
     version: "5.1.3"
   wechat_camera_picker:
     dependency: "direct main"
