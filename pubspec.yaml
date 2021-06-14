@@ -59,7 +59,7 @@ dependencies:
 
   pin_code_text_field: ^1.8.0
 
-  styled_text: ^2.0.0
+  styled_text: ^3.0.1
 
 dev_dependencies:
   flutter_test:
