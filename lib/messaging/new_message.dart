@@ -24,15 +24,20 @@ class NewMessage extends StatelessWidget {
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(
           leading: const Icon(Icons.person_add),
-          title: Text('Add Contact'.i18n),
+          title: Text('Add Contact by username'.i18n),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
           onTap: () {
-            Navigator.restorablePushNamed(context, '/add_contact');
+            Navigator.restorablePushNamed(context, '/add_contact_username');
           },
         ),
         const Divider(thickness: 1),
         ListTile(
-          leading: const Icon(Icons.group_add),
-          title: Text('New Group Message'.i18n),
+          leading: const Icon(Icons.qr_code),
+          title: Text('Scan QR Code'.i18n),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+          onTap: () {
+            Navigator.restorablePushNamed(context, '/add_contact_QR');
+          },
         ),
         const Divider(thickness: 1),
         Expanded(
@@ -42,8 +47,7 @@ class NewMessage extends StatelessWidget {
             var all = contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
               contacts.sort((a, b) {
-                var dc = (a.value.displayName)
-                    .compareTo(b.value.displayName);
+                var dc = (a.value.displayName).compareTo(b.value.displayName);
                 if (dc != 0) {
                   return dc;
                 }
