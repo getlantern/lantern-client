@@ -15,6 +15,13 @@
                 "--flavor",
                 "prod",
             ]
+          },
+          {
+            "name": "Widget Test",
+            "program": "test/widget_test.dart",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
           }
     ]
 }
