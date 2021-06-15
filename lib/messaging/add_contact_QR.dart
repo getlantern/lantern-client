@@ -18,11 +18,12 @@ class _AddViaQRState extends State<AddViaQR> {
   final _qrKey = GlobalKey(debugLabel: 'QR');
 
   QRViewController? qrController;
-  TextEditingController contactId = TextEditingController();
-  TextEditingController displayName = TextEditingController();
 
-  var scanning = false;
-  var isVerified = false;
+  bool scanning = false;
+  bool contactIsVerified = false;
+  bool contactVerifiedMe = false;
+  String? contactId;
+  String? displayName;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -51,10 +52,10 @@ class _AddViaQRState extends State<AddViaQR> {
     qrController?.scannedDataStream.listen((scanData) {
       try {
         var contact = Contact.fromJson(scanData.code);
-        contactId.text = contact.contactId.id;
-        displayName.text = contact.displayName;
+        contactId = contact.contactId.id;
+        displayName = contact.displayName;
         setState(() {
-          isVerified = true;
+          contactIsVerified = true;
         });
       } finally {
         qrController?.pauseCamera();
@@ -86,11 +87,10 @@ class _AddViaQRState extends State<AddViaQR> {
               }),
         ],
         body: model.me((BuildContext context, Contact me, Widget? child) {
-          displayName.text = me.displayName;
-
           return SingleChildScrollView(
               child: Container(
             height: 100.h,
+            width: 100.w,
             color: Colors.black,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -105,9 +105,20 @@ class _AddViaQRState extends State<AddViaQR> {
                         ),
                         width: 200,
                         height: 200,
-                        child: QRView(
-                          key: _qrKey,
-                          onQRViewCreated: _onQRViewCreated,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            QRView(
+                              key: _qrKey,
+                              onQRViewCreated: _onQRViewCreated,
+                            ),
+                            if (contactIsVerified)
+                              const Icon(
+                                Icons.check_circle_outline_outlined,
+                                size: 200,
+                                color: Colors.white,
+                              ),
+                          ],
                         ),
                       )),
                   Padding(
@@ -118,12 +129,33 @@ class _AddViaQRState extends State<AddViaQR> {
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
                         width: 200,
-                        height: 200,
-                        child: QrImage(
-                          data: me.writeToJson(),
-                          errorCorrectionLevel: QrErrorCorrectLevel.H,
-                          version: QrVersions.auto,
-                        ),
+                        height: 225,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  QrImage(
+                                    data: me.writeToJson(),
+                                    errorCorrectionLevel: QrErrorCorrectLevel.H,
+                                    version: QrVersions.auto,
+                                  ),
+                                  if (contactVerifiedMe)
+                                    const Icon(
+                                      Icons.check_circle_outline_outlined,
+                                      size: 200,
+                                      color: Colors.white,
+                                    ),
+                                ],
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Text(me.displayName,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ))),
+                            ]),
                       )),
                   Padding(
                     padding: const EdgeInsets.all(20),
@@ -135,30 +167,31 @@ class _AddViaQRState extends State<AddViaQR> {
                           style: const TextStyle(color: Colors.white),
                         )),
                   ),
-                  // if (isVerified)
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Button(
-                            text: 'Continue to message'.i18n,
-                            onPressed: () async {
-                              context.loaderOverlay.show();
-                              try {
-                                await model.addOrUpdateDirectContact(
-                                    contactId.value.text,
-                                    displayName.value.text);
-                                // Navigator.pushNamedAndRemoveUntil(
-                                //     context, 'conversations', (r) => false);
-                                Navigator.pop(context);
-                              } finally {
-                                context.loaderOverlay.hide();
-                              }
-                            },
-                          ),
-                        ]),
-                  )
+                  if (contactIsVerified | contactVerifiedMe)
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Button(
+                              text: 'Continue to message'.i18n,
+                              onPressed: () async {
+                                context.loaderOverlay.show();
+                                try {
+                                  await model.addOrUpdateDirectContact(
+                                      contactId!,
+                                      displayName!,
+                                      contactIsVerified | contactVerifiedMe);
+                                  // Navigator.pushNamedAndRemoveUntil(
+                                  //     context, 'conversations', (r) => false);
+                                  Navigator.pop(context);
+                                } finally {
+                                  context.loaderOverlay.hide();
+                                }
+                              },
+                            ),
+                          ]),
+                    )
                 ]),
           ));
         }));

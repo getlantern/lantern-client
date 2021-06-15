@@ -30,11 +30,12 @@ class MessagingModel extends Model {
   }
 
   Future<void> addOrUpdateDirectContact<T>(
-      String identityKey, String displayName) {
+      String identityKey, String displayName, bool isFullyVerified) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
       'identityKey': identityKey,
       'displayName': displayName,
+      'isFullyVerified': isFullyVerified,
     });
   }
 
