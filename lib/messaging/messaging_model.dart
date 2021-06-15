@@ -147,18 +147,18 @@ class MessagingModel extends Model {
   }
 
   // TODO: implement this on messaging-android
-  Future<bool> getMyVerificationStatus<T>(Contact contact) async {
+  Future<bool> getVerificationStatus<T>(Contact contact) async {
     return methodChannel
-        .invokeMethod('getMyVerificationStatus', <String, dynamic>{
+        .invokeMethod('getVerificationStatus', <String, dynamic>{
       'contact': contact,
     }).then((value) => value as bool);
   }
 
   // TODO: implement this on messaging-android
-  Future<bool> verifyContact<T>(Contact contact) async {
+  Future<void> verifyContact<T>(Contact contact) async {
     return methodChannel.invokeMethod('verifyContact', <String, dynamic>{
       'contact': contact,
-    }).then((value) => value as bool); // should return true if verified
+    });
   }
 
   Widget contactsByActivity(
