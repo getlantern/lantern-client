@@ -43,8 +43,7 @@ class _AddViaQRState extends State<AddViaQR> {
     }
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    var model = context.watch<MessagingModel>();
+  void _onQRViewCreated(QRViewController controller, MessagingModel model) {
     qrController = controller;
     qrController?.pauseCamera();
     setState(() {
@@ -54,9 +53,8 @@ class _AddViaQRState extends State<AddViaQR> {
       try {
         // TODO: This should return the displayName in addition to contactId
         var contact = Contact.fromJson(scanData.code);
-        await model.verifyContact(contact);
         setState(() async {
-          contactIsVerified = true;
+          contactIsVerified = await model.verifyContact(contact);
           contactVerifiedMe = await model.getMyVerificationStatus(contact);
           contactId = contact.contactId.id;
           displayName = contact.displayName;
@@ -114,7 +112,8 @@ class _AddViaQRState extends State<AddViaQR> {
                           children: [
                             QRView(
                               key: _qrKey,
-                              onQRViewCreated: _onQRViewCreated,
+                              onQRViewCreated: (controller) =>
+                                  _onQRViewCreated(controller, model),
                             ),
                             if (contactIsVerified)
                               const Icon(
