@@ -7,16 +7,20 @@ class Reactions extends StatelessWidget {
   final List<String> reactionOptions;
   final MessagingModel messagingModel;
   final PathAndValue<StoredMessage> message;
+  final ScrollController scrollController;
   const Reactions(
       {required this.reactionOptions,
       required this.message,
       required this.messagingModel,
+      required this.scrollController,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) => ListView.separated(
         scrollDirection: Axis.horizontal,
+        physics: const ClampingScrollPhysics(),
+        controller: scrollController,
         itemBuilder: (context, index) => GestureDetector(
           onTap: () async {
             await messagingModel.react(message, reactionOptions[index]);

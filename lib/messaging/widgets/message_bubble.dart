@@ -19,11 +19,13 @@ class MessageBubble extends StatelessWidget {
     required this.contact,
     required this.onReply,
     required this.onTapReply,
+    required this.scrollController,
   }) : super(key: key);
 
   final PathAndValue<StoredMessage> message;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
+  final ScrollController scrollController;
   final Contact contact;
   final Function(StoredMessage?) onReply;
   final Function(PathAndValue<StoredMessage>) onTapReply;
@@ -123,6 +125,7 @@ class MessageBubble extends StatelessWidget {
             title: Flexible(
               fit: FlexFit.tight,
               child: Reactions(
+                scrollController: scrollController,
                 reactionOptions: reactions.keys.toList(),
                 message: message,
                 messagingModel: model,

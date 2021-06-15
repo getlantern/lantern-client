@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/event/Event.dart';
@@ -25,6 +26,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
+  late ScrollController _listScrollController;
+  late ScrollController _activeScrollController;
+  late Drag? _drag;
   final String _initialRoute;
   int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
@@ -49,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    _listScrollController = ScrollController();
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
@@ -105,18 +110,63 @@ class _HomePageState extends State<HomePage> {
 
   void onPageChange(int index) => setState(() => _currentIndex = index);
 
+  void _handleDragStart(DragStartDetails details) {
+    if (_listScrollController.hasClients) {
+      final RenderBox? renderBox = _listScrollController
+          .position.context.storageContext
+          .findRenderObject() as RenderBox;
+      if (renderBox!.paintBounds
+          .shift(renderBox.localToGlobal(Offset.zero))
+          .contains(details.globalPosition)) {
+        _activeScrollController = _listScrollController;
+        _drag = _activeScrollController.position.drag(details, _disposeDrag);
+        return;
+      }
+    }
+    _activeScrollController = _pageController;
+    _drag = _pageController.position.drag(details, _disposeDrag);
+  }
+
+  /*
+   * If the listView is on Page 1, then change the condition as "details.primaryDelta < 0" and
+   * "_activeScrollController.position.pixels ==  _activeScrollController.position.maxScrollExtent"
+   */
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (_activeScrollController == _listScrollController &&
+        details.primaryDelta! > 0 &&
+        _activeScrollController.position.pixels ==
+            _activeScrollController.position.minScrollExtent) {
+      _activeScrollController = _pageController;
+      _drag?.cancel();
+      _drag = _pageController.position.drag(
+          DragStartDetails(
+              globalPosition: details.globalPosition,
+              localPosition: details.localPosition),
+          _disposeDrag);
+    }
+    _drag?.update(details);
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
+    _listScrollController.dispose();
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }
     super.dispose();
   }
 
-  void onUpdateCurrentIndexPageView(int index) {
-    _pageController.jumpToPage(index);
+  void _handleDragEnd(DragEndDetails details) {
+    _drag?.end(details);
   }
+
+  void _handleDragCancel() => _drag?.cancel();
+
+  void _disposeDrag() => _drag = null;
+
+  void onUpdateCurrentIndexPageView(int index) =>
+      _pageController.jumpToPage(index);
 
   @override
   Widget build(BuildContext context) {
@@ -130,22 +180,40 @@ class _HomePageState extends State<HomePage> {
                 .language((BuildContext context, String lang, Widget? child) {
               Localization.locale = lang;
               return Scaffold(
-                body: PageView(
-                  onPageChanged: onPageChange,
-                  controller: _pageController,
-                  children: [
-                    TabStatusProvider(
-                      pageController: _pageController,
-                      index: 0,
-                      child: MessagesTab(
-                          _initialRoute.replaceFirst(routeMessaging, ''),
-                          widget._initialRouteArguments),
-                    ),
-                    VPNTab(),
-                    ExchangeTab(),
-                    AccountTab(),
-                    if (developmentMode) DeveloperSettingsTab(),
-                  ],
+                body: RawGestureDetector(
+                  gestures: <Type, GestureRecognizerFactory>{
+                    HorizontalDragGestureRecognizer:
+                        GestureRecognizerFactoryWithHandlers<
+                                HorizontalDragGestureRecognizer>(
+                            () => HorizontalDragGestureRecognizer(),
+                            (HorizontalDragGestureRecognizer instance) {
+                      instance
+                        ..onStart = _handleDragStart
+                        ..onUpdate = _handleDragUpdate
+                        ..onEnd = _handleDragEnd
+                        ..onCancel = _handleDragCancel;
+                    })
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: PageView(
+                    onPageChanged: onPageChange,
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      TabStatusProvider(
+                        pageController: _pageController,
+                        index: 0,
+                        child: MessagesTab(
+                            _listScrollController,
+                            _initialRoute.replaceFirst(routeMessaging, ''),
+                            widget._initialRouteArguments),
+                      ),
+                      VPNTab(),
+                      ExchangeTab(),
+                      AccountTab(),
+                      if (developmentMode) DeveloperSettingsTab(),
+                    ],
+                  ),
                 ),
                 bottomNavigationBar: CustomBottomBar(
                   currentIndex: _currentIndex,

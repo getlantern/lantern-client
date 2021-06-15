@@ -23,8 +23,9 @@ import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
+  final ScrollController scrollController;
 
-  Conversation(this._contact) : super();
+  Conversation(this._contact, this.scrollController) : super();
 
   @override
   _ConversationState createState() => _ConversationState();
@@ -352,6 +353,7 @@ class _ConversationState extends State<Conversation>
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubble(
+            scrollController: widget.scrollController,
             message: messageRecords.elementAt(index),
             priorMessage: index >= messageRecords.length - 1
                 ? null
