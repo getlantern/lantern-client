@@ -52,7 +52,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             // "getContactFromUsername" -> messaging.getContactFromUsername(
             //     call.argument("username")!!,
             // )
-            // "getMyVerificationStatus" -> messaging.getMyVerificationStatus(
+            // "getVerificationStatus" -> messaging.getVerificationStatus(
             //     call.argument("contact")!!,
             // )
             // "verifyContact" -> messaging.verifyContact(

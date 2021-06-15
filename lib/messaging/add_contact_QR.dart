@@ -53,9 +53,10 @@ class _AddViaQRState extends State<AddViaQR> {
       try {
         // TODO: This should return the displayName in addition to contactId
         var contact = Contact.fromJson(scanData.code);
+        await model.verifyContact(contact);
         setState(() async {
-          contactIsVerified = await model.verifyContact(contact);
-          contactVerifiedMe = await model.getMyVerificationStatus(contact);
+          contactIsVerified = true;
+          contactVerifiedMe = await model.getVerificationStatus(contact);
           contactId = contact.contactId.id;
           displayName = contact.displayName;
         });
