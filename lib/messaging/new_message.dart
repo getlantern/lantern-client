@@ -62,7 +62,7 @@ class NewMessage extends StatelessWidget {
                 return ListTile(
                   title: Text(
                       contact.value.displayName.isEmpty
-                          ? 'Unnamed'.i18n
+                          ? 'Unnamed contact'.i18n
                           : contact.value.displayName,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text(

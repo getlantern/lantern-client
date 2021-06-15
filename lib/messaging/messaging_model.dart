@@ -29,6 +29,7 @@ class MessagingModel extends Model {
     });
   }
 
+  // TODO: update on messaging-android
   Future<void> addOrUpdateDirectContact<T>(
       String identityKey, String displayName, bool isFullyVerified) {
     return methodChannel
@@ -137,10 +138,26 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
-  Future<Contact?> getContactFromUsername<T>(String username) {
+  // TODO: implement this on messaging-android
+  Future<Contact> getContactFromUsername<T>(String username) async {
     return methodChannel
         .invokeMethod('getContactFromUsername', <String, dynamic>{
       'username': username,
+    }).then((value) => value as Contact);
+  }
+
+  // TODO: implement this on messaging-android
+  Future<bool> getMyVerificationStatus<T>(Contact contact) async {
+    return methodChannel
+        .invokeMethod('getMyVerificationStatus', <String, dynamic>{
+      'contact': contact,
+    }).then((value) => value as bool);
+  }
+
+  // TODO: implement this on messaging-android
+  Future<void> verifyContact<T>(Contact contact) async {
+    return methodChannel.invokeMethod('verifyContact', <String, dynamic>{
+      'contact': contact,
     });
   }
 

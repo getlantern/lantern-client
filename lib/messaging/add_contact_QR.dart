@@ -44,21 +44,25 @@ class _AddViaQRState extends State<AddViaQR> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    var model = context.watch<MessagingModel>();
     qrController = controller;
     qrController?.pauseCamera();
     setState(() {
       scanning = false;
     });
-    qrController?.scannedDataStream.listen((scanData) {
+    qrController?.scannedDataStream.listen((scanData) async {
       try {
+        // TODO: This should return the displayName in addition to contactId
         var contact = Contact.fromJson(scanData.code);
-        contactId = contact.contactId.id;
-        displayName = contact.displayName;
-        setState(() {
+        await model.verifyContact(contact);
+        setState(() async {
           contactIsVerified = true;
+          contactVerifiedMe = await model.getMyVerificationStatus(contact);
+          contactId = contact.contactId.id;
+          displayName = contact.displayName;
         });
       } finally {
-        qrController?.pauseCamera();
+        await qrController?.pauseCamera();
         setState(() {
           scanning = false;
         });
@@ -178,10 +182,12 @@ class _AddViaQRState extends State<AddViaQR> {
                               onPressed: () async {
                                 context.loaderOverlay.show();
                                 try {
+                                  final isFullyVerified =
+                                      contactIsVerified && contactVerifiedMe;
                                   await model.addOrUpdateDirectContact(
                                       contactId!,
                                       displayName!,
-                                      contactIsVerified | contactVerifiedMe);
+                                      isFullyVerified);
                                   // Navigator.pushNamedAndRemoveUntil(
                                   //     context, 'conversations', (r) => false);
                                   Navigator.pop(context);
