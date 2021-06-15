@@ -52,12 +52,9 @@ public class LanternHttpClient extends HttpClient {
 
     /**
      * Creates a new HTTP client
-     *
-     * @param proxyHost The host of the local proxy.
-     * @param proxyPort The port of the local proxy.
      */
-    public LanternHttpClient(final String proxyHost, final int proxyPort) {
-        super(proxyHost, proxyPort);
+    public LanternHttpClient() {
+        super();
     }
 
     /**
