@@ -288,7 +288,7 @@ class _ConversationState extends State<Conversation>
         },
         // Conversation body
         child: Stack(children: [
-          Column(children: [
+          Flex(direction: Axis.vertical, children: [
             // Conversation subtitle
             Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -385,80 +385,58 @@ class _ConversationState extends State<Conversation>
     });
   }
 
-  Widget _buildMessageBar(context) {
-    return Row(children: [
-      Container(
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            setState(() {
-              _emojiShowing = !_emojiShowing;
-            });
+  Widget _buildMessageBar(context) => ListTile(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+        leading: IconButton(
+          onPressed: () {
+            setState(() => _emojiShowing = !_emojiShowing);
             dismissKeyboard();
           },
-          child: const Icon(Icons.insert_emoticon),
+          icon: Icon(Icons.insert_emoticon,
+              color: !_emojiShowing
+                  ? Theme.of(context).primaryIconTheme.color
+                  : Theme.of(context).primaryColorDark),
         ),
-      ),
-      Expanded(
-        // Text field
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: TextFormField(
-            autofocus: false,
-            focusNode: _focusNode,
-            textInputAction: TextInputAction.send,
-            controller: _newMessage,
-            onTap: () => setState(() {
-              _emojiShowing = false;
-            }),
-            onChanged: (value) {
-              setState(() {
-                _isSendIconVisible = value.isNotEmpty;
-              });
-            },
-            //
-            onFieldSubmitted: (value) => _handleSubmit(_newMessage),
-            decoration: InputDecoration(
-              // Send icon
-              suffixIcon: _isSendIconVisible
-                  ? IconButton(
-                      icon: const Icon(Icons.send, color: Colors.black),
-                      onPressed: () => _handleSubmit(_newMessage))
-                  : null,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: 'Message'.i18n,
-              border: const OutlineInputBorder(),
-            ),
+        title: TextFormField(
+          autofocus: false,
+          focusNode: _focusNode,
+          textInputAction: TextInputAction.send,
+          controller: _newMessage,
+          onTap: () => setState(() => _emojiShowing = false),
+          onChanged: (value) {
+            setState(() => _isSendIconVisible = value.isNotEmpty);
+          },
+          onFieldSubmitted: (value) =>
+              value.isEmpty ? null : _handleSubmit(_newMessage),
+          decoration: InputDecoration(
+            // Send icon
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: 'Message'.i18n,
+            border: const OutlineInputBorder(),
           ),
         ),
-      ),
-      // Attachments icon
-      if (!_isSendIconVisible)
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () => _selectFilesToShare(),
-            child: const Icon(Icons.add_circle_rounded),
-          ),
-        ),
-      if (!_isSendIconVisible)
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTapDown: (details) {
-              _startRecording();
-            },
-            onTapUp: (details) async {
-              await _finishRecording();
-            },
-            child: const Icon(Icons.mic),
-          ),
-        ),
-    ]);
-  }
+        trailing: _isSendIconVisible
+            ? IconButton(
+                icon: const Icon(Icons.send, color: Colors.black),
+                onPressed: () => _handleSubmit(_newMessage),
+              )
+            : Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () async => await _selectFilesToShare(),
+                    icon: const Icon(Icons.add_circle_rounded),
+                  ),
+                  IconButton(
+                      onPressed: () => _startRecording(),
+                      icon: const Icon(Icons.mic))
+                ],
+              ),
+      );
 
   Widget _buildEmojiKeyboard({required double width}) => MessagingEmojiPicker(
         showEmojis: _emojiShowing,
