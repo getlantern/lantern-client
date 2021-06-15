@@ -34,30 +34,36 @@ class TextBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Flex(
+        direction: Axis.vertical,
         crossAxisAlignment:
             outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-              child: Column(
+              child: Flex(
+            direction: Axis.vertical,
             crossAxisAlignment:
                 outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               if (isDateMarker != '') DateMarker(isDateMarker),
-              ContentContainer(
-                  outbound,
-                  inbound,
-                  msg,
-                  message,
-                  contact,
-                  onTapReply,
-                  startOfBlock,
-                  endOfBlock,
-                  newestMessage,
-                  reactions),
-              StatusRow(outbound, inbound, msg, message)
+              Flexible(
+                child: ContentContainer(
+                    outbound,
+                    inbound,
+                    msg,
+                    message,
+                    contact,
+                    onTapReply,
+                    startOfBlock,
+                    endOfBlock,
+                    newestMessage,
+                    reactions),
+              ),
+              Flexible(
+                child: StatusRow(outbound, inbound, msg, message),
+              ),
             ],
           )),
         ]);
