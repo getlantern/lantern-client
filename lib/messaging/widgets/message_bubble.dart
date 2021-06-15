@@ -1,3 +1,4 @@
+import 'package:lantern/messaging/widgets/reactions.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -109,26 +110,6 @@ class MessageBubble extends StatelessWidget {
     BuildContext context,
     MessagingModel model,
   ) {
-    final reactionOptions = reactions.keys.toList();
-    final reactionArray = reactionOptions
-        .map((e) => Container(
-              margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                child: GestureDetector(
-                  onTap: () {
-                    model.react(message, e);
-                    Navigator.pop(context);
-                  },
-                  child: Transform.scale(
-                      scale: 1.3,
-                      child: Text(e, style: const TextStyle(fontSize: 16))),
-                ),
-              ),
-            ))
-        .toList(growable: false);
-
     if (wasDeleted) {
       final humanizedSenderName =
           matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
@@ -139,7 +120,14 @@ class MessageBubble extends StatelessWidget {
     return FocusedMenuHolder(
         menuItems: [
           FocusedMenuItem(
-            title: Row(children: [...reactionArray]),
+            title: Flexible(
+              fit: FlexFit.tight,
+              child: Reactions(
+                reactionOptions: reactions.keys.toList(),
+                message: message,
+                messagingModel: model,
+              ),
+            ),
             onPressed: () {},
           ),
           FocusedMenuItem(
