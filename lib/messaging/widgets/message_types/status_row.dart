@@ -47,7 +47,7 @@ class StatusRow extends StatelessWidget {
                             ))),
                   Container(
                       child: CustomAssetImage(
-                          path: ImagePaths.timer_00,
+                          path: ImagePaths.timer_12,
                           size: 14,
                           color: outbound ? outboundMsgColor : inboundMsgColor))
                 ])));
