@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
+import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
@@ -56,7 +57,7 @@ class ContentContainer extends StatelessWidget {
           maxWidth: 350, // TODO: move both these to a responsive sizes file
         ),
         decoration: BoxDecoration(
-          color: outbound ? Colors.black38 : Colors.black12,
+          color: outbound ? outboundBgColor : inboundBgColor,
           borderRadius: BorderRadius.only(
             topLeft: inbound && !startOfBlock
                 ? Radius.zero
@@ -92,9 +93,7 @@ class ContentContainer extends StatelessWidget {
                     child: Text(
                       '${msg.text}',
                       style: TextStyle(
-                        color: outbound
-                            ? Colors.white
-                            : Colors.black, // TODO: generalize in theme
+                        color: outbound ? outboundMsgColor : inboundMsgColor,
                       ),
                     ),
                   ),
@@ -102,6 +101,7 @@ class ContentContainer extends StatelessWidget {
               ...attachments,
               const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
               ...reactionsList,
+              StatusRow(outbound, inbound, msg, message)
             ]));
   }
 }

@@ -28,23 +28,23 @@ class StatusRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
           Opacity(
-            opacity: 0.35,
+            opacity: 0.8,
             child: Text(
               message.value.ts.toInt().humanizeDate(),
-              style: const TextStyle(
-                color: Colors.black, // TODO: consolidate colors here
+              style: TextStyle(
+                color: outbound ? outboundMsgColor : inboundMsgColor,
                 fontSize: 10,
               ),
             ),
           ),
           if (statusIcon != null)
             Opacity(
-                opacity: 0.35,
+                opacity: 0.8,
                 child: Transform.scale(
                     scale: .5,
                     child: Icon(
                       statusIcon,
-                      color: Colors.black,
+                      color: outbound ? outboundMsgColor : inboundMsgColor,
                     ))),
         ]));
   }
