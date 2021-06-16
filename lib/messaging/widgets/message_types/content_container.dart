@@ -61,16 +61,16 @@ class ContentContainer extends StatelessWidget {
           borderRadius: BorderRadius.only(
             topLeft: inbound && !startOfBlock
                 ? Radius.zero
-                : const Radius.circular(5),
+                : const Radius.circular(8),
             topRight: outbound && !startOfBlock
                 ? Radius.zero
-                : const Radius.circular(5),
+                : const Radius.circular(8),
             bottomRight: outbound && (!endOfBlock || newestMessage)
                 ? Radius.zero
-                : const Radius.circular(5),
+                : const Radius.circular(8),
             bottomLeft: inbound && (!endOfBlock || newestMessage)
                 ? Radius.zero
-                : const Radius.circular(5),
+                : const Radius.circular(8),
           ),
         ),
         child: Column(
@@ -92,9 +92,7 @@ class ContentContainer extends StatelessWidget {
                   Flexible(
                     child: Text(
                       '${msg.text}',
-                      style: TextStyle(
-                        color: outbound ? outboundMsgColor : inboundMsgColor,
-                      ),
+                      style: tsMessageBody(outbound),
                     ),
                   ),
               ]),
