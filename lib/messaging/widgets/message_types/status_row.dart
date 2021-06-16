@@ -22,30 +22,34 @@ class StatusRow extends StatelessWidget {
     final statusIcon = getStatusIcon(inbound, msg);
 
     return Container(
-        // padding: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-          Opacity(
+        color: Colors.black54,
+        width: 100,
+        child: Opacity(
             opacity: 0.8,
-            child: Text(
-              message.value.ts.toInt().humanizeDate(),
-              style: TextStyle(
-                color: outbound ? outboundMsgColor : inboundMsgColor,
-                fontSize: 10,
-              ),
-            ),
-          ),
-          if (statusIcon != null)
-            Opacity(
-                opacity: 0.8,
-                child: Transform.scale(
-                    scale: .5,
-                    child: Icon(
-                      statusIcon,
-                      color: outbound ? outboundMsgColor : inboundMsgColor,
-                    ))),
-        ]));
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    child: Text(
+                      message.value.ts.toInt().humanizeDate(),
+                      style: tsMessageStatus(outbound),
+                    ),
+                  ),
+                  if (statusIcon != null)
+                    Container(
+                        child: Transform.scale(
+                            scale: .5,
+                            child: Icon(
+                              statusIcon,
+                              color:
+                                  outbound ? outboundMsgColor : inboundMsgColor,
+                            ))),
+                  Container(
+                      child: CustomAssetImage(
+                          path: ImagePaths.timer_00,
+                          size: 14,
+                          color: outbound ? outboundMsgColor : inboundMsgColor))
+                ])));
   }
 }
