@@ -22,7 +22,6 @@ import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
 import org.getlantern.lantern.model.MessagingHolder;
-import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
@@ -34,8 +33,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LanternApp extends Application implements ActivityLifecycleCallbacks {
@@ -95,12 +102,12 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         messaging.init(this);
         Logger.debug(TAG, "messaging.init() finished at " + (System.currentTimeMillis() - start));
         session = new LanternSessionManager(this);
+        configureProxySelector();
         Logger.debug(TAG, "new LanternSessionManager finished at " + (System.currentTimeMillis() - start));
         if (LanternApp.getSession().isPlayVersion()) {
             inAppBilling = new InAppBilling(this);
         }
-        lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
-                (int) session.getSettings().getHttpProxyPort());
+        lanternHttpClient = new LanternHttpClient();
         Logger.debug(TAG, "new LanternHttpClient finished at " + (System.currentTimeMillis() - start));
         initFirebase();
         Logger.debug(TAG, "initFirebase() finished at " + (System.currentTimeMillis() - start));
@@ -263,7 +270,9 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         return lanternHttpClient;
     }
 
-    public static HttpClient getHttpClient() { return lanternHttpClient; }
+    public static HttpClient getHttpClient() {
+        return lanternHttpClient;
+    }
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -296,4 +305,41 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     public static void getPlans(LanternHttpClient.PlansCallback cb) {
         lanternHttpClient.getPlans(cb, inAppBilling);
     }
+
+    /**
+     * Configures the default ProxySelector to send all traffic to the embedded Lantern proxy.
+     */
+    private void configureProxySelector() {
+        final SocketAddress proxyAddress = addrFromString(session.getSettings().getHttpProxyHost() + ":" +
+                session.getSettings().getHttpProxyPort());
+        ProxySelector.setDefault(new ProxySelector() {
+            @Override
+            public List<Proxy> select(URI uri) {
+                final List<Proxy> proxiesList = new ArrayList();
+                proxiesList.add(new Proxy(Proxy.Type.HTTP, proxyAddress));
+                return proxiesList;
+            }
+
+            @Override
+            public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+            }
+        });
+    }
+
+    /**
+     * Converts a host:port string into an InetSocketAddress by first making a fake URL using that
+     * address.
+     *
+     * @param addr
+     * @return
+     */
+    private static InetSocketAddress addrFromString(String addr) {
+        try {
+            URI uri = new URI("my://" + addr);
+            return new InetSocketAddress(uri.getHost(), uri.getPort());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
