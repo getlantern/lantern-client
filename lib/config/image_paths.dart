@@ -38,17 +38,17 @@ class ImagePaths {
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
 
-  static const timer_12 = 'assets/images/countdown/disappear_timer_12.svg';
-  static const timer_11 = 'assets/images/countdown/disappear_timer_11.svg';
-  static const timer_10 = 'assets/images/countdown/disappear_timer_10.svg';
-  static const timer_09 = 'assets/images/countdown/disappear_timer_09.svg';
-  static const timer_08 = 'assets/images/countdown/disappear_timer_08.svg';
-  static const timer_07 = 'assets/images/countdown/disappear_timer_07.svg';
-  static const timer_06 = 'assets/images/countdown/disappear_timer_06.svg';
-  static const timer_05 = 'assets/images/countdown/disappear_timer_05.svg';
-  static const timer_04 = 'assets/images/countdown/disappear_timer_04.svg';
-  static const timer_03 = 'assets/images/countdown/disappear_timer_03.svg';
-  static const timer_02 = 'assets/images/countdown/disappear_timer_02.svg';
-  static const timer_01 = 'assets/images/countdown/disappear_timer_01.svg';
-  static const timer_00 = 'assets/images/countdown/disappear_timer_00.svg';
+  static const timer_12 = 'assets/images/disappear/timer_12.svg';
+  static const timer_11 = 'assets/images/disappear/timer_11.svg';
+  static const timer_10 = 'assets/images/disappear/timer_10.svg';
+  static const timer_09 = 'assets/images/disappear/timer_09.svg';
+  static const timer_08 = 'assets/images/disappear/timer_08.svg';
+  static const timer_07 = 'assets/images/disappear/timer_07.svg';
+  static const timer_06 = 'assets/images/disappear/timer_06.svg';
+  static const timer_05 = 'assets/images/disappear/timer_05.svg';
+  static const timer_04 = 'assets/images/disappear/timer_04.svg';
+  static const timer_03 = 'assets/images/disappear/timer_03.svg';
+  static const timer_02 = 'assets/images/disappear/timer_02.svg';
+  static const timer_01 = 'assets/images/disappear/timer_01.svg';
+  static const timer_00 = 'assets/images/disappear/timer_00.svg';
 }
