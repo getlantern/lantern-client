@@ -38,17 +38,21 @@ class ImagePaths {
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
 
-  static const timer_12 = 'assets/images/disappear/timer_12.svg';
-  static const timer_11 = 'assets/images/disappear/timer_11.svg';
-  static const timer_10 = 'assets/images/disappear/timer_10.svg';
-  static const timer_09 = 'assets/images/disappear/timer_09.svg';
-  static const timer_08 = 'assets/images/disappear/timer_08.svg';
-  static const timer_07 = 'assets/images/disappear/timer_07.svg';
-  static const timer_06 = 'assets/images/disappear/timer_06.svg';
-  static const timer_05 = 'assets/images/disappear/timer_05.svg';
-  static const timer_04 = 'assets/images/disappear/timer_04.svg';
-  static const timer_03 = 'assets/images/disappear/timer_03.svg';
-  static const timer_02 = 'assets/images/disappear/timer_02.svg';
-  static const timer_01 = 'assets/images/disappear/timer_01.svg';
-  static const timer_00 = 'assets/images/disappear/timer_00.svg';
+  static const _countdownPaths = [
+    'assets/images/disappear/timer_12.svg',
+    'assets/images/disappear/timer_11.svg',
+    'assets/images/disappear/timer_10.svg',
+    'assets/images/disappear/timer_9.svg',
+    'assets/images/disappear/timer_8.svg',
+    'assets/images/disappear/timer_7.svg',
+    'assets/images/disappear/timer_6.svg',
+    'assets/images/disappear/timer_5.svg',
+    'assets/images/disappear/timer_4.svg',
+    'assets/images/disappear/timer_3.svg',
+    'assets/images/disappear/timer_2.svg',
+    'assets/images/disappear/timer_1.svg',
+    'assets/images/disappear/timer_0.svg'
+  ];
+
+  static List<String> get countdownPaths => _countdownPaths;
 }
