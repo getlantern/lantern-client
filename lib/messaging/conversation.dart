@@ -313,11 +313,13 @@ class _ConversationState extends State<Conversation>
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 ),
+              const Divider(),
               Padding(
-                padding: const EdgeInsets.only(top: 3),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
                 child: MessageBar(
-                  width: size!.width * 0.7,
-                  height: size!.height * 0.06,
+                  width: size!.width,
+                  height: size!.height * 0.07,
                   sendIcon: _isSendIconVisible,
                   onFieldSubmitted: (value) =>
                       value.isEmpty ? null : _handleSubmit(_newMessage),
