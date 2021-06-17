@@ -70,8 +70,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                       try {
                         await model.addOrUpdateDirectContact(
                             contact!.contactId.id,
-                            usernameController.value.text,
-                            false);
+                            usernameController.value.text);
                         // Navigator.pushNamedAndRemoveUntil(
                         //     context, 'conversations', (r) => false);
                         Navigator.pop(context);
