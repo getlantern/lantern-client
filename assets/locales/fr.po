@@ -245,7 +245,7 @@ msgid "Payment Test Mode"
 msgstr "Mode de test de paiement"
 
 msgid "Play Version"
-msgstr ""
+msgstr "Version de Google Play"
 
 msgid "Yinbi Enabled"
 msgstr "Yinbi est activé"
