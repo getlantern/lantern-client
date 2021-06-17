@@ -6,22 +6,30 @@ class MessageBar extends StatelessWidget {
   final VoidCallback? onEmojiTap;
   final VoidCallback onTextFieldTap;
   final VoidCallback? onSend;
+  final VoidCallback? onFileSend;
+  final Function(TapDownDetails)? onRecording;
+  final Function(TapUpDetails)? onStopRecording;
   final Function(String)? onTextFieldChanged;
   final Function(String)? onFieldSubmitted;
   final TextEditingController messageController;
+  final bool hasPermission;
   final FocusNode? focusNode;
   final bool sendIcon;
   final double width;
   final double height;
-  const MessageBar(
+  MessageBar(
       {this.onEmojiTap,
       this.focusNode,
       required this.onSend,
       required this.width,
       required this.height,
+      required this.hasPermission,
+      required this.onRecording,
+      required this.onStopRecording,
       required this.onTextFieldChanged,
       required this.messageController,
       required this.onFieldSubmitted,
+      required this.onFileSend,
       required this.displayEmojis,
       required this.onTextFieldTap,
       this.sendIcon = false,
@@ -70,14 +78,15 @@ class MessageBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () async =>
-                        print('better change'), //await _selectFilesToShare(),
+                    onPressed: onFileSend,
                     icon: const Icon(Icons.add_circle_rounded),
                   ),
-                  IconButton(
-                      onPressed: () => print('NICESOTOBAYO'),
-                      // onPressed: () => _startRecording(),
-                      icon: const Icon(Icons.mic))
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTapDown: onRecording,
+                    onTapUp: onStopRecording,
+                    child: const Icon(Icons.mic),
+                  ),
                 ],
               ),
       ),
