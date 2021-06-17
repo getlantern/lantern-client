@@ -4,7 +4,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
 
-class StatusRow extends StatelessWidget {
+class StatusRow extends StatefulWidget {
   final bool outbound;
   final bool inbound;
   final StoredMessage msg;
@@ -18,18 +18,19 @@ class StatusRow extends StatelessWidget {
   ) : super();
 
   @override
-  Widget build(BuildContext context) {
-    final statusIcon = getStatusIcon(inbound, msg);
+  StatusRowState createState() => StatusRowState();
+}
 
-    // final lifespan =
-    //     (msg.disappearAt - DateTime.now().millisecondsSinceEpoch);
-    // var step = (lifespan.toInt() / 12).round();
-    // var remainingTime = lifespan.toInt() - step;
-    // var index = (remainingTime / step).floor();
+class StatusRowState extends State<StatusRow> {
+  @override
+  Widget build(BuildContext context) {
+    final statusIcon = getStatusIcon(widget.inbound, widget.msg);
+    final lifespan = (widget.msg.disappearAt - widget.msg.firstViewedAt);
 
     return TweenAnimationBuilder<int>(
         tween: IntTween(begin: 0, end: 12),
-        duration: const Duration(seconds: 10),
+        duration: Duration(milliseconds: lifespan.toInt()),
+        curve: Curves.linear,
         builder: (BuildContext context, int index, Widget? child) {
           return Container(
               child: Opacity(
@@ -41,8 +42,8 @@ class StatusRow extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 1),
                           child: Text(
-                            message.value.ts.toInt().humanizeDate(),
-                            style: tsMessageStatus(outbound),
+                            widget.message.value.ts.toInt().humanizeDate(),
+                            style: tsMessageStatus(widget.outbound),
                           ),
                         ),
                         if (statusIcon != null)
@@ -52,7 +53,7 @@ class StatusRow extends StatelessWidget {
                               child: Icon(
                                 statusIcon,
                                 size: 12,
-                                color: outbound
+                                color: widget.outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor,
                               )),
@@ -61,7 +62,7 @@ class StatusRow extends StatelessWidget {
                             child: CustomAssetImage(
                                 path: ImagePaths.countdownPaths[index],
                                 size: 12,
-                                color: outbound
+                                color: widget.outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor)),
                       ])));
