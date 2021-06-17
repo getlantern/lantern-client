@@ -368,11 +368,10 @@ class _ConversationState extends State<Conversation>
           ),
           if (_recording)
             VoiceRecorder(
+              onSwipeLeft: () => setState(() => _recording = false),
               stopWatchTimer: _stopWatchTimer,
               willCancelRecording: _willCancelRecording,
-              onTapUpListener: () async {
-                await _finishRecording();
-              },
+              onTapUpListener: () async => await _finishRecording(),
             ),
         ]),
       ),
