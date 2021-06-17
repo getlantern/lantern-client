@@ -5,7 +5,6 @@ class MessagingEmojiPicker extends StatelessWidget {
   final bool showEmojis;
   final String emptySuggestions;
   final double height;
-  final double width;
   final Function(Category, Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
@@ -14,7 +13,6 @@ class MessagingEmojiPicker extends StatelessWidget {
     required this.emptySuggestions,
     this.height = 200,
     this.onBackspacePressed,
-    required this.width,
     required this.onEmojiSelected,
     Key? key,
   }) : super(key: key);

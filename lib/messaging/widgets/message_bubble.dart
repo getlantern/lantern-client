@@ -1,3 +1,4 @@
+import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/widgets/reactions.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -20,9 +21,11 @@ class MessageBubble extends StatelessWidget {
     required this.onReply,
     required this.onTapReply,
     required this.scrollController,
+    required this.onEmojiTap,
   }) : super(key: key);
 
   final PathAndValue<StoredMessage> message;
+  final ShowEmojis onEmojiTap;
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
   final ScrollController scrollController;
@@ -125,6 +128,7 @@ class MessageBubble extends StatelessWidget {
             title: Flexible(
               fit: FlexFit.tight,
               child: Reactions(
+                onEmojiTap: onEmojiTap,
                 scrollController: scrollController,
                 reactionOptions: reactions.keys.toList(),
                 message: message,

@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   late PageController _pageController;
   late ScrollController _listScrollController;
   late ScrollController _activeScrollController;
-  late Drag? _drag;
+  Drag? _drag;
   final String _initialRoute;
   int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
