@@ -35,7 +35,7 @@ class MessageBar extends StatelessWidget {
       height: height,
       child: ListTile(
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+            const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 6.0),
         leading: IconButton(
           onPressed: onEmojiTap,
           icon: Icon(Icons.sentiment_very_satisfied,
