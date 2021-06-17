@@ -25,13 +25,16 @@ class StatusRowState extends State<StatusRow> {
   @override
   Widget build(BuildContext context) {
     final statusIcon = getStatusIcon(widget.inbound, widget.msg);
-    final lifespan = (widget.msg.disappearAt - widget.msg.firstViewedAt);
+    final begin = widget.msg.firstViewedAt.toInt();
+    final end = widget.msg.disappearAt.toInt();
+    final lifeSpan = end - begin + 1;
+    final step = lifeSpan / 12;
 
     return TweenAnimationBuilder<int>(
-        tween: IntTween(begin: 0, end: 12),
-        duration: Duration(milliseconds: lifespan.toInt()),
+        tween: IntTween(begin: begin, end: lifeSpan),
+        duration: Duration(milliseconds: lifeSpan),
         curve: Curves.linear,
-        builder: (BuildContext context, int index, Widget? child) {
+        builder: (BuildContext context, int time, Widget? child) {
           return Container(
               child: Opacity(
                   opacity: 0.8,
@@ -60,11 +63,13 @@ class StatusRowState extends State<StatusRow> {
                         Container(
                             padding: const EdgeInsets.symmetric(horizontal: 1),
                             child: CustomAssetImage(
-                                path: ImagePaths.countdownPaths[index],
+                                path: ImagePaths
+                                    .countdownPaths[(time / step).floor()],
                                 size: 12,
                                 color: widget.outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor)),
+                        // Text((time / step).floor().toString()),
                       ])));
         });
   }
