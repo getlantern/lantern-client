@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/custom_pan_gesture_recognizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class VoiceRecorder extends StatelessWidget {
@@ -8,11 +9,13 @@ class VoiceRecorder extends StatelessWidget {
     Key? key,
     required this.stopWatchTimer,
     required this.willCancelRecording,
+    required this.onSwipeLeft,
     required this.onTapUpListener,
   }) : super(key: key);
 
   final StopWatchTimer stopWatchTimer;
   final bool willCancelRecording;
+  final VoidCallback onSwipeLeft;
   final Function onTapUpListener;
 
   @override
@@ -60,8 +63,13 @@ class VoiceRecorder extends StatelessWidget {
                           style: const TextStyle(fontWeight: FontWeight.bold))),
                 ),
               ),
-              GestureDetector(
-                onTapUp: (details) => onTapUpListener(),
+              ForcedPanDetector(
+                onPanDown: _onPanDown,
+                onPanEnd: _onPanEnd,
+                onPanUpdate: _onPanUpdate,
+                onTap: () {},
+                onDoubleTap: () {},
+                // onTapUp: (details) => onTapUpListener(),
                 child: Transform.scale(
                   scale: 2,
                   alignment: Alignment.bottomRight,
@@ -84,5 +92,20 @@ class VoiceRecorder extends StatelessWidget {
         ),
       ),
     ]);
+  }
+
+  void _onPanUpdate(Offset details) => _handlePan(details, false);
+
+  void _onPanEnd(Offset details) => _handlePan(details, true);
+
+  void _handlePan(Offset details, bool isPanEnd) {
+    if (isPanEnd && details.dx <= 200.0) {
+      onSwipeLeft();
+    }
+  }
+
+  bool _onPanDown(Offset details) {
+    _handlePan(details, false);
+    return true;
   }
 }
