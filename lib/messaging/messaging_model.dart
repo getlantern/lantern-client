@@ -29,14 +29,12 @@ class MessagingModel extends Model {
     });
   }
 
-  // TODO: update on messaging-android
   Future<void> addOrUpdateDirectContact<T>(
-      String identityKey, String displayName, bool isFullyVerified) {
-    return methodChannel
-        .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+      String identityKey, String displayName) {
+    return methodChannel.invokeMethod(
+        'addOrUpdateDirectContact', <String, dynamic>{
       'identityKey': identityKey,
-      'displayName': displayName,
-      'isFullyVerified': isFullyVerified,
+      'displayName': displayName
     });
   }
 
@@ -152,13 +150,6 @@ class MessagingModel extends Model {
         .invokeMethod('getVerificationStatus', <String, dynamic>{
       'contact': contact,
     }).then((value) => value as bool);
-  }
-
-  // TODO: implement this on messaging-android
-  Future<void> verifyContact<T>(Contact contact) async {
-    return methodChannel.invokeMethod('verifyContact', <String, dynamic>{
-      'contact': contact,
-    });
   }
 
   Widget contactsByActivity(

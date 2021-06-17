@@ -4,7 +4,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
-import 'package:loader_overlay/loader_overlay.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
@@ -22,8 +22,7 @@ class _AddViaQRState extends State<AddViaQR> {
   bool scanning = false;
   bool contactIsVerified = false;
   bool contactVerifiedMe = false;
-  String? contactId;
-  String? displayName;
+  late Contact contact;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -51,14 +50,12 @@ class _AddViaQRState extends State<AddViaQR> {
     });
     qrController?.scannedDataStream.listen((scanData) async {
       try {
-        // TODO: This should return the displayName in addition to contactId
         var contact = Contact.fromJson(scanData.code);
-        await model.verifyContact(contact);
-        setState(() async {
+        setState(() {
           contactIsVerified = true;
-          contactVerifiedMe = await model.getVerificationStatus(contact);
-          contactId = contact.contactId.id;
-          displayName = contact.displayName;
+          contact = Contact.fromJson(scanData.code);
+          contactVerifiedMe = !contact.firstReceivedMessageTs
+              .isZero; //if we have not received a control message from this contact, we are not verified by them
         });
       } finally {
         await qrController?.pauseCamera();
@@ -180,20 +177,10 @@ class _AddViaQRState extends State<AddViaQR> {
                             Button(
                               text: 'Continue to message'.i18n,
                               onPressed: () async {
-                                context.loaderOverlay.show();
-                                try {
-                                  final isFullyVerified =
-                                      contactIsVerified && contactVerifiedMe;
-                                  await model.addOrUpdateDirectContact(
-                                      contactId!,
-                                      displayName!,
-                                      isFullyVerified);
-                                  // Navigator.pushNamedAndRemoveUntil(
-                                  //     context, 'conversations', (r) => false);
-                                  Navigator.pop(context);
-                                } finally {
-                                  context.loaderOverlay.hide();
-                                }
+                                unawaited(Navigator.pushNamed(
+                                    context, '/conversation',
+                                    arguments: contact));
+                                // Navigator.pop(context);
                               },
                             ),
                           ]),
