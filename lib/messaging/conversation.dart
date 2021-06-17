@@ -240,10 +240,6 @@ class _ConversationState extends State<Conversation>
     AssetPicker.unregisterObserve();
   }
 
-  void showKeyboard() {
-    _focusNode.requestFocus();
-  }
-
   void dismissKeyboard() {
     _focusNode.unfocus();
   }
