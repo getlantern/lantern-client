@@ -6,6 +6,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
@@ -34,6 +35,7 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
+  bool _customEmojiResponse = false;
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
@@ -46,6 +48,7 @@ class _ConversationState extends State<Conversation>
   var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
+  PathAndValue<StoredMessage>? _storedMessage;
   final _scrollController = ItemScrollController();
 
   @override
@@ -147,6 +150,7 @@ class _ConversationState extends State<Conversation>
     });
   }
 
+  void showKeyboard() => _focusNode.requestFocus();
   Future<List<AssetEntity>?> _renderFilePicker() async {
     AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
@@ -255,8 +259,11 @@ class _ConversationState extends State<Conversation>
         replyToId: _quotedMessage?.id);
   }
 
+  Size? size;
+  late final ShowEmojis onEmojiTap;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
     var tabStatus = context.watch<TabStatus>();
     if (tabStatus.active) {
@@ -288,38 +295,75 @@ class _ConversationState extends State<Conversation>
         },
         // Conversation body
         child: Stack(children: [
-          Flex(direction: Axis.vertical, children: [
-            // Conversation subtitle
-            Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: _buildMessagesLifeExpectancy()),
-            // Message bubbles
-            Expanded(
-              child: _buildMessageBubbles(),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Divider(height: 3),
-            ),
-            // Message bar
-            if (_isReplying)
+          Flex(
+            direction: Axis.vertical,
+            children: [
+              // Conversation subtitle
               Padding(
-                padding: const EdgeInsets.all(8),
-                child: StagingContainerItem(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: _buildMessagesLifeExpectancy()),
+              // Message bubbles
+              Expanded(
+                child: _buildMessageBubbles(),
+              ),
+              // Message bar
+              if (_isReplying)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: StagingContainerItem(
                     quotedMessage: _quotedMessage,
                     model: model,
                     contact: widget._contact,
-                    onCloseListener: () => setState(() {
-                          _isReplying = false;
-                        })),
+                    onCloseListener: () => setState(() => _isReplying = false),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: MessageBar(
+                  width: size!.width * 0.7,
+                  height: size!.height * 0.06,
+                  sendIcon: _isSendIconVisible,
+                  onFieldSubmitted: (value) =>
+                      value.isEmpty ? null : _handleSubmit(_newMessage),
+                  onTextFieldChanged: (value) =>
+                      setState(() => _isSendIconVisible = value.isNotEmpty),
+                  onSend: () => _handleSubmit(_newMessage),
+                  onTextFieldTap: () => setState(() => _emojiShowing = false),
+                  messageController: _newMessage,
+                  displayEmojis: _emojiShowing,
+                  focusNode: _focusNode,
+                  onEmojiTap: () {
+                    {
+                      setState(() => _emojiShowing = !_emojiShowing);
+                      dismissKeyboard();
+                    }
+                  },
+                ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: _buildMessageBar(context),
-            ),
-            _buildEmojiKeyboard(width: 150.0),
-          ]),
-          // Voice recorder
+              MessagingEmojiPicker(
+                showEmojis: _emojiShowing,
+                emptySuggestions: 'No Recents'.i18n,
+                height: size!.height * 0.25,
+                onBackspacePressed: () {
+                  _newMessage
+                    ..text = _newMessage.text.characters.skipLast(1).toString()
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
+                },
+                onEmojiSelected: (category, emoji) async {
+                  if (_customEmojiResponse && _storedMessage != null) {
+                    await model.react(_storedMessage!, emoji.emoji);
+                    _storedMessage = null;
+                  }
+                  setState(() => _isSendIconVisible = true);
+                  _newMessage
+                    ..text += emoji.emoji
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
+                },
+              ),
+            ],
+          ),
           if (_recording)
             VoiceRecorder(
               stopWatchTimer: _stopWatchTimer,
@@ -361,11 +405,16 @@ class _ConversationState extends State<Conversation>
             nextMessage:
                 index == 0 ? null : messageRecords.elementAt(index - 1).value,
             contact: widget._contact,
+            onEmojiTap: (showEmoji, messageSelected) => setState(() {
+              _emojiShowing = true;
+              _customEmojiResponse = true;
+              _storedMessage = messageSelected;
+            }),
             onReply: (_message) {
               setState(() {
                 _isReplying = true;
                 _quotedMessage = _message;
-                showKeyboard(); // TODO: this is clashing with Navigator.pop(context);
+                showKeyboard();
               });
             },
             onTapReply: (_tappedMessage) {
@@ -384,76 +433,7 @@ class _ConversationState extends State<Conversation>
       );
     });
   }
-
-  Widget _buildMessageBar(context) => ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-        leading: IconButton(
-          onPressed: () {
-            setState(() => _emojiShowing = !_emojiShowing);
-            dismissKeyboard();
-          },
-          icon: Icon(Icons.insert_emoticon,
-              color: !_emojiShowing
-                  ? Theme.of(context).primaryIconTheme.color
-                  : Theme.of(context).primaryColorDark),
-        ),
-        title: TextFormField(
-          autofocus: false,
-          focusNode: _focusNode,
-          textInputAction: TextInputAction.send,
-          controller: _newMessage,
-          onTap: () => setState(() => _emojiShowing = false),
-          onChanged: (value) {
-            setState(() => _isSendIconVisible = value.isNotEmpty);
-          },
-          onFieldSubmitted: (value) =>
-              value.isEmpty ? null : _handleSubmit(_newMessage),
-          decoration: InputDecoration(
-            // Send icon
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            hintText: 'Message'.i18n,
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        trailing: _isSendIconVisible
-            ? IconButton(
-                icon: const Icon(Icons.send, color: Colors.black),
-                onPressed: () => _handleSubmit(_newMessage),
-              )
-            : Flex(
-                direction: Axis.horizontal,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () async => await _selectFilesToShare(),
-                    icon: const Icon(Icons.add_circle_rounded),
-                  ),
-                  IconButton(
-                      onPressed: () => _startRecording(),
-                      icon: const Icon(Icons.mic))
-                ],
-              ),
-      );
-
-  Widget _buildEmojiKeyboard({required double width}) => MessagingEmojiPicker(
-        showEmojis: _emojiShowing,
-        emptySuggestions: 'No Recents'.i18n,
-        width: width,
-        onBackspacePressed: () {
-          _newMessage
-            ..text = _newMessage.text.characters.skipLast(1).toString()
-            ..selection = TextSelection.fromPosition(
-                TextPosition(offset: _newMessage.text.length));
-        },
-        onEmojiSelected: (category, emoji) {
-          setState(() => _isSendIconVisible = true);
-          _newMessage
-            ..text += emoji.emoji
-            ..selection = TextSelection.fromPosition(
-                TextPosition(offset: _newMessage.text.length));
-        },
-      );
 }
+
+typedef ShowEmojis = void Function(
+    bool showEmoji, PathAndValue<StoredMessage>? messageStored);

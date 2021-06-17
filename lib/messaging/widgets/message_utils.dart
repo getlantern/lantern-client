@@ -5,13 +5,7 @@ import 'package:intl/intl.dart';
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
   // hardcode the list of available emoticons in a way that is convenient to parse
-  var reactions = {
-    '👍': [],
-    '👎': [],
-    '😄': [],
-    '❤': [],
-    '😢': [], // TODO: Add the [...] option here
-  };
+  var reactions = {'👍': [], '👎': [], '😄': [], '❤': [], '😢': [], '•••': []};
   // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
   // create a Map from Iterable<String> and Iterable<Reaction>
   var reactor_emoticon_map = {};
