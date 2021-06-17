@@ -11,7 +11,7 @@ type = ANDROID
 
 [lantern.lantern-flutter]
 file_filter = assets/locales/<lang>.po
-lang_map = zh-Hans:zh-cn, zh-Hant:zh-hk, ru_RU:ru, fa_IR:fa
+lang_map = zh-Hans:zh-cn, zh-Hant:zh-hk, ru_RU:ru, fa_IR:fa, hi_IN:hi
 minimum_perc = 100
 source_file = assets/locales/en.po
 source_lang = en_US
