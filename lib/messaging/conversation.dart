@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -24,9 +23,8 @@ import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
-  final ScrollController scrollController;
 
-  Conversation(this._contact, this.scrollController) : super();
+  Conversation(this._contact) : super();
 
   @override
   _ConversationState createState() => _ConversationState();
@@ -36,6 +34,7 @@ class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
   bool _customEmojiResponse = false;
+  bool _hasPermission = false;
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
@@ -119,19 +118,19 @@ class _ConversationState extends State<Conversation>
     });
   }
 
-  void _startRecording() {
+  Future<void> _startRecording() async {
     if (_recording) {
       return;
     }
-
-    model.startRecordingVoiceMemo().then((value) {
+    _hasPermission = await model.startRecordingVoiceMemo();
+    if (_hasPermission) {
       _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
       _stopWatchTimer.onExecute.add(StopWatchExecute.start);
       setState(() {
         _recording = true;
         _totalPanned = 0;
       });
-    });
+    }
   }
 
   Future<void> _finishRecording() async {
@@ -321,11 +320,16 @@ class _ConversationState extends State<Conversation>
                   width: size!.width,
                   height: size!.height * 0.07,
                   sendIcon: _isSendIconVisible,
+                  hasPermission: _hasPermission,
+                  onFileSend: () async => await _selectFilesToShare(),
                   onFieldSubmitted: (value) =>
                       value.isEmpty ? null : _handleSubmit(_newMessage),
                   onTextFieldChanged: (value) =>
                       setState(() => _isSendIconVisible = value.isNotEmpty),
                   onSend: () => _handleSubmit(_newMessage),
+                  onRecording: (TapDownDetails tapDown) => _startRecording(),
+                  onStopRecording: (TapUpDetails tapUpDetails) async =>
+                      _hasPermission ? await _finishRecording() : null,
                   onTextFieldTap: () => setState(() => _emojiShowing = false),
                   messageController: _newMessage,
                   displayEmojis: _emojiShowing,
@@ -395,7 +399,6 @@ class _ConversationState extends State<Conversation>
         itemCount: messageRecords.length,
         itemBuilder: (context, index) {
           return MessageBubble(
-            scrollController: widget.scrollController,
             message: messageRecords.elementAt(index),
             priorMessage: index >= messageRecords.length - 1
                 ? null

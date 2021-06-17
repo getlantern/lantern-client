@@ -8,11 +8,9 @@ import 'conversations.dart';
 
 class MessagesTab extends StatefulWidget {
   final String _initialRoute;
-  final ScrollController scrollController;
   final dynamic _initialRouteArguments;
 
-  MessagesTab(
-      this.scrollController, this._initialRoute, this._initialRouteArguments);
+  MessagesTab(this._initialRoute, this._initialRouteArguments);
 
   @override
   _MessagesTabState createState() => _MessagesTabState();
@@ -42,8 +40,8 @@ class _MessagesTabState extends State<MessagesTab>
               break;
             case '/conversation':
               builder = (BuildContext context) => Conversation(
-                  settings.arguments ?? widget._initialRouteArguments,
-                  widget.scrollController);
+                    settings.arguments ?? widget._initialRouteArguments,
+                  );
               break;
             default:
               throw Exception('unknown route ${settings.name}');
