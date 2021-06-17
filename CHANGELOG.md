@@ -1,4 +1,15 @@
 
+<a name="6.7.2"></a>
+## [6.7.2](https://github.com/getlantern/android-lantern/compare/6.7.1...6.7.2)
+
+> 2021-06-17
+
+### Pull Requests
+
+* Merge pull request [#157](https://github.com/getlantern/android-lantern/issues/157) from getlantern/ox/issue155
+* Merge pull request [#144](https://github.com/getlantern/android-lantern/issues/144) from getlantern/ox/issue143
+
+
 <a name="6.7.1"></a>
 ## [6.7.1](https://github.com/getlantern/android-lantern/compare/lantern-6.7.0...6.7.1)
 
