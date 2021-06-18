@@ -2,7 +2,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/humanize.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -71,15 +70,15 @@ class NewMessage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
                         border: Border(
-                      top:
-                          BorderSide(width: topBorderWidth, color: Colors.grey),
+                      top: BorderSide(
+                          width: topBorderWidth, color: Colors.black12),
                       bottom: BorderSide(
-                          width: bottomBorderWidth, color: Colors.grey),
+                          width: bottomBorderWidth, color: Colors.black12),
                     )),
                     child: ListTile(
                       leading: const Icon(
                         Icons.account_circle,
-                        size: 30,
+                        size: 25,
                         color: Colors.black,
                       ),
                       title: Text(contact.value.displayName.isEmpty
