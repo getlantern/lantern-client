@@ -64,16 +64,13 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                 Button(
                   width: 200,
                   text: 'Start Message'.i18n,
-                  onPressed: () async {
+                  onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       context.loaderOverlay.show();
                       try {
-                        await model.addOrUpdateDirectContact(
-                            contact!.contactId.id,
-                            usernameController.value.text);
-                        // Navigator.pushNamedAndRemoveUntil(
-                        //     context, 'conversations', (r) => false);
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/conversation',
+                            arguments: contact);
+                        // Navigator.pop(context);
                       } finally {
                         context.loaderOverlay.hide();
                       }
