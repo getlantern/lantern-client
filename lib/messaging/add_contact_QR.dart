@@ -4,7 +4,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
@@ -46,22 +45,29 @@ class _AddViaQRState extends State<AddViaQR> {
     qrController = controller;
     qrController?.pauseCamera();
     setState(() {
-      scanning = false;
+      scanning = true;
     });
     qrController?.scannedDataStream.listen((scanData) async {
       try {
-        var contact = Contact.fromJson(scanData.code);
         setState(() {
-          contactIsVerified = true;
           contact = Contact.fromJson(scanData.code);
+          contactIsVerified = true;
           contactVerifiedMe = !contact.firstReceivedMessageTs
               .isZero; //if we have not received a control message from this contact, we are not verified by them
+          scanning = false;
         });
-      } finally {
-        await qrController?.pauseCamera();
+      } catch (e) {
         setState(() {
           scanning = false;
         });
+        showInfoDialog(
+          context,
+          title: 'Error'.i18n,
+          des:
+              'Something went wrong while scanning the QR code', // TODO: Add i18n
+        );
+      } finally {
+        await qrController?.pauseCamera();
       }
     });
   }
@@ -176,10 +182,9 @@ class _AddViaQRState extends State<AddViaQR> {
                           children: [
                             Button(
                               text: 'Continue to message'.i18n,
-                              onPressed: () async {
-                                unawaited(Navigator.pushNamed(
-                                    context, '/conversation',
-                                    arguments: contact));
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/conversation',
+                                    arguments: contact);
                                 // Navigator.pop(context);
                               },
                             ),
