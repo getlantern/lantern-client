@@ -26,11 +26,12 @@ message Contact {
   repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
   string displayName = 3; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
   int64 createdTs = 4; // the millisecond unix timestamp when this contact was created
-  int64 mostRecentMessageTs = 5; // the millisecond unix timestamp of the most recent message with this contact
+  int64 mostRecentMessageTs = 5; // the millisecond unix timestamp of the most recent message with this contact (excluding control messages)
   MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
   string mostRecentMessageText = 7; // the text of the most recent message with this contact
   string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
   int32 messagesDisappearAfterSeconds = 9; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
+  int64 firstReceivedMessageTs = 10; // the timestamp of when the first message was received from this contact (including control messages)
 }
 
 // An attachment to a Message
@@ -117,6 +118,14 @@ message DisappearSettings {
   int32 messagesDisappearAfterSeconds = 1; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
 }
 
+// A message that's used for WebRTC signaling. Unlike regular messages, this type of message is not
+// stored on disk. The client also doesn't attempt to re-send, but rather returns an error if it
+// fails to send right away.
+message WebRTCSignal {
+  string senderId = 1; // the id of the person who sent this message
+  bytes content = 2; // the contents of the message
+}
+
 // An envelope for messages to be transferred via the message broker
 message TransferMessage {
   oneof content {
@@ -124,6 +133,7 @@ message TransferMessage {
     bytes reaction = 2; // serialized Reaction
     bytes deleteMessageId = 3; // the id of a message from this Sender to delete
     bytes disappearSettings = 4; // serialized DisappearSettings
+    bytes webRTCSignal = 5; // the content of a WebRTCSignalingMessage
   }
 }
 
@@ -134,7 +144,7 @@ message OutboundMessage {
     SENT = 1; // message has been sent to specific deviceId
   }
 
-  string id = 1; // a unique identifier for this
+  string id = 1; // a unique identifier for this message
   string senderId = 2; // the id of who sent this message (same as on StoredMessage)
   string recipientId = 3; // the id of the recipient
   int64 sent = 4; // The unix timestamp in millisecond for when the message was sent
