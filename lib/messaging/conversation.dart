@@ -288,33 +288,31 @@ class _ConversationState extends State<Conversation>
         // Conversation body
         child: Stack(children: [
           Column(children: [
-            const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15)),
-            // Conversation header
-            Card(
-                color: Colors.white70,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: 65.w,
-                      height: 15.h,
-                      child:
-                          const Icon(Icons.account_circle_rounded, size: 140),
-                    ),
-                    Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        child: Text(widget._contact.displayName,
-                            style: const TextStyle(fontSize: 25))),
-                  ],
-                )),
-            // Message Retention
+            // const Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
+            // // Conversation header
+            // Card(
+            //     color: Colors.white70,
+            //     child: Column(
+            //       children: [
+            //         Container(
+            //           width: 75.w,
+            //           height: 15.h,
+            //           child:
+            //               const Icon(Icons.account_circle_rounded, size: 140),
+            //         ),
+            //         Container(
+            //             padding: const EdgeInsets.symmetric(
+            //                 horizontal: 15, vertical: 15),
+            //             child: Text(widget._contact.displayName,
+            //                 style: const TextStyle(fontSize: 25))),
+            //       ],
+            //     )),
+            // // Message Retention
             Card(
                 color: Colors.white70,
                 child: Container(
-                    width: 60.w,
+                    width: 65.w,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: _buildMessagesLifeExpectancy())),
