@@ -292,26 +292,27 @@ class _ConversationState extends State<Conversation>
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15)),
             // Conversation header
             Card(
-                color: Colors.white38,
+                color: Colors.white70,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Container(
-                      width: 70.w,
+                      width: 65.w,
                       height: 15.h,
-                      child: const Icon(Icons.account_circle, size: 100),
+                      child:
+                          const Icon(Icons.account_circle_rounded, size: 140),
                     ),
                     Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 15),
                         child: Text(widget._contact.displayName,
-                            style: TextStyle(fontSize: 25))),
+                            style: const TextStyle(fontSize: 25))),
                   ],
                 )),
             // Message Retention
             Card(
-                color: Colors.white38,
+                color: Colors.white70,
                 child: Container(
                     width: 60.w,
                     padding: const EdgeInsets.symmetric(
