@@ -29,15 +29,12 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
     /**
      * Creates a new HTTP client
      *
-     * @param proxyHost The host of the local proxy.
-     * @param proxyPort The port of the local proxy.
      */
-    constructor(proxyHost: String, proxyPort: Int) : this(
+    constructor() : this(
         OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
-            .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(proxyHost, proxyPort)))
             .build()
     )
 
