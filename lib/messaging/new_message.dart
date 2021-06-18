@@ -2,7 +2,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/humanize.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -24,17 +23,28 @@ class NewMessage extends StatelessWidget {
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(
           leading: const Icon(Icons.person_add),
-          title: Text('Add Contact'.i18n),
+          title: Text('Add Contact by username'.i18n),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
           onTap: () {
-            Navigator.restorablePushNamed(context, '/add_contact');
+            Navigator.restorablePushNamed(context, '/add_contact_username');
           },
         ),
         const Divider(thickness: 1),
         ListTile(
-          leading: const Icon(Icons.group_add),
-          title: Text('New Group Message'.i18n),
+          leading: const Icon(Icons.qr_code),
+          title: Text('Scan QR Code'.i18n),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+          onTap: () {
+            Navigator.restorablePushNamed(context, '/add_contact_QR');
+          },
         ),
         const Divider(thickness: 1),
+        ListTile(
+            title: Text('Recent contacts'.i18n,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ))),
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
@@ -42,8 +52,7 @@ class NewMessage extends StatelessWidget {
             var all = contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
               contacts.sort((a, b) {
-                var dc = (a.value.displayName)
-                    .compareTo(b.value.displayName);
+                var dc = (a.value.displayName).compareTo(b.value.displayName);
                 if (dc != 0) {
                   return dc;
                 }
@@ -55,21 +64,31 @@ class NewMessage extends StatelessWidget {
               itemCount: all.length,
               itemBuilder: (context, index) {
                 var contact = all[index];
-                return ListTile(
-                  title: Text(
-                      contact.value.displayName.isEmpty
-                          ? 'Unnamed'.i18n
-                          : contact.value.displayName,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(
-                      'added '.i18n +
-                          contact.value.createdTs.toInt().humanizeDate(),
-                      overflow: TextOverflow.ellipsis),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/conversation',
-                        arguments: contact.value);
-                  },
-                );
+                var topBorderWidth = index.isEven ? 0.5 : 0.0;
+                var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
+                return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                          width: topBorderWidth, color: Colors.black12),
+                      bottom: BorderSide(
+                          width: bottomBorderWidth, color: Colors.black12),
+                    )),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.account_circle,
+                        size: 25,
+                        color: Colors.black,
+                      ),
+                      title: Text(contact.value.displayName.isEmpty
+                          ? 'Unnamed contact'.i18n
+                          : contact.value.displayName),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/conversation',
+                            arguments: contact.value);
+                      },
+                    ));
               },
             );
           }),

@@ -92,6 +92,8 @@ dependencies:
   focused_menu: ^1.0.5
 
   extended_image: ^4.1.0
+
+  sizer: ^2.0.13
   
 dev_dependencies:
   flutter_test:

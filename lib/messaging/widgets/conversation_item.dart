@@ -18,8 +18,15 @@ class ConversationItem extends StatelessWidget {
     return model.contact(context, _contact,
         (BuildContext context, Contact contact, Widget? child) {
       return ListTile(
+        leading: const Icon(
+          Icons.account_circle,
+          size: 40,
+          color: Colors.black,
+        ),
         title: Text(
-            contact.displayName.isEmpty ? 'Unnamed'.i18n : contact.displayName,
+            contact.displayName.isEmpty
+                ? 'Unnamed contact'.i18n
+                : contact.displayName,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
             "${contact.mostRecentMessageDirection == MessageDirection.OUT ? 'Me'.i18n + ': ' : ''}${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'.i18n}",
