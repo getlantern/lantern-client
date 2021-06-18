@@ -113,6 +113,11 @@ class _ConversationState extends State<Conversation>
     setState(() {
       _quotedMessage = null;
     });
+    // scroll to bottom on send
+    _scrollController.scrollTo(
+        index: 00,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOutCubic);
   }
 
   void _startRecording() {
