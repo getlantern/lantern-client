@@ -136,20 +136,12 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
-  // TODO: implement this on messaging-android, unless we modify the function above ^ (which I don't think we are currently using anywhere)
+  // TODO: implement this on server
   Future<Contact> getContactFromUsername<T>(String username) async {
     return methodChannel
         .invokeMethod('getContactFromUsername', <String, dynamic>{
       'username': username,
     }).then((value) => value as Contact);
-  }
-
-  // TODO: implement this on messaging-android
-  Future<bool> getVerificationStatus<T>(Contact contact) async {
-    return methodChannel
-        .invokeMethod('getVerificationStatus', <String, dynamic>{
-      'contact': contact,
-    }).then((value) => value as bool);
   }
 
   Widget contactsByActivity(
