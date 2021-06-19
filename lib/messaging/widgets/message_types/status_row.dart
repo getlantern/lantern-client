@@ -3,7 +3,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
-import 'package:lantern/utils/int_extension.dart';
+import 'package:lantern/utils/stored_message_extension.dart';
 
 class StatusRow extends StatefulWidget {
   final bool outbound;
@@ -26,19 +26,17 @@ class StatusRowState extends State<StatusRow> {
   @override
   Widget build(BuildContext context) {
     final statusIcon = getStatusIcon(widget.inbound, widget.msg);
-    final segments = widget.msg.firstViewedAt
-        .toInt()
-        .segments(iterations: 12, endTime: widget.msg.disappearAt.toInt());
     final begin = widget.msg.firstViewedAt.toInt();
     final end = widget.msg.disappearAt.toInt();
     final lifeSpan = end - begin;
-
+    final segments = widget.msg.segments(iterations: 12);
     return TweenAnimationBuilder<int>(
-        tween: IntTween(begin: begin, end: lifeSpan),
+        key: Key('tween_${widget.msg.id}'),
+        tween: IntTween(begin: DateTime.now().millisecondsSinceEpoch, end: end),
         duration: Duration(milliseconds: lifeSpan),
         curve: Curves.linear,
         builder: (BuildContext context, int time, Widget? child) {
-          var index = begin.position(segments: segments, extraTime: time);
+          var index = widget.msg.position(segments: segments);
           return Container(
             child: Opacity(
               opacity: 0.8,
