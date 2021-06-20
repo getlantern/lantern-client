@@ -28,28 +28,6 @@ class VoiceRecorder extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16, bottom: 17),
-                child: Icon(Icons.circle, color: Colors.red),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, bottom: 22),
-                child: StreamBuilder<int>(
-                  stream: stopWatchTimer.rawTime,
-                  initialData: stopWatchTimer.rawTime.value,
-                  builder: (context, snap) {
-                    final value = snap.data;
-                    final displayTime = StopWatchTimer.getDisplayTime(
-                        value ?? 0,
-                        minute: true,
-                        second: true,
-                        hours: false,
-                        milliSecond: false);
-                    return Text(displayTime,
-                        style: const TextStyle(fontWeight: FontWeight.bold));
-                  },
-                ),
-              ),
               Expanded(
                 child: Container(
                   alignment: Alignment.center,
