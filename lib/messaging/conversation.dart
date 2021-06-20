@@ -271,110 +271,96 @@ class _ConversationState extends State<Conversation>
       // Conversation title (contact name)
       title: displayName,
       actions: [DisappearingTimerAction(widget._contact)],
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onPanUpdate: (details) {
-          _totalPanned += details.delta.dx;
-          if (!_willCancelRecording && _totalPanned < -19) {
-            setState(() {
-              _willCancelRecording = true;
-            });
-          } else if (_willCancelRecording && _totalPanned > -19) {
-            setState(() {
-              _willCancelRecording = false;
-            });
-          }
-        },
-        onPanEnd: (details) async {
-          await _finishRecording();
-        },
-        // Conversation body
-        child: Stack(children: [
-          Flex(
-            direction: Axis.vertical,
-            children: [
-              // Conversation subtitle
-              Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: _buildMessagesLifeExpectancy()),
-              // Message bubbles
-              Expanded(
-                child: _buildMessageBubbles(),
-              ),
-              // Message bar
-              if (_isReplying)
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: StagingContainerItem(
-                    quotedMessage: _quotedMessage,
-                    model: model,
-                    contact: widget._contact,
-                    onCloseListener: () => setState(() => _isReplying = false),
-                  ),
-                ),
-              const Divider(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-                child: MessageBar(
-                  width: size!.width,
-                  height: size!.height * 0.07,
-                  sendIcon: _isSendIconVisible,
-                  hasPermission: _hasPermission,
-                  onFileSend: () async => await _selectFilesToShare(),
-                  onFieldSubmitted: (value) =>
-                      value.isEmpty ? null : _handleSubmit(_newMessage),
-                  onTextFieldChanged: (value) =>
-                      setState(() => _isSendIconVisible = value.isNotEmpty),
-                  onSend: () => _handleSubmit(_newMessage),
-                  onRecording: (TapDownDetails tapDown) => _startRecording(),
-                  onStopRecording: (TapUpDetails tapUpDetails) async =>
-                      _hasPermission ? await _finishRecording() : null,
-                  onTextFieldTap: () => setState(() => _emojiShowing = false),
-                  messageController: _newMessage,
-                  displayEmojis: _emojiShowing,
-                  focusNode: _focusNode,
-                  onEmojiTap: () {
-                    {
-                      setState(() => _emojiShowing = !_emojiShowing);
-                      dismissKeyboard();
-                    }
-                  },
-                ),
-              ),
-              MessagingEmojiPicker(
-                showEmojis: _emojiShowing,
-                emptySuggestions: 'No Recents'.i18n,
-                height: size!.height * 0.25,
-                onBackspacePressed: () {
-                  _newMessage
-                    ..text = _newMessage.text.characters.skipLast(1).toString()
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
-                },
-                onEmojiSelected: (category, emoji) async {
-                  if (_customEmojiResponse && _storedMessage != null) {
-                    await model.react(_storedMessage!, emoji.emoji);
-                    _storedMessage = null;
-                  }
-                  setState(() => _isSendIconVisible = true);
-                  _newMessage
-                    ..text += emoji.emoji
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
-                },
-              ),
-            ],
-          ),
-          if (_recording)
-            VoiceRecorder(
-              onSwipeLeft: () => setState(() => _recording = false),
-              stopWatchTimer: _stopWatchTimer,
-              willCancelRecording: _willCancelRecording,
-              onTapUpListener: () async => await _finishRecording(),
+      body: Stack(children: [
+        Flex(
+          direction: Axis.vertical,
+          children: [
+            // Conversation subtitle
+            Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: _buildMessagesLifeExpectancy()),
+            // Message bubbles
+            Expanded(
+              child: _buildMessageBubbles(),
             ),
-        ]),
-      ),
+            // Message bar
+            if (_isReplying)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: StagingContainerItem(
+                  quotedMessage: _quotedMessage,
+                  model: model,
+                  contact: widget._contact,
+                  onCloseListener: () => setState(() => _isReplying = false),
+                ),
+              ),
+            const Divider(),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+              child: MessageBar(
+                width: size!.width,
+                isRecording: _recording,
+                stopWatchTimer: _stopWatchTimer,
+                onSwipeLeft: () => setState(() => _recording = false),
+                onTapUpListener: () async => await _finishRecording(),
+                willCancelRecording: _willCancelRecording,
+                height: size!.height * 0.07,
+                sendIcon: _isSendIconVisible,
+                hasPermission: _hasPermission,
+                onFileSend: () async => await _selectFilesToShare(),
+                onFieldSubmitted: (value) =>
+                    value.isEmpty ? null : _handleSubmit(_newMessage),
+                onTextFieldChanged: (value) =>
+                    setState(() => _isSendIconVisible = value.isNotEmpty),
+                onSend: () => _handleSubmit(_newMessage),
+                onRecording: () => _startRecording(),
+                onStopRecording: () async =>
+                    _hasPermission ? await _finishRecording() : null,
+                onTextFieldTap: () => setState(() => _emojiShowing = false),
+                messageController: _newMessage,
+                displayEmojis: _emojiShowing,
+                focusNode: _focusNode,
+                onEmojiTap: () {
+                  {
+                    setState(() => _emojiShowing = !_emojiShowing);
+                    dismissKeyboard();
+                  }
+                },
+              ),
+            ),
+            MessagingEmojiPicker(
+              showEmojis: _emojiShowing,
+              emptySuggestions: 'No Recents'.i18n,
+              height: size!.height * 0.25,
+              onBackspacePressed: () {
+                _newMessage
+                  ..text = _newMessage.text.characters.skipLast(1).toString()
+                  ..selection = TextSelection.fromPosition(
+                      TextPosition(offset: _newMessage.text.length));
+              },
+              onEmojiSelected: (category, emoji) async {
+                if (_customEmojiResponse && _storedMessage != null) {
+                  await model.react(_storedMessage!, emoji.emoji);
+                  _storedMessage = null;
+                }
+                setState(() => _isSendIconVisible = true);
+                _newMessage
+                  ..text += emoji.emoji
+                  ..selection = TextSelection.fromPosition(
+                      TextPosition(offset: _newMessage.text.length));
+              },
+            ),
+          ],
+        ),
+        // if (_recording)
+        //   VoiceRecorder(
+        //     onSwipeLeft: () => setState(() => _recording = false),
+        //     stopWatchTimer: _stopWatchTimer,
+        //     willCancelRecording: _willCancelRecording,
+        //     onTapUpListener: () async => await _finishRecording(),
+        //   ),
+      ]),
     );
   }
 

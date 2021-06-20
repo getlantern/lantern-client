@@ -74,11 +74,11 @@ dependencies:
 
   dotted_border: ^2.0.0
 
-  emoji_picker_flutter: ^1.0.5
+  emoji_picker_flutter: ^1.0.6
 
   email_validator: '^2.0.1'
 
-  hexcolor: ^2.0.3
+  hexcolor: ^2.0.4
 
   pin_code_text_field: ^1.8.0
 
