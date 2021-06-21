@@ -52,10 +52,12 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           contact = Contact.fromJson(scanData.code);
           contactIsVerified = true;
-          contactVerifiedMe = !contact.firstReceivedMessageTs
-              .isZero; //if we have not received a control message from this contact, we are not verified by them
+          contactVerifiedMe = contact.firstReceivedMessageTs.toInt() !=
+              0; //if we have not received a control message from this contact, we are not verified by them
           scanning = false;
         });
+        await model.addOrUpdateDirectContact(
+            contact.contactId.id, contact.displayName);
       } catch (e) {
         setState(() {
           scanning = false;
