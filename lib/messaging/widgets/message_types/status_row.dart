@@ -40,42 +40,34 @@ class StatusRowState extends State<StatusRow> {
           return Container(
             child: Opacity(
               opacity: 0.8,
-              child: Flex(
+              child: Wrap(
                 direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: Text(
-                        widget.message.value.ts.toInt().humanizeDate(),
-                        style: tsMessageStatus(widget.outbound),
-                      ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: Text(
+                      widget.message.value.ts.toInt().humanizeDate(),
+                      style: tsMessageStatus(widget.outbound),
                     ),
                   ),
                   if (statusIcon != null)
-                    Flexible(
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 1),
-                          child: Icon(
-                            statusIcon,
-                            size: 12,
-                            color: widget.outbound
-                                ? outboundMsgColor
-                                : inboundMsgColor,
-                          )),
-                    ),
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: CustomAssetImage(
-                          path: ImagePaths.countdownPaths[index],
+                    Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: Icon(
+                          statusIcon,
                           size: 12,
                           color: widget.outbound
                               ? outboundMsgColor
-                              : inboundMsgColor),
-                    ),
+                              : inboundMsgColor,
+                        )),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: CustomAssetImage(
+                        path: ImagePaths.countdownPaths[index],
+                        size: 12,
+                        color: widget.outbound
+                            ? outboundMsgColor
+                            : inboundMsgColor),
                   ),
                 ],
               ),
