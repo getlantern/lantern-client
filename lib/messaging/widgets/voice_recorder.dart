@@ -68,10 +68,10 @@ class VoiceRecorder extends StatelessWidget {
   /// to check if a swipe is gonna be used, we just need to check if the `dx` is lower than 200.0
   /// if true then we proceeds to call [onSwipeLeft] if not then [onStopRecording] is called
   void _handlePan(Offset details, bool isPanEnd) {
-    if (isPanEnd && details.dx <= 200.0) {
+    if (isPanEnd && details.dx <= 180.0) {
       onSwipeLeft();
     }
-    if (isPanEnd && details.dx > 200.0) {
+    if (isPanEnd && details.dx > 180.0) {
       onStopRecording();
     }
   }
