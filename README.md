@@ -75,3 +75,27 @@ This auto-formats all Kotlin files in the project.
 ./gradlew ktlintCheck
 
 This manually runs the linter against all Kotlin files in the project.
+
+### VSCode debugging
+Create this `.vscode/launch.json` file: 
+```
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "android-lantern (prod mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": [
+        "--no-sound-null-safety",
+        "--flavor",
+        "prod"
+      ]
+    }
+  ]
+}
+```

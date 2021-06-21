@@ -1,8 +1,10 @@
+import 'package:lantern/messaging/add_contact_username.dart';
 import 'package:lantern/messaging/new_message.dart';
 import 'package:lantern/messaging/your_contact_info.dart';
 import 'package:lantern/package_store.dart';
 
-import 'add_contact.dart';
+import 'add_contact_QR.dart';
+import 'add_contact_username.dart';
 import 'conversation.dart';
 import 'conversations.dart';
 
@@ -35,8 +37,11 @@ class _MessagesTabState extends State<MessagesTab>
             case '/new_message':
               builder = (BuildContext _) => NewMessage();
               break;
-            case '/add_contact':
-              builder = (BuildContext _) => AddContact();
+            case '/add_contact_QR':
+              builder = (BuildContext _) => AddViaQR();
+              break;
+            case '/add_contact_username':
+              builder = (BuildContext _) => AddViaUsername();
               break;
             case '/conversation':
               builder = (BuildContext context) => Conversation(

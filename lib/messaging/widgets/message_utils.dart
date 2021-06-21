@@ -45,6 +45,7 @@ String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
 IconData? getStatusIcon(bool inbound, StoredMessage msg) {
   return inbound
       ? null
+      // TODO: Add a StoredMessage_DeliveryStatus.READ flag
       : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
           ? Icons.check_circle_outline_outlined
           : msg.status == StoredMessage_DeliveryStatus.SENDING
