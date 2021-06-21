@@ -3,6 +3,7 @@ import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
+import 'package:lantern/package_store.dart';
 
 class Reactions extends StatelessWidget {
   final List<String> reactionOptions;
@@ -24,36 +25,49 @@ class Reactions extends StatelessWidget {
         children: reactionOptions
             .map(
               (e) => Flexible(
-                child: GestureDetector(
-                  onTap: () async {
-                    if (e == '•••') {
-                      onEmojiTap(true, message);
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: TextButton(
+                    onPressed: () async {
+                      if (e == '•••') {
+                        onEmojiTap(true, message);
+                        Navigator.pop(context);
+                        return;
+                      }
+                      await messagingModel.react(message, e);
                       Navigator.pop(context);
-                      return;
-                    }
-                    await messagingModel.react(message, e);
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0.0, 2.0),
-                          blurRadius: 2.0,
-                        ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      child: Center(
-                        child: Text(
-                          e,
-                          style: Theme.of(context).textTheme.headline6,
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (states) => states.contains(MaterialState.pressed)
+                            ? Colors.white
+                            : Colors.teal.withOpacity(0.1),
+                      ),
+                      elevation: MaterialStateProperty.resolveWith<double?>(
+                        (states) {
+                          return states.contains(MaterialState.pressed)
+                              ? 4.0
+                              : 0;
+                        },
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
                       ),
+                      foregroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return states.contains(MaterialState.pressed)
+                              ? Colors.white
+                              : Colors.teal.withOpacity(0.1);
+                        },
+                      ),
+                    ),
+                    child: Text(
+                      e,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ),
                 ),
