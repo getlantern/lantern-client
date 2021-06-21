@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/messaging/widgets/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/custom_pan_gesture_recognizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class MessageBar extends StatelessWidget {
@@ -127,64 +127,17 @@ class MessageBar extends StatelessWidget {
                           onPressed: onFileSend,
                           icon: const Icon(Icons.add_circle_rounded),
                         ),
-                  //TODO: MOVE EVERYTHING FROM THE STACK INTO VOICE_RECORDER
-                  Stack(
-                    clipBehavior: Clip.none,
-                    fit: StackFit.passthrough,
-                    children: [
-                      isRecording
-                          ? Transform.scale(
-                              scale: 2,
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(38)),
-                                ),
-                                child: const SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                ),
-                              ),
-                            )
-                          : const SizedBox(),
-                      ForcedPanDetector(
-                        onPanDown: _onPanDown,
-                        onPanUpdate: _onPanUpdate,
-                        onPanEnd: _onPanEnd,
-                        onDoubleTap: () {},
-                        onTap: () {},
-                        child: Icon(
-                          Icons.mic,
-                          size: isRecording ? 30.0 : 25,
-                          color: isRecording ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ],
+                  VoiceRecorder(
+                    willCancelRecording: willCancelRecording,
+                    onSwipeLeft: onSwipeLeft,
+                    isRecording: isRecording,
+                    onStopRecording: onStopRecording,
+                    onTapUpListener: onTapUpListener,
+                    onRecording: onRecording,
                   ),
                 ],
               ),
       ),
     );
-  }
-
-  void _onPanUpdate(Offset details) => _handlePan(details, false);
-
-  void _onPanEnd(Offset details) => _handlePan(details, true);
-
-  void _handlePan(Offset details, bool isPanEnd) {
-    if (isPanEnd && details.dx <= 200.0) {
-      onSwipeLeft();
-    }
-    if (isPanEnd && details.dx > 200.0) {
-      onStopRecording();
-    }
-  }
-
-  bool _onPanDown(Offset details) {
-    onRecording();
-    _handlePan(details, false);
-    return true;
   }
 }
