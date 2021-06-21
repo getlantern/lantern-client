@@ -3,8 +3,9 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:lantern/utils/stored_message_extension.dart';
 
-class StatusRow extends StatelessWidget {
+class StatusRow extends StatefulWidget {
   final bool outbound;
   final bool inbound;
   final StoredMessage msg;
@@ -18,34 +19,68 @@ class StatusRow extends StatelessWidget {
   ) : super();
 
   @override
-  Widget build(BuildContext context) {
-    final statusIcon = getStatusIcon(inbound, msg);
+  StatusRowState createState() => StatusRowState();
+}
 
-    return Container(
-        // padding: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-          Opacity(
-            opacity: 0.35,
-            child: Text(
-              message.value.ts.toInt().humanizeDate(),
-              style: const TextStyle(
-                color: Colors.black, // TODO: consolidate colors here
-                fontSize: 10,
+class StatusRowState extends State<StatusRow> {
+  @override
+  Widget build(BuildContext context) {
+    final statusIcon = getStatusIcon(widget.inbound, widget.msg);
+    final begin = widget.msg.firstViewedAt.toInt();
+    final end = widget.msg.disappearAt.toInt();
+    final lifeSpan = end - begin;
+    final segments = widget.msg.segments(iterations: 12);
+    return TweenAnimationBuilder<int>(
+        key: Key('tween_${widget.msg.id}'),
+        tween: IntTween(begin: DateTime.now().millisecondsSinceEpoch, end: end),
+        duration: Duration(milliseconds: lifeSpan),
+        curve: Curves.linear,
+        builder: (BuildContext context, int time, Widget? child) {
+          var index = widget.msg.position(segments: segments);
+          return Container(
+            child: Opacity(
+              opacity: 0.8,
+              child: Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 1),
+                      child: Text(
+                        widget.message.value.ts.toInt().humanizeDate(),
+                        style: tsMessageStatus(widget.outbound),
+                      ),
+                    ),
+                  ),
+                  if (statusIcon != null)
+                    Flexible(
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 1),
+                          child: Icon(
+                            statusIcon,
+                            size: 12,
+                            color: widget.outbound
+                                ? outboundMsgColor
+                                : inboundMsgColor,
+                          )),
+                    ),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 1),
+                      child: CustomAssetImage(
+                          path: ImagePaths.countdownPaths[index],
+                          size: 12,
+                          color: widget.outbound
+                              ? outboundMsgColor
+                              : inboundMsgColor),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          if (statusIcon != null)
-            Opacity(
-                opacity: 0.35,
-                child: Transform.scale(
-                    scale: .5,
-                    child: Icon(
-                      statusIcon,
-                      color: Colors.black,
-                    ))),
-        ]));
+          );
+        });
   }
 }

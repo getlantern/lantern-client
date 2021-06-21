@@ -56,3 +56,11 @@ TextStyle? tsTitleTrailVPNItem() =>
 TextStyle? tsPinLabel() => const TextStyle(fontSize: 10);
 
 TextStyle? tsExplanation() => const TextStyle(height: 1.6);
+
+TextStyle? tsMessageBody(outbound) => TextStyle(
+    color: outbound ? outboundMsgColor : inboundMsgColor, height: 1.3);
+
+TextStyle? tsMessageStatus(outbound) => TextStyle(
+      color: outbound ? outboundMsgColor : inboundMsgColor,
+      fontSize: 10,
+    );
