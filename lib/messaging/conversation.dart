@@ -34,6 +34,8 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
+  Size? size;
+  late final ShowEmojis onEmojiTap;
   bool _customEmojiResponse = false;
   bool _hasPermission = false;
 
@@ -41,7 +43,6 @@ class _ConversationState extends State<Conversation>
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   bool _recording = false;
   bool _willCancelRecording = false;
-  double _totalPanned = 0.0;
   bool _isSendIconVisible = false;
   bool _isReplying = false;
   StoredMessage? _quotedMessage;
@@ -93,9 +94,7 @@ class _ConversationState extends State<Conversation>
 
   bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
     if (_emojiShowing) {
-      setState(() {
-        _emojiShowing = false;
-      });
+      setState(() => _emojiShowing = false);
       return true;
     } else {
       return false;
@@ -114,9 +113,7 @@ class _ConversationState extends State<Conversation>
       replyToSenderId: replyToSenderId,
     );
     _newMessage.clear();
-    setState(() {
-      _quotedMessage = null;
-    });
+    setState(() => _quotedMessage = null);
     // scroll to bottom on send
     _scrollController.scrollTo(
         index: 00,
@@ -134,7 +131,6 @@ class _ConversationState extends State<Conversation>
       _stopWatchTimer.onExecute.add(StopWatchExecute.start);
       setState(() {
         _recording = true;
-        _totalPanned = 0;
       });
     }
   }
@@ -260,8 +256,6 @@ class _ConversationState extends State<Conversation>
         replyToId: _quotedMessage?.id);
   }
 
-  Size? size;
-  late final ShowEmojis onEmojiTap;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -274,215 +268,183 @@ class _ConversationState extends State<Conversation>
       unawaited(model.clearCurrentConversationContact());
     }
     return BaseScreen(
-      // Conversation title (contact name)
-      title: displayName,
-      actions: [DisappearingTimerAction(widget._contact)],
-      //body: Stack(children: [
-        //Flex(
-         // direction: Axis.vertical,
-         // children: [
-            // Conversation subtitle
-         //   Padding(
-          //      padding: const EdgeInsets.only(top: 8, bottom: 8),
-           //     child: _buildMessagesLifeExpectancy()),
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onPanUpdate: (details) {
-          _totalPanned += details.delta.dx;
-          if (!_willCancelRecording && _totalPanned < -19) {
-            setState(() {
-              _willCancelRecording = true;
-            });
-          } else if (_willCancelRecording && _totalPanned > -19) {
-            setState(() {
-              _willCancelRecording = false;
-            });
-          }
-        },
-        onPanEnd: (details) async {
-          await _finishRecording();
-        },
-        // Conversation body
-        child: Stack(children: [
-          Column(children: [
-            // const Padding(
-            //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
-            // // Conversation header
-            // Card(
-            //     color: Colors.white70,
-            //     child: Column(
-            //       children: [
-            //         Container(
-            //           width: 75.w,
-            //           height: 15.h,
-            //           child:
-            //               const Icon(Icons.account_circle_rounded, size: 140),
-            //         ),
-            //         Container(
-            //             padding: const EdgeInsets.symmetric(
-            //                 horizontal: 15, vertical: 15),
-            //             child: Text(widget._contact.displayName,
-            //                 style: const TextStyle(fontSize: 25))),
-            //       ],
-            //     )),
-            // // Message Retention
-            Card(
+        // Conversation title (contact name)
+        title: displayName,
+        actions: [DisappearingTimerAction(widget._contact)],
+        body: Stack(children: [
+          Flex(
+            direction: Axis.vertical,
+            children: [
+              // const Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
+              // // Conversation header
+              // Card(
+              //     color: Colors.white70,
+              //     child: Column(
+              //       children: [
+              //         Container(
+              //           width: 75.w,
+              //           height: 15.h,
+              //           child:
+              //               const Icon(Icons.account_circle_rounded, size: 140),
+              //         ),
+              //         Container(
+              //             padding: const EdgeInsets.symmetric(
+              //                 horizontal: 15, vertical: 15),
+              //             child: Text(widget._contact.displayName,
+              //                 style: const TextStyle(fontSize: 25))),
+              //       ],
+              //     )),
+              // // Message Retention
+              Card(
                 color: Colors.white70,
                 child: Container(
-                    width: 65.w,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: _buildMessagesLifeExpectancy())),
-            // Message bubbles
-            Expanded(
-              child: _buildMessageBubbles(),
-            ),
-            // Message bar
-            if (_isReplying)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: StagingContainerItem(
-                  quotedMessage: _quotedMessage,
-                  model: model,
-                  contact: widget._contact,
-                  onCloseListener: () => setState(() => _isReplying = false),
+                  width: 65.w,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: _buildMessagesLifeExpectancy(),
                 ),
               ),
-            const Divider(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-              child: MessageBar(
-                width: size!.width,
-                isRecording: _recording,
-                stopWatchTimer: _stopWatchTimer,
-                onSwipeLeft: () => setState(() => _recording = false),
-                onTapUpListener: () async => await _finishRecording(),
-                willCancelRecording: _willCancelRecording,
-                height: size!.height * 0.07,
-                sendIcon: _isSendIconVisible,
-                hasPermission: _hasPermission,
-                onFileSend: () async => await _selectFilesToShare(),
-                onFieldSubmitted: (value) =>
-                    value.isEmpty ? null : _handleSubmit(_newMessage),
-                onTextFieldChanged: (value) =>
-                    setState(() => _isSendIconVisible = value.isNotEmpty),
-                onSend: () => _handleSubmit(_newMessage),
-                onRecording: () => _startRecording(),
-                onStopRecording: () async =>
-                    _hasPermission ? await _finishRecording() : null,
-                onTextFieldTap: () => setState(() => _emojiShowing = false),
-                messageController: _newMessage,
-                displayEmojis: _emojiShowing,
-                focusNode: _focusNode,
-                onEmojiTap: () {
-                  {
-                    setState(() => _emojiShowing = !_emojiShowing);
+              Flexible(
+                fit: FlexFit.tight,
+                child: _buildMessageBubbles(),
+              ),
+              // Message bar
+              if (_isReplying)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: StagingContainerItem(
+                    quotedMessage: _quotedMessage,
+                    model: model,
+                    contact: widget._contact,
+                    onCloseListener: () => setState(() => _isReplying = false),
+                  ),
+                ),
+              const Divider(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                child: MessageBar(
+                  width: size!.width,
+                  isRecording: _recording,
+                  stopWatchTimer: _stopWatchTimer,
+                  onSwipeLeft: () => setState(() => _recording = false),
+                  onTapUpListener: () async => await _finishRecording(),
+                  willCancelRecording: _willCancelRecording,
+                  height: size!.height * 0.07,
+                  sendIcon: _isSendIconVisible,
+                  hasPermission: _hasPermission,
+                  onFileSend: () async => await _selectFilesToShare(),
+                  onFieldSubmitted: (value) =>
+                      value.isEmpty ? null : _handleSubmit(_newMessage),
+                  onTextFieldChanged: (value) =>
+                      setState(() => _isSendIconVisible = value.isNotEmpty),
+                  onSend: () => _handleSubmit(_newMessage),
+                  onRecording: () => _startRecording(),
+                  onStopRecording: () async =>
+                      _hasPermission ? await _finishRecording() : null,
+                  onTextFieldTap: () => setState(() => _emojiShowing = false),
+                  messageController: _newMessage,
+                  displayEmojis: _emojiShowing,
+                  focusNode: _focusNode,
+                  onEmojiTap: () {
+                    {
+                      setState(() => _emojiShowing = !_emojiShowing);
+                      dismissKeyboard();
+                    }
+                  },
+                ),
+              ),
+              MessagingEmojiPicker(
+                showEmojis: _emojiShowing,
+                emptySuggestions: 'No Recents'.i18n,
+                height: size!.height * 0.25,
+                onBackspacePressed: () {
+                  _newMessage
+                    ..text = _newMessage.text.characters.skipLast(1).toString()
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
+                },
+                onEmojiSelected: (category, emoji) async {
+                  if (_customEmojiResponse && _storedMessage != null) {
                     dismissKeyboard();
+                    await model.react(_storedMessage!, emoji.emoji);
+                    _storedMessage = null;
                   }
+                  setState(() => _isSendIconVisible = true);
+                  _newMessage
+                    ..text += emoji.emoji
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
                 },
               ),
-            ),
-            MessagingEmojiPicker(
-              showEmojis: _emojiShowing,
-              emptySuggestions: 'No Recents'.i18n,
-              height: size!.height * 0.25,
-              onBackspacePressed: () {
-                _newMessage
-                  ..text = _newMessage.text.characters.skipLast(1).toString()
-                  ..selection = TextSelection.fromPosition(
-                      TextPosition(offset: _newMessage.text.length));
-              },
-              onEmojiSelected: (category, emoji) async {
-                if (_customEmojiResponse && _storedMessage != null) {
-                  await model.react(_storedMessage!, emoji.emoji);
-                  _storedMessage = null;
-                }
-                setState(() => _isSendIconVisible = true);
-                _newMessage
-                  ..text += emoji.emoji
-                  ..selection = TextSelection.fromPosition(
-                      TextPosition(offset: _newMessage.text.length));
-              },
-            ),
-          ],
-        ),
-        // if (_recording)
-        //   VoiceRecorder(
-        //     onSwipeLeft: () => setState(() => _recording = false),
-        //     stopWatchTimer: _stopWatchTimer,
-        //     willCancelRecording: _willCancelRecording,
-        //     onTapUpListener: () async => await _finishRecording(),
-        //   ),
-      ]),
-    );
+            ],
+          ),
+        ]));
   }
 
-  Widget _buildMessagesLifeExpectancy() {
-    return model.singleContact(
+  Widget _buildMessagesLifeExpectancy() => model.singleContact(
         context,
         widget._contact,
-        (context, contact, child) => contact.messagesDisappearAfterSeconds > 0
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Icon(Icons.timer, size: 18),
-                  Text(
-                      'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-                      style: TextStyle(fontSize: 12)) //TODO: i18n
-                ],
-              )
-            : Row(
-                children: [
-                  const Icon(Icons.lock_clock),
-                  Text('New messages do not disappear') //TODO: i18n
-                ],
-              ));
-  }
+        (context, contact, child) => ListTile(
+          leading: contact.messagesDisappearAfterSeconds > 0
+              ? const Icon(Icons.timer)
+              : const Icon(Icons.lock_clock, size: 18),
+          title: contact.messagesDisappearAfterSeconds > 0
+              ? Text(
+                  'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
+                  style: const TextStyle(fontSize: 12),
+                )
+              : const Text('New messages do not disappear'),
+        ),
+      );
 
   Widget _buildMessageBubbles() {
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
-      return ScrollablePositionedList.builder(
-        itemScrollController: _scrollController,
-        reverse: true,
-        itemCount: messageRecords.length,
-        itemBuilder: (context, index) {
-          return MessageBubble(
-            message: messageRecords.elementAt(index),
-            priorMessage: index >= messageRecords.length - 1
-                ? null
-                : messageRecords.elementAt(index + 1).value,
-            nextMessage:
-                index == 0 ? null : messageRecords.elementAt(index - 1).value,
-            contact: widget._contact,
-            onEmojiTap: (showEmoji, messageSelected) => setState(() {
-              _emojiShowing = true;
-              _customEmojiResponse = true;
-              _storedMessage = messageSelected;
-            }),
-            onReply: (_message) {
-              setState(() {
-                _isReplying = true;
-                _quotedMessage = _message;
-                showKeyboard();
-              });
-            },
-            onTapReply: (_tappedMessage) {
-              final _scrollToIndex = messageRecords.toList().indexWhere(
-                  (element) =>
-                      element.value.id == _tappedMessage.value.replyToId);
-              if (_scrollToIndex != -1) {
-                _scrollController.scrollTo(
-                    index: _scrollToIndex,
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.easeInOutCubic);
-              }
-            },
-          );
-        },
-      );
+      return messageRecords.isEmpty
+          ? Container()
+          : ScrollablePositionedList.builder(
+              itemScrollController: _scrollController,
+              reverse: true,
+              itemCount: messageRecords.length,
+              itemBuilder: (context, index) {
+                return MessageBubble(
+                  message: messageRecords.elementAt(index),
+                  priorMessage: index >= messageRecords.length - 1
+                      ? null
+                      : messageRecords.elementAt(index + 1).value,
+                  nextMessage: index == 0
+                      ? null
+                      : messageRecords.elementAt(index - 1).value,
+                  contact: widget._contact,
+                  onEmojiTap: (showEmoji, messageSelected) => setState(() {
+                    _emojiShowing = true;
+                    _customEmojiResponse = true;
+                    _storedMessage = messageSelected;
+                  }),
+                  onReply: (_message) {
+                    setState(() {
+                      _isReplying = true;
+                      _quotedMessage = _message;
+                      showKeyboard();
+                    });
+                  },
+                  onTapReply: (_tappedMessage) {
+                    final _scrollToIndex = messageRecords.toList().indexWhere(
+                        (element) =>
+                            element.value.id == _tappedMessage.value.replyToId);
+                    if (_scrollToIndex != -1) {
+                      _scrollController.scrollTo(
+                          index: _scrollToIndex,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOutCubic);
+                    }
+                  },
+                );
+              },
+            );
     });
   }
 }
