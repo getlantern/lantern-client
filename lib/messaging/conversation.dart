@@ -295,7 +295,7 @@ class _ConversationState extends State<Conversation>
               //                 style: const TextStyle(fontSize: 25))),
               //       ],
               //     )),
-              // // Message Retention
+              // Message Retention
               Card(
                 color: Colors.white70,
                 child: Container(
@@ -307,7 +307,7 @@ class _ConversationState extends State<Conversation>
                 fit: FlexFit.tight,
                 child: _buildMessageBubbles(),
               ),
-              // Message bar
+              // Reply container
               if (_isReplying)
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -329,7 +329,7 @@ class _ConversationState extends State<Conversation>
                   onSwipeLeft: () => setState(() => _recording = false),
                   onTapUpListener: () async => await _finishRecording(),
                   willCancelRecording: _willCancelRecording,
-                  height: size!.height * 0.07,
+                  height: 45,
                   sendIcon: _isSendIconVisible,
                   hasPermission: _hasPermission,
                   onFileSend: () async => await _selectFilesToShare(),
