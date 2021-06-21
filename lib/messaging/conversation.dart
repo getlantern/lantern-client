@@ -299,9 +299,7 @@ class _ConversationState extends State<Conversation>
               Card(
                 color: Colors.white70,
                 child: Container(
-                  width: 65.w,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  width: 70.w,
                   child: _buildMessagesLifeExpectancy(),
                 ),
               ),
@@ -387,15 +385,18 @@ class _ConversationState extends State<Conversation>
         context,
         widget._contact,
         (context, contact, child) => ListTile(
+          dense: true,
+          minLeadingWidth: 18,
           leading: contact.messagesDisappearAfterSeconds > 0
-              ? const Icon(Icons.timer)
+              ? const Icon(Icons.timer, size: 18)
               : const Icon(Icons.lock_clock, size: 18),
           title: contact.messagesDisappearAfterSeconds > 0
               ? Text(
-                  'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-                  style: const TextStyle(fontSize: 12),
+                  'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
+                  style: const TextStyle(fontSize: 13),
                 )
-              : const Text('New messages do not disappear'),
+              : const Text('New messages do not disappear',
+                  style: TextStyle(fontSize: 13)),
         ),
       );
 
