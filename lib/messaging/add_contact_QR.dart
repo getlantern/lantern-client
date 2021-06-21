@@ -93,50 +93,51 @@ class _AddViaQRState extends State<AddViaQR> {
               }),
         ],
         body: model.me((BuildContext context, Contact me, Widget? child) {
-          return SingleChildScrollView(
-              child: Container(
-            height: 100.h,
+          return Container(
             width: 100.w,
             color: Colors.black,
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                      padding: const EdgeInsets.only(top: 50, bottom: 10),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        width: 200,
-                        height: 200,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            QRView(
-                              key: _qrKey,
-                              onQRViewCreated: (controller) =>
-                                  _onQRViewCreated(controller, model),
-                            ),
-                            if (contactIsVerified)
-                              const Icon(
-                                Icons.check_circle_outline_outlined,
-                                size: 200,
-                                color: Colors.white,
+                  Flexible(
+                    flex: 2,
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 50, bottom: 10),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          width: 50.w,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              QRView(
+                                key: _qrKey,
+                                onQRViewCreated: (controller) =>
+                                    _onQRViewCreated(controller, model),
                               ),
-                          ],
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        width: 200,
-                        height: 225,
+                              if (contactIsVerified)
+                                const Icon(
+                                  Icons.check_circle_outline_outlined,
+                                  size: 200,
+                                  color: Colors.white,
+                                ),
+                            ],
+                          ),
+                        )),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      width: 50.w,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -155,43 +156,49 @@ class _AddViaQRState extends State<AddViaQR> {
                                     ),
                                 ],
                               ),
-                              Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(me.displayName,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ))),
+                              Text(me.displayName,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  )),
                             ]),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Container(
-                        width: 70.w,
-                        child: Text(
-                          'To start a message with your friend, scan each others QR code.  This process will verify the security and end-to-end encryption of your conversation.'
-                              .i18n,
-                          style: const TextStyle(color: Colors.white),
-                        )),
+                      ),
+                    ),
                   ),
-                  if (contactIsVerified | contactVerifiedMe)
-                    Padding(
-                      padding: const EdgeInsets.all(20),
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                          width: 70.w,
+                          child: Text(
+                            'To start a message with your friend, scan each others QR code.  This process will verify the security and end-to-end encryption of your conversation.'
+                                .i18n,
+                            style: const TextStyle(color: Colors.white),
+                          )),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Button(
-                              text: 'Continue to message'.i18n,
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/conversation',
-                                    arguments: contact);
-                                // Navigator.pop(context);
-                              },
-                            ),
+                            if (contactIsVerified | contactVerifiedMe)
+                              Button(
+                                text: 'Continue to message'.i18n,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/conversation',
+                                      arguments: contact);
+                                  // Navigator.pop(context);
+                                },
+                              ),
                           ]),
-                    )
+                    ),
+                  )
                 ]),
-          ));
+          );
         }));
   }
 }
