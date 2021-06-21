@@ -106,9 +106,8 @@ class ContentContainer extends StatelessWidget {
                 ]),
             ...attachments,
             const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            ...reactionsList,
             Flexible(
-              child: StatusRow(outbound, inbound, msg, message),
+              child: StatusRow(outbound, inbound, msg, message, reactionsList),
             ),
           ]),
     );

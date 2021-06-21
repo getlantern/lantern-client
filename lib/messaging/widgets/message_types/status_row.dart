@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
@@ -10,13 +12,11 @@ class StatusRow extends StatefulWidget {
   final bool inbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
+  final List reactionsList;
 
   const StatusRow(
-    this.outbound,
-    this.inbound,
-    this.msg,
-    this.message,
-  ) : super();
+      this.outbound, this.inbound, this.msg, this.message, this.reactionsList)
+      : super();
 
   @override
   StatusRowState createState() => StatusRowState();
@@ -42,7 +42,10 @@ class StatusRowState extends State<StatusRow> {
               opacity: 0.8,
               child: Wrap(
                 direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
+                verticalDirection: VerticalDirection.up,
                 children: [
+                  ...widget.reactionsList,
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 1),
                     child: Text(
