@@ -115,6 +115,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/disappear/
     - assets/locales/
 
   # An image asset can refer to one or more resolution-specific "variants", see

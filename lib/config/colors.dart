@@ -19,6 +19,11 @@ Color indicatorRed = HexColor('#D5001F');
 Color indicatorGreen = HexColor('#00A83E');
 Color overlayBlack = HexColor('#000000CB');
 
+Color outboundBgColor = HexColor('#007A7C');
+Color outboundMsgColor = HexColor('#FFFFFF');
+Color inboundMsgColor = HexColor('#000000');
+Color inboundBgColor = HexColor('#EBEBEB');
+
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;
 Color unselectedTabLabelColor = grey5;
