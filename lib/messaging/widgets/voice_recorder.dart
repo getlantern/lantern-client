@@ -64,6 +64,9 @@ class VoiceRecorder extends StatelessWidget {
 
   void _onPanEnd(Offset details) => _handlePan(details, true);
 
+  /// If the user drag a finger on the widget `_handlePan` is called.
+  /// to check if a swipe is gonna be used, we just need to check if the `dx` is lower than 200.0
+  /// if true then we proceeds to call [onSwipeLeft] if not then [onStopRecording] is called
   void _handlePan(Offset details, bool isPanEnd) {
     if (isPanEnd && details.dx <= 200.0) {
       onSwipeLeft();
