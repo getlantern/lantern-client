@@ -132,38 +132,41 @@ class _AddViaQRState extends State<AddViaQR> {
                   ),
                   Flexible(
                     flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      width: 50.w,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Stack(
-                                children: [
-                                  QrImage(
-                                    data: me.writeToJson(),
-                                    errorCorrectionLevel: QrErrorCorrectLevel.H,
-                                    version: QrVersions.auto,
-                                  ),
-                                  if (contactVerifiedMe)
-                                    const Icon(
-                                      Icons.check_circle_outline_outlined,
-                                      size: 200,
-                                      color: Colors.white,
+                    child: AspectRatio(
+                      aspectRatio: .8,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Stack(
+                                  children: [
+                                    QrImage(
+                                      data: me.writeToJson(),
+                                      errorCorrectionLevel:
+                                          QrErrorCorrectLevel.H,
+                                      version: QrVersions.auto,
                                     ),
-                                ],
-                              ),
-                              Text(me.displayName,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                  )),
-                            ]),
+                                    if (contactVerifiedMe)
+                                      const Icon(
+                                        Icons.check_circle_outline_outlined,
+                                        size: 200,
+                                        color: Colors.white,
+                                      ),
+                                  ],
+                                ),
+                                Text(me.displayName,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    )),
+                              ]),
+                        ),
                       ),
                     ),
                   ),
