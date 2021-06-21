@@ -318,10 +318,12 @@ class _ConversationState extends State<Conversation>
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 ),
-              const Divider(),
+              const Divider(height: 1.0),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                padding: _recording
+                    ? const EdgeInsets.only(top: 4.0, right: 0, left: 0)
+                    : const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 2.0),
                 child: MessageBar(
                   width: size!.width,
                   isRecording: _recording,
