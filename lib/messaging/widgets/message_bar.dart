@@ -55,91 +55,95 @@ class MessageBar extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      child: Center(
-        child: ListTile(
-          contentPadding: isRecording
-              ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
-              : const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 6.0),
-          leading: isRecording
-              ? Flex(
-                  direction: Axis.horizontal,
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Flexible(
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        radius: 12,
-                      ),
+      margin: isRecording
+          ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
+          : const EdgeInsets.only(right: 1.0, left: 1.0, bottom: 6.0),
+      child: ListTile(
+        contentPadding: isRecording
+            ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
+            : const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 0),
+        leading: isRecording
+            ? Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Flexible(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.red,
+                      radius: 12,
                     ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: CountdownTimer(stopWatchTimer: stopWatchTimer),
-                      ),
-                    ),
-                  ],
-                )
-              : IconButton(
-                  onPressed: onEmojiTap,
-                  icon: Icon(Icons.sentiment_very_satisfied,
-                      color: !displayEmojis
-                          ? Theme.of(context).primaryIconTheme.color
-                          : Theme.of(context).primaryColorDark),
-                ),
-          title: isRecording
-              ? Center(
-                  child: Text(
-                    willCancelRecording
-                        ? 'will cancel'.i18n
-                        : '< ' + 'swipe to cancel'.i18n,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                )
-              : TextFormField(
-                  autofocus: false,
-                  textInputAction: TextInputAction.send,
-                  controller: messageController,
-                  onTap: onTextFieldTap,
-                  onChanged: onTextFieldChanged,
-                  focusNode: focusNode,
-                  onFieldSubmitted: onFieldSubmitted,
-                  decoration: InputDecoration(
-                    // Send icon
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    hintText: 'Message'.i18n,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-          trailing: sendIcon && !isRecording
-              ? IconButton(
-                  icon: const Icon(Icons.send, color: Colors.black),
-                  onPressed: onSend,
-                )
-              : Flex(
-                  direction: Axis.horizontal,
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    isRecording
-                        ? const SizedBox()
-                        : IconButton(
-                            onPressed: onFileSend,
-                            icon: const Icon(Icons.add_circle_rounded),
-                          ),
-                    VoiceRecorder(
-                      willCancelRecording: willCancelRecording,
-                      onSwipeLeft: onSwipeLeft,
-                      isRecording: isRecording,
-                      onStopRecording: onStopRecording,
-                      onTapUpListener: onTapUpListener,
-                      onRecording: onRecording,
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: CountdownTimer(stopWatchTimer: stopWatchTimer),
                     ),
-                  ],
+                  ),
+                ],
+              )
+            : IconButton(
+                onPressed: onEmojiTap,
+                icon: Icon(Icons.sentiment_very_satisfied,
+                    color: !displayEmojis
+                        ? Theme.of(context).primaryIconTheme.color
+                        : Theme.of(context).primaryColorDark),
+              ),
+        title: isRecording
+            ? Padding(
+                padding: isRecording
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.only(bottom: 8.0, right: 2.0),
+                child: Text(
+                  willCancelRecording
+                      ? 'will cancel'.i18n
+                      : '< ' + 'swipe to cancel'.i18n,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-        ),
+              )
+            : TextFormField(
+                autofocus: false,
+                textInputAction: TextInputAction.send,
+                controller: messageController,
+                onTap: onTextFieldTap,
+                onChanged: onTextFieldChanged,
+                focusNode: focusNode,
+                onFieldSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  // Send icon
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  hintText: 'Message'.i18n,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+        trailing: sendIcon && !isRecording
+            ? IconButton(
+                icon: const Icon(Icons.send, color: Colors.black),
+                onPressed: onSend,
+              )
+            : Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  isRecording
+                      ? const SizedBox()
+                      : IconButton(
+                          onPressed: onFileSend,
+                          icon: const Icon(Icons.add_circle_rounded),
+                        ),
+                  VoiceRecorder(
+                    willCancelRecording: willCancelRecording,
+                    onSwipeLeft: onSwipeLeft,
+                    isRecording: isRecording,
+                    onStopRecording: onStopRecording,
+                    onTapUpListener: onTapUpListener,
+                    onRecording: onRecording,
+                  ),
+                ],
+              ),
       ),
     );
   }

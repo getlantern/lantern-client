@@ -101,11 +101,11 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  void _send(String text,
+  Future<void> _send(String text,
       {List<Uint8List>? attachments,
       String? replyToSenderId,
-      String? replyToId}) {
-    model.sendToDirectContact(
+      String? replyToId}) async {
+    await model.sendToDirectContact(
       widget._contact.contactId.id,
       text: text,
       attachments: attachments,
@@ -115,10 +115,12 @@ class _ConversationState extends State<Conversation>
     _newMessage.clear();
     setState(() => _quotedMessage = null);
     // scroll to bottom on send
-    _scrollController.scrollTo(
-        index: 00,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOutCubic);
+    // the error is due to this segment of the code, it's appear that the assertion is not true
+    // and when the scroll tries to display the new message breaks.
+    // await _scrollController.scrollTo(
+    //     index: 00,
+    //     duration: const Duration(seconds: 1),
+    //     curve: Curves.easeInOutCubic);
   }
 
   Future<void> _startRecording() async {
@@ -143,7 +145,7 @@ class _ConversationState extends State<Conversation>
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
     var attachment = await model.stopRecordingVoiceMemo();
     if (!_willCancelRecording) {
-      _send(_newMessage.value.text, attachments: [attachment]);
+      await _send(_newMessage.value.text, attachments: [attachment]);
     }
     setState(() {
       _recording = false;
@@ -228,7 +230,7 @@ class _ConversationState extends State<Conversation>
         final metadata = {'title': el.title as String};
         final attachment =
             await model.filePickerLoadAttachment(absolutePath, metadata);
-        _send(_newMessage.value.text, attachments: [attachment]);
+        await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
       showInfoDialog(
@@ -245,13 +247,13 @@ class _ConversationState extends State<Conversation>
     _focusNode.unfocus();
   }
 
-  void _handleSubmit(TextEditingController _newMessage) {
+  Future<void> _handleSubmit(TextEditingController _newMessage) async {
     setState(() {
       _isSendIconVisible = false;
       _isReplying = false;
       _emojiShowing = false;
     });
-    _send(_newMessage.value.text,
+    await _send(_newMessage.value.text,
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
   }
@@ -335,8 +337,8 @@ class _ConversationState extends State<Conversation>
                   sendIcon: _isSendIconVisible,
                   hasPermission: _hasPermission,
                   onFileSend: () async => await _selectFilesToShare(),
-                  onFieldSubmitted: (value) =>
-                      value.isEmpty ? null : _handleSubmit(_newMessage),
+                  onFieldSubmitted: (value) async =>
+                      value.isEmpty ? null : await _handleSubmit(_newMessage),
                   onTextFieldChanged: (value) =>
                       setState(() => _isSendIconVisible = value.isNotEmpty),
                   onSend: () => _handleSubmit(_newMessage),
