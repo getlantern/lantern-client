@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:lantern/messaging/messaging_model.dart';
@@ -44,9 +45,14 @@ class _AddViaQRState extends State<AddViaQR> {
     setState(() {
       scanning = true;
     });
-    qrController?.scannedDataStream.listen((scanData) async {
+    late StreamSubscription<Barcode>? subscription;
+    subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        var parts = scanData.code.split("\|");
+        if (scannedContact != null) {
+          // we've already scanned the contact, don't bother processing again
+          return;
+        }
+        var parts = scanData.code.split('\|');
         var contact = Contact.create();
         contact.contactId = ContactId.create();
         contact.contactId.type = ContactType.DIRECT;
@@ -55,6 +61,15 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scannedContact = contact;
         });
+        var contactNotifier = model.contactNotifier(contact);
+        late void Function() listener;
+        listener = () {
+          if (contact.firstReceivedMessageTs > 0) {
+            contactNotifier.removeListener(listener);
+            Navigator.pushNamed(context, '/conversation', arguments: contact);
+          }
+        };
+        contactNotifier.addListener(listener);
         await model.addOrUpdateDirectContact(
             contact.contactId.id, contact.displayName);
       } catch (e) {
@@ -68,6 +83,7 @@ class _AddViaQRState extends State<AddViaQR> {
               'Something went wrong while scanning the QR code', // TODO: Add i18n
         );
       } finally {
+        await subscription?.cancel();
         await qrController?.pauseCamera();
       }
     });
@@ -89,13 +105,6 @@ class _AddViaQRState extends State<AddViaQR> {
 
   Widget doBuildBody(
       BuildContext context, MessagingModel model, Contact? contact) {
-    if (contact != null && contact.firstReceivedMessageTs > 0) {
-      // TODO: this is not the right place to do this, we should listen independently
-      // and not call navigate from within build().
-      Navigator.pushNamed(context, '/conversation', arguments: contact);
-      return Container();
-    }
-
     return model.me((BuildContext context, Contact me, Widget? child) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
