@@ -19,6 +19,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:sizer/sizer.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -112,6 +113,11 @@ class _ConversationState extends State<Conversation>
     setState(() {
       _quotedMessage = null;
     });
+    // scroll to bottom on send
+    _scrollController.scrollTo(
+        index: 00,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOutCubic);
   }
 
   void _startRecording() {
@@ -287,10 +293,34 @@ class _ConversationState extends State<Conversation>
         // Conversation body
         child: Stack(children: [
           Column(children: [
-            // Conversation subtitle
-            Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: _buildMessagesLifeExpectancy()),
+            // const Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
+            // // Conversation header
+            // Card(
+            //     color: Colors.white70,
+            //     child: Column(
+            //       children: [
+            //         Container(
+            //           width: 75.w,
+            //           height: 15.h,
+            //           child:
+            //               const Icon(Icons.account_circle_rounded, size: 140),
+            //         ),
+            //         Container(
+            //             padding: const EdgeInsets.symmetric(
+            //                 horizontal: 15, vertical: 15),
+            //             child: Text(widget._contact.displayName,
+            //                 style: const TextStyle(fontSize: 25))),
+            //       ],
+            //     )),
+            // // Message Retention
+            Card(
+                color: Colors.white70,
+                child: Container(
+                    width: 65.w,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: _buildMessagesLifeExpectancy())),
             // Message bubbles
             Expanded(
               child: _buildMessageBubbles(),
@@ -336,9 +366,21 @@ class _ConversationState extends State<Conversation>
         context,
         widget._contact,
         (context, contact, child) => contact.messagesDisappearAfterSeconds > 0
-            ? Text(
-                'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}')
-            : Container());
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Icon(Icons.timer, size: 18),
+                  Text(
+                      'New messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
+                      style: TextStyle(fontSize: 12)) //TODO: i18n
+                ],
+              )
+            : Row(
+                children: [
+                  const Icon(Icons.lock_clock),
+                  Text('New messages do not disappear') //TODO: i18n
+                ],
+              ));
   }
 
   Widget _buildMessageBubbles() {

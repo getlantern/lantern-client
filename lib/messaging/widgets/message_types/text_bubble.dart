@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/widgets/message_types/date_marker_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
-import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
@@ -57,7 +56,6 @@ class TextBubble extends StatelessWidget {
                   endOfBlock,
                   newestMessage,
                   reactions),
-              StatusRow(outbound, inbound, msg, message)
             ],
           )),
         ]);

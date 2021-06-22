@@ -12,7 +12,7 @@ class ImageAttachment extends StatelessWidget {
     var model = context.watch<MessagingModel>();
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
-      case StoredAttachment_Status.PENDING_ENCRYPTION:
+      case StoredAttachment_Status.PENDING:
         // pending download
         return Transform.scale(
             scale: 0.5, child: const CircularProgressIndicator());
