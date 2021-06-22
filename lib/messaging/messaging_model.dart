@@ -31,10 +31,10 @@ class MessagingModel extends Model {
 
   Future<void> addOrUpdateDirectContact<T>(
       String identityKey, String displayName) {
-    return methodChannel
-        .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+    return methodChannel.invokeMethod(
+        'addOrUpdateDirectContact', <String, dynamic>{
       'identityKey': identityKey,
-      'displayName': displayName,
+      'displayName': displayName
     });
   }
 
@@ -134,6 +134,14 @@ class MessagingModel extends Model {
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));
+  }
+
+  // TODO: implement this on server
+  Future<Contact> getContactFromUsername<T>(String username) async {
+    return methodChannel
+        .invokeMethod('getContactFromUsername', <String, dynamic>{
+      'username': username,
+    }).then((value) => value as Contact);
   }
 
   Widget contactsByActivity(

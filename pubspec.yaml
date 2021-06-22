@@ -92,6 +92,8 @@ dependencies:
   focused_menu: ^1.0.5
 
   extended_image: ^4.1.0
+
+  sizer: ^2.0.13
   
 dev_dependencies:
   flutter_test:
@@ -113,6 +115,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/disappear/
     - assets/locales/
 
   # An image asset can refer to one or more resolution-specific "variants", see

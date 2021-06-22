@@ -49,6 +49,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     replyToId = call.argument("replyToId"),
                     replyToSenderId = call.argument("replyToSenderId")
                 )
+            // "getContactFromUsername" -> messaging.getContactFromUsername(
+            //     call.argument("username")!!,
+            // )
             "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
