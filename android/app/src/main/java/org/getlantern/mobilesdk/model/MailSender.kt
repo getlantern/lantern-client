@@ -1,12 +1,12 @@
 package org.getlantern.mobilesdk.model
 
-import android.EmailMessage
-import android.EmailResponseHandler
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
+import internalsdk.EmailMessage
+import internalsdk.EmailResponseHandler
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.InputStream;
 
-public class Settings implements android.Settings {
+public class Settings implements internalsdk.Settings {
 
     private static final String TAG = Settings.class.getName();
     private static final String configFileName = "settings.json";

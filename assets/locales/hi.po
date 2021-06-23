@@ -2,17 +2,20 @@
 # Translators:
 # e2f <projects@e2f.com>, 2021
 # Lantern, 2021
-# Kalyan Dikshit <dikshitrocks93@gmail.com>, 2021
 # E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2021
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2021
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2021
+# Kalyan Dikshit <dikshitrocks93@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2021\n"
+"Last-Translator: Kalyan Dikshit <dikshitrocks93@gmail.com>, 2021\n"
 "Language-Team: Hindi (India) (https://www.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "app_name"
+msgstr "लैंटर्न"
 
 msgid "Daily Data Usage"
 msgstr "हर दिन का डेटा उपयोग"
@@ -226,3 +229,21 @@ msgstr "लॉग आउट "
 
 msgid "confirm_remove_device"
 msgstr "क्या आप वाकई इस डिवाइस को अपने Pro खाते से अनलिंक करना चाहते हैं?"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""

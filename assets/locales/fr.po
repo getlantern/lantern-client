@@ -12,6 +12,9 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgid "app_name"
+msgstr "Lantern"
+
 msgid "Daily Data Usage"
 msgstr "Données quotidiennes utilisées"
 
@@ -228,3 +231,21 @@ msgstr "Déconnexion"
 
 msgid "confirm_remove_device"
 msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
+
+msgid "n/a"
+msgstr "s/o"
+
+msgid "Developer Settings"
+msgstr "Paramètres pour les développeurs"
+
+msgid "Developer"
+msgstr "Développeur"
+
+msgid "Payment Test Mode"
+msgstr "Mode de test de paiement"
+
+msgid "Play Version"
+msgstr "Version de Google Play"
+
+msgid "Yinbi Enabled"
+msgstr "Yinbi est activé"
