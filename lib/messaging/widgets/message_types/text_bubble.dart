@@ -33,19 +33,21 @@ class TextBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        crossAxisAlignment:
-            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-              child: Column(
-            crossAxisAlignment:
-                outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isDateMarker != '') DateMarker(isDateMarker),
-              ContentContainer(
+    return Flex(
+      direction: Axis.vertical,
+      crossAxisAlignment:
+          outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment:
+              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isDateMarker != '') Flexible(child: DateMarker(isDateMarker)),
+            Flexible(
+              child: ContentContainer(
                   outbound,
                   inbound,
                   msg,
@@ -56,8 +58,10 @@ class TextBubble extends StatelessWidget {
                   endOfBlock,
                   newestMessage,
                   reactions),
-            ],
-          )),
-        ]);
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

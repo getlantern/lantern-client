@@ -58,7 +58,6 @@ dependencies:
   photo_manager: ^1.2.1
 
   wechat_assets_picker:
-    # path: ../wechat_assets_picker
     git: https://github.com/getlantern/wechat_assets_picker.git 
 
   wechat_camera_picker: ^2.1.0
@@ -75,11 +74,11 @@ dependencies:
 
   dotted_border: ^2.0.0
 
-  emoji_picker_flutter: ^1.0.5
+  emoji_picker_flutter: ^1.0.6
 
   email_validator: '^2.0.1'
 
-  hexcolor: ^2.0.3
+  hexcolor: ^2.0.4
 
   pin_code_text_field: ^1.8.0
 

@@ -114,9 +114,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void onUpdateCurrentIndexPageView(int index) {
-    _pageController.jumpToPage(index);
-  }
+  void onUpdateCurrentIndexPageView(int index) =>
+      _pageController.jumpToPage(index);
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                 body: PageView(
                   onPageChanged: onPageChange,
                   controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     TabStatusProvider(
                       pageController: _pageController,
