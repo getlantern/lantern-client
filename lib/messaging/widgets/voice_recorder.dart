@@ -61,11 +61,9 @@ class VoiceRecorder extends StatelessWidget {
   /// if true then we proceeds to call [onSwipeLeft] if not then [onStopRecording] is called
   void _handlePan(Offset details, bool isPanEnd) {
     if (isPanEnd && details.dx < -150.0) {
-      print('is ended and dx is lower than -150');
       onSwipeLeft();
     }
     if (isPanEnd && details.dx > -150.0) {
-      print('is ended and dx is higher than -150');
       onStopRecording();
     }
   }
