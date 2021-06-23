@@ -19,7 +19,6 @@ import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 
-
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
  * settings can be observed.
@@ -44,20 +43,33 @@ class SessionModel(
             // initialize data for fresh install // TODO remove the need to do this for each data path
             tx.put(
                 PATH_PRO_USER,
-                tx.get(PATH_PRO_USER) ?: false
+                castToBoolean(tx.get(PATH_PRO_USER), false)
             )
             tx.put(
                 PATH_YINBI_ENABLED,
-                tx.get(PATH_YINBI_ENABLED) ?: false
+                castToBoolean(tx.get(PATH_YINBI_ENABLED), false)
             )
             tx.put(
                 PATH_SHOULD_SHOW_YINBI_BADGE,
-                tx.get(PATH_SHOULD_SHOW_YINBI_BADGE) ?: true
+                castToBoolean(tx.get(PATH_SHOULD_SHOW_YINBI_BADGE), true)
             )
             tx.put(
                 PATH_PROXY_ALL,
-                tx.get(PATH_PROXY_ALL) ?: false
+                castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+        }
+    }
+
+    /**
+     * Sometimes, preferences values from old clients that are supposed to be booleans will actually
+     * be stored as numeric values or as strings. This normalizes them all to Booleans.
+     */
+    private fun castToBoolean(value: Any?, defaultValue: Boolean): Boolean {
+        return when (value) {
+            is Boolean -> value
+            is Number -> value.toInt() == 1
+            is String -> value.toBoolean()
+            else -> defaultValue
         }
     }
 
