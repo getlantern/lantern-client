@@ -12,7 +12,7 @@ require (
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20201105130739-9586b8bde3a9
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
-	github.com/getlantern/ipproxy v0.0.0-20210618005501-ae4be01d5356
+	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20201229185957-3fadd2c8f5ba
@@ -37,6 +37,8 @@ replace github.com/anacrolix/go-libutp => github.com/getlantern/go-libutp v1.0.3
 replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
 
 replace github.com/keighl/mandrill => github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358
+
+replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20210430190606-84f1a4e5b695
 
 //replace github.com/getlantern/yinbi-server => ../yinbi-server
 
