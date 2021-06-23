@@ -57,7 +57,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
                       padding: const EdgeInsets.only(
                           left: 64, right: 64, top: 32, bottom: 32),
                       child: QrImage(
-                        data: me.writeToJson(),
+                        data: '${me.contactId.id}|${me.displayName}',
                         errorCorrectionLevel: QrErrorCorrectLevel.H,
                         version: QrVersions.auto,
                       ),
@@ -105,8 +105,8 @@ class _YourContactInfoState extends State<YourContactInfo> {
                         ),
                       ),
                       Padding(
-                          padding:
-                              const EdgeInsets.only(left: 16, bottom: 4, top: 32),
+                          padding: const EdgeInsets.only(
+                              left: 16, bottom: 4, top: 32),
                           child: Text(
                               'Messenger ID (How Others Contact You)'
                                       .i18n
