@@ -330,7 +330,10 @@ class _ConversationState extends State<Conversation>
                   width: size!.width,
                   isRecording: _recording,
                   stopWatchTimer: _stopWatchTimer,
-                  onSwipeLeft: () => setState(() => _recording = false),
+                  onSwipeLeft: () async {
+                    await model.stopRecordingVoiceMemo();
+                    setState(() => _recording = false);
+                  },
                   onTapUpListener: () async => await _finishRecording(),
                   willCancelRecording: _willCancelRecording,
                   height: 45,
@@ -342,7 +345,7 @@ class _ConversationState extends State<Conversation>
                   onTextFieldChanged: (value) =>
                       setState(() => _isSendIconVisible = value.isNotEmpty),
                   onSend: () => _handleSubmit(_newMessage),
-                  onRecording: () => _startRecording(),
+                  onRecording: () async => await _startRecording(),
                   onStopRecording: () async =>
                       _hasPermission ? await _finishRecording() : null,
                   onTextFieldTap: () => setState(() => _emojiShowing = false),

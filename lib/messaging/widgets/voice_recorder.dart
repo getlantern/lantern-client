@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/custom_pan_gesture_recognizer.dart';
 
 class VoiceRecorder extends StatelessWidget {
   const VoiceRecorder({
@@ -44,12 +43,10 @@ class VoiceRecorder extends StatelessWidget {
                 ),
               )
             : const SizedBox(),
-        ForcedPanDetector(
-          onPanDown: _onPanDown,
-          onPanUpdate: _onPanUpdate,
-          onPanEnd: _onPanEnd,
-          onDoubleTap: () {},
-          onTap: () {},
+        GestureDetector(
+          onLongPressMoveUpdate: _onPanUpdate,
+          onLongPressEnd: _onPressEnd,
+          onLongPressStart: _onLongPressStart,
           child: Icon(
             Icons.mic,
             size: isRecording ? 30.0 : 25,
@@ -60,25 +57,25 @@ class VoiceRecorder extends StatelessWidget {
     );
   }
 
-  void _onPanUpdate(Offset details) => _handlePan(details, false);
-
-  void _onPanEnd(Offset details) => _handlePan(details, true);
+  void _onPanUpdate(LongPressMoveUpdateDetails details) =>
+      _handlePan(details.localPosition, false);
 
   /// If the user drag a finger on the widget `_handlePan` is called.
   /// to check if a swipe is gonna be used, we just need to check if the `dx` is lower than 200.0
   /// if true then we proceeds to call [onSwipeLeft] if not then [onStopRecording] is called
   void _handlePan(Offset details, bool isPanEnd) {
-    if (isPanEnd && details.dx <= 180.0) {
+    if (isPanEnd && details.dx < -150.0) {
+      print('is ended and dx is lower than -150');
       onSwipeLeft();
     }
-    if (isPanEnd && details.dx > 180.0) {
+    if (isPanEnd && details.dx > -150.0) {
+      print('is ended and dx is higher than -150');
       onStopRecording();
     }
   }
 
-  bool _onPanDown(Offset details) {
-    onRecording();
-    _handlePan(details, false);
-    return true;
-  }
+  void _onPressEnd(LongPressEndDetails details) =>
+      _handlePan(details.localPosition, true);
+
+  void _onLongPressStart(LongPressStartDetails details) => onRecording();
 }

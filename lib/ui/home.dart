@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/event/Event.dart';
@@ -26,7 +25,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
-  late ScrollController _listScrollController;
   final String _initialRoute;
   int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
@@ -51,7 +49,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-    _listScrollController = ScrollController();
     final eventManager = EventManager('lantern_event_channel');
     loadAsync = Localization.loadTranslations();
 
@@ -111,7 +108,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _pageController.dispose();
-    _listScrollController.dispose();
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }
@@ -136,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                 body: PageView(
                   onPageChanged: onPageChange,
                   controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     TabStatusProvider(
                       pageController: _pageController,
