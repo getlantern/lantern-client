@@ -6,15 +6,18 @@
 # محيي الدين <tx99h4@hotmail.com>, 2021
 # Rima Sghaier, 2021
 # Amin Jobran, 2021
-# Abed Abedd <abderrahman.younis@gmail.com>, 2021
 # e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021
+# Abed Abedd <abderrahman.younis@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021\n"
+"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "app_name"
+msgstr "لانترن"
 
 msgid "Daily Data Usage"
 msgstr "الاستخدام اليومي للبيانات"
@@ -228,3 +231,21 @@ msgstr "تسجيل الخروج"
 
 msgid "confirm_remove_device"
 msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""

@@ -10,15 +10,18 @@
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2021
 # Helen R <helen.russel88@gmail.com>, 2021
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2021
-# sayanvd <sayanvd@yandex.ru>, 2021
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2021
+# sayanvd <sayanvd@yandex.ru>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2021\n"
+"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2021\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "app_name"
+msgstr "Lantern"
 
 msgid "Daily Data Usage"
 msgstr "Ежедневное использование данных"
@@ -235,3 +238,21 @@ msgstr "Выйти"
 
 msgid "confirm_remove_device"
 msgstr "Вы уверены, что хотите отвязать это устройство от аккаунта Pro?"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""

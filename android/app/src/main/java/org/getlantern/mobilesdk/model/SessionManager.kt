@@ -1,7 +1,5 @@
 package org.getlantern.mobilesdk.model
 
-import android.AdSettings
-import android.Session
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -12,6 +10,8 @@ import android.text.TextUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
+import internalsdk.AdSettings
+import internalsdk.Session
 import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
@@ -25,7 +25,7 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
-import java.util.*
+import java.util.Locale
 import kotlin.collections.HashMap
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
@@ -42,7 +42,6 @@ abstract class SessionManager(application: Application) : Session {
     val settings: Settings
     protected val context: Context
     protected val prefs: SharedPreferences
-    protected val editor: SharedPreferences.Editor get() = prefs.edit()
     val db: DB
     protected val vpnModel: VpnModel
 
@@ -116,7 +115,7 @@ abstract class SessionManager(application: Application) : Session {
     private fun setLocale(locale: Locale?) {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")
-            editor.putString(LANG, locale.toString()).commit()
+            prefs.edit().putString(LANG, locale.toString()).apply()
             if (locale.language != oldLocale) {
                 EventBus.getDefault().post(locale)
             }
@@ -124,11 +123,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun hasAcceptedTerms(): Boolean {
-        return prefs.getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
+        return getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
     }
 
     fun acceptTerms() {
-        editor.putInt(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION).commit()
+        prefs.edit().putInt(ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION).apply()
     }
 
     override fun deviceOS(): String {
@@ -148,9 +147,9 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     var showAdsAfterDays: Long
-        get() = prefs.getLong(SHOW_ADS_AFTER_DAYS, 0L)
+        get() = getLong(SHOW_ADS_AFTER_DAYS, 0L)
         set(days) {
-            editor.putLong(SHOW_ADS_AFTER_DAYS, days).commit()
+            prefs.edit().putLong(SHOW_ADS_AFTER_DAYS, days).apply()
         }
 
     /**
@@ -191,11 +190,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun proxyAll(): Boolean {
-        return prefs.getBoolean(PROXY_ALL, false)
+        return getBoolean(PROXY_ALL, false)
     }
 
     fun setProxyAll(proxyAll: Boolean) {
-        editor.putBoolean(PROXY_ALL, proxyAll).commit()
+        prefs.edit().putBoolean(PROXY_ALL, proxyAll).apply()
     }
 
     val serverCountry: String?
@@ -213,7 +212,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setForceCountry(countryCode: String) {
-        editor.putString(FORCE_COUNTRY, countryCode).commit()
+        prefs.edit().putString(FORCE_COUNTRY, countryCode).apply()
     }
 
     override fun appVersion(): String {
@@ -225,7 +224,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setEmail(email: String?) {
-        editor.putString(EMAIL_ADDRESS, email).commit()
+        prefs.edit().putString(EMAIL_ADDRESS, email).apply()
     }
 
     fun setUserIdAndToken(userId: Long, token: String) {
@@ -234,12 +233,12 @@ abstract class SessionManager(application: Application) : Session {
             return
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        editor.putLong(USER_ID, userId).putString(TOKEN, token).commit()
+        prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).apply()
         FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
     private fun setDeviceId(deviceId: String?) {
-        editor.putString(DEVICE_ID, deviceId).commit()
+        prefs.edit().putString(DEVICE_ID, deviceId).apply()
     }
 
     override fun getDeviceID(): String {
@@ -276,18 +275,18 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     private val isPaymentTestMode: Boolean
-        get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
+        get() = getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
-        editor.putBoolean(PAYMENT_TEST_MODE, true).commit()
+        prefs.edit().putBoolean(PAYMENT_TEST_MODE, mode).apply()
     }
 
     fun updateVpnPreference(useVpn: Boolean) {
-        editor.putBoolean(PREF_USE_VPN, useVpn).commit()
+        prefs.edit().putBoolean(PREF_USE_VPN, useVpn).apply()
     }
 
     fun updateBootUpVpnPreference(boot: Boolean) {
-        editor.putBoolean(PREF_BOOTUP_VPN, boot).commit()
+        prefs.edit().putBoolean(PREF_BOOTUP_VPN, boot).apply()
     }
 
     override fun locale(): String {
@@ -296,7 +295,7 @@ abstract class SessionManager(application: Application) : Session {
 
     private fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
-        editor.putString(LATEST_BANDWIDTH, amount).commit()
+        prefs.edit().putString(LATEST_BANDWIDTH, amount).apply()
         vpnModel.saveBandwidth(
             Vpn.Bandwidth.newBuilder()
                 .setPercent(update.percent)
@@ -318,11 +317,11 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun setSurveyLinkOpened(url: String?) {
-        editor.putBoolean(url, true).commit()
+        prefs.edit().putBoolean(url, true).apply()
     }
 
     fun surveyLinkOpened(url: String?): Boolean {
-        return prefs.getBoolean(url, false)
+        return getBoolean(url, false)
     }
 
     override fun setStaging(staging: Boolean) {
@@ -334,7 +333,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun setCountry(country: String) {
-        editor.putString(GEO_COUNTRY_CODE, country).commit()
+        prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
     }
 
     override fun updateStats(
@@ -348,9 +347,9 @@ abstract class SessionManager(application: Application) : Session {
         EventBus.getDefault().post(st)
 
         // save last location received
-        editor.putString(SERVER_COUNTRY, country).commit()
-        editor.putString(SERVER_CITY, city).commit()
-        editor.putString(SERVER_COUNTRY_CODE, countryCode).commit()
+        prefs.edit().putString(SERVER_COUNTRY, country)
+            .putString(SERVER_CITY, city)
+            .putString(SERVER_COUNTRY_CODE, countryCode).apply()
         vpnModel.saveServerInfo(
             Vpn.ServerInfo.newBuilder()
                 .setCity(city)
@@ -361,30 +360,30 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     protected fun getInt(name: String?, defaultValue: Int): Int {
-        return try {
-            prefs.getInt(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
-            try {
-                prefs.getLong(name, defaultValue.toLong()).toInt()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                Integer.valueOf(prefs.getString(name, defaultValue.toString())!!)
-            }
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Number -> value.toInt()
+            is String -> value.toInt()
+            else -> throw ClassCastException("$value cannot be cast to Int")
         }
     }
 
-    private fun getLong(name: String?, defaultValue: Long): Long {
-        return try {
-            prefs.getLong(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
-            try {
-                prefs.getInt(name, defaultValue.toInt()).toLong()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                prefs.getString(name, defaultValue.toString())?.toLong() ?: 0L
-            }
+    protected fun getLong(name: String?, defaultValue: Long): Long {
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Number -> value.toLong()
+            is String -> value.toLong()
+            else -> throw ClassCastException("$value cannot be cast to Long")
+        }
+    }
+
+    protected fun getBoolean(name: String?, defaultValue: Boolean): Boolean {
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Boolean -> value
+            is Number -> value.toInt() == 1
+            is String -> value.toBoolean()
+            else -> throw ClassCastException("$value cannot be cast to Boolean")
         }
     }
 
@@ -395,7 +394,7 @@ abstract class SessionManager(application: Application) : Session {
      * before, false is returned.
      */
     fun hasPrefExpired(name: String?): Boolean {
-        val expires = prefs.getLong(name, 0)
+        val expires = getLong(name, 0)
         return System.currentTimeMillis() >= expires
     }
 
@@ -405,7 +404,7 @@ abstract class SessionManager(application: Application) : Session {
      */
     fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
-        editor.putLong(name, currentMilliseconds + numSeconds * 1000).commit()
+        prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).apply()
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -422,7 +421,7 @@ abstract class SessionManager(application: Application) : Session {
         for ((key, value) in headers) {
             e.putString(key, value)
         }
-        e.commit()
+        e.apply()
     }
 
     // headers serialized as a json encoded string->string map
@@ -495,12 +494,12 @@ abstract class SessionManager(application: Application) : Session {
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
-        editor.putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
-            .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
-            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
-            .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).commit()
         db = prefsAdapter.db
+        prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
+            .putBoolean(PAYMENT_TEST_MODE, getBoolean(PAYMENT_TEST_MODE, false))
+            .putBoolean(PLAY_VERSION, getBoolean(PLAY_VERSION, false))
+            .putBoolean(YINBI_ENABLED, getBoolean(YINBI_ENABLED, false))
+            .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")

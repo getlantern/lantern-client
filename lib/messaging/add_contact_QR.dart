@@ -64,9 +64,12 @@ class _AddViaQRState extends State<AddViaQR> {
         var contactNotifier = model.contactNotifier(contact);
         late void Function() listener;
         listener = () {
-          if (contact.firstReceivedMessageTs > 0) {
+          var updatedContact = contactNotifier.value;
+          if (updatedContact != null &&
+              updatedContact.firstReceivedMessageTs > 0) {
             contactNotifier.removeListener(listener);
-            Navigator.pushNamed(context, '/conversation', arguments: contact);
+            Navigator.pushNamed(context, '/conversation',
+                arguments: updatedContact);
           }
         };
         contactNotifier.addListener(listener);
