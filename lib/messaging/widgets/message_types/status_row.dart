@@ -10,13 +10,11 @@ class StatusRow extends StatefulWidget {
   final bool inbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
+  final List reactionsList;
 
   const StatusRow(
-    this.outbound,
-    this.inbound,
-    this.msg,
-    this.message,
-  ) : super();
+      this.outbound, this.inbound, this.msg, this.message, this.reactionsList)
+      : super();
 
   @override
   StatusRowState createState() => StatusRowState();
@@ -40,42 +38,37 @@ class StatusRowState extends State<StatusRow> {
           return Container(
             child: Opacity(
               opacity: 0.8,
-              child: Flex(
+              child: Wrap(
                 direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
+                alignment: WrapAlignment.center,
+                verticalDirection: VerticalDirection.up,
                 children: [
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: Text(
-                        widget.message.value.ts.toInt().humanizeDate(),
-                        style: tsMessageStatus(widget.outbound),
-                      ),
+                  ...widget.reactionsList,
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: Text(
+                      widget.message.value.ts.toInt().humanizeDate(),
+                      style: tsMessageStatus(widget.outbound),
                     ),
                   ),
                   if (statusIcon != null)
-                    Flexible(
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 1),
-                          child: Icon(
-                            statusIcon,
-                            size: 12,
-                            color: widget.outbound
-                                ? outboundMsgColor
-                                : inboundMsgColor,
-                          )),
-                    ),
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: CustomAssetImage(
-                          path: ImagePaths.countdownPaths[index],
+                    Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: Icon(
+                          statusIcon,
                           size: 12,
                           color: widget.outbound
                               ? outboundMsgColor
-                              : inboundMsgColor),
-                    ),
+                              : inboundMsgColor,
+                        )),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: CustomAssetImage(
+                        path: ImagePaths.countdownPaths[index],
+                        size: 12,
+                        color: widget.outbound
+                            ? outboundMsgColor
+                            : inboundMsgColor),
                   ),
                 ],
               ),

@@ -29,19 +29,15 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
 
-  late Future<void> loadAsync;
-
   Function()? _cancelEventSubscription;
 
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeExchange)) {
-      _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
-      _currentIndex = 3;
+      _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
-      _currentIndex = 4;
+      _currentIndex = 3;
     }
   }
 
@@ -50,7 +46,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
     final eventManager = EventManager('lantern_event_channel');
-    loadAsync = Localization.loadTranslations();
 
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
@@ -114,47 +109,42 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void onUpdateCurrentIndexPageView(int index) {
-    _pageController.jumpToPage(index);
-  }
+  void onUpdateCurrentIndexPageView(int index) =>
+      _pageController.jumpToPage(index);
 
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
-    return FutureBuilder(
-        future: loadAsync,
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return sessionModel.developmentMode(
-              (BuildContext context, bool developmentMode, Widget? child) {
-            return sessionModel
-                .language((BuildContext context, String lang, Widget? child) {
-              Localization.locale = lang;
-              return Scaffold(
-                body: PageView(
-                  onPageChanged: onPageChange,
-                  controller: _pageController,
-                  children: [
-                    TabStatusProvider(
-                      pageController: _pageController,
-                      index: 0,
-                      child: MessagesTab(
-                          _initialRoute.replaceFirst(routeMessaging, ''),
-                          widget._initialRouteArguments),
-                    ),
-                    VPNTab(),
-                    ExchangeTab(),
-                    AccountTab(),
-                    if (developmentMode) DeveloperSettingsTab(),
-                  ],
-                ),
-                bottomNavigationBar: CustomBottomBar(
-                  currentIndex: _currentIndex,
-                  showDeveloperSettings: developmentMode,
-                  updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-                ),
-              );
-            });
-          });
-        });
+    return sessionModel.developmentMode(
+        (BuildContext context, bool developmentMode, Widget? child) {
+      return sessionModel
+          .language((BuildContext context, String lang, Widget? child) {
+        Localization.locale = lang;
+        return Scaffold(
+          body: PageView(
+            onPageChanged: onPageChange,
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              TabStatusProvider(
+                pageController: _pageController,
+                index: 0,
+                child: MessagesTab(
+                    _initialRoute.replaceFirst(routeMessaging, ''),
+                    widget._initialRouteArguments),
+              ),
+              VPNTab(),
+              AccountTab(),
+              if (developmentMode) DeveloperSettingsTab(),
+            ],
+          ),
+          bottomNavigationBar: CustomBottomBar(
+            currentIndex: _currentIndex,
+            showDeveloperSettings: developmentMode,
+            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
+          ),
+        );
+      });
+    });
   }
 }

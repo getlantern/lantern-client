@@ -9,7 +9,6 @@ class ImagePaths {
   static const keyboard_arrow_right_icon =
       'assets/images/keyboard_arrow_right_icon.svg';
   static const location_on_icon = 'assets/images/location_on_icon.svg';
-  static const exchange_icon = 'assets/images/exchange_icon.svg';
 
   static const devices_icon = 'assets/images/devices_icon.svg';
   static const star_icon = 'assets/images/star_icon.svg';

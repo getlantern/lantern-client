@@ -45,7 +45,8 @@ class _MessagesTabState extends State<MessagesTab>
               break;
             case '/conversation':
               builder = (BuildContext context) => Conversation(
-                  settings.arguments ?? widget._initialRouteArguments);
+                    settings.arguments ?? widget._initialRouteArguments,
+                  );
               break;
             default:
               throw Exception('unknown route ${settings.name}');

@@ -1,7 +1,7 @@
 package org.getlantern.mobilesdk;
 
 import android.content.Context;
-import android.Android;
+import internalsdk.Internalsdk;
 import android.util.Log;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -13,19 +13,19 @@ public class ProdLogger extends Logger {
     }
 
     synchronized public static void enable(Context context) {
-        android.Android.enableLogging(Lantern.configDirFor(context, ""));
+        Internalsdk.enableLogging(Lantern.configDirFor(context, ""));
         Logger.instance = new ProdLogger();
     }
 
     @Override
     protected void log(int level, String tag, String msg) {
-        android.Android.debug(tag, msg);
+        Internalsdk.debug(tag, msg);
         logToCrashlytics(level, tag, msg);
     }
 
     @Override
     protected void logError(String tag, String msg, Throwable t) {
-        android.Android.error(tag, msg);
+        Internalsdk.error(tag, msg);
         logToCrashlytics(Log.ERROR, tag, msg);
         if (t != null) {
             FirebaseCrashlytics.getInstance().recordException(t);

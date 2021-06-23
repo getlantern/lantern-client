@@ -2,15 +2,18 @@
 # Translators:
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
 # e2f <projects@e2f.com>, 2021
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021\n"
+"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021\n"
 "Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "app_name"
+msgstr "Lantern"
 
 msgid "Daily Data Usage"
 msgstr "每日網路數據用量"
@@ -217,4 +220,19 @@ msgid "confirm_remove_device"
 msgstr "是否確定要將此裝置從群組中移除？"
 
 msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
 msgstr ""

@@ -1,15 +1,18 @@
 # 
 # Translators:
 # e2f <projects@e2f.com>, 2021
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2021
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2021
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2021\n"
+"Last-Translator: CN R10 <tx_e2f_cn_r10@ate2f.com>, 2021\n"
 "Language-Team: Chinese Simplified (https://www.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "app_name"
+msgstr "蓝灯"
 
 msgid "Daily Data Usage"
 msgstr "每日数据用量"
@@ -217,4 +220,19 @@ msgid "confirm_remove_device"
 msgstr "您是否确定要从您的专业版帐户中取消链接此设备？"
 
 msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
 msgstr ""

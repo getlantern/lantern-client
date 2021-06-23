@@ -34,72 +34,82 @@ class ContentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reactionsList = [];
-    reactions.forEach((key, value) {
-      if (value.isNotEmpty) {
-        reactionsList.add(Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            // Tap on emoji to bring modal with breakdown of interactions
-            child: GestureDetector(
+    reactions.forEach(
+      (key, value) {
+        if (value.isNotEmpty) {
+          reactionsList.add(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              // Tap on emoji to bring modal with breakdown of interactions
+              child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () =>
                     displayEmojiBreakdownPopup(context, msg, reactions),
-                child: displayEmojiCount(reactions, key))));
-      }
-    });
+                child: displayEmojiCount(reactions, key),
+              ),
+            ),
+          );
+        }
+      },
+    );
 
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment));
 
     return Container(
-        padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
-        constraints: const BoxConstraints(
-          minWidth: 70,
-          maxWidth: 350, // TODO: move both these to a responsive sizes file
+      padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
+      decoration: BoxDecoration(
+        color: outbound ? outboundBgColor : inboundBgColor,
+        borderRadius: BorderRadius.only(
+          topLeft:
+              inbound && !startOfBlock ? Radius.zero : const Radius.circular(8),
+          topRight: outbound && !startOfBlock
+              ? Radius.zero
+              : const Radius.circular(8),
+          bottomRight: outbound && (!endOfBlock || newestMessage)
+              ? Radius.zero
+              : const Radius.circular(8),
+          bottomLeft: inbound && (!endOfBlock || newestMessage)
+              ? Radius.zero
+              : const Radius.circular(8),
         ),
-        decoration: BoxDecoration(
-          color: outbound ? outboundBgColor : inboundBgColor,
-          borderRadius: BorderRadius.only(
-            topLeft: inbound && !startOfBlock
-                ? Radius.zero
-                : const Radius.circular(8),
-            topRight: outbound && !startOfBlock
-                ? Radius.zero
-                : const Radius.circular(8),
-            bottomRight: outbound && (!endOfBlock || newestMessage)
-                ? Radius.zero
-                : const Radius.circular(8),
-            bottomLeft: inbound && (!endOfBlock || newestMessage)
-                ? Radius.zero
-                : const Radius.circular(8),
-          ),
-        ),
-        child: Column(
-            crossAxisAlignment:
-                outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                if (msg.replyToId.isNotEmpty)
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () => onTapReply(message),
-                    child: ReplyBubble(outbound, msg, contact),
-                  ),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                if (msg.text.isNotEmpty)
-                  Flexible(
-                    child: Text(
-                      '${msg.text}',
-                      style: tsMessageBody(outbound),
+      ),
+      child: Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment:
+              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (msg.replyToId.isNotEmpty)
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => onTapReply(message),
+                      child: ReplyBubble(outbound, msg, contact),
                     ),
-                  ),
-              ]),
-              ...attachments,
-              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-              ...reactionsList,
-              StatusRow(outbound, inbound, msg, message)
-            ]));
+                ]),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+            Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (msg.text.isNotEmpty)
+                    Flexible(
+                      child: Text(
+                        '${msg.text}',
+                        style: tsMessageBody(outbound),
+                      ),
+                    ),
+                ]),
+            ...attachments,
+            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+            Flexible(
+              child: StatusRow(outbound, inbound, msg, message, reactionsList),
+            ),
+          ]),
+    );
   }
 }
