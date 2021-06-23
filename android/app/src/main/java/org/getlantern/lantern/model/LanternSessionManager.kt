@@ -25,11 +25,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     private var verifyCode: String? = null
 
     override fun isProUser(): Boolean {
-        return prefs.getBoolean(PRO_USER, false)
+        return getBoolean(PRO_USER, false)
     }
 
     fun isExpired(): Boolean {
-        return prefs.getBoolean(PRO_EXPIRED, false)
+        return getBoolean(PRO_EXPIRED, false)
     }
 
     fun getCurrency(): Currency? {
@@ -158,7 +158,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun yinbiEnabled(): Boolean {
-        return BuildConfig.YINBI_ENABLED || prefs.getBoolean(YINBI_ENABLED, false)
+        return BuildConfig.YINBI_ENABLED || getBoolean(YINBI_ENABLED, false)
     }
 
     fun setYinbiEnabled(enabled: Boolean) {
@@ -170,7 +170,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun showYinbiRedemptionTable(): Boolean {
-        return prefs.getBoolean(SHOW_YINBI_REDEMPTION, false)
+        return getBoolean(SHOW_YINBI_REDEMPTION, false)
     }
 
     fun setShowRedemptionTable(v: Boolean) {
@@ -229,7 +229,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun showRenewalPref(): Boolean {
-        return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
+        return getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
     fun setProPlan(plan: ProPlan?) {
@@ -339,7 +339,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     // isPlayVersion checks whether or not the user installed Lantern via
     // the Google Play store
     override fun isPlayVersion(): Boolean {
-        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
+        if (BuildConfig.PLAY_VERSION || getBoolean(PLAY_VERSION, false)) {
             return true
         }
         try {
