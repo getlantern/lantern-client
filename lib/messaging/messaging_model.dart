@@ -175,6 +175,14 @@ class MessagingModel extends Model {
     });
   }
 
+  ValueNotifier<Contact?> contactNotifier(Contact contact) {
+    return singleValueNotifier(
+        '/contacts/${_contactPathSegment(contact.contactId)}', contact,
+        deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
+  }
+
   Widget contactMessages(Contact contact,
       {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
           builder}) {
