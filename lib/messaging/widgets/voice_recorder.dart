@@ -44,7 +44,6 @@ class VoiceRecorder extends StatelessWidget {
               )
             : const SizedBox(),
         GestureDetector(
-          onLongPressMoveUpdate: _onPanUpdate,
           onLongPressEnd: _onPressEnd,
           onLongPressStart: _onLongPressStart,
           child: Icon(
@@ -56,9 +55,6 @@ class VoiceRecorder extends StatelessWidget {
       ],
     );
   }
-
-  void _onPanUpdate(LongPressMoveUpdateDetails details) =>
-      _handlePan(details.localPosition, false);
 
   /// If the user drag a finger on the widget `_handlePan` is called.
   /// to check if a swipe is gonna be used, we just need to check if the `dx` is lower than 200.0
