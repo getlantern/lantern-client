@@ -1,6 +1,5 @@
 package org.getlantern.lantern
 
-import android.Android
 import android.Manifest
 import android.app.Activity
 import android.content.ComponentName
@@ -24,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
+import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -437,7 +437,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         override fun doInBackground(vararg v: Void): String? {
             try {
                 Logger.debug(TAG, "Checking for updates")
-                return Android.checkForUpdates()
+                return Internalsdk.checkForUpdates()
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, "Error checking for update", e)
             }

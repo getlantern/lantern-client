@@ -11,6 +11,9 @@ msgstr ""
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "app_name"
+msgstr "Lantern"
+
 msgid "Daily Data Usage"
 msgstr "နေ့စဉ် ဒေတာအသုံးပြုမှု"
 
@@ -227,3 +230,21 @@ msgstr "လော့အောက်ထွက်ပါ"
 
 msgid "confirm_remove_device"
 msgstr "ဤပစ္စည်းအားသင်၏ Pro အကောင့်မှသင်ပြန်ဖွင့်လိုသည်မှာသေချာပါသလား။"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""

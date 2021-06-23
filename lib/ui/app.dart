@@ -10,6 +10,7 @@ import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sizer/sizer.dart';
+
 import 'home.dart';
 
 class LanternApp extends StatelessWidget {
@@ -18,58 +19,64 @@ class LanternApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          Provider(create: (context) => MessagingModel()),
-          Provider(create: (context) => VpnModel()),
-          Provider(create: (context) => AudioPlayer()),
-          Provider(create: (context) => SessionModel()),
-          Provider(create: (context) => EventManager('lantern_event_channel')),
-          Provider(
-              create: (context) =>
-                  const MethodChannel('lantern_method_channel')),
-        ],
-        child: Sizer(builder: (context, orientation, deviceType) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Lantern Messenger',
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('ar', 'EG'),
-              const Locale('fr', 'FR'),
-              const Locale('en', 'US'),
-              const Locale('fa', 'IR'),
-              const Locale('th', 'TH'),
-              const Locale('ms', 'MY'),
-              const Locale('ru', 'RU'),
-              const Locale('ur', 'IN'),
-              const Locale('zh', 'CN'),
-              const Locale('zh', 'HK'),
-              const Locale('es', 'ES'),
-              const Locale('tr', 'TR'),
-              const Locale('vi', 'VN'),
-              const Locale('my', 'MM'),
-            ],
-            onGenerateRoute: (RouteSettings settings) {
-              return MaterialPageRoute<dynamic>(
-                builder: (context) {
-                  return LoaderOverlay(
-                    useDefaultLoading: true,
-                    child: I18n(
-                      initialLocale: const Locale('en', 'US'),
-                      child: HomePage(settings.name!, settings.arguments),
-                    ),
-                  );
-                },
-                settings: settings,
-              );
-            },
-            theme: buildTheme(context),
-          );
-        }));
+      providers: [
+        Provider(create: (context) => MessagingModel()),
+        Provider(create: (context) => VpnModel()),
+        Provider(create: (context) => AudioPlayer()),
+        Provider(create: (context) => SessionModel()),
+        Provider(create: (context) => EventManager('lantern_event_channel')),
+        Provider(
+            create: (context) => const MethodChannel('lantern_method_channel')),
+      ],
+      child: FutureBuilder(
+          future: Localization.loadTranslations(),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            return Sizer(
+              builder: (context, orientation, deviceType) {
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Lantern Messenger',
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: [
+                    const Locale('ar', 'EG'),
+                    const Locale('fr', 'FR'),
+                    const Locale('en', 'US'),
+                    const Locale('fa', 'IR'),
+                    const Locale('th', 'TH'),
+                    const Locale('ms', 'MY'),
+                    const Locale('ru', 'RU'),
+                    const Locale('ur', 'IN'),
+                    const Locale('zh', 'CN'),
+                    const Locale('zh', 'HK'),
+                    const Locale('es', 'ES'),
+                    const Locale('tr', 'TR'),
+                    const Locale('vi', 'VN'),
+                    const Locale('my', 'MM'),
+                  ],
+                  onGenerateRoute: (RouteSettings settings) {
+                    return MaterialPageRoute<dynamic>(
+                      builder: (context) {
+                        return LoaderOverlay(
+                          useDefaultLoading: true,
+                          child: I18n(
+                            initialLocale: const Locale('en', 'US'),
+                            child: HomePage(settings.name!, settings.arguments),
+                          ),
+                        );
+                      },
+                      settings: settings,
+                    );
+                  },
+                  theme: buildTheme(context),
+                );
+              },
+            );
+          }),
+    );
   }
 
   ThemeData buildTheme(BuildContext context) {

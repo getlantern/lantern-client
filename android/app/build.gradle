@@ -182,6 +182,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            debuggable false
             buildConfigField "boolean", "DEVELOPMENT_MODE", "false"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -302,7 +303,7 @@ repositories {
     google()
     mavenCentral()
     mavenLocal()
-    maven { url  "http://dl.bintray.com/piasy/maven" }
+    maven { url  "https://dl.bintray.com/piasy/maven" }
     maven { url "https://www.jitpack.io" }
 }
 

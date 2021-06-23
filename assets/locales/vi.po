@@ -5,13 +5,17 @@
 # Nathan Tran, 2021
 # Yen Le Van <yenlevanbk@gmail.com>, 2021
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021
+# Lantern, 2021
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021\n"
+"Last-Translator: Lantern, 2021\n"
 "Language-Team: Vietnamese (https://www.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "app_name"
+msgstr "Lantern"
 
 msgid "Daily Data Usage"
 msgstr "Sử dụng dữ liệu hàng ngày"
@@ -224,3 +228,21 @@ msgstr "Đăng xuất"
 
 msgid "confirm_remove_device"
 msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"
+
+msgid "n/a"
+msgstr ""
+
+msgid "Developer Settings"
+msgstr ""
+
+msgid "Developer"
+msgstr ""
+
+msgid "Payment Test Mode"
+msgstr ""
+
+msgid "Play Version"
+msgstr ""
+
+msgid "Yinbi Enabled"
+msgstr ""
