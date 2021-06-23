@@ -149,7 +149,7 @@ class _AddViaQRState extends State<AddViaQR> {
                 ),
               ),
               Flexible(
-                flex: 4,
+                flex: 2,
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Container(
@@ -167,7 +167,7 @@ class _AddViaQRState extends State<AddViaQR> {
                 ),
               ),
               Flexible(
-                flex: 4,
+                flex: 2,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -180,14 +180,10 @@ class _AddViaQRState extends State<AddViaQR> {
                       ),
                     ),
                     if (contact != null)
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Icon(
-                          Icons.check_circle_outline_outlined,
-                          size: 50.w,
-                          color: Colors.white,
-                        ),
-                      ),
+                      const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CustomAssetImage(
+                              path: ImagePaths.check_grey, size: 200)),
                   ],
                 ),
               ),
