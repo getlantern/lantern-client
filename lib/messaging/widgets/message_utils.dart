@@ -5,13 +5,7 @@ import 'package:intl/intl.dart';
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
   // hardcode the list of available emoticons in a way that is convenient to parse
-  var reactions = {
-    '👍': [],
-    '👎': [],
-    '😄': [],
-    '❤': [],
-    '😢': [], // TODO: Add the [...] option here
-  };
+  var reactions = {'👍': [], '👎': [], '😄': [], '❤': [], '😢': [], '•••': []};
   // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
   // create a Map from Iterable<String> and Iterable<Reaction>
   var reactor_emoticon_map = {};
@@ -102,17 +96,18 @@ Container displayEmojiCount(
   final reactionKey = reactions.keys.firstWhere((key) => key == emoticon);
   final reactorsToKey = reactions[reactionKey]!;
   return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200, // TODO generalize in theme
-        borderRadius: const BorderRadius.all(Radius.circular(999)),
+      decoration: const BoxDecoration(
+        color: Colors.white, // TODO generalize in theme
+        borderRadius: BorderRadius.all(Radius.circular(999)),
       ),
       child: Padding(
           padding: reactorsToKey.length > 1
               ? const EdgeInsets.only(left: 3, top: 3, right: 6, bottom: 3)
               : const EdgeInsets.all(3),
           child: reactorsToKey.length > 1
-              ? Text(emoticon + reactorsToKey.length.toString())
-              : Text(emoticon)));
+              ? Text(emoticon + reactorsToKey.length.toString(),
+                  style: const TextStyle(fontSize: 12))
+              : Text(emoticon, style: const TextStyle(fontSize: 12))));
 }
 
 String determineDateSwitch(
