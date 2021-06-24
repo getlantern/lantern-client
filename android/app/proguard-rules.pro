@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+-dontobfuscate
+
 -keep class com.microtripit.** { *; }
 -keep class com.microtripit.mandrillapp.**
 -keep class com.stripe.** { *; }
@@ -190,3 +192,7 @@
 -keep class net.sqlcipher.** { *; }
 -keep class net.sqlcipher.database.* { *; }
 ##---------------End: proguard configuration for sqlcipher  ----------
+
+##---------------Begin: proguard configuration for Signal  ----------
+-keep class org.whispersystems.** { *; }
+##---------------End: proguard configuration for Signal  ----------
