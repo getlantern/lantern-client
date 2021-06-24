@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -9,37 +11,25 @@ import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
+import 'package:lantern/ui/widgets/new_bottom_nav.dart';
 
 import 'widgets/vpn/vpn.dart';
 
 class HomePage extends StatefulWidget {
-  final String _initialRoute;
-  final dynamic _initialRouteArguments;
-
-  HomePage(this._initialRoute, this._initialRouteArguments, {Key? key})
-      : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState(_initialRoute);
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
-  final String _initialRoute;
   int _currentIndex = 0;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
 
   Function()? _cancelEventSubscription;
 
-  _HomePageState(this._initialRoute) {
-    if (_initialRoute.startsWith(routeVPN)) {
-      _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeAccount)) {
-      _currentIndex = 2;
-    } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
-      _currentIndex = 3;
-    }
-  }
+  _HomePageState();
 
   @override
   void initState() {
@@ -116,35 +106,49 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
     return sessionModel.developmentMode(
-        (BuildContext context, bool developmentMode, Widget? child) {
-      return sessionModel
-          .language((BuildContext context, String lang, Widget? child) {
-        Localization.locale = lang;
-        return Scaffold(
-          body: PageView(
-            onPageChanged: onPageChange,
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              TabStatusProvider(
-                pageController: _pageController,
-                index: 0,
-                child: MessagesTab(
-                    _initialRoute.replaceFirst(routeMessaging, ''),
-                    widget._initialRouteArguments),
-              ),
-              VPNTab(),
-              AccountTab(),
-              if (developmentMode) DeveloperSettingsTab(),
-            ],
-          ),
-          bottomNavigationBar: CustomBottomBar(
-            currentIndex: _currentIndex,
-            showDeveloperSettings: developmentMode,
-            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-          ),
+      (BuildContext context, bool developmentMode, Widget? child) {
+        return sessionModel.language(
+          (BuildContext context, String lang, Widget? child) {
+            Localization.locale = lang;
+            return AutoTabsScaffold(
+              routes: [
+                const Messages(),
+                Vpn(),
+                const Account(),
+                if (developmentMode) Developer(),
+              ],
+              // body: PageView(
+              //   onPageChanged: onPageChange,
+              //   controller: _pageController,
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   children: [
+              //     TabStatusProvider(
+              //       pageController: _pageController,
+              //       index: 0,
+              //       child: MessagesTab(
+              //           _initialRoute.replaceFirst(routeMessaging, ''),
+              //           widget._initialRouteArguments),
+              //     ),
+              //     VPNTab(),
+              //     AccountTab(),
+              //     if (developmentMode) DeveloperSettingsTab(),
+              //   ],
+              // ),
+              bottomNavigationBuilder: (context, tabsRouter) =>
+                  buildBottomNav(context, tabsRouter, developmentMode),
+            );
+          },
         );
-      });
-    });
+      },
+    );
+  }
+
+  Widget buildBottomNav(
+      BuildContext context, TabsRouter tabsRouter, bool isDevelop) {
+    return NewBottomNav(
+      onTap: tabsRouter.setActiveIndex,
+      index: tabsRouter.activeIndex,
+      isDevelop: isDevelop,
+    );
   }
 }
