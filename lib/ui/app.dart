@@ -15,7 +15,7 @@ import 'package:sizer/sizer.dart';
 
 import 'home.dart';
 
-final router = AppRouter();
+final globalRouter = AppRouter();
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);
@@ -49,8 +49,8 @@ class LanternApp extends StatelessWidget {
                         GlobalWidgetsLocalizations.delegate,
                         GlobalCupertinoLocalizations.delegate,
                       ],
-                      routeInformationParser: router.defaultRouteParser(),
-                      routerDelegate: router.delegate(
+                      routeInformationParser: globalRouter.defaultRouteParser(),
+                      routerDelegate: globalRouter.delegate(
                         navigatorObservers: () => [
                           BotToastNavigatorObserver(),
                         ],

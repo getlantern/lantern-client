@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router_observer.dart';
 import 'package:lantern/messaging/add_contact_QR.dart';
 import 'package:lantern/messaging/add_contact_username.dart';
 import 'package:lantern/messaging/conversation.dart';
@@ -21,6 +22,7 @@ import 'package:lantern/ui/widgets/account/developer_settings.dart';
           page: EmptyRouterPage,
           name: 'messages',
           path: 'messages',
+          //guards: [RouterObserver],
           children: [
             CustomRoute<void>(
               page: Conversations,
