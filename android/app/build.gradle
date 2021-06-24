@@ -435,3 +435,6 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+// Upload Crashlytics NDK symbols
+tasks.whenTaskAdded { task -> if (task.name.startsWith('assemble') && task.name.endsWith("Release")) task.finalizedBy "uploadCrashlyticsSymbolFile" + task.name.substring('assemble'.length()) }
