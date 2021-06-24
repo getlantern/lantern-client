@@ -16,6 +16,9 @@
 #   public *;
 #}
 
+# Don't obfuscate so that logs contain useful stack traces
+-dontobfuscate
+
 -keep class com.microtripit.** { *; }
 -keep class com.microtripit.mandrillapp.**
 -keep class com.stripe.** { *; }
