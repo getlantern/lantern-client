@@ -119,6 +119,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         }
     }
 
+    //(TODO): On ocassions OPUS breaks the app, throwing the following error, need to investigate how to fix this.
+    //F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), 
+    //fault addr 0x90 in tid 28989 (OpusRecorder re), pid 12804 (lantern.lantern)
     private fun doStartRecordingVoiceMemo() {
         startedRecording.set(System.currentTimeMillis())
         stopRecording.set(
