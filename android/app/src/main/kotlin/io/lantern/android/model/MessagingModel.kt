@@ -53,7 +53,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             //     call.argument("username")!!,
             // )
             "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
-            "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
+            "markViewed" ->{
+                messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
+                voiceMemoFile.delete()
+            }
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
@@ -67,8 +70,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                         "audio/ogg",
                         mapOf("duration" to duration.toString(), "role" to "voiceMemo")
                     ).toByteArray()
-                } finally {
-                    voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
+                }catch(ex: Exception){
+                    //If there's an exception the file is gonna be removed.
+                    //Previously there was a final step where
+                    voiceMemoFile.delete()
                 }
             }
             "filePickerLoadAttachment" -> {
