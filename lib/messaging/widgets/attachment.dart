@@ -27,19 +27,20 @@ Widget attachmentWidget(StoredAttachment attachment) {
           child: Column(
         children: [
           Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: borderColor,
-                  width: 1,
-                ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(borderRadius),
-                ),
-                color: Colors.white,
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: borderColor,
+                width: 1,
               ),
-              child: const Icon(Icons.audiotrack_rounded)),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(borderRadius),
+              ),
+              color: Colors.white,
+            ),
+            child: const Icon(Icons.audiotrack_rounded),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Text(
@@ -69,6 +70,9 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'video/webm':
       return Flexible(child: VideoAttachment(attachment));
     default:
-      return Container();
+
+      ///Is better to use SizedBox due to the default size always being the minimum possible.
+      ///the container is not 0 by default, always use a tiny gap on the screen.
+      return const SizedBox();
   }
 }
