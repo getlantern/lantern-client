@@ -173,10 +173,6 @@ class VoiceMemoState extends State<VoiceMemo> {
                     ),
                   ),
                 ),
-                Text(
-                  _position != null ? _positionText : '',
-                  style: const TextStyle(fontSize: 10.0, color: Colors.white),
-                ),
               ],
             ),
           ],
