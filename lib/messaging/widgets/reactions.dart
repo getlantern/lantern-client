@@ -64,10 +64,13 @@ class Reactions extends StatelessWidget {
                         },
                       ),
                     ),
-                    child: Text(
-                      e,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle2,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        e,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
                     ),
                   ),
                 ),
