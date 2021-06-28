@@ -40,26 +40,15 @@ class _HomePageState extends State<HomePage> {
         case Event.SurveyAvailable:
           final message = params['message'] as String;
           final buttonText = params['buttonText'] as String;
-          final snackBar = SnackBar(
-            backgroundColor: Colors.black,
+          CustomToast.show(
+            title: 'Lantern',
+            surveyText: buttonText,
+            onSurvey: () => mainMethodChannel.invokeMethod('showLastSurvey'),
+            body: message,
+            icon: const Icon(Icons.notifications_active),
             duration: const Duration(days: 99999),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            behavior: SnackBarBehavior.floating,
-            margin:
-                const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),
-            // simple way to show indefinitely
-            content: Text(message),
-            action: SnackBarAction(
-              textColor: secondaryPink,
-              label: buttonText.toUpperCase(),
-              onPressed: () {
-                mainMethodChannel.invokeMethod('showLastSurvey');
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
+            onClose: () {},
           );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
           break;
         default:
           throw Exception('Unhandled event $event');
