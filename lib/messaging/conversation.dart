@@ -261,13 +261,13 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    var tabStatus = context.watch<TabStatus>();
-    if (tabStatus.active) {
-      unawaited(
-          model.setCurrentConversationContact(widget._contact.contactId.id));
-    } else {
-      unawaited(model.clearCurrentConversationContact());
-    }
+    //var tabStatus = context.watch<TabStatus>();
+    //if (tabStatus.active) {
+    unawaited(
+        model.setCurrentConversationContact(widget._contact.contactId.id));
+    //} else {
+    //unawaited(model.clearCurrentConversationContact());
+    //}
     return BaseScreen(
         // Conversation title (contact name)
         title: displayName,

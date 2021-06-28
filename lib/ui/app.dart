@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/core/router/router_observer.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/session_model.dart';
@@ -15,7 +16,7 @@ import 'package:sizer/sizer.dart';
 
 import 'home.dart';
 
-final globalRouter = AppRouter();
+final globalRouter = AppRouter(routerObserver: RouterObserver());
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);

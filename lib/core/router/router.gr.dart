@@ -6,43 +6,44 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:lantern/messaging/add_contact_QR.dart' as _i8;
-import 'package:lantern/messaging/add_contact_username.dart' as _i9;
-import 'package:lantern/messaging/conversation.dart' as _i10;
-import 'package:lantern/messaging/conversations.dart' as _i5;
-import 'package:lantern/messaging/new_message.dart' as _i7;
-import 'package:lantern/messaging/your_contact_info.dart' as _i6;
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i12;
-import 'package:lantern/package_store.dart' as _i11;
-import 'package:lantern/ui/index.dart' as _i3;
-import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i4;
+import 'package:lantern/core/router/router_observer.dart' as _i3;
+import 'package:lantern/messaging/add_contact_QR.dart' as _i9;
+import 'package:lantern/messaging/add_contact_username.dart' as _i10;
+import 'package:lantern/messaging/conversation.dart' as _i11;
+import 'package:lantern/messaging/conversations.dart' as _i6;
+import 'package:lantern/messaging/new_message.dart' as _i8;
+import 'package:lantern/messaging/your_contact_info.dart' as _i7;
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i13;
+import 'package:lantern/package_store.dart' as _i12;
+import 'package:lantern/ui/index.dart' as _i4;
+import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i5;
 
 class AppRouter extends _i1.RootStackRouter {
-  AppRouter([_i2.GlobalKey<_i2.NavigatorState>? navigatorKey])
+  AppRouter(
+      {_i2.GlobalKey<_i2.NavigatorState>? navigatorKey,
+      required this.routerObserver})
       : super(navigatorKey);
+
+  final _i3.RouterObserver routerObserver;
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    Main.name: (routeData) => _i1.AdaptivePage<void>(
+    Home.name: (routeData) => _i1.AdaptivePage<void>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<MainArgs>(orElse: () => const MainArgs());
-          return _i3.HomePage(key: args.key);
+          final args = data.argsAs<HomeArgs>(orElse: () => const HomeArgs());
+          return _i4.HomePage(key: args.key);
         }),
-    Messages.name: (routeData) => _i1.CustomPage<void>(
+    MessagesRouter.name: (routeData) => _i1.AdaptivePage<void>(
         routeData: routeData,
         builder: (_) {
           return const _i1.EmptyRouterPage();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
+        }),
     Vpn.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<VpnArgs>(orElse: () => const VpnArgs());
-          return _i3.VPNTab(key: args.key);
+          return _i4.VPNTab(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -51,7 +52,7 @@ class AppRouter extends _i1.RootStackRouter {
     Account.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i3.AccountTab();
+          return _i4.AccountTab();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -62,16 +63,16 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args =
               data.argsAs<DeveloperArgs>(orElse: () => const DeveloperArgs());
-          return _i4.DeveloperSettingsTab(key: args.key);
+          return _i5.DeveloperSettingsTab(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false),
-    Conversations.name: (routeData) => _i1.CustomPage<void>(
+    ConversationsRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i5.Conversations();
+          return _i6.Conversations();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -80,7 +81,7 @@ class AppRouter extends _i1.RootStackRouter {
     ContactInfo.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i6.YourContactInfo();
+          return _i7.YourContactInfo();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -89,7 +90,7 @@ class AppRouter extends _i1.RootStackRouter {
     NewMessage.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i7.NewMessage();
+          return _i8.NewMessage();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -98,7 +99,7 @@ class AppRouter extends _i1.RootStackRouter {
     AddQR.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i8.AddViaQR();
+          return _i9.AddViaQR();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -107,7 +108,7 @@ class AppRouter extends _i1.RootStackRouter {
     AddUsername.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i9.AddViaUsername();
+          return _i10.AddViaUsername();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -117,7 +118,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ConversationArgs>();
-          return _i10.Conversation(args.contact);
+          return _i11.Conversation(args.contact);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -127,11 +128,11 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig('/#redirect',
-            path: '/', redirectTo: '/main', fullMatch: true),
-        _i1.RouteConfig(Main.name, path: '/main', children: [
-          _i1.RouteConfig(Messages.name, path: 'messages', children: [
-            _i1.RouteConfig(Conversations.name, path: ''),
+        _i1.RouteConfig(Home.name, path: '/', guards: [
+          routerObserver
+        ], children: [
+          _i1.RouteConfig(MessagesRouter.name, path: 'messages', children: [
+            _i1.RouteConfig(ConversationsRoute.name, path: ''),
             _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
             _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
             _i1.RouteConfig(AddQR.name, path: 'addQR'),
@@ -145,29 +146,29 @@ class AppRouter extends _i1.RootStackRouter {
       ];
 }
 
-class Main extends _i1.PageRouteInfo<MainArgs> {
-  Main({_i11.Key? key, List<_i1.PageRouteInfo>? children})
+class Home extends _i1.PageRouteInfo<HomeArgs> {
+  Home({_i12.Key? key, List<_i1.PageRouteInfo>? children})
       : super(name,
-            path: '/main', args: MainArgs(key: key), initialChildren: children);
+            path: '/', args: HomeArgs(key: key), initialChildren: children);
 
-  static const String name = 'Main';
+  static const String name = 'Home';
 }
 
-class MainArgs {
-  const MainArgs({this.key});
+class HomeArgs {
+  const HomeArgs({this.key});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 }
 
-class Messages extends _i1.PageRouteInfo {
-  const Messages({List<_i1.PageRouteInfo>? children})
+class MessagesRouter extends _i1.PageRouteInfo {
+  const MessagesRouter({List<_i1.PageRouteInfo>? children})
       : super(name, path: 'messages', initialChildren: children);
 
-  static const String name = 'Messages';
+  static const String name = 'MessagesRouter';
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {
-  Vpn({_i11.Key? key}) : super(name, path: 'vpn', args: VpnArgs(key: key));
+  Vpn({_i12.Key? key}) : super(name, path: 'vpn', args: VpnArgs(key: key));
 
   static const String name = 'Vpn';
 }
@@ -175,7 +176,7 @@ class Vpn extends _i1.PageRouteInfo<VpnArgs> {
 class VpnArgs {
   const VpnArgs({this.key});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 }
 
 class Account extends _i1.PageRouteInfo {
@@ -185,7 +186,7 @@ class Account extends _i1.PageRouteInfo {
 }
 
 class Developer extends _i1.PageRouteInfo<DeveloperArgs> {
-  Developer({_i11.Key? key})
+  Developer({_i12.Key? key})
       : super(name, path: 'developer', args: DeveloperArgs(key: key));
 
   static const String name = 'Developer';
@@ -194,13 +195,13 @@ class Developer extends _i1.PageRouteInfo<DeveloperArgs> {
 class DeveloperArgs {
   const DeveloperArgs({this.key});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 }
 
-class Conversations extends _i1.PageRouteInfo {
-  const Conversations() : super(name, path: '');
+class ConversationsRoute extends _i1.PageRouteInfo {
+  const ConversationsRoute() : super(name, path: '');
 
-  static const String name = 'Conversations';
+  static const String name = 'ConversationsRoute';
 }
 
 class ContactInfo extends _i1.PageRouteInfo {
@@ -228,7 +229,7 @@ class AddUsername extends _i1.PageRouteInfo {
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i12.Contact contact})
+  Conversation({required _i13.Contact contact})
       : super(name,
             path: 'conversation', args: ConversationArgs(contact: contact));
 
@@ -238,5 +239,5 @@ class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
 class ConversationArgs {
   const ConversationArgs({required this.contact});
 
-  final _i12.Contact contact;
+  final _i13.Contact contact;
 }

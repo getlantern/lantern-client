@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
             Localization.locale = lang;
             return AutoTabsScaffold(
               routes: [
-                const Messages(),
+                const MessagesRouter(),
                 Vpn(),
                 const Account(),
                 if (developmentMode) Developer(),

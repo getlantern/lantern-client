@@ -14,19 +14,18 @@ import 'package:lantern/ui/widgets/account/developer_settings.dart';
   routes: <AutoRoute>[
     AdaptiveRoute<void>(
       initial: true,
-      name: 'main',
+      name: 'home',
       page: HomePage,
-      path: '/main',
+      path: '/',
+      guards: [RouterObserver],
       children: [
-        CustomRoute<void>(
+        AutoRoute<void>(
           page: EmptyRouterPage,
-          name: 'messages',
+          name: 'MessagesRouter',
           path: 'messages',
-          //guards: [RouterObserver],
           children: [
             CustomRoute<void>(
               page: Conversations,
-              name: 'conversations',
               path: '',
               transitionsBuilder: TransitionsBuilders.fadeIn,
               durationInMilliseconds: 400,
@@ -65,10 +64,9 @@ import 'package:lantern/ui/widgets/account/developer_settings.dart';
               path: 'conversation',
               transitionsBuilder: TransitionsBuilders.fadeIn,
               durationInMilliseconds: 400,
+              //guards: [RouterObserver],
             ),
           ],
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 400,
         ),
         CustomRoute<void>(
           page: VPNTab,
