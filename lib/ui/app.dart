@@ -14,8 +14,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:sizer/sizer.dart';
 
-import 'home.dart';
-
 final globalRouter = AppRouter(routerObserver: RouterObserver());
 
 class LanternApp extends StatelessWidget {
@@ -74,24 +72,6 @@ class LanternApp extends StatelessWidget {
                         const Locale('my', 'MM'),
                       ],
                     );
-                    // return MaterialApp(
-
-                    //   onGenerateRoute: (RouteSettings settings) {
-                    //     return MaterialPageRoute<dynamic>(
-                    //       builder: (context) {
-                    //         return LoaderOverlay(
-                    //           useDefaultLoading: true,
-                    //           child: I18n(
-                    //             initialLocale: const Locale('en', 'US'),
-                    //             child: HomePage(settings.name!, settings.arguments),
-                    //           ),
-                    //         );
-                    //       },
-                    //       settings: settings,
-                    //     );
-                    //   },
-                    //
-                    // );
                   },
                 ),
               ),

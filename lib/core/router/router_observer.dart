@@ -8,6 +8,7 @@ class RouterObserver extends AutoRouteGuard {
     print("resolve route name:${resolver.route.routeName}");
     print("route name args: ${resolver.route.args.toString()}");
     print("is root route name: ${router.isRoot}");
+    print('route name has entries: ${router.hasEntries}');
     //if (router.canPopSelfOrChildren) {
     resolver.next(true);
     //} else {

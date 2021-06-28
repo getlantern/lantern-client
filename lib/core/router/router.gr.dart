@@ -28,17 +28,19 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    Home.name: (routeData) => _i1.AdaptivePage<void>(
+    Home.name: (routeData) => _i1.AdaptivePage<dynamic>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<HomeArgs>(orElse: () => const HomeArgs());
           return _i4.HomePage(key: args.key);
         }),
-    MessagesRouter.name: (routeData) => _i1.AdaptivePage<void>(
+    MessagesRouter.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
           return const _i1.EmptyRouterPage();
-        }),
+        },
+        opaque: true,
+        barrierDismissible: false),
     Vpn.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
@@ -128,16 +130,15 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig(Home.name, path: '/', guards: [
-          routerObserver
-        ], children: [
+        _i1.RouteConfig(Home.name, path: '/', children: [
           _i1.RouteConfig(MessagesRouter.name, path: 'messages', children: [
             _i1.RouteConfig(ConversationsRoute.name, path: ''),
             _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
             _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
             _i1.RouteConfig(AddQR.name, path: 'addQR'),
             _i1.RouteConfig(AddUsername.name, path: 'addUsername'),
-            _i1.RouteConfig(Conversation.name, path: 'conversation')
+            _i1.RouteConfig(Conversation.name,
+                path: 'conversation', guards: [routerObserver])
           ]),
           _i1.RouteConfig(Vpn.name, path: 'vpn'),
           _i1.RouteConfig(Account.name, path: 'account'),

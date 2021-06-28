@@ -7,13 +7,9 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
-import 'package:lantern/ui/widgets/account/developer_settings.dart';
+import 'package:lantern/ui/widgets/custom_toast/custom_toast.dart';
 import 'package:lantern/ui/widgets/new_bottom_nav.dart';
-
-import 'widgets/vpn/vpn.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -23,9 +19,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late PageController _pageController;
-  int _currentIndex = 0;
+  final PageController _pageController = PageController();
+  BuildContext? _context;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
+  final navigationChannel = const MethodChannel('navigation');
 
   Function()? _cancelEventSubscription;
 
@@ -34,9 +31,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
     final eventManager = EventManager('lantern_event_channel');
-
+    navigationChannel.setMethodCallHandler(_handleNativeMethodCall);
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -69,26 +65,17 @@ class _HomePageState extends State<HomePage> {
           throw Exception('Unhandled event $event');
       }
     });
-    _handleNavigationRequestsFromNative();
   }
 
-  void _handleNavigationRequestsFromNative() {
-    var navigationChannel = const MethodChannel('navigation');
-    navigationChannel.setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'openConversation':
-          Navigator.pushNamed(context, '/messaging/conversation',
-              arguments: Contact.fromBuffer(call.arguments as Uint8List));
-          break;
-        default:
-          throw Exception('unknown navigation method ${call.method}');
-      }
-      return Future.value(null);
-    });
-    // navigationChannel.invokeMethod('ready');
+  Future<dynamic> _handleNativeMethodCall(MethodCall methodCall) async {
+    if (methodCall.method == 'openConversation') {
+      await _context!
+          .innerRouterOf<TabsRouter>(Home.name)!
+          .innerRouterOf<StackRouter>(MessagesRouter.name)!
+          .push(Conversation(
+              contact: Contact.fromBuffer(methodCall.arguments as Uint8List)));
+    }
   }
-
-  void onPageChange(int index) => setState(() => _currentIndex = index);
 
   @override
   void dispose() {
@@ -99,11 +86,9 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void onUpdateCurrentIndexPageView(int index) =>
-      _pageController.jumpToPage(index);
-
   @override
   Widget build(BuildContext context) {
+    _context = context;
     var sessionModel = context.watch<SessionModel>();
     return sessionModel.developmentMode(
       (BuildContext context, bool developmentMode, Widget? child) {
@@ -117,23 +102,6 @@ class _HomePageState extends State<HomePage> {
                 const Account(),
                 if (developmentMode) Developer(),
               ],
-              // body: PageView(
-              //   onPageChanged: onPageChange,
-              //   controller: _pageController,
-              //   physics: const NeverScrollableScrollPhysics(),
-              //   children: [
-              //     TabStatusProvider(
-              //       pageController: _pageController,
-              //       index: 0,
-              //       child: MessagesTab(
-              //           _initialRoute.replaceFirst(routeMessaging, ''),
-              //           widget._initialRouteArguments),
-              //     ),
-              //     VPNTab(),
-              //     AccountTab(),
-              //     if (developmentMode) DeveloperSettingsTab(),
-              //   ],
-              // ),
               bottomNavigationBuilder: (context, tabsRouter) =>
                   buildBottomNav(context, tabsRouter, developmentMode),
             );
@@ -144,11 +112,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildBottomNav(
-      BuildContext context, TabsRouter tabsRouter, bool isDevelop) {
-    return NewBottomNav(
-      onTap: tabsRouter.setActiveIndex,
-      index: tabsRouter.activeIndex,
-      isDevelop: isDevelop,
-    );
-  }
+          BuildContext context, TabsRouter tabsRouter, bool isDevelop) =>
+      NewBottomNav(
+        onTap: tabsRouter.setActiveIndex,
+        index: tabsRouter.activeIndex,
+        isDevelop: isDevelop,
+      );
 }
