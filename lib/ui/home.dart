@@ -28,12 +28,10 @@ class _HomePageState extends State<HomePage> {
   _HomePageState(this._initialRoute) {
     if (_initialRoute.startsWith(routeVPN)) {
       _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeExchange)) {
-      _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeAccount)) {
-      _currentIndex = 3;
+      _currentIndex = 2;
     } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
-      _currentIndex = 4;
+      _currentIndex = 3;
     }
   }
 
