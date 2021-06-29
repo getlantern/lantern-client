@@ -190,7 +190,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun proxyAll(): Boolean {
-        return prefs.getBoolean(PROXY_ALL, false)
+        return getBoolean(PROXY_ALL, false)
     }
 
     fun setProxyAll(proxyAll: Boolean) {
@@ -275,7 +275,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     private val isPaymentTestMode: Boolean
-        get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
+        get() = getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
         prefs.edit().putBoolean(PAYMENT_TEST_MODE, mode).apply()
@@ -321,7 +321,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun surveyLinkOpened(url: String?): Boolean {
-        return prefs.getBoolean(url, false)
+        return getBoolean(url, false)
     }
 
     override fun setStaging(staging: Boolean) {
@@ -360,30 +360,30 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     protected fun getInt(name: String?, defaultValue: Int): Int {
-        return try {
-            prefs.getInt(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.debug(TAG, e.message)
-            try {
-                prefs.getLong(name, defaultValue.toLong()).toInt()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                Integer.valueOf(prefs.getString(name, defaultValue.toString())!!)
-            }
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Number -> value.toInt()
+            is String -> value.toInt()
+            else -> throw ClassCastException("$value cannot be cast to Int")
         }
     }
 
     protected fun getLong(name: String?, defaultValue: Long): Long {
-        return try {
-            prefs.getLong(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.debug(TAG, e.message)
-            try {
-                prefs.getInt(name, defaultValue.toInt()).toLong()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                prefs.getString(name, defaultValue.toString())?.toLong() ?: 0L
-            }
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Number -> value.toLong()
+            is String -> value.toLong()
+            else -> throw ClassCastException("$value cannot be cast to Long")
+        }
+    }
+
+    protected fun getBoolean(name: String?, defaultValue: Boolean): Boolean {
+        var value = db.get<Any>(name!!) ?: defaultValue
+        return when (value) {
+            is Boolean -> value
+            is Number -> value.toInt() == 1
+            is String -> value.toBoolean()
+            else -> throw ClassCastException("$value cannot be cast to Boolean")
         }
     }
 
@@ -494,12 +494,12 @@ abstract class SessionManager(application: Application) : Session {
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
-        prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
-            .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
-            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
-            .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
         db = prefsAdapter.db
+        prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
+            .putBoolean(PAYMENT_TEST_MODE, getBoolean(PAYMENT_TEST_MODE, false))
+            .putBoolean(PLAY_VERSION, getBoolean(PLAY_VERSION, false))
+            .putBoolean(YINBI_ENABLED, getBoolean(YINBI_ENABLED, false))
+            .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
