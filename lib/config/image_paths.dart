@@ -15,6 +15,7 @@ class ImagePaths {
   static const desktop_icon = 'assets/images/desktop_icon.svg';
   static const yinbi_icon = 'assets/images/yinbi_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
+  static const qr_code = 'assets/images/qr_code.svg';
 
   static const email_icon = 'assets/images/email_icon.svg';
   static const clock_icon = 'assets/images/clock_icon.svg';

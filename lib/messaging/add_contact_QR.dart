@@ -79,12 +79,12 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scanning = false;
         });
-        showInfoDialog(
-          context,
-          title: 'Error'.i18n,
-          des:
-              'Something went wrong while scanning the QR code', // TODO: Add i18n
-        );
+        showInfoDialog(context,
+            title: 'Error'.i18n,
+            des:
+                'Something went wrong while scanning the QR code', // TODO: Add i18n
+            icon: ImagePaths.alert_icon,
+            buttonText: 'OK'.i18n);
       } finally {
         await subscription?.cancel();
         await qrController?.pauseCamera();
@@ -131,13 +131,13 @@ class _AddViaQRState extends State<AddViaQR> {
                           )),
                       GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () => showInfoDialog(
-                          context,
-                          title: 'Scan QR Code'.i18n,
-                          des:
-                              "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
-                                  .i18n,
-                        ),
+                        onTap: () => showInfoDialog(context,
+                            title: 'Scan QR Code'.i18n,
+                            des:
+                                "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+                                    .i18n,
+                            icon: ImagePaths.qr_code,
+                            buttonText: 'GOT IT'.i18n),
                         child: const Icon(
                           Icons.info,
                           size: 14,
