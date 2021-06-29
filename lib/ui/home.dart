@@ -43,11 +43,11 @@ class _HomePageState extends State<HomePage> {
           CustomToast.show(
             title: 'Lantern',
             surveyText: buttonText,
-            onSurvey: () => mainMethodChannel.invokeMethod('showLastSurvey'),
+            onSurvey: () async =>
+                await mainMethodChannel.invokeMethod('showLastSurvey'),
             body: message,
             icon: const Icon(Icons.notifications_active),
             duration: const Duration(days: 99999),
-            onClose: () {},
           );
           break;
         default:
