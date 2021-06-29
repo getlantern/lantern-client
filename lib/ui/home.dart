@@ -91,20 +91,14 @@ class _HomePageState extends State<HomePage> {
                 const Account(),
                 if (developmentMode) Developer(),
               ],
-              bottomNavigationBuilder: (context, tabsRouter) =>
-                  buildBottomNav(context, tabsRouter, developmentMode),
+              bottomNavigationBuilder: (context, tabsRouter) => NewBottomNav(
+                  onTap: tabsRouter.setActiveIndex,
+                  index: tabsRouter.activeIndex,
+                  isDevelop: developmentMode),
             );
           },
         );
       },
     );
   }
-
-  Widget buildBottomNav(
-          BuildContext context, TabsRouter tabsRouter, bool isDevelop) =>
-      NewBottomNav(
-        onTap: tabsRouter.setActiveIndex,
-        index: tabsRouter.activeIndex,
-        isDevelop: isDevelop,
-      );
 }

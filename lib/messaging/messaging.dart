@@ -1,11 +1,5 @@
-import 'package:lantern/messaging/add_contact_username.dart';
-import 'package:lantern/messaging/new_message.dart';
-import 'package:lantern/messaging/your_contact_info.dart';
 import 'package:lantern/package_store.dart';
 
-import 'add_contact_QR.dart';
-import 'add_contact_username.dart';
-import 'conversation.dart';
 import 'conversations.dart';
 
 class MessagesTab extends StatefulWidget {
@@ -51,18 +45,6 @@ class _MessagesTabState extends State<MessagesTab>
     //       }
     //       return MaterialPageRoute(builder: builder, settings: settings);
     //     });
-  }
-
-  /// This captures the back-button and makes sure it's used to pop the scope on
-  /// the navigator inside the messaging tab.
-  WidgetBuilder willPopScopeBuilder(WidgetBuilder wrapped) {
-    return (BuildContext context) =>
-        WillPopScope(onWillPop: _onWillPop, child: wrapped(context));
-  }
-
-  Future<bool> _onWillPop() {
-    Navigator.pop(context);
-    return Future.value(false);
   }
 
   @override
