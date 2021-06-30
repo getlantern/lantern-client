@@ -61,8 +61,8 @@ class NewBottomNav extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
                 Positioned(
-                  right: 1,
-                  top: 1,
+                  right: -10,
+                  bottom: -12,
                   child: CircleAvatar(
                     maxRadius: activeIconSize - 4,
                     backgroundColor: (value == 'Disconnecting'.i18n ||
