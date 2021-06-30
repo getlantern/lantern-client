@@ -63,10 +63,11 @@ class CustomBottomNav extends StatelessWidget {
             iconWidget: vpnModel.vpnStatus(
               (context, value, child) => CircleAvatar(
                 maxRadius: activeIconSize - 4,
-                backgroundColor:
-                    (value == 'Disconnecting'.i18n || value == 'Connected'.i18n)
-                        ? indicatorGreen
-                        : indicatorRed,
+                backgroundColor: (value.toLowerCase() ==
+                            'Disconnecting'.i18n.toLowerCase() ||
+                        value == 'Connected'.i18n.toLowerCase())
+                    ? indicatorGreen
+                    : indicatorRed,
               ),
             ),
           ),
