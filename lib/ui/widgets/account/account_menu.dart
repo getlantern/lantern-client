@@ -1,6 +1,7 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 import 'settings_item.dart';
 
@@ -12,9 +13,8 @@ class AccountMenu extends StatelessWidget {
         LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
   }
 
-  void authorizeDeviceForPro(BuildContext context) {
-    Navigator.pushNamed(context, routeAuthorizeDeviceForPro);
-  }
+  Future<void> authorizeDeviceForPro(BuildContext context) async =>
+      await context.pushRoute(ProAccount());
 
   void inviteFriends() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
@@ -32,9 +32,8 @@ class AccountMenu extends StatelessWidget {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_YINBI_REDEMPTION);
   }
 
-  void openSettings(BuildContext context) {
-    Navigator.pushNamed(context, routeSettings);
-  }
+  void openSettings(BuildContext context) async =>
+      await context.pushRoute(Settings());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -89,16 +88,13 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.account_icon,
         iconColor: Colors.black,
         title: 'pro_account_management'.i18n,
-        onTap: () {
-          Navigator.pushNamed(context, routeProAccount);
-        },
+        onTap: () async => await context.pushRoute(ProAccount()),
       ),
       SettingsItem(
-          icon: ImagePaths.devices_icon,
-          title: 'add_device'.i18n,
-          onTap: () {
-            Navigator.pushNamed(context, routeApproveDevice);
-          }),
+        icon: ImagePaths.devices_icon,
+        title: 'add_device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
       SettingsItem(
         icon: ImagePaths.star_icon,
         title: 'invite_friends'.i18n,

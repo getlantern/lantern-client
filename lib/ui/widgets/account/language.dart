@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
+import 'package:auto_route/auto_route.dart';
 
 class Language extends StatelessWidget {
   static const languages = [
@@ -45,7 +46,7 @@ class Language extends StatelessWidget {
               groupValue: currentLang,
               onChanged: (String? value) async {
                 await sessionModel.setLanguage(lang);
-                Navigator.pop(context);
+                await context.popRoute();
               },
             );
           },

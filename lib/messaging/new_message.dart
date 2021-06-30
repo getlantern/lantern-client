@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/add_contact_username.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -17,11 +16,10 @@ class NewMessage extends StatelessWidget {
       title: 'New Message'.i18n,
       actions: [
         IconButton(
-            icon: const Icon(Icons.qr_code),
-            tooltip: 'Your Contact Info'.i18n,
-            onPressed: () {
-              Navigator.restorablePushNamed(context, '/your_contact_info');
-            }),
+          icon: const Icon(Icons.qr_code),
+          tooltip: 'Your Contact Info'.i18n,
+          onPressed: () async => await context.pushRoute(const ContactInfo()),
+        ),
       ],
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(

@@ -87,9 +87,9 @@ class _HomePageState extends State<HomePage> {
             return AutoTabsScaffold(
               routes: [
                 const MessagesRouter(),
-                Vpn(),
-                const Account(),
-                if (developmentMode) Developer(),
+                const VpnRouter(),
+                const AccountRouter(),
+                if (developmentMode) const DeveloperRoute(),
               ],
               bottomNavigationBuilder: (context, tabsRouter) => NewBottomNav(
                   onTap: tabsRouter.setActiveIndex,

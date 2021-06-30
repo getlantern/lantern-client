@@ -8,6 +8,13 @@ import 'package:lantern/messaging/new_message.dart';
 import 'package:lantern/messaging/your_contact_info.dart';
 import 'package:lantern/ui/index.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
+import 'package:lantern/ui/widgets/account/device_linking/approve_device.dart';
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_for_pro.dart';
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email.dart';
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email_pin.dart';
+import 'package:lantern/ui/widgets/account/language.dart';
+import 'package:lantern/ui/widgets/account/pro_account.dart';
+import 'package:lantern/ui/widgets/account/settings.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -69,25 +76,95 @@ import 'package:lantern/ui/widgets/account/developer_settings.dart';
           ],
         ),
         CustomRoute<void>(
-          page: VPNTab,
-          name: 'vpn',
+          page: EmptyRouterPage,
+          name: 'VpnRouter',
           path: 'vpn',
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 400,
+          children: [
+            CustomRoute<void>(
+              page: VPNTab,
+              name: 'vpn',
+              path: '',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+          ],
         ),
         CustomRoute<void>(
-          page: AccountTab,
-          name: 'account',
+          page: EmptyRouterPage,
+          name: 'AccountRouter',
           path: 'account',
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 400,
+          children: [
+            CustomRoute<void>(
+              page: AccountTab,
+              name: 'account',
+              path: '',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: ProAccount,
+              name: 'ProAccount',
+              path: 'proAccount',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: Settings,
+              name: 'Settings',
+              path: 'settings',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: Language,
+              name: 'Language',
+              path: 'language',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: AuthorizeDeviceForPro,
+              name: 'AuthorizePro',
+              path: 'authorizePro',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: AuthorizeDeviceViaEmail,
+              name: 'AuthorizeDeviceEmail',
+              path: 'authorizeDeviceEmail',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: AuthorizeDeviceViaEmailPin,
+              name: 'AuthorizeDeviceEmailPin',
+              path: 'authorizeDeviceEmailPin',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+            CustomRoute<void>(
+              page: ApproveDevice,
+              name: 'ApproveDevice',
+              path: 'approveDevice',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+          ],
         ),
         CustomRoute<void>(
-          page: DeveloperSettingsTab,
-          name: 'developer',
+          page: EmptyRouterPage,
+          name: 'DeveloperRoute',
           path: 'developer',
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 400,
+          children: [
+            CustomRoute<void>(
+              page: DeveloperSettingsTab,
+              name: 'developerSetting',
+              path: '',
+              transitionsBuilder: TransitionsBuilders.fadeIn,
+              durationInMilliseconds: 400,
+            ),
+          ],
         ),
       ],
     ),

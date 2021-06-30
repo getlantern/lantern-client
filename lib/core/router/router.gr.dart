@@ -7,16 +7,27 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 import 'package:lantern/core/router/router_observer.dart' as _i3;
-import 'package:lantern/messaging/add_contact_QR.dart' as _i9;
-import 'package:lantern/messaging/add_contact_username.dart' as _i10;
-import 'package:lantern/messaging/conversation.dart' as _i11;
-import 'package:lantern/messaging/conversations.dart' as _i6;
-import 'package:lantern/messaging/new_message.dart' as _i8;
-import 'package:lantern/messaging/your_contact_info.dart' as _i7;
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i13;
-import 'package:lantern/package_store.dart' as _i12;
+import 'package:lantern/messaging/add_contact_QR.dart' as _i8;
+import 'package:lantern/messaging/add_contact_username.dart' as _i9;
+import 'package:lantern/messaging/conversation.dart' as _i10;
+import 'package:lantern/messaging/conversations.dart' as _i5;
+import 'package:lantern/messaging/new_message.dart' as _i7;
+import 'package:lantern/messaging/your_contact_info.dart' as _i6;
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i20;
+import 'package:lantern/package_store.dart' as _i19;
 import 'package:lantern/ui/index.dart' as _i4;
-import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i5;
+import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i18;
+import 'package:lantern/ui/widgets/account/device_linking/approve_device.dart'
+    as _i17;
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_for_pro.dart'
+    as _i14;
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email.dart'
+    as _i15;
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email_pin.dart'
+    as _i16;
+import 'package:lantern/ui/widgets/account/language.dart' as _i13;
+import 'package:lantern/ui/widgets/account/pro_account.dart' as _i11;
+import 'package:lantern/ui/widgets/account/settings.dart' as _i12;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter(
@@ -41,6 +52,82 @@ class AppRouter extends _i1.RootStackRouter {
         },
         opaque: true,
         barrierDismissible: false),
+    VpnRouter.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        },
+        opaque: true,
+        barrierDismissible: false),
+    AccountRouter.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        },
+        opaque: true,
+        barrierDismissible: false),
+    DeveloperRoute.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        },
+        opaque: true,
+        barrierDismissible: false),
+    ConversationsRoute.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i5.Conversations();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    ContactInfo.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i6.YourContactInfo();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    NewMessage.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i7.NewMessage();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    AddQR.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i8.AddViaQR();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    AddUsername.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i9.AddViaUsername();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    Conversation.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<ConversationArgs>();
+          return _i10.Conversation(args.contact);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
     Vpn.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
@@ -60,67 +147,89 @@ class AppRouter extends _i1.RootStackRouter {
         durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false),
-    Developer.name: (routeData) => _i1.CustomPage<void>(
+    ProAccount.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
           final args =
-              data.argsAs<DeveloperArgs>(orElse: () => const DeveloperArgs());
-          return _i5.DeveloperSettingsTab(key: args.key);
+              data.argsAs<ProAccountArgs>(orElse: () => const ProAccountArgs());
+          return _i11.ProAccount(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false),
-    ConversationsRoute.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i6.Conversations();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
-    ContactInfo.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i7.YourContactInfo();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
-    NewMessage.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i8.NewMessage();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
-    AddQR.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i9.AddViaQR();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
-    AddUsername.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i10.AddViaUsername();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 400,
-        opaque: true,
-        barrierDismissible: false),
-    Conversation.name: (routeData) => _i1.CustomPage<void>(
+    Settings.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<ConversationArgs>();
-          return _i11.Conversation(args.contact);
+          final args =
+              data.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
+          return _i12.Settings(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    Language.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args =
+              data.argsAs<LanguageArgs>(orElse: () => const LanguageArgs());
+          return _i13.Language(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    AuthorizePro.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<AuthorizeProArgs>(
+              orElse: () => const AuthorizeProArgs());
+          return _i14.AuthorizeDeviceForPro(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    AuthorizeDeviceEmail.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<AuthorizeDeviceEmailArgs>(
+              orElse: () => const AuthorizeDeviceEmailArgs());
+          return _i15.AuthorizeDeviceViaEmail(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    AuthorizeDeviceEmailPin.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<AuthorizeDeviceEmailPinArgs>(
+              orElse: () => const AuthorizeDeviceEmailPinArgs());
+          return _i16.AuthorizeDeviceViaEmailPin(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    ApproveDevice.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<ApproveDeviceArgs>(
+              orElse: () => const ApproveDeviceArgs());
+          return _i17.ApproveDevice(key: args.key);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 400,
+        opaque: true,
+        barrierDismissible: false),
+    DeveloperSetting.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<DeveloperSettingArgs>(
+              orElse: () => const DeveloperSettingArgs());
+          return _i18.DeveloperSettingsTab(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 400,
@@ -140,15 +249,29 @@ class AppRouter extends _i1.RootStackRouter {
             _i1.RouteConfig(Conversation.name,
                 path: 'conversation', guards: [routerObserver])
           ]),
-          _i1.RouteConfig(Vpn.name, path: 'vpn'),
-          _i1.RouteConfig(Account.name, path: 'account'),
-          _i1.RouteConfig(Developer.name, path: 'developer')
+          _i1.RouteConfig(VpnRouter.name,
+              path: 'vpn', children: [_i1.RouteConfig(Vpn.name, path: '')]),
+          _i1.RouteConfig(AccountRouter.name, path: 'account', children: [
+            _i1.RouteConfig(Account.name, path: ''),
+            _i1.RouteConfig(ProAccount.name, path: 'proAccount'),
+            _i1.RouteConfig(Settings.name, path: 'settings'),
+            _i1.RouteConfig(Language.name, path: 'language'),
+            _i1.RouteConfig(AuthorizePro.name, path: 'authorizePro'),
+            _i1.RouteConfig(AuthorizeDeviceEmail.name,
+                path: 'authorizeDeviceEmail'),
+            _i1.RouteConfig(AuthorizeDeviceEmailPin.name,
+                path: 'authorizeDeviceEmailPin'),
+            _i1.RouteConfig(ApproveDevice.name, path: 'approveDevice')
+          ]),
+          _i1.RouteConfig(DeveloperRoute.name,
+              path: 'developer',
+              children: [_i1.RouteConfig(DeveloperSetting.name, path: '')])
         ])
       ];
 }
 
 class Home extends _i1.PageRouteInfo<HomeArgs> {
-  Home({_i12.Key? key, List<_i1.PageRouteInfo>? children})
+  Home({_i19.Key? key, List<_i1.PageRouteInfo>? children})
       : super(name,
             path: '/', args: HomeArgs(key: key), initialChildren: children);
 
@@ -158,7 +281,7 @@ class Home extends _i1.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i12.Key? key;
+  final _i19.Key? key;
 }
 
 class MessagesRouter extends _i1.PageRouteInfo {
@@ -168,35 +291,25 @@ class MessagesRouter extends _i1.PageRouteInfo {
   static const String name = 'MessagesRouter';
 }
 
-class Vpn extends _i1.PageRouteInfo<VpnArgs> {
-  Vpn({_i12.Key? key}) : super(name, path: 'vpn', args: VpnArgs(key: key));
+class VpnRouter extends _i1.PageRouteInfo {
+  const VpnRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'vpn', initialChildren: children);
 
-  static const String name = 'Vpn';
+  static const String name = 'VpnRouter';
 }
 
-class VpnArgs {
-  const VpnArgs({this.key});
+class AccountRouter extends _i1.PageRouteInfo {
+  const AccountRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'account', initialChildren: children);
 
-  final _i12.Key? key;
+  static const String name = 'AccountRouter';
 }
 
-class Account extends _i1.PageRouteInfo {
-  const Account() : super(name, path: 'account');
+class DeveloperRoute extends _i1.PageRouteInfo {
+  const DeveloperRoute({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'developer', initialChildren: children);
 
-  static const String name = 'Account';
-}
-
-class Developer extends _i1.PageRouteInfo<DeveloperArgs> {
-  Developer({_i12.Key? key})
-      : super(name, path: 'developer', args: DeveloperArgs(key: key));
-
-  static const String name = 'Developer';
-}
-
-class DeveloperArgs {
-  const DeveloperArgs({this.key});
-
-  final _i12.Key? key;
+  static const String name = 'DeveloperRoute';
 }
 
 class ConversationsRoute extends _i1.PageRouteInfo {
@@ -230,7 +343,7 @@ class AddUsername extends _i1.PageRouteInfo {
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i13.Contact contact})
+  Conversation({required _i20.Contact contact})
       : super(name,
             path: 'conversation', args: ConversationArgs(contact: contact));
 
@@ -240,5 +353,132 @@ class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
 class ConversationArgs {
   const ConversationArgs({required this.contact});
 
-  final _i13.Contact contact;
+  final _i20.Contact contact;
+}
+
+class Vpn extends _i1.PageRouteInfo<VpnArgs> {
+  Vpn({_i19.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
+
+  static const String name = 'Vpn';
+}
+
+class VpnArgs {
+  const VpnArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class Account extends _i1.PageRouteInfo {
+  const Account() : super(name, path: '');
+
+  static const String name = 'Account';
+}
+
+class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
+  ProAccount({_i19.Key? key})
+      : super(name, path: 'proAccount', args: ProAccountArgs(key: key));
+
+  static const String name = 'ProAccount';
+}
+
+class ProAccountArgs {
+  const ProAccountArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class Settings extends _i1.PageRouteInfo<SettingsArgs> {
+  Settings({_i19.Key? key})
+      : super(name, path: 'settings', args: SettingsArgs(key: key));
+
+  static const String name = 'Settings';
+}
+
+class SettingsArgs {
+  const SettingsArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class Language extends _i1.PageRouteInfo<LanguageArgs> {
+  Language({_i19.Key? key})
+      : super(name, path: 'language', args: LanguageArgs(key: key));
+
+  static const String name = 'Language';
+}
+
+class LanguageArgs {
+  const LanguageArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class AuthorizePro extends _i1.PageRouteInfo<AuthorizeProArgs> {
+  AuthorizePro({_i19.Key? key})
+      : super(name, path: 'authorizePro', args: AuthorizeProArgs(key: key));
+
+  static const String name = 'AuthorizePro';
+}
+
+class AuthorizeProArgs {
+  const AuthorizeProArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class AuthorizeDeviceEmail extends _i1.PageRouteInfo<AuthorizeDeviceEmailArgs> {
+  AuthorizeDeviceEmail({_i19.Key? key})
+      : super(name,
+            path: 'authorizeDeviceEmail',
+            args: AuthorizeDeviceEmailArgs(key: key));
+
+  static const String name = 'AuthorizeDeviceEmail';
+}
+
+class AuthorizeDeviceEmailArgs {
+  const AuthorizeDeviceEmailArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class AuthorizeDeviceEmailPin
+    extends _i1.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
+  AuthorizeDeviceEmailPin({_i19.Key? key})
+      : super(name,
+            path: 'authorizeDeviceEmailPin',
+            args: AuthorizeDeviceEmailPinArgs(key: key));
+
+  static const String name = 'AuthorizeDeviceEmailPin';
+}
+
+class AuthorizeDeviceEmailPinArgs {
+  const AuthorizeDeviceEmailPinArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class ApproveDevice extends _i1.PageRouteInfo<ApproveDeviceArgs> {
+  ApproveDevice({_i19.Key? key})
+      : super(name, path: 'approveDevice', args: ApproveDeviceArgs(key: key));
+
+  static const String name = 'ApproveDevice';
+}
+
+class ApproveDeviceArgs {
+  const ApproveDeviceArgs({this.key});
+
+  final _i19.Key? key;
+}
+
+class DeveloperSetting extends _i1.PageRouteInfo<DeveloperSettingArgs> {
+  DeveloperSetting({_i19.Key? key})
+      : super(name, path: '', args: DeveloperSettingArgs(key: key));
+
+  static const String name = 'DeveloperSetting';
+}
+
+class DeveloperSettingArgs {
+  const DeveloperSettingArgs({this.key});
+
+  final _i19.Key? key;
 }

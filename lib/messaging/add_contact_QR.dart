@@ -7,6 +7,8 @@ import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -63,13 +65,12 @@ class _AddViaQRState extends State<AddViaQR> {
         });
         var contactNotifier = model.contactNotifier(contact);
         late void Function() listener;
-        listener = () {
+        listener = () async {
           var updatedContact = contactNotifier.value;
           if (updatedContact != null &&
               updatedContact.firstReceivedMessageTs > 0) {
             contactNotifier.removeListener(listener);
-            Navigator.pushNamed(context, '/conversation',
-                arguments: updatedContact);
+            await context.pushRoute(Conversation(contact: updatedContact));
           }
         };
         contactNotifier.addListener(listener);
