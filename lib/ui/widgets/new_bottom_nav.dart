@@ -27,11 +27,11 @@ class NewBottomNav extends StatelessWidget {
       iconSize: 24,
       backgroundColor: unselectedTabColor,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: TextStyle(color: selectedTabLabelColor, fontSize: 15),
+      selectedLabelStyle: TextStyle(color: selectedTabLabelColor, fontSize: 13),
       showSelectedLabels: true,
       showUnselectedLabels: true,
       unselectedLabelStyle:
-          TextStyle(color: unselectedTabLabelColor, fontSize: 15),
+          TextStyle(color: unselectedTabLabelColor, fontSize: 13),
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
@@ -46,8 +46,8 @@ class NewBottomNav extends StatelessWidget {
             color: selectedTabLabelColor,
             fit: BoxFit.contain,
           ),
-          label: 'Messaging',
-          tooltip: 'Messaging',
+          label: 'Messaging'.i18n,
+          tooltip: 'Messaging'.i18n,
         ),
         BottomNavigationBarItem(
           backgroundColor: index == 1 ? selectedTabColor : unselectedTabColor,
@@ -65,10 +65,10 @@ class NewBottomNav extends StatelessWidget {
                   top: 1,
                   child: CircleAvatar(
                     maxRadius: activeIconSize - 4,
-                    backgroundColor:
-                        (value == 'disconnecting' || value == 'connected')
-                            ? indicatorGreen
-                            : indicatorRed,
+                    backgroundColor: (value == 'Disconnecting'.i18n ||
+                            value == 'Connected'.i18n)
+                        ? indicatorGreen
+                        : indicatorRed,
                   ),
                 ),
               ],
@@ -88,10 +88,10 @@ class NewBottomNav extends StatelessWidget {
                   top: 1,
                   child: CircleAvatar(
                     maxRadius: activeIconSize - 4,
-                    backgroundColor:
-                        (value == 'disconnecting' || value == 'connected')
-                            ? indicatorGreen
-                            : indicatorRed,
+                    backgroundColor: (value == 'Disconnecting'.i18n ||
+                            value == 'Connected'.i18n)
+                        ? indicatorGreen
+                        : indicatorRed,
                   ),
                 ),
               ],
@@ -126,8 +126,8 @@ class NewBottomNav extends StatelessWidget {
               ),
             ),
           ),
-          label: 'Account',
-          tooltip: 'Account',
+          label: 'Account'.i18n,
+          tooltip: 'Account'.i18n,
         ),
         if (isDevelop)
           BottomNavigationBarItem(
@@ -142,8 +142,8 @@ class NewBottomNav extends StatelessWidget {
               color: selectedTabLabelColor,
               fit: BoxFit.contain,
             ),
-            label: 'Developer',
-            tooltip: 'Developer',
+            label: 'Developer'.i18n,
+            tooltip: 'Developer'.i18n,
           ),
       ],
     );
