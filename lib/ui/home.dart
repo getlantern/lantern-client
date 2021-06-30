@@ -9,7 +9,7 @@ import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_toast/custom_toast.dart';
-import 'package:lantern/ui/widgets/new_bottom_nav.dart';
+import 'package:lantern/ui/widgets/custom_bottom_nav.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -91,10 +91,11 @@ class _HomePageState extends State<HomePage> {
                 const AccountRouter(),
                 if (developmentMode) const DeveloperRoute(),
               ],
-              bottomNavigationBuilder: (context, tabsRouter) => NewBottomNav(
-                  onTap: tabsRouter.setActiveIndex,
-                  index: tabsRouter.activeIndex,
-                  isDevelop: developmentMode),
+              bottomNavigationBuilder: (context, tabsRouter) => CustomBottomNav(
+                onTap: tabsRouter.setActiveIndex,
+                index: tabsRouter.activeIndex,
+                isDevelop: developmentMode,
+              ),
             );
           },
         );
