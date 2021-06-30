@@ -5,6 +5,7 @@ class MessagingEmojiPicker extends StatelessWidget {
   final bool showEmojis;
   final String emptySuggestions;
   final double height;
+  final double width;
   final Function(Category, Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
@@ -12,6 +13,7 @@ class MessagingEmojiPicker extends StatelessWidget {
     required this.showEmojis,
     required this.emptySuggestions,
     this.height = 200,
+    required this.width,
     this.onBackspacePressed,
     required this.onEmojiSelected,
     Key? key,
@@ -31,6 +33,7 @@ class MessagingEmojiPicker extends StatelessWidget {
 
   Widget _showEmojiKeyBoard({required BuildContext context}) => Container(
         height: height,
+        width: width,
         child: EmojiPicker(
           key: key,
           onBackspacePressed: onBackspacePressed,

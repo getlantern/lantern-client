@@ -371,12 +371,14 @@ class _ConversationState extends State<Conversation>
                     dismissKeyboard();
                     await model.react(_storedMessage!, emoji.emoji);
                     _storedMessage = null;
+                    setState(() => _emojiShowing = false);
+                  } else {
+                    setState(() => _isSendIconVisible = true);
+                    _newMessage
+                      ..text += emoji.emoji
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: _newMessage.text.length));
                   }
-                  setState(() => _isSendIconVisible = true);
-                  _newMessage
-                    ..text += emoji.emoji
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
                 },
               ),
             ],
