@@ -360,6 +360,7 @@ class _ConversationState extends State<Conversation>
                 showEmojis: _emojiShowing,
                 emptySuggestions: 'No Recents'.i18n,
                 height: size!.height * 0.25,
+                width: size!.width,
                 onBackspacePressed: () {
                   _newMessage
                     ..text = _newMessage.text.characters.skipLast(1).toString()
