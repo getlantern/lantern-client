@@ -1,5 +1,9 @@
 import 'package:lantern/package_store.dart';
 
+//
+// This file will contain text styles (font weight, size, line height, color) for text that figures in reusable components such as Alert and Info Dialogs, Messages etc
+//
+
 // Global styles
 TextStyle? tsHeadline1(BuildContext context) =>
     Theme.of(context).textTheme.headline1;
