@@ -75,35 +75,47 @@ class _YourContactInfoState extends State<YourContactInfo> {
                                   ':',
                               style:
                                   tsSubTitle(context)?.copyWith(fontSize: 12))),
-                      ListTile(
-                        title: TextFormField(
-                            controller: displayName,
-                            focusNode: displayNameFocus,
-                            decoration: const InputDecoration(
-                              icon: Icon(Icons.perm_identity),
-                              enabledBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            )),
-                        tileColor: Colors.black12,
-                        trailing: TextButton(
-                          onPressed: () {
-                            if (editing) {
-                              var text = displayName.value.text;
-                              model.setMyDisplayName(text);
-                              setState(() {
-                                editing = false;
-                              });
-                            } else {
-                              setState(() {
-                                editing = true;
-                              });
-                            }
-                          },
-                          child:
-                              editing ? Text('Save'.i18n) : Text('Change'.i18n),
-                        ),
-                      ),
+                      !editing
+                          ? ListTile(
+                              leading: const Icon(Icons.perm_identity),
+                              title: Text(displayName.value.text),
+                              tileColor: Colors.black12,
+                              trailing: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    editing = true;
+                                  });
+                                },
+                                child: Text('Change'.i18n,
+                                    style:
+                                        const TextStyle(color: Colors.black)),
+                              ),
+                            )
+                          : ListTile(
+                              title: TextFormField(
+                                  controller: displayName,
+                                  focusNode: displayNameFocus,
+                                  decoration: const InputDecoration(
+                                    icon: Icon(Icons.perm_identity),
+                                    enabledBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  )),
+                              tileColor: Colors.white,
+                              trailing: TextButton(
+                                onPressed: () {
+                                  var text = displayName.value.text;
+                                  model.setMyDisplayName(text);
+                                  setState(() {
+                                    editing = false;
+                                  });
+                                },
+                                child: Text('Save'.i18n,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
                       Padding(
                           padding: const EdgeInsets.only(
                               left: 16, bottom: 4, top: 32),

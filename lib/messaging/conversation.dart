@@ -232,12 +232,12 @@ class _ConversationState extends State<Conversation>
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
-      showInfoDialog(
-        context,
-        title: 'Error'.i18n,
-        // TODO: Add i18n below
-        des: 'Something went wrong while sharing a media file.',
-      );
+      showInfoDialog(context,
+          title: 'Error'.i18n,
+          // TODO: Add i18n below
+          des: 'Something went wrong while sharing a media file.',
+          icon: ImagePaths.alert_icon,
+          buttonText: 'OK'.i18n);
     }
     AssetPicker.unregisterObserve();
   }
