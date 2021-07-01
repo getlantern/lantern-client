@@ -198,8 +198,8 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     builder: (BuildContext context) {
       return AlertDialog(
         title: isLocal
-            ? const Text('Delete for me')
-            : const Text('Delete for everyone'),
+            ? Text('Delete for me', style: tsAlertDialogTitle())
+            : Text('Delete for everyone', style: tsAlertDialogTitle()),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
@@ -220,7 +220,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
                   : model.deleteGlobally(message);
               Navigator.of(context).pop();
             },
-            child: Text('Delete'.i18n, style: tsAlertDialogButton()),
+            child: Text('Delete'.i18n, style: tsAlertDialogButton(primaryPink)),
           )
         ],
       );

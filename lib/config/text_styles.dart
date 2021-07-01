@@ -68,9 +68,15 @@ TextStyle? tsMessageStatus(outbound) => TextStyle(
     );
 
 // Dialogs
+TextStyle? tsAlertDialogTitle() => GoogleFonts.roboto().copyWith(fontSize: 16);
+
 TextStyle? tsAlertDialogBody() => const TextStyle(fontSize: 14, height: 1.5);
 
-TextStyle? tsAlertDialogButton() => TextStyle(color: primaryPink, fontSize: 16);
+TextStyle? tsAlertDialogButton(color) => TextStyle(
+      color: color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
 
 TextStyle? tsInfoDialogTitle() => GoogleFonts.roboto().copyWith(fontSize: 16);
 
