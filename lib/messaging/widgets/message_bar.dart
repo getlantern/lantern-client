@@ -91,17 +91,7 @@ class MessageBar extends StatelessWidget {
                         : Theme.of(context).primaryColorDark),
               ),
         title: isRecording
-            ? Padding(
-                padding: isRecording
-                    ? EdgeInsets.zero
-                    : const EdgeInsets.only(bottom: 8.0, right: 2.0),
-                child: Text(
-                  willCancelRecording
-                      ? 'will cancel'.i18n
-                      : '< ' + 'swipe to cancel'.i18n,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              )
+            ? const SizedBox()
             : TextFormField(
                 autofocus: false,
                 textInputAction: TextInputAction.send,
