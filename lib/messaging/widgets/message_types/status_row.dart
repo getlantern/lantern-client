@@ -23,7 +23,6 @@ class StatusRow extends StatefulWidget {
 class StatusRowState extends State<StatusRow> {
   @override
   Widget build(BuildContext context) {
-    final statusIcon = getStatusIcon(widget.inbound, widget.msg);
     final begin = widget.msg.firstViewedAt.toInt();
     final end = widget.msg.disappearAt.toInt();
     final lifeSpan = end - begin;
@@ -45,24 +44,18 @@ class StatusRowState extends State<StatusRow> {
                 children: [
                   ...widget.reactionsList,
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: Text(
                       widget.message.value.ts.toInt().humanizeDate(),
                       style: tsMessageStatus(widget.outbound),
                     ),
                   ),
-                  if (statusIcon != null)
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 1),
-                        child: Icon(
-                          statusIcon,
-                          size: 12,
-                          color: widget.outbound
-                              ? outboundMsgColor
-                              : inboundMsgColor,
-                        )),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: renderStatusIcon(
+                          widget.inbound, widget.outbound, widget.msg)),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: CustomAssetImage(
                         path: ImagePaths.countdownPaths[index],
                         size: 12,
