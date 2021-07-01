@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/notifications.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -24,7 +24,7 @@ class VoiceMemo extends StatefulWidget {
 class VoiceMemoState extends State<VoiceMemo> {
   AudioStore audioStore = AudioStore();
   MessagingModel? model;
-  AudioPlayerState? _audioPlayerState;
+  PlayerState? _audioPlayerState;
   Duration? _duration;
   Duration? _position;
   PlayerState _playerState = PlayerState.stopped;
@@ -209,15 +209,15 @@ class VoiceMemoState extends State<VoiceMemo> {
       // Implemented for iOS, waiting for android impl
       if (Theme.of(context).platform == TargetPlatform.iOS) {
         // (Optional) listen for notification updates in the background
-        audioStore.audioPlayer.startHeadlessService();
+        audioStore.audioPlayer.notificationService.startHeadlessService();
 
         // set at least title to see the notification bar on ios.
-        audioStore.audioPlayer.setNotification(
+        audioStore.audioPlayer.notificationService.setNotification(
           title: 'Lantern',
           duration: duration,
           elapsedTime: const Duration(seconds: 0),
-          hasNextTrack: false,
-          hasPreviousTrack: false,
+          enableNextTrackButton: false,
+          enablePreviousTrackButton: false,
         );
       }
     });
@@ -246,22 +246,16 @@ class VoiceMemoState extends State<VoiceMemo> {
       });
     });
 
-    /// if there's more audio
-    _playerControlCommandSubscription =
-        audioStore.audioPlayer.onPlayerCommand.listen((command) {
-      print('command');
-    });
-
     audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
       setState(() {
-        _audioPlayerState = state;
+        _audioPlayerState = state as PlayerState?;
       });
     });
 
     audioStore.audioPlayer.onNotificationPlayerStateChanged.listen((state) {
       if (!mounted) return;
-      setState(() => _audioPlayerState = state);
+      setState(() => _audioPlayerState = state as PlayerState?);
     });
   }
 
