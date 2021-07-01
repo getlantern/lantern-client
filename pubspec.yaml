@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   wechat_assets_picker:
     git: https://github.com/getlantern/wechat_assets_picker.git
-  audioplayers: ^0.18.3
+  audioplayers: ^0.19.1
   
   auto_route: ^2.2.0
   back_button_interceptor: ^5.0.0
