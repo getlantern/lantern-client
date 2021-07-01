@@ -24,7 +24,6 @@ class VoiceMemo extends StatefulWidget {
 class VoiceMemoState extends State<VoiceMemo> {
   AudioStore audioStore = AudioStore();
   MessagingModel? model;
-  PlayerState? _audioPlayerState;
   Duration? _duration;
   Duration? _position;
   PlayerState _playerState = PlayerState.stopped;
@@ -248,14 +247,10 @@ class VoiceMemoState extends State<VoiceMemo> {
 
     audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
-      setState(() {
-        _audioPlayerState = state as PlayerState?;
-      });
     });
 
     audioStore.audioPlayer.onNotificationPlayerStateChanged.listen((state) {
       if (!mounted) return;
-      setState(() => _audioPlayerState = state as PlayerState?);
     });
   }
 
