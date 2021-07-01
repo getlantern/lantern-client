@@ -16,20 +16,19 @@ Color grey3 = const Color.fromRGBO(235, 235, 235, 1);
 Color grey4 = const Color.fromRGBO(191, 191, 191, 1);
 Color grey5 = const Color.fromRGBO(112, 112, 112, 1);
 Color overlayBlack = Colors.black87;
-Color borderColor = grey3;
+Color indicatorRed = const Color.fromRGBO(213, 0, 31, 1);
+Color indicatorGreen = secondaryBlue;
+Color offSwitchColor = grey5;
+Color onSwitchColor = secondaryBlue;
 
 Color outboundBgColor = const Color.fromRGBO(0, 122, 124, 1);
 Color outboundMsgColor = white;
 Color inboundMsgColor = black;
 Color inboundBgColor = grey3;
 
-Color indicatorRed = const Color.fromRGBO(213, 0, 31, 1);
-Color indicatorGreen = secondaryBlue;
-Color offSwitchColor = grey5;
-Color onSwitchColor = secondaryBlue;
-Color usedDataBarColor = primaryBlue;
-
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;
 Color unselectedTabLabelColor = grey5;
 Color selectedTabLabelColor = black;
+Color borderColor = grey3;
+Color usedDataBarColor = primaryBlue;

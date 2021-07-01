@@ -1,6 +1,10 @@
 import 'package:lantern/package_store.dart';
 
-///TextTheme
+//
+// This file will contain text styles (font weight, size, line height, color) for text that figures in reusable components such as Alert and Info Dialogs, Messages etc
+//
+
+// Global styles
 TextStyle? tsHeadline1(BuildContext context) =>
     Theme.of(context).textTheme.headline1;
 
@@ -39,6 +43,8 @@ TextStyle? tsCaption(BuildContext context) =>
 TextStyle? tsOverline(BuildContext context) =>
     Theme.of(context).textTheme.overline;
 
+// Custom styles
+
 TextStyle? tsTitleAppbar() => GoogleFonts.roboto().copyWith(
     fontWeight: FontWeight.bold, fontSize: 20, color: const Color(0xff040505));
 
@@ -63,4 +69,29 @@ TextStyle? tsMessageBody(outbound) => TextStyle(
 TextStyle? tsMessageStatus(outbound) => TextStyle(
       color: outbound ? outboundMsgColor : inboundMsgColor,
       fontSize: 10,
+    );
+
+// Dialogs
+TextStyle? tsAlertDialogTitle() => GoogleFonts.roboto().copyWith(fontSize: 16);
+
+TextStyle? tsAlertDialogBody() => const TextStyle(fontSize: 14, height: 1.5);
+
+TextStyle? tsAlertDialogButton(color) => TextStyle(
+      color: color,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    );
+
+TextStyle? tsInfoDialogTitle() => GoogleFonts.roboto().copyWith(fontSize: 16);
+
+TextStyle? tsInfoDialogText(color) => GoogleFonts.roboto().copyWith(
+      fontSize: 14,
+      height: 23 / 14,
+      color: color,
+    );
+
+TextStyle? tsInfoDialogButton(color) => GoogleFonts.roboto().copyWith(
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: color,
     );
