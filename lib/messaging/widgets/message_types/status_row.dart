@@ -54,6 +54,7 @@ class StatusRowState extends State<StatusRow> {
                       padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: renderStatusIcon(
                           widget.inbound, widget.outbound, widget.msg)),
+                  // TODO: This should not appear if the message never self-deletes
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: CustomAssetImage(
