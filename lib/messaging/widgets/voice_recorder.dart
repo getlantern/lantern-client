@@ -44,8 +44,8 @@ class VoiceRecorder extends StatelessWidget {
               )
             : const SizedBox(),
         GestureDetector(
-          onLongPressEnd: _onPressEnd,
-          onLongPressStart: _onLongPressStart,
+          onPanDown: _onTapDown,
+          onPanEnd: _onTapUp,
           child: Icon(
             Icons.mic,
             size: isRecording ? 30.0 : 25,
@@ -68,8 +68,8 @@ class VoiceRecorder extends StatelessWidget {
     }
   }
 
-  void _onPressEnd(LongPressEndDetails details) =>
-      _handlePan(details.localPosition, true);
+  void _onTapUp(DragEndDetails details) => onStopRecording();
+  //_handlePan(details.localPosition, true);
 
-  void _onLongPressStart(LongPressStartDetails details) => onRecording();
+  void _onTapDown(DragDownDetails details) => onRecording();
 }
