@@ -64,3 +64,7 @@ TextStyle? tsMessageStatus(outbound) => TextStyle(
       color: outbound ? outboundMsgColor : inboundMsgColor,
       fontSize: 10,
     );
+
+TextStyle? tsAlertDialogBody() => const TextStyle(fontSize: 14, height: 1.5);
+
+TextStyle? tsAlertDialogButton() => TextStyle(color: primaryPink, fontSize: 16);
