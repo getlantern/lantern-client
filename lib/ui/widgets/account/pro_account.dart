@@ -1,9 +1,10 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../settings_section_header.dart';
 import 'settings_item.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 class ProAccount extends StatelessWidget {
   ProAccount({Key? key}) : super(key: key);
@@ -107,9 +108,7 @@ class ProAccount extends StatelessWidget {
           if (devices.devices.length < 3) {
             items.add(SettingsItem(
               title: '',
-              onTap: () {
-                Navigator.pushNamed(context, routeApproveDevice);
-              },
+              onTap: () async => await context.pushRoute(ApproveDevice()),
               child: Text('Add Device'.i18n.toUpperCase(),
                   style: tsAlertDialogButton(primaryPink)),
             ));

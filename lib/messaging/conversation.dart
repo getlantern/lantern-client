@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
@@ -11,7 +12,6 @@ import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
@@ -261,13 +261,10 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    var tabStatus = context.watch<TabStatus>();
-    if (tabStatus.active) {
-      unawaited(
-          model.setCurrentConversationContact(widget._contact.contactId.id));
-    } else {
-      unawaited(model.clearCurrentConversationContact());
-    }
+    (context.tabsRouter.activeIndex == 0)
+        ? unawaited(
+            model.setCurrentConversationContact(widget._contact.contactId.id))
+        : unawaited(model.clearCurrentConversationContact());
     return BaseScreen(
         // Conversation title (contact name)
         title: displayName,
@@ -363,6 +360,7 @@ class _ConversationState extends State<Conversation>
                 showEmojis: _emojiShowing,
                 emptySuggestions: 'No Recents'.i18n,
                 height: size!.height * 0.25,
+                width: size!.width,
                 onBackspacePressed: () {
                   _newMessage
                     ..text = _newMessage.text.characters.skipLast(1).toString()
@@ -374,12 +372,14 @@ class _ConversationState extends State<Conversation>
                     dismissKeyboard();
                     await model.react(_storedMessage!, emoji.emoji);
                     _storedMessage = null;
+                    setState(() => _emojiShowing = false);
+                  } else {
+                    setState(() => _isSendIconVisible = true);
+                    _newMessage
+                      ..text += emoji.emoji
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: _newMessage.text.length));
                   }
-                  setState(() => _isSendIconVisible = true);
-                  _newMessage
-                    ..text += emoji.emoji
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
                 },
               ),
             ],

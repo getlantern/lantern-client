@@ -2,6 +2,8 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -14,29 +16,24 @@ class NewMessage extends StatelessWidget {
       title: 'New Message'.i18n,
       actions: [
         IconButton(
-            icon: const Icon(Icons.qr_code),
-            tooltip: 'Your Contact Info'.i18n,
-            onPressed: () {
-              Navigator.restorablePushNamed(context, '/your_contact_info');
-            }),
+          icon: const Icon(Icons.qr_code),
+          tooltip: 'Your Contact Info'.i18n,
+          onPressed: () async => await context.pushRoute(const ContactInfo()),
+        ),
       ],
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(
           leading: const Icon(Icons.person_add),
           title: Text('Add Contact by username'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () {
-            Navigator.restorablePushNamed(context, '/add_contact_username');
-          },
+          onTap: () async => await context.pushRoute(const AddUsername()),
         ),
         const Divider(thickness: 1),
         ListTile(
           leading: const Icon(Icons.qr_code),
           title: Text('Scan QR Code'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () {
-            Navigator.restorablePushNamed(context, '/add_contact_QR');
-          },
+          onTap: () async => await context.pushRoute(const AddQR()),
         ),
         const Divider(thickness: 1),
         ListTile(
@@ -84,10 +81,9 @@ class NewMessage extends StatelessWidget {
                       title: Text(contact.value.displayName.isEmpty
                           ? 'Unnamed contact'.i18n
                           : contact.value.displayName),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/conversation',
-                            arguments: contact.value);
-                      },
+                      onTap: () async => await context.pushRoute(
+                        Conversation(contact: contact.value),
+                      ),
                     ));
               },
             );

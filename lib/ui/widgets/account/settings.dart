@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 import 'settings_item.dart';
 
@@ -16,9 +17,7 @@ class Settings extends StatelessWidget {
     );
   }
 
-  void changeLanguage(BuildContext context) {
-    Navigator.pushNamed(context, routeLanguage);
-  }
+  void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
   void reportIssue() {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
