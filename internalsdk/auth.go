@@ -35,13 +35,13 @@ type authHandler struct {
 // NewAuthClient creates a new auth client for Android
 // It expects the auth server address as input
 func NewAuthClient(authAddr string) error {
-	log.Debugf("Creating new auth client with proxy addr %s", proxyAddr)
+	log.Debugf("Creating new auth client with proxy addr %s", authAddr)
 	httpClient, err := createHTTPClient()
 	if err != nil {
 		return err
 	}
 	authClient := client.New(authAddr, httpClient)
-	handler = &authHandler{httpClient, authClient}
+	handler = &authHandler{authClient, httpClient}
 	return nil
 }
 

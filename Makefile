@@ -159,7 +159,6 @@ endef
 
 $(GO_VENDOR_SOURCES): go.mod go.sum
 	@echo "Updating vendored libs" && \
-	git config url."https://71cee071ea22b7ffb10f68fa330d1130133bbfbd:x-oauth-basic@github.com/".insteadOf "https://github.com/" && \
 	GOPRIVATE="github.com/getlantern" go mod vendor
 
 vendor: $(GO_VENDOR_SOURCES)
@@ -354,8 +353,8 @@ invalidate-getlantern-dot-org: require-awscli
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(call build-tags) && \
-	echo "Running gomobile with `which gomobile` version `GO111MODULE=off gomobile version` ..." && \
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS_NOSTRIP) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
+	echo "Running gomobile with `which gomobile` version `gomobile version` ..." && \
+	GOPRIVATE="github.com/getlantern" GOOS=android gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS_NOSTRIP) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \

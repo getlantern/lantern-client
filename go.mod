@@ -1,16 +1,17 @@
 module github.com/getlantern/android-lantern
 
-go 1.15
+go 1.16
 
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
+	github.com/getlantern/auth-server v0.0.0-20210705231735-4eb43fae79e9
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
 	github.com/getlantern/dnsgrab v0.0.0-20210120195910-d879cb272122
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/flashlight v0.0.0-20210604161640-154236899665
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
-	github.com/getlantern/golog v0.0.0-20201105130739-9586b8bde3a9
+	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
@@ -20,11 +21,11 @@ require (
 	github.com/getlantern/protected v0.0.0-20190111224713-cc3b5f4a0fb8
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
+	github.com/lib/pq v1.10.2 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
-	golang.org/x/mobile v0.0.0-20210527171505-7e972142eb43 // indirect
-	golang.org/x/net v0.0.0-20210410081132-afb366fc7cd1
-	golang.org/x/sys v0.0.0-20210608053332-aa57babbf139 // indirect
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+	golang.org/x/tools v0.1.4 // indirect
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.7.1-0.20210422183034-b5805f4c233b
