@@ -159,8 +159,8 @@ endef
 
 $(GO_VENDOR_SOURCES): go.mod go.sum
 	@echo "Updating vendored libs" && \
-	git config --global url."https://71cee071ea22b7ffb10f68fa330d1130133bbfbd:x-oauth-basic@github.com/".insteadOf "https://github.com/" && \
-	go mod vendor
+	git config url."https://71cee071ea22b7ffb10f68fa330d1130133bbfbd:x-oauth-basic@github.com/".insteadOf "https://github.com/" && \
+	GOPRIVATE="github.com/getlantern" go mod vendor
 
 vendor: $(GO_VENDOR_SOURCES)
 
