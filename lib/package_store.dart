@@ -13,6 +13,7 @@ export 'i18n/i18n.dart';
 export 'ui/index.dart';
 export 'ui/widgets/index.dart';
 export 'utils/index.dart';
+export 'package:lantern/model/auth_model.dart';
 export 'package:lantern/model/session_model.dart';
 export 'package:lantern/model/vpn_model.dart';
 export 'package:lantern/lantern_navigator.dart';

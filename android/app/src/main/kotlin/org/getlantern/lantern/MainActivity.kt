@@ -34,6 +34,7 @@ import okhttp3.Response
 import org.getlantern.lantern.activity.PopUpAdActivity_
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
+import org.getlantern.lantern.client.AuthClient
 import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -60,6 +61,7 @@ import kotlin.collections.ArrayList
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
+    private lateinit var authModel: AuthModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
@@ -71,6 +73,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
+        authModel = AuthModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)

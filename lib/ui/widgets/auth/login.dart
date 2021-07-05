@@ -15,6 +15,10 @@ class Login extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
 
+  void signIn(String username, String password) {
+    AuthClient.signIn(username, password);
+  }
+
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
