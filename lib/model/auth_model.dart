@@ -15,7 +15,7 @@ class AuthModel  extends Model {
   }
 
 
-  Future<void> signIn(int lanternUserID, String username, String password) {
+  Future<void> signIn(String username, String password) {
     return methodChannel.invokeMethod('signIn', <String, dynamic>{
       'password': password,
       'username': username,

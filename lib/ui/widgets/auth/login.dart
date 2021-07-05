@@ -15,13 +15,9 @@ class Login extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
 
-  void signIn(String username, String password) {
-    AuthClient.signIn(username, password);
-  }
-
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
+    var authModel = context.watch<AuthModel>();
 
     return BaseScreen(
       title: 'Sign In'.i18n,
@@ -72,8 +68,8 @@ class Login extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.loaderOverlay.show();
-                      sessionModel
-                          .login(usernameController.value.text,
+                      authModel
+                          .signIn(usernameController.value.text,
                             passwordController.value.text)
                           .then((result) {
                         context.loaderOverlay.hide();

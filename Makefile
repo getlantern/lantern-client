@@ -354,7 +354,7 @@ invalidate-getlantern-dot-org: require-awscli
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(call build-tags) && \
-	echo "Running gomobile with `which gomobile` version `gomobile version` ..." && \
+	echo "Running gomobile with `which gomobile` version `GO111MODULE=off gomobile version` ..." && \
 	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS_NOSTRIP) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
