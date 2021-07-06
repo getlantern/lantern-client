@@ -17,7 +17,7 @@ class StepOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
+    var authModel = context.watch<AuthModel>();
 
     return BaseScreen(
       title: 'Create Account'.i18n,
@@ -51,11 +51,11 @@ class StepOne extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.loaderOverlay.show();
-                      sessionModel
+                      authModel
                           .setUsername(usernameController.value.text);
                       context.loaderOverlay.hide();
                       Navigator.pushNamed(
-                            context, routeAuthRegisterStepTwo);    
+                            context, routeAuthRegisterStepTwo);
                     }
                   },
                 ),

@@ -6,12 +6,21 @@ import 'model.dart';
 class AuthModel  extends Model {
   AuthModel() : super('auth');
 
-  Future<void> register(int lanternUserID, String username, String password) {
+  Widget username(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('username',
+        builder: builder);
+  }
+
+  Future<void> createAccount(String password) {
     return methodChannel.invokeMethod('register', <String, dynamic>{
-      'lanternUserID': lanternUserID,
       'password': password,
-      'username': username,
     });
+  }
+
+  Future<String> setUsername(String username) {
+    return methodChannel.invokeMethod('setUsername', <String, dynamic>{
+        'username': username,
+      }).then((value) => value as String);
   }
 
 

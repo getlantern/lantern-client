@@ -17,7 +17,7 @@ class StepTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
+    var authModel = context.watch<AuthModel>();
 
     return BaseScreen(
       title: 'Create Account'.i18n,
@@ -68,7 +68,7 @@ class StepTwo extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.loaderOverlay.show();
-                      sessionModel
+                      authModel
                           .createAccount(passwordController.value.text)
                           .then((result) {
                         context.loaderOverlay.hide();

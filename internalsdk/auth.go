@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"time"
-	_ "unsafe" // For go:linkname
 
 	"github.com/getlantern/auth-server/api"
 	"github.com/getlantern/auth-server/client"
@@ -24,9 +23,9 @@ var (
 
 // AuthResponse represents an API response
 // from the auth server
-type AuthResponse struct {
-	StatusCode int
-	Error      string
+type AuthResponse interface {
+	StatusCode() int
+	Error() string
 }
 
 //AuthClient is an interface defined for making
@@ -97,12 +96,11 @@ func (ar *authResponse) StatusCode() int {
 // a primitive type AuthResponse with the HTTP response status code
 // and error message (if any)
 func newAuthResponse(resp *api.AuthResponse) AuthResponse {
-	var authResp AuthResponse
+	var authResp authResponse
 	if resp != nil && resp.ApiResponse != nil {
-		authResp.StatusCode = resp.ApiResponse.StatusCode
-		authResp.Error = resp.ApiResponse.Error
+		authResp.response = resp
 	}
-	return authResp
+	return &authResp
 }
 
 // SignIn authenticates Lantern users with the authentication server
