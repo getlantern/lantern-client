@@ -7,7 +7,7 @@ class DateMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Flex(direction: Axis.vertical, children: [
       Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(),

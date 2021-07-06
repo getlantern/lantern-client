@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     final eventManager = EventManager('lantern_event_channel');
-    navigationChannel.setMethodCallHandler(_handleNativeMethodCall);
+    navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -56,13 +56,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<dynamic> _handleNativeMethodCall(MethodCall methodCall) async {
-    if (methodCall.method == 'openConversation') {
-      await _context!
-          .innerRouterOf<TabsRouter>(Home.name)!
-          .innerRouterOf<StackRouter>(MessagesRouter.name)!
-          .push(Conversation(
-              contact: Contact.fromBuffer(methodCall.arguments as Uint8List)));
+  Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
+    switch (methodCall.method) {
+      case 'openConversation':
+        await _context!
+            .innerRouterOf<TabsRouter>(Home.name)!
+            .innerRouterOf<StackRouter>(MessagesRouter.name)!
+            .push(Conversation(
+                contact:
+                    Contact.fromBuffer(methodCall.arguments as Uint8List)));
+        break;
+      default:
+        return;
     }
   }
 

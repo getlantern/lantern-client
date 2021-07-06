@@ -20,6 +20,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:sizer/sizer.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -261,7 +262,7 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    (context.tabsRouter.activeIndex == 0)
+    (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(
             model.setCurrentConversationContact(widget._contact.contactId.id))
         : unawaited(model.clearCurrentConversationContact());
@@ -302,7 +303,6 @@ class _ConversationState extends State<Conversation>
                 ),
               ),
               Flexible(
-                fit: FlexFit.tight,
                 child: _buildMessageBubbles(),
               ),
               // Reply container

@@ -25,7 +25,7 @@ class CustomBottomNav extends StatelessWidget {
 
     return BottomNavigationBar(
       currentIndex: index,
-      elevation: 8.0,
+      elevation: 0.0,
       unselectedFontSize: 0,
       selectedFontSize: 0,
       onTap: onTap,

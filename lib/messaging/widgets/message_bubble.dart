@@ -55,7 +55,8 @@ class MessageBubble extends StatelessWidget {
       final isAttachment = msg.attachments.isNotEmpty;
 
       return InkWell(
-          child: Row(
+          child: Flex(
+        direction: Axis.horizontal,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
             outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
