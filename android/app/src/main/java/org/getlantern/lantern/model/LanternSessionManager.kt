@@ -256,7 +256,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(REFERRAL_CODE, "")
     }
 
-    override fun setCode(referral: String?) {
+    fun setCode(referral: String?) {
         prefs.edit().putString(REFERRAL_CODE, referral).apply()
     }
 

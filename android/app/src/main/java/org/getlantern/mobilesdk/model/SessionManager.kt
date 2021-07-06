@@ -193,6 +193,10 @@ abstract class SessionManager(application: Application) : Session {
         return getBoolean(PROXY_ALL, false)
     }
 
+    override fun crash() {
+        throw Exception("I'm excepting!")
+    }
+
     fun setProxyAll(proxyAll: Boolean) {
         prefs.edit().putBoolean(PROXY_ALL, proxyAll).apply()
     }

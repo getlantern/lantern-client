@@ -38,32 +38,28 @@ func (c testSettings) TimeoutMillis() int       { return 15000 }
 func (c testSettings) GetHttpProxyHost() string { return "127.0.0.1" }
 func (c testSettings) GetHttpProxyPort() int    { return 49128 }
 
-func (c testSession) AfterStart()                        {}
-func (c testSession) BandwidthUpdate(int, int, int, int) {}
-func (c testSession) ConfigUpdate(bool)                  {}
-func (c testSession) ShowSurvey(survey string)           {}
-func (c testSession) GetUserID() int64                   { return 0 }
-func (c testSession) GetToken() string                   { return "" }
-func (c testSession) GetForcedCountryCode() string       { return "" }
-func (c testSession) GetDNSServer() string               { return "8.8.8.8" }
-func (c testSession) SetStaging(bool)                    {}
-func (c testSession) SetCountry(string)                  {}
-func (c testSession) ProxyAll() bool                     { return true }
-func (c testSession) GetDeviceID() string                { return "123456789" }
-func (c testSession) AccountId() string                  { return "1234" }
-func (c testSession) Locale() string                     { return "en-US" }
-func (c testSession) GetTimeZone() string                { return "Americas/Chicago" }
-func (c testSession) SetUserId(int64)                    {}
-func (c testSession) SetToken(string)                    {}
-func (c testSession) SetCode(string)                     {}
-func (c testSession) IsProUser() bool                    { return true }
+func (c testSession) AfterStart() error                        { return nil }
+func (c testSession) BandwidthUpdate(int, int, int, int) error { return nil }
+func (c testSession) ConfigUpdate(bool) error                  { return nil }
+func (c testSession) GetUserID() (int64, error)                { return 0, nil }
+func (c testSession) GetToken() (string, error)                { return "", nil }
+func (c testSession) GetForcedCountryCode() (string, error)    { return "", nil }
+func (c testSession) GetDNSServer() (string, error)            { return "8.8.8.8", nil }
+func (c testSession) SetStaging(bool) error                    { return nil }
+func (c testSession) SetCountry(string) error                  { return nil }
+func (c testSession) ProxyAll() (bool, error)                  { return true, nil }
+func (c testSession) GetDeviceID() (string, error)             { return "123456789", nil }
+func (c testSession) AccountId() (string, error)               { return "1234", nil }
+func (c testSession) Locale() (string, error)                  { return "en-US", nil }
+func (c testSession) GetTimeZone() (string, error)             { return "Americas/Chicago", nil }
+func (c testSession) IsProUser() (bool, error)                 { return true, nil }
 
-func (c testSession) UpdateStats(string, string, string, int, int) {}
+func (c testSession) UpdateStats(string, string, string, int, int) error { return nil }
 
-func (c testSession) UpdateAdSettings(AdSettings) {}
+func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
 
-func (c testSession) SerializedInternalHeaders() string {
-	return c.serializedInternalHeaders
+func (c testSession) SerializedInternalHeaders() (string, error) {
+	return c.serializedInternalHeaders, nil
 }
 
 func TestProxying(t *testing.T) {

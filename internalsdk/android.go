@@ -64,48 +64,87 @@ type Settings interface {
 }
 
 type Session interface {
-	common.AuthConfig
-	SetCountry(string)
-	UpdateAdSettings(AdSettings)
-	UpdateStats(string, string, string, int, int)
-	SetStaging(bool)
-	ProxyAll() bool
-	BandwidthUpdate(int, int, int, int)
-	Locale() string
-	GetTimeZone() string
-	Code() string
-	GetCountryCode() string
-	GetForcedCountryCode() string
-	GetDNSServer() string
-	Provider() string
-	AppVersion() string
-	IsPlayVersion() bool
-	Email() string
-	SetCode(string)
-	Currency() string
-	DeviceOS() string
-	IsProUser() bool
+	GetDeviceID() (string, error)
+	GetUserID() (int64, error)
+	GetToken() (string, error)
+	SetCountry(string) error
+	UpdateAdSettings(AdSettings) error
+	UpdateStats(string, string, string, int, int) error
+	SetStaging(bool) error
+	ProxyAll() (bool, error)
+	BandwidthUpdate(int, int, int, int) error
+	Locale() (string, error)
+	GetTimeZone() (string, error)
+	Code() (string, error)
+	GetCountryCode() (string, error)
+	GetForcedCountryCode() (string, error)
+	GetDNSServer() (string, error)
+	Provider() (string, error)
+	AppVersion() (string, error)
+	IsPlayVersion() (bool, error)
+	Email() (string, error)
+	Currency() (string, error)
+	DeviceOS() (string, error)
+	IsProUser() (bool, error)
+	Crash() error
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
-	SerializedInternalHeaders() string
+	SerializedInternalHeaders() (string, error)
 }
 
 type userConfig struct {
 	session Session
 }
 
-func (uc *userConfig) GetDeviceID() string          { return uc.session.GetDeviceID() }
-func (uc *userConfig) GetUserID() int64             { return uc.session.GetUserID() }
-func (uc *userConfig) GetToken() string             { return uc.session.GetToken() }
-func (uc *userConfig) GetLanguage() string          { return uc.session.Locale() }
-func (uc *userConfig) GetTimeZone() (string, error) { return uc.session.GetTimeZone(), nil }
+func must(label string) func(err error) {
+	return func(err error) {
+		if err != nil {
+			panic(fmt.Sprintf("unexpected error calling %v: %v", label, err))
+		}
+	}
+}
+
+func mustString(label string) func(val string, err error) string {
+	return func(val string, err error) string {
+		if err != nil {
+			panic(fmt.Sprintf("unexpected error getting %v: %v", label, err))
+		}
+		return val
+	}
+}
+
+func mustInt64(label string) func(val int64, err error) int64 {
+	return func(val int64, err error) int64 {
+		if err != nil {
+			panic(fmt.Sprintf("unexpected error getting %v: %v", label, err))
+		}
+		return val
+	}
+}
+
+func mustBool(label string) func(val bool, err error) bool {
+	return func(val bool, err error) bool {
+		if err != nil {
+			panic(fmt.Sprintf("unexpected error getting %v: %v", label, err))
+		}
+		return val
+	}
+}
+
+func (uc *userConfig) GetDeviceID() string { return mustString("DeviceID")(uc.session.GetDeviceID()) }
+func (uc *userConfig) GetUserID() int64    { return mustInt64("UserID")(uc.session.GetUserID()) }
+func (uc *userConfig) GetToken() string    { return mustString("Token")(uc.session.GetToken()) }
+func (uc *userConfig) GetLanguage() string { return mustString("Locale")(uc.session.Locale()) }
+func (uc *userConfig) GetTimeZone() (string, error) {
+	return mustString("TimeZone")(uc.session.GetTimeZone()), nil
+}
 func (uc *userConfig) GetInternalHeaders() map[string]string {
 	h := make(map[string]string)
 
 	var f interface{}
-	if err := json.Unmarshal([]byte(uc.session.SerializedInternalHeaders()), &f); err != nil {
+	if err := json.Unmarshal([]byte(mustString("SerializedInternalHeaders")(uc.session.SerializedInternalHeaders())), &f); err != nil {
 		return h
 	}
 	m, ok := f.(map[string]interface{})
@@ -234,6 +273,10 @@ func Start(configDir string, locale string,
 
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
+		go func() {
+			time.Sleep(30 * time.Second)
+			must("Crash")(session.Crash())
+		}()
 	})
 
 	startTimeout := time.Duration(settings.TimeoutMillis()) * time.Millisecond
@@ -277,7 +320,7 @@ func run(configDir, locale string,
 
 	memhelper.Track(15*time.Second, 15*time.Second)
 	appdir.SetHomeDir(configDir)
-	session.SetStaging(common.Staging)
+	must("SetStaging")(session.SetStaging(common.Staging))
 
 	log.Debugf("Starting lantern: configDir %s locale %s sticky config %t",
 		configDir, locale, settings.StickyConfig())
@@ -309,7 +352,7 @@ func run(configDir, locale string,
 
 	grabber, err := dnsgrab.ListenWithCache(
 		"127.0.0.1:0",
-		session.GetDNSServer(),
+		mustString("DNSServer")(session.GetDNSServer()),
 		cache,
 	)
 	if err != nil {
@@ -328,7 +371,7 @@ func run(configDir, locale string,
 		settings.GetHttpProxyHost(),
 		settings.GetHttpProxyPort())
 
-	forcedCountryCode := session.GetForcedCountryCode()
+	forcedCountryCode := mustString("ForcedCountryCode")(session.GetForcedCountryCode())
 	if forcedCountryCode != "" {
 		config.ForceCountry(forcedCountryCode)
 	}
@@ -338,20 +381,20 @@ func run(configDir, locale string,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.ProxyAll,
+		func() bool { return mustBool("ProxyAll")(session.ProxyAll()) },
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
 		// already have in desktop)
 		func() bool { return true }, // auto report
 		flags,
 		func(cfg *config.Global, src config.Source) {
-			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
+			must("UpdateAdSettings")(session.UpdateAdSettings(&adSettings{cfg.AdSettings}))
 			email.SetDefaultRecipient(cfg.ReportIssueEmail)
 		}, // onConfigUpdate
 		nil, // onProxiesUpdate
 		newUserConfig(session),
 		NewStatsTracker(session),
-		session.IsProUser,
+		func() bool { return mustBool("IsProUser")(session.IsProUser()) },
 		func() string { return "" }, // only used for desktop
 		func() string { return "" }, // only used for desktop
 		func(addr string) (string, error) {
@@ -392,7 +435,7 @@ func bandwidthUpdates(session Session) {
 	go func() {
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
-			session.BandwidthUpdate(percent, remaining, allowed, int(quota.TTLSeconds))
+			must("BandwidthUpdate")(session.BandwidthUpdate(percent, remaining, allowed, int(quota.TTLSeconds)))
 		}
 	}()
 }
@@ -435,7 +478,7 @@ func afterStart(session Session) {
 		if <-geolookup.OnRefresh() {
 			country := geolookup.GetCountry(0)
 			log.Debugf("Successful geolookup: country %s", country)
-			session.SetCountry(country)
+			must("SetCountry")(session.SetCountry(country))
 		}
 	}()
 }

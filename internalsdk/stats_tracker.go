@@ -15,8 +15,8 @@ func NewStatsTracker(session Session) *statsTracker {
 		session: session,
 	}
 	s.Tracker.AddListener(func(st stats.Stats) {
-		s.session.UpdateStats(st.City, st.Country,
-			st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked)
+		must("UpdateStats")(s.session.UpdateStats(st.City, st.Country,
+			st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked))
 	})
 	return s
 }
