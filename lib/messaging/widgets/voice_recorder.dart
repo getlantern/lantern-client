@@ -5,17 +5,13 @@ import 'package:lantern/package_store.dart';
 class VoiceRecorder extends StatelessWidget {
   const VoiceRecorder({
     Key? key,
-    required this.willCancelRecording,
-    required this.onSwipeLeft,
     required this.isRecording,
     required this.onRecording,
     required this.onStopRecording,
     required this.onTapUpListener,
   }) : super(key: key);
 
-  final bool willCancelRecording;
   final bool isRecording;
-  final VoidCallback onSwipeLeft;
   final VoidCallback onRecording;
   final VoidCallback onStopRecording;
   final Function onTapUpListener;
@@ -54,18 +50,6 @@ class VoiceRecorder extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  /// If the user drag a finger on the widget `_handlePan` is called.
-  /// to check if a swipe is gonna be used, we just need to check if the `dx` is lower than 200.0
-  /// if true then we proceeds to call [onSwipeLeft] if not then [onStopRecording] is called
-  void _handlePan(Offset details, bool isPanEnd) {
-    if (isPanEnd && details.dx < -150.0) {
-      onSwipeLeft();
-    }
-    if (isPanEnd && details.dx > -150.0) {
-      onStopRecording();
-    }
   }
 
   void _onTapUp(DragEndDetails details) => onStopRecording();

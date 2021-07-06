@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:audioplayers/audioplayers_api.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
@@ -40,10 +42,13 @@ class _ConversationState extends State<Conversation>
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
+  PlayerState? playerState;
   bool _recording = false;
+  bool _finishedRecording = false;
   bool _willCancelRecording = false;
   bool _isSendIconVisible = false;
   bool _isReplying = false;
+  Uint8List? recording;
   StoredMessage? _quotedMessage;
   var displayName = '';
   bool _emojiShowing = false;
@@ -140,14 +145,14 @@ class _ConversationState extends State<Conversation>
     if (!_recording) {
       return;
     }
-
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    var attachment = await model.stopRecordingVoiceMemo();
-    if (!_willCancelRecording) {
-      await _send(_newMessage.value.text, attachments: [attachment]);
-    }
+    recording = await model.stopRecordingVoiceMemo();
+    // if (!_willCancelRecording) {
+    //   await _send(_newMessage.value.text, attachments: [recording!]);
+    // }
     setState(() {
       _recording = false;
+      _finishedRecording = true;
       _willCancelRecording = false;
     });
   }
@@ -272,6 +277,33 @@ class _ConversationState extends State<Conversation>
         // Conversation title (contact name)
         title: displayName,
         actions: [DisappearingTimerAction(widget._contact)],
+        actionButton: AnimatedContainer(
+          margin: const EdgeInsets.only(bottom: 60.0),
+          curve: Curves.easeIn,
+          duration: const Duration(milliseconds: 400),
+          constraints: _finishedRecording
+              ? BoxConstraints.loose(const Size(50, 50))
+              : BoxConstraints.tight(
+                  const Size(0, 0),
+                ),
+          child: _finishedRecording
+              ? FloatingActionButton(
+                  onPressed: _finishedRecording
+                      ? () async {
+                          await _send(_newMessage.value.text,
+                              attachments: [recording!]);
+                          setState(() {
+                            _recording = false;
+                            _finishedRecording = true;
+                            _willCancelRecording = false;
+                            _finishedRecording = false;
+                          });
+                        }
+                      : null,
+                  child: const Icon(Icons.send),
+                )
+              : const SizedBox(),
+        ),
         body: Stack(children: [
           Flex(
             direction: Axis.vertical,
@@ -320,19 +352,23 @@ class _ConversationState extends State<Conversation>
                   ),
                 ),
               const Divider(height: 1.0),
-              Padding(
+              Container(
+                color: Colors.grey[200],
                 padding: _recording
                     ? const EdgeInsets.only(top: 4.0, right: 0, left: 0)
                     : const EdgeInsets.symmetric(
                         vertical: 4.0, horizontal: 2.0),
                 child: MessageBar(
+                  recording: recording,
                   width: size!.width,
                   isRecording: _recording,
                   stopWatchTimer: _stopWatchTimer,
-                  onSwipeLeft: () async {
-                    await model.stopRecordingVoiceMemo();
-                    setState(() => _recording = false);
-                  },
+                  onCancelRecording: () async => setState(() {
+                    _recording = false;
+                    _willCancelRecording = true;
+                    _finishedRecording = false;
+                  }),
+                  finishedRecording: _finishedRecording,
                   onTapUpListener: () async => await _finishRecording(),
                   willCancelRecording: _willCancelRecording,
                   height: 45,
