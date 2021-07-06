@@ -19,7 +19,7 @@ class AuthModel(
     private const val TAG = "AuthModel"
   }
 
-  private val authClient = AuthClient(AUTH_STAGING_API_ADDR)
+  private val authClient = NewAuthClient(AUTH_STAGING_API_ADDR)
 
   init {
       flutterEngine?.let {

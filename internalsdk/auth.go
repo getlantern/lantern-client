@@ -1,7 +1,6 @@
 package internalsdk
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/cookiejar"
 	"time"
@@ -14,15 +13,27 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
+const (
+	authAPIHost        = "auth4.lantern.network"
+	authStagingAPIHost = "auth-staging.lantern.network"
+)
+
 var (
 	handler *authHandler
 )
 
+// AuthResponse represents an API response
+// from the auth server
+type AuthResponse struct {
+	StatusCode int
+	Error      string
+}
+
 //AuthClient is an interface defined for making
 // client requests to the auth server
 type AuthClient interface {
-	SignIn(string, string) *api.AuthResponse
-	Register(int64, string, string) *api.AuthResponse
+	SignIn(string, string) AuthResponse
+	Register(int, string, string) AuthResponse
 }
 
 // authHandler is an implementation of the AuthClient
@@ -34,69 +45,76 @@ type authHandler struct {
 
 // NewAuthClient creates a new auth client for Android
 // It expects the auth server address as input
-func NewAuthClient(authAddr string) error {
+func NewAuthClient(authAddr string) AuthClient {
 	log.Debugf("Creating new auth client with proxy addr %s", authAddr)
 	httpClient, err := createHTTPClient()
 	if err != nil {
-		return err
+		log.Error(err)
+		return nil
 	}
 	authClient := client.New(authAddr, httpClient)
 	handler = &authHandler{authClient, httpClient}
-	return nil
+	return handler
 }
 
-// checkInit returns nil if the auth client has
-// been initialized; otherwise, it returns the error response
-func checkInit() *api.AuthResponse {
-	if handler == nil {
-		err := fmt.Errorf("Auth client hasn't been initialized")
-		// return error auth response
-		return api.NewAuthResponse(http.StatusBadRequest, err)
-	}
-	return nil
-}
-
-func (h *authHandler) signIn(username, password string) *api.AuthResponse {
+func (h *authHandler) signIn(username, password string) (*api.AuthResponse, error) {
 	params := &models.UserParams{
 		Username: username,
 		Password: password,
 	}
-	resp, err := h.authClient.SignIn(params)
-	if err != nil {
-		log.Errorf("Sign in error: %v", err)
-	}
-	return resp
+	return h.authClient.SignIn(params)
 }
 
-func (h *authHandler) register(lanternUserID int64, username, password string) *api.AuthResponse {
+func (h *authHandler) register(lanternUserID int, username,
+	password string) (*api.AuthResponse, error) {
 	params := &models.UserParams{
-		LanternUserID: lanternUserID,
+		LanternUserID: int64(lanternUserID),
 		Username:      username,
 		Password:      password,
 	}
-	resp, err := h.authClient.Register(params)
-	if err != nil {
-		log.Errorf("Create account error: %v", err)
+	return h.authClient.Register(params)
+}
+
+type authResponse struct {
+	response *api.AuthResponse
+}
+
+func (ar *authResponse) Error() string {
+	if ar != nil && ar.response != nil {
+		return ar.response.ApiResponse.Error
 	}
-	return resp
+	return ""
+}
+
+func (ar *authResponse) StatusCode() int {
+	if ar != nil && ar.response != nil {
+		return ar.response.ApiResponse.StatusCode
+	}
+	return 0
+}
+
+// newAuthResponse conforms an API response type to
+// a primitive type AuthResponse with the HTTP response status code
+// and error message (if any)
+func newAuthResponse(resp *api.AuthResponse) AuthResponse {
+	var authResp AuthResponse
+	if resp != nil && resp.ApiResponse != nil {
+		authResp.StatusCode = resp.ApiResponse.StatusCode
+		authResp.Error = resp.ApiResponse.Error
+	}
+	return authResp
 }
 
 // SignIn authenticates Lantern users with the authentication server
-func SignIn(username, password string) *api.AuthResponse {
-	resp := checkInit()
-	if resp != nil {
-		return resp
-	}
-	return handler.signIn(username, password)
+func (handler *authHandler) SignIn(username, password string) AuthResponse {
+	resp, _ := handler.signIn(username, password)
+	return newAuthResponse(resp)
 }
 
 // Register sends a new Lantern user create account request to the authentication server
-func Register(lanternUserID int64, username, password string) *api.AuthResponse {
-	resp := checkInit()
-	if resp != nil {
-		return resp
-	}
-	return handler.register(lanternUserID, username, password)
+func (handler *authHandler) Register(lanternUserID int, username, password string) AuthResponse {
+	resp, _ := handler.register(lanternUserID, username, password)
+	return newAuthResponse(resp)
 }
 
 // createHTTPClient creates a chained-then-fronted configured HTTP client

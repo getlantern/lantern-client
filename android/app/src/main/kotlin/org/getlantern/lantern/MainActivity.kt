@@ -28,13 +28,13 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.android.model.AuthModel
 import io.lantern.android.model.SessionModel
 import io.lantern.android.model.VpnModel
 import okhttp3.Response
 import org.getlantern.lantern.activity.PopUpAdActivity_
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
-import org.getlantern.lantern.client.AuthClient
 import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
