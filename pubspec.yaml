@@ -78,8 +78,6 @@ dependencies:
 
   email_validator: '^2.0.1'
 
-  hexcolor: ^2.0.4
-
   pin_code_text_field: ^1.8.0
 
   styled_text: ^3.0.1
