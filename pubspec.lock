@@ -35,7 +35,7 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.3"
+    version: "0.19.1"
   back_button_interceptor:
     dependency: "direct main"
     description:
