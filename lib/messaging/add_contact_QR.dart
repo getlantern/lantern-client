@@ -21,6 +21,7 @@ class _AddViaQRState extends State<AddViaQR> {
   bool scanning = false;
   Contact? scannedContact;
 
+  // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
@@ -79,12 +80,12 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scanning = false;
         });
-        showInfoDialog(
-          context,
-          title: 'Error'.i18n,
-          des:
-              'Something went wrong while scanning the QR code', // TODO: Add i18n
-        );
+        showInfoDialog(context,
+            title: 'Error'.i18n,
+            des:
+                'Something went wrong while scanning the QR code', // TODO: Add i18n
+            icon: ImagePaths.alert_icon,
+            buttonText: 'OK'.i18n);
       } finally {
         await subscription?.cancel();
         await qrController?.pauseCamera();
@@ -109,58 +110,86 @@ class _AddViaQRState extends State<AddViaQR> {
   Widget doBuildBody(
       BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(
-                    top: 10, start: 10, end: 10),
-                child: Text(
-                  "Scan your friend's QR code and ask them to do the same."
-                      .i18n,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 4,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: QrImage(
-                  data: '${me.contactId.id}|${me.displayName}',
-                  errorCorrectionLevel: QrErrorCorrectLevel.H,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 4,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: QRView(
-                      key: _qrKey,
-                      onQRViewCreated: (controller) =>
-                          _onQRViewCreated(controller, model),
-                    ),
+      return Container(
+        color: Colors.black,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
+                              .i18n,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          )),
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () => showInfoDialog(context,
+                            title: 'Scan QR Code'.i18n,
+                            des:
+                                "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+                                    .i18n,
+                            icon: ImagePaths.qr_code,
+                            buttonText: 'GOT IT'.i18n),
+                        child: const Icon(
+                          Icons.info,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
-                  if (contact != null)
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Icon(
-                        Icons.check_circle_outline_outlined,
-                        size: 50.w,
-                        color: Colors.white,
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
                     ),
-                ],
+                    child: QrImage(
+                      data: '${me.contactId.id}|${me.displayName}',
+                      errorCorrectionLevel: QrErrorCorrectLevel.H,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ]);
+              Flexible(
+                flex: 2,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: QRView(
+                        key: _qrKey,
+                        onQRViewCreated: (controller) =>
+                            _onQRViewCreated(controller, model),
+                      ),
+                    ),
+                    if (contact != null)
+                      const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CustomAssetImage(
+                              path: ImagePaths.check_grey, size: 200)),
+                  ],
+                ),
+              ),
+            ]),
+      );
     });
   }
 
