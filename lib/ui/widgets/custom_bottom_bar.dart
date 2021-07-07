@@ -28,6 +28,8 @@ class CustomBottomBar extends StatelessWidget {
       elevation: 0.0,
       unselectedFontSize: 0,
       selectedFontSize: 0,
+      showSelectedLabels: false,
+      type: BottomNavigationBarType.fixed,
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
