@@ -42,18 +42,32 @@ String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
       : 'me'; // TODO: i18n
 }
 
-IconData? getStatusIcon(bool inbound, StoredMessage msg) {
+Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
   return inbound
       ? null
-      // TODO: Add a StoredMessage_DeliveryStatus.READ flag
       : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
-          ? Icons.check_circle_outline_outlined
+          ? Icon(
+              Icons.check_circle_outline_outlined,
+              size: 12,
+              color: outbound ? outboundMsgColor : inboundMsgColor,
+            )
           : msg.status == StoredMessage_DeliveryStatus.SENDING
-              ? Icons.pending_outlined
+              ? SizedBox(
+                  width: 10,
+                  height: 10,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 0.5,
+                    color: outbound ? outboundMsgColor : inboundMsgColor,
+                  ),
+                )
               : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_FAILED ||
                       msg.status ==
                           StoredMessage_DeliveryStatus.PARTIALLY_FAILED
-                  ? Icons.error_outline
+                  ? Icon(
+                      Icons.error_outline,
+                      size: 12,
+                      color: outbound ? outboundMsgColor : inboundMsgColor,
+                    )
                   : null;
 }
 

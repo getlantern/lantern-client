@@ -6,7 +6,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:sizer/sizer.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
