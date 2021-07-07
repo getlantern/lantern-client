@@ -30,7 +30,7 @@ void showInfoDialog(BuildContext context,
               ),
               Text(
                 title,
-                style: tsInfoDialogTitle(),
+                style: tsInfoDialogTitle,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -55,7 +55,7 @@ void showInfoDialog(BuildContext context,
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       buttonText,
-                      style: tsInfoDialogButton(),
+                      style: tsInfoDialogButton,
                     ),
                   ),
                 ),

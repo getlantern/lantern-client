@@ -72,7 +72,7 @@ class Settings extends StatelessWidget {
                 return Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: tsSelectedTitleItem(),
+                  style: tsSelectedTitleItem,
                 );
               }),
             ),

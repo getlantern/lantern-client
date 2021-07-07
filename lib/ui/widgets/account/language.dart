@@ -38,9 +38,8 @@ class Language extends StatelessWidget {
               title: Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: lang == currentLang
-                      ? tsSelectedTitleItem()
-                      : tsTitleItem()),
+                  style:
+                      lang == currentLang ? tsSelectedTitleItem : tsTitleItem),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {
