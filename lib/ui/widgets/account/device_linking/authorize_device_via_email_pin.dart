@@ -19,7 +19,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
         text: 'recovery_email_sent'
             .i18n
             .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
-        style: tsExplanation(),
+        style: tsExplanation,
         styles: {
           'highlight':
               TextStyle(color: primaryBlue, fontWeight: FontWeight.bold),
@@ -44,7 +44,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     'Enter or paste linking code'.i18n.toUpperCase(),
-                    style: tsPinLabel(),
+                    style: tsPinLabel,
                   ),
                 ),
                 CustomPinField(
@@ -85,7 +85,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                                   },
                                   child: Text(
                                     'Okay'.i18n,
-                                    style: tsAlertDialogButtonPink(),
+                                    style: tsAlertDialogButtonPink,
                                   ),
                                 ),
                               ],
@@ -98,7 +98,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                     },
                     child: Text(
                       'Re-send Email'.i18n.toUpperCase(),
-                      style: tsAlertDialogButtonPink(),
+                      style: tsAlertDialogButtonPink,
                     ),
                   ),
                 ),
