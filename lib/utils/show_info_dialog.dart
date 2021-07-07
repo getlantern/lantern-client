@@ -1,7 +1,10 @@
 import 'package:lantern/package_store.dart';
 
 void showInfoDialog(BuildContext context,
-    {String title = '', String des = '', String icon = ''}) {
+    {String title = '',
+    String des = '',
+    String icon = '',
+    String buttonText = 'OK'}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -51,7 +54,7 @@ void showInfoDialog(BuildContext context,
                   child: Ink(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      'OK'.i18n,
+                      buttonText,
                       style: tsInfoDialogButton(),
                     ),
                   ),
