@@ -142,17 +142,6 @@ public abstract class Lantern {
         // TODO: stop service if necessary
     }
 
-    /**
-     * Adds metadata for reporting to cloud Logging services.
-     *
-     * @param key
-     * @param value
-     */
-    public static void addLoggingMetadata(
-            final String key, final String value) {
-        internalsdk.Internalsdk.addLoggingMetadata(key, value);
-    }
-
     private static void trackStartSession(final Context context) {
         sendSessionEvent(context, "Start");
     }

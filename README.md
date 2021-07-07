@@ -28,6 +28,7 @@ update the generated dart code.
 * Android SDK from 25 up to the latest.
 * [Git LFS](https://git-lfs.github.com) (more information on **STEPS TO RUN THE PROJECT**)
 * [Flutter V2.0.6](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos) (This is due to a custom plugin that needs to be migrated)
+* [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
 
 In the welcome screen choose the "Open an existing Android Studio" option and
 select the folder containing this README.

@@ -63,7 +63,46 @@ type Settings interface {
 	TimeoutMillis() int
 }
 
+// Session provides an interface for interacting with the Android Java/Kotlin code.
+// Note - all methods return an error so that Go has the opportunity to inspect any exceptions
+// thrown from the Java code. If a method interface doesn't include an error, exceptions on the
+// Java side immediately result in a panic from which Go cannot recover.
 type Session interface {
+	GetDeviceID() (string, error)
+	GetUserID() (int64, error)
+	GetToken() (string, error)
+	SetCountry(string) error
+	UpdateAdSettings(AdSettings) error
+	UpdateStats(string, string, string, int, int) error
+	SetStaging(bool) error
+	ProxyAll() (bool, error)
+	BandwidthUpdate(int, int, int, int) error
+	Locale() (string, error)
+	GetTimeZone() (string, error)
+	Code() (string, error)
+	GetCountryCode() (string, error)
+	GetForcedCountryCode() (string, error)
+	GetDNSServer() (string, error)
+	Provider() (string, error)
+	AppVersion() (string, error)
+	IsPlayVersion() (bool, error)
+	Email() (string, error)
+	Currency() (string, error)
+	DeviceOS() (string, error)
+	IsProUser() (bool, error)
+
+	// workaround for lack of any sequence types in gomobile bind... ;_;
+	// used to implement GetInternalHeaders() map[string]string
+	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
+	SerializedInternalHeaders() (string, error)
+
+	SetSentryExtra(key, value string) error
+}
+
+// panickingSession mimics the Session interface but its methods panic instead of returning errors
+// In practice, this is implemented by panicLoggingSession which first logs errors to Sentry before
+// panicking.
+type panickingSession interface {
 	common.AuthConfig
 	SetCountry(string)
 	UpdateAdSettings(AdSettings)
@@ -81,7 +120,6 @@ type Session interface {
 	AppVersion() string
 	IsPlayVersion() bool
 	Email() string
-	SetCode(string)
 	Currency() string
 	DeviceOS() string
 	IsProUser() bool
@@ -90,10 +128,12 @@ type Session interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+
+	SetSentryExtra(key, value string)
 }
 
 type userConfig struct {
-	session Session
+	session panickingSession
 }
 
 func (uc *userConfig) GetDeviceID() string          { return uc.session.GetDeviceID() }
@@ -122,7 +162,7 @@ func (uc *userConfig) GetInternalHeaders() map[string]string {
 	return h
 }
 
-func newUserConfig(session Session) *userConfig {
+func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
@@ -140,6 +180,8 @@ type SocketProtector interface {
 // The DNS server is used to resolve host only when dialing a protected connection
 // from within Lantern client.
 func ProtectConnections(protector SocketProtector, dnsServer string) {
+	defer sentryRecover(nil)
+
 	log.Debug("Protecting connections")
 	p := protected.New(protector.ProtectConn, dnsServer)
 	netx.OverrideDial(p.DialContext)
@@ -147,7 +189,7 @@ func ProtectConnections(protector SocketProtector, dnsServer string) {
 	netx.OverrideResolve(p.ResolveTCP)
 	netx.OverrideResolveUDP(p.ResolveUDP)
 	netx.OverrideListenUDP(p.ListenUDP)
-	bal := GetBalancer(0)
+	bal := getBalancer(0)
 	if bal != nil {
 		log.Debug("Protected after balancer already created, force redial")
 		bal.ResetFromExisting()
@@ -157,11 +199,13 @@ func ProtectConnections(protector SocketProtector, dnsServer string) {
 // RemoveOverrides removes the protected tlsdialer overrides
 // that allowed connections to bypass the VPN.
 func RemoveOverrides() {
+	defer sentryRecover(nil)
+
 	log.Debug("Removing overrides")
 	netx.Reset()
 }
 
-func GetBalancer(timeout time.Duration) *balancer.Balancer {
+func getBalancer(timeout time.Duration) *balancer.Balancer {
 	_cl, ok := cl.Get(timeout)
 	if !ok {
 		return nil
@@ -207,6 +251,8 @@ type adSettings struct {
 }
 
 func (s *adSettings) GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error) {
+	defer sentryRecover(nil)
+
 	adProvider := s.wrapped.GetAdProvider(isPro, countryCode, daysSinceInstalled)
 	if adProvider == nil {
 		return nil, errNoAdProviderAvailable
@@ -229,8 +275,14 @@ type Updater autoupdate.Updater
 // start to use it, even as it finishes its initialization sequence. However,
 // initial activity may be slow, so clients with low read timeouts may
 // time out.
-func Start(configDir string, locale string,
-	settings Settings, session Session) (*StartResult, error) {
+func Start(configDir string,
+	locale string,
+	settings Settings,
+	wrappedSession Session) (*StartResult, error) {
+
+	defer sentryRecover(wrappedSession)
+
+	session := &panicLoggingSession{wrappedSession}
 
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
@@ -262,18 +314,13 @@ func Start(configDir string, locale string,
 	return &StartResult{addr.(string), socksAddr.(string), dnsGrabberAddr.(string)}, nil
 }
 
-// AddLoggingMetadata adds metadata for reporting to cloud logging services
-func AddLoggingMetadata(key, value string) {
-	//logging.SetExtraLogglyInfo(key, value)
-}
-
 // EnableLogging enables logging.
 func EnableLogging(configDir string) {
 	logging.EnableFileLogging(configDir)
 }
 
 func run(configDir, locale string,
-	settings Settings, session Session) {
+	settings Settings, session panickingSession) {
 
 	memhelper.Track(15*time.Second, 15*time.Second)
 	appdir.SetHomeDir(configDir)
@@ -377,6 +424,9 @@ func run(configDir, locale string,
 	if err != nil {
 		log.Fatalf("Failed to start flashlight: %v", err)
 	}
+
+	configureSentryScope(session)
+
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address
 		"127.0.0.1:0", // listen for SOCKS on random address
@@ -388,7 +438,7 @@ func run(configDir, locale string,
 	)
 }
 
-func bandwidthUpdates(session Session) {
+func bandwidthUpdates(session panickingSession) {
 	go func() {
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
@@ -419,7 +469,7 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
-func setBandwidth(session Session) {
+func setBandwidth(session panickingSession) {
 	quota, _ := bandwidth.GetQuota()
 	percent, remaining, allowed := getBandwidth(quota)
 	if percent != 0 && remaining != 0 {
@@ -427,8 +477,7 @@ func setBandwidth(session Session) {
 	}
 }
 
-func afterStart(session Session) {
-
+func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
 	go func() {
