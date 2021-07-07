@@ -52,7 +52,7 @@ void showInfoDialog(BuildContext context,
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       'OK'.i18n,
-                      style: tsInfoDialogButton(primaryPink),
+                      style: tsInfoDialogButton(),
                     ),
                   ),
                 ),

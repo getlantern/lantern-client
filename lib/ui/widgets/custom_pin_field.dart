@@ -35,7 +35,7 @@ class CustomPinField extends StatelessWidget {
                       },
                       child: Text(
                         'No'.i18n,
-                        style: tsAlertDialogButton(grey4),
+                        style: tsAlertDialogButtonGrey(),
                       ),
                     ),
                     TextButton(
@@ -45,7 +45,7 @@ class CustomPinField extends StatelessWidget {
                       },
                       child: Text(
                         'Yes'.i18n,
-                        style: tsAlertDialogButton(primaryPink),
+                        style: tsAlertDialogButtonPink(),
                       ),
                     ),
                   ],
