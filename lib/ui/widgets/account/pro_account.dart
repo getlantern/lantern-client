@@ -72,7 +72,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'No'.i18n,
-                                  style: tsAlertDialogButton(grey4),
+                                  style: tsAlertDialogButtonGrey(),
                                 ),
                               ),
                               TextButton(
