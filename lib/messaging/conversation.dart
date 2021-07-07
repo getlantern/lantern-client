@@ -262,7 +262,9 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    (context.router.currentChild!.name == router_gr.Conversation.name)
+    (context.router.currentChild!.name == router_gr.Conversation.name &&
+            context.router.routeData.router.current.name ==
+                router_gr.MessagesRouter.name)
         ? unawaited(
             model.setCurrentConversationContact(widget._contact.contactId.id))
         : unawaited(model.clearCurrentConversationContact());
@@ -284,6 +286,7 @@ class _ConversationState extends State<Conversation>
               //         Container(
               //           width: 75.w,
               //           height: 15.h,
+
               //           child:
               //               const Icon(Icons.account_circle_rounded, size: 140),
               //         ),
