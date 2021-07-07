@@ -89,7 +89,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'Yes'.i18n,
-                                  style: tsAlertDialogButtonPink(),
+                                  style: tsAlertDialogButtonPink,
                                 ),
                               ),
                             ],
@@ -100,7 +100,7 @@ class ProAccount extends StatelessWidget {
               child: !allowRemoval
                   ? null
                   : Text((isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                      style: tsAlertDialogButtonPink()),
+                      style: tsAlertDialogButtonPink),
             );
           }));
 
@@ -111,7 +111,7 @@ class ProAccount extends StatelessWidget {
                 Navigator.pushNamed(context, routeApproveDevice);
               },
               child: Text('Add Device'.i18n.toUpperCase(),
-                  style: tsAlertDialogButtonPink()),
+                  style: tsAlertDialogButtonPink),
             ));
           }
 

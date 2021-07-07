@@ -16,50 +16,50 @@ TextStyle? tsCaption(BuildContext context) =>
 
 // Custom styles
 
-TextStyle? tsTitleAppbar() =>
+TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: black);
 
-TextStyle? tsTitleItem() =>
+TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
 
-TextStyle? tsSelectedTitleItem() => tsTitleItem()?.copyWith(color: primaryPink);
+TextStyle tsSelectedTitleItem = tsTitleItem.copyWith(color: primaryPink);
 
-TextStyle? tsTitleHeadVPNItem() =>
+TextStyle tsTitleHeadVPNItem =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: 14);
 
-TextStyle? tsTitleTrailVPNItem() =>
+TextStyle tsTitleTrailVPNItem =
     const TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
 
-TextStyle? tsPinLabel() => const TextStyle(fontSize: 10);
+TextStyle tsPinLabel = const TextStyle(fontSize: 10);
 
-TextStyle? tsExplanation() => const TextStyle(height: 1.6);
+TextStyle tsExplanation = const TextStyle(height: 1.6);
 
-TextStyle? tsMessageBody(outbound) => TextStyle(
+TextStyle tsMessageBody(outbound) => TextStyle(
     color: outbound ? outboundMsgColor : inboundMsgColor, height: 1.3);
 
-TextStyle? tsMessageStatus(outbound) => TextStyle(
+TextStyle tsMessageStatus(outbound) => TextStyle(
       color: outbound ? outboundMsgColor : inboundMsgColor,
       fontSize: 10,
     );
 
 // Dialogs
-TextStyle? tsAlertDialogTitle() => const TextStyle(fontSize: 16);
+TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 
-TextStyle? tsAlertDialogBody() => const TextStyle(fontSize: 14, height: 1.5);
+TextStyle tsAlertDialogBody = const TextStyle(fontSize: 14, height: 1.5);
 
-TextStyle? tsAlertDialogButtonGrey() => TextStyle(
-      color: grey4,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    );
+TextStyle tsAlertDialogButtonGrey = TextStyle(
+  color: grey4,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+);
 
-TextStyle? tsAlertDialogButtonPink() => TextStyle(
-      color: primaryPink,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    );
+TextStyle tsAlertDialogButtonPink = TextStyle(
+  color: primaryPink,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+);
 
-TextStyle? tsInfoDialogTitle() => const TextStyle(fontSize: 16);
+TextStyle? tsInfoDialogTitle = const TextStyle(fontSize: 16);
 
 TextStyle? tsInfoDialogText(color) => TextStyle(
       fontSize: 14,
@@ -67,8 +67,8 @@ TextStyle? tsInfoDialogText(color) => TextStyle(
       color: color,
     );
 
-TextStyle? tsInfoDialogButton() => TextStyle(
-      fontWeight: FontWeight.w600,
-      fontSize: 14,
-      color: primaryPink,
-    );
+TextStyle? tsInfoDialogButton = TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 14,
+  color: primaryPink,
+);
