@@ -42,7 +42,7 @@ REVISION_DATE := $(shell date -u -j -f "%F %T %z" "$(GIT_REVISION_DATE)" +"%Y%m%
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS_NOSTRIP := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+LDFLAGS_NOSTRIP := -extldflags '-Wl,--build-id=0x00000003' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
 LDFLAGS := $(LDFLAGS_NOSTRIP) -s
 
 BINARIES_PATH ?= ../lantern-binaries

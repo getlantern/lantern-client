@@ -18,6 +18,7 @@ require (
 	github.com/getlantern/netx v0.0.0-20201229185957-3fadd2c8f5ba
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20190111224713-cc3b5f4a0fb8
+	github.com/getsentry/sentry-go v0.11.0 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0

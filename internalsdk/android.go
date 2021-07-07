@@ -33,6 +33,7 @@ import (
 	"github.com/getlantern/mtime"
 	"github.com/getlantern/netx"
 	"github.com/getlantern/protected"
+	"github.com/getsentry/sentry-go"
 )
 
 const (
@@ -272,8 +273,18 @@ func Start(configDir string, locale string,
 	settings Settings, session Session) (*StartResult, error) {
 
 	startOnce.Do(func() {
+		err := sentry.Init(sentry.ClientOptions{
+			Dsn: "https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353",
+			// Enable printing of SDK debug messages.
+			// Useful when getting started or trying to figure something out.
+			Debug: true,
+		})
+		if err != nil {
+			log.Errorf("Unable to initialize sentry: %v", err)
+		}
 		go run(configDir, locale, settings, session)
 		go func() {
+			defer sentry.Recover()
 			time.Sleep(30 * time.Second)
 			must("Crash")(session.Crash())
 		}()

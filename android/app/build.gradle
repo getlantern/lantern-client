@@ -184,8 +184,8 @@ android {
         }
 
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             debuggable false
             buildConfigField "boolean", "DEVELOPMENT_MODE", "false"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
