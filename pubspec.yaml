@@ -72,7 +72,7 @@ dependencies:
 
   url_launcher: ^6.0.3
 
-  fluttertoast: 8.0.6
+  fluttertoast: ^8.0.7
 
   badges: ^2.0.0-nullsafety.1
 
