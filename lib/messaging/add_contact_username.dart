@@ -1,9 +1,11 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:auto_route/auto_route.dart';
 
 class AddViaUsername extends StatefulWidget {
   @override
@@ -26,9 +28,8 @@ class _AddViaUsernameState extends State<AddViaUsername> {
         IconButton(
             icon: const Icon(Icons.qr_code),
             tooltip: 'Your Contact Info'.i18n,
-            onPressed: () {
-              Navigator.restorablePushNamed(context, '/your_contact_info');
-            }),
+            onPressed: () async =>
+                await context.pushRoute(const ContactInfo())),
       ],
       body: SingleChildScrollView(
         child: Form(
@@ -66,13 +67,12 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                 Button(
                   width: 200,
                   text: 'Start Message'.i18n,
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       context.loaderOverlay.show();
                       try {
-                        Navigator.pushNamed(context, '/conversation',
-                            arguments: contact);
-                        // Navigator.pop(context);
+                        await context
+                            .pushRoute(Conversation(contact: contact!));
                       } finally {
                         context.loaderOverlay.hide();
                       }
