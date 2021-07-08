@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:audioplayers/audioplayers_api.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
@@ -22,6 +22,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:sizer/sizer.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -266,13 +267,12 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    var tabStatus = context.watch<TabStatus>();
-    if (tabStatus.active) {
-      unawaited(
-          model.setCurrentConversationContact(widget._contact.contactId.id));
-    } else {
-      unawaited(model.clearCurrentConversationContact());
-    }
+    (context.router.currentChild!.name == router_gr.Conversation.name &&
+            context.router.routeData.router.current.name ==
+                router_gr.MessagesRouter.name)
+        ? unawaited(
+            model.setCurrentConversationContact(widget._contact.contactId.id))
+        : unawaited(model.clearCurrentConversationContact());
     return BaseScreen(
         // Conversation title (contact name)
         title: displayName,
@@ -318,6 +318,7 @@ class _ConversationState extends State<Conversation>
               //         Container(
               //           width: 75.w,
               //           height: 15.h,
+
               //           child:
               //               const Icon(Icons.account_circle_rounded, size: 140),
               //         ),
@@ -337,7 +338,6 @@ class _ConversationState extends State<Conversation>
                 ),
               ),
               Flexible(
-                fit: FlexFit.tight,
                 child: _buildMessageBubbles(),
               ),
               // Reply container
@@ -410,12 +410,14 @@ class _ConversationState extends State<Conversation>
                     dismissKeyboard();
                     await model.react(_storedMessage!, emoji.emoji);
                     _storedMessage = null;
+                    setState(() => _emojiShowing = false);
+                  } else {
+                    setState(() => _isSendIconVisible = true);
+                    _newMessage
+                      ..text += emoji.emoji
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: _newMessage.text.length));
                   }
-                  setState(() => _isSendIconVisible = true);
-                  _newMessage
-                    ..text += emoji.emoji
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
                 },
               ),
             ],
