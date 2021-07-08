@@ -5,6 +5,7 @@ import 'package:lantern/config/image_paths.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_bottom_item.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:sizer/sizer.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -37,7 +38,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: Text('Messaging'.i18n, style: const TextStyle(fontSize: 12)),
+            label: Text('Messaging'.i18n, style: TextStyle(fontSize: 9.sp)),
             icon: SvgPicture.asset(
               ImagePaths.messages_icon,
               color:
@@ -54,7 +55,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 1,
             total: isDevelop ? 4 : 3,
-            label: const Text('VPN', style: TextStyle(fontSize: 12)),
+            label: Text('VPN', style: TextStyle(fontSize: 9.sp)),
             icon: SvgPicture.asset(
               ImagePaths.key_icon,
               color:
@@ -81,7 +82,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 2,
             total: isDevelop ? 4 : 3,
-            label: Text('Account'.i18n, style: const TextStyle(fontSize: 12)),
+            label: Text('Account'.i18n, style: TextStyle(fontSize: 9.sp)),
             onTap: () => onTap!(2),
             icon: sessionModel.shouldShowYinbiBadge(
               (context, value, child) => CustomBadge(
@@ -106,7 +107,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 3,
             total: isDevelop ? 4 : 3,
-            label: Text('Developer'.i18n, style: const TextStyle(fontSize: 12)),
+            label: Text('Developer'.i18n, style: TextStyle(fontSize: 9.sp)),
             icon: SvgPicture.asset(
               ImagePaths.devices_icon,
               color:
