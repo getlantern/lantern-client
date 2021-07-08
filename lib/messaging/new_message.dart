@@ -37,12 +37,6 @@ class NewMessage extends StatelessWidget {
           onTap: () async => await context.pushRoute(const AddQR()),
         ),
         const Divider(thickness: 1),
-        ListTile(
-            title: Text('Recent contacts'.i18n,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                ))),
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
@@ -64,28 +58,39 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 var topBorderWidth = index.isEven ? 0.5 : 0.0;
                 var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
-                return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                          width: topBorderWidth, color: Colors.black12),
-                      bottom: BorderSide(
-                          width: bottomBorderWidth, color: Colors.black12),
-                    )),
-                    child: ListTile(
-                      leading: const Icon(
-                        Icons.account_circle,
-                        size: 25,
-                        color: Colors.black,
+                return Column(
+                  children: [
+                    ListTile(
+                        title: Text('Recent contacts'.i18n,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ))),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                          border: Border(
+                        top: BorderSide(
+                            width: topBorderWidth, color: Colors.black12),
+                        bottom: BorderSide(
+                            width: bottomBorderWidth, color: Colors.black12),
+                      )),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.account_circle,
+                          size: 25,
+                          color: Colors.black,
+                        ),
+                        title: Text(contact.value.displayName.isEmpty
+                            ? 'Unnamed contact'.i18n
+                            : contact.value.displayName),
+                        onTap: () async => await context.pushRoute(
+                          Conversation(contact: contact.value),
+                        ),
                       ),
-                      title: Text(contact.value.displayName.isEmpty
-                          ? 'Unnamed contact'.i18n
-                          : contact.value.displayName),
-                      onTap: () async => await context.pushRoute(
-                        Conversation(contact: contact.value),
-                      ),
-                    ));
+                    ),
+                  ],
+                );
               },
             );
           }),

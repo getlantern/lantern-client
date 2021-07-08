@@ -26,7 +26,8 @@ class CustomPinField extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: Text('Paste from clipboard?'.i18n),
+                  content: Text('Paste from clipboard?'.i18n,
+                      style: tsAlertDialogBody),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
@@ -34,7 +35,7 @@ class CustomPinField extends StatelessWidget {
                       },
                       child: Text(
                         'No'.i18n,
-                        style: TextStyle(color: grey4),
+                        style: tsAlertDialogButtonGrey,
                       ),
                     ),
                     TextButton(
@@ -44,7 +45,7 @@ class CustomPinField extends StatelessWidget {
                       },
                       child: Text(
                         'Yes'.i18n,
-                        style: TextStyle(color: primaryPink),
+                        style: tsAlertDialogButtonPink,
                       ),
                     ),
                   ],
