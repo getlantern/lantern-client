@@ -37,28 +37,13 @@ class TextBubble extends StatelessWidget {
       direction: Axis.vertical,
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Flex(
+        Wrap(
           direction: Axis.vertical,
-          crossAxisAlignment:
-              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
-            if (isDateMarker != '') Flexible(child: DateMarker(isDateMarker)),
-            Flexible(
-              child: ContentContainer(
-                  outbound,
-                  inbound,
-                  msg,
-                  message,
-                  contact,
-                  onTapReply,
-                  startOfBlock,
-                  endOfBlock,
-                  newestMessage,
-                  reactions),
-            ),
+            if (isDateMarker != '') DateMarker(isDateMarker),
+            ContentContainer(outbound, inbound, msg, message, contact,
+                onTapReply, startOfBlock, endOfBlock, newestMessage, reactions),
           ],
         ),
       ],
