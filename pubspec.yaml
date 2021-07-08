@@ -49,6 +49,10 @@ dependencies:
 
   audioplayers: ^0.19.1
 
+  auto_route: ^2.2.0
+
+  bot_toast: ^4.0.1
+
   stop_watch_timer: ^1.0.0
 
   uuid: ^3.0.3
@@ -68,7 +72,7 @@ dependencies:
 
   url_launcher: ^6.0.3
 
-  fluttertoast: 8.0.6
+  fluttertoast: ^8.0.7
 
   badges: ^2.0.0-nullsafety.1
 
@@ -97,6 +101,8 @@ dev_dependencies:
     sdk: flutter
 
   test: ^1.15.7
+  auto_route_generator: ^2.1.0
+  build_runner: ^2.0.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

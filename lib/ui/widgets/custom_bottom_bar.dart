@@ -1,192 +1,125 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lantern/config/colors.dart';
+import 'package:lantern/config/image_paths.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/custom_bottom_item.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
-
-import 'custom_rounded_rectangle_border.dart';
-
-class TabItem {
-  final int index;
-  final String title;
-  final String icon;
-
-  TabItem({required this.index, required this.title, required this.icon});
-}
+import 'package:sizer/sizer.dart';
 
 class CustomBottomBar extends StatelessWidget {
-  final int currentIndex;
-  final bool showDeveloperSettings;
-  final Function updateCurrentIndexPageView;
-  final List<TabItem> tabs = [
-    TabItem(index: 0, title: 'Messaging', icon: ImagePaths.messages_icon),
-    TabItem(index: 1, title: 'VPN', icon: ImagePaths.key_icon),
-    TabItem(index: 2, title: 'Account', icon: ImagePaths.account_icon),
-  ];
+  final int index;
+  final Function(int)? onTap;
+  final bool isDevelop;
 
-  CustomBottomBar(
-      {this.currentIndex = 0,
-      this.showDeveloperSettings = false,
-      required this.updateCurrentIndexPageView,
+  const CustomBottomBar(
+      {required this.index,
+      required this.isDevelop,
+      required this.onTap,
       Key? key})
-      : super(key: key) {
-    if (showDeveloperSettings) {
-      tabs.add(TabItem(
-          index: 3, title: 'Developer'.i18n, icon: ImagePaths.devices_icon));
-    }
-  }
-
-  Widget activeIcon({bool isActive = false}) {
-    return Container(
-      margin: const EdgeInsetsDirectional.only(start: 4),
-      height: activeIconSize,
-      width: activeIconSize,
-      decoration: BoxDecoration(
-        color: isActive ? indicatorGreen : indicatorRed,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(activeIconSize / 2),
-        ),
-        boxShadow: isActive
-            ? [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: const Offset(0, 0), // changes position of shadow
-                ),
-              ]
-            : [],
-      ),
-    );
-  }
-
-  Widget renderBottomTabItem(
-      {required TabItem tab,
-      bool isActive = false,
-      required BuildContext context}) {
-    var sessionModel = context.watch<SessionModel>();
-    var selected = currentIndex == tab.index;
-    var tabIsFirst = tab.index == 0;
-    var tabIsLast = tab.index == tabs.length - 1;
-    var selectedIsPrior = currentIndex == tab.index - 1;
-    var selectedIsNext = currentIndex == tab.index + 1;
-
-    return Expanded(
-      flex: 1,
-      child: InkWell(
-        customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadiusDirectional.only(
-            topStart: Radius.circular(
-              !tabIsFirst ? borderRadius : 0,
-            ),
-            topEnd: Radius.circular(!tabIsLast ? borderRadius : 0),
-          ),
-        ),
-        onTap: () => updateCurrentIndexPageView(tab.index),
-        child: Ink(
-          decoration: ShapeDecoration(
-            color: selected ? selectedTabColor : unselectedTabColor,
-            shape: CustomRoundedRectangleBorder(
-              topSide: selected
-                  ? null
-                  : BorderSide(
-                      color: borderColor,
-                      width: 1,
-                    ),
-              endSide: selectedIsNext
-                  ? BorderSide(
-                      color: borderColor,
-                      width: 1,
-                    )
-                  : null,
-              startSide: selectedIsPrior
-                  ? BorderSide(
-                      color: borderColor,
-                      width: 1,
-                    )
-                  : null,
-              topStartCornerSide: BorderSide(
-                color: selectedIsPrior ? borderColor : Colors.white,
-              ),
-              topEndCornerSide: BorderSide(
-                color: selectedIsNext ? borderColor : Colors.white,
-              ),
-              borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(
-                  selectedIsPrior ? borderRadius : 0,
-                ),
-                topEnd: Radius.circular(
-                  selectedIsNext ? borderRadius : 0,
-                ),
-              ),
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              tab.title == 'Account'
-                  ? sessionModel.shouldShowYinbiBadge((BuildContext context,
-                      bool shouldShowYinbiBadge, Widget? child) {
-                      return CustomBadge(
-                        count: 1,
-                        fontSize: 8.0,
-                        showBadge: shouldShowYinbiBadge,
-                        child: CustomAssetImage(
-                          path: tab.icon,
-                          size: 24,
-                          color: selected
-                              ? selectedTabLabelColor
-                              : unselectedTabLabelColor,
-                        ),
-                      );
-                    })
-                  : CustomAssetImage(
-                      path: tab.icon,
-                      size: 24,
-                      color: selected
-                          ? selectedTabLabelColor
-                          : unselectedTabLabelColor,
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    tab.title.i18n,
-                    style: GoogleFonts.roboto().copyWith(
-                      fontSize: 12,
-                      color: selected
-                          ? selectedTabLabelColor
-                          : unselectedTabLabelColor,
-                    ),
-                  ),
-                  tab.title == 'VPN'
-                      ? activeIcon(isActive: isActive)
-                      : Container(),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var sessionModel = context.watch<SessionModel>();
     var vpnModel = context.watch<VpnModel>();
-    return Container(
-      height: 68,
-      child: vpnModel
-          .vpnStatus((BuildContext context, String? vpnStatus, Widget? child) {
-        return Row(
-          children: tabs
-              .map(
-                (tab) => renderBottomTabItem(
-                    tab: tab,
-                    isActive: (vpnStatus == 'connected' ||
-                        vpnStatus == 'disconnecting'),
-                    context: context),
-              )
-              .toList(),
-        );
-      }),
+
+    return BottomNavigationBar(
+      currentIndex: index,
+      elevation: 0.0,
+      unselectedFontSize: 0,
+      selectedFontSize: 0,
+      showSelectedLabels: false,
+      type: BottomNavigationBarType.fixed,
+      onTap: onTap,
+      items: [
+        BottomNavigationBarItem(
+          icon: CustomBottomItem(
+            currentIndex: index,
+            position: 0,
+            total: isDevelop ? 4 : 3,
+            label: Text('Messaging'.i18n, style: TextStyle(fontSize: 9.sp)),
+            icon: SvgPicture.asset(
+              ImagePaths.messages_icon,
+              color:
+                  index == 0 ? selectedTabLabelColor : unselectedTabLabelColor,
+              fit: BoxFit.contain,
+            ),
+            onTap: () => onTap!(0),
+          ),
+          label: '',
+          tooltip: 'Messaging'.i18n,
+        ),
+        BottomNavigationBarItem(
+          icon: CustomBottomItem(
+            currentIndex: index,
+            position: 1,
+            total: isDevelop ? 4 : 3,
+            label: Text('VPN', style: TextStyle(fontSize: 9.sp)),
+            icon: SvgPicture.asset(
+              ImagePaths.key_icon,
+              color:
+                  index == 1 ? selectedTabLabelColor : unselectedTabLabelColor,
+              fit: BoxFit.contain,
+            ),
+            onTap: () => onTap!(1),
+            iconWidget: vpnModel.vpnStatus(
+              (context, value, child) => CircleAvatar(
+                maxRadius: activeIconSize - 4,
+                backgroundColor: (value.toLowerCase() ==
+                            'Disconnecting'.i18n.toLowerCase() ||
+                        value == 'Connected'.i18n.toLowerCase())
+                    ? indicatorGreen
+                    : indicatorRed,
+              ),
+            ),
+          ),
+          label: '',
+          tooltip: 'VPN',
+        ),
+        BottomNavigationBarItem(
+          icon: CustomBottomItem(
+            currentIndex: index,
+            position: 2,
+            total: isDevelop ? 4 : 3,
+            label: Text('Account'.i18n, style: TextStyle(fontSize: 9.sp)),
+            onTap: () => onTap!(2),
+            icon: sessionModel.shouldShowYinbiBadge(
+              (context, value, child) => CustomBadge(
+                count: 1,
+                fontSize: 8.0,
+                showBadge: value,
+                child: SvgPicture.asset(
+                  ImagePaths.account_icon,
+                  color: index == 2
+                      ? selectedTabLabelColor
+                      : unselectedTabLabelColor,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+          label: '',
+          tooltip: 'Account'.i18n,
+        ),
+        BottomNavigationBarItem(
+          icon: CustomBottomItem(
+            currentIndex: index,
+            position: 3,
+            total: isDevelop ? 4 : 3,
+            label: Text('Developer'.i18n, style: TextStyle(fontSize: 9.sp)),
+            icon: SvgPicture.asset(
+              ImagePaths.devices_icon,
+              color:
+                  index == 3 ? selectedTabLabelColor : unselectedTabLabelColor,
+              fit: BoxFit.contain,
+            ),
+            onTap: () => onTap!(3),
+          ),
+          label: '',
+          tooltip: 'Developer'.i18n,
+        ),
+      ],
     );
   }
 }
