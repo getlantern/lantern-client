@@ -33,8 +33,8 @@ ext {
 
     // WARNING! compileSdkVersion and targetSdkVersion must not be set to 30
     // see https://github.com/getlantern/lantern-internal/issues/4497
-    compileSdkVersion = 30
-    targetSdkVersion = 30
+    compileSdkVersion = 29
+    targetSdkVersion = 29
     minSdkVersion = 21
     androidAnnotationsVersion = '4.7.0'
     androidAnnotationsAPIVersion = '4.7.0'
