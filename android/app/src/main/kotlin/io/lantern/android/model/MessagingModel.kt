@@ -68,7 +68,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     return messaging.createAttachment(
                         voiceMemoFile,
                         "audio/ogg",
-                        mapOf("duration" to duration.toString(), "role" to "voiceMemo")
+                        mapOf("duration" to duration.toString(), "role" to "voiceMemo"),
+                        lazy = false
                     ).toByteArray()
                 }catch(ex: Exception){
                     //If there's an exception the file is gonna be removed.
