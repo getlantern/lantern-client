@@ -386,6 +386,7 @@ func run(configDir, locale string,
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
 		session.ProxyAll,
+		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
 		// already have in desktop)
@@ -420,6 +421,7 @@ func run(configDir, locale string,
 			}
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
+		func() string { return "" },
 	)
 	if err != nil {
 		log.Fatalf("Failed to start flashlight: %v", err)
