@@ -1,7 +1,8 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/humanize.dart';
 
 import '../messaging_model.dart';
@@ -34,10 +35,9 @@ class ConversationItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis),
         trailing:
             Text(contact.mostRecentMessageTs.toInt().humanizeDate().toString()),
-        onTap: () async {
-          unawaited(Navigator.pushNamed(context, '/conversation',
-              arguments: contact));
-        },
+        onTap: () async => await context.pushRoute(
+          Conversation(contact: contact),
+        ),
       );
     });
   }

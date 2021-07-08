@@ -3,6 +3,8 @@ import 'package:lantern/messaging/widgets/conversation_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/core/router/router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 
 class Conversations extends StatelessWidget {
   @override
@@ -13,11 +15,12 @@ class Conversations extends StatelessWidget {
         title: 'Messages'.i18n,
         actions: [
           IconButton(
-              icon: const Icon(Icons.qr_code),
-              tooltip: 'Your Contact Info'.i18n,
-              onPressed: () {
-                Navigator.restorablePushNamed(context, '/your_contact_info');
-              }),
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Your Contact Info'.i18n,
+            onPressed: () async => await context.pushRoute(
+              const ContactInfo(),
+            ),
+          ),
         ],
         body: model.contactsByActivity(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
@@ -36,9 +39,7 @@ class Conversations extends StatelessWidget {
           );
         }),
         actionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.restorablePushNamed(context, '/new_message');
-          },
+          onPressed: () async => await context.pushRoute(const NewMessage()),
           child: const Icon(Icons.add),
         ));
   }

@@ -1,52 +1,36 @@
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/model/tab_status.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
-import 'package:lantern/ui/widgets/account/developer_settings.dart';
-
-import 'widgets/vpn/vpn.dart';
+import 'package:lantern/ui/widgets/custom_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
-  final String _initialRoute;
-  final dynamic _initialRouteArguments;
-
-  HomePage(this._initialRoute, this._initialRouteArguments, {Key? key})
-      : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState(_initialRoute);
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late PageController _pageController;
-  final String _initialRoute;
-  int _currentIndex = 0;
+  BuildContext? _context;
   final mainMethodChannel = const MethodChannel('lantern_method_channel');
+  final navigationChannel = const MethodChannel('navigation');
 
   Function()? _cancelEventSubscription;
 
-  _HomePageState(this._initialRoute) {
-    if (_initialRoute.startsWith(routeVPN)) {
-      _currentIndex = 1;
-    } else if (_initialRoute.startsWith(routeAccount)) {
-      _currentIndex = 2;
-    } else if (_initialRoute.startsWith(routeDeveloperSettings)) {
-      _currentIndex = 3;
-    }
-  }
+  _HomePageState();
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
     final eventManager = EventManager('lantern_event_channel');
-
+    navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
@@ -79,72 +63,56 @@ class _HomePageState extends State<HomePage> {
           throw Exception('Unhandled event $event');
       }
     });
-    _handleNavigationRequestsFromNative();
   }
 
-  void _handleNavigationRequestsFromNative() {
-    var navigationChannel = const MethodChannel('navigation');
-    navigationChannel.setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'openConversation':
-          Navigator.pushNamed(context, '/messaging/conversation',
-              arguments: Contact.fromBuffer(call.arguments as Uint8List));
-          break;
-        default:
-          throw Exception('unknown navigation method ${call.method}');
-      }
-      return Future.value(null);
-    });
-    // navigationChannel.invokeMethod('ready');
+  Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
+    switch (methodCall.method) {
+      case 'openConversation':
+        await _context!
+            .innerRouterOf<TabsRouter>(Home.name)!
+            .innerRouterOf<StackRouter>(MessagesRouter.name)!
+            .push(Conversation(
+                contact:
+                    Contact.fromBuffer(methodCall.arguments as Uint8List)));
+        break;
+      default:
+        return;
+    }
   }
-
-  void onPageChange(int index) => setState(() => _currentIndex = index);
 
   @override
   void dispose() {
-    _pageController.dispose();
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }
     super.dispose();
   }
 
-  void onUpdateCurrentIndexPageView(int index) =>
-      _pageController.jumpToPage(index);
-
   @override
   Widget build(BuildContext context) {
+    _context = context;
     var sessionModel = context.watch<SessionModel>();
     return sessionModel.developmentMode(
-        (BuildContext context, bool developmentMode, Widget? child) {
-      return sessionModel
-          .language((BuildContext context, String lang, Widget? child) {
-        Localization.locale = lang;
-        return Scaffold(
-          body: PageView(
-            onPageChanged: onPageChange,
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              TabStatusProvider(
-                pageController: _pageController,
-                index: 0,
-                child: MessagesTab(
-                    _initialRoute.replaceFirst(routeMessaging, ''),
-                    widget._initialRouteArguments),
+      (BuildContext context, bool developmentMode, Widget? child) {
+        return sessionModel.language(
+          (BuildContext context, String lang, Widget? child) {
+            Localization.locale = lang;
+            return AutoTabsScaffold(
+              routes: [
+                const MessagesRouter(),
+                const VpnRouter(),
+                const AccountRouter(),
+                if (developmentMode) const DeveloperRoute(),
+              ],
+              bottomNavigationBuilder: (context, tabsRouter) => CustomBottomBar(
+                onTap: tabsRouter.setActiveIndex,
+                index: tabsRouter.activeIndex,
+                isDevelop: developmentMode,
               ),
-              VPNTab(),
-              AccountTab(),
-              if (developmentMode) DeveloperSettingsTab(),
-            ],
-          ),
-          bottomNavigationBar: CustomBottomBar(
-            currentIndex: _currentIndex,
-            showDeveloperSettings: developmentMode,
-            updateCurrentIndexPageView: onUpdateCurrentIndexPageView,
-          ),
+            );
+          },
         );
-      });
-    });
+      },
+    );
   }
 }
