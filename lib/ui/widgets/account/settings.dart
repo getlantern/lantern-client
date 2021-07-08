@@ -69,7 +69,7 @@ class Settings extends StatelessWidget {
                 (BuildContext context, String lang, Widget? child) => Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: tsSelectedTitleItem(),
+                  style: tsSelectedTitleItem,
                 ),
               ),
             ),
