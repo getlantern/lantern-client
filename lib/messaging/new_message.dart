@@ -1,3 +1,4 @@
+import 'package:lantern/messaging/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -5,6 +6,8 @@ import 'package:lantern/package_store.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
+
+import 'add_contact_username.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -27,14 +30,15 @@ class NewMessage extends StatelessWidget {
           leading: const Icon(Icons.person_add),
           title: Text('Add Contact by username'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () async => await context.pushRoute(const AddUsername()),
+          onTap: () =>
+              Navigator.of(context).restorablePush(_renderAddViaUsername),
         ),
         const Divider(thickness: 1),
         ListTile(
           leading: const Icon(Icons.qr_code),
           title: Text('Scan QR Code'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () async => await context.pushRoute(const AddQR()),
+          onTap: () => Navigator.of(context).restorablePush(_renderAddViaQR),
         ),
         const Divider(thickness: 1),
         Container(
@@ -101,6 +105,31 @@ class NewMessage extends StatelessWidget {
           }),
         )
       ]),
+    );
+  }
+
+  static Route<Object?> _renderAddViaQR(BuildContext context, Object? args) {
+    return RawDialogRoute<void>(
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        return AddViaQR();
+      },
+    );
+  }
+
+  static Route<Object?> _renderAddViaUsername(
+      BuildContext context, Object? args) {
+    return RawDialogRoute<void>(
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        return AddViaUsername();
+      },
     );
   }
 }
