@@ -280,6 +280,7 @@ func Start(configDir string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
 
+	wrappedSession = wrapCaching(wrappedSession)
 	defer sentryRecover(wrappedSession)
 
 	session := &panicLoggingSession{wrappedSession}
