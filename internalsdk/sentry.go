@@ -9,6 +9,11 @@ import (
 	"github.com/getsentry/sentry-go"
 )
 
+var (
+	// these are contextual properties that we're comfortable sending to Sentry
+	whitelistedContext = []string{"op", "root_op", "geo_country", "is_data_capped", "is_pro", "locale_country", "locale_language"}
+)
+
 func init() {
 	err := sentry.Init(sentry.ClientOptions{
 		Dsn:              "https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353",
@@ -53,16 +58,20 @@ func sentryPanicIfNecessary(session Session, err interface{}) {
 	if !common.InDevelopment() {
 		log.Errorf("Sending panic to Sentry: %v", err)
 		sentry.WithScope(func(scope *sentry.Scope) {
-			scope.SetLevel(sentry.LevelFatal)
-			// include current op if available
-			op, found := ops.AsMap(nil, false)["op"]
-			if found {
-				scope.SetExtra("op", op)
-				if session != nil {
-					session.SetSentryExtra("op", op.(string))
-					session.SetSentryExtra("gostack", string(debug.Stack()))
+			// include whitelisted context
+			opsContext := ops.AsMap(nil, true)
+			for _, prop := range whitelistedContext {
+				val, found := opsContext[prop]
+				if found {
+					scope.SetExtra(prop, val)
+					if session != nil {
+						session.SetSentryExtra(prop, fmt.Sprintf("%v", val))
+					}
 				}
 			}
+			session.SetSentryExtra("gostack", string(debug.Stack()))
+
+			scope.SetLevel(sentry.LevelFatal)
 
 			switch err := err.(type) {
 			case error:
