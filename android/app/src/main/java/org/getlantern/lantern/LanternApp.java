@@ -21,7 +21,6 @@ import com.squareup.leakcanary.LeakCanary;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
-import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
