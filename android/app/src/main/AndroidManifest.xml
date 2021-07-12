@@ -82,22 +82,9 @@
         </activity>
 
         <activity
-            android:name=".activity.AdyenActivity_"
-            android:configChanges="locale|layoutDirection"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
-
-        <activity
             android:name=".activity.PaymentWallActivity_"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-        </activity>
-
-        <activity
-            android:name=".activity.AdyenSuccessActivity_"
-            android:screenOrientation="portrait"
             android:noHistory="true">
         </activity>
 

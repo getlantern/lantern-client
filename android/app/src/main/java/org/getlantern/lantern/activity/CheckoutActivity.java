@@ -55,6 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.Pair;
 import okhttp3.FormBody;
 import okhttp3.Response;
 
@@ -397,8 +398,8 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
     private void submitStripe() {
         try {
-            int[] dates = expirationInput.getValidDateFields();
-            Card card = Card.create(cardInput.getCardNumber(), dates[0], dates[1], cvcInput.getText().toString().trim());
+            Pair<Integer, Integer> dates = expirationInput.getValidDateFields();
+            Card card = Card.create(cardInput.getCardNumber(), dates.component1(), dates.component2(), cvcInput.getText().toString().trim());
             dialog = ProgressDialog.show(this,
                     getResources().getString(R.string.processing_payment),
                     "",
@@ -408,7 +409,7 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
                     this,
                     LanternApp.getSession().stripePubKey()
             );
-            stripe.createToken(
+            stripe.createCardToken(
                     card,
                     new ApiResultCallback<Token>() {
                         public void onSuccess(@NonNull Token token) {
@@ -479,9 +480,9 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 
         final Class<? extends Activity> activityClass;
         switch (provider.toLowerCase()) {
-            case "adyen":
-                activityClass = AdyenActivity_.class;
-                break;
+//            case "adyen":
+//                activityClass = AdyenActivity_.class;
+//                break;
             case "paymentwall":
                 activityClass = PaymentWallActivity_.class;
                 break;

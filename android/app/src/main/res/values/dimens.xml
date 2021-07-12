@@ -24,6 +24,8 @@
     <dimen name="toolbarHeight">56dp</dimen>
     <dimen name="menusWidth">168dp</dimen>
 
+    <dimen name="divider">1dp</dimen>
+
     <dimen name="defaultDividerHeight">4dp</dimen>
     <dimen name="defaultProgressBarHeight">1dp</dimen>
     <dimen name="defaultTitleSize">14dp</dimen>
