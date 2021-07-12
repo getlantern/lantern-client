@@ -339,11 +339,6 @@ dependencies {
 
     implementation(name:'paymentwall-android-sdk', ext: 'aar')
 
-    implementation 'com.adyen.checkout:core:1.14.1'
-    implementation 'com.adyen.checkout:utils:1.14.1'
-    implementation 'com.adyen.checkout:ui:1.14.1'
-    implementation 'com.adyen.checkout:cardscan:1.14.1'
-
     implementation project(':alipaySdk-15.6.5-20190718211148')
     implementation(name:'alipayadapter-release', ext: 'aar') {
         transitive = true
@@ -399,7 +394,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    implementation 'com.stripe:stripe-android:10.3.1'
+    implementation 'com.stripe:stripe-android:16.10.2'
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
