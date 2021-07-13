@@ -6,7 +6,7 @@ import 'attachment_types/image.dart';
 import 'attachment_types/video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
-Widget attachmentWidget(StoredAttachment attachment) {
+Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final mimeType = attachment.attachment.mimeType;
   // https://developer.android.com/guide/topics/media/media-formats
@@ -41,8 +41,8 @@ Widget attachmentWidget(StoredAttachment attachment) {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Text(
               attachmentTitle.toString(),
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: inbound ? inboundMsgColor : outboundMsgColor,
                 fontSize: 12,
               ),
             ),
@@ -73,15 +73,16 @@ Widget attachmentWidget(StoredAttachment attachment) {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Icon(Icons.file_copy, size: 30, color: Colors.white),
+            Icon(Icons.file_copy,
+                size: 30, color: inbound ? inboundMsgColor : outboundMsgColor),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   margin: const EdgeInsetsDirectional.only(end: 20),
                   child: Text(attachmentTitle.toString(),
-                      style: const TextStyle(
-                          color: Colors.white,
+                      style: TextStyle(
+                          color: inbound ? inboundMsgColor : outboundMsgColor,
                           fontSize: 12,
                           fontWeight: FontWeight.w500)),
                 ),
