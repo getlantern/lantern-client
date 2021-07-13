@@ -4,8 +4,9 @@ import 'package:lantern/package_store.dart';
 
 class ImageAttachment extends StatelessWidget {
   final StoredAttachment attachment;
+  final bool inbound;
 
-  ImageAttachment(this.attachment);
+  ImageAttachment(this.attachment, this.inbound);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +16,13 @@ class ImageAttachment extends StatelessWidget {
       case StoredAttachment_Status.PENDING:
         // pending download
         return Transform.scale(
-            scale: 0.5, child: const CircularProgressIndicator());
+            scale: 0.5,
+            child: CircularProgressIndicator(
+                color: inbound ? inboundMsgColor : outboundMsgColor));
       case StoredAttachment_Status.FAILED:
         // error with download
-        return const Icon(Icons.error_outlined);
+        return Icon(Icons.error_outlined,
+            color: inbound ? inboundMsgColor : outboundMsgColor);
       case StoredAttachment_Status.DONE:
         // successful download, onto decrypting
         return Container(
@@ -28,22 +32,30 @@ class ImageAttachment extends StatelessWidget {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return const Icon(Icons.error_outlined);
+                      return Icon(Icons.error_outlined,
+                          color: inbound ? inboundMsgColor : outboundMsgColor);
                     }
                     return Image.memory(snapshot.data,
                         errorBuilder: (BuildContext context, Object error,
                                 StackTrace? stackTrace) =>
-                            const Icon(Icons.error_outlined),
+                            Icon(Icons.error_outlined,
+                                color: inbound
+                                    ? inboundMsgColor
+                                    : outboundMsgColor),
                         filterQuality: FilterQuality.high,
                         scale: 3);
                   default:
                     return Transform.scale(
-                        scale: 0.5, child: const CircularProgressIndicator());
+                        scale: 0.5,
+                        child: CircularProgressIndicator(
+                          color: inbound ? inboundMsgColor : outboundMsgColor,
+                        ));
                 }
               }),
         );
       default:
-        return const Icon(Icons.error_outlined);
+        return Icon(Icons.error_outlined,
+            color: inbound ? inboundMsgColor : outboundMsgColor);
     }
   }
 }

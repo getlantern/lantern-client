@@ -57,14 +57,14 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     case 'image/wav':
     case 'image/heif':
     case 'image/heic':
-      return Flexible(child: ImageAttachment(attachment));
+      return Flexible(child: ImageAttachment(attachment, inbound));
     case 'video/mp4':
     case 'video/mkv':
     case 'video/mov':
     case 'video/quicktime':
     case 'video/3gp':
     case 'video/webm':
-      return Flexible(child: VideoAttachment(attachment));
+      return Flexible(child: VideoAttachment(attachment, inbound));
     default:
       // render generic file type as an icon
       return Padding(
