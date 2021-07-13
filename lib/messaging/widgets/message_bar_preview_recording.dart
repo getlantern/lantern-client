@@ -3,11 +3,14 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
+import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/voice.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/utils/audio_store.dart';
 import 'package:lantern/package_store.dart';
+import 'package:pedantic/pedantic.dart';
 
 class MessageBarPreviewRecording extends StatefulWidget {
   final Uint8List? recording;
@@ -62,9 +65,59 @@ class _MessageBarPreviewRecordingState
         children: [
           Flexible(
             fit: FlexFit.loose,
-            child: Container(
-              height: 100.0,
-              child: _getWaveBar(),
+            child: Stack(
+              clipBehavior: Clip.antiAlias,
+              children: [
+                Positioned(
+                  top: 1,
+                  left: 1,
+                  height: 100,
+                  width: 270,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: _getWaveBar(),
+                  ),
+                ),
+                Positioned.fill(
+                  left: -22,
+                  top: 1,
+                  bottom: 10,
+                  right: -22,
+                  child: SliderTheme(
+                    data: const SliderThemeData(
+                      activeTrackColor: Colors.transparent,
+                      inactiveTrackColor: Colors.transparent,
+                      thumbShape: RectangleSliderThumbShapes(height: 35),
+                    ),
+                    child: Slider(
+                      onChanged: (v) {
+                        final position = v * _duration!.inMilliseconds;
+                        audioStore.audioPlayer.seek(
+                          Duration(
+                            milliseconds: position.round(),
+                          ),
+                        );
+                      },
+                      divisions: 100,
+                      label: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? (_position!.inSeconds).toString() + ' sec.'
+                          : '0 sec.',
+                      value: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? _position!.inMilliseconds /
+                              _duration!.inMilliseconds
+                          : 0.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -73,19 +126,27 @@ class _MessageBarPreviewRecordingState
     );
   }
 
+  double moveTo() {
+    var percentageAudio =
+        (_position!.inMilliseconds * 100) / (_duration!.inMilliseconds);
+    return (270 * percentageAudio * 0.01);
+  }
+
   Widget currentIcon() {
     if (_isPlaying) {
       return TextButton(
         onPressed: _isPlaying ? () => _pause() : null,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.black),
+          backgroundColor: MaterialStateProperty.all(
+            Colors.grey[200],
+          ),
           shape: MaterialStateProperty.all<CircleBorder>(
             const CircleBorder(),
           ),
         ),
         child: const Icon(
           Icons.pause,
-          color: Colors.white,
+          color: Colors.black,
           size: 20.0,
         ),
       );
@@ -114,53 +175,26 @@ class _MessageBarPreviewRecordingState
     }
   }
 
-  Widget _getWaveBar() {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: 100,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        var _height = rand.nextInt(50).toDouble();
-        return StreamBuilder<Duration>(
-          stream: audioStore.audioPlayer.onAudioPositionChanged,
-          initialData: const Duration(seconds: 0),
-          builder: (context, snapshot) {
-            return GestureDetector(
-              onTap: () => audioStore.audioPlayer.seek(Duration(
-                  seconds: (index * _duration!.inMilliseconds ~/ 10000))),
-              child: Align(
-                child: Container(
-                  width: 2,
-                  height: _height < 5 ? 5 : _height,
-                  color:
-                      index * ((_duration?.inMicroseconds ?? 100) / 100000) >=
-                              (snapshot.data!.inSeconds)
-                          ? Colors.black
-                          : Colors.blue,
-                ),
-              ),
-            );
-          },
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          onTap: () => audioStore.audioPlayer.seek(
-            Duration(
-              seconds: (index * _duration!.inMilliseconds ~/ 100000),
-            ),
-          ),
-          child: Align(
-            child: Container(
-              width: 2,
-              height: 50,
-              color: Colors.transparent,
-            ),
-          ),
-        );
-      },
-    );
-  }
+  Widget _getWaveBar() => FutureBuilder(
+        future: model!
+            .decryptAttachment(StoredAttachment.fromBuffer(widget.recording!)),
+        builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
+          return (snapshot != null && snapshot.hasData)
+              ? CustomPaint(
+                  painter: Waveform(
+                    waveData: snapshot.data!,
+                    gap: 1,
+                    density: 130,
+                    height: 100,
+                    width: 270,
+                    startingHeight: 5,
+                    finishedHeight: 5.5,
+                    color: Colors.black,
+                  ),
+                )
+              : const SizedBox();
+        },
+      );
 
   @override
   void dispose() {
@@ -174,10 +208,8 @@ class _MessageBarPreviewRecordingState
   }
 
   void initAudioPlayer() {
-    _durationSubscription =
-        audioStore.audioPlayer.onDurationChanged.listen((duration) {
-      setState(() => _duration = duration);
-    });
+    _durationSubscription = audioStore.audioPlayer.onDurationChanged
+        .listen((duration) => setState(() => _duration = duration));
 
     _playerCompleteSubscription =
         audioStore.audioPlayer.onPlayerCompletion.listen((event) {
@@ -187,8 +219,6 @@ class _MessageBarPreviewRecordingState
 
     _playerErrorSubscription =
         audioStore.audioPlayer.onPlayerError.listen((msg) {
-      //ERROR ON FORMAT (MAYBE IS DUE TO THE AUDIO BEEN ENCRYPTED)
-      print("AUDIO ERROR: ${msg}");
       setState(() {
         _playerState = PlayerState.stopped;
         _duration = const Duration(seconds: 0);
@@ -196,9 +226,20 @@ class _MessageBarPreviewRecordingState
       });
     });
 
+    _positionSubscription =
+        audioStore.audioPlayer.onAudioPositionChanged.listen(
+      (p) => setState(
+        () => _position = p,
+      ),
+    );
+
     audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
     });
+    unawaited(Future.microtask(() async {
+      await play();
+      await _pause();
+    }));
   }
 
   Future<int> _pause() async {
@@ -230,10 +271,10 @@ class _MessageBarPreviewRecordingState
         ? _position
         : null;
 
-    var demoss = StoredAttachment.fromBuffer(widget.recording!);
-    var variable = await model!.decryptAttachment(demoss);
+    var _storedAttachment = StoredAttachment.fromBuffer(widget.recording!);
+    var bytes = await model!.decryptAttachment(_storedAttachment);
     await audioStore.stop();
-    final result = await audioStore.audioPlayer.playBytes(variable);
+    final result = await audioStore.audioPlayer.playBytes(bytes);
     if (result == 1) setState(() => _playerState = PlayerState.playing);
     await audioStore.audioPlayer.setPlaybackRate(playbackRate: 1.0);
     return result;
