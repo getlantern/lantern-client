@@ -55,8 +55,8 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'image/gif':
     case 'image/webp':
     case 'image/wav':
-    // TODO: check older platforms for HEIF
     case 'image/heif':
+    case 'image/heic':
       return Flexible(child: ImageAttachment(attachment));
     case 'video/mp4':
     case 'video/mkv':
