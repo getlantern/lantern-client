@@ -16,6 +16,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
+import io.sentry.Sentry;
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -123,7 +124,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun hasAcceptedTerms(): Boolean {
-        return getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
+        return prefs.getInt(ACCEPTED_TERMS_VERSION, 0) >= CURRENT_TERMS_VERSION
     }
 
     fun acceptTerms() {
@@ -147,7 +148,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     var showAdsAfterDays: Long
-        get() = getLong(SHOW_ADS_AFTER_DAYS, 0L)
+        get() = prefs.getLong(SHOW_ADS_AFTER_DAYS, 0L)
         set(days) {
             prefs.edit().putLong(SHOW_ADS_AFTER_DAYS, days).apply()
         }
@@ -190,7 +191,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun proxyAll(): Boolean {
-        return getBoolean(PROXY_ALL, false)
+        return prefs.getBoolean(PROXY_ALL, false)
     }
 
     fun setProxyAll(proxyAll: Boolean) {
@@ -264,7 +265,7 @@ abstract class SessionManager(application: Application) : Session {
             // production environment but that gets special treatment from the proserver to hit
             // payment providers' test endpoints.
             9007199254740992L
-        } else getLong(USER_ID, 0)
+        } else prefs.getLong(USER_ID, 0)
     }
 
     override fun getToken(): String {
@@ -275,7 +276,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     private val isPaymentTestMode: Boolean
-        get() = getBoolean(PAYMENT_TEST_MODE, false)
+        get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
         prefs.edit().putBoolean(PAYMENT_TEST_MODE, mode).apply()
@@ -321,7 +322,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun surveyLinkOpened(url: String?): Boolean {
-        return getBoolean(url, false)
+        return prefs.getBoolean(url, false)
     }
 
     override fun setStaging(staging: Boolean) {
@@ -359,34 +360,6 @@ abstract class SessionManager(application: Application) : Session {
         )
     }
 
-    protected fun getInt(name: String?, defaultValue: Int): Int {
-        var value = db.get<Any>(name!!) ?: defaultValue
-        return when (value) {
-            is Number -> value.toInt()
-            is String -> value.toInt()
-            else -> throw ClassCastException("$value cannot be cast to Int")
-        }
-    }
-
-    protected fun getLong(name: String?, defaultValue: Long): Long {
-        var value = db.get<Any>(name!!) ?: defaultValue
-        return when (value) {
-            is Number -> value.toLong()
-            is String -> value.toLong()
-            else -> throw ClassCastException("$value cannot be cast to Long")
-        }
-    }
-
-    protected fun getBoolean(name: String?, defaultValue: Boolean): Boolean {
-        var value = db.get<Any>(name!!) ?: defaultValue
-        return when (value) {
-            is Boolean -> value
-            is Number -> value.toInt() == 1
-            is String -> value.toBoolean()
-            else -> throw ClassCastException("$value cannot be cast to Boolean")
-        }
-    }
-
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
@@ -394,7 +367,7 @@ abstract class SessionManager(application: Application) : Session {
      * before, false is returned.
      */
     fun hasPrefExpired(name: String?): Boolean {
-        val expires = getLong(name, 0)
+        val expires = prefs.getLong(name, 0)
         return System.currentTimeMillis() >= expires
     }
 
@@ -429,6 +402,12 @@ abstract class SessionManager(application: Application) : Session {
         val headers = getInternalHeaders()
         val gson = GsonBuilder().disableHtmlEscaping().create()
         return gson.toJson(headers)
+    }
+
+    override fun setSentryExtra(key: String, value: String) {
+        Sentry.configureScope { scope ->
+            scope.setExtra(key, value)
+        }
     }
 
     companion object {
@@ -490,18 +469,18 @@ abstract class SessionManager(application: Application) : Session {
         context = application
         vpnModel = VpnModel()
         Logger.debug(TAG, "VpnModel() finished at ${System.currentTimeMillis() - start}")
+        db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
+        db.registerType(2000, Vpn.Device::class.java)
+        db.registerType(2001, Vpn.Devices::class.java)
         val prefsAdapter = BaseModel.masterDB.asSharedPreferences(
             PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
-        db = prefsAdapter.db
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
-            .putBoolean(PAYMENT_TEST_MODE, getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, getBoolean(PLAY_VERSION, false))
-            .putBoolean(YINBI_ENABLED, getBoolean(YINBI_ENABLED, false))
+            .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
+            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
+            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
-        db.registerType(2000, Vpn.Device::class.java)
-        db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,

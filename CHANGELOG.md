@@ -1,4 +1,30 @@
 
+<a name="6.7.4"></a>
+## [6.7.4](https://github.com/getlantern/android-lantern/compare/6.7.3...6.7.4)
+
+> 2021-07-08
+
+### Pull Requests
+
+* Merge pull request [#193](https://github.com/getlantern/android-lantern/issues/193) from getlantern/ox/issue187-2
+
+
+<a name="6.7.3"></a>
+## [6.7.3](https://github.com/getlantern/android-lantern/compare/6.7.2...6.7.3)
+
+> 2021-06-24
+
+### Reverts
+
+* Updated to latest version of ipproxy using gvisor
+
+### Pull Requests
+
+* Merge pull request [#175](https://github.com/getlantern/android-lantern/issues/175) from getlantern/ox/miscupdates
+* Merge pull request [#170](https://github.com/getlantern/android-lantern/issues/170) from getlantern/ox/issue169
+* Merge pull request [#160](https://github.com/getlantern/android-lantern/issues/160) from getlantern/ox/switch_back_to_gvisor
+
+
 <a name="6.7.2"></a>
 ## [6.7.2](https://github.com/getlantern/android-lantern/compare/6.7.1...6.7.2)
 
