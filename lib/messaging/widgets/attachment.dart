@@ -7,8 +7,10 @@ import 'attachment_types/video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment) {
+  final attachmentTitle = attachment.attachment.metadata['title'];
+  final mimeType = attachment.attachment.mimeType;
   // https://developer.android.com/guide/topics/media/media-formats
-  switch (attachment.attachment.mimeType) {
+  switch (mimeType) {
     case 'application/ogg':
     case 'audio/ogg':
       return Flexible(child: VoiceMemo(attachment));
@@ -18,7 +20,6 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'audio/mp3':
     case 'audio/flac':
     case 'audio/mpeg':
-      final attachmentTitle = attachment.attachment.metadata['title'];
       return Flexible(
           child: Column(
         children: [
@@ -39,7 +40,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Text(
-              attachmentTitle as String,
+              attachmentTitle.toString(),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
@@ -65,6 +66,31 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'video/webm':
       return Flexible(child: VideoAttachment(attachment));
     default:
-      return Container();
+      // render generic file type as an icon
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const Icon(Icons.file_copy, size: 30, color: Colors.white),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsetsDirectional.only(end: 20),
+                  child: Text(attachmentTitle.toString(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500)),
+                ),
+                // Text('size',
+                //     style: const TextStyle(color: Colors.white, fontSize: 12))
+              ],
+            )
+          ],
+        ),
+      );
   }
 }
