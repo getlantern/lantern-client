@@ -33,6 +33,7 @@ BUNDLER   := $(call get-command,bundle)
 ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
 GMSAAS    := $(call get-command,gmsaas)
+SENTRY    := $(call get-command,sentry-cli)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
 GIT_REVISION := $(shell git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)
@@ -40,9 +41,11 @@ GIT_REVISION_DATE := $(shell git show -s --format=%ci $(GIT_REVISION_SHORTCODE))
 
 REVISION_DATE := $(shell date -u -j -f "%F %T %z" "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S" 2>/dev/null || date -u -d "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S")
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
+# We explicitly set a build-id for use in the liblantern ELF binary so that Sentry and Crashlytics can successfully associate uploaded debug symbols with corresponding errors/crashes
+BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS_NOSTRIP := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+LDFLAGS_NOSTRIP := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
 LDFLAGS := $(LDFLAGS_NOSTRIP) -s
 
 BINARIES_PATH ?= ../lantern-binaries
@@ -237,6 +240,10 @@ require-wget:
 require-magick:
 	@if [[ -z "$(MAGICK)" ]]; then echo 'Missing "magick" command. Try brew install imagemagick.'; exit 1; fi
 
+.PHONY: require-sentry
+require-sentry:
+	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
+
 release-qa: require-version require-s3cmd require-changelog
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa.txt" && \
@@ -384,7 +391,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -396,13 +403,11 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
 	VERSION_CODE="$$VERSION_CODE" && \
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -b $(MOBILE_DIR)/app/build.gradle \
 		assembleProdRelease && \
-	echo "Theoretically we should be able to run both gradle tasks at once, but it doesn't work" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -b $(MOBILE_DIR)/app/build.gradle \
-		uploadCrashlyticsSymbolFileProdRelease && \
+	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
-$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -413,9 +418,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
 		bundleRelease && \
-	echo "Theoretically we should be able to run both gradle tasks at once, but it doesn't work" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
-		uploadCrashlyticsSymbolFileProdRelease && \
+	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-pull-translations:
@@ -436,12 +439,10 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-# Note, the below executes both android-release and android-bundle with ANDROID_ARCH=all because Crashlytics
-# needs the stripped native libs, which aren't built by bundle-android for some reason.
 package-android: require-version require-android-keystore
 	@cp ~/.gradle/gradle.properties gradle.properties.user && \
 	make pubget android-release && \
-	ANDROID_ARCH=all make android-release android-bundle && \
+	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
 
 upload-aab-to-play: require-release-track require-pip

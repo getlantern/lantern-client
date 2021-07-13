@@ -16,6 +16,7 @@
 #   public *;
 #}
 
+# Don't obfuscate so that logs contain useful stack traces
 -dontobfuscate
 
 -keep class com.microtripit.** { *; }
