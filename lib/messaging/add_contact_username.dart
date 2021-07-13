@@ -24,58 +24,72 @@ class _AddViaUsernameState extends State<AddViaUsername> {
     var size = MediaQuery.of(context).size;
 
     return Container(
+      padding: const EdgeInsets.all(4),
       color: Colors.white,
       width: size.width,
       height: size.height,
-      child: Form(
-        key: _formKey,
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: CustomTextField(
-                controller: usernameController,
-                label: 'Username'.i18n,
-                helperText:
-                    'Enter a username to start a message conversation'.i18n,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(
-                  Icons.email,
-                  color: Colors.black,
-                ),
-                validator: (value) {
-                  try {
-                    setState(() {
-                      // TODO: missing
-                      contact = model.getContactFromUsername(
-                          usernameController.value.text) as Contact;
-                    });
-                  } catch (e) {
-                    return 'An error occurred while searching for this username'
-                        .i18n;
-                  }
-                }),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+          IconButton(
+            icon: const Icon(Icons.close_rounded),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Button(
-                width: 200,
-                text: 'Start Message'.i18n,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    context.loaderOverlay.show();
-                    try {
-                      await context.pushRoute(Conversation(contact: contact!));
-                    } finally {
-                      context.loaderOverlay.hide();
-                    }
-                  }
-                },
+          Form(
+            key: _formKey,
+            child: Column(children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 36, horizontal: 16),
+                child: CustomTextField(
+                    controller: usernameController,
+                    label: 'Username'.i18n,
+                    helperText:
+                        'Enter a username to start a message conversation'.i18n,
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: const Icon(
+                      Icons.email,
+                      color: Colors.black,
+                    ),
+                    validator: (value) {
+                      try {
+                        setState(() {
+                          // TODO: missing
+                          contact = model.getContactFromUsername(
+                              usernameController.value.text) as Contact;
+                        });
+                      } catch (e) {
+                        return 'An error occurred while searching for this username'
+                            .i18n;
+                      }
+                    }),
               ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Button(
+                    width: 200,
+                    text: 'Start Message'.i18n,
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        context.loaderOverlay.show();
+                        try {
+                          await context
+                              .pushRoute(Conversation(contact: contact!));
+                        } finally {
+                          context.loaderOverlay.hide();
+                        }
+                      }
+                    },
+                  ),
+                ]),
+              )
             ]),
-          )
-        ]),
+          ),
+        ],
       ),
     );
   }
