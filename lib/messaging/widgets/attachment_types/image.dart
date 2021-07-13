@@ -31,7 +31,11 @@ class ImageAttachment extends StatelessWidget {
                       return const Icon(Icons.error_outlined);
                     }
                     return Image.memory(snapshot.data,
-                        filterQuality: FilterQuality.high, scale: 3);
+                        errorBuilder: (BuildContext context, Object error,
+                                StackTrace? stackTrace) =>
+                            const Icon(Icons.error_outlined),
+                        filterQuality: FilterQuality.high,
+                        scale: 3);
                   default:
                     return Transform.scale(
                         scale: 0.5, child: const CircularProgressIndicator());
@@ -39,7 +43,7 @@ class ImageAttachment extends StatelessWidget {
               }),
         );
       default:
-        return Container();
+        return const Icon(Icons.error_outlined);
     }
   }
 }
