@@ -127,11 +127,11 @@ class _AddViaQRState extends State<AddViaQR> {
       BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Padding(
-            padding: EdgeInsetsDirectional.all(10),
+            padding: EdgeInsetsDirectional.all(20),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
