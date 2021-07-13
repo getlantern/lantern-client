@@ -64,7 +64,11 @@ class VideoAttachmentState extends State<VideoAttachment> {
                                 ),
                               )
                             : Image.memory(snapshot.data,
-                                filterQuality: FilterQuality.high, scale: 3),
+                                errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stackTrace) =>
+                                    const Icon(Icons.error_outlined),
+                                filterQuality: FilterQuality.high,
+                                scale: 3),
                         IconButton(
                             iconSize: 96,
                             icon: Icon(
