@@ -353,7 +353,9 @@ class _ConversationState extends State<Conversation>
                 ),
               const Divider(height: 1.0),
               Container(
-                color: Colors.grey[200],
+                color: _recording || _finishedRecording
+                    ? Colors.grey[200]
+                    : Colors.white,
                 padding: _recording
                     ? const EdgeInsets.only(top: 4.0, right: 0, left: 0)
                     : const EdgeInsets.symmetric(

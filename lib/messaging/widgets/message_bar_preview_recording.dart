@@ -3,8 +3,11 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/voice.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/utils/audio_store.dart';
+import 'package:lantern/package_store.dart';
 
 class MessageBarPreviewRecording extends StatefulWidget {
   final Uint8List? recording;
@@ -32,6 +35,7 @@ class _MessageBarPreviewRecordingState
   bool get _isPlaying => _playerState == PlayerState.playing;
   bool get _isPaused => _playerState == PlayerState.paused;
   Random rand = Random();
+  MessagingModel? model;
 
   @override
   void initState() {
@@ -41,6 +45,7 @@ class _MessageBarPreviewRecordingState
 
   @override
   Widget build(BuildContext context) {
+    model = context.watch<MessagingModel>();
     return ListTile(
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
@@ -122,15 +127,16 @@ class _MessageBarPreviewRecordingState
           builder: (context, snapshot) {
             return GestureDetector(
               onTap: () => audioStore.audioPlayer.seek(Duration(
-                  seconds: (index * _duration!.inMilliseconds ~/ 1000))),
+                  seconds: (index * _duration!.inMilliseconds ~/ 10000))),
               child: Align(
                 child: Container(
                   width: 2,
                   height: _height < 5 ? 5 : _height,
-                  color: index * ((_duration?.inSeconds ?? 100) / 100000) >=
-                          (snapshot.data!.inSeconds)
-                      ? Colors.black
-                      : Colors.blue,
+                  color:
+                      index * ((_duration?.inMicroseconds ?? 100) / 100000) >=
+                              (snapshot.data!.inSeconds)
+                          ? Colors.black
+                          : Colors.blue,
                 ),
               ),
             );
@@ -223,8 +229,11 @@ class _MessageBarPreviewRecordingState
             _position!.inMilliseconds < _duration!.inMilliseconds)
         ? _position
         : null;
+
+    var demoss = StoredAttachment.fromBuffer(widget.recording!);
+    var variable = await model!.decryptAttachment(demoss);
     await audioStore.stop();
-    final result = await audioStore.audioPlayer.playBytes(widget.recording!);
+    final result = await audioStore.audioPlayer.playBytes(variable);
     if (result == 1) setState(() => _playerState = PlayerState.playing);
     await audioStore.audioPlayer.setPlaybackRate(playbackRate: 1.0);
     return result;
