@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings.Secure
 import android.text.TextUtils
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
@@ -235,7 +234,6 @@ abstract class SessionManager(application: Application) : Session {
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
         prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).apply()
-        FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
     private fun setDeviceId(deviceId: String?) {

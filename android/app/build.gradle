@@ -26,7 +26,6 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -201,16 +200,6 @@ android {
 
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            firebaseCrashlytics {
-                // Enable processing and uploading of native symbols to Crashlytics servers.
-                // By default, this is disabled to improve build speeds.
-                // This flag must be enabled to see properly-symbolicated native
-                // stack traces in the Crashlytics dashboard.
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir '../../build/app/intermediates/merged_native_libs/prodRelease/out/lib/'
-                strippedNativeLibsDir '../../build/app/intermediates/stripped_native_libs/prodRelease/out/lib/'
-            }
         }
     }
 
@@ -401,10 +390,6 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
 
-    // Declare the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ndk'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
 
@@ -436,10 +421,6 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-// Upload Crashlytics NDK symbols
-tasks.whenTaskAdded { task -> if (task.name.startsWith('assemble') && task.name.endsWith("Release")) task.finalizedBy "uploadCrashlyticsSymbolFile" + task.name.substring('assemble'.length()) }
-
 
 sentry {
     // Enables or disables the automatic upload of mapping files

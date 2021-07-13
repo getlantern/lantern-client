@@ -20,7 +20,6 @@ buildscript {
         classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufVersion"
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
         classpath("org.jlleitschuh.gradle:ktlint-gradle:10.0.0")
     }
 }
