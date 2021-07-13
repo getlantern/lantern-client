@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:audioplayers/notifications.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio_store.dart';
+import 'package:lantern/utils/waveform/waveform.dart';
+import 'package:lantern/utils/duration_extension.dart';
+import 'package:sizer/sizer.dart';
 
 /// An attachment that shows an audio player.
 enum PlayerState { stopped, playing, paused }
@@ -35,7 +40,6 @@ class VoiceMemoState extends State<VoiceMemo> {
   StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
   bool get _isPlaying => _playerState == PlayerState.playing;
   bool get _isPaused => _playerState == PlayerState.paused;
-  String get _positionText => _position?.toString().split('.').first ?? '';
 
   Future<int> _pause() async {
     final result = await audioStore.pause();
@@ -60,27 +64,45 @@ class VoiceMemoState extends State<VoiceMemo> {
     setState(() => _playerState = PlayerState.stopped);
   }
 
-  Widget currentIcon(MessagingModel model) {
+  Widget currentIcon(MessagingModel model, Uint8List bytes) {
     if (_isPlaying) {
-      return IconButton(
+      return TextButton(
         onPressed: _isPlaying ? () => _pause() : null,
-        iconSize: 32.0,
-        icon: const Icon(Icons.pause),
-        color: Colors.white,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Colors.white,
+          ),
+          shape: MaterialStateProperty.all<CircleBorder>(
+            const CircleBorder(),
+          ),
+        ),
+        child: Icon(
+          Icons.pause,
+          color: outboundBgColor,
+          size: 20.0,
+        ),
       );
     } else {
-      return IconButton(
+      return TextButton(
         onPressed: () async {
           if (_isPaused) {
             final result = await audioStore.resume();
             if (result == 1) setState(() => _playerState = PlayerState.playing);
           } else {
-            await play(widget.attachment, model);
+            await play(bytes);
           }
         },
-        iconSize: 32.0,
-        icon: const Icon(Icons.play_arrow),
-        color: Colors.white,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+          shape: MaterialStateProperty.all<CircleBorder>(
+            const CircleBorder(),
+          ),
+        ),
+        child: Icon(
+          Icons.play_arrow,
+          color: outboundBgColor,
+          size: 20.0,
+        ),
       );
     }
   }
@@ -127,59 +149,125 @@ class VoiceMemoState extends State<VoiceMemo> {
           ],
         );
       case StoredAttachment_Status.DONE:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                currentIcon(model!),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.75 - 70,
-                  child: SliderTheme(
-                    data: const SliderThemeData(
-                      activeTrackColor: Colors.white,
-                      inactiveTrackColor: Colors.grey,
-                      thumbColor: Colors.blue,
-                    ),
-                    child: Slider(
-                      onChanged: (v) {
-                        final position = v * _duration!.inMilliseconds;
-                        audioStore.audioPlayer.seek(
-                          Duration(
-                            milliseconds: position.round(),
+        return FutureBuilder(
+            future: model!.decryptAttachment(widget.attachment),
+            builder: (context, AsyncSnapshot<Uint8List?>? snapshot) {
+              var _seconds = (double.tryParse(
+                          widget.attachment.attachment.metadata['duration']!)! *
+                      1000)
+                  .toInt();
+              var _audioDuration = Duration(milliseconds: _seconds);
+              return snapshot != null && snapshot.hasData
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            currentIcon(model!, snapshot.data!),
+                            Text(
+                              _playerState == PlayerState.stopped
+                                  ? _audioDuration.time(
+                                      minute: true, seconds: true)
+                                  : _audioDuration
+                                      .calculate(inputDuration: _position)
+                                      .time(minute: true, seconds: true),
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.75 - 90,
+                          padding: const EdgeInsets.only(top: 10),
+                          height: 50,
+                          child: Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              _getWaveBar(),
+                              Positioned.fill(
+                                left: -22,
+                                top: 1,
+                                bottom: 10,
+                                right: -22,
+                                child: SliderTheme(
+                                  data: const SliderThemeData(
+                                    activeTrackColor: Colors.transparent,
+                                    inactiveTrackColor: Colors.transparent,
+                                    thumbShape:
+                                        RectangleSliderThumbShapes(height: 35),
+                                  ),
+                                  child: Slider(
+                                    onChanged: (v) {
+                                      final position =
+                                          v * _duration!.inMilliseconds;
+                                      audioStore.audioPlayer.seek(
+                                        Duration(
+                                          milliseconds: position.round(),
+                                        ),
+                                      );
+                                    },
+                                    divisions: 100,
+                                    label: (_position != null &&
+                                            _duration != null &&
+                                            _position!.inMilliseconds > 0 &&
+                                            _position!.inMilliseconds <
+                                                _duration!.inMilliseconds)
+                                        ? (_position!.inSeconds).toString() +
+                                            ' sec.'
+                                        : '0 sec.',
+                                    value: (_position != null &&
+                                            _duration != null &&
+                                            _position!.inMilliseconds > 0 &&
+                                            _position!.inMilliseconds <
+                                                _duration!.inMilliseconds)
+                                        ? _position!.inMilliseconds /
+                                            _duration!.inMilliseconds
+                                        : 0.0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                      divisions: 100,
-                      label: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? (_position!.inSeconds).toString() + ' sec.'
-                          : '0 sec.',
-                      value: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? _position!.inMilliseconds /
-                              _duration!.inMilliseconds
-                          : 0.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+                        ),
+                      ],
+                    )
+                  : const SizedBox();
+            });
       default:
         return const SizedBox();
     }
   }
+
+  Widget _getWaveBar() => FutureBuilder(
+        future: model!.decryptAttachment(widget.attachment),
+        builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
+          return (snapshot != null && snapshot.hasData)
+              ? CustomPaint(
+                  painter: Waveform(
+                    waveData: snapshot.data!,
+                    gap: 1,
+                    density: 130,
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.75 - 90,
+                    color: Colors.white,
+                    startingHeight: 4,
+                    finishedHeight: 4.5,
+                  ),
+                  child: Container(
+                    height: 25,
+                    width: MediaQuery.of(context).size.width * 0.75 - 90,
+                  ),
+                )
+              : const SizedBox();
+        },
+      );
 
   @override
   void initState() {
@@ -258,17 +346,16 @@ class VoiceMemoState extends State<VoiceMemo> {
   void didUpdateWidget(VoiceMemo oldWidget) {
     super.didUpdateWidget(oldWidget);
     initAudioPlayer();
-    _stop();
+    //_stop();
   }
 
-  Future<int> play(StoredAttachment attachment, MessagingModel model) async {
+  Future<int> play(Uint8List bytes) async {
     (_position != null &&
             _duration != null &&
             _position!.inMilliseconds > 0 &&
             _position!.inMilliseconds < _duration!.inMilliseconds)
         ? _position
         : null;
-    final bytes = await model.decryptAttachment(attachment);
     await audioStore.stop();
     final result = await audioStore.audioPlayer.playBytes(bytes);
 
