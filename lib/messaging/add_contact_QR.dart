@@ -127,44 +127,61 @@ class _AddViaQRState extends State<AddViaQR> {
       BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
       return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                        "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
-                            .i18n,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        )),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () => showInfoDialog(context,
-                          title: 'Scan QR Code'.i18n,
-                          des:
-                              "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
-                                  .i18n,
-                          icon: ImagePaths.qr_code,
-                          buttonText: 'GOT IT'.i18n),
-                      child: const Icon(
-                        Icons.info,
-                        size: 14,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsetsDirectional.all(10),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.close_rounded,
+                  color: Colors.white,
                 ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          Flexible(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                      "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
+                          .i18n,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      )),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => showInfoDialog(context,
+                        title: 'Scan QR Code'.i18n,
+                        des:
+                            "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+                                .i18n,
+                        icon: ImagePaths.qr_code,
+                        buttonText: 'GOT IT'.i18n),
+                    child: const Icon(
+                      Icons.info,
+                      size: 14,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
             ),
-            Flexible(
-              flex: 2,
+          ),
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Container(
@@ -181,8 +198,11 @@ class _AddViaQRState extends State<AddViaQR> {
                 ),
               ),
             ),
-            Flexible(
-              flex: 2,
+          ),
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -195,14 +215,14 @@ class _AddViaQRState extends State<AddViaQR> {
                     ),
                   ),
                   if (contact != null)
-                    const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: CustomAssetImage(
-                            path: ImagePaths.check_grey, size: 200)),
+                    const CustomAssetImage(
+                        path: ImagePaths.check_grey, size: 200),
                 ],
               ),
             ),
-          ]);
+          ),
+        ],
+      );
     });
   }
 }
