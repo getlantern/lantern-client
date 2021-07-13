@@ -57,14 +57,17 @@ class MessageBarRecording extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Flexible(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.red,
-                    radius: 12,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 6.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.red,
+                      radius: 12,
+                    ),
                   ),
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.only(left: 16, bottom: 6.0),
                     child: CountdownTimer(stopWatchTimer: stopWatchTimer),
                   ),
                 ),
