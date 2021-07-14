@@ -292,6 +292,9 @@ release-beta: require-s3cmd
 	git add $(BETA_BASE_NAME)* && \
 	(git commit -am "Latest beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
 
+release-autoupdate:
+	@echo $$VERSION > autoupdate-version.txt
+
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-s3-git-repos copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 release-s3-git-repos: require-version require-s3cmd require-wget require-lantern-binaries require-magick
