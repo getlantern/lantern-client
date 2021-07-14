@@ -17,6 +17,7 @@ class MessageBar extends StatelessWidget {
   final VoidCallback? onFileSend;
   final VoidCallback onRecording;
   final VoidCallback onStopRecording;
+  final VoidCallback onInmediateSend;
   final Function(String)? onTextFieldChanged;
   final Function(String)? onFieldSubmitted;
   final TextEditingController messageController;
@@ -33,6 +34,7 @@ class MessageBar extends StatelessWidget {
   MessageBar(
       {this.onEmojiTap,
       this.focusNode,
+      required this.onInmediateSend,
       required this.recording,
       required this.finishedRecording,
       required this.onCancelRecording,
@@ -83,6 +85,7 @@ class MessageBar extends StatelessWidget {
             onFileSend: onFileSend,
             displayEmojis: displayEmojis,
             onTextFieldTap: onTextFieldTap,
+            onInmediateSend: onInmediateSend,
           ),
           recording == null
               ? const SizedBox()

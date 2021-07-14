@@ -130,7 +130,10 @@ class _ConversationState extends State<Conversation>
       replyToSenderId: replyToSenderId,
     );
     _newMessage.clear();
-    setState(() => _quotedMessage = null);
+    setState(() {
+      _quotedMessage = null;
+      recording = null;
+    });
     // scroll to bottom on send
     // the error is due to this segment of the code, it's appear that the assertion is not true
     // and when the scroll tries to display the new message breaks.
@@ -152,6 +155,21 @@ class _ConversationState extends State<Conversation>
         _recording = true;
       });
     }
+  }
+
+  Future<void> _inmediateSendRecording() async {
+    if (!_recording) {
+      return;
+    }
+    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+    recording = await model.stopRecordingVoiceMemo();
+    await _send(_newMessage.value.text, attachments: [recording!]);
+    setState(() {
+      _recording = false;
+      _finishedRecording = true;
+      _willCancelRecording = false;
+      _finishedRecording = false;
+    });
   }
 
   Future<void> _finishRecording() async {
@@ -301,20 +319,9 @@ class _ConversationState extends State<Conversation>
                     const Size(0, 0),
                   ),
             child: _recording
-                ? FloatingActionButton(
-                    onPressed: _finishedRecording
-                        ? () async {
-                            await _send(_newMessage.value.text,
-                                attachments: [recording!]);
-                            setState(() {
-                              _recording = false;
-                              _finishedRecording = true;
-                              _willCancelRecording = false;
-                              _finishedRecording = false;
-                            });
-                          }
-                        : null,
-                    child: const Icon(Icons.send),
+                ? const FloatingActionButton(
+                    onPressed: null,
+                    child: Icon(Icons.send),
                   )
                 : const SizedBox(),
           ),
@@ -408,12 +415,14 @@ class _ConversationState extends State<Conversation>
                         _finishedRecording = true;
                         _willCancelRecording = false;
                         _finishedRecording = false;
-                        recording = null;
                       });
                     },
                     onRecording: () async => await _startRecording(),
                     onStopRecording: () async =>
                         _hasPermission ? await _finishRecording() : null,
+                    onInmediateSend: () async {
+                      await _inmediateSendRecording();
+                    },
                     onTextFieldTap: () => setState(() => _emojiShowing = false),
                     messageController: _newMessage,
                     displayEmojis: _emojiShowing,
