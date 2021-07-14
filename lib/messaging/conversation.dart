@@ -300,7 +300,7 @@ class _ConversationState extends State<Conversation>
                 : BoxConstraints.tight(
                     const Size(0, 0),
                   ),
-            child: _finishedRecording
+            child: _recording
                 ? FloatingActionButton(
                     onPressed: _finishedRecording
                         ? () async {
@@ -396,7 +396,16 @@ class _ConversationState extends State<Conversation>
                         value.isEmpty ? null : await _handleSubmit(_newMessage),
                     onTextFieldChanged: (value) =>
                         setState(() => _isSendIconVisible = value.isNotEmpty),
-                    onSend: () => _handleSubmit(_newMessage),
+                    onSend: () async {
+                      await _send(_newMessage.value.text,
+                          attachments: [recording!]);
+                      setState(() {
+                        _recording = false;
+                        _finishedRecording = true;
+                        _willCancelRecording = false;
+                        _finishedRecording = false;
+                      });
+                    },
                     onRecording: () async => await _startRecording(),
                     onStopRecording: () async =>
                         _hasPermission ? await _finishRecording() : null,
