@@ -278,7 +278,7 @@ class _ConversationState extends State<Conversation>
         title: displayName,
         actions: [DisappearingTimerAction(widget._contact)],
         actionButton: AnimatedContainer(
-          margin: const EdgeInsets.only(bottom: 60.0),
+          margin: const EdgeInsetsDirectional.only(bottom: 60.0),
           curve: Curves.easeIn,
           duration: const Duration(milliseconds: 400),
           constraints: _finishedRecording
