@@ -8,7 +8,7 @@ extension DurationExtension on Duration {
       _time += inMinutes <= 9 ? '0$inMinutes:' : '$inMinutes:';
     }
     if (seconds) {
-      _time += inSeconds <= 9 ? '0$inSeconds' : '$inSeconds:';
+      _time += inSeconds <= 9 ? '0$inSeconds' : '$inSeconds';
     }
     return _time;
   }
