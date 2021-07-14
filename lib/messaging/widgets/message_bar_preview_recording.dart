@@ -15,9 +15,12 @@ import 'package:pedantic/pedantic.dart';
 class MessageBarPreviewRecording extends StatefulWidget {
   final Uint8List? recording;
   final VoidCallback onCancelRecording;
+  final VoidCallback? onSend;
 
   const MessageBarPreviewRecording(
-      {required this.recording, required this.onCancelRecording});
+      {required this.recording,
+      required this.onCancelRecording,
+      required this.onSend});
 
   @override
   State<StatefulWidget> createState() {
@@ -52,14 +55,7 @@ class _MessageBarPreviewRecordingState
     return ListTile(
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      leading: IconButton(
-        onPressed: widget.onCancelRecording,
-        icon: const Icon(
-          Icons.close_rounded,
-          color: Colors.black,
-          size: 30.0,
-        ),
-      ),
+      leading: currentIcon(),
       title: Flex(
         direction: Axis.horizontal,
         children: [
@@ -122,7 +118,33 @@ class _MessageBarPreviewRecordingState
           ),
         ],
       ),
-      trailing: currentIcon(),
+      trailing: Flex(
+        direction: Axis.horizontal,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Flexible(
+            child: IconButton(
+              onPressed: widget.onCancelRecording,
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.black,
+                size: 30.0,
+              ),
+            ),
+          ),
+          Flexible(
+            child: IconButton(
+              onPressed: widget.onSend,
+              icon: const Icon(
+                Icons.send,
+                color: Colors.black,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
