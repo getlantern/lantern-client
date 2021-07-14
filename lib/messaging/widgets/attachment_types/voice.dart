@@ -126,10 +126,6 @@ class VoiceMemoState extends State<VoiceMemo> {
                   strokeWidth: 0.5,
                   color: widget.outbound ? outboundMsgColor : inboundMsgColor,
                 ),
-                const Text(
-                  'Uploading',
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                ),
               ],
             ),
           ],
