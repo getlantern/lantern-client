@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/conversation_item.dart';
+import 'package:lantern/messaging/contact.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -32,7 +32,12 @@ class Contacts extends StatelessWidget {
           return ListView.builder(
             itemCount: contacts.length,
             itemBuilder: (context, index) {
-              return ConversationItem(contacts[index]);
+              return Column(
+                children: [
+                  ContactItem(contacts[index]),
+                  CustomDivider(height: 1),
+                ],
+              );
             },
           );
         }),
