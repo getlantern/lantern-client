@@ -51,6 +51,10 @@ dependencies:
 
   fluttertoast: ^8.0.3
 
+  catcher: ^0.6.7
+
+  sentry: ^5.1.0
+
   badges: ^2.0.0-nullsafety.1
 
   email_validator: '^2.0.1'
