@@ -54,7 +54,7 @@ class ContentContainer extends StatelessWidget {
     );
 
     final attachments = msg.attachments.values
-        .map((attachment) => attachmentWidget(attachment));
+        .map((attachment) => attachmentWidget(attachment, outbound));
 
     return Container(
       padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),

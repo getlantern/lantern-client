@@ -6,7 +6,7 @@ import 'attachment_types/image.dart';
 import 'attachment_types/video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
-Widget attachmentWidget(StoredAttachment attachment) {
+Widget attachmentWidget(StoredAttachment attachment, bool outbound) {
   // https://developer.android.com/guide/topics/media/media-formats
   switch (attachment.attachment.mimeType) {
     case 'application/ogg':
@@ -15,7 +15,7 @@ Widget attachmentWidget(StoredAttachment attachment) {
     case 'audio/m4a':
     case 'audio/flac':
     case 'audio/aac':
-      return Flexible(child: VoiceMemo(attachment));
+      return Flexible(child: VoiceMemo(attachment, outbound));
 
     ///(LUIS): Im not quite sure if it's neccesary to sepparate the VoiceMemo from an audio format.
     /// at the end both are audio files.
