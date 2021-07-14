@@ -78,16 +78,26 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsetsDirectional.only(end: 20),
-                  child: Text(attachmentTitle.toString(),
-                      style: TextStyle(
-                          color: inbound ? inboundMsgColor : outboundMsgColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500)),
+                SizedBox(
+                  width: 150.0,
+                  child: Text(
+                    attachmentTitle.toString(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: inbound ? inboundMsgColor : outboundMsgColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
-                // Text('size',
-                //     style: const TextStyle(color: Colors.white, fontSize: 12))
+                Text(attachmentTitle.toString().split('.')[1].toUpperCase(),
+                    style: TextStyle(
+                      color: inbound ? inboundMsgColor : outboundMsgColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ))
               ],
             )
           ],
