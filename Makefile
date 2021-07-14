@@ -41,7 +41,7 @@ GIT_REVISION_DATE := $(shell git show -s --format=%ci $(GIT_REVISION_SHORTCODE))
 
 REVISION_DATE := $(shell date -u -j -f "%F %T %z" "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S" 2>/dev/null || date -u -d "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S")
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
-# We explicitly set a build-id for use in the liblantern ELF binary so that Sentry and Crashlytics can successfully associate uploaded debug symbols with corresponding errors/crashes
+# We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
@@ -291,6 +291,9 @@ release-beta: require-s3cmd
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
 	(git commit -am "Latest beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
+
+release-autoupdate:
+	@echo $$VERSION > autoupdate-version.txt
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-s3-git-repos copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
