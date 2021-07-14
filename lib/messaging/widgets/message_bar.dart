@@ -89,6 +89,7 @@ class MessageBar extends StatelessWidget {
               : MessageBarPreviewRecording(
                   onCancelRecording: onCancelRecording!,
                   recording: recording,
+                  onSend: onSend,
                 ),
         ],
       ),
