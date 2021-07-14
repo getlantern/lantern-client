@@ -292,10 +292,10 @@ class _ConversationState extends State<Conversation>
           title: displayName,
           actions: [DisappearingTimerAction(widget._contact)],
           actionButton: AnimatedContainer(
-            margin: const EdgeInsetsDirectional.only(bottom: 60.0),
+            margin: const EdgeInsetsDirectional.only(bottom: 100.0),
             curve: Curves.easeIn,
             duration: const Duration(milliseconds: 400),
-            constraints: _finishedRecording
+            constraints: _recording
                 ? BoxConstraints.loose(const Size(50, 50))
                 : BoxConstraints.tight(
                     const Size(0, 0),
@@ -384,6 +384,7 @@ class _ConversationState extends State<Conversation>
                       _recording = false;
                       _willCancelRecording = true;
                       _finishedRecording = false;
+                      recording = null;
                     }),
                     finishedRecording: _finishedRecording,
                     onTapUpListener: () async => await _finishRecording(),
@@ -398,12 +399,16 @@ class _ConversationState extends State<Conversation>
                         setState(() => _isSendIconVisible = value.isNotEmpty),
                     onSend: () async {
                       await _send(_newMessage.value.text,
-                          attachments: [recording!]);
+                          attachments:
+                              recording != null && recording!.isNotEmpty
+                                  ? [recording!]
+                                  : []);
                       setState(() {
                         _recording = false;
                         _finishedRecording = true;
                         _willCancelRecording = false;
                         _finishedRecording = false;
+                        recording = null;
                       });
                     },
                     onRecording: () async => await _startRecording(),
