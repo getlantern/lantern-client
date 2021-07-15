@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:catcher/catcher.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:sentry/sentry.dart';
 
-// ignore: avoid_redundant_argument_values
-ReportMode reportMode = SilentReportMode();
-
-final CatcherOptions catcherOptions = CatcherOptions(
-  reportMode,
+final debugOption = CatcherOptions(
+  SilentReportMode(),
   [
     ConsoleHandler(
       enableApplicationParameters: true,
@@ -16,7 +11,18 @@ final CatcherOptions catcherOptions = CatcherOptions(
       enableCustomParameters: true,
       enableStackTrace: true,
     ),
-    // Requires the SentryClient import, put this in pubspec sentry: ^5.1.0
+  ],
+);
+
+final releaseOption = CatcherOptions(
+  SilentReportMode(),
+  [
+    ConsoleHandler(
+      enableApplicationParameters: true,
+      enableDeviceParameters: true,
+      enableCustomParameters: true,
+      enableStackTrace: true,
+    ),
     SentryHandler(
       SentryClient(SentryOptions(
           dsn:
@@ -26,9 +32,10 @@ final CatcherOptions catcherOptions = CatcherOptions(
   ],
 );
 
-// String catcherScreenShots = catcherScreenshotDirectory() as String;
-
-// Future<String> catcherScreenshotDirectory() async {
-//   var externalDir = await getExternalStorageDirectory() as Directory;
-//   return externalDir.path.toString();
-// }
+void setupCatcherAndRun(StatelessWidget root) {
+  Catcher(
+    rootWidget: root,
+    debugConfig: debugOption,
+    releaseConfig: releaseOption,
+  );
+}
