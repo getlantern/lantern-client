@@ -18,7 +18,7 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     case 'audio/m4a':
     case 'audio/flac':
     case 'audio/aac':
-      return Flexible(child: VoiceMemo(attachment, outbound));
+      return Flexible(child: VoiceMemo(attachment, inbound));
 
     ///(LUIS): Im not quite sure if it's neccesary to sepparate the VoiceMemo from an audio format.
     /// at the end both are audio files.

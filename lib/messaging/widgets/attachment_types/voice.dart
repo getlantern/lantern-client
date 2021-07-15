@@ -17,9 +17,9 @@ enum PlayingRouteState { speakers, earpiece }
 
 class VoiceMemo extends StatefulWidget {
   final StoredAttachment attachment;
-  final bool outbound;
+  final bool inbound;
 
-  VoiceMemo(this.attachment, this.outbound);
+  VoiceMemo(this.attachment, this.inbound);
 
   @override
   State<StatefulWidget> createState() {
@@ -124,7 +124,7 @@ class VoiceMemoState extends State<VoiceMemo> {
               children: [
                 CircularProgressIndicator(
                   strokeWidth: 0.5,
-                  color: widget.outbound ? outboundMsgColor : inboundMsgColor,
+                  color: widget.inbound ? inboundMsgColor : outboundMsgColor,
                 ),
               ],
             ),
