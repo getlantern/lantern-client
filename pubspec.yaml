@@ -78,6 +78,10 @@ dependencies:
 
   fluttertoast: ^8.0.7
 
+  catcher: ^0.6.7
+
+  sentry: ^5.1.0
+
   badges: ^2.0.0-nullsafety.1
 
   dotted_border: ^2.0.0

@@ -6,8 +6,9 @@ import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatefulWidget {
   final StoredAttachment attachment;
+  final bool inbound;
 
-  VideoAttachment(this.attachment);
+  VideoAttachment(this.attachment, this.inbound);
 
   @override
   VideoAttachmentState createState() => VideoAttachmentState();
@@ -29,10 +30,13 @@ class VideoAttachmentState extends State<VideoAttachment> {
       case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
         return Transform.scale(
-            scale: 0.5, child: const CircularProgressIndicator());
+            scale: 0.5,
+            child: CircularProgressIndicator(
+                color: widget.inbound ? inboundMsgColor : outboundMsgColor));
       case StoredAttachment_Status.FAILED:
         // error with download
-        return const Icon(Icons.error_outlined);
+        return Icon(Icons.error_outlined,
+            color: widget.inbound ? inboundMsgColor : outboundMsgColor);
       default:
         // successful download, onto decrypting
         return Container(
@@ -42,10 +46,17 @@ class VideoAttachmentState extends State<VideoAttachment> {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Transform.scale(
-                        scale: 0.5, child: const CircularProgressIndicator());
+                        scale: 0.5,
+                        child: CircularProgressIndicator(
+                            color: widget.inbound
+                                ? inboundMsgColor
+                                : outboundMsgColor));
                   case ConnectionState.done:
                     if (snapshot.hasError) {
-                      return const Icon(Icons.error_outlined);
+                      return Icon(Icons.error_outlined,
+                          color: widget.inbound
+                              ? inboundMsgColor
+                              : outboundMsgColor);
                     }
                     return Stack(
                       alignment: Alignment.center,
@@ -64,14 +75,23 @@ class VideoAttachmentState extends State<VideoAttachment> {
                                 ),
                               )
                             : Image.memory(snapshot.data,
-                                filterQuality: FilterQuality.high, scale: 3),
+                                errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stackTrace) =>
+                                    Icon(Icons.error_outlined,
+                                        color: widget.inbound
+                                            ? inboundMsgColor
+                                            : outboundMsgColor),
+                                filterQuality: FilterQuality.high,
+                                scale: 3),
                         IconButton(
                             iconSize: 96,
                             icon: Icon(
                                 _controller?.value.isPlaying ?? false
                                     ? Icons.stop_circle_outlined
                                     : Icons.play_circle_outline,
-                                color: Colors.white,
+                                color: widget.inbound
+                                    ? inboundMsgColor
+                                    : outboundMsgColor,
                                 size: 60),
                             onPressed: () {
                               if (_controller?.value.isPlaying ?? false) {
@@ -104,7 +124,10 @@ class VideoAttachmentState extends State<VideoAttachment> {
                       ],
                     );
                   default:
-                    return const Icon(Icons.image);
+                    return Icon(Icons.image,
+                        color: widget.inbound
+                            ? inboundMsgColor
+                            : outboundMsgColor);
                 }
               }),
         );
