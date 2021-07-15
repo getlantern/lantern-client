@@ -68,10 +68,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                         mapOf("duration" to duration.toString(), "role" to "voiceMemo"),
                         lazy = false
                     ).toByteArray()
-                }catch(ex: Exception){
-                    //If there's an exception the file is gonna be removed.
+                } finally {
                     voiceMemoFile.delete()
-                    throw ex
                 }
             }
             "filePickerLoadAttachment" -> {
