@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -68,12 +69,8 @@ class _HomePageState extends State<HomePage> {
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'openConversation':
-        await _context!
-            .innerRouterOf<TabsRouter>(Home.name)!
-            .innerRouterOf<StackRouter>(MessagesRouter.name)!
-            .push(Conversation(
-                contact:
-                    Contact.fromBuffer(methodCall.arguments as Uint8List)));
+        final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
+        await _context!.openConversation(contact);
         break;
       default:
         return;

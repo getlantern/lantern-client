@@ -6,27 +6,25 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:lantern/messaging/add_contact_QR.dart' as _i7;
-import 'package:lantern/messaging/add_contact_username.dart' as _i8;
-import 'package:lantern/messaging/conversation.dart' as _i9;
+import 'package:lantern/messaging/conversation.dart' as _i7;
 import 'package:lantern/messaging/conversations.dart' as _i4;
 import 'package:lantern/messaging/new_message.dart' as _i6;
 import 'package:lantern/messaging/your_contact_info.dart' as _i5;
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i19;
-import 'package:lantern/package_store.dart' as _i10;
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i17;
+import 'package:lantern/package_store.dart' as _i8;
 import 'package:lantern/ui/home.dart' as _i3;
-import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i18;
+import 'package:lantern/ui/widgets/account/developer_settings.dart' as _i16;
 import 'package:lantern/ui/widgets/account/device_linking/approve_device.dart'
-    as _i17;
-import 'package:lantern/ui/widgets/account/device_linking/authorize_device_for_pro.dart'
-    as _i14;
-import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email.dart'
     as _i15;
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_for_pro.dart'
+    as _i12;
+import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email.dart'
+    as _i13;
 import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email_pin.dart'
-    as _i16;
-import 'package:lantern/ui/widgets/account/language.dart' as _i13;
-import 'package:lantern/ui/widgets/account/pro_account.dart' as _i11;
-import 'package:lantern/ui/widgets/account/settings.dart' as _i12;
+    as _i14;
+import 'package:lantern/ui/widgets/account/language.dart' as _i11;
+import 'package:lantern/ui/widgets/account/pro_account.dart' as _i9;
+import 'package:lantern/ui/widgets/account/settings.dart' as _i10;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter([_i2.GlobalKey<_i2.NavigatorState>? navigatorKey])
@@ -98,31 +96,11 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 450,
         opaque: true,
         barrierDismissible: false),
-    AddQR.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i7.AddViaQR();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
-    AddUsername.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i8.AddViaUsername();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
     Conversation.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ConversationArgs>();
-          return _i9.Conversation(args.contact);
+          return _i7.Conversation(args.contact);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -133,7 +111,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<VpnArgs>(orElse: () => const VpnArgs());
-          return _i10.VPNTab(key: args.key);
+          return _i8.VPNTab(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -143,7 +121,7 @@ class AppRouter extends _i1.RootStackRouter {
     Account.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i10.AccountTab();
+          return _i8.AccountTab();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -155,7 +133,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args =
               data.argsAs<ProAccountArgs>(orElse: () => const ProAccountArgs());
-          return _i11.ProAccount(key: args.key);
+          return _i9.ProAccount(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -167,7 +145,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args =
               data.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
-          return _i12.Settings(key: args.key);
+          return _i10.Settings(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -179,7 +157,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args =
               data.argsAs<LanguageArgs>(orElse: () => const LanguageArgs());
-          return _i13.Language(key: args.key);
+          return _i11.Language(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -191,7 +169,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args = data.argsAs<AuthorizeProArgs>(
               orElse: () => const AuthorizeProArgs());
-          return _i14.AuthorizeDeviceForPro(key: args.key);
+          return _i12.AuthorizeDeviceForPro(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -203,7 +181,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args = data.argsAs<AuthorizeDeviceEmailArgs>(
               orElse: () => const AuthorizeDeviceEmailArgs());
-          return _i15.AuthorizeDeviceViaEmail(key: args.key);
+          return _i13.AuthorizeDeviceViaEmail(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -215,7 +193,7 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args = data.argsAs<AuthorizeDeviceEmailPinArgs>(
               orElse: () => const AuthorizeDeviceEmailPinArgs());
-          return _i16.AuthorizeDeviceViaEmailPin(key: args.key);
+          return _i14.AuthorizeDeviceViaEmailPin(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -227,19 +205,19 @@ class AppRouter extends _i1.RootStackRouter {
         builder: (data) {
           final args = data.argsAs<ApproveDeviceArgs>(
               orElse: () => const ApproveDeviceArgs());
-          return _i17.ApproveDevice(key: args.key);
+          return _i15.ApproveDevice(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
         reverseDurationInMilliseconds: 450,
         opaque: true,
         barrierDismissible: false),
-    DeveloperSetting.name: (routeData) => _i1.CustomPage<void>(
+    DeveloperSettings.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
-          final args = data.argsAs<DeveloperSettingArgs>(
-              orElse: () => const DeveloperSettingArgs());
-          return _i18.DeveloperSettingsTab(key: args.key);
+          final args = data.argsAs<DeveloperSettingsArgs>(
+              orElse: () => const DeveloperSettingsArgs());
+          return _i16.DeveloperSettingsTab(key: args.key);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -255,8 +233,6 @@ class AppRouter extends _i1.RootStackRouter {
             _i1.RouteConfig(ConversationsRoute.name, path: ''),
             _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
             _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
-            _i1.RouteConfig(AddQR.name, path: 'addQR'),
-            _i1.RouteConfig(AddUsername.name, path: 'addUsername'),
             _i1.RouteConfig(Conversation.name, path: 'conversation')
           ]),
           _i1.RouteConfig(VpnRouter.name,
@@ -275,13 +251,13 @@ class AppRouter extends _i1.RootStackRouter {
           ]),
           _i1.RouteConfig(DeveloperRoute.name,
               path: 'developer',
-              children: [_i1.RouteConfig(DeveloperSetting.name, path: '')])
+              children: [_i1.RouteConfig(DeveloperSettings.name, path: '')])
         ])
       ];
 }
 
 class Home extends _i1.PageRouteInfo<HomeArgs> {
-  Home({_i10.Key? key, List<_i1.PageRouteInfo>? children})
+  Home({_i8.Key? key, List<_i1.PageRouteInfo>? children})
       : super(name,
             path: '/', args: HomeArgs(key: key), initialChildren: children);
 
@@ -291,7 +267,7 @@ class Home extends _i1.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class MessagesRouter extends _i1.PageRouteInfo {
@@ -340,20 +316,8 @@ class NewMessage extends _i1.PageRouteInfo {
   static const String name = 'NewMessage';
 }
 
-class AddQR extends _i1.PageRouteInfo {
-  const AddQR() : super(name, path: 'addQR');
-
-  static const String name = 'AddQR';
-}
-
-class AddUsername extends _i1.PageRouteInfo {
-  const AddUsername() : super(name, path: 'addUsername');
-
-  static const String name = 'AddUsername';
-}
-
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i19.Contact contact})
+  Conversation({required _i17.Contact contact})
       : super(name,
             path: 'conversation', args: ConversationArgs(contact: contact));
 
@@ -363,11 +327,11 @@ class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
 class ConversationArgs {
   const ConversationArgs({required this.contact});
 
-  final _i19.Contact contact;
+  final _i17.Contact contact;
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {
-  Vpn({_i10.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
+  Vpn({_i8.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
 
   static const String name = 'Vpn';
 }
@@ -375,7 +339,7 @@ class Vpn extends _i1.PageRouteInfo<VpnArgs> {
 class VpnArgs {
   const VpnArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class Account extends _i1.PageRouteInfo {
@@ -385,7 +349,7 @@ class Account extends _i1.PageRouteInfo {
 }
 
 class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
-  ProAccount({_i10.Key? key})
+  ProAccount({_i8.Key? key})
       : super(name, path: 'proAccount', args: ProAccountArgs(key: key));
 
   static const String name = 'ProAccount';
@@ -394,11 +358,11 @@ class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
 class ProAccountArgs {
   const ProAccountArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class Settings extends _i1.PageRouteInfo<SettingsArgs> {
-  Settings({_i10.Key? key})
+  Settings({_i8.Key? key})
       : super(name, path: 'settings', args: SettingsArgs(key: key));
 
   static const String name = 'Settings';
@@ -407,11 +371,11 @@ class Settings extends _i1.PageRouteInfo<SettingsArgs> {
 class SettingsArgs {
   const SettingsArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class Language extends _i1.PageRouteInfo<LanguageArgs> {
-  Language({_i10.Key? key})
+  Language({_i8.Key? key})
       : super(name, path: 'language', args: LanguageArgs(key: key));
 
   static const String name = 'Language';
@@ -420,11 +384,11 @@ class Language extends _i1.PageRouteInfo<LanguageArgs> {
 class LanguageArgs {
   const LanguageArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class AuthorizePro extends _i1.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({_i10.Key? key})
+  AuthorizePro({_i8.Key? key})
       : super(name, path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
   static const String name = 'AuthorizePro';
@@ -433,11 +397,11 @@ class AuthorizePro extends _i1.PageRouteInfo<AuthorizeProArgs> {
 class AuthorizeProArgs {
   const AuthorizeProArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class AuthorizeDeviceEmail extends _i1.PageRouteInfo<AuthorizeDeviceEmailArgs> {
-  AuthorizeDeviceEmail({_i10.Key? key})
+  AuthorizeDeviceEmail({_i8.Key? key})
       : super(name,
             path: 'authorizeDeviceEmail',
             args: AuthorizeDeviceEmailArgs(key: key));
@@ -448,12 +412,12 @@ class AuthorizeDeviceEmail extends _i1.PageRouteInfo<AuthorizeDeviceEmailArgs> {
 class AuthorizeDeviceEmailArgs {
   const AuthorizeDeviceEmailArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class AuthorizeDeviceEmailPin
     extends _i1.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
-  AuthorizeDeviceEmailPin({_i10.Key? key})
+  AuthorizeDeviceEmailPin({_i8.Key? key})
       : super(name,
             path: 'authorizeDeviceEmailPin',
             args: AuthorizeDeviceEmailPinArgs(key: key));
@@ -464,11 +428,11 @@ class AuthorizeDeviceEmailPin
 class AuthorizeDeviceEmailPinArgs {
   const AuthorizeDeviceEmailPinArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
 class ApproveDevice extends _i1.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({_i10.Key? key})
+  ApproveDevice({_i8.Key? key})
       : super(name, path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
   static const String name = 'ApproveDevice';
@@ -477,18 +441,18 @@ class ApproveDevice extends _i1.PageRouteInfo<ApproveDeviceArgs> {
 class ApproveDeviceArgs {
   const ApproveDeviceArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }
 
-class DeveloperSetting extends _i1.PageRouteInfo<DeveloperSettingArgs> {
-  DeveloperSetting({_i10.Key? key})
-      : super(name, path: '', args: DeveloperSettingArgs(key: key));
+class DeveloperSettings extends _i1.PageRouteInfo<DeveloperSettingsArgs> {
+  DeveloperSettings({_i8.Key? key})
+      : super(name, path: '', args: DeveloperSettingsArgs(key: key));
 
-  static const String name = 'DeveloperSetting';
+  static const String name = 'DeveloperSettings';
 }
 
-class DeveloperSettingArgs {
-  const DeveloperSettingArgs({this.key});
+class DeveloperSettingsArgs {
+  const DeveloperSettingsArgs({this.key});
 
-  final _i10.Key? key;
+  final _i8.Key? key;
 }

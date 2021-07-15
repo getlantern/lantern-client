@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -70,7 +70,8 @@ class _AddViaQRState extends State<AddViaQR> {
           if (updatedContact != null &&
               updatedContact.firstReceivedMessageTs > 0) {
             contactNotifier.removeListener(listener);
-            await context.pushRoute(Conversation(contact: updatedContact));
+            Navigator.of(context).pop(); // close the full screen dialog
+            await context.openConversation(updatedContact);
           }
         };
         contactNotifier.addListener(listener);
@@ -99,10 +100,18 @@ class _AddViaQRState extends State<AddViaQR> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
+
+    return buildBody(context, model);
+  }
+
   Widget buildBody(BuildContext context, MessagingModel model) {
     if (scannedContact == null) {
       return doBuildBody(context, model, null);
     }
+
     return model.singleContact(context, scannedContact!,
         (context, contact, child) => doBuildBody(context, model, contact));
   }
@@ -110,93 +119,85 @@ class _AddViaQRState extends State<AddViaQR> {
   Widget doBuildBody(
       BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
-      return Container(
-        color: Colors.black,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                          "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
+      return fullScreenDialogLayout(Colors.black, Colors.white, context, [
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                      "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
+                          .i18n,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      )),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => showInfoDialog(context,
+                      title: 'Scan QR Code'.i18n,
+                      des:
+                          "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
                               .i18n,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          )),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () => showInfoDialog(context,
-                            title: 'Scan QR Code'.i18n,
-                            des:
-                                "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
-                                    .i18n,
-                            icon: ImagePaths.qr_code,
-                            buttonText: 'GOT IT'.i18n),
-                        child: const Icon(
-                          Icons.info,
-                          size: 14,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
+                      icon: ImagePaths.qr_code,
+                      buttonText: 'GOT IT'.i18n),
+                  child: const Icon(
+                    Icons.info,
+                    size: 14,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
                   ),
                 ),
+                child: QrImage(
+                  data: '${me.contactId.id}|${me.displayName}',
+                  errorCorrectionLevel: QrErrorCorrectLevel.H,
+                ),
               ),
-              Flexible(
-                flex: 2,
-                child: AspectRatio(
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AspectRatio(
                   aspectRatio: 1,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                    ),
-                    child: QrImage(
-                      data: '${me.contactId.id}|${me.displayName}',
-                      errorCorrectionLevel: QrErrorCorrectLevel.H,
-                    ),
+                  child: QRView(
+                    key: _qrKey,
+                    onQRViewCreated: (controller) =>
+                        _onQRViewCreated(controller, model),
                   ),
                 ),
-              ),
-              Flexible(
-                flex: 2,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: QRView(
-                        key: _qrKey,
-                        onQRViewCreated: (controller) =>
-                            _onQRViewCreated(controller, model),
-                      ),
-                    ),
-                    if (contact != null)
-                      const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CustomAssetImage(
-                              path: ImagePaths.check_grey, size: 200)),
-                  ],
-                ),
-              ),
-            ]),
-      );
+                if (contact != null)
+                  const CustomAssetImage(
+                      path: ImagePaths.check_grey, size: 200),
+              ],
+            ),
+          ),
+        ),
+      ]);
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
-    return BaseScreen(title: 'QR Code'.i18n, body: buildBody(context, model));
   }
 }
