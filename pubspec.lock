@@ -71,7 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-<<<<<<< HEAD
   bot_toast:
     dependency: "direct main"
     description:
@@ -254,14 +253,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  dotted_border:
-    dependency: "direct main"
-    description:
-      name: dotted_border
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-=======
   device_info_plus:
     dependency: transitive
     description:
@@ -311,7 +302,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
->>>>>>> master
+  dotted_border:
+    dependency: "direct main"
+    description:
+      name: dotted_border
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   email_validator:
     dependency: "direct main"
     description:
@@ -430,7 +427,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.7"
-<<<<<<< HEAD
   focused_menu:
     dependency: "direct main"
     description:
@@ -445,8 +441,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-=======
->>>>>>> master
   gettext_parser:
     dependency: transitive
     description:
@@ -783,7 +777,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-<<<<<<< HEAD
   pubspec_parse:
     dependency: transitive
     description:
@@ -833,6 +826,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0-nullsafety.0"
+  sentry:
+    dependency: "direct main"
+    description:
+      name: sentry
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
   share:
     dependency: "direct main"
     description:
@@ -882,15 +882,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-=======
-  sentry:
-    dependency: "direct main"
-    description:
-      name: sentry
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.1.0"
->>>>>>> master
   shelf:
     dependency: transitive
     description:
