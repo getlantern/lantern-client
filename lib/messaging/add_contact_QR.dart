@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -53,7 +52,6 @@ class _AddViaQRState extends State<AddViaQR> {
       try {
         if (scannedContact != null) {
           // we've already scanned the contact, don't bother processing again
-          Navigator.of(context).pop(); // close the full screen dialog
           return;
         }
         var parts = scanData.code.split('\|');
@@ -72,9 +70,8 @@ class _AddViaQRState extends State<AddViaQR> {
           if (updatedContact != null &&
               updatedContact.firstReceivedMessageTs > 0) {
             contactNotifier.removeListener(listener);
-            await context.pushRoute(
-                Conversation(contact: updatedContact)); // open up conversation
             Navigator.of(context).pop(); // close the full screen dialog
+            await context.openConversation(updatedContact);
           }
         };
         contactNotifier.addListener(listener);
