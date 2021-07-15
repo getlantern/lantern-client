@@ -82,12 +82,14 @@ class _MessageBarPreviewRecordingState
                         ? -145
                         : -80,
                 left: -23,
-                child: _isPlaying
+                child: _isPlaying || _isPaused
                     ? SliderTheme(
-                        data: const SliderThemeData(
+                        data: SliderThemeData(
                           activeTrackColor: Colors.transparent,
-                          inactiveTrackColor: Colors.blue,
-                          thumbShape: RectangleSliderThumbShapes(height: 41.5),
+                          inactiveTrackColor: Colors.transparent,
+                          thumbShape:
+                              const RectangleSliderThumbShapes(height: 41.5),
+                          valueIndicatorColor: Colors.grey.shade200,
                         ),
                         child: Slider(
                           onChanged: (v) {
