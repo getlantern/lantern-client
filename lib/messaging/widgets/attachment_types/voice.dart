@@ -197,11 +197,13 @@ class VoiceMemoState extends State<VoiceMemo> {
                                 bottom: 10,
                                 right: -22,
                                 child: SliderTheme(
-                                  data: const SliderThemeData(
+                                  data: SliderThemeData(
                                     activeTrackColor: Colors.transparent,
                                     inactiveTrackColor: Colors.transparent,
+                                    valueIndicatorColor: Colors.grey.shade200,
                                     thumbShape:
-                                        RectangleSliderThumbShapes(height: 35),
+                                        const RectangleSliderThumbShapes(
+                                            height: 35),
                                   ),
                                   child: Slider(
                                     onChanged: (v) {
