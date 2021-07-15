@@ -1,6 +1,7 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -167,4 +168,32 @@ void showSnackbar(BuildContext context, String text) {
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
+    BuildContext context, List<Widget> widgetList) {
+  return Container(
+    color: bgColor,
+    child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsetsDirectional.all(20),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.close_rounded,
+                  color: iconColor,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          ...widgetList
+        ]),
+  );
 }

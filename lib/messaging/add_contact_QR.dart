@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -106,10 +107,7 @@ class _AddViaQRState extends State<AddViaQR> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    return Container(
-      color: Colors.black,
-      child: buildBody(context, model),
-    );
+    return buildBody(context, model);
   }
 
   Widget buildBody(BuildContext context, MessagingModel model) {
@@ -124,103 +122,85 @@ class _AddViaQRState extends State<AddViaQR> {
   Widget doBuildBody(
       BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsetsDirectional.all(20),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.close_rounded,
-                  color: Colors.white,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-          Flexible(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
+      return fullScreenDialogLayout(Colors.black, Colors.white, context, [
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
                       "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
                           .i18n,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
                       )),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () => showInfoDialog(context,
-                        title: 'Scan QR Code'.i18n,
-                        des:
-                            "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
-                                .i18n,
-                        icon: ImagePaths.qr_code,
-                        buttonText: 'GOT IT'.i18n),
-                    child: const Icon(
-                      Icons.info,
-                      size: 14,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => showInfoDialog(context,
+                      title: 'Scan QR Code'.i18n,
+                      des:
+                          "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+                              .i18n,
+                      icon: ImagePaths.qr_code,
+                      buttonText: 'GOT IT'.i18n),
+                  child: const Icon(
+                    Icons.info,
+                    size: 14,
+                    color: Colors.white,
+                  ),
+                )
+              ],
             ),
           ),
-          Flexible(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
+        ),
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
                   ),
-                  child: QrImage(
-                    data: '${me.contactId.id}|${me.displayName}',
-                    errorCorrectionLevel: QrErrorCorrectLevel.H,
-                  ),
+                ),
+                child: QrImage(
+                  data: '${me.contactId.id}|${me.displayName}',
+                  errorCorrectionLevel: QrErrorCorrectLevel.H,
                 ),
               ),
             ),
           ),
-          Flexible(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: QRView(
-                      key: _qrKey,
-                      onQRViewCreated: (controller) =>
-                          _onQRViewCreated(controller, model),
-                    ),
+        ),
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: QRView(
+                    key: _qrKey,
+                    onQRViewCreated: (controller) =>
+                        _onQRViewCreated(controller, model),
                   ),
-                  if (contact != null)
-                    const CustomAssetImage(
-                        path: ImagePaths.check_grey, size: 200),
-                ],
-              ),
+                ),
+                if (contact != null)
+                  const CustomAssetImage(
+                      path: ImagePaths.check_grey, size: 200),
+              ],
             ),
           ),
-        ],
-      );
+        ),
+      ]);
     });
   }
 }
