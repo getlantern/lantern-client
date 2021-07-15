@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/config/transitions.dart';
 import 'package:lantern/ui/widgets/vpn/vpn.dart';
 
 const vpn_tab_router = CustomRoute<void>(
@@ -8,10 +9,10 @@ const vpn_tab_router = CustomRoute<void>(
   children: [
     CustomRoute<void>(
         page: VPNTab,
-        name: 'vpn',
+        name: 'Vpn',
         path: '',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
   ],
 );

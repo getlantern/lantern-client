@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/config/transitions.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/conversations.dart';
 import 'package:lantern/messaging/new_message.dart';
@@ -12,29 +13,29 @@ const message_tab_router = CustomRoute<void>(
     CustomRoute<void>(
         page: Conversations,
         path: '',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: YourContactInfo,
-        name: 'contactInfo',
+        name: 'ContactInfo',
         path: 'contactInfo',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: NewMessage,
-        name: 'newMessage',
+        name: 'NewMessage',
         path: 'newMessage',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: Conversation,
-        name: 'conversation',
+        name: 'Conversation',
         path: 'conversation',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
   ],
 );
