@@ -12,14 +12,6 @@ import internalsdk.Session;
 public class EmbeddedLantern extends Lantern {
   private static final String TAG = "EmbeddedLantern";
 
-  static {
-    // Track extra info about Android for Logging to Loggly.
-    EmbeddedLantern.addLoggingMetadata("androidDevice", android.os.Build.DEVICE);
-    org.getlantern.mobilesdk.Lantern.addLoggingMetadata("androidModel", android.os.Build.MODEL);
-    org.getlantern.mobilesdk.Lantern.addLoggingMetadata("androidSdkVersion",
-        "" + android.os.Build.VERSION.SDK_INT + " (" + android.os.Build.VERSION.RELEASE + ")");
-  }
-
   @Override
   protected StartResult start(final Context context, final String locale, final Settings settings,
       final Session session) throws LanternNotRunningException {

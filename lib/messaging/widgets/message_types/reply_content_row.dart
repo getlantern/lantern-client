@@ -51,7 +51,11 @@ class ReplyContentRow extends StatelessWidget {
                               return const Icon(Icons.error_outlined);
                             }
                             return Image.memory(snapshot.data,
-                                filterQuality: FilterQuality.high, scale: 10);
+                                errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stackTrace) =>
+                                    const Icon(Icons.error_outlined),
+                                filterQuality: FilterQuality.high,
+                                scale: 10);
                           default:
                             return Transform.scale(
                                 scale: 0.5,

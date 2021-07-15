@@ -151,14 +151,13 @@ class MessageBubble extends StatelessWidget {
                 Clipboard.setData(ClipboardData(text: message.value.text));
               },
             ),
-          if (outbound)
-            FocusedMenuItem(
-              trailingIcon: const Icon(Icons.delete),
-              title: Text('Delete for me'.i18n),
-              onPressed: () {
-                _showDeleteDialog(context, model, true, message);
-              },
-            ),
+          FocusedMenuItem(
+            trailingIcon: const Icon(Icons.delete),
+            title: Text('Delete for me'.i18n),
+            onPressed: () {
+              _showDeleteDialog(context, model, true, message);
+            },
+          ),
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),

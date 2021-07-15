@@ -1,3 +1,7 @@
+plugins {
+    id "io.sentry.android.gradle" version "2.0.1"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -22,7 +26,6 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -197,16 +200,6 @@ android {
 
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            firebaseCrashlytics {
-                // Enable processing and uploading of native symbols to Crashlytics servers.
-                // By default, this is disabled to improve build speeds.
-                // This flag must be enabled to see properly-symbolicated native
-                // stack traces in the Crashlytics dashboard.
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir '../../build/app/intermediates/merged_native_libs/prodRelease/out/lib/'
-                strippedNativeLibsDir '../../build/app/intermediates/stripped_native_libs/prodRelease/out/lib/'
-            }
         }
     }
 
@@ -335,11 +328,6 @@ dependencies {
 
     implementation(name:'paymentwall-android-sdk', ext: 'aar')
 
-    implementation 'com.adyen.checkout:core:1.14.1'
-    implementation 'com.adyen.checkout:utils:1.14.1'
-    implementation 'com.adyen.checkout:ui:1.14.1'
-    implementation 'com.adyen.checkout:cardscan:1.14.1'
-
     implementation project(':alipaySdk-15.6.5-20190718211148')
     implementation(name:'alipayadapter-release', ext: 'aar') {
         transitive = true
@@ -395,19 +383,17 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    implementation 'com.stripe:stripe-android:10.3.1'
+    implementation 'com.stripe:stripe-android:16.10.2'
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation platform('com.google.firebase:firebase-bom:28.2.0')
 
-    // Declare the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ndk'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
+
+    implementation 'io.sentry:sentry-android:5.0.1'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
@@ -430,11 +416,30 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
-    implementation 'com.github.getlantern:secrets-android:66a9adb621'
-    implementation 'com.github.getlantern:messaging-android:b36eec4d45'
-
     // from https://github.com/getlantern/opus_android
     implementation(name:'opuslib-release', ext: 'aar')
+    implementation 'com.github.getlantern:secrets-android:66a9adb621'
+    implementation 'com.github.getlantern:db-android:db23e4a298'
+    implementation 'com.github.getlantern:messaging-android:26c8faebda'
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+sentry {
+    // Enables or disables the automatic upload of mapping files
+    // during a build.  If you disable this, you'll need to manually
+    // upload the mapping files with sentry-cli when you do a release.
+    autoUpload = true
+
+    // Disables or enables the automatic configuration of Native Symbols
+    // for Sentry. This executes sentry-cli automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    uploadNativeSymbols = true
+
+    // Does or doesn't include the source code of native code for Sentry.
+    // This executes sentry-cli with the --include-sources param. automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    includeNativeSources = false
+}

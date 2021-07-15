@@ -1,5 +1,6 @@
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
@@ -22,21 +23,13 @@ class _AddViaUsernameState extends State<AddViaUsername> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    return BaseScreen(
-      title: 'Add Contact'.i18n,
-      actions: [
-        IconButton(
-            icon: const Icon(Icons.qr_code),
-            tooltip: 'Your Contact Info'.i18n,
-            onPressed: () async =>
-                await context.pushRoute(const ContactInfo())),
-      ],
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
+    return fullScreenDialogLayout(Colors.white, Colors.black, context, [
+      Form(
+        key: _formKey,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Flexible(
               child: CustomTextField(
                   controller: usernameController,
                   label: 'Username'.i18n,
@@ -60,30 +53,28 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                     }
                   }),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Button(
-                  width: 200,
-                  text: 'Start Message'.i18n,
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      context.loaderOverlay.show();
-                      try {
-                        await context
-                            .pushRoute(Conversation(contact: contact!));
-                      } finally {
-                        context.loaderOverlay.hide();
-                      }
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Button(
+                width: 200,
+                text: 'Start Message'.i18n,
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    context.loaderOverlay.show();
+                    try {
+                      await context.pushRoute(Conversation(contact: contact!));
+                    } finally {
+                      context.loaderOverlay.hide();
                     }
-                  },
-                ),
-              ]),
-            )
-          ]),
-        ),
-      ),
-    );
+                  }
+                },
+              ),
+            ]),
+          )
+        ]),
+      )
+    ]);
   }
 }
