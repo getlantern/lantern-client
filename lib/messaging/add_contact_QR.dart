@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -105,12 +105,9 @@ class _AddViaQRState extends State<AddViaQR> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    var size = MediaQuery.of(context).size;
 
     return Container(
       color: Colors.black,
-      width: size.width,
-      height: size.height,
       child: buildBody(context, model),
     );
   }
@@ -119,6 +116,7 @@ class _AddViaQRState extends State<AddViaQR> {
     if (scannedContact == null) {
       return doBuildBody(context, model, null);
     }
+
     return model.singleContact(context, scannedContact!,
         (context, contact, child) => doBuildBody(context, model, contact));
   }

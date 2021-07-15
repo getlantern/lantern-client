@@ -10,7 +10,7 @@ import 'package:lantern/ui/home.dart';
   routes: <AutoRoute>[
     AutoRoute(
       initial: true,
-      name: 'home',
+      name: 'Home',
       page: HomePage,
       path: '/',
       children: [
