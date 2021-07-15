@@ -32,8 +32,8 @@ final releaseOption = CatcherOptions(
   ],
 );
 
-void setupCatcherAndRun(StatelessWidget root) {
-  Catcher(
+Catcher setupCatcherAndRun(StatelessWidget root) {
+  return Catcher(
     rootWidget: root,
     debugConfig: debugOption,
     releaseConfig: releaseOption,
