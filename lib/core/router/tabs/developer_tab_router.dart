@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/config/transitions.dart';
 import 'package:lantern/ui/widgets/account/developer_settings.dart';
 
 const developer_tab_router = CustomRoute<void>(
@@ -8,10 +9,10 @@ const developer_tab_router = CustomRoute<void>(
   children: [
     CustomRoute<void>(
         page: DeveloperSettingsTab,
-        name: 'developerSetting',
+        name: 'DeveloperSettings',
         path: '',
-        transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450),
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
   ],
 );
