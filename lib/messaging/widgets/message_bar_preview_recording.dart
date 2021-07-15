@@ -52,99 +52,112 @@ class _MessageBarPreviewRecordingState
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    return ListTile(
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      leading: currentIcon(),
-      title: Flex(
-        direction: Axis.horizontal,
-        children: [
-          Flexible(
-            fit: FlexFit.loose,
-            child: Stack(
-              clipBehavior: Clip.antiAlias,
-              children: [
-                Positioned(
-                  top: 1,
-                  left: 1,
-                  height: 100,
-                  width: 270,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: _getWaveBar(),
-                  ),
-                ),
-                Positioned.fill(
-                  left: -22,
-                  top: 1,
-                  bottom: 10,
-                  right: -22,
-                  child: SliderTheme(
-                    data: const SliderThemeData(
-                      activeTrackColor: Colors.transparent,
-                      inactiveTrackColor: Colors.transparent,
-                      thumbShape: RectangleSliderThumbShapes(height: 35),
-                    ),
-                    child: Slider(
-                      onChanged: (v) {
-                        final position = v * _duration!.inMilliseconds;
-                        audioStore.audioPlayer.seek(
-                          Duration(
-                            milliseconds: position.round(),
-                          ),
-                        );
-                      },
-                      divisions: 100,
-                      label: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? (_position!.inSeconds).toString() + ' sec.'
-                          : '0 sec.',
-                      value: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? _position!.inMilliseconds /
-                              _duration!.inMilliseconds
-                          : 0.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      trailing: Flex(
-        direction: Axis.horizontal,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Flexible(
-            child: IconButton(
-              onPressed: widget.onCancelRecording,
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.black,
-                size: 30.0,
+    return Flex(
+      mainAxisSize: MainAxisSize.max,
+      direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Flexible(
+          child: currentIcon(),
+        ),
+        Flexible(
+          fit: FlexFit.tight,
+          flex: MediaQuery.of(context).orientation == Orientation.landscape
+              ? 6
+              : 4,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              Positioned(
+                bottom: 22,
+                right: -22,
+                left: 4,
+                child: _getWaveBar(context),
               ),
-            ),
-          ),
-          Flexible(
-            child: IconButton(
-              onPressed: widget.onSend,
-              icon: const Icon(
-                Icons.send,
-                color: Colors.black,
-                size: 30.0,
+              Positioned.fill(
+                right:
+                    MediaQuery.of(context).orientation == Orientation.landscape
+                        ? -145
+                        : -80,
+                left: -23,
+                child: _isPlaying
+                    ? SliderTheme(
+                        data: const SliderThemeData(
+                          activeTrackColor: Colors.transparent,
+                          inactiveTrackColor: Colors.blue,
+                          thumbShape: RectangleSliderThumbShapes(height: 41.5),
+                        ),
+                        child: Slider(
+                          onChanged: (v) {
+                            final position = v * _duration!.inMilliseconds;
+                            audioStore.audioPlayer.seek(
+                              Duration(
+                                milliseconds: position.round(),
+                              ),
+                            );
+                          },
+                          divisions: 100,
+                          label: (_position != null &&
+                                  _duration != null &&
+                                  _position!.inMilliseconds > 0 &&
+                                  _position!.inMilliseconds <
+                                      _duration!.inMilliseconds)
+                              ? (_position!.inSeconds).toString() + ' sec.'
+                              : '0 sec.',
+                          value: (_position != null &&
+                                  _duration != null &&
+                                  _position!.inMilliseconds > 0 &&
+                                  _position!.inMilliseconds <
+                                      _duration!.inMilliseconds)
+                              ? _position!.inMilliseconds /
+                                  _duration!.inMilliseconds
+                              : 0.0,
+                        ),
+                      )
+                    : const SizedBox(),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        const Spacer(),
+        Flexible(
+          child: Container(
+            width: MediaQuery.of(context).orientation == Orientation.landscape
+                ? MediaQuery.of(context).size.width * 0.22
+                : 240,
+            height: 100,
+            child: Flex(
+                mainAxisSize: MainAxisSize.max,
+                direction: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: widget.onCancelRecording,
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                        size: 30.0,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: widget.onSend,
+                      child: const Icon(
+                        Icons.send,
+                        color: Colors.black,
+                        size: 30.0,
+                      ),
+                    ),
+                  ),
+                ]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -156,25 +169,20 @@ class _MessageBarPreviewRecordingState
 
   Widget currentIcon() {
     if (_isPlaying) {
-      return TextButton(
-        onPressed: _isPlaying ? () => _pause() : null,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Colors.grey[200],
+      return GestureDetector(
+        onTap: _isPlaying ? () => _pause() : null,
+        child: CircleAvatar(
+          backgroundColor: Colors.grey.shade200,
+          child: const Icon(
+            Icons.pause,
+            color: Colors.black,
+            size: 20.0,
           ),
-          shape: MaterialStateProperty.all<CircleBorder>(
-            const CircleBorder(),
-          ),
-        ),
-        child: const Icon(
-          Icons.pause,
-          color: Colors.black,
-          size: 20.0,
         ),
       );
     } else {
-      return TextButton(
-        onPressed: () async {
+      return GestureDetector(
+        onTap: () async {
           if (_isPaused) {
             final result = await audioStore.resume();
             if (result == 1) setState(() => _playerState = PlayerState.playing);
@@ -182,22 +190,19 @@ class _MessageBarPreviewRecordingState
             await play();
           }
         },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.black),
-          shape: MaterialStateProperty.all<CircleBorder>(
-            const CircleBorder(),
+        child: const CircleAvatar(
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.play_arrow,
+            color: Colors.white,
+            size: 20.0,
           ),
-        ),
-        child: const Icon(
-          Icons.play_arrow,
-          color: Colors.white,
-          size: 20.0,
         ),
       );
     }
   }
 
-  Widget _getWaveBar() => FutureBuilder(
+  Widget _getWaveBar(BuildContext context) => FutureBuilder(
         future: model!
             .decryptAttachment(StoredAttachment.fromBuffer(widget.recording!)),
         builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
@@ -208,7 +213,10 @@ class _MessageBarPreviewRecordingState
                     gap: 1,
                     density: 130,
                     height: 100,
-                    width: 270,
+                    width: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? MediaQuery.of(context).size.width * 0.8
+                        : MediaQuery.of(context).size.width * 0.7,
                     startingHeight: 5,
                     finishedHeight: 5.5,
                     color: Colors.black,

@@ -49,8 +49,8 @@ class MessageBarRecording extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: isRecording
-          ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
-          : const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 0),
+          ? const EdgeInsets.only(right: 0, left: 8.0)
+          : const EdgeInsets.only(right: 8.0, left: 8.0),
       leading: isRecording
           ? Flex(
               direction: Axis.horizontal,
@@ -109,6 +109,7 @@ class MessageBarRecording extends StatelessWidget {
               direction: Axis.horizontal,
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 isRecording
                     ? const SizedBox()
