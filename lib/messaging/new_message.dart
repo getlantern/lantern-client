@@ -8,6 +8,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/full_screen_dialog.dart';
 
 import 'add_contact_username.dart';
+import 'contact.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -78,30 +79,11 @@ class NewMessage extends StatelessWidget {
               itemCount: all.length,
               itemBuilder: (context, index) {
                 var contact = all[index];
-                var topBorderWidth = index.isEven ? 0.5 : 0.0;
-                var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
-                return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border(
-                    top: BorderSide(
-                        width: topBorderWidth, color: Colors.black12),
-                    bottom: BorderSide(
-                        width: bottomBorderWidth, color: Colors.black12),
-                  )),
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.account_circle,
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                    title: Text(contact.value.displayName.isEmpty
-                        ? 'Unnamed contact'.i18n
-                        : contact.value.displayName),
-                    onTap: () async => await context.pushRoute(
-                      Conversation(contact: contact.value),
-                    ),
-                  ),
+                return Column(
+                  children: [
+                    // false will render the Contact options route
+                    ContactItem(contact, index, false),
+                  ],
                 );
               },
             );

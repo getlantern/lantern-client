@@ -20,22 +20,16 @@ class Contacts extends StatelessWidget {
             onPressed: () => {},
           ),
         ],
-        body: model.contactsByActivity(builder: (context,
+        body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var contacts = _contacts
-              .where((contact) => contact.value.mostRecentMessageTs > 0)
-              .toList();
-          contacts.sort((a, b) {
-            return (b.value.mostRecentMessageTs - a.value.mostRecentMessageTs)
-                .toInt();
-          });
+          var contacts = _contacts.toList();
           return ListView.builder(
             itemCount: contacts.length,
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  ContactItem(contacts[index]),
-                  CustomDivider(height: 1),
+                  // true will render the new_message route
+                  ContactItem(contacts[index], index, true),
                 ],
               );
             },
