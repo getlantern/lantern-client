@@ -30,14 +30,18 @@ class NewMessage extends StatelessWidget {
           leading: const Icon(Icons.person_add),
           title: Text('Add Contact by username'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () => showFullScreenDialog(context, AddViaUsername()),
+          onTap: () async => await context.router.push(
+            FullScreenDialogPage(widget: AddViaUsername()),
+          ),
         ),
         const Divider(thickness: 1),
         ListTile(
           leading: const Icon(Icons.qr_code),
           title: Text('Scan QR Code'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () => showFullScreenDialog(context, AddViaQR()),
+          onTap: () async => await context.router.push(
+            FullScreenDialogPage(widget: AddViaQR()),
+          ),
         ),
         const Divider(thickness: 1),
         Container(
