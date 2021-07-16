@@ -32,3 +32,12 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
+
+List<Color> avatarBgColors = [
+  primaryBlue,
+  primaryPink,
+  primaryYellow,
+  secondaryBlue,
+  secondaryPink,
+  secondaryYellow,
+];

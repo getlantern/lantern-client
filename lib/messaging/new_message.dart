@@ -5,7 +5,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/full_screen_dialog.dart';
 
 import 'add_contact_username.dart';
 import 'contact.dart';
@@ -52,8 +51,8 @@ class NewMessage extends StatelessWidget {
             return ListTile(
                 title: Text(
                     contacts.isNotEmpty
-                        ? 'Recent contacts'.i18n
-                        : 'No contacts have been added yet'.i18n,
+                        ? 'Recent contacts'.i18n.toUpperCase()
+                        : 'No contacts have been added yet'.i18n.toUpperCase(),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -81,8 +80,8 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return Column(
                   children: [
-                    // false will render the Contact options route
-                    ContactItem(contact, index, false),
+                    // true will render the new_message route
+                    ContactItem(contact, index, true),
                   ],
                 );
               },

@@ -3,7 +3,6 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-/// An item in a conversation list.
 class ContactOptions extends StatelessWidget {
   final PathAndValue<Contact> _contact;
 

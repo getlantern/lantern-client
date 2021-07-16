@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
@@ -196,4 +198,10 @@ Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
           ...widgetList
         ]),
   );
+}
+
+T getRandomElement<T>(List<T> list) {
+  final random = Random();
+  var i = random.nextInt(list.length);
+  return list[i];
 }
