@@ -29,29 +29,31 @@ class _AddViaUsernameState extends State<AddViaUsername> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Flexible(
-              child: CustomTextField(
-                  controller: usernameController,
-                  label: 'Username'.i18n,
-                  helperText:
-                      'Enter a username to start a message conversation'.i18n,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(
-                    Icons.email,
-                    color: Colors.black,
-                  ),
-                  validator: (value) {
-                    try {
-                      setState(() {
-                        // TODO: missing
-                        contact = model.getContactFromUsername(
-                            usernameController.value.text) as Contact;
-                      });
-                    } catch (e) {
-                      return 'An error occurred while searching for this username'
-                          .i18n;
-                    }
-                  }),
+            child: Wrap(
+              children: [
+                CustomTextField(
+                    controller: usernameController,
+                    label: 'Username'.i18n,
+                    helperText:
+                        'Enter a username to start a message conversation'.i18n,
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: const Icon(
+                      Icons.email,
+                      color: Colors.black,
+                    ),
+                    validator: (value) {
+                      try {
+                        setState(() {
+                          // TODO: missing
+                          contact = model.getContactFromUsername(
+                              usernameController.value.text) as Contact;
+                        });
+                      } catch (e) {
+                        return 'An error occurred while searching for this username'
+                            .i18n;
+                      }
+                    }),
+              ],
             ),
           ),
           Padding(
