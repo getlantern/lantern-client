@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
+import 'package:lantern/enums/mime_reply.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_types/reply_content_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -31,36 +32,78 @@ class StagingContainerItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[100],
       ),
-      child: Column(
+      child: Flex(
+        direction: Axis.vertical,
         children: [
-          Row(
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (quotedMessage != null)
-                Expanded(
-                  child: Text(
-                    'Replying to $inResponseTo', //TODO: Add i18n
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+              Flexible(
+                fit: FlexFit.tight,
+                child: Text(
+                  'Replying to $inResponseTo', //TODO: Add i18n
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-              GestureDetector(
-                onTap: () => onCloseListener(),
-                child: const Icon(Icons.close, size: 20),
-              )
+              ),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () => onCloseListener(),
+                  child: const Icon(Icons.close, size: 20),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 4),
-          Row(children: [
-            Expanded(
-                child: Text(quotedMessage!.text.toString(),
-                    style: const TextStyle(color: Colors.black54))),
-            if (quotedMessage!.attachments.isNotEmpty)
-              ReplyContentRow(
-                  quotedMessage: quotedMessage as StoredMessage,
-                  outbound: quotedMessage!.direction == MessageDirection.OUT,
-                  model: model),
-          ])
+          const SizedBox(height: 4.0),
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              quotedMessage?.text != null && quotedMessage!.text.isNotEmpty
+                  ? Flexible(
+                      child: Text(
+                        quotedMessage!.text.toString(),
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    )
+                  : const SizedBox(),
+              MimeReply.reply(quotedMessage),
+            ],
+          ),
         ],
       ),
+      // child: Column(
+      //   children: [
+      //     Row(
+      //       children: [
+      //         if (quotedMessage != null)
+      //           Expanded(
+      //             child: Text(
+      //               'Replying to $inResponseTo', //TODO: Add i18n
+      //               style: const TextStyle(fontWeight: FontWeight.bold),
+      //             ),
+      //           ),
+      //         GestureDetector(
+      //           onTap: () => onCloseListener(),
+      //           child: const Icon(Icons.close, size: 20),
+      //         )
+      //       ],
+      //     ),
+      //     const SizedBox(height: 4),
+      //     Row(children: [
+      //       Expanded(
+      //           child: Text(quotedMessage!.text.toString(),
+      //               style: const TextStyle(color: Colors.black54))),
+      //       if (quotedMessage!.attachments.isNotEmpty)
+      //         ReplyContentRow(
+      //             quotedMessage: quotedMessage as StoredMessage,
+      //             outbound: quotedMessage!.direction == MessageDirection.OUT,
+      //             model: model),
+      //     ])
+      //   ],
+      // ),
     );
   }
 }

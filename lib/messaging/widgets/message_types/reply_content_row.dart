@@ -19,19 +19,6 @@ class ReplyContentRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (quotedMessage.attachments
-            .isEmpty) // TODO: right now we either have an attachment or a text, which we will update at some point.
-          Container(
-              constraints: const BoxConstraints(
-                  maxWidth: 300), // TODO: move this to a responsive sizes file
-              child: Text(
-                quotedMessage.text,
-                softWrap: true,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.black, // TODO: generalize in theme
-                ),
-              )),
         if (quotedMessage.attachments.isNotEmpty)
           Text(quotedMessage.attachments[0]!.attachment.mimeType.split('/')[0],
               style: const TextStyle(fontStyle: FontStyle.italic)),
