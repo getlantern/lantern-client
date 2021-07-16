@@ -29,7 +29,10 @@ class Contacts extends StatelessWidget {
               return Column(
                 children: [
                   // true will render the new_message route
-                  ContactItem(contacts[index], index, true),
+                  ContactItem(contacts[index], index, false),
+                  ContactItem(contacts[index], index, false),
+                  ContactItem(contacts[index], index, false),
+                  ContactItem(contacts[index], index, false),
                 ],
               );
             },

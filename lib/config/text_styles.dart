@@ -22,6 +22,9 @@ TextStyle tsTitleAppbar =
 TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
 
+TextStyle tsSettingsItem =
+    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16);
+
 TextStyle tsSelectedTitleItem = tsTitleItem.copyWith(color: primaryPink);
 
 TextStyle tsTitleHeadVPNItem =

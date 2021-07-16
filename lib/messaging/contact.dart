@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -9,9 +10,10 @@ import 'package:lantern/core/router/router.gr.dart';
 class ContactItem extends StatelessWidget {
   final PathAndValue<Contact> _contact;
   final int _index;
-  final bool _renderNewMessage;
+  final bool _renderNewMessageRoute;
 
-  ContactItem(this._contact, this._index, this._renderNewMessage) : super();
+  ContactItem(this._contact, this._index, this._renderNewMessageRoute)
+      : super();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ContactItem extends StatelessWidget {
           : contact.displayName;
       var avatarLetters = displayName.substring(0, 2);
       return Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             border: Border(
           top: BorderSide(width: topBorderWidth, color: Colors.black12),
@@ -33,18 +35,20 @@ class ContactItem extends StatelessWidget {
         )),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Colors.pink[800],
+            backgroundColor: getRandomElement(avatarBgColors),
             child: Text(avatarLetters.toUpperCase(),
                 style: const TextStyle(color: Colors.white)),
           ),
           title: Text(displayName,
               style: const TextStyle(fontWeight: FontWeight.normal)),
-          subtitle: Text(contact.contactId.id.toString(),
-              style: const TextStyle(fontSize: 10.0)),
-          onTap: () async => await context.pushRoute(_renderNewMessage
-              ? ContactOptions(contact: _contact)
-              : Conversation(contact: _contact.value)
-                  as PageRouteInfo<dynamic>),
+          subtitle: _renderNewMessageRoute
+              ? Text(contact.contactId.id.toString(),
+                  style: const TextStyle(fontSize: 10.0))
+              : null,
+          onTap: () async => await context.pushRoute((_renderNewMessageRoute
+                  ? ContactOptions(contact: _contact)
+                  : Conversation(contact: _contact.value))
+              as PageRouteInfo<dynamic>),
         ),
       );
     });
