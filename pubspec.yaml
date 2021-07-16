@@ -59,7 +59,7 @@ dependencies:
 
   pedantic: ^1.11.0
 
-  photo_manager: ^1.2.1
+  photo_manager: ^1.2.5
 
   wechat_assets_picker:
     git: https://github.com/getlantern/wechat_assets_picker.git
