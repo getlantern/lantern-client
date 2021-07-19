@@ -309,22 +309,6 @@ class _ConversationState extends State<Conversation>
           // Conversation title (contact name)
           title: displayName,
           actions: [DisappearingTimerAction(widget._contact)],
-          actionButton: AnimatedContainer(
-            margin: const EdgeInsetsDirectional.only(bottom: 100.0),
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 400),
-            constraints: _recording
-                ? BoxConstraints.loose(const Size(50, 50))
-                : BoxConstraints.tight(
-                    const Size(0, 0),
-                  ),
-            child: _recording
-                ? const FloatingActionButton(
-                    onPressed: null,
-                    child: Icon(Icons.send),
-                  )
-                : const SizedBox(),
-          ),
           body: Stack(children: [
             Flex(
               direction: Axis.vertical,
