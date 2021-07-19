@@ -45,10 +45,8 @@ class ContactItem extends StatelessWidget {
               ? Text(contact.contactId.id.toString(),
                   style: const TextStyle(fontSize: 10.0))
               : null,
-          onTap: () async => await context.pushRoute((_renderNewMessageRoute
-                  ? ContactOptions(contact: _contact)
-                  : Conversation(contact: _contact.value))
-              as PageRouteInfo<dynamic>),
+          onTap: () async =>
+              await context.pushRoute(Conversation(contact: _contact.value)),
         ),
       );
     });
