@@ -378,10 +378,8 @@ class _ConversationState extends State<Conversation>
                   color: _recording || _finishedRecording
                       ? Colors.grey[200]
                       : Colors.white,
-                  padding: _recording
-                      ? const EdgeInsets.only(top: 4.0, right: 0, left: 0)
-                      : const EdgeInsets.symmetric(
-                          vertical: 4.0, horizontal: 2.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: kBottomNavigationBarHeight,
                   child: MessageBar(
                     recording: recording,
                     width: size!.width,
@@ -396,7 +394,7 @@ class _ConversationState extends State<Conversation>
                     finishedRecording: _finishedRecording,
                     onTapUpListener: () async => await _finishRecording(),
                     willCancelRecording: _willCancelRecording,
-                    height: 45,
+                    height: 55,
                     sendIcon: _isSendIconVisible,
                     hasPermission: _hasPermission,
                     onFileSend: () async => await _selectFilesToShare(),
