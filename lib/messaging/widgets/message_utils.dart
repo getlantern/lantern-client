@@ -200,8 +200,10 @@ Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
   );
 }
 
-T getRandomElement<T>(List<T> list) {
-  final random = Random();
-  var i = random.nextInt(list.length);
-  return list[i];
+int generateUniqueColorIndex(String str) {
+  var index = 0;
+  for (var i = 0; i < str.length; i++) {
+    index += str.codeUnitAt(i);
+  }
+  return index % avatarBgColors.length;
 }

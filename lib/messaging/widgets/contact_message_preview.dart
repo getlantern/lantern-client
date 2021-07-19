@@ -35,7 +35,8 @@ class ContactMessagePreview extends StatelessWidget {
         )),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: getRandomElement(avatarBgColors),
+            backgroundColor:
+                avatarBgColors[generateUniqueColorIndex(contact.contactId.id)],
             child: Text(avatarLetters.toUpperCase(),
                 style: const TextStyle(color: Colors.white)),
           ),
@@ -43,7 +44,9 @@ class ContactMessagePreview extends StatelessWidget {
               contact.displayName.isEmpty
                   ? 'Unnamed contact'.i18n
                   : contact.displayName,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontWeight:
+                      _isContactPreview ? FontWeight.normal : FontWeight.bold)),
           subtitle: _isContactPreview
               ? null
               : Text(
