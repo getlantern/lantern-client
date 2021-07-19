@@ -39,7 +39,7 @@ class NewMessage extends StatelessWidget {
             FullScreenDialogPage(widget: AddViaUsername()),
           ),
         ),
-        const Divider(thickness: 1),
+        Divider(thickness: 1, color: grey2),
         ListTile(
           leading: const Icon(Icons.qr_code),
           title: Text('Scan QR Code'.i18n),
@@ -48,7 +48,7 @@ class NewMessage extends StatelessWidget {
             FullScreenDialogPage(widget: AddViaQR()),
           ),
         ),
-        const Divider(thickness: 1),
+        Divider(thickness: 1, color: grey2),
         Container(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
