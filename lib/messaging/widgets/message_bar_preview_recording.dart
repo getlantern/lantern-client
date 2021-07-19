@@ -8,6 +8,7 @@ import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/voice.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:sizer/sizer.dart';
 import 'package:lantern/utils/audio_store.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
@@ -52,114 +53,90 @@ class _MessageBarPreviewRecordingState
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    return Flex(
-      mainAxisSize: MainAxisSize.max,
-      direction: Axis.horizontal,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Flexible(
-          child: currentIcon(),
-        ),
-        Flexible(
-          fit: FlexFit.tight,
-          flex: MediaQuery.of(context).orientation == Orientation.landscape
-              ? 6
-              : 4,
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: AlignmentDirectional.bottomStart,
-            children: [
-              Positioned(
-                bottom: 22,
-                right: -22,
-                left: 4,
-                child: _getWaveBar(context),
-              ),
-              Positioned.fill(
-                right:
-                    MediaQuery.of(context).orientation == Orientation.landscape
-                        ? -145
-                        : -80,
-                left: -23,
-                child: _isPlaying || _isPaused
-                    ? SliderTheme(
-                        data: SliderThemeData(
-                          activeTrackColor: Colors.transparent,
-                          inactiveTrackColor: Colors.transparent,
-                          thumbShape:
-                              const RectangleSliderThumbShapes(height: 41.5),
-                          valueIndicatorColor: Colors.grey.shade200,
-                        ),
-                        child: Slider(
-                          onChanged: (v) {
-                            final position = v * _duration!.inMilliseconds;
-                            audioStore.audioPlayer.seek(
-                              Duration(
-                                milliseconds: position.round(),
-                              ),
-                            );
-                          },
-                          divisions: 100,
-                          label: (_position != null &&
-                                  _duration != null &&
-                                  _position!.inMilliseconds > 0 &&
-                                  _position!.inMilliseconds <
-                                      _duration!.inMilliseconds)
-                              ? (_position!.inSeconds).toString() + ' sec.'
-                              : '0 sec.',
-                          value: (_position != null &&
-                                  _duration != null &&
-                                  _position!.inMilliseconds > 0 &&
-                                  _position!.inMilliseconds <
-                                      _duration!.inMilliseconds)
-                              ? _position!.inMilliseconds /
-                                  _duration!.inMilliseconds
-                              : 0.0,
-                        ),
-                      )
-                    : const SizedBox(),
-              ),
-            ],
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      leading: currentIcon(),
+      title: Stack(
+        clipBehavior: Clip.hardEdge,
+        alignment: AlignmentDirectional.bottomStart,
+        children: [
+          Positioned(
+            bottom: 22,
+            right: -22,
+            left: 4,
+            child: _getWaveBar(context),
           ),
-        ),
-        const Spacer(),
-        Flexible(
-          child: Container(
-            width: MediaQuery.of(context).orientation == Orientation.landscape
-                ? MediaQuery.of(context).size.width * 0.22
-                : 240,
-            height: 100,
-            child: Flex(
-                mainAxisSize: MainAxisSize.max,
-                direction: Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: widget.onCancelRecording,
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.black,
-                        size: 30.0,
-                      ),
+          Positioned.fill(
+            right: MediaQuery.of(context).orientation == Orientation.landscape
+                ? -135
+                : -80,
+            left: -23,
+            child: _isPlaying || _isPaused
+                ? SliderTheme(
+                    data: const SliderThemeData(
+                      activeTrackColor: Colors.transparent,
+                      inactiveTrackColor: Colors.blue,
+                      thumbShape: RectangleSliderThumbShapes(height: 41.5),
+                      valueIndicatorColor: Colors.transparent,
                     ),
-                  ),
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: widget.onSend,
-                      child: const Icon(
-                        Icons.send,
-                        color: Colors.black,
-                        size: 30.0,
-                      ),
+                    child: Slider(
+                      onChanged: (v) {
+                        final position = v * _duration!.inMilliseconds;
+                        audioStore.audioPlayer.seek(
+                          Duration(
+                            milliseconds: position.round(),
+                          ),
+                        );
+                      },
+                      divisions: 100,
+                      label: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? (_position!.inSeconds).toString() + ' sec.'
+                          : '0 sec.',
+                      value: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? _position!.inMilliseconds /
+                              _duration!.inMilliseconds
+                          : 0.0,
                     ),
-                  ),
-                ]),
+                  )
+                : const SizedBox(),
           ),
-        ),
-      ],
+        ],
+      ),
+      trailing: Flex(
+          mainAxisSize: MainAxisSize.min,
+          direction: Axis.horizontal,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: GestureDetector(
+                onTap: widget.onCancelRecording,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.black,
+                  size: 20.sp,
+                ),
+              ),
+            ),
+            const VerticalDivider(color: Colors.transparent),
+            Flexible(
+              child: GestureDetector(
+                onTap: widget.onSend,
+                child: Icon(
+                  Icons.send,
+                  color: Colors.black,
+                  size: 20.sp,
+                ),
+              ),
+            ),
+          ]),
     );
   }
 
