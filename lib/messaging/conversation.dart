@@ -308,7 +308,28 @@ class _ConversationState extends State<Conversation>
       child: BaseScreen(
           // Conversation title (contact name)
           title: displayName,
-          actions: [DisappearingTimerAction(widget._contact)],
+          centerTitle: false,
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.call),
+                  tooltip: 'Call'.i18n,
+                  onPressed: () {},
+                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: DisappearingTimerAction(widget._contact)),
+                IconButton(
+                  icon: const Icon(Icons.more_vert_rounded),
+                  tooltip: 'Menu'.i18n,
+                  onPressed: () {},
+                )
+              ],
+            )
+          ],
           actionButton: AnimatedContainer(
             margin: const EdgeInsetsDirectional.only(bottom: 100.0),
             curve: Curves.easeIn,
@@ -329,28 +350,6 @@ class _ConversationState extends State<Conversation>
             Flex(
               direction: Axis.vertical,
               children: [
-                // const Padding(
-                //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
-                // // Conversation header
-                // Card(
-                //     color: Colors.white70,
-                //     child: Column(
-                //       children: [
-                //         Container(
-                //           width: 75.w,
-                //           height: 15.h,
-
-                //           child:
-                //               const Icon(Icons.account_circle_rounded, size: 140),
-                //         ),
-                //         Container(
-                //             padding: const EdgeInsets.symmetric(
-                //                 horizontal: 15, vertical: 15),
-                //             child: Text(widget._contact.displayName,
-                //                 style: const TextStyle(fontSize: 25))),
-                //       ],
-                //     )),
-                // Message Retention
                 Card(
                   color: Colors.white70,
                   child: Container(
