@@ -24,8 +24,6 @@ class VoiceRecorder extends StatefulWidget {
 
 class _VoiceRecorderState extends State<VoiceRecorder>
     with WidgetsBindingObserver {
-  double? _verticalPosition = 0.0;
-
   @override
   void initState() {
     super.initState();
@@ -58,6 +56,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
                 scale: 2,
                 alignment: Alignment.bottomRight,
                 child: Container(
+                  padding: const EdgeInsets.only(top: 5),
                   decoration: const BoxDecoration(
                     color: Colors.red,
                     borderRadius:
@@ -73,7 +72,6 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         GestureDetector(
           onPanDown: _onTapDown,
           onPanEnd: _onTapEnd,
-          onPanUpdate: _onTapUp,
           child: Icon(
             Icons.mic,
             size: widget.isRecording ? 30.0 : 25,
@@ -84,13 +82,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
     );
   }
 
-  void _onTapUp(DragUpdateDetails details) {
-    _verticalPosition = (details.delta.dy).clamp(.0, 1.0);
-  }
-
-  void _onTapEnd(DragEndDetails details) => (_verticalPosition! >= .207)
-      ? widget.onInmediateSend()
-      : widget.onStopRecording();
+  void _onTapEnd(DragEndDetails details) => widget.onStopRecording();
 
   void _onTapDown(DragDownDetails details) => widget.onRecording();
 
