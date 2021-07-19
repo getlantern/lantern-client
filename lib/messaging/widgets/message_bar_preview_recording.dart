@@ -75,7 +75,7 @@ class _MessageBarPreviewRecordingState
                 ? SliderTheme(
                     data: const SliderThemeData(
                       activeTrackColor: Colors.transparent,
-                      inactiveTrackColor: Colors.blue,
+                      inactiveTrackColor: Colors.transparent,
                       thumbShape: RectangleSliderThumbShapes(height: 41.5),
                       valueIndicatorColor: Colors.transparent,
                     ),
