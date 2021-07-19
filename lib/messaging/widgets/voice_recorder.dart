@@ -48,34 +48,36 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none,
-      fit: StackFit.passthrough,
       children: [
         widget.isRecording
-            ? Transform.scale(
-                scale: 2,
+            ? Align(
                 alignment: Alignment.bottomRight,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 5),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(38)),
+                child: Transform.scale(
+                  scale: 2,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                      ),
+                    ),
+                    child: const SizedBox(
+                      height: 60,
+                      width: 60,
+                    ),
                   ),
-                  child: const SizedBox(
-                    height: 50,
-                    width: 40,
-                  ),
-                ),
-              )
+                ))
             : const SizedBox(),
-        GestureDetector(
-          onPanDown: _onTapDown,
-          onPanEnd: _onTapEnd,
-          child: Icon(
-            Icons.mic,
-            size: widget.isRecording ? 30.0 : 25,
-            color: widget.isRecording ? Colors.white : Colors.black,
+        Align(
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onPanDown: _onTapDown,
+            onPanEnd: _onTapEnd,
+            child: Icon(
+              Icons.mic,
+              size: widget.isRecording ? 30.0 : 25,
+              color: widget.isRecording ? Colors.white : Colors.black,
+            ),
           ),
         ),
       ],
