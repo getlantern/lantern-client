@@ -136,6 +136,8 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
+  Future<void> deleteContact(String contactPath) async {}
+
   // TODO: implement this on server
   Future<Contact> getContactFromUsername<T>(String username) async {
     return methodChannel
