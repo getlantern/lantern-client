@@ -62,8 +62,8 @@ class _VoiceRecorderState extends State<VoiceRecorder>
                       ),
                     ),
                     child: const SizedBox(
-                      height: 60,
-                      width: 60,
+                      height: 70,
+                      width: 70,
                     ),
                   ),
                 ))
@@ -75,7 +75,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
             onPanEnd: _onTapEnd,
             child: Icon(
               Icons.mic,
-              size: widget.isRecording ? 30.0 : 25,
+              size: widget.isRecording ? 35.0 : 25,
               color: widget.isRecording ? Colors.white : Colors.black,
             ),
           ),
