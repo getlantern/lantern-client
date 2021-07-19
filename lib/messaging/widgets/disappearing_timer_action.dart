@@ -23,20 +23,26 @@ class DisappearingTimerAction extends StatelessWidget {
         onSelected: (int value) {
           model.setDisappearSettings(contact, value);
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Flex(direction: Axis.vertical, children: [
-            const Flexible(
-              child: Icon(Icons.timer),
+        child: Stack(children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 5.0),
+            child: Icon(
+              Icons.timer,
             ),
-            contact.messagesDisappearAfterSeconds > 0
-                ? Flexible(
-                    child: Text(contact.messagesDisappearAfterSeconds
-                        .humanizeSeconds()),
-                  )
-                : const SizedBox.shrink()
-          ]),
-        ),
+          ),
+          Positioned(
+            left: 5,
+            bottom: -5,
+            child: contact.messagesDisappearAfterSeconds > 0
+                ? Text(
+                    contact.messagesDisappearAfterSeconds
+                        .humanizeSeconds()
+                        .toUpperCase(),
+                    style: const TextStyle(
+                        fontSize: 10.0, fontWeight: FontWeight.bold))
+                : Text(''),
+          )
+        ]),
       ),
     );
   }

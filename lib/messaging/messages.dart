@@ -16,6 +16,11 @@ class Messages extends StatelessWidget {
         title: 'Messages'.i18n,
         actions: [
           IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Search'.i18n,
+            onPressed: () {},
+          ),
+          IconButton(
             icon: const Icon(Icons.qr_code),
             tooltip: 'Your Contact Info'.i18n,
             onPressed: () async => await context.pushRoute(

@@ -8,6 +8,7 @@ class BaseScreen extends StatelessWidget {
   final Widget body;
   final Widget? actionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final bool? centerTitle;
 
   BaseScreen(
       {this.title = '',
@@ -16,6 +17,7 @@ class BaseScreen extends StatelessWidget {
       required this.body,
       this.actionButton,
       this.floatingActionButtonLocation,
+      this.centerTitle,
       Key? key})
       : super(key: key);
 
@@ -26,6 +28,7 @@ class BaseScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: title,
         logoTitle: logoTitle,
+        centerTitle: centerTitle,
         actions: actions,
       ),
       body: body,
