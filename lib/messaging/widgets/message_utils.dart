@@ -239,8 +239,8 @@ Future<void> displayConversationOptions(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.delete),
                                 ),
                                 Text('Delete Contact'.i18n.toUpperCase(),
@@ -266,7 +266,8 @@ Future<void> displayConversationOptions(
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // model.deleteContact(contact);
+                                  model.deleteDirectContact(
+                                      contact.contactId.id);
                                   Navigator.of(context).pop();
                                 },
                                 child: Text('Delete Contact'.i18n.toUpperCase(),
