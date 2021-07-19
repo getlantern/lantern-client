@@ -326,8 +326,8 @@ class _ConversationState extends State<Conversation>
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
-                  onPressed: () =>
-                      displayConversationOptions(context, widget._contact),
+                  onPressed: () => displayConversationOptions(
+                      model, context, widget._contact),
                 )
               ],
             )

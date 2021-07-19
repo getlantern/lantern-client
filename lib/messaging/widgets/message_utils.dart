@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
@@ -209,7 +210,8 @@ int generateUniqueColorIndex(String str) {
   return index % avatarBgColors.length;
 }
 
-Future<void> displayConversationOptions(BuildContext context, Contact contact) {
+Future<void> displayConversationOptions(
+    MessagingModel model, BuildContext context, Contact contact) {
   return showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -227,7 +229,53 @@ Future<void> displayConversationOptions(BuildContext context, Contact contact) {
               Divider(thickness: 1, color: grey2),
               ListTile(
                   leading: const Icon(Icons.delete, color: Colors.black),
-                  title: Text('Delete ${contact.displayName}')),
+                  title: Text('Delete ${contact.displayName}'),
+                  onTap: () => showDialog<void>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.delete),
+                                ),
+                                Text('Delete Contact'.i18n.toUpperCase(),
+                                    style: tsAlertDialogTitle),
+                              ],
+                            ),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(
+                                      'Are you sure you want to delete Lo Borges from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
+                                      style: tsAlertDialogBody) // TODO: i18n
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'.i18n.toUpperCase(),
+                                    style: tsAlertDialogButtonGrey),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // model.deleteContact(contact);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Delete Contact'.i18n.toUpperCase(),
+                                    style: tsAlertDialogButtonPink),
+                              )
+                            ],
+                          );
+                        },
+                      )),
               const Padding(
                 padding: EdgeInsets.all(12),
               ),
