@@ -12,6 +12,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
@@ -325,7 +326,8 @@ class _ConversationState extends State<Conversation>
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
-                  onPressed: () {},
+                  onPressed: () =>
+                      displayConversationOptions(context, widget._contact),
                 )
               ],
             )
@@ -372,7 +374,7 @@ class _ConversationState extends State<Conversation>
                           setState(() => _isReplying = false),
                     ),
                   ),
-                const Divider(height: 1.0),
+                Divider(height: 1.0, color: grey2),
                 Container(
                   color: _recording || _finishedRecording
                       ? Colors.grey[200]

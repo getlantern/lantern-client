@@ -89,6 +89,7 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
               ),
               const Center(
                   child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
+              Divider(thickness: 1, color: grey2),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -206,4 +207,30 @@ int generateUniqueColorIndex(String str) {
     index += str.codeUnitAt(i);
   }
   return index % avatarBgColors.length;
+}
+
+Future<void> displayConversationOptions(BuildContext context, Contact contact) {
+  return showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
+      builder: (context) => Wrap(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(12),
+              ),
+              const Center(
+                  child: Text('Message Options',
+                      style: TextStyle(fontSize: 18.0))),
+              Divider(thickness: 1, color: grey2),
+              ListTile(
+                  leading: const Icon(Icons.delete, color: Colors.black),
+                  title: Text('Delete ${contact.displayName}')),
+              const Padding(
+                padding: EdgeInsets.all(12),
+              ),
+            ],
+          ));
 }

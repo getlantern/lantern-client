@@ -46,7 +46,7 @@ class ContactMessagePreview extends StatelessWidget {
                   : contact.displayName,
               style: TextStyle(
                   fontWeight:
-                      _isContactPreview ? FontWeight.normal : FontWeight.bold)),
+                      _isContactPreview ? FontWeight.normal : FontWeight.w500)),
           subtitle: _isContactPreview
               ? null
               : Text(

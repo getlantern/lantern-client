@@ -17,7 +17,7 @@ TextStyle? tsCaption(BuildContext context) =>
 // Custom styles
 
 TextStyle tsTitleAppbar =
-    TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: black);
+    TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
 
 TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
