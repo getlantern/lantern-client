@@ -11,6 +11,7 @@ class ImagePaths {
   static const location_on_icon = 'assets/images/location_on_icon.svg';
 
   static const devices_icon = 'assets/images/devices_icon.svg';
+  static const contacts_icon = 'assets/images/contacts_icon.svg';
   static const star_icon = 'assets/images/star_icon.svg';
   static const desktop_icon = 'assets/images/desktop_icon.svg';
   static const yinbi_icon = 'assets/images/yinbi_icon.svg';

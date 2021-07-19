@@ -30,12 +30,20 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
+  void openContacts(BuildContext context) async =>
+      await context.pushRoute(const Contacts());
+
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
       SettingsItem(
         icon: ImagePaths.crown_icon_monochrome,
         title: 'upgrade_to_lantern_pro'.i18n,
         onTap: upgradeToLanternPro,
+      ),
+      SettingsItem(
+        icon: ImagePaths.contacts_icon,
+        title: 'Contacts'.i18n,
+        onTap: () => openContacts(context),
       ),
       SettingsItem(
         icon: ImagePaths.devices_icon,
