@@ -5,14 +5,14 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/utils/humanize.dart';
 
-/// An item in a conversation list.
 class ContactMessagePreview extends StatelessWidget {
   final PathAndValue<Contact> _contact;
   final int _index;
-  final bool _renderNewMessageRoute;
+  final bool _isContactPreview;
 
-  ContactMessagePreview(this._contact, this._index, this._renderNewMessageRoute)
+  ContactMessagePreview(this._contact, this._index, this._isContactPreview)
       : super();
 
   @override
@@ -39,12 +39,22 @@ class ContactMessagePreview extends StatelessWidget {
             child: Text(avatarLetters.toUpperCase(),
                 style: const TextStyle(color: Colors.white)),
           ),
-          title: Text(displayName,
-              style: const TextStyle(fontWeight: FontWeight.normal)),
-          subtitle: _renderNewMessageRoute
-              ? Text(contact.contactId.id.toString(),
-                  style: const TextStyle(fontSize: 10.0))
-              : null,
+          title: Text(
+              contact.displayName.isEmpty
+                  ? 'Unnamed contact'.i18n
+                  : contact.displayName,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: _isContactPreview
+              ? null
+              : Text(
+                  "${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'.i18n}",
+                  overflow: TextOverflow.ellipsis),
+          trailing: _isContactPreview
+              ? null
+              : Text(contact.mostRecentMessageTs
+                  .toInt()
+                  .humanizeDate()
+                  .toString()),
           onTap: () async =>
               await context.pushRoute(Conversation(contact: _contact.value)),
         ),
