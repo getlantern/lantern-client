@@ -7,12 +7,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 
 /// An item in a conversation list.
-class ContactItem extends StatelessWidget {
+class ContactMessagePreview extends StatelessWidget {
   final PathAndValue<Contact> _contact;
   final int _index;
   final bool _renderNewMessageRoute;
 
-  ContactItem(this._contact, this._index, this._renderNewMessageRoute)
+  ContactMessagePreview(this._contact, this._index, this._renderNewMessageRoute)
       : super();
 
   @override

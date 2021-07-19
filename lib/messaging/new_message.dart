@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/add_contact_QR.dart';
+import 'package:lantern/messaging/widgets/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-import 'add_contact_username.dart';
-import 'contact.dart';
+import 'widgets/add_contact_username.dart';
+import 'widgets/contact_message_preview.dart';
 
 class NewMessage extends StatelessWidget {
   static const NUM_RECENT_CONTACTS = 10;
@@ -80,8 +80,7 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return Column(
                   children: [
-                    // true will render the new_message route
-                    ContactItem(contact, index, true),
+                    ContactMessagePreview(contact, index, true),
                   ],
                 );
               },
