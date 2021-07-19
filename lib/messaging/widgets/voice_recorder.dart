@@ -2,8 +2,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/package_store.dart';
 
-// ignore: must_be_immutable
-class VoiceRecorder extends StatelessWidget {
+class VoiceRecorder extends StatefulWidget {
   VoiceRecorder({
     Key? key,
     required this.isRecording,
@@ -13,9 +12,6 @@ class VoiceRecorder extends StatelessWidget {
     required this.onInmediateSend,
   }) : super(key: key);
 
-  double? _verticalPosition = 0.0;
-  double? _horizontalPosition = 0.0;
-
   final bool isRecording;
   final VoidCallback onInmediateSend;
   final VoidCallback onRecording;
@@ -23,12 +19,41 @@ class VoiceRecorder extends StatelessWidget {
   final Function onTapUpListener;
 
   @override
+  _VoiceRecorderState createState() => _VoiceRecorderState();
+}
+
+class _VoiceRecorderState extends State<VoiceRecorder>
+    with WidgetsBindingObserver {
+  double? _verticalPosition = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        if (widget.isRecording) widget.onStopRecording();
+        break;
+      case AppLifecycleState.resumed:
+      default:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       fit: StackFit.passthrough,
       children: [
-        isRecording
+        widget.isRecording
             ? Transform.scale(
                 scale: 2,
                 alignment: Alignment.bottomRight,
@@ -51,8 +76,8 @@ class VoiceRecorder extends StatelessWidget {
           onPanUpdate: _onTapUp,
           child: Icon(
             Icons.mic,
-            size: isRecording ? 30.0 : 25,
-            color: isRecording ? Colors.white : Colors.black,
+            size: widget.isRecording ? 30.0 : 25,
+            color: widget.isRecording ? Colors.white : Colors.black,
           ),
         ),
       ],
@@ -61,12 +86,18 @@ class VoiceRecorder extends StatelessWidget {
 
   void _onTapUp(DragUpdateDetails details) {
     _verticalPosition = (details.delta.dy).clamp(.0, 1.0);
-    _horizontalPosition = (details.delta.dx).clamp(.0, 1.0);
+    print('vertical: $_verticalPosition');
   }
 
-  void _onTapEnd(DragEndDetails details) =>
-      (_verticalPosition! >= 1.0) ? onInmediateSend() : onStopRecording();
-  //_handlePan(details.localPosition, true);
+  void _onTapEnd(DragEndDetails details) => (_verticalPosition! >= .2)
+      ? widget.onInmediateSend()
+      : widget.onStopRecording();
 
-  void _onTapDown(DragDownDetails details) => onRecording();
+  void _onTapDown(DragDownDetails details) => widget.onRecording();
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
 }
