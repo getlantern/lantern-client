@@ -80,6 +80,7 @@ class NewMessage extends StatelessWidget {
                 var contact = all[index];
                 return Column(
                   children: [
+                    // true will style this as a Contact preview
                     ContactMessagePreview(contact, index, true),
                   ],
                 );
