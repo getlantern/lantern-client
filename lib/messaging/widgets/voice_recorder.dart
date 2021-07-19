@@ -86,10 +86,9 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   void _onTapUp(DragUpdateDetails details) {
     _verticalPosition = (details.delta.dy).clamp(.0, 1.0);
-    print('vertical: $_verticalPosition');
   }
 
-  void _onTapEnd(DragEndDetails details) => (_verticalPosition! >= .2)
+  void _onTapEnd(DragEndDetails details) => (_verticalPosition! >= .207)
       ? widget.onInmediateSend()
       : widget.onStopRecording();
 
