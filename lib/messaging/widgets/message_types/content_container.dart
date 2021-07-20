@@ -17,6 +17,7 @@ class ContentContainer extends StatelessWidget {
   final bool endOfBlock;
   final bool newestMessage;
   final Map<String, List<dynamic>> reactions;
+  final bool isAttachment;
 
   const ContentContainer(
     this.outbound,
@@ -29,6 +30,7 @@ class ContentContainer extends StatelessWidget {
     this.endOfBlock,
     this.newestMessage,
     this.reactions,
+    this.isAttachment,
   ) : super();
 
   @override
@@ -59,7 +61,12 @@ class ContentContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
       decoration: BoxDecoration(
-        color: outbound ? outboundBgColor : inboundBgColor,
+        color: !isAttachment
+            ? outbound
+                ? outboundBgColor
+                : inboundBgColor
+            : null,
+        border: isAttachment ? Border.all(color: grey3, width: 1) : null,
         borderRadius: BorderRadius.only(
           topLeft:
               inbound && !startOfBlock ? Radius.zero : const Radius.circular(8),
