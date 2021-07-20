@@ -5,6 +5,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:sizer/sizer.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -57,6 +58,7 @@ class ContentContainer extends StatelessWidget {
         .map((attachment) => attachmentWidget(attachment, inbound));
 
     return Container(
+      constraints: BoxConstraints(minWidth: 30.w, maxWidth: 85.w),
       padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
@@ -106,9 +108,15 @@ class ContentContainer extends StatelessWidget {
                 ]),
             ...attachments,
             const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            Flexible(
-              child: StatusRow(outbound, inbound, msg, message, reactionsList),
-            ),
+            Flex(
+                direction: Axis.horizontal,
+                crossAxisAlignment: outbound
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StatusRow(outbound, inbound, msg, message, reactionsList)
+                ]),
           ]),
     );
   }
