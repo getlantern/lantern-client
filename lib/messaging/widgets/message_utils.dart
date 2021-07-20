@@ -1,10 +1,9 @@
-import 'dart:math';
-
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:auto_route/auto_route.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -258,16 +257,14 @@ Future<void> displayConversationOptions(
                             ),
                             actions: <Widget>[
                               TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                                onPressed: () async => context.router.pop(),
                                 child: Text('Cancel'.i18n.toUpperCase(),
                                     style: tsAlertDialogButtonGrey),
                               ),
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   try {
-                                    model.deleteDirectContact(
+                                    await model.deleteDirectContact(
                                         contact.contactId.id);
                                   } catch (e) {
                                     showInfoDialog(context,
@@ -278,7 +275,7 @@ Future<void> displayConversationOptions(
                                         icon: ImagePaths.alert_icon,
                                         buttonText: 'OK'.i18n);
                                   } finally {
-                                    Navigator.of(context).pop();
+                                    await context.router.pop();
                                   }
                                 },
                                 child: Text('Delete Contact'.i18n.toUpperCase(),
