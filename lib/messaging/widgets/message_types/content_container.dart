@@ -61,11 +61,7 @@ class ContentContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
       decoration: BoxDecoration(
-        color: !isAttachment
-            ? outbound
-                ? outboundBgColor
-                : inboundBgColor
-            : null,
+        color: outbound ? outboundBgColor : inboundBgColor,
         border: isAttachment ? Border.all(color: grey3, width: 1) : null,
         borderRadius: BorderRadius.only(
           topLeft:
