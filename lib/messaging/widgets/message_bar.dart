@@ -65,7 +65,7 @@ class MessageBar extends StatelessWidget {
       height: height,
       margin: isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
-          : const EdgeInsets.only(right: 1.0, left: 1.0, bottom: 6.0),
+          : EdgeInsets.zero,
       child: IndexedStack(
         index: finishedRecording ? 1 : 0,
         children: [
