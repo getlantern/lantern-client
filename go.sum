@@ -266,6 +266,10 @@ github.com/getlantern/flashlight v0.0.0-20210604161640-154236899665 h1:hj+THEI1T
 github.com/getlantern/flashlight v0.0.0-20210604161640-154236899665/go.mod h1:+TROypPgaNw+EPcvEJx9RpgKCmABi/AQMhhhua/6qXg=
 github.com/getlantern/flashlight v0.0.0-20210708122701-47eba1a3805e h1:MPyfblBLlIEJBYml8wfQEDL1q7PhmyAO4BfQ1kUZ2Qc=
 github.com/getlantern/flashlight v0.0.0-20210708122701-47eba1a3805e/go.mod h1:sqV6bLjVy/7QY94vfQ/TfmNbxMk/9xiWdOI8rcdsPc8=
+github.com/getlantern/flashlight v0.0.0-20210720145345-085ed9f28fd6 h1:xylzw8JtiNbFPnP4R7TEhACR8PW0XgACXOz8YCIq6LM=
+github.com/getlantern/flashlight v0.0.0-20210720145345-085ed9f28fd6/go.mod h1:Ypxv3LJbRgJ18QAnzw+5Nij4eZtYqAxQUTTwBi7/vXg=
+github.com/getlantern/flashlight v0.0.0-20210721035221-d60547da339c h1:EwtD6snMVTUBNS0RH7I8yg/RtN2UVmmdLvOqDgv/QOg=
+github.com/getlantern/flashlight v0.0.0-20210721035221-d60547da339c/go.mod h1:d7YFJzYDL1A04VMc58qivv77XJWprbIVT/63Kaq6wSI=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20201229165541-138879ce456e h1:E/pli6KGwtqoGmxM+VdtiW8oJXVglqWiEKv2FII+xgY=
@@ -322,6 +326,10 @@ github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87 h1:AWhpwnC6n/a7
 github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87/go.mod h1:n2pvzFBL6JmhwaBOUQa7eM45kInmrVq/b78qdKh5BUk=
 github.com/getlantern/iptool v0.0.0-20170421160045-8723ea29ea42 h1:uSvHE7r08LiSG9s7SnLhS5soMzzKSCBtG1cSrGQ/rP4=
 github.com/getlantern/iptool v0.0.0-20170421160045-8723ea29ea42/go.mod h1:gA+8p3g1vV3VKYfGdyDRebIYQdgLbkyCs6MXg7DLv5Y=
+github.com/getlantern/iptool v0.0.0-20210720145027-087d6115df94 h1:BxfUm/Zq0KH6FEUnLw3rXzl9S0YchvOg0AUMM+0ym/s=
+github.com/getlantern/iptool v0.0.0-20210720145027-087d6115df94/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
+github.com/getlantern/iptool v0.0.0-20210721034953-519bf8ce0147 h1:/4ibPEIbC7c786Ec5Z8QqTti8MAjjTp/LmfuF6frVDM=
+github.com/getlantern/iptool v0.0.0-20210721034953-519bf8ce0147/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
 github.com/getlantern/jibber_jabber v0.0.0-20160317154340-7346f98d2644 h1:qEdoFWgwj/IjbL2mfdjUsqHIy0p6B0eQ2znpQnpder0=
 github.com/getlantern/jibber_jabber v0.0.0-20160317154340-7346f98d2644/go.mod h1:zwtJ4plEkFdyAcFfiY7ia++fludxUHZ3GBlyP1SDk4c=
 github.com/getlantern/kcp-go v2.0.3-0.20171025115649-19559e0e938c+incompatible h1:C3L+9cEeZGFrXsGZfxuuttc5LY63fZwNBw/sj71k864=
