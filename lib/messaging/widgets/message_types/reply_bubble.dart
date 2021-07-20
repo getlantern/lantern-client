@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:lantern/enums/mime_reply.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_content_row.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -59,10 +59,10 @@ class ReplyBubble extends StatelessWidget {
               // if it has not been remotely deleted
               if (quotedMessage != null &&
                   quotedMessage.value.remotelyDeletedAt == 0) {
-                return ReplyContentRow(
-                    quotedMessage: quotedMessage.value,
-                    outbound: outbound,
-                    model: model);
+                return MimeReply.reply(
+                    storedMessage: quotedMessage.value,
+                    model: model,
+                    context: context);
               } else {
                 // display deleted bubble
                 final humanizedSenderName =
