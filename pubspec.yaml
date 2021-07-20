@@ -62,13 +62,17 @@ dependencies:
   photo_manager: ^1.2.5
 
   wechat_assets_picker:
-    git: https://github.com/getlantern/wechat_assets_picker.git 
+    git: https://github.com/getlantern/wechat_assets_picker.git
 
   wechat_camera_picker: ^2.1.0
+
+  flutter_keyboard_visibility: ^5.0.2
 
   video_player: ^2.1.5
 
   flutter_svg: ^0.21.0-nullsafety.0
+
+  hexcolor: ^2.0.4
 
   url_launcher: ^6.0.3
 
@@ -85,8 +89,6 @@ dependencies:
   emoji_picker_flutter: ^1.0.6
 
   email_validator: '^2.0.1'
-
-  hexcolor: ^2.0.4
 
   pin_code_text_field: ^1.8.0
 
