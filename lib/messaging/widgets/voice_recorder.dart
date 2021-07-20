@@ -24,8 +24,6 @@ class VoiceRecorder extends StatefulWidget {
 
 class _VoiceRecorderState extends State<VoiceRecorder>
     with WidgetsBindingObserver {
-  double? _verticalPosition = 0.0;
-
   @override
   void initState() {
     super.initState();
@@ -49,49 +47,76 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanDown: _onTapDown,
+      onPanEnd: _onTapEnd,
+      child: Transform.scale(
+        scale: widget.isRecording ? 2 : 1,
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: 50,
+          height: 50,
+          margin: widget.isRecording ? const EdgeInsets.only(top: 10) : null,
+          decoration: BoxDecoration(
+            color: widget.isRecording ? Colors.red : Colors.transparent,
+            borderRadius:
+                const BorderRadius.only(topLeft: Radius.circular(100)),
+          ),
+          child: widget.isRecording
+              ? const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10),
+                  child: Icon(
+                    Icons.mic,
+                    color: Colors.white,
+                  ),
+                )
+              : const Icon(
+                  Icons.mic,
+                  color: Colors.black,
+                ),
+        ),
+      ),
+    );
     return Stack(
       clipBehavior: Clip.none,
-      fit: StackFit.passthrough,
       children: [
         widget.isRecording
-            ? Transform.scale(
-                scale: 2,
+            ? Align(
                 alignment: Alignment.bottomRight,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(38)),
+                child: Transform.scale(
+                  scale: 1.5,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(100),
+                        topRight: Radius.circular(100),
+                      ),
+                    ),
+                    child: const SizedBox(
+                      height: 80,
+                      width: 80,
+                    ),
                   ),
-                  child: const SizedBox(
-                    height: 50,
-                    width: 40,
-                  ),
-                ),
-              )
+                ))
             : const SizedBox(),
-        GestureDetector(
-          onPanDown: _onTapDown,
-          onPanEnd: _onTapEnd,
-          onPanUpdate: _onTapUp,
-          child: Icon(
-            Icons.mic,
-            size: widget.isRecording ? 30.0 : 25,
-            color: widget.isRecording ? Colors.white : Colors.black,
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onPanDown: _onTapDown,
+            onPanEnd: _onTapEnd,
+            child: Icon(
+              Icons.mic,
+              size: widget.isRecording ? 35.0 : 25,
+              color: widget.isRecording ? Colors.white : Colors.black,
+            ),
           ),
         ),
       ],
     );
   }
 
-  void _onTapUp(DragUpdateDetails details) {
-    _verticalPosition = (details.delta.dy).clamp(.0, 1.0);
-    print('vertical: $_verticalPosition');
-  }
-
-  void _onTapEnd(DragEndDetails details) => (_verticalPosition! >= .2)
-      ? widget.onInmediateSend()
-      : widget.onStopRecording();
+  void _onTapEnd(DragEndDetails details) => widget.onStopRecording();
 
   void _onTapDown(DragDownDetails details) => widget.onRecording();
 
