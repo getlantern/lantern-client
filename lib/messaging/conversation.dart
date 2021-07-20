@@ -396,7 +396,6 @@ class _ConversationState extends State<Conversation>
                       setState(() {
                         _quotedMessage = null;
                         _recording = false;
-                        _finishedRecording = true;
                         _willCancelRecording = false;
                         _finishedRecording = false;
                         _isSendIconVisible = false;
