@@ -56,23 +56,31 @@ class ContentContainer extends StatelessWidget {
 
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
-
     return Container(
       constraints: BoxConstraints(minWidth: 30.w, maxWidth: 85.w),
       padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
         borderRadius: BorderRadius.only(
-          topLeft:
-              inbound && !startOfBlock ? Radius.zero : const Radius.circular(8),
-          topRight: outbound && !startOfBlock
-              ? Radius.zero
+          topLeft: inbound
+              ? endOfBlock
+                  ? const Radius.circular(1)
+                  : const Radius.circular(8)
               : const Radius.circular(8),
-          bottomRight: outbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
+          topRight: outbound
+              ? endOfBlock
+                  ? const Radius.circular(1)
+                  : const Radius.circular(8)
               : const Radius.circular(8),
-          bottomLeft: inbound && (!endOfBlock || newestMessage)
-              ? Radius.zero
+          bottomRight: outbound
+              ? startOfBlock
+                  ? const Radius.circular(1)
+                  : const Radius.circular(8)
+              : const Radius.circular(8),
+          bottomLeft: inbound
+              ? startOfBlock
+                  ? const Radius.circular(1)
+                  : const Radius.circular(8)
               : const Radius.circular(8),
         ),
       ),
