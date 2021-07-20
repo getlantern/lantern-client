@@ -35,12 +35,12 @@ class MimeReply {
       direction: Axis.horizontal,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text(
-          storedMessage.attachments[0]!.attachment.mimeType
-              .split('/')[0]
-              .toUpperCase(),
-          style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12.0),
-        ),
+        // Text(
+        //   storedMessage.attachments[0]!.attachment.mimeType
+        //       .split('/')[0]
+        //       .toUpperCase(),
+        //   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12.0),
+        // ),
         (MimeTypes.AUDIO == _mimeType)
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
