@@ -5,4 +5,3 @@
 - [ ] Did this change improve test coverage?
 - [ ] Is the code in question being linted? If not, consider adding a linter step to CI. If yes, make sure the linter is happy.
 - [ ] Have you logged tickets for related technical debt with the label “techdebt”?
-- [ ] 
