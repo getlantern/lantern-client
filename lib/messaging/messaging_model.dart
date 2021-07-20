@@ -136,11 +136,10 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
-  Future<void> deleteDirectContact(String id) {
-    return methodChannel.invokeMethod('deleteDirectContact', <String, dynamic>{
-      'id': id,
-    });
-  }
+  Future<void> deleteDirectContact<T>(String id) async =>
+      methodChannel.invokeMethod('deleteDirectContact', <String, dynamic>{
+        'id': id,
+      });
 
   Future<Contact> getContactFromUsername<T>(String username) async {
     return methodChannel

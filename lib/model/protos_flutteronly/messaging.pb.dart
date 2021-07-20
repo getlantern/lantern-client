@@ -1031,73 +1031,11 @@ class DisappearSettings extends $pb.GeneratedMessage {
   void clearMessagesDisappearAfterSeconds() => clearField(1);
 }
 
-class WebRTCSignal extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WebRTCSignal', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
-    ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'content', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  WebRTCSignal._() : super();
-  factory WebRTCSignal({
-    $core.String? senderId,
-    $core.List<$core.int>? content,
-  }) {
-    final _result = create();
-    if (senderId != null) {
-      _result.senderId = senderId;
-    }
-    if (content != null) {
-      _result.content = content;
-    }
-    return _result;
-  }
-  factory WebRTCSignal.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory WebRTCSignal.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  WebRTCSignal clone() => WebRTCSignal()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  WebRTCSignal copyWith(void Function(WebRTCSignal) updates) => super.copyWith((message) => updates(message as WebRTCSignal)) as WebRTCSignal; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static WebRTCSignal create() => WebRTCSignal._();
-  WebRTCSignal createEmptyInstance() => create();
-  static $pb.PbList<WebRTCSignal> createRepeated() => $pb.PbList<WebRTCSignal>();
-  @$core.pragma('dart2js:noInline')
-  static WebRTCSignal getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WebRTCSignal>(create);
-  static WebRTCSignal? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get senderId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set senderId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasSenderId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearSenderId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.List<$core.int> get content => $_getN(1);
-  @$pb.TagNumber(2)
-  set content($core.List<$core.int> v) { $_setBytes(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasContent() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearContent() => clearField(2);
-}
-
 enum TransferMessage_Content {
   message, 
   reaction, 
   deleteMessageId, 
   disappearSettings, 
-  webRTCSignal, 
   notSet
 }
 
@@ -1107,16 +1045,14 @@ class TransferMessage extends $pb.GeneratedMessage {
     2 : TransferMessage_Content.reaction,
     3 : TransferMessage_Content.deleteMessageId,
     4 : TransferMessage_Content.disappearSettings,
-    5 : TransferMessage_Content.webRTCSignal,
     0 : TransferMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5])
+    ..oo(0, [1, 2, 3, 4])
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
     ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
-    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'webRTCSignal', $pb.PbFieldType.OY, protoName: 'webRTCSignal')
     ..hasRequiredFields = false
   ;
 
@@ -1126,7 +1062,6 @@ class TransferMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? reaction,
     $core.List<$core.int>? deleteMessageId,
     $core.List<$core.int>? disappearSettings,
-    $core.List<$core.int>? webRTCSignal,
   }) {
     final _result = create();
     if (message != null) {
@@ -1140,9 +1075,6 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     if (disappearSettings != null) {
       _result.disappearSettings = disappearSettings;
-    }
-    if (webRTCSignal != null) {
-      _result.webRTCSignal = webRTCSignal;
     }
     return _result;
   }
@@ -1205,15 +1137,6 @@ class TransferMessage extends $pb.GeneratedMessage {
   $core.bool hasDisappearSettings() => $_has(3);
   @$pb.TagNumber(4)
   void clearDisappearSettings() => clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.List<$core.int> get webRTCSignal => $_getN(4);
-  @$pb.TagNumber(5)
-  set webRTCSignal($core.List<$core.int> v) { $_setBytes(4, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasWebRTCSignal() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearWebRTCSignal() => clearField(5);
 }
 
 enum OutboundMessage_Content {
