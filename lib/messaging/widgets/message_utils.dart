@@ -256,30 +256,38 @@ Future<void> displayConversationOptions(
                               ),
                             ),
                             actions: <Widget>[
-                              TextButton(
-                                onPressed: () async => context.router.pop(),
-                                child: Text('Cancel'.i18n.toUpperCase(),
-                                    style: tsAlertDialogButtonGrey),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  try {
-                                    await model.deleteDirectContact(
-                                        contact.contactId.id);
-                                  } catch (e) {
-                                    showInfoDialog(context,
-                                        title: 'Error'.i18n,
-                                        des:
-                                            'Something went wrong while deleting this contact.'
-                                                .i18n,
-                                        icon: ImagePaths.alert_icon,
-                                        buttonText: 'OK'.i18n);
-                                  } finally {
-                                    await context.router.pop();
-                                  }
-                                },
-                                child: Text('Delete Contact'.i18n.toUpperCase(),
-                                    style: tsAlertDialogButtonPink),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () async => context.router.pop(),
+                                    child: Text('Cancel'.i18n.toUpperCase(),
+                                        style: tsAlertDialogButtonGrey),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      try {
+                                        await model.deleteDirectContact(
+                                            contact.contactId.id);
+                                      } catch (e) {
+                                        showInfoDialog(context,
+                                            title: 'Error'.i18n,
+                                            des:
+                                                'Something went wrong while deleting this contact.'
+                                                    .i18n,
+                                            icon: ImagePaths.alert_icon,
+                                            buttonText: 'OK'.i18n);
+                                      } finally {
+                                        await context.router.pop();
+                                      }
+                                    },
+                                    child: Text(
+                                        'Delete Contact'.i18n.toUpperCase(),
+                                        style: tsAlertDialogButtonPink),
+                                  )
+                                ],
                               )
                             ],
                           );
