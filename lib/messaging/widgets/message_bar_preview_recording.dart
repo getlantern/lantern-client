@@ -181,29 +181,40 @@ class _MessageBarPreviewRecordingState
     }
   }
 
-  Widget _getWaveBar(BuildContext context) => FutureBuilder(
-        future: model!
-            .decryptAttachment(StoredAttachment.fromBuffer(widget.recording!)),
-        builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
-          return (snapshot != null && snapshot.hasData)
-              ? CustomPaint(
-                  painter: Waveform(
-                    waveData: snapshot.data!,
-                    gap: 1,
-                    density: 130,
-                    height: 100,
-                    width: MediaQuery.of(context).orientation ==
-                            Orientation.landscape
-                        ? MediaQuery.of(context).size.width * 0.8
-                        : MediaQuery.of(context).size.width * 0.7,
-                    startingHeight: 5,
-                    finishedHeight: 5.5,
-                    color: Colors.black,
-                  ),
-                )
-              : const SizedBox();
-        },
-      );
+  Widget _getWaveBar(BuildContext context) {
+    var temporal = StoredAttachment.fromBuffer(widget.recording!);
+    var thumbnails = temporal.thumbnail;
+
+    //var audioWave = AudioWaveform.fromBuffer(thumbnails.attachment.keyMaterial);
+    //var aa = temporal.thumbnail as AudioWaveform;
+    print('tempora');
+    return FutureBuilder(
+      future: model!
+          .decryptAttachment(StoredAttachment.fromBuffer(widget.recording!)),
+      builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
+        if (snapshot != null && snapshot.hasData) {
+          print(temporal);
+        }
+        return (snapshot != null && snapshot.hasData)
+            ? CustomPaint(
+                painter: Waveform(
+                  waveData: thumbnails.attachment.keyMaterial,
+                  gap: 1,
+                  density: 130,
+                  height: 100,
+                  width: MediaQuery.of(context).orientation ==
+                          Orientation.landscape
+                      ? MediaQuery.of(context).size.width * 0.8
+                      : MediaQuery.of(context).size.width * 0.7,
+                  startingHeight: 5,
+                  finishedHeight: 5.5,
+                  color: Colors.black,
+                ),
+              )
+            : const SizedBox();
+      },
+    );
+  }
 
   @override
   void dispose() {
