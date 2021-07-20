@@ -47,29 +47,61 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanDown: _onTapDown,
+      onPanEnd: _onTapEnd,
+      child: Transform.scale(
+        scale: widget.isRecording ? 2 : 1,
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: 50,
+          height: 50,
+          margin: widget.isRecording ? const EdgeInsets.only(top: 10) : null,
+          decoration: BoxDecoration(
+            color: widget.isRecording ? Colors.red : Colors.transparent,
+            borderRadius:
+                const BorderRadius.only(topLeft: Radius.circular(100)),
+          ),
+          child: widget.isRecording
+              ? const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10),
+                  child: Icon(
+                    Icons.mic,
+                    color: Colors.white,
+                  ),
+                )
+              : const Icon(
+                  Icons.mic,
+                  color: Colors.black,
+                ),
+        ),
+      ),
+    );
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         widget.isRecording
             ? Align(
                 alignment: Alignment.bottomRight,
                 child: Transform.scale(
-                  scale: 2,
+                  scale: 1.5,
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
+                        topLeft: Radius.circular(100),
+                        topRight: Radius.circular(100),
                       ),
                     ),
                     child: const SizedBox(
-                      height: 70,
-                      width: 70,
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                 ))
             : const SizedBox(),
         Align(
-          alignment: Alignment.center,
+          alignment: Alignment.centerRight,
           child: GestureDetector(
             onPanDown: _onTapDown,
             onPanEnd: _onTapEnd,
