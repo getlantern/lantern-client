@@ -250,7 +250,7 @@ Future<void> displayConversationOptions(
                               child: ListBody(
                                 children: <Widget>[
                                   Text(
-                                      'Are you sure you want to delete Lo Borges from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
+                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
                                       style: tsAlertDialogBody) // TODO: i18n
                                 ],
                               ),
