@@ -394,6 +394,7 @@ class _ConversationState extends State<Conversation>
                           replyToSenderId: _quotedMessage?.senderId,
                           replyToId: _quotedMessage?.id);
                       setState(() {
+                        _quotedMessage = null;
                         _recording = false;
                         _finishedRecording = true;
                         _willCancelRecording = false;
