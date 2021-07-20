@@ -78,24 +78,31 @@ class MimeReply {
                           ),
               )
             : (MimeTypes.VIDEO == _mimeType || MimeTypes.IMAGE == _mimeType)
-                ? FutureBuilder(
-                    future: model.thumbnail(
-                        storedMessage.attachments[0] as StoredAttachment),
-                    builder: (BuildContext context,
-                            AsyncSnapshot<Uint8List?>? snapshot) =>
-                        snapshot == null || !snapshot.hasData
-                            ? const Icon(Icons.error_outlined)
-                            : Image.memory(snapshot.data!,
-                                errorBuilder: (BuildContext context,
-                                        Object error, StackTrace? stackTrace) =>
-                                    const Icon(Icons.error_outlined),
-                                filterQuality: FilterQuality.high,
-                                scale: 10),
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder(
+                      future: model.thumbnail(
+                          storedMessage.attachments[0] as StoredAttachment),
+                      builder: (BuildContext context,
+                              AsyncSnapshot<Uint8List?>? snapshot) =>
+                          snapshot == null || !snapshot.hasData
+                              ? const Icon(Icons.error_outlined)
+                              : Image.memory(snapshot.data!,
+                                  errorBuilder: (BuildContext context,
+                                          Object error,
+                                          StackTrace? stackTrace) =>
+                                      const Icon(Icons.error_outlined),
+                                  filterQuality: FilterQuality.high,
+                                  scale: 10),
+                    ),
                   )
-                : const Icon(
-                    Icons.play_circle_outline,
-                    color: Colors.white,
-                    size: 30,
+                : const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.play_circle_outline,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
       ],
     );
