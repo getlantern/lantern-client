@@ -266,9 +266,20 @@ Future<void> displayConversationOptions(
                               ),
                               TextButton(
                                 onPressed: () {
-                                  model.deleteDirectContact(
-                                      contact.contactId.id);
-                                  Navigator.of(context).pop();
+                                  try {
+                                    model.deleteDirectContact(
+                                        contact.contactId.id);
+                                  } catch (e) {
+                                    showInfoDialog(context,
+                                        title: 'Error'.i18n,
+                                        des:
+                                            'Something went wrong while deleting this contact.'
+                                                .i18n,
+                                        icon: ImagePaths.alert_icon,
+                                        buttonText: 'OK'.i18n);
+                                  } finally {
+                                    Navigator.of(context).pop();
+                                  }
                                 },
                                 child: Text('Delete Contact'.i18n.toUpperCase(),
                                     style: tsAlertDialogButtonPink),
