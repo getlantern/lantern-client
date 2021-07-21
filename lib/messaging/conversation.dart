@@ -375,7 +375,7 @@ class _ConversationState extends State<Conversation>
                           setState(() => _isReplying = false),
                     ),
                   ),
-                Divider(height: 1.0, color: grey2),
+                Divider(height: 1.0, color: grey3),
                 Container(
                   color: _recording || _finishedRecording
                       ? Colors.grey[200]
