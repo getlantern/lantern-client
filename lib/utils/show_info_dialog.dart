@@ -1,7 +1,10 @@
 import 'package:lantern/package_store.dart';
 
 void showInfoDialog(BuildContext context,
-    {String title = '', String des = '', String icon = ''}) {
+    {String title = '',
+    String des = '',
+    String icon = '',
+    String buttonText = 'OK'}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -27,7 +30,7 @@ void showInfoDialog(BuildContext context,
               ),
               Text(
                 title,
-                style: GoogleFonts.roboto().copyWith(fontSize: 16),
+                style: tsInfoDialogTitle,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -38,11 +41,7 @@ void showInfoDialog(BuildContext context,
                   ),
                   child: Text(
                     des,
-                    style: GoogleFonts.roboto().copyWith(
-                      fontSize: 14,
-                      height: 23 / 14,
-                      color: unselectedTabLabelColor,
-                    ),
+                    style: tsInfoDialogText(unselectedTabLabelColor),
                   ),
                 ),
               ),
@@ -55,12 +54,8 @@ void showInfoDialog(BuildContext context,
                   child: Ink(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      'OK'.i18n,
-                      style: GoogleFonts.roboto().copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: primaryPink,
-                      ),
+                      buttonText,
+                      style: tsInfoDialogButton,
                     ),
                   ),
                 ),

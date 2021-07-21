@@ -1,6 +1,7 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 import '../settings_section_header.dart';
 import 'settings_item.dart';
@@ -72,7 +73,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'No'.i18n,
-                                  style: TextStyle(color: grey4),
+                                  style: tsAlertDialogButtonGrey,
                                 ),
                               ),
                               TextButton(
@@ -89,7 +90,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'Yes'.i18n,
-                                  style: TextStyle(color: primaryPink),
+                                  style: tsAlertDialogButtonPink,
                                 ),
                               ),
                             ],
@@ -100,20 +101,16 @@ class ProAccount extends StatelessWidget {
               child: !allowRemoval
                   ? null
                   : Text((isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                      style: TextStyle(
-                          color: primaryPink, fontWeight: FontWeight.w500)),
+                      style: tsAlertDialogButtonPink),
             );
           }));
 
           if (devices.devices.length < 3) {
             items.add(SettingsItem(
               title: '',
-              onTap: () {
-                Navigator.pushNamed(context, routeApproveDevice);
-              },
+              onTap: () async => await context.pushRoute(ApproveDevice()),
               child: Text('Add Device'.i18n.toUpperCase(),
-                  style: TextStyle(
-                      color: primaryPink, fontWeight: FontWeight.w500)),
+                  style: tsAlertDialogButtonPink),
             ));
           }
 

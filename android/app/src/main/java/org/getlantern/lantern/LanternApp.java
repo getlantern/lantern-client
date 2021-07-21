@@ -21,7 +21,7 @@ import com.squareup.leakcanary.LeakCanary;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
-import org.getlantern.lantern.model.ProPlan;
+import org.getlantern.lantern.model.MessagingHolder;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
@@ -33,8 +33,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LanternApp extends Application implements ActivityLifecycleCallbacks {
@@ -45,7 +53,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     private static LanternSessionManager session;
     private static InAppBilling inAppBilling;
     private static boolean isForeground;
-    private static boolean supportsPro;
     private FirebaseRemoteConfig firebaseRemoteConfig;
 
     private static final String FIREBASE_BACKEND_HEADER_PREFIX = "x_lantern_";
@@ -60,7 +67,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }});
 
     private Activity currentActivity;
-    private WelcomeDialog welcome;
+    public final MessagingHolder messaging = new MessagingHolder();
 
     @Override
     public void onCreate() {
@@ -92,13 +99,15 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         }
 
         appContext = getApplicationContext();
+        messaging.init(this);
+        Logger.debug(TAG, "messaging.init() finished at " + (System.currentTimeMillis() - start));
         session = new LanternSessionManager(this);
+        configureProxySelector();
         Logger.debug(TAG, "new LanternSessionManager finished at " + (System.currentTimeMillis() - start));
         if (LanternApp.getSession().isPlayVersion()) {
             inAppBilling = new InAppBilling(this);
         }
-        lanternHttpClient = new LanternHttpClient(session.getSettings().getHttpProxyHost(),
-                (int) session.getSettings().getHttpProxyPort());
+        lanternHttpClient = new LanternHttpClient();
         Logger.debug(TAG, "new LanternHttpClient finished at " + (System.currentTimeMillis() - start));
         initFirebase();
         Logger.debug(TAG, "initFirebase() finished at " + (System.currentTimeMillis() - start));
@@ -243,7 +252,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
             return;
         }
 
-        welcome = WelcomeDialog_.builder().layout(experiment).build();
+        WelcomeDialog welcome = WelcomeDialog_.builder().layout(experiment).build();
         if (welcome == null) {
             Logger.error(TAG, "Could not create welcome screen dialog");
             return;
@@ -296,4 +305,41 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     public static void getPlans(LanternHttpClient.PlansCallback cb) {
         lanternHttpClient.getPlans(cb, inAppBilling);
     }
+
+    /**
+     * Configures the default ProxySelector to send all traffic to the embedded Lantern proxy.
+     */
+    private void configureProxySelector() {
+        final SocketAddress proxyAddress = addrFromString(session.getSettings().getHttpProxyHost() + ":" +
+                session.getSettings().getHttpProxyPort());
+        ProxySelector.setDefault(new ProxySelector() {
+            @Override
+            public List<Proxy> select(URI uri) {
+                final List<Proxy> proxiesList = new ArrayList();
+                proxiesList.add(new Proxy(Proxy.Type.HTTP, proxyAddress));
+                return proxiesList;
+            }
+
+            @Override
+            public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+            }
+        });
+    }
+
+    /**
+     * Converts a host:port string into an InetSocketAddress by first making a fake URL using that
+     * address.
+     *
+     * @param addr
+     * @return
+     */
+    private static InetSocketAddress addrFromString(String addr) {
+        try {
+            URI uri = new URI("my://" + addr);
+            return new InetSocketAddress(uri.getHost(), uri.getPort());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

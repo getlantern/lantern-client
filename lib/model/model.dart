@@ -14,7 +14,7 @@ abstract class Model {
   late MethodChannel methodChannel;
   late ModelEventChannel _updatesChannel;
   final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
-  HashMap();
+      HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
 
   Model(String name) {
@@ -28,12 +28,12 @@ abstract class Model {
 
   Future<List<T>> list<T>(String path,
       {int start = 0,
-        int count = 2 ^ 32,
-        String? fullTextSearch,
-        bool reverseSort = false,
-        T Function(Uint8List serialized)? deserialize}) async {
+      int count = 2 ^ 32,
+      String? fullTextSearch,
+      bool reverseSort = false,
+      T Function(Uint8List serialized)? deserialize}) async {
     var intermediate =
-    await methodChannel.invokeMethod('list', <String, dynamic>{
+        await methodChannel.invokeMethod('list', <String, dynamic>{
       'path': path,
       'start': start,
       'count': count,
@@ -52,9 +52,9 @@ abstract class Model {
 
   ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(String path,
       {T? defaultValue,
-        required ValueWidgetBuilder<T> builder,
-        bool details = false,
-        T Function(Uint8List serialized)? deserialize}) {
+      required ValueWidgetBuilder<T> builder,
+      bool details = false,
+      T Function(Uint8List serialized)? deserialize}) {
     var notifier = singleValueNotifier(path, defaultValue,
         details: details, deserialize: deserialize);
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
@@ -63,7 +63,7 @@ abstract class Model {
   ValueNotifier<T?> singleValueNotifier<T>(String path, T defaultValue,
       {bool details = false, T Function(Uint8List serialized)? deserialize}) {
     var result =
-    _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;
+        _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;
     if (result == null) {
       result = SubscribedSingleValueNotifier(
           path, defaultValue, _updatesChannel, () {
@@ -77,15 +77,15 @@ abstract class Model {
   ValueListenableBuilder<ChangeTrackingList<T>> subscribedListBuilder<T>(
       String path,
       {required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
-        bool details = false,
-        int Function(String key1, String key2)? compare,
-        T Function(Uint8List serialized)? deserialize}) {
+      bool details = false,
+      int Function(String key1, String key2)? compare,
+      T Function(Uint8List serialized)? deserialize}) {
     var notifier = listNotifier(path,
         details: details, compare: compare, deserialize: deserialize);
     return SubscribedListBuilder<T>(
         path,
         notifier,
-            (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
+        (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
             builder(
                 context,
                 value.map.entries.map((e) => PathAndValue(e.key, e.value)),
@@ -94,8 +94,8 @@ abstract class Model {
 
   ValueNotifier<ChangeTrackingList<T>> listNotifier<T>(String path,
       {bool details = false,
-        int Function(String key1, String key2)? compare,
-        T Function(Uint8List serialized)? deserialize}) {
+      int Function(String key1, String key2)? compare,
+      T Function(Uint8List serialized)? deserialize}) {
     var result = _listNotifierCache[path] as SubscribedListNotifier<T>?;
     if (result == null) {
       result = SubscribedListNotifier(path, _updatesChannel, () {

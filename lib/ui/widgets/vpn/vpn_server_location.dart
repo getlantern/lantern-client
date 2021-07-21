@@ -27,7 +27,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
           children: [
             Text(
               'Server Location'.i18n + ': ',
-              style: tsTitleHeadVPNItem()?.copyWith(
+              style: tsTitleHeadVPNItem.copyWith(
                 color: unselectedTabLabelColor,
               ),
             ),
@@ -62,14 +62,14 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
                   const SizedBox(width: 12),
                   Text(
                     serverInfo.city,
-                    style: tsTitleTrailVPNItem(),
+                    style: tsTitleTrailVPNItem,
                   )
                 ],
               );
             } else {
               return Text(
                 'n/a'.i18n,
-                style: tsTitleTrailVPNItem(),
+                style: tsTitleTrailVPNItem,
               );
             }
           });

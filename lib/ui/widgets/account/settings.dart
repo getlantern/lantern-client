@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 import 'settings_item.dart';
 
@@ -8,21 +9,17 @@ class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
   void openInfoProxyAll(BuildContext context) {
-    showInfoDialog(
-      context,
-      title: 'proxy_all'.i18n,
-      des: 'description_proxy_all_dialog'.i18n,
-      icon: ImagePaths.key_icon,
-    );
+    showInfoDialog(context,
+        title: 'proxy_all'.i18n,
+        des: 'description_proxy_all_dialog'.i18n,
+        icon: ImagePaths.key_icon,
+        buttonText: 'OK'.i18n);
   }
 
-  void changeLanguage(BuildContext context) {
-    Navigator.pushNamed(context, routeLanguage);
-  }
+  void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
-  void reportIssue() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
-  }
+  void reportIssue() =>
+      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +39,9 @@ class Settings extends StatelessWidget {
             icon: ImagePaths.key_icon,
             title: 'proxy_all'.i18n,
             openInfoDialog: openInfoProxyAll,
-            child: sessionModel
-                .proxyAll((BuildContext context, bool proxyAll, Widget? child) {
-              return FlutterSwitch(
+            child: sessionModel.proxyAll(
+              (BuildContext context, bool proxyAll, Widget? child) =>
+                  FlutterSwitch(
                 width: 44.0,
                 height: 24.0,
                 valueFontSize: 12.0,
@@ -56,8 +53,8 @@ class Settings extends StatelessWidget {
                 onToggle: (bool newValue) {
                   sessionModel.setProxyAll(newValue);
                 },
-              );
-            }),
+              ),
+            ),
           ),
           SettingsItem(
             icon: ImagePaths.translate_icon,
@@ -68,14 +65,13 @@ class Settings extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: sessionModel
-                  .language((BuildContext context, String lang, Widget? child) {
-                return Text(
+              child: sessionModel.language(
+                (BuildContext context, String lang, Widget? child) => Text(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: tsSelectedTitleItem(),
-                );
-              }),
+                  style: tsSelectedTitleItem,
+                ),
+              ),
             ),
           ),
           SettingsItem(

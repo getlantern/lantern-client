@@ -25,11 +25,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     private var verifyCode: String? = null
 
     override fun isProUser(): Boolean {
-        return getBoolean(PRO_USER, false)
+        return prefs.getBoolean(PRO_USER, false)
     }
 
     fun isExpired(): Boolean {
-        return getBoolean(PRO_EXPIRED, false)
+        return prefs.getBoolean(PRO_EXPIRED, false)
     }
 
     fun getCurrency(): Currency? {
@@ -154,11 +154,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getDeviceExp(): Long {
-        return getLong(DEVICE_CODE_EXP, 0)
+        return prefs.getLong(DEVICE_CODE_EXP, 0)
     }
 
     fun yinbiEnabled(): Boolean {
-        return BuildConfig.YINBI_ENABLED || getBoolean(YINBI_ENABLED, false)
+        return BuildConfig.YINBI_ENABLED || prefs.getBoolean(YINBI_ENABLED, false)
     }
 
     fun setYinbiEnabled(enabled: Boolean) {
@@ -170,7 +170,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun showYinbiRedemptionTable(): Boolean {
-        return getBoolean(SHOW_YINBI_REDEMPTION, false)
+        return prefs.getBoolean(SHOW_YINBI_REDEMPTION, false)
     }
 
     fun setShowRedemptionTable(v: Boolean) {
@@ -178,7 +178,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getProDaysLeft(): Int {
-        return getInt(PRO_DAYS_LEFT, 0)
+        return prefs.getInt(PRO_DAYS_LEFT, 0)
     }
 
     private fun setExpiration(expiration: Long?) {
@@ -195,7 +195,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getExpiration(): LocalDateTime? {
-        val expiration = getLong(EXPIRY_DATE, 0L)
+        val expiration = prefs.getLong(EXPIRY_DATE, 0L)
         return if (expiration == 0L) {
             null
         } else LocalDateTime(expiration * 1000)
@@ -212,11 +212,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // Show only once to free users. (If set, don't show)
         // Also, if the install isn't new-ish, we won't start showing them a welcome.
-        return isRecentInstall && getLong(WELCOME_LAST_SEEN, 0) == 0L
+        return isRecentInstall && prefs.getLong(WELCOME_LAST_SEEN, 0) == 0L
     }
 
     fun numProMonths(): Int {
-        return getInt(PRO_MONTHS_LEFT, 0)
+        return prefs.getInt(PRO_MONTHS_LEFT, 0)
     }
 
     fun setWelcomeLastSeen() {
@@ -229,7 +229,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun showRenewalPref(): Boolean {
-        return getBoolean(SHOW_RENEWAL_PREF, true)
+        return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
     fun setProPlan(plan: ProPlan?) {
@@ -256,7 +256,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(REFERRAL_CODE, "")
     }
 
-    override fun setCode(referral: String?) {
+    fun setCode(referral: String?) {
         prefs.edit().putString(REFERRAL_CODE, referral).apply()
     }
 
@@ -339,7 +339,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     // isPlayVersion checks whether or not the user installed Lantern via
     // the Google Play store
     override fun isPlayVersion(): Boolean {
-        if (BuildConfig.PLAY_VERSION || getBoolean(PLAY_VERSION, false)) {
+        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
             return true
         }
         try {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
+    android:extractNativeLibs="true"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.getlantern.lantern">
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,6 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
@@ -27,6 +30,9 @@
         android:icon="@drawable/app_icon"
         android:theme="@style/AppTheme"
         android:label="@string/app_name">
+        
+        <meta-data android:name="io.sentry.dsn" android:value="https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -78,22 +84,9 @@
         </activity>
 
         <activity
-            android:name=".activity.AdyenActivity_"
-            android:configChanges="locale|layoutDirection"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
-
-        <activity
             android:name=".activity.PaymentWallActivity_"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-        </activity>
-
-        <activity
-            android:name=".activity.AdyenSuccessActivity_"
-            android:screenOrientation="portrait"
             android:noHistory="true">
         </activity>
 
@@ -222,9 +215,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
         <meta-data android:name="google_analytics_ssaid_collection_enabled" android:value="false" />
 
