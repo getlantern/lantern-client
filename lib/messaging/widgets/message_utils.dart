@@ -1,9 +1,11 @@
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/ui/app.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -210,14 +212,14 @@ int generateUniqueColorIndex(String str) {
 }
 
 Future<void> displayConversationOptions(
-    MessagingModel model, BuildContext context, Contact contact) {
+    MessagingModel model, BuildContext parentContext, Contact contact) {
   return showModalBottomSheet(
-      context: context,
+      context: parentContext,
       isDismissible: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
-      builder: (context) => Wrap(
+      builder: (bottomContext) => Wrap(
             children: [
               const Padding(
                 padding: EdgeInsets.all(12),
@@ -230,7 +232,7 @@ Future<void> displayConversationOptions(
                   leading: const Icon(Icons.delete, color: Colors.black),
                   title: Text('Delete ${contact.displayName}'),
                   onTap: () => showDialog<void>(
-                        context: context,
+                        context: bottomContext,
                         barrierDismissible: true,
                         builder: (BuildContext context) {
                           return AlertDialog(
@@ -271,7 +273,13 @@ Future<void> displayConversationOptions(
                                       try {
                                         await model.deleteDirectContact(
                                             contact.contactId.id);
+                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        //and then pop the root screen.
+                                        context.router.popUntilRoot();
+                                        parentContext.router.popUntilRoot();
                                       } catch (e) {
+                                        await context.router.current.router
+                                            .pop(); //WORKS
                                         showInfoDialog(context,
                                             title: 'Error'.i18n,
                                             des:
@@ -279,8 +287,6 @@ Future<void> displayConversationOptions(
                                                     .i18n,
                                             icon: ImagePaths.alert_icon,
                                             buttonText: 'OK'.i18n);
-                                      } finally {
-                                        await context.router.pop();
                                       }
                                     },
                                     child: Text(
