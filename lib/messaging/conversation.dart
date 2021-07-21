@@ -311,7 +311,8 @@ class _ConversationState extends State<Conversation>
           title: displayName,
           centerTitle: false,
           actions: [
-            Row(
+            Flex(
+              direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -9,11 +9,13 @@ class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
   void openInfoProxyAll(BuildContext context) {
-    showInfoDialog(context,
-        title: 'proxy_all'.i18n,
-        des: 'description_proxy_all_dialog'.i18n,
-        icon: ImagePaths.key_icon,
-        buttonText: 'OK'.i18n);
+    showInfoDialog(
+      context,
+      title: 'proxy_all'.i18n,
+      des: 'description_proxy_all_dialog'.i18n,
+      icon: ImagePaths.key_icon,
+      buttonText: 'OK'.i18n,
+    );
   }
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
