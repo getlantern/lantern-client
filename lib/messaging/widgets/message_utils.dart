@@ -277,14 +277,12 @@ Future<void> displayConversationOptions(
                                                 'Something went wrong while deleting this contact.'
                                                     .i18n,
                                             icon: ImagePaths.alert_icon,
-                                            buttonText: 'OK'.i18n,
-                                            customNav: true,
-                                            customNavigatorBehavior: () {
-                                          //In order to be capable to return to the root screen, we need to pop the bottom sheet
-                                          //and then pop the root screen.
-                                          context.router.popUntilRoot();
-                                          parentContext.router.popUntilRoot();
-                                        });
+                                            buttonText: 'OK'.i18n);
+                                      } finally {
+                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        //and then pop the root screen.
+                                        context.router.popUntilRoot();
+                                        parentContext.router.popUntilRoot();
                                       }
                                     },
                                     child: Text(
