@@ -1,4 +1,3 @@
-import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -210,14 +209,14 @@ int generateUniqueColorIndex(String str) {
 }
 
 Future<void> displayConversationOptions(
-    MessagingModel model, BuildContext context, Contact contact) {
+    MessagingModel model, BuildContext parentContext, Contact contact) {
   return showModalBottomSheet(
-      context: context,
+      context: parentContext,
       isDismissible: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
-      builder: (context) => Wrap(
+      builder: (bottomContext) => Wrap(
             children: [
               const Padding(
                 padding: EdgeInsets.all(12),
@@ -230,7 +229,7 @@ Future<void> displayConversationOptions(
                   leading: const Icon(Icons.delete, color: Colors.black),
                   title: Text('Delete ${contact.displayName}'),
                   onTap: () => showDialog<void>(
-                        context: context,
+                        context: bottomContext,
                         barrierDismissible: true,
                         builder: (BuildContext context) {
                           return AlertDialog(
@@ -278,9 +277,14 @@ Future<void> displayConversationOptions(
                                                 'Something went wrong while deleting this contact.'
                                                     .i18n,
                                             icon: ImagePaths.alert_icon,
-                                            buttonText: 'OK'.i18n);
-                                      } finally {
-                                        await context.router.pop();
+                                            buttonText: 'OK'.i18n,
+                                            customNav: true,
+                                            customNavigatorBehavior: () {
+                                          //In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                          //and then pop the root screen.
+                                          context.router.popUntilRoot();
+                                          parentContext.router.popUntilRoot();
+                                        });
                                       }
                                     },
                                     child: Text(

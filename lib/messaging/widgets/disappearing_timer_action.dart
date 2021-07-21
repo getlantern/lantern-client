@@ -3,6 +3,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:sizer/sizer.dart';
 
 class DisappearingTimerAction extends StatelessWidget {
   final Contact contact;
@@ -23,26 +24,27 @@ class DisappearingTimerAction extends StatelessWidget {
         onSelected: (int value) {
           model.setDisappearSettings(contact, value);
         },
-        child: Stack(children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 5.0),
-            child: Icon(
-              Icons.timer,
-            ),
-          ),
-          Positioned(
-            left: 5,
-            bottom: -5,
-            child: contact.messagesDisappearAfterSeconds > 0
-                ? Text(
-                    contact.messagesDisappearAfterSeconds
-                        .humanizeSeconds()
-                        .toUpperCase(),
-                    style: const TextStyle(
-                        fontSize: 10.0, fontWeight: FontWeight.bold))
-                : Text(''),
-          )
-        ]),
+        child: Flex(
+            direction: Axis.vertical,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Flexible(
+                flex: 2,
+                child: Icon(
+                  Icons.timer,
+                ),
+              ),
+              contact.messagesDisappearAfterSeconds > 0
+                  ? Flexible(
+                      child: Text(
+                          contact.messagesDisappearAfterSeconds
+                              .humanizeSeconds()
+                              .toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 10.0, fontWeight: FontWeight.bold)),
+                    )
+                  : const SizedBox(),
+            ]),
       ),
     );
   }
