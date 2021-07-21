@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/routes.dart';
-
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import '../../button.dart';
 
 class AuthorizeDeviceForPro extends StatelessWidget {
@@ -20,7 +20,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             const Spacer(),
             Text(
               'Authorize with Device Linking Pin'.i18n,
-              style: tsTitleItem(),
+              style: tsTitleItem,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
@@ -41,13 +41,13 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             Flexible(
               child: CustomDivider(
                 label: 'OR'.i18n,
-                labelStyle: tsTitleItem(),
+                labelStyle: tsTitleItem,
               ),
             ),
             const Spacer(),
             Text(
               'Authorize Device via Email'.i18n,
-              style: tsTitleItem(),
+              style: tsTitleItem,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
@@ -61,9 +61,8 @@ class AuthorizeDeviceForPro extends StatelessWidget {
               width: 200,
               text: 'Link via Email'.i18n,
               inverted: true,
-              onPressed: () {
-                Navigator.pushNamed(context, routeAuthorizeDeviceViaEmail);
-              },
+              onPressed: () async =>
+                  await context.pushRoute(AuthorizeDeviceEmail()),
             ),
             const Spacer(),
           ],

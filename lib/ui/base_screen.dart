@@ -6,7 +6,8 @@ class BaseScreen extends StatelessWidget {
   final String? logoTitle;
   final List<Widget>? actions;
   final Widget body;
-  final FloatingActionButton? actionButton;
+  final Widget? actionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   BaseScreen(
       {this.title = '',
@@ -14,6 +15,7 @@ class BaseScreen extends StatelessWidget {
       this.actions,
       required this.body,
       this.actionButton,
+      this.floatingActionButtonLocation,
       Key? key})
       : super(key: key);
 
@@ -28,6 +30,7 @@ class BaseScreen extends StatelessWidget {
       ),
       body: body,
       floatingActionButton: actionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
     );
   }
 }

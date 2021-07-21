@@ -16,7 +16,7 @@ class VPNBandwidth extends StatelessWidget {
                   children: [
                     Text(
                       'Daily Data Usage'.i18n + ': ',
-                      style: tsTitleHeadVPNItem()?.copyWith(
+                      style: tsTitleHeadVPNItem.copyWith(
                         color: unselectedTabLabelColor,
                       ),
                     ),
@@ -24,7 +24,7 @@ class VPNBandwidth extends StatelessWidget {
                       child: Text(
                         '${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB',
                         textAlign: TextAlign.end,
-                        style: tsTitleTrailVPNItem(),
+                        style: tsTitleTrailVPNItem,
                       ),
                     ),
                   ],

@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
+import io.lantern.messaging.AttachmentTooBigException
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -69,6 +70,8 @@ abstract class BaseModel(
                 is GeneratedMessageLite<*, *> -> result.success(out.toByteArray())
                 else -> result.success(out)
             }
+        } catch (e: AttachmentTooBigException) {
+            result.error("attachmentTooBig", e.message, e.maxAttachmentBytes)
         } catch (t: Throwable) {
             result.error("unknownError", t.message, null)
             Logger.error(TAG, "Unexpected error calling ${call.method}: $t")

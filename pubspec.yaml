@@ -39,33 +39,78 @@ dependencies:
 
   flag: ^5.0.0-nullsafety
 
+  qr_flutter: ^4.0.0
+
+  qr_code_scanner: ^0.4.0
+
   loader_overlay: ^2.0.0
+
+  share: ^2.0.1
+
+  audioplayers: ^0.19.1
+
+  auto_route: ^2.2.0
+
+  bot_toast: ^4.0.1
+
+  stop_watch_timer: ^1.0.0
 
   uuid: ^3.0.3
 
   pedantic: ^1.11.0
 
+  photo_manager: ^1.2.5
+
+  wechat_assets_picker:
+    git: https://github.com/getlantern/wechat_assets_picker.git
+
+  wechat_camera_picker: ^2.1.0
+
+  flutter_keyboard_visibility: ^5.0.2
+
+  video_player: ^2.1.5
+
   flutter_svg: ^0.21.0-nullsafety.0
+
+  hexcolor: ^2.0.4
 
   url_launcher: ^6.0.3
 
-  fluttertoast: ^8.0.3
+  fluttertoast: ^8.0.7
+
+  catcher: ^0.6.7
+
+  sentry: ^5.1.0
 
   badges: ^2.0.0-nullsafety.1
 
-  email_validator: '^2.0.1'
+  dotted_border: ^2.0.0
 
-  hexcolor: ^2.0.3
+  emoji_picker_flutter: ^1.0.6
+
+  email_validator: '^2.0.1'
 
   pin_code_text_field: ^1.8.0
 
   styled_text: ^3.0.1
 
+  back_button_interceptor: ^5.0.0
+
+  scrollable_positioned_list: ^0.2.0-nullsafety.0
+
+  focused_menu: ^1.0.5
+
+  extended_image: ^4.1.0
+
+  sizer: ^2.0.13
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   test: ^1.15.7
+  auto_route_generator: ^2.1.0
+  build_runner: ^2.0.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -81,6 +126,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/disappear/
     - assets/locales/
 
   # An image asset can refer to one or more resolution-specific "variants", see

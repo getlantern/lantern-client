@@ -28,6 +28,7 @@ update the generated dart code.
 * Android SDK from 25 up to the latest.
 * [Git LFS](https://git-lfs.github.com) (more information on **STEPS TO RUN THE PROJECT**)
 * [Flutter V2.0.6](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos) (This is due to a custom plugin that needs to be migrated)
+* [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
 
 In the welcome screen choose the "Open an existing Android Studio" option and
 select the folder containing this README.
@@ -309,3 +310,27 @@ This auto-formats all Kotlin files in the project.
 ./gradlew ktlintCheck
 
 This manually runs the linter against all Kotlin files in the project.
+
+### VSCode debugging
+Create this `.vscode/launch.json` file: 
+```
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "android-lantern (prod mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": [
+        "--no-sound-null-safety",
+        "--flavor",
+        "prod"
+      ]
+    }
+  ]
+}
+```
