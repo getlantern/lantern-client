@@ -420,7 +420,7 @@ dependencies {
     implementation(name:'opuslib-release', ext: 'aar')
     implementation 'com.github.getlantern:secrets-android:66a9adb621'
     implementation 'com.github.getlantern:db-android:db23e4a298'
-    implementation 'com.github.getlantern:messaging-android:cbf4b2fbe4'
+    implementation 'com.github.getlantern:messaging-android:a07dd04d87'
 }
 
 apply plugin: 'com.google.gms.google-services'
