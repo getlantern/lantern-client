@@ -1,8 +1,11 @@
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/ui/app.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -270,6 +273,10 @@ Future<void> displayConversationOptions(
                                       try {
                                         await model.deleteDirectContact(
                                             contact.contactId.id);
+                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        //and then pop the root screen.
+                                        context.router.popUntilRoot();
+                                        parentContext.router.popUntilRoot();
                                       } catch (e) {
                                         showInfoDialog(context,
                                             title: 'Error'.i18n,
@@ -278,11 +285,6 @@ Future<void> displayConversationOptions(
                                                     .i18n,
                                             icon: ImagePaths.alert_icon,
                                             buttonText: 'OK'.i18n);
-                                      } finally {
-                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
-                                        //and then pop the root screen.
-                                        context.router.popUntilRoot();
-                                        parentContext.router.popUntilRoot();
                                       }
                                     },
                                     child: Text(
