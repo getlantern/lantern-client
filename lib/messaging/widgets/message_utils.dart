@@ -278,8 +278,6 @@ Future<void> displayConversationOptions(
                                         context.router.popUntilRoot();
                                         parentContext.router.popUntilRoot();
                                       } catch (e) {
-                                        await context.router.current.router
-                                            .pop(); //WORKS
                                         showInfoDialog(context,
                                             title: 'Error'.i18n,
                                             des:
