@@ -1,10 +1,14 @@
 import 'package:lantern/package_store.dart';
 
-void showInfoDialog(BuildContext context,
-    {String title = '',
-    String des = '',
-    String icon = '',
-    String buttonText = 'OK'}) {
+void showInfoDialog(
+  BuildContext context, {
+  String title = '',
+  String des = '',
+  String icon = '',
+  String buttonText = 'OK',
+  bool customNav = false,
+  VoidCallback? customNavigatorBehavior,
+}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -49,7 +53,9 @@ void showInfoDialog(BuildContext context,
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    customNav
+                        ? customNavigatorBehavior!()
+                        : Navigator.pop(context);
                   },
                   child: Ink(
                     padding: const EdgeInsets.all(8),
