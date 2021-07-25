@@ -191,7 +191,8 @@ class VoiceMemoState extends State<VoiceMemo> {
                           padding: const EdgeInsets.only(top: 10),
                           height: 50,
                           child: Stack(
-                            alignment: Alignment.centerLeft,
+                            clipBehavior: Clip.hardEdge,
+                            alignment: AlignmentDirectional.bottomCenter,
                             children: [
                               _getWaveBar(),
                               Positioned.fill(
