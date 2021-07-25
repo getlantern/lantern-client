@@ -7,8 +7,9 @@ import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_sh
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio_store.dart';
-import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/utils/duration_extension.dart';
+import 'package:lantern/utils/waveform/wave_progress_bar.dart';
+import 'package:lantern/utils/waveform_extension.dart';
 import 'package:sizer/sizer.dart';
 
 /// An attachment that shows an audio player.
@@ -32,6 +33,7 @@ class VoiceMemoState extends State<VoiceMemo> {
   MessagingModel? model;
   Duration? _duration;
   Duration? _position;
+  AudioWaveform? _waveform;
   PlayerState _playerState = PlayerState.stopped;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _positionSubscription;
@@ -41,6 +43,7 @@ class VoiceMemoState extends State<VoiceMemo> {
   StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
   bool get _isPlaying => _playerState == PlayerState.playing;
   bool get _isPaused => _playerState == PlayerState.paused;
+  List<double> reducedAudioWave = [];
 
   Future<int> _pause() async {
     final result = await audioStore.pause();
@@ -150,7 +153,7 @@ class VoiceMemoState extends State<VoiceMemo> {
         );
       case StoredAttachment_Status.DONE:
         return FutureBuilder(
-            future: model!.decryptAttachment(widget.attachment),
+            future: loadData(),
             builder: (context, AsyncSnapshot<Uint8List?>? snapshot) {
               var _seconds = (double.tryParse(
                           widget.attachment.attachment.metadata['duration']!)! *
@@ -203,7 +206,7 @@ class VoiceMemoState extends State<VoiceMemo> {
                                     valueIndicatorColor: Colors.grey.shade200,
                                     thumbShape:
                                         const RectangleSliderThumbShapes(
-                                            height: 35),
+                                            height: 45),
                                   ),
                                   child: Slider(
                                     onChanged: (v) {
@@ -215,7 +218,6 @@ class VoiceMemoState extends State<VoiceMemo> {
                                         ),
                                       );
                                     },
-                                    divisions: 100,
                                     label: (_position != null &&
                                             _duration != null &&
                                             _position!.inMilliseconds > 0 &&
@@ -247,28 +249,27 @@ class VoiceMemoState extends State<VoiceMemo> {
     }
   }
 
-  Widget _getWaveBar() => FutureBuilder(
-        future: model!.decryptAttachment(widget.attachment),
-        builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
-          return (snapshot != null && snapshot.hasData)
-              ? CustomPaint(
-                  painter: Waveform(
-                    waveData: snapshot.data!,
-                    gap: 1,
-                    density: 130,
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.75 - 90,
-                    color: Colors.white,
-                    startingHeight: 4,
-                    finishedHeight: 4.5,
-                  ),
-                  child: Container(
-                    height: 25,
-                    width: MediaQuery.of(context).size.width * 0.75 - 90,
-                  ),
-                )
-              : const SizedBox();
-        },
+  Future<Uint8List> loadData() async {
+    var _bytesBuffer = await model!.thumbnail(widget.attachment);
+    _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
+    reducedAudioWave =
+        _waveform!.bars.map((e) => e.toDouble()).toList().reduceList(10);
+    return await model!.decryptAttachment(widget.attachment);
+  }
+
+  Widget _getWaveBar() => WaveProgressBar(
+        progressPercentage: (_position != null &&
+                _duration != null &&
+                _position!.inMilliseconds > 0 &&
+                _position!.inMilliseconds < _duration!.inMilliseconds)
+            ? (_position!.inMilliseconds / _duration!.inMilliseconds) * 100
+            : 0.0,
+        alignment: Alignment.bottomCenter,
+        listOfHeights: reducedAudioWave,
+        width: MediaQuery.of(context).size.width * 0.75 - 90,
+        initalColor: widget.inbound ? Colors.black : Colors.white,
+        progressColor: widget.inbound ? outboundMsgColor : inboundMsgColor,
+        backgroundColor: widget.inbound ? inboundBgColor : outboundBgColor,
       );
 
   @override

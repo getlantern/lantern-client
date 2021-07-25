@@ -4,14 +4,15 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
-import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/voice.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:lantern/utils/audio_store.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:lantern/utils/waveform_extension.dart';
 
 class MessageBarPreviewRecording extends StatefulWidget {
   final Uint8List? recording;
@@ -56,59 +57,55 @@ class _MessageBarPreviewRecordingState
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       leading: currentIcon(),
-      title: Stack(
-        clipBehavior: Clip.hardEdge,
-        alignment: AlignmentDirectional.bottomStart,
-        children: [
-          Positioned(
-            bottom: 22,
-            right: -22,
-            left: 4,
-            child: _getWaveBar(context),
-          ),
-          Positioned.fill(
-            right: MediaQuery.of(context).orientation == Orientation.landscape
-                ? -135
-                : -80,
-            left: -23,
-            child: _isPlaying || _isPaused
-                ? SliderTheme(
-                    data: const SliderThemeData(
-                      activeTrackColor: Colors.transparent,
-                      inactiveTrackColor: Colors.transparent,
-                      thumbShape: RectangleSliderThumbShapes(height: 41.5),
-                      valueIndicatorColor: Colors.transparent,
-                    ),
-                    child: Slider(
-                      onChanged: (v) {
-                        final position = v * _duration!.inMilliseconds;
-                        audioStore.audioPlayer.seek(
-                          Duration(
-                            milliseconds: position.round(),
-                          ),
-                        );
-                      },
-                      divisions: 100,
-                      label: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? (_position!.inSeconds).toString() + ' sec.'
-                          : '0 sec.',
-                      value: (_position != null &&
-                              _duration != null &&
-                              _position!.inMilliseconds > 0 &&
-                              _position!.inMilliseconds <
-                                  _duration!.inMilliseconds)
-                          ? _position!.inMilliseconds /
-                              _duration!.inMilliseconds
-                          : 0.0,
-                    ),
-                  )
-                : const SizedBox(),
-          ),
-        ],
+      title: Expanded(
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          alignment: AlignmentDirectional.bottomStart,
+          children: [
+            _getWaveBar(context),
+            Positioned.fill(
+              right: MediaQuery.of(context).orientation == Orientation.landscape
+                  ? -135
+                  : -80,
+              left: -23,
+              child: _isPlaying || _isPaused
+                  ? SliderTheme(
+                      data: const SliderThemeData(
+                        activeTrackColor: Colors.transparent,
+                        inactiveTrackColor: Colors.transparent,
+                        thumbShape: RectangleSliderThumbShapes(height: 41.5),
+                        valueIndicatorColor: Colors.transparent,
+                      ),
+                      child: Slider(
+                        onChanged: (v) {
+                          final position = v * _duration!.inMilliseconds;
+                          audioStore.audioPlayer.seek(
+                            Duration(
+                              milliseconds: position.round(),
+                            ),
+                          );
+                        },
+                        label: (_position != null &&
+                                _duration != null &&
+                                _position!.inMilliseconds > 0 &&
+                                _position!.inMilliseconds <
+                                    _duration!.inMilliseconds)
+                            ? (_position!.inSeconds).toString() + ' sec.'
+                            : '0 sec.',
+                        value: (_position != null &&
+                                _duration != null &&
+                                _position!.inMilliseconds > 0 &&
+                                _position!.inMilliseconds <
+                                    _duration!.inMilliseconds)
+                            ? _position!.inMilliseconds /
+                                _duration!.inMilliseconds
+                            : 0.0,
+                      ),
+                    )
+                  : const SizedBox(),
+            ),
+          ],
+        ),
       ),
       trailing: Flex(
           mainAxisSize: MainAxisSize.min,
@@ -182,34 +179,32 @@ class _MessageBarPreviewRecordingState
   }
 
   Widget _getWaveBar(BuildContext context) {
-    var temporal = StoredAttachment.fromBuffer(widget.recording!);
-    var thumbnails = temporal.thumbnail;
-
-    //var audioWave = AudioWaveform.fromBuffer(thumbnails.attachment.keyMaterial);
-    //var aa = temporal.thumbnail as AudioWaveform;
-    print('tempora');
+    var _storedAttachment = StoredAttachment.fromBuffer(widget.recording!);
     return FutureBuilder(
-      future: model!
-          .decryptAttachment(StoredAttachment.fromBuffer(widget.recording!)),
+      future: model!.thumbnail(_storedAttachment),
       builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
+        AudioWaveform? audioWave;
+        var reducedAudioWave = <double>[];
         if (snapshot != null && snapshot.hasData) {
-          print(temporal);
+          audioWave = AudioWaveform.fromBuffer(snapshot.data!);
+          reducedAudioWave =
+              audioWave.bars.map((e) => e.toDouble()).toList().reduceList(10);
         }
         return (snapshot != null && snapshot.hasData)
-            ? CustomPaint(
-                painter: Waveform(
-                  waveData: thumbnails.attachment.keyMaterial,
-                  gap: 1,
-                  density: 130,
-                  height: 100,
-                  width: MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                      ? MediaQuery.of(context).size.width * 0.8
-                      : MediaQuery.of(context).size.width * 0.7,
-                  startingHeight: 5,
-                  finishedHeight: 5.5,
-                  color: Colors.black,
-                ),
+            ? WaveProgressBar(
+                progressPercentage: (_position != null &&
+                        _duration != null &&
+                        _position!.inMilliseconds > 0 &&
+                        _position!.inMilliseconds < _duration!.inMilliseconds)
+                    ? (_position!.inMilliseconds / _duration!.inMilliseconds) *
+                        100
+                    : 0.0,
+                alignment: Alignment.bottomCenter,
+                listOfHeights: reducedAudioWave,
+                width: MediaQuery.of(context).size.width * 0.75,
+                initalColor: Colors.black,
+                progressColor: outboundMsgColor,
+                backgroundColor: inboundBgColor,
               )
             : const SizedBox();
       },
