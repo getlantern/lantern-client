@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audioplayers/notifications.dart';
@@ -263,8 +264,11 @@ class VoiceMemoState extends State<VoiceMemo> {
     try {
       _bytesBuffer = await model!.thumbnail(widget.attachment);
       _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
-      reducedAudioWave =
-          _waveform!.bars.map((e) => e.toDouble()).toList().reduceList(10);
+      reducedAudioWave = _waveform!.bars
+          .map((e) => e.toPercentage(
+              _waveform!.bars.reduce(max), _waveform!.bars.reduce(min)))
+          .toList()
+          .reduceList(10);
     } catch (e) {
       reducedAudioWave = [];
     }
