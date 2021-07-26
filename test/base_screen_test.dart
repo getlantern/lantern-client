@@ -25,6 +25,12 @@ void main() {
           print('Check for the CustomAppBar to be loaded correctly');
           expect(customAppbar, findsOneWidget);
 
+          await tester.pump(const Duration(seconds: 5));
+
+          var homePage = find.byType(HomePage);
+          print('Check for the HomePage to be loaded correctly');
+          expect(homePage, findsOneWidget);
+
           // await tester.pumpWidget(
           //   LanternApp(),
           // );
