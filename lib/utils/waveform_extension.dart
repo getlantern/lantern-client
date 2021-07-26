@@ -11,3 +11,7 @@ extension WaveformExtension on List<double> {
     return _reduced;
   }
 }
+
+extension IntExtension on int {
+  double toPercentage(int max, int min) => (this - min) / (max - min) * 100;
+}
