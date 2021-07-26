@@ -193,12 +193,16 @@ class _MessageBarPreviewRecordingState
         if (snapshot != null && snapshot.hasData) {
           try {
             audioWave = AudioWaveform.fromBuffer(snapshot.data!);
-            reducedAudioWave =
-                audioWave.bars.map((e) => e.toDouble()).toList().reduceList(10);
+            reducedAudioWave = audioWave.bars
+                .map((e) => e.toPercentage(
+                    audioWave!.bars.reduce(max), audioWave.bars.reduce(min)))
+                .toList()
+                .reduceList(10);
           } catch (e) {
             reducedAudioWave = [];
           }
         }
+
         return (snapshot != null && snapshot.hasData)
             ? WaveProgressBar(
                 progressPercentage: (_position != null &&
@@ -206,11 +210,11 @@ class _MessageBarPreviewRecordingState
                         _position!.inMilliseconds > 0 &&
                         _position!.inMilliseconds < _duration!.inMilliseconds)
                     ? (_position!.inMilliseconds / _duration!.inMilliseconds) *
-                        100
+                        120
                     : 0.0,
                 alignment: Alignment.bottomCenter,
                 listOfHeights: reducedAudioWave,
-                width: MediaQuery.of(context).size.width * 0.75,
+                width: MediaQuery.of(context).size.width * 0.6,
                 initalColor: Colors.black,
                 progressColor: outboundMsgColor,
                 backgroundColor: inboundBgColor,
