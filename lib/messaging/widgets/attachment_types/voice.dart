@@ -187,14 +187,16 @@ class VoiceMemoState extends State<VoiceMemo> {
                           ],
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.75 - 90,
+                          width: MediaQuery.of(context).size.width * 0.6,
                           padding: const EdgeInsets.only(top: 10),
                           height: 50,
                           child: Stack(
                             clipBehavior: Clip.hardEdge,
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
-                              _getWaveBar(),
+                              reducedAudioWave.isNotEmpty
+                                  ? _getWaveBar()
+                                  : const SizedBox(),
                               Positioned.fill(
                                 left: -22,
                                 top: 1,
@@ -202,8 +204,14 @@ class VoiceMemoState extends State<VoiceMemo> {
                                 right: -22,
                                 child: SliderTheme(
                                   data: SliderThemeData(
-                                    activeTrackColor: Colors.transparent,
-                                    inactiveTrackColor: Colors.transparent,
+                                    activeTrackColor:
+                                        reducedAudioWave.isNotEmpty
+                                            ? Colors.transparent
+                                            : Colors.grey,
+                                    inactiveTrackColor:
+                                        reducedAudioWave.isNotEmpty
+                                            ? Colors.transparent
+                                            : Colors.blue,
                                     valueIndicatorColor: Colors.grey.shade200,
                                     thumbShape:
                                         const RectangleSliderThumbShapes(
@@ -251,10 +259,15 @@ class VoiceMemoState extends State<VoiceMemo> {
   }
 
   Future<Uint8List> loadData() async {
-    var _bytesBuffer = await model!.thumbnail(widget.attachment);
-    _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
-    reducedAudioWave =
-        _waveform!.bars.map((e) => e.toDouble()).toList().reduceList(10);
+    Uint8List? _bytesBuffer;
+    try {
+      _bytesBuffer = await model!.thumbnail(widget.attachment);
+      _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
+      reducedAudioWave =
+          _waveform!.bars.map((e) => e.toDouble()).toList().reduceList(10);
+    } catch (e) {
+      reducedAudioWave = [];
+    }
     return await model!.decryptAttachment(widget.attachment);
   }
 
@@ -267,7 +280,7 @@ class VoiceMemoState extends State<VoiceMemo> {
             : 0.0,
         alignment: Alignment.bottomCenter,
         listOfHeights: reducedAudioWave,
-        width: MediaQuery.of(context).size.width * 0.75 - 90,
+        width: MediaQuery.of(context).size.width * 0.6,
         initalColor: widget.inbound ? Colors.black : Colors.white,
         progressColor: widget.inbound ? outboundMsgColor : inboundMsgColor,
         backgroundColor: widget.inbound ? inboundBgColor : outboundBgColor,
@@ -293,25 +306,8 @@ class VoiceMemoState extends State<VoiceMemo> {
   }
 
   void initAudioPlayer() {
-    _durationSubscription =
-        audioStore.audioPlayer.onDurationChanged.listen((duration) {
-      setState(() => _duration = duration);
-
-      // Implemented for iOS, waiting for android impl
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        // (Optional) listen for notification updates in the background
-        audioStore.audioPlayer.notificationService.startHeadlessService();
-
-        // set at least title to see the notification bar on ios.
-        audioStore.audioPlayer.notificationService.setNotification(
-          title: 'Lantern',
-          duration: duration,
-          elapsedTime: const Duration(seconds: 0),
-          enableNextTrackButton: false,
-          enablePreviousTrackButton: false,
-        );
-      }
-    });
+    _durationSubscription = audioStore.audioPlayer.onDurationChanged
+        .listen((duration) => setState(() => _duration = duration));
 
     _positionSubscription =
         audioStore.audioPlayer.onAudioPositionChanged.listen(

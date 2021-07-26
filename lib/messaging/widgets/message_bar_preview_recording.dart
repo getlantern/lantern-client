@@ -44,6 +44,7 @@ class _MessageBarPreviewRecordingState
   bool get _isPaused => _playerState == PlayerState.paused;
   Random rand = Random();
   MessagingModel? model;
+  var reducedAudioWave = <double>[];
 
   @override
   void initState() {
@@ -70,10 +71,15 @@ class _MessageBarPreviewRecordingState
               left: -23,
               child: _isPlaying || _isPaused
                   ? SliderTheme(
-                      data: const SliderThemeData(
-                        activeTrackColor: Colors.transparent,
-                        inactiveTrackColor: Colors.transparent,
-                        thumbShape: RectangleSliderThumbShapes(height: 41.5),
+                      data: SliderThemeData(
+                        activeTrackColor: reducedAudioWave.isNotEmpty
+                            ? Colors.transparent
+                            : Colors.grey,
+                        inactiveTrackColor: reducedAudioWave.isNotEmpty
+                            ? Colors.transparent
+                            : Colors.blue,
+                        thumbShape:
+                            const RectangleSliderThumbShapes(height: 41.5),
                         valueIndicatorColor: Colors.transparent,
                       ),
                       child: Slider(
@@ -184,11 +190,14 @@ class _MessageBarPreviewRecordingState
       future: model!.thumbnail(_storedAttachment),
       builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
         AudioWaveform? audioWave;
-        var reducedAudioWave = <double>[];
         if (snapshot != null && snapshot.hasData) {
-          audioWave = AudioWaveform.fromBuffer(snapshot.data!);
-          reducedAudioWave =
-              audioWave.bars.map((e) => e.toDouble()).toList().reduceList(10);
+          try {
+            audioWave = AudioWaveform.fromBuffer(snapshot.data!);
+            reducedAudioWave =
+                audioWave.bars.map((e) => e.toDouble()).toList().reduceList(10);
+          } catch (e) {
+            reducedAudioWave = [];
+          }
         }
         return (snapshot != null && snapshot.hasData)
             ? WaveProgressBar(
