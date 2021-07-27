@@ -8,6 +8,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:collection/collection.dart';
+import 'package:sizer/sizer.dart';
 
 class ReplyBubble extends StatelessWidget {
   final bool outbound;
@@ -24,7 +25,7 @@ class ReplyBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<MessagingModel>();
     return Container(
-        constraints: const BoxConstraints(minWidth: 100),
+        constraints: BoxConstraints(maxWidth: 65.w),
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
             color: Colors.white),
