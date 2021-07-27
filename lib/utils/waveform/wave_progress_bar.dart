@@ -23,18 +23,21 @@ class WaveProgressBar extends StatelessWidget {
     required this.width,
     required this.progressPercentage,
   });
+
   @override
   Widget build(BuildContext context) {
     var arrayOfBars = <Widget>[];
-    arrayOfBars.add(CustomPaint(
-      painter: BackgroundBarPainter(
-        containerWidth: width,
-        containerHeight: listOfHeights.reduce(max),
-        progresPercentage: progressPercentage,
-        initialColor: initalColor,
-        progressColor: progressColor,
+    arrayOfBars.add(
+      CustomPaint(
+        painter: BackgroundBarPainter(
+          containerWidth: width,
+          containerHeight: listOfHeights.reduce(max),
+          progresPercentage: progressPercentage,
+          initialColor: initalColor,
+          progressColor: progressColor,
+        ),
       ),
-    ));
+    );
 
     for (var i = 0; i < listOfHeights.length; i++) {
       arrayOfBars.add(
@@ -50,6 +53,7 @@ class WaveProgressBar extends StatelessWidget {
         ),
       );
     }
+
     return Container(
       height: listOfHeights.reduce(max),
       width: width,

@@ -8,6 +8,7 @@ class BackgroundBarPainter extends CustomPainter {
   final Color? progressColor;
   final Paint trackPaint;
   final Paint progressPaint;
+
   BackgroundBarPainter({
     required this.containerWidth,
     required this.containerHeight,
@@ -20,6 +21,7 @@ class BackgroundBarPainter extends CustomPainter {
         progressPaint = Paint()
           ..color = progressColor ?? Colors.red
           ..style = PaintingStyle.fill;
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRRect(
@@ -29,6 +31,7 @@ class BackgroundBarPainter extends CustomPainter {
           const Radius.circular(0),
         ),
         trackPaint);
+
     canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, -containerHeight / 2,
@@ -39,7 +42,5 @@ class BackgroundBarPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
