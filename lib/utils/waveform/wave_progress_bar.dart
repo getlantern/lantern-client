@@ -9,15 +9,15 @@ class WaveProgressBar extends StatelessWidget {
   final Alignment alignment;
   final double width;
   final Color initalColor;
-  final Color? progressColor;
+  final Color progressColor;
   final Color backgroundColor;
   final double begin;
 
   WaveProgressBar({
     required this.listOfHeights,
-    this.initalColor = Colors.grey,
-    this.progressColor = Colors.red,
-    this.backgroundColor = Colors.white,
+    required this.initalColor,
+    required this.progressColor,
+    required this.backgroundColor,
     this.alignment = Alignment.center,
     this.begin = 0,
     required this.width,
