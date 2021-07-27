@@ -36,10 +36,8 @@ class StatusRowState extends State<StatusRow> {
           var index = widget.msg.position(segments: segments);
           return Container(
             child: Opacity(
-              opacity: 0.8,
-              child: Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.center,
+              opacity: 0.9,
+              child: Row(
                 verticalDirection: VerticalDirection.up,
                 children: [
                   ...widget.reactionsList,

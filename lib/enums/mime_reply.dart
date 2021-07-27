@@ -35,67 +35,87 @@ class MimeReply {
       direction: Axis.horizontal,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text(
-          storedMessage.attachments[0]!.attachment.mimeType.split('/')[0],
-          style: const TextStyle(fontStyle: FontStyle.italic),
-        ),
+        // Text(
+        //   storedMessage.attachments[0]!.attachment.mimeType
+        //       .split('/')[0]
+        //       .toUpperCase(),
+        //   style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12.0),
+        // ),
         (MimeTypes.AUDIO == _mimeType)
-            ? Text(
-                'Time: (${_audioDuration.time(minute: true, seconds: true)})',
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FutureBuilder(
+                  future: model.decryptAttachment(
+                      storedMessage.attachments[0] as StoredAttachment),
+                  builder: (BuildContext context,
+                          AsyncSnapshot<Uint8List?>? snapshot) =>
+                      snapshot == null || !snapshot.hasData
+                          ? const Icon(
+                              Icons.error,
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: CustomPaint(
+                                      painter: Waveform(
+                                        waveData: snapshot.data!,
+                                        gap: 1,
+                                        density: 100,
+                                        height: 100,
+                                        width: 120,
+                                        startingHeight: 5,
+                                        finishedHeight: 5.5,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  _audioDuration.time(
+                                      minute: true, seconds: true),
+                                  style: TextStyle(
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                 ),
               )
-            : const SizedBox(),
-        (MimeTypes.AUDIO == _mimeType)
-            ? FutureBuilder(
-                future: model.decryptAttachment(
-                    storedMessage.attachments[0] as StoredAttachment),
-                builder: (BuildContext context,
-                        AsyncSnapshot<Uint8List?>? snapshot) =>
-                    snapshot == null || !snapshot.hasData
-                        ? const SizedBox()
-                        : Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomPaint(
-                                painter: Waveform(
-                                  waveData: snapshot.data!,
-                                  gap: 1,
-                                  density: 100,
-                                  height: 100,
-                                  width: 120,
-                                  startingHeight: 5,
-                                  finishedHeight: 5.5,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-              )
             : (MimeTypes.VIDEO == _mimeType || MimeTypes.IMAGE == _mimeType)
-                ? FutureBuilder(
-                    future: model.thumbnail(
-                        storedMessage.attachments[0] as StoredAttachment),
-                    builder: (BuildContext context,
-                            AsyncSnapshot<Uint8List?>? snapshot) =>
-                        snapshot == null || !snapshot.hasData
-                            ? const Icon(Icons.error_outlined)
-                            : Image.memory(snapshot.data!,
-                                errorBuilder: (BuildContext context,
-                                        Object error, StackTrace? stackTrace) =>
-                                    const Icon(Icons.error_outlined),
-                                filterQuality: FilterQuality.high,
-                                scale: 10),
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder(
+                      future: model.thumbnail(
+                          storedMessage.attachments[0] as StoredAttachment),
+                      builder: (BuildContext context,
+                              AsyncSnapshot<Uint8List?>? snapshot) =>
+                          snapshot == null || !snapshot.hasData
+                              ? const Icon(Icons.error_outlined)
+                              : Image.memory(snapshot.data!,
+                                  errorBuilder: (BuildContext context,
+                                          Object error,
+                                          StackTrace? stackTrace) =>
+                                      const Icon(Icons.error_outlined),
+                                  filterQuality: FilterQuality.high,
+                                  scale: 10),
+                    ),
                   )
-                : const Icon(
-                    Icons.play_circle_outline,
-                    color: Colors.white,
-                    size: 30,
+                : const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.play_circle_outline,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
       ],
     );
