@@ -11,6 +11,7 @@ class SingleBarPainter extends CustomPainter {
   final double actualSeekBarHeight;
   final double startingPosition;
   final double heightOfContainer;
+
   SingleBarPainter({
     required this.backgroundColor,
     this.barBorderRadius = 0,
@@ -31,43 +32,48 @@ class SingleBarPainter extends CustomPainter {
     final outerSideHeight = maxSeekBarHeight - actualSeekBarHeight;
 
     canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(startingPosition, -heightOfContainer / 1.9,
-              singleBarWidth, outerSideHeight / 2),
-          const Radius.circular(0),
-        ),
-        aboveAndBelowPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(startingPosition, -heightOfContainer / 1.9,
+            singleBarWidth, outerSideHeight / 2),
+        const Radius.circular(0),
+      ),
+      aboveAndBelowPaint,
+    );
+
     canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(
-                startingPosition,
-                outerSideHeight / 2 - heightOfContainer / 2,
-                singleBarWidth,
-                actualSeekBarHeight),
-            Radius.circular(barBorderRadius)),
-        trackPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+            startingPosition,
+            outerSideHeight / 2 - heightOfContainer / 2,
+            singleBarWidth,
+            actualSeekBarHeight),
+        Radius.circular(barBorderRadius),
+      ),
+      trackPaint,
+    );
+
     canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(
-                startingPosition,
-                (outerSideHeight / 2) -
-                    heightOfContainer / 2 +
-                    actualSeekBarHeight,
-                singleBarWidth,
-                outerSideHeight / 2),
-            const Radius.circular(0)),
-        aboveAndBelowPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+            startingPosition,
+            (outerSideHeight / 2) - heightOfContainer / 2 + actualSeekBarHeight,
+            singleBarWidth,
+            outerSideHeight / 2),
+        const Radius.circular(0),
+      ),
+      aboveAndBelowPaint,
+    );
+
     canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(startingPosition, -heightOfContainer / 2,
-              0.2 * singleBarWidth, heightOfContainer),
-          const Radius.circular(0),
-        ),
-        aboveAndBelowPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(startingPosition, -heightOfContainer / 2,
+            0.2 * singleBarWidth, heightOfContainer),
+        const Radius.circular(0),
+      ),
+      aboveAndBelowPaint,
+    );
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
