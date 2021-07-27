@@ -78,6 +78,7 @@ class MessageBar extends StatelessWidget {
             hasPermission: hasPermission,
             onRecording: onRecording,
             sendIcon: sendIcon,
+            onEmojiTap: onEmojiTap,
             onStopRecording: onStopRecording,
             onTextFieldChanged: onTextFieldChanged,
             messageController: messageController,
