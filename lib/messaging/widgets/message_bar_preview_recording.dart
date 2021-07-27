@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/attachment_types/voice.dart';
+import 'package:lantern/messaging/widgets/attachment_types/audio.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -194,8 +194,7 @@ class _MessageBarPreviewRecordingState
           try {
             audioWave = AudioWaveform.fromBuffer(snapshot.data!);
             reducedAudioWave = audioWave.bars
-                .map((e) => e.toPercentage(
-                    audioWave!.bars.reduce(max), audioWave.bars.reduce(min)))
+                .map((e) => e.toPercentage(255, 0))
                 .toList()
                 .reduceList(10);
           } catch (e) {

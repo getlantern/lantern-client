@@ -265,8 +265,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
       _bytesBuffer = await model!.thumbnail(widget.attachment);
       _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
       reducedAudioWave = _waveform!.bars
-          .map((e) => e.toPercentage(
-              _waveform!.bars.reduce(max), _waveform!.bars.reduce(min)))
+          .map((e) => e.toPercentage(255, 0))
           .toList()
           .averageList();
     } catch (e) {
