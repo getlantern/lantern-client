@@ -268,7 +268,12 @@ Future<void> displayConversationOptions(
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      context.loaderOverlay.show();
+                                      context.loaderOverlay.show(
+                                          widget: const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ));
                                       try {
                                         await model.deleteDirectContact(
                                             contact.contactId.id);
