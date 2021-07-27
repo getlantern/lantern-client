@@ -2,7 +2,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 import 'attachment_types/generic.dart';
-import 'attachment_types/voice.dart';
+import 'attachment_types/audio.dart';
 import 'attachment_types/image.dart';
 import 'attachment_types/video.dart';
 
@@ -22,7 +22,7 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     case 'audio/mp4':
     case 'audio/mkv':
     case 'audio/mpeg':
-      return Flexible(child: VoiceMemo(attachment, inbound));
+      return Flexible(child: AudioAttachment(attachment, inbound));
     case 'image/jpeg':
     case 'image/png':
     case 'image/bpm':

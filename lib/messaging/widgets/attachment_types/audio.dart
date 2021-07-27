@@ -17,19 +17,19 @@ import 'package:sizer/sizer.dart';
 enum PlayerState { stopped, playing, paused }
 enum PlayingRouteState { speakers, earpiece }
 
-class VoiceMemo extends StatefulWidget {
+class AudioAttachment extends StatefulWidget {
   final StoredAttachment attachment;
   final bool inbound;
 
-  VoiceMemo(this.attachment, this.inbound);
+  AudioAttachment(this.attachment, this.inbound);
 
   @override
   State<StatefulWidget> createState() {
-    return VoiceMemoState();
+    return AudioAttachmentState();
   }
 }
 
-class VoiceMemoState extends State<VoiceMemo> {
+class AudioAttachmentState extends State<AudioAttachment> {
   AudioStore audioStore = AudioStore();
   MessagingModel? model;
   Duration? _duration;
@@ -268,7 +268,7 @@ class VoiceMemoState extends State<VoiceMemo> {
           .map((e) => e.toPercentage(
               _waveform!.bars.reduce(max), _waveform!.bars.reduce(min)))
           .toList()
-          .reduceList(10);
+          .averageList();
     } catch (e) {
       reducedAudioWave = [];
     }
@@ -347,7 +347,7 @@ class VoiceMemoState extends State<VoiceMemo> {
   }
 
   @override
-  void didUpdateWidget(VoiceMemo oldWidget) {
+  void didUpdateWidget(AudioAttachment oldWidget) {
     super.didUpdateWidget(oldWidget);
     initAudioPlayer();
     //_stop();
