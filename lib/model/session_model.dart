@@ -111,6 +111,10 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<bool> getShouldShowYinbiBadge() => methodChannel
+      .invokeMethod('getShouldShowYinbiBadge')
+      .then((value) => value as bool);
+
   Future<String> validateRecoveryCode(String code) {
     return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'code': code,

@@ -157,6 +157,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getLong(DEVICE_CODE_EXP, 0)
     }
 
+    fun getShouldShowYinbi(): Boolean {
+        return prefs.getBoolean(SHOULD_SHOW_YINBI_BADGE, true)
+    }
+
     fun yinbiEnabled(): Boolean {
         return BuildConfig.YINBI_ENABLED || prefs.getBoolean(YINBI_ENABLED, false)
     }

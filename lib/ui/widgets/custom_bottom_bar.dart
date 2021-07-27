@@ -85,16 +85,20 @@ class CustomBottomBar extends StatelessWidget {
             label: Text('Account'.i18n, style: TextStyle(fontSize: 9.sp)),
             onTap: () => onTap!(2),
             icon: sessionModel.shouldShowYinbiBadge(
-              (context, value, child) => CustomBadge(
-                count: 1,
-                fontSize: 8.0,
-                showBadge: value,
-                child: SvgPicture.asset(
-                  ImagePaths.account_icon,
-                  color: index == 2
-                      ? selectedTabLabelColor
-                      : unselectedTabLabelColor,
-                  fit: BoxFit.contain,
+              (context, value, child) => FutureBuilder(
+                future: sessionModel.getShouldShowYinbiBadge(),
+                initialData: false,
+                builder: (context, AsyncSnapshot<bool> snapshot) => CustomBadge(
+                  count: 1,
+                  fontSize: 8.0,
+                  showBadge: snapshot.data ?? false,
+                  child: SvgPicture.asset(
+                    ImagePaths.account_icon,
+                    color: index == 2
+                        ? selectedTabLabelColor
+                        : unselectedTabLabelColor,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),

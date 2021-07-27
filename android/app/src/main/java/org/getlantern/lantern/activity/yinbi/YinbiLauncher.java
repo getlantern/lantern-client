@@ -18,9 +18,8 @@ public class YinbiLauncher extends Activity {
         } else {
             activityClass = YinbiScreenActivity.class;
         }
+        LanternApp.getSession().setShouldShowYinbiBadge(false);
         startActivity(new Intent(this, activityClass));
         finish();
-
-        LanternApp.getSession().setShouldShowYinbiBadge(false);
     }
 }

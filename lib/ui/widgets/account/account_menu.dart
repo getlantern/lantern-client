@@ -54,16 +54,17 @@ class AccountMenu extends StatelessWidget {
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      sessionModel.shouldShowYinbiBadge(
-        (BuildContext context, bool shouldShowYinbiBadge, Widget? child) =>
-            SettingsItem(
+      FutureBuilder(
+        future: sessionModel.getShouldShowYinbiBadge(),
+        initialData: false,
+        builder: (context, AsyncSnapshot<bool> snapshot) => SettingsItem(
           icon: ImagePaths.yinbi_icon,
           title: 'free_yinbi_crypto'.i18n,
           onTap: openFreeYinbiCrypto,
           child: CustomBadge(
             count: 1,
             fontSize: 14,
-            showBadge: shouldShowYinbiBadge,
+            showBadge: snapshot.data ?? false,
           ),
         ),
       ),

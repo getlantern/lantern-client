@@ -75,6 +75,9 @@ class SessionModel(
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            "getShouldShowYinbiBadge" -> {
+                result.success(LanternApp.getSession().getShouldShowYinbi())
+            }
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
