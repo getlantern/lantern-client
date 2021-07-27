@@ -131,7 +131,6 @@ class _ConversationState extends State<Conversation>
     );
     _newMessage.clear();
     setState(() {
-      _quotedMessage = null;
       recording = null;
     });
     // scroll to bottom on send
@@ -391,12 +390,17 @@ class _ConversationState extends State<Conversation>
                           attachments:
                               recording != null && recording!.isNotEmpty
                                   ? [recording!]
-                                  : []);
+                                  : [],
+                          replyToSenderId: _quotedMessage?.senderId,
+                          replyToId: _quotedMessage?.id);
                       setState(() {
+                        _quotedMessage = null;
                         _recording = false;
-                        _finishedRecording = true;
                         _willCancelRecording = false;
                         _finishedRecording = false;
+                        _isSendIconVisible = false;
+                        _isReplying = false;
+                        _emojiShowing = false;
                       });
                     },
                     onRecording: () async => await _startRecording(),
