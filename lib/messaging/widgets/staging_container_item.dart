@@ -33,6 +33,7 @@ class StagingContainerItem extends StatelessWidget {
       ),
       child: Flex(
         direction: Axis.vertical,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flex(
             direction: Axis.horizontal,
@@ -58,7 +59,7 @@ class StagingContainerItem extends StatelessWidget {
           Flex(
             direction: Axis.horizontal,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               quotedMessage?.text != null && quotedMessage!.text.isNotEmpty
                   ? Flexible(
