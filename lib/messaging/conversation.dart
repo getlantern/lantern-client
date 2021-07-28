@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
-import 'package:lantern/messaging/widgets/staging_container_item.dart';
+import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -348,7 +348,7 @@ class _ConversationState extends State<Conversation>
                 if (_isReplying)
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: StagingContainerItem(
+                    child: ReplyPreview(
                       quotedMessage: _quotedMessage,
                       model: model,
                       contact: widget._contact,

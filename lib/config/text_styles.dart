@@ -72,3 +72,13 @@ TextStyle? tsInfoDialogButton = TextStyle(
   fontSize: 14,
   color: primaryPink,
 );
+
+// Message bubble StyleSheet
+TextStyle? tsReplySnippetHeader = const TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 14,
+  color: Colors.black,
+);
+
+TextStyle? tsReplySnippetSpecialCase =
+    const TextStyle(fontStyle: FontStyle.italic);

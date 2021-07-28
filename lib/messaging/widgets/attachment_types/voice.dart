@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:audioplayers/notifications.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio_store.dart';

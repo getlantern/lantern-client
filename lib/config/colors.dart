@@ -23,6 +23,7 @@ Color outboundBgColor = HexColor('#007A7C');
 Color outboundMsgColor = HexColor('#FFFFFF');
 Color inboundMsgColor = HexColor('#000000');
 Color inboundBgColor = HexColor('#EBEBEB');
+Color snippetShadowColor = HexColor('#F5F5F5');
 
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;

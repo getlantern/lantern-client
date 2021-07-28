@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:lantern/messaging/widgets/message_bar_preview_recording.dart';
-import 'package:lantern/messaging/widgets/message_bar_recording.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/message_bar_recording.dart';
 import 'package:lantern/package_store.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 

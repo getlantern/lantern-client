@@ -5,10 +5,10 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-import 'message_utils.dart';
+import '../message_utils.dart';
 
-class StagingContainerItem extends StatelessWidget {
-  const StagingContainerItem({
+class ReplyPreview extends StatelessWidget {
+  const ReplyPreview({
     Key? key,
     this.quotedMessage,
     required this.model,
