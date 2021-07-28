@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lantern/messaging/widgets/countdown_timer.dart';
-import 'package:lantern/messaging/widgets/voice_recorder.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:lantern/package_store.dart';
 

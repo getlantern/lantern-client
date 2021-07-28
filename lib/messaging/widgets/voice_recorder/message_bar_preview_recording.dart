@@ -3,7 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/voice.dart';

@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -101,7 +101,7 @@ class ContentContainer extends StatelessWidget {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () => onTapReply(message),
-                      child: ReplyBubble(outbound, msg, contact),
+                      child: ReplySnippet(outbound, msg, contact),
                     ),
                 ]),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4)),

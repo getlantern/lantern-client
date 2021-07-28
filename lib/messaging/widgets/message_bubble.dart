@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/conversation.dart';
-import 'package:lantern/messaging/widgets/reactions.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/reactions.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
