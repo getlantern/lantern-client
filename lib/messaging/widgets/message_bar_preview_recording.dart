@@ -58,60 +58,58 @@ class _MessageBarPreviewRecordingState
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       leading: currentIcon(),
-      title: Expanded(
-        child: Stack(
-          clipBehavior: Clip.hardEdge,
-          alignment: AlignmentDirectional.bottomStart,
-          children: [
-            _getWaveBar(context),
-            Positioned.fill(
-              right: MediaQuery.of(context).orientation == Orientation.landscape
-                  ? -135
-                  : -80,
-              left: -23,
-              child: _isPlaying || _isPaused
-                  ? SliderTheme(
-                      data: SliderThemeData(
-                        activeTrackColor: reducedAudioWave.isNotEmpty
-                            ? Colors.transparent
-                            : Colors.grey,
-                        inactiveTrackColor: reducedAudioWave.isNotEmpty
-                            ? Colors.transparent
-                            : Colors.blue,
-                        thumbShape:
-                            const RectangleSliderThumbShapes(height: 41.5),
-                        valueIndicatorColor: Colors.transparent,
-                      ),
-                      child: Slider(
-                        onChanged: (v) {
-                          final position = v * _duration!.inMilliseconds;
-                          audioStore.audioPlayer.seek(
-                            Duration(
-                              milliseconds: position.round(),
-                            ),
-                          );
-                        },
-                        label: (_position != null &&
-                                _duration != null &&
-                                _position!.inMilliseconds > 0 &&
-                                _position!.inMilliseconds <
-                                    _duration!.inMilliseconds)
-                            ? (_position!.inSeconds).toString() + ' sec.'
-                            : '0 sec.',
-                        value: (_position != null &&
-                                _duration != null &&
-                                _position!.inMilliseconds > 0 &&
-                                _position!.inMilliseconds <
-                                    _duration!.inMilliseconds)
-                            ? _position!.inMilliseconds /
-                                _duration!.inMilliseconds
-                            : 0.0,
-                      ),
-                    )
-                  : const SizedBox(),
-            ),
-          ],
-        ),
+      title: Stack(
+        clipBehavior: Clip.hardEdge,
+        alignment: AlignmentDirectional.bottomStart,
+        children: [
+          _getWaveBar(context),
+          Positioned.fill(
+            right: MediaQuery.of(context).orientation == Orientation.landscape
+                ? -135
+                : -80,
+            left: -23,
+            child: _isPlaying || _isPaused
+                ? SliderTheme(
+                    data: SliderThemeData(
+                      activeTrackColor: reducedAudioWave.isNotEmpty
+                          ? Colors.transparent
+                          : Colors.grey,
+                      inactiveTrackColor: reducedAudioWave.isNotEmpty
+                          ? Colors.transparent
+                          : Colors.blue,
+                      thumbShape:
+                          const RectangleSliderThumbShapes(height: 41.5),
+                      valueIndicatorColor: Colors.transparent,
+                    ),
+                    child: Slider(
+                      onChanged: (v) {
+                        final position = v * _duration!.inMilliseconds;
+                        audioStore.audioPlayer.seek(
+                          Duration(
+                            milliseconds: position.round(),
+                          ),
+                        );
+                      },
+                      label: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? (_position!.inSeconds).toString() + ' sec.'
+                          : '0 sec.',
+                      value: (_position != null &&
+                              _duration != null &&
+                              _position!.inMilliseconds > 0 &&
+                              _position!.inMilliseconds <
+                                  _duration!.inMilliseconds)
+                          ? _position!.inMilliseconds /
+                              _duration!.inMilliseconds
+                          : 0.0,
+                    ),
+                  )
+                : const SizedBox(),
+          ),
+        ],
       ),
       trailing: Flex(
           mainAxisSize: MainAxisSize.min,
