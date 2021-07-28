@@ -13,7 +13,7 @@ import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
-import 'package:lantern/messaging/widgets/staging_container_item.dart';
+import 'package:lantern/messaging/widgets/message_types/reply_snippet.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -348,7 +348,7 @@ class _ConversationState extends State<Conversation>
                 if (_isReplying)
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: StagingContainerItem(
+                    child: ReplySnippet(
                       quotedMessage: _quotedMessage,
                       model: model,
                       contact: widget._contact,
