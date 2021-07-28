@@ -386,6 +386,9 @@ class _ConversationState extends State<Conversation>
                     onTextFieldChanged: (value) =>
                         setState(() => _isSendIconVisible = value.isNotEmpty),
                     onSend: () async {
+                      if (_newMessage.value.text.trim().isEmpty) {
+                        return;
+                      }
                       await _send(_newMessage.value.text,
                           attachments:
                               recording != null && recording!.isNotEmpty
