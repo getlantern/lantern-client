@@ -106,13 +106,13 @@ class MimeReply {
             const Padding(
               padding: EdgeInsets.all(4.0),
               child: Icon(
-                Icons.insert_drive_file_rounded,
+                Icons.circle_notifications_outlined,
                 color: Colors.black,
                 size: 30,
               ),
             ),
             const Text(
-              'Could not render attachment preview',
+              'Could not render attachment preview', // TODO: add i18n
               style: TextStyle(fontSize: 10.0),
             )
           ],
