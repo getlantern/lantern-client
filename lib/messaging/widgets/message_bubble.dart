@@ -9,7 +9,9 @@ import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/text_bubble.dart';
+
+import 'message_types/content_container.dart';
+import 'message_types/date_marker_bubble.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -175,18 +177,31 @@ class MessageBubble extends StatelessWidget {
         duration: const Duration(seconds: 0),
         animateMenuItems: false,
         onPressed: () {},
-        child: TextBubble(
-            outbound,
-            inbound,
-            startOfBlock,
-            endOfBlock,
-            newestMessage,
-            reactions,
-            msg,
-            message,
-            contact,
-            onTapReply,
-            isDateMarker));
+        child: Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment:
+              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              direction: Axis.vertical,
+              children: [
+                if (isDateMarker != '') DateMarker(isDateMarker),
+                ContentContainer(
+                    outbound,
+                    inbound,
+                    msg,
+                    message,
+                    contact,
+                    onTapReply,
+                    startOfBlock,
+                    endOfBlock,
+                    newestMessage,
+                    reactions,
+                    isAttachment),
+              ],
+            ),
+          ],
+        ));
   }
 }
 
