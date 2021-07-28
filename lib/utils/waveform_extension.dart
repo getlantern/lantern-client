@@ -1,14 +1,18 @@
 extension WaveformExtension on List<double> {
-  List<double> reduceList(int factor) {
-    var _reduced = <double>[];
-    var _counter = 0.0;
-    for (var _element in this) {
-      if (_counter % factor == 0) {
-        _reduced.add(_element);
+  List<double> reduceListWithAverageAndSteps(
+    int _size,
+    int _step,
+  ) {
+    var _listOfNumbers = this;
+    var _listOfNumbersReduced = <double>[];
+    for (var i = 0; i < _listOfNumbers.length; i += _step) {
+      var _sum = 0.0;
+      for (var j = 0; j < _step; j++) {
+        _sum += _listOfNumbers[i + j];
       }
-      _counter++;
+      _listOfNumbersReduced.add(_sum / _step);
     }
-    return _reduced;
+    return _listOfNumbersReduced.take(_size).toList();
   }
 }
 

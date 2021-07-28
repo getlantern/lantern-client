@@ -196,7 +196,7 @@ class _MessageBarPreviewRecordingState
             reducedAudioWave = audioWave.bars
                 .map((e) => e.toPercentage(255, 0))
                 .toList()
-                .reduceList(10);
+                .reduceListWithAverageAndSteps(100, 10);
           } catch (e) {
             reducedAudioWave = [];
           }

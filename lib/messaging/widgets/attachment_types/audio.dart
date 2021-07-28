@@ -267,7 +267,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
       reducedAudioWave = _waveform!.bars
           .map((e) => e.toPercentage(255, 0))
           .toList()
-          .averageList();
+          .reduceListWithAverageAndSteps(100, 10);
     } catch (e) {
       reducedAudioWave = [];
     }
