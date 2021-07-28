@@ -43,7 +43,7 @@ class StagingContainerItem extends StatelessWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: Text(
-                  'Replying to $inResponseTo', //TODO: Add i18n
+                  inResponseTo,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -70,7 +70,9 @@ class StagingContainerItem extends StatelessWidget {
                     )
                   : const SizedBox(),
               MimeReply.reply(
-                  storedMessage: quotedMessage, model: model, context: context),
+                  storedMessage: quotedMessage!,
+                  model: model,
+                  context: context),
             ],
           ),
         ],

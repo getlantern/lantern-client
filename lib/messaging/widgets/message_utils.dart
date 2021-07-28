@@ -38,9 +38,9 @@ List<dynamic> _humanizeReactorIdList(
 }
 
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
-  return contactIdToMatch == contact.contactId.id
-      ? contact.displayName
-      : 'me'; // TODO: i18n
+  final interlocutor =
+      contactIdToMatch == contact.contactId.id ? contact.displayName : 'me';
+  return 'Replying to $interlocutor';
 }
 
 Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
