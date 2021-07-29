@@ -72,12 +72,12 @@ class ContentContainer extends StatelessWidget {
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock
-                  ? const Radius.circular(1)
+                  ? Radius.circular(startOfBlock ? 8 : 1)
                   : const Radius.circular(8)
               : const Radius.circular(8),
           topRight: outbound
               ? endOfBlock
-                  ? const Radius.circular(1)
+                  ? Radius.circular(startOfBlock ? 8 : 1)
                   : const Radius.circular(8)
               : const Radius.circular(8),
           bottomRight: outbound
