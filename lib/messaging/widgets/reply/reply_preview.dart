@@ -1,11 +1,11 @@
-import 'dart:ui';
 import 'package:flutter/widgets.dart';
-import 'package:lantern/enums/mime_reply.dart';
+import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_deleted.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-
-import '../message_utils.dart';
 
 class ReplyPreview extends StatelessWidget {
   const ReplyPreview({
@@ -23,9 +23,11 @@ class ReplyPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // use the message's replyToId to identify who this is in response to
-    final inResponseTo = matchIdToDisplayName(quotedMessage!.senderId, contact);
-
+    final isNotNullorDeleted =
+        (quotedMessage != null && quotedMessage!.remotelyDeletedAt == 0);
+    final mimeType = isNotNullorDeleted && quotedMessage!.attachments.isNotEmpty
+        ? quotedMessage!.attachments[0]!.attachment.mimeType.split('/')[0]
+        : '';
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -42,10 +44,8 @@ class ReplyPreview extends StatelessWidget {
             children: [
               Flexible(
                 fit: FlexFit.tight,
-                child: Text(
-                  inResponseTo,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+                child:
+                    ReplySnippetHeader(msg: quotedMessage!, contact: contact),
               ),
               Flexible(
                 child: GestureDetector(
@@ -57,24 +57,21 @@ class ReplyPreview extends StatelessWidget {
           ),
           const SizedBox(height: 4.0),
           Flex(
-            direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              quotedMessage?.text != null && quotedMessage!.text.isNotEmpty
-                  ? Flexible(
-                      child: Text(
-                        quotedMessage!.text.toString(),
-                        style: const TextStyle(color: Colors.black54),
-                      ),
-                    )
-                  : const SizedBox(),
-              MimeReply.reply(
-                  storedMessage: quotedMessage!,
-                  model: model,
-                  context: context),
-            ],
-          ),
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  mimeType,
+                  style: tsReplySnippetSpecialCase,
+                ),
+                quotedMessage!.attachments.isEmpty
+                    ? ReplySnippetText(quotedMessage: quotedMessage)
+                    : ReplyMime.reply(
+                        storedMessage: quotedMessage!,
+                        model: model,
+                        context: context),
+              ]),
         ],
       ),
     );

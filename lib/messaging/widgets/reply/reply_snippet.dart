@@ -1,10 +1,12 @@
 import 'dart:ui';
 
-import 'package:lantern/enums/mime_reply.dart';
+import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_deleted.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:collection/collection.dart';
 import 'package:sizer/sizer.dart';
@@ -27,8 +29,6 @@ class ReplySnippet extends StatelessWidget {
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       final quotedMessage = messageRecords
           .firstWhereOrNull((element) => element.value.id == msg.replyToId);
-      final humanizedSenderName =
-          matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
       final isNotNullorDeleted =
           (quotedMessage != null && quotedMessage.value.remotelyDeletedAt == 0);
       final mimeType =
@@ -55,19 +55,7 @@ class ReplySnippet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.reply,
-                    size: 12,
-                  ),
-                  Text(
-                    matchIdToDisplayName(msg.replyToSenderId, contact),
-                    overflow: TextOverflow.ellipsis,
-                    style: tsReplySnippetHeader,
-                  ),
-                ],
-              ),
+              ReplySnippetHeader(msg: msg, contact: contact),
               isNotNullorDeleted
                   ? Flex(
                       direction: Axis.horizontal,
@@ -76,21 +64,17 @@ class ReplySnippet extends StatelessWidget {
                           mimeType,
                           style: tsReplySnippetSpecialCase,
                         ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: Container(
-                            height: 30.0,
-                            child: MimeReply.reply(
-                                storedMessage: quotedMessage!.value,
+                        quotedMessage!.value.attachments.isEmpty
+                            ? ReplySnippetText(
+                                quotedMessage: quotedMessage.value)
+                            : ReplyMime.reply(
+                                storedMessage: quotedMessage.value,
                                 model: model,
                                 context: context),
-                          ),
-                        )
                       ],
                     )
                   // display deleted bubble
-                  : Text('Message deleted'.i18n,
-                      style: tsReplySnippetSpecialCase)
+                  : const ReplySnippetDeleted()
             ],
           ));
     });

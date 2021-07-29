@@ -4,25 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:lantern/enums/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/utils/waveform/waveform.dart';
-import 'package:lantern/utils/duration_extension.dart';
-import 'package:sizer/sizer.dart';
 
 enum MimeTypes { VIDEO, AUDIO, IMAGE, OTHERS, EMPTY }
 
-class MimeReply {
+class ReplyMime {
   static Widget reply(
       {required StoredMessage storedMessage,
       required MessagingModel model,
       required BuildContext context}) {
-    // return Text reply first
-    if (storedMessage.attachments.isEmpty) {
-      return Flexible(
-          fit: FlexFit.tight,
-          child: Text(storedMessage.text, overflow: TextOverflow.ellipsis));
-    }
     final _mimeType = storedMessage.attachments[0]!.attachment.fromString();
-
     // not currently in use but might be needed in the future
     // var _seconds = 0;
     // var _audioDuration = Duration.zero;
