@@ -12,6 +12,8 @@ import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:sizer/sizer.dart';
 
+import 'audio_widget.dart';
+
 class MessageBarPreviewRecording extends StatefulWidget {
   final MessagingModel model;
   final Audio audio;

@@ -54,8 +54,13 @@ class Audio {
 
   void _onDetachedIfAvailable() {
     if (_onDetached != null) {
-      _onDetached!();
-      _onDetached = null;
+      try {
+        _onDetached!();
+      } catch (e) {
+        // ignore
+      } finally {
+        _onDetached = null;
+      }
     }
   }
 
