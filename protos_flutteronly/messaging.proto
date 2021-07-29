@@ -118,14 +118,6 @@ message DisappearSettings {
   int32 messagesDisappearAfterSeconds = 1; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
 }
 
-// A message that's used for WebRTC signaling. Unlike regular messages, this type of message is not
-// stored on disk. The client also doesn't attempt to re-send, but rather returns an error if it
-// fails to send right away.
-message WebRTCSignal {
-  string senderId = 1; // the id of the person who sent this message
-  bytes content = 2; // the contents of the message
-}
-
 // An envelope for messages to be transferred via the message broker
 message TransferMessage {
   oneof content {
@@ -133,7 +125,6 @@ message TransferMessage {
     bytes reaction = 2; // serialized Reaction
     bytes deleteMessageId = 3; // the id of a message from this Sender to delete
     bytes disappearSettings = 4; // serialized DisappearSettings
-    bytes webRTCSignal = 5; // the content of a WebRTCSignalingMessage
   }
 }
 
@@ -144,7 +135,7 @@ message OutboundMessage {
     SENT = 1; // message has been sent to specific deviceId
   }
 
-  string id = 1; // a unique identifier for this message
+  string id = 1; // a unique identifier for this
   string senderId = 2; // the id of who sent this message (same as on StoredMessage)
   string recipientId = 3; // the id of the recipient
   int64 sent = 4; // The unix timestamp in millisecond for when the message was sent
@@ -164,4 +155,9 @@ message InboundAttachment {
   int64 ts = 3; // The unix timestamp in milliseconds for when the message was received (has to match what's on the StoredMessage
   int32 attachmentId = 4; // The id of the attachment within the Message
   bool isThumbnail = 5; // indicates if this is a download of a thumbnail
+}
+
+// An audio waveform
+message AudioWaveform {
+  bytes bars = 1; // amplitude bars of the waveform, encoded as bytes.
 }
