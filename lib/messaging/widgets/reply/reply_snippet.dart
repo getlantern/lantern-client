@@ -9,7 +9,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:collection/collection.dart';
-import 'package:sizer/sizer.dart';
 
 class ReplySnippet extends StatelessWidget {
   final bool outbound;
@@ -35,7 +34,7 @@ class ReplySnippet extends StatelessWidget {
 
       return Container(
           height: 56.0,
-          constraints: BoxConstraints(maxWidth: 65.w),
+          constraints: const BoxConstraints(maxWidth: 280),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               boxShadow: [
@@ -53,7 +52,6 @@ class ReplySnippet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 3.5),

@@ -59,7 +59,8 @@ class ContentContainer extends StatelessWidget {
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
     return Container(
-      constraints: BoxConstraints(minWidth: 30.w, maxWidth: 85.w),
+      constraints: const BoxConstraints(maxWidth: 300),
+      clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.only(
           top: isAttachment ? 0 : 8,
           bottom: 8,
@@ -67,6 +68,7 @@ class ContentContainer extends StatelessWidget {
           right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
+        border: Border.all(color: grey4, width: isAttachment ? 0.5 : 0),
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock
@@ -107,13 +109,15 @@ class ContentContainer extends StatelessWidget {
                       child: ReplySnippet(outbound, msg, contact),
                     ),
                 ]),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+            if (!isAttachment)
+              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
             Flex(
                 direction: Axis.horizontal,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (msg.text.isNotEmpty)
                     Flexible(
+                      fit: FlexFit.loose,
                       child: Text(
                         '${msg.text}',
                         style: tsMessageBody(outbound),

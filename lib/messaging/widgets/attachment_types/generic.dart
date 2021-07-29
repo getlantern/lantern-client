@@ -22,9 +22,8 @@ class GenericAttachment extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // TODO: create a utils function that looks up file extension and returns corresponding icon
         Container(
-          margin: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+          margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             border: Border.all(
