@@ -76,10 +76,16 @@ class ReplySnippet extends StatelessWidget {
                           mimeType,
                           style: tsReplySnippetSpecialCase,
                         ),
-                        MimeReply.reply(
-                            storedMessage: quotedMessage!.value,
-                            model: model,
-                            context: context)
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: Container(
+                            height: 30.0,
+                            child: MimeReply.reply(
+                                storedMessage: quotedMessage!.value,
+                                model: model,
+                                context: context),
+                          ),
+                        )
                       ],
                     )
                   // display deleted bubble
