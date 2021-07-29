@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:audioplayers/notifications.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/audio_store.dart';
+import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/duration_extension.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
@@ -30,43 +29,33 @@ class AudioAttachment extends StatefulWidget {
 }
 
 class AudioAttachmentState extends State<AudioAttachment> {
-  AudioStore audioStore = AudioStore();
   late MessagingModel model;
+  late Audio audio;
   Duration? _duration;
   Duration? _position;
   PlayerState _playerState = PlayerState.stopped;
-  StreamSubscription? _durationSubscription;
-  StreamSubscription? _positionSubscription;
-  StreamSubscription? _playerCompleteSubscription;
-  StreamSubscription? _playerErrorSubscription;
-  StreamSubscription? _playerStateSubscription;
-  StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
 
   bool get _isPlaying => _playerState == PlayerState.playing;
 
   bool get _isPaused => _playerState == PlayerState.paused;
 
   Future<int> _pause() async {
-    final result = await audioStore.pause();
-    if (result == 1 && mounted) {
+    final result = await audio.pause();
+    if (result == 1) {
       setState(() => _playerState = PlayerState.paused);
     }
     return result;
   }
 
   Future<int> _stop() async {
-    final result = await audioStore.stop();
-    if (result == 1 && mounted) {
+    final result = await audio.stop();
+    if (result == 1) {
       setState(() {
         _playerState = PlayerState.stopped;
         _position = const Duration();
       });
     }
     return result;
-  }
-
-  void _onComplete() {
-    setState(() => _playerState = PlayerState.stopped);
   }
 
   Widget currentIcon(MessagingModel model) {
@@ -91,7 +80,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
       return TextButton(
         onPressed: () async {
           if (_isPaused) {
-            final result = await audioStore.resume();
+            final result = await audio.resume();
             if (result == 1) setState(() => _playerState = PlayerState.playing);
           } else {
             context.loaderOverlay.show();
@@ -121,6 +110,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
+    audio = context.watch<Audio>();
     switch (widget.attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING:
@@ -162,11 +152,11 @@ class AudioAttachmentState extends State<AudioAttachment> {
         return FutureBuilder(
             future: model.thumbnail(widget.attachment),
             builder: (context, AsyncSnapshot<Uint8List?>? snapshot) {
-              var _seconds = (double.tryParse(
+              var seconds = (double.tryParse(
                           widget.attachment.attachment.metadata['duration']!)! *
                       1000)
                   .toInt();
-              var _audioDuration = Duration(milliseconds: _seconds);
+              var audioDuration = Duration(milliseconds: seconds);
               if (snapshot == null || !snapshot.hasData) {
                 return const SizedBox();
               }
@@ -185,8 +175,8 @@ class AudioAttachmentState extends State<AudioAttachment> {
                       currentIcon(model),
                       Text(
                         _playerState == PlayerState.stopped
-                            ? _audioDuration.time(minute: true, seconds: true)
-                            : _audioDuration
+                            ? audioDuration.time(minute: true, seconds: true)
+                            : audioDuration
                                 .calculate(inputDuration: _position)
                                 .time(minute: true, seconds: true),
                         style: TextStyle(
@@ -227,8 +217,12 @@ class AudioAttachmentState extends State<AudioAttachment> {
                             ),
                             child: Slider(
                               onChanged: (v) {
+                                if (_playerState == PlayerState.stopped) {
+                                  // can't seek while stopped
+                                  return;
+                                }
                                 final position = v * _duration!.inMilliseconds;
-                                audioStore.audioPlayer.seek(
+                                audio.seek(
                                   Duration(
                                     milliseconds: position.round(),
                                   ),
@@ -279,80 +273,31 @@ class AudioAttachmentState extends State<AudioAttachment> {
       );
 
   @override
-  void initState() {
-    super.initState();
-    initAudioPlayer();
-  }
-
-  @override
   void dispose() {
     _stop();
-    audioStore.dispose();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    _playerErrorSubscription?.cancel();
-    _playerStateSubscription?.cancel();
-    _playerControlCommandSubscription?.cancel();
     super.dispose();
   }
 
-  void initAudioPlayer() {
-    _durationSubscription = audioStore.audioPlayer.onDurationChanged
-        .listen((duration) => setState(() => _duration = duration));
-
-    _positionSubscription =
-        audioStore.audioPlayer.onAudioPositionChanged.listen(
-      (p) => setState(
-        () => _position = p,
-      ),
+  Future<void> play(Uint8List bytes) async {
+    await audio.play(
+      bytes: bytes,
+      onAttached: () {
+        setState(() {
+          _playerState = PlayerState.playing;
+        });
+      },
+      onDetached: () {
+        setState(() {
+          _playerState = PlayerState.stopped;
+          _position = const Duration();
+        });
+      },
+      onDurationChanged: ((d) => setState(() {
+            _duration = d;
+          })),
+      onPositionChanged: ((p) => setState(() {
+            _position = p;
+          })),
     );
-
-    _playerCompleteSubscription =
-        audioStore.audioPlayer.onPlayerCompletion.listen((event) {
-      _onComplete();
-      setState(() {
-        _position = _duration;
-      });
-    });
-
-    _playerErrorSubscription =
-        audioStore.audioPlayer.onPlayerError.listen((msg) {
-      setState(() {
-        _playerState = PlayerState.stopped;
-        _duration = const Duration(seconds: 0);
-        _position = const Duration(seconds: 0);
-      });
-    });
-
-    audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
-      if (!mounted) return;
-    });
-
-    audioStore.audioPlayer.onNotificationPlayerStateChanged.listen((state) {
-      if (!mounted) return;
-    });
-  }
-
-  @override
-  void didUpdateWidget(AudioAttachment oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    initAudioPlayer();
-    //_stop();
-  }
-
-  Future<int> play(Uint8List bytes) async {
-    (_position != null &&
-            _duration != null &&
-            _position!.inMilliseconds > 0 &&
-            _position!.inMilliseconds < _duration!.inMilliseconds)
-        ? _position
-        : null;
-    await audioStore.stop();
-    final result = await audioStore.audioPlayer.playBytes(bytes);
-
-    if (result == 1) setState(() => _playerState = PlayerState.playing);
-    await audioStore.audioPlayer.setPlaybackRate(playbackRate: 1.0);
-    return result;
   }
 }

@@ -7,19 +7,21 @@ import 'package:lantern/messaging/widgets/attachment_types/audio.dart';
 import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/audio_store.dart';
+import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:sizer/sizer.dart';
 
 class MessageBarPreviewRecording extends StatefulWidget {
   final MessagingModel model;
+  final Audio audio;
   final StoredAttachment recording;
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
   const MessageBarPreviewRecording(
       {required this.model,
+      required this.audio,
       required this.recording,
       required this.onCancelRecording,
       required this.onSend});
@@ -32,14 +34,9 @@ class MessageBarPreviewRecording extends StatefulWidget {
 
 class _MessageBarPreviewRecordingState
     extends State<MessageBarPreviewRecording> {
-  StreamSubscription? _durationSubscription;
-  StreamSubscription<Duration>? _positionSubscription;
-  StreamSubscription? _playerCompleteSubscription;
-  StreamSubscription? _playerErrorSubscription;
   Duration? _duration;
   Duration? _position;
   PlayerState _playerState = PlayerState.stopped;
-  AudioStore audioStore = AudioStore();
 
   bool get _isPlaying => _playerState == PlayerState.playing;
 
@@ -50,7 +47,6 @@ class _MessageBarPreviewRecordingState
   @override
   void initState() {
     super.initState();
-    initAudioPlayer();
     widget.model.thumbnail(widget.recording).then((thumbnail) {
       setState(() {
         reducedAudioWave =
@@ -90,7 +86,7 @@ class _MessageBarPreviewRecordingState
                     child: Slider(
                       onChanged: (v) {
                         final position = v * _duration!.inMilliseconds;
-                        audioStore.audioPlayer.seek(
+                        widget.audio.seek(
                           Duration(
                             milliseconds: position.round(),
                           ),
@@ -164,7 +160,7 @@ class _MessageBarPreviewRecordingState
       return GestureDetector(
         onTap: () async {
           if (_isPaused) {
-            final result = await audioStore.resume();
+            final result = await widget.audio.resume();
             if (result == 1) setState(() => _playerState = PlayerState.playing);
           } else {
             await play();
@@ -206,47 +202,11 @@ class _MessageBarPreviewRecordingState
   @override
   void dispose() {
     _stop();
-    audioStore.dispose();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    _playerErrorSubscription?.cancel();
     super.dispose();
   }
 
-  void initAudioPlayer() {
-    _durationSubscription = audioStore.audioPlayer.onDurationChanged
-        .listen((duration) => setState(() => _duration = duration));
-
-    _playerCompleteSubscription =
-        audioStore.audioPlayer.onPlayerCompletion.listen((event) {
-      _onComplete();
-      setState(() => _position = _duration);
-    });
-
-    _playerErrorSubscription =
-        audioStore.audioPlayer.onPlayerError.listen((msg) {
-      setState(() {
-        _playerState = PlayerState.stopped;
-        _duration = const Duration(seconds: 0);
-        _position = const Duration(seconds: 0);
-      });
-    });
-
-    _positionSubscription =
-        audioStore.audioPlayer.onAudioPositionChanged.listen(
-      (p) => setState(
-        () => _position = p,
-      ),
-    );
-
-    audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
-      if (!mounted) return;
-    });
-  }
-
   Future<int> _pause() async {
-    final result = await audioStore.pause();
+    final result = await widget.audio.pause();
     if (result == 1 && mounted) {
       setState(() => _playerState = PlayerState.paused);
     }
@@ -254,7 +214,7 @@ class _MessageBarPreviewRecordingState
   }
 
   Future<int> _stop() async {
-    final result = await audioStore.stop();
+    final result = await widget.audio.stop();
     if (result == 1 && mounted) {
       setState(() {
         _playerState = PlayerState.stopped;
@@ -264,14 +224,21 @@ class _MessageBarPreviewRecordingState
     return result;
   }
 
-  void _onComplete() => setState(() => _playerState = PlayerState.stopped);
-
-  Future<int> play() async {
-    var bytes = await widget.model.decryptAttachment(widget.recording);
-    await audioStore.stop();
-    final result = await audioStore.audioPlayer.playBytes(bytes);
-    if (result == 1) setState(() => _playerState = PlayerState.playing);
-    await audioStore.audioPlayer.setPlaybackRate(playbackRate: 1.0);
-    return result;
+  Future<void> play() async {
+    await widget.audio.play(
+      bytes: await widget.model.decryptAttachment(widget.recording),
+      onAttached: () {
+        setState(() => _playerState = PlayerState.playing);
+      },
+      onDetached: () {
+        setState(() => _playerState = PlayerState.stopped);
+      },
+      onDurationChanged: ((d) => setState(() {
+            _duration = d;
+          })),
+      onPositionChanged: ((p) => setState(() {
+            _position = p;
+          })),
+    );
   }
 }
