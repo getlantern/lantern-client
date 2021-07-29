@@ -318,9 +318,9 @@ final $typed_data.Uint8List inboundAttachmentDescriptor = $convert.base64Decode(
 const AudioWaveform$json = const {
   '1': 'AudioWaveform',
   '2': const [
-    const {'1': 'bars', '3': 1, '4': 1, '5': 12, '10': 'bars'},
+    const {'1': 'bars', '3': 1, '4': 3, '5': 5, '10': 'bars'},
   ],
 };
 
 /// Descriptor for `AudioWaveform`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List audioWaveformDescriptor = $convert.base64Decode('Cg1BdWRpb1dhdmVmb3JtEhIKBGJhcnMYASABKAxSBGJhcnM=');
+final $typed_data.Uint8List audioWaveformDescriptor = $convert.base64Decode('Cg1BdWRpb1dhdmVmb3JtEhIKBGJhcnMYASADKAVSBGJhcnM=');

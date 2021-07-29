@@ -119,7 +119,6 @@ class MessageBarRecording extends StatelessWidget {
                       ),
                 VoiceRecorder(
                   isRecording: isRecording,
-                  onInmediateSend: onInmediateSend,
                   onStopRecording: onStopRecording,
                   onTapUpListener: onTapUpListener,
                   onRecording: onRecording,
