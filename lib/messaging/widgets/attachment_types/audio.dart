@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audioplayers/notifications.dart';
@@ -11,6 +10,7 @@ import 'package:lantern/utils/audio_store.dart';
 import 'package:lantern/utils/duration_extension.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sizer/sizer.dart';
 
 /// An attachment that shows an audio player.
@@ -31,10 +31,9 @@ class AudioAttachment extends StatefulWidget {
 
 class AudioAttachmentState extends State<AudioAttachment> {
   AudioStore audioStore = AudioStore();
-  MessagingModel? model;
+  late MessagingModel model;
   Duration? _duration;
   Duration? _position;
-  AudioWaveform? _waveform;
   PlayerState _playerState = PlayerState.stopped;
   StreamSubscription? _durationSubscription;
   StreamSubscription? _positionSubscription;
@@ -42,9 +41,10 @@ class AudioAttachmentState extends State<AudioAttachment> {
   StreamSubscription? _playerErrorSubscription;
   StreamSubscription? _playerStateSubscription;
   StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
+
   bool get _isPlaying => _playerState == PlayerState.playing;
+
   bool get _isPaused => _playerState == PlayerState.paused;
-  List<double> reducedAudioWave = [];
 
   Future<int> _pause() async {
     final result = await audioStore.pause();
@@ -69,7 +69,7 @@ class AudioAttachmentState extends State<AudioAttachment> {
     setState(() => _playerState = PlayerState.stopped);
   }
 
-  Widget currentIcon(MessagingModel model, Uint8List bytes) {
+  Widget currentIcon(MessagingModel model) {
     if (_isPlaying) {
       return TextButton(
         onPressed: _isPlaying ? () => _pause() : null,
@@ -94,6 +94,9 @@ class AudioAttachmentState extends State<AudioAttachment> {
             final result = await audioStore.resume();
             if (result == 1) setState(() => _playerState = PlayerState.playing);
           } else {
+            context.loaderOverlay.show();
+            var bytes = await model.decryptAttachment(widget.attachment);
+            context.loaderOverlay.hide();
             await play(bytes);
           }
         },
@@ -154,124 +157,110 @@ class AudioAttachmentState extends State<AudioAttachment> {
         );
       case StoredAttachment_Status.DONE:
         return FutureBuilder(
-            future: loadData(),
+            future: model.thumbnail(widget.attachment),
             builder: (context, AsyncSnapshot<Uint8List?>? snapshot) {
               var _seconds = (double.tryParse(
                           widget.attachment.attachment.metadata['duration']!)! *
                       1000)
                   .toInt();
               var _audioDuration = Duration(milliseconds: _seconds);
-              return snapshot != null && snapshot.hasData
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            currentIcon(model!, snapshot.data!),
-                            Text(
-                              _playerState == PlayerState.stopped
-                                  ? _audioDuration.time(
-                                      minute: true, seconds: true)
-                                  : _audioDuration
-                                      .calculate(inputDuration: _position)
-                                      .time(minute: true, seconds: true),
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+              if (snapshot == null || !snapshot.hasData) {
+                return const SizedBox();
+              }
+              var reducedAudioWave = AudioWaveform.fromBuffer(snapshot.data!)
+                  .bars
+                  .reducedWaveform();
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      currentIcon(model),
+                      Text(
+                        _playerState == PlayerState.stopped
+                            ? _audioDuration.time(minute: true, seconds: true)
+                            : _audioDuration
+                                .calculate(inputDuration: _position)
+                                .time(minute: true, seconds: true),
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          padding: const EdgeInsets.only(top: 10),
-                          height: 50,
-                          child: Stack(
-                            clipBehavior: Clip.hardEdge,
-                            alignment: AlignmentDirectional.bottomCenter,
-                            children: [
-                              reducedAudioWave.isNotEmpty
-                                  ? _getWaveBar()
-                                  : const SizedBox(),
-                              Positioned.fill(
-                                left: -22,
-                                top: 1,
-                                bottom: 10,
-                                right: -22,
-                                child: SliderTheme(
-                                  data: SliderThemeData(
-                                    activeTrackColor:
-                                        reducedAudioWave.isNotEmpty
-                                            ? Colors.transparent
-                                            : Colors.grey,
-                                    inactiveTrackColor:
-                                        reducedAudioWave.isNotEmpty
-                                            ? Colors.transparent
-                                            : Colors.blue,
-                                    valueIndicatorColor: Colors.grey.shade200,
-                                    thumbShape:
-                                        const RectangleSliderThumbShapes(
-                                            height: 45),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    padding: const EdgeInsets.only(top: 10),
+                    height: 50,
+                    child: Stack(
+                      clipBehavior: Clip.hardEdge,
+                      alignment: AlignmentDirectional.bottomCenter,
+                      children: [
+                        reducedAudioWave.isNotEmpty
+                            ? _getWaveBar(reducedAudioWave)
+                            : const SizedBox(),
+                        Positioned.fill(
+                          left: -22,
+                          top: 1,
+                          bottom: 10,
+                          right: -22,
+                          child: SliderTheme(
+                            data: SliderThemeData(
+                              activeTrackColor: reducedAudioWave.isNotEmpty
+                                  ? Colors.transparent
+                                  : Colors.grey,
+                              inactiveTrackColor: reducedAudioWave.isNotEmpty
+                                  ? Colors.transparent
+                                  : Colors.blue,
+                              valueIndicatorColor: Colors.grey.shade200,
+                              thumbShape:
+                                  const RectangleSliderThumbShapes(height: 45),
+                            ),
+                            child: Slider(
+                              onChanged: (v) {
+                                final position = v * _duration!.inMilliseconds;
+                                audioStore.audioPlayer.seek(
+                                  Duration(
+                                    milliseconds: position.round(),
                                   ),
-                                  child: Slider(
-                                    onChanged: (v) {
-                                      final position =
-                                          v * _duration!.inMilliseconds;
-                                      audioStore.audioPlayer.seek(
-                                        Duration(
-                                          milliseconds: position.round(),
-                                        ),
-                                      );
-                                    },
-                                    label: (_position != null &&
-                                            _duration != null &&
-                                            _position!.inMilliseconds > 0 &&
-                                            _position!.inMilliseconds <
-                                                _duration!.inMilliseconds)
-                                        ? (_position!.inSeconds).toString() +
-                                            ' sec.'
-                                        : '0 sec.',
-                                    value: (_position != null &&
-                                            _duration != null &&
-                                            _position!.inMilliseconds > 0 &&
-                                            _position!.inMilliseconds <
-                                                _duration!.inMilliseconds)
-                                        ? _position!.inMilliseconds /
-                                            _duration!.inMilliseconds
-                                        : 0.0,
-                                  ),
-                                ),
-                              ),
-                            ],
+                                );
+                              },
+                              label: (_position != null &&
+                                      _duration != null &&
+                                      _position!.inMilliseconds > 0 &&
+                                      _position!.inMilliseconds <
+                                          _duration!.inMilliseconds)
+                                  ? (_position!.inSeconds).toString() + ' sec.'
+                                  : '0 sec.',
+                              value: (_position != null &&
+                                      _duration != null &&
+                                      _position!.inMilliseconds > 0 &&
+                                      _position!.inMilliseconds <
+                                          _duration!.inMilliseconds)
+                                  ? _position!.inMilliseconds /
+                                      _duration!.inMilliseconds
+                                  : 0.0,
+                            ),
                           ),
                         ),
                       ],
-                    )
-                  : const SizedBox();
+                    ),
+                  ),
+                ],
+              );
             });
       default:
         return const SizedBox();
     }
   }
 
-  Future<Uint8List> loadData() async {
-    Uint8List? _bytesBuffer;
-    try {
-      _bytesBuffer = await model!.thumbnail(widget.attachment);
-      _waveform = AudioWaveform.fromBuffer(_bytesBuffer);
-      reducedAudioWave = _waveform!.bars.reducedWaveform();
-    } catch (e) {
-      reducedAudioWave = [];
-    }
-    return await model!.decryptAttachment(widget.attachment);
-  }
-
-  Widget _getWaveBar() => WaveProgressBar(
+  Widget _getWaveBar(List<double> reducedAudioWave) => WaveProgressBar(
         progressPercentage: (_position != null &&
                 _duration != null &&
                 _position!.inMilliseconds > 0 &&
