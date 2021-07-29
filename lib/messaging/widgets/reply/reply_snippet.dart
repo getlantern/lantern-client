@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
-import 'package:lantern/messaging/widgets/reply/reply_snippet_deleted.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_description.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
@@ -32,9 +32,6 @@ class ReplySnippet extends StatelessWidget {
       final isNotNullorDeleted =
           (quotedMessage != null && quotedMessage.value.remotelyDeletedAt == 0);
       final isTextRespose = quotedMessage?.value.attachments.isEmpty ?? false;
-      final mimeType = quotedMessage?.value.attachments[0]!.attachment.mimeType
-              .split('/')[0] ??
-          '';
 
       return Container(
           height: 56.0,
@@ -49,37 +46,54 @@ class ReplySnippet extends StatelessWidget {
                 ),
               ],
               color: snippetBgColor),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Flex(
+            direction: Axis.horizontal,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  ReplySnippetHeader(msg: msg, contact: contact),
-                  isNotNullorDeleted
-                      // display either text or mime
-                      ? isTextRespose
-                          // display text
-                          ? ReplySnippetText(
-                              quotedMessage: quotedMessage!.value)
-                          // display mime type and mime
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  mimeType,
-                                  style: tsReplySnippetSpecialCase,
-                                ),
-                                ReplyMime(
-                                    storedMessage: quotedMessage!.value,
-                                    model: model)
-                              ],
-                            )
-                      // display deleted bubble
-                      : const ReplySnippetDeleted()
-                ],
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 3.5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ReplySnippetHeader(msg: msg, contact: contact),
+                      if (isNotNullorDeleted && isTextRespose)
+                        ReplySnippetText(text: quotedMessage!.value.text),
+                      if (isNotNullorDeleted && !isTextRespose)
+                        ReplySnippetDescription(
+                          descriptiveText: quotedMessage
+                                  ?.value.attachments[0]!.attachment.mimeType
+                                  .split('/')[0] ??
+                              'Error fetching Message Preview'.i18n,
+                        ),
+                      if (!isNotNullorDeleted)
+                        ReplySnippetDescription(
+                          descriptiveText: 'Message was deleted'.i18n,
+                        )
+                    ],
+                  ),
+                ),
               ),
+              if (isNotNullorDeleted && !isTextRespose)
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8))),
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    clipBehavior: Clip.hardEdge,
+                    child: ReplyMime(
+                        storedMessage: quotedMessage!.value, model: model),
+                  ),
+                )
             ],
           ));
     });

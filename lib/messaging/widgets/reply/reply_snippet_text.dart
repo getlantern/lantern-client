@@ -1,18 +1,15 @@
-import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 
 class ReplySnippetText extends StatelessWidget {
   const ReplySnippetText({
     Key? key,
-    required this.quotedMessage,
+    required this.text,
   }) : super(key: key);
 
-  final StoredMessage? quotedMessage;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        fit: FlexFit.tight,
-        child: Text(quotedMessage!.text, overflow: TextOverflow.ellipsis));
+    return Text(text, overflow: TextOverflow.ellipsis);
   }
 }
