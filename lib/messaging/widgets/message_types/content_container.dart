@@ -68,7 +68,7 @@ class ContentContainer extends StatelessWidget {
           right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
-        border: Border.all(color: grey4, width: isAttachment ? 0.5 : 0),
+        border: isAttachment ? Border.all(color: grey4, width: 0.5) : null,
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock
