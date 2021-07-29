@@ -191,10 +191,7 @@ class _MessageBarPreviewRecordingState
         if (snapshot != null && snapshot.hasData) {
           try {
             audioWave = AudioWaveform.fromBuffer(snapshot.data!);
-            reducedAudioWave = audioWave.bars
-                .map((e) => e.toPercentage(255, 0))
-                .toList()
-                .reduceListWithAverageAndSteps(100, 10);
+            reducedAudioWave = audioWave.bars.reducedWaveform();
           } catch (e) {
             reducedAudioWave = [];
           }
