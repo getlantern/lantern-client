@@ -36,14 +36,16 @@ class ReplyPreview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
-            flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ReplySnippetHeader(msg: quotedMessage!, contact: contact),
+                  const Padding(
+                    padding: EdgeInsets.all(2.0),
+                  ),
                   if (isNotNullorDeleted && isTextRespose)
                     ReplySnippetText(text: quotedMessage!.text),
                   if (isNotNullorDeleted && !isTextRespose)
