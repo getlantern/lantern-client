@@ -1,6 +1,6 @@
 import 'package:lantern/package_store.dart';
 
-import 'conversations.dart';
+import 'messages.dart';
 
 class MessagesTab extends StatefulWidget {
   MessagesTab();
@@ -14,7 +14,7 @@ class _MessagesTabState extends State<MessagesTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Conversations();
+    return Messages();
   }
 
   @override

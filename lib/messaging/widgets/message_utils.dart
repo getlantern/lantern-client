@@ -1,7 +1,9 @@
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
@@ -87,6 +89,7 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
               ),
               const Center(
                   child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
+              Divider(thickness: 1, color: grey2),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -196,4 +199,113 @@ Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
           ...widgetList
         ]),
   );
+}
+
+int generateUniqueColorIndex(String str) {
+  var index = 0;
+  for (var i = 0; i < str.length; i++) {
+    index += str.codeUnitAt(i);
+  }
+  return index % avatarBgColors.length;
+}
+
+Future<void> displayConversationOptions(
+    MessagingModel model, BuildContext parentContext, Contact contact) {
+  return showModalBottomSheet(
+      context: parentContext,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
+      builder: (bottomContext) => Wrap(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(12),
+              ),
+              const Center(
+                  child: Text('Message Options',
+                      style: TextStyle(fontSize: 18.0))),
+              Divider(thickness: 1, color: grey2),
+              ListTile(
+                  leading: const Icon(Icons.delete, color: Colors.black),
+                  title: Text('Delete ${contact.displayName}'),
+                  onTap: () => showDialog<void>(
+                        context: bottomContext,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.delete),
+                                ),
+                                Text('Delete Contact'.i18n.toUpperCase(),
+                                    style: tsAlertDialogTitle),
+                              ],
+                            ),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(
+                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
+                                      style: tsAlertDialogBody) // TODO: i18n
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () async => context.router.pop(),
+                                    child: Text('Cancel'.i18n.toUpperCase(),
+                                        style: tsAlertDialogButtonGrey),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      context.loaderOverlay.show(
+                                          widget: const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ));
+                                      try {
+                                        await model.deleteDirectContact(
+                                            contact.contactId.id);
+                                      } catch (e) {
+                                        showInfoDialog(context,
+                                            title: 'Error'.i18n,
+                                            des:
+                                                'Something went wrong while deleting this contact.'
+                                                    .i18n,
+                                            icon: ImagePaths.alert_icon,
+                                            buttonText: 'OK'.i18n);
+                                      } finally {
+                                        context.loaderOverlay.hide();
+                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        //and then pop the root screen.
+                                        context.router.popUntilRoot();
+                                        parentContext.router.popUntilRoot();
+                                      }
+                                    },
+                                    child: Text(
+                                        'Delete Contact'.i18n.toUpperCase(),
+                                        style: tsAlertDialogButtonPink),
+                                  )
+                                ],
+                              )
+                            ],
+                          );
+                        },
+                      )),
+              const Padding(
+                padding: EdgeInsets.all(12),
+              ),
+            ],
+          ));
 }

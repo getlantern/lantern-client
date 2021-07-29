@@ -34,6 +34,8 @@ class LanternApp extends StatelessWidget {
           future: Localization.loadTranslations(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             return GlobalLoaderOverlay(
+              overlayColor: Colors.black,
+              overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: const Locale('en', 'US'),
                 child: Sizer(

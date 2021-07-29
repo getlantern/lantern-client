@@ -7,7 +7,7 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 import 'package:lantern/messaging/conversation.dart' as _i8;
-import 'package:lantern/messaging/conversations.dart' as _i5;
+import 'package:lantern/messaging/messages.dart' as _i5;
 import 'package:lantern/messaging/new_message.dart' as _i7;
 import 'package:lantern/messaging/your_contact_info.dart' as _i6;
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i18;
@@ -78,10 +78,10 @@ class AppRouter extends _i1.RootStackRouter {
         },
         opaque: true,
         barrierDismissible: false),
-    ConversationsRoute.name: (routeData) => _i1.CustomPage<void>(
+    MessagesRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i5.Conversations();
+          return _i5.Messages();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -242,7 +242,7 @@ class AppRouter extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(Home.name, path: '/', children: [
           _i1.RouteConfig(MessagesRouter.name, path: 'messages', children: [
-            _i1.RouteConfig(ConversationsRoute.name, path: ''),
+            _i1.RouteConfig(MessagesRoute.name, path: ''),
             _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
             _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
             _i1.RouteConfig(Conversation.name, path: 'conversation')
@@ -328,10 +328,10 @@ class DeveloperRoute extends _i1.PageRouteInfo {
   static const String name = 'DeveloperRoute';
 }
 
-class ConversationsRoute extends _i1.PageRouteInfo {
-  const ConversationsRoute() : super(name, path: '');
+class MessagesRoute extends _i1.PageRouteInfo {
+  const MessagesRoute() : super(name, path: '');
 
-  static const String name = 'ConversationsRoute';
+  static const String name = 'MessagesRoute';
 }
 
 class ContactInfo extends _i1.PageRouteInfo {

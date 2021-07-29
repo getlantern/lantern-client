@@ -7,7 +7,7 @@ extension EnumExtension on MimeTypes {
 
 extension AttachmentExtension on Attachment {
   MimeTypes fromString() {
-    if (mimeType == null || mimeType.isEmpty) return MimeTypes.EMPTY;
+    if (mimeType.isEmpty) return MimeTypes.EMPTY;
     if (mimeType.contains('video')) return MimeTypes.VIDEO;
     if (mimeType.contains('image')) return MimeTypes.IMAGE;
     if (mimeType == 'application/ogg') return MimeTypes.AUDIO;
