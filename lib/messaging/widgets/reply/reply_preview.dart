@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
-import 'package:lantern/messaging/widgets/reply/reply_snippet_deleted.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -66,7 +65,7 @@ class ReplyPreview extends StatelessWidget {
                   style: tsReplySnippetSpecialCase,
                 ),
                 quotedMessage!.attachments.isEmpty
-                    ? ReplySnippetText(quotedMessage: quotedMessage)
+                    ? ReplySnippetText(text: quotedMessage!.text)
                     : ReplyMime(storedMessage: quotedMessage!, model: model),
               ]),
         ],
