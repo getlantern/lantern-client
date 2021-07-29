@@ -1,32 +1,25 @@
-extension WaveformExtension on List<double> {
-  /// Returns a a new list with the average values of a group of numbers `steps` taken from the list.
-  /// ```dart
-  /// var list = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
-  /// list.reduceListWithAverageAndSteps(5, 2) => [1.5, 3.5, 5.5, 7.5, 9.5])
+extension WaveformExtension on List<int> {
+  /// Returns a new List reducing the given waveform to a 100 bars by:
+  ///
+  /// 1. Grouping bars into groups of size <original bars>/<target bars>
+  /// 2. Taking the max bar from each group
+  /// 3. Converting the amplitude into a percentage
   /// ```
-  List<double> reduceListWithAverageAndSteps(
-    int _size,
-    int _step,
-  ) {
-    var _listOfNumbers = this;
-    var _listOfNumbersReduced = <double>[];
-    // Iterate over the list of numbers
-    for (var i = 0; i < _listOfNumbers.length; i += _step) {
-      // Get the average of the numbers in the current group
-      // and add it to the list of numbers reduced
-      var _sum = 0.0;
-      // Iterate over the numbers in the current group
-      for (var j = 0; j < _step; j++) {
-        // Add the current number to the sum
-        _sum += _listOfNumbers[i + j];
+  List<double> reducedWaveform() {
+    var input = this;
+    var output = <double>[];
+    var groupSize = (input.length / 100).round();
+    var max = 0.0;
+    for (var i = 0; i < input.length; i++) {
+      var value = input[i].toDouble() / 255.0 * 100.0;
+      if (value > max) max = value;
+      var next = i + 1;
+      if (next % groupSize == 0 || next == input.length) {
+        // record max
+        output.add(max);
+        max = 0;
       }
-      _listOfNumbersReduced.add(_sum / _step);
     }
-    // Return the list of numbers reduced
-    return _listOfNumbersReduced.take(_size).toList();
+    return output;
   }
-}
-
-extension IntExtension on int {
-  double toPercentage(int max, int min) => (this - min) / (max - min) * 100;
 }

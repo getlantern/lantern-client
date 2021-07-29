@@ -159,5 +159,5 @@ message InboundAttachment {
 
 // An audio waveform
 message AudioWaveform {
-  bytes bars = 1; // amplitude bars of the waveform, encoded as bytes. Byte 0 is the lowest amplitude, byte 255 is the highest.
+  repeated int32 bars = 1; // amplitude bars of the waveform, encoded as 32 bit integers. 0 is the lowest amplitude, 255 is the highest.
 }
