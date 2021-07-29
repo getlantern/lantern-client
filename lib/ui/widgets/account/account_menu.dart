@@ -1,7 +1,7 @@
-import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'settings_item.dart';
 

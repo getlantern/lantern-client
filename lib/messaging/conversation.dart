@@ -3,29 +3,32 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:audioplayers/audioplayers_api.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
 import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
-import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
-import 'package:sizer/sizer.dart';
-import 'package:lantern/core/router/router.gr.dart' as router_gr;
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -46,13 +49,12 @@ class _ConversationState extends State<Conversation>
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  PlayerState? playerState;
-  bool _recording = false;
+  bool _isRecording = false;
   bool _finishedRecording = false;
-  bool _willCancelRecording = false;
   bool _isSendIconVisible = false;
   bool _isReplying = false;
-  Uint8List? recording;
+  Uint8List? _recording;
+  AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
   var displayName = '';
   bool _emojiShowing = false;
@@ -106,6 +108,7 @@ class _ConversationState extends State<Conversation>
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
+    _audioPreviewController?.stop();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
   }
@@ -132,7 +135,8 @@ class _ConversationState extends State<Conversation>
     );
     _newMessage.clear();
     setState(() {
-      recording = null;
+      _recording = null;
+      _audioPreviewController = null;
     });
     // scroll to bottom on send
     // the error is due to this segment of the code, it's appear that the assertion is not true
@@ -144,7 +148,7 @@ class _ConversationState extends State<Conversation>
   }
 
   Future<void> _startRecording() async {
-    if (_recording) {
+    if (_isRecording) {
       return;
     }
     _hasPermission = await model.startRecordingVoiceMemo();
@@ -152,43 +156,33 @@ class _ConversationState extends State<Conversation>
       _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
       _stopWatchTimer.onExecute.add(StopWatchExecute.start);
       setState(() {
-        _recording = true;
+        _isRecording = true;
       });
     }
   }
 
-  Future<void> _inmediateSendRecording() async {
-    if (!_recording) {
-      return;
-    }
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    recording = await model.stopRecordingVoiceMemo();
-    await _send(_newMessage.value.text, attachments: [recording!]);
-    setState(() {
-      _recording = false;
-      _finishedRecording = true;
-      _willCancelRecording = false;
-      _finishedRecording = false;
-    });
-  }
-
   Future<void> _finishRecording() async {
-    if (!_recording) {
+    if (!_isRecording) {
       return;
     }
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    recording = await model.stopRecordingVoiceMemo();
-    // if (!_willCancelRecording) {
-    //   await _send(_newMessage.value.text, attachments: [recording!]);
-    // }
-    setState(() {
-      _recording = false;
-      _finishedRecording = true;
-      _willCancelRecording = false;
-    });
+
+    context.loaderOverlay.show();
+    try {
+      _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      _recording = await model.stopRecordingVoiceMemo();
+      var attachment = StoredAttachment.fromBuffer(_recording!);
+      setState(() {
+        _isRecording = false;
+        _finishedRecording = true;
+        _audioPreviewController = AudioController(context, attachment);
+      });
+    } finally {
+      context.loaderOverlay.hide();
+    }
   }
 
   void showKeyboard() => _focusNode.requestFocus();
+
   Future<List<AssetEntity>?> _renderFilePicker() async {
     AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
@@ -332,22 +326,6 @@ class _ConversationState extends State<Conversation>
               ],
             )
           ],
-          actionButton: AnimatedContainer(
-            margin: const EdgeInsetsDirectional.only(bottom: 100.0),
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 400),
-            constraints: _recording
-                ? BoxConstraints.loose(const Size(50, 50))
-                : BoxConstraints.tight(
-                    const Size(0, 0),
-                  ),
-            child: _recording
-                ? const FloatingActionButton(
-                    onPressed: null,
-                    child: Icon(Icons.send),
-                  )
-                : const SizedBox(),
-          ),
           body: Stack(children: [
             Flex(
               direction: Axis.vertical,
@@ -372,68 +350,12 @@ class _ConversationState extends State<Conversation>
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: _recording || _finishedRecording
+                  color: _isRecording || _finishedRecording
                       ? Colors.grey[200]
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
-                  child: MessageBar(
-                    recording: recording,
-                    width: size!.width,
-                    isRecording: _recording,
-                    stopWatchTimer: _stopWatchTimer,
-                    onCancelRecording: () async => setState(() {
-                      _recording = false;
-                      _willCancelRecording = true;
-                      _finishedRecording = false;
-                      recording = null;
-                    }),
-                    finishedRecording: _finishedRecording,
-                    onTapUpListener: () async => await _finishRecording(),
-                    willCancelRecording: _willCancelRecording,
-                    height: 55,
-                    sendIcon: _isSendIconVisible,
-                    hasPermission: _hasPermission,
-                    onFileSend: () async => await _selectFilesToShare(),
-                    onFieldSubmitted: (value) async =>
-                        value.isEmpty ? null : await _handleSubmit(_newMessage),
-                    onTextFieldChanged: (value) =>
-                        setState(() => _isSendIconVisible = value.isNotEmpty),
-                    onSend: () async {
-                      await _send(_newMessage.value.text,
-                          attachments:
-                              recording != null && recording!.isNotEmpty
-                                  ? [recording!]
-                                  : [],
-                          replyToSenderId: _quotedMessage?.senderId,
-                          replyToId: _quotedMessage?.id);
-                      setState(() {
-                        _quotedMessage = null;
-                        _recording = false;
-                        _willCancelRecording = false;
-                        _finishedRecording = false;
-                        _isSendIconVisible = false;
-                        _isReplying = false;
-                        _emojiShowing = false;
-                      });
-                    },
-                    onRecording: () async => await _startRecording(),
-                    onStopRecording: () async =>
-                        _hasPermission ? await _finishRecording() : null,
-                    onInmediateSend: () async {
-                      await _inmediateSendRecording();
-                    },
-                    onTextFieldTap: () => setState(() => _emojiShowing = false),
-                    messageController: _newMessage,
-                    displayEmojis: _emojiShowing,
-                    focusNode: _focusNode,
-                    onEmojiTap: () {
-                      {
-                        setState(() => _emojiShowing = !_emojiShowing);
-                        dismissKeyboard();
-                      }
-                    },
-                  ),
+                  child: _buildMessageBar(),
                 ),
                 MessagingEmojiPicker(
                   showEmojis: _emojiShowing,
@@ -532,6 +454,144 @@ class _ConversationState extends State<Conversation>
                 );
               },
             );
+    });
+  }
+
+  Widget _buildMessageBar() {
+    return Container(
+      width: size!.width,
+      height: 55,
+      margin: _isRecording
+          ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
+          : EdgeInsets.zero,
+      child: IndexedStack(
+        index: _finishedRecording ? 1 : 0,
+        children: [
+          _buildMessageBarRecording(context),
+          _audioPreviewController == null
+              ? const SizedBox()
+              : MessageBarPreviewRecording(
+                  model: model,
+                  audioController: _audioPreviewController!,
+                  onCancelRecording: () async => setState(() {
+                    _isRecording = false;
+                    _finishedRecording = false;
+                    _recording = null;
+                    _audioPreviewController = null;
+                  }),
+                  onSend: send,
+                ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageBarRecording(BuildContext context) {
+    return ListTile(
+      contentPadding: _isRecording
+          ? const EdgeInsets.only(right: 0, left: 2.0)
+          : EdgeInsets.zero,
+      leading: _isRecording
+          ? Flex(
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 6.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.red,
+                      radius: 12,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, bottom: 6.0),
+                    child: CountdownTimer(stopWatchTimer: _stopWatchTimer),
+                  ),
+                ),
+              ],
+            )
+          : IconButton(
+              onPressed: () {
+                {
+                  setState(() => _emojiShowing = !_emojiShowing);
+                  dismissKeyboard();
+                }
+              },
+              icon: Icon(Icons.sentiment_very_satisfied,
+                  color: !_emojiShowing
+                      ? Theme.of(context).primaryIconTheme.color
+                      : Theme.of(context).primaryColorDark),
+            ),
+      title: _isRecording
+          ? const SizedBox()
+          : TextFormField(
+              autofocus: false,
+              textInputAction: TextInputAction.send,
+              controller: _newMessage,
+              onTap: () => setState(() => _emojiShowing = false),
+              onChanged: (value) =>
+                  setState(() => _isSendIconVisible = value.isNotEmpty),
+              focusNode: _focusNode,
+              onFieldSubmitted: (value) async =>
+                  value.isEmpty ? null : await _handleSubmit(_newMessage),
+              decoration: InputDecoration(
+                // Send icon
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                hintText: 'Message'.i18n,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+      trailing: _isSendIconVisible && !_isRecording
+          ? IconButton(
+              icon: const Icon(Icons.send, color: Colors.black),
+              onPressed: send,
+            )
+          : Flex(
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _isRecording
+                    ? const SizedBox()
+                    : IconButton(
+                        onPressed: () async => await _selectFilesToShare(),
+                        icon: const Icon(Icons.add_circle_rounded),
+                      ),
+                VoiceRecorder(
+                  isRecording: _isRecording,
+                  onRecording: () async => await _startRecording(),
+                  onStopRecording: () async =>
+                      _hasPermission ? await _finishRecording() : null,
+                  onTapUpListener: () async => await _finishRecording(),
+                ),
+              ],
+            ),
+    );
+  }
+
+  void send() async {
+    if (_newMessage.value.text.trim().isEmpty && _recording == null) {
+      return;
+    }
+    await _send(_newMessage.value.text,
+        attachments:
+            _recording != null && _recording!.isNotEmpty ? [_recording!] : [],
+        replyToSenderId: _quotedMessage?.senderId,
+        replyToId: _quotedMessage?.id);
+    setState(() {
+      _quotedMessage = null;
+      _isRecording = false;
+      _finishedRecording = false;
+      _isSendIconVisible = false;
+      _isReplying = false;
+      _emojiShowing = false;
     });
   }
 }

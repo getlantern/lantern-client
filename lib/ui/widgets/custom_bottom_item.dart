@@ -12,6 +12,7 @@ class CustomBottomItem extends StatelessWidget {
   final Widget? iconWidget;
   final Widget icon;
   final VoidCallback onTap;
+
   const CustomBottomItem({
     required this.currentIndex,
     required this.total,
