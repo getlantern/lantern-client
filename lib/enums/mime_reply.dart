@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lantern/enums/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/utils/duration_extension.dart';
+import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:sizer/sizer.dart';
 
 enum MimeTypes { VIDEO, AUDIO, IMAGE, OTHERS, EMPTY }

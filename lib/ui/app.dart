@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
@@ -10,7 +11,6 @@ import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:sizer/sizer.dart';
 
 final globalRouter = AppRouter();
