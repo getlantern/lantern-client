@@ -12,6 +12,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/staging_container_item.dart';
 import 'package:lantern/model/model.dart';
@@ -307,33 +308,50 @@ class _ConversationState extends State<Conversation>
       child: BaseScreen(
           // Conversation title (contact name)
           title: displayName,
-          actions: [DisappearingTimerAction(widget._contact)],
+          centerTitle: false,
+          actions: [
+            Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.call),
+                  tooltip: 'Call'.i18n,
+                  onPressed: () {},
+                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: DisappearingTimerAction(widget._contact)),
+                IconButton(
+                  icon: const Icon(Icons.more_vert_rounded),
+                  tooltip: 'Menu'.i18n,
+                  onPressed: () => displayConversationOptions(
+                      model, context, widget._contact),
+                )
+              ],
+            )
+          ],
+          actionButton: AnimatedContainer(
+            margin: const EdgeInsetsDirectional.only(bottom: 100.0),
+            curve: Curves.easeIn,
+            duration: const Duration(milliseconds: 400),
+            constraints: _recording
+                ? BoxConstraints.loose(const Size(50, 50))
+                : BoxConstraints.tight(
+                    const Size(0, 0),
+                  ),
+            child: _recording
+                ? const FloatingActionButton(
+                    onPressed: null,
+                    child: Icon(Icons.send),
+                  )
+                : const SizedBox(),
+          ),
           body: Stack(children: [
             Flex(
               direction: Axis.vertical,
               children: [
-                // const Padding(
-                //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
-                // // Conversation header
-                // Card(
-                //     color: Colors.white70,
-                //     child: Column(
-                //       children: [
-                //         Container(
-                //           width: 75.w,
-                //           height: 15.h,
-
-                //           child:
-                //               const Icon(Icons.account_circle_rounded, size: 140),
-                //         ),
-                //         Container(
-                //             padding: const EdgeInsets.symmetric(
-                //                 horizontal: 15, vertical: 15),
-                //             child: Text(widget._contact.displayName,
-                //                 style: const TextStyle(fontSize: 25))),
-                //       ],
-                //     )),
-                // Message Retention
                 Card(
                   color: Colors.white70,
                   child: Container(
@@ -356,7 +374,7 @@ class _ConversationState extends State<Conversation>
                           setState(() => _isReplying = false),
                     ),
                   ),
-                const Divider(height: 1.0),
+                Divider(height: 1.0, color: grey3),
                 Container(
                   color: _recording || _finishedRecording
                       ? Colors.grey[200]

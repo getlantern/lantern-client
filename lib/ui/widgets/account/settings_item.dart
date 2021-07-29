@@ -53,7 +53,7 @@ class SettingsItem extends StatelessWidget {
                               child: Text(
                                 title!,
                                 overflow: TextOverflow.ellipsis,
-                                style: tsTitleItem,
+                                style: tsSettingsItem,
                               ),
                             ),
                           ),

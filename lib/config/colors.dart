@@ -32,3 +32,13 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
+
+List<Color> avatarBgColors = [
+  HexColor('#003B7A'),
+  HexColor('#007A02'),
+  HexColor('#0A5ADB'),
+  HexColor('#7A003B'),
+  HexColor('#7A0078'),
+  HexColor('#8B4910'),
+  HexColor('#957000')
+];
