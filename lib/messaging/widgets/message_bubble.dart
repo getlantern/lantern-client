@@ -119,8 +119,7 @@ class MessageBubble extends StatelessWidget {
     if (wasDeleted) {
       final humanizedSenderName =
           matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
-      return DeletedBubble(
-          '$humanizedSenderName deleted this message for everyone'); // TODO: Add i18n
+      return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
 
     return FocusedMenuHolder(
