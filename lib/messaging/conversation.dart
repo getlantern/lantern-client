@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:audioplayers/audioplayers_api.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar.dart';
@@ -21,11 +22,10 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
-import 'package:sizer/sizer.dart';
-import 'package:lantern/core/router/router.gr.dart' as router_gr;
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -157,30 +157,12 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> _inmediateSendRecording() async {
-    if (!_recording) {
-      return;
-    }
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    recording = await model.stopRecordingVoiceMemo();
-    await _send(_newMessage.value.text, attachments: [recording!]);
-    setState(() {
-      _recording = false;
-      _finishedRecording = true;
-      _willCancelRecording = false;
-      _finishedRecording = false;
-    });
-  }
-
   Future<void> _finishRecording() async {
     if (!_recording) {
       return;
     }
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
     recording = await model.stopRecordingVoiceMemo();
-    // if (!_willCancelRecording) {
-    //   await _send(_newMessage.value.text, attachments: [recording!]);
-    // }
     setState(() {
       _recording = false;
       _finishedRecording = true;
@@ -189,6 +171,7 @@ class _ConversationState extends State<Conversation>
   }
 
   void showKeyboard() => _focusNode.requestFocus();
+
   Future<List<AssetEntity>?> _renderFilePicker() async {
     AssetPicker.registerObserve();
     return await AssetPicker.pickAssets(
@@ -332,22 +315,6 @@ class _ConversationState extends State<Conversation>
               ],
             )
           ],
-          actionButton: AnimatedContainer(
-            margin: const EdgeInsetsDirectional.only(bottom: 100.0),
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 400),
-            constraints: _recording
-                ? BoxConstraints.loose(const Size(50, 50))
-                : BoxConstraints.tight(
-                    const Size(0, 0),
-                  ),
-            child: _recording
-                ? const FloatingActionButton(
-                    onPressed: null,
-                    child: Icon(Icons.send),
-                  )
-                : const SizedBox(),
-          ),
           body: Stack(children: [
             Flex(
               direction: Axis.vertical,
@@ -428,9 +395,6 @@ class _ConversationState extends State<Conversation>
                     onRecording: () async => await _startRecording(),
                     onStopRecording: () async =>
                         _hasPermission ? await _finishRecording() : null,
-                    onInmediateSend: () async {
-                      await _inmediateSendRecording();
-                    },
                     onTextFieldTap: () => setState(() => _emojiShowing = false),
                     messageController: _newMessage,
                     displayEmojis: _emojiShowing,

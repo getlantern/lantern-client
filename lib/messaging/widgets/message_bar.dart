@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_bar_preview_recording.dart';
 import 'package:lantern/messaging/widgets/message_bar_recording.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -17,7 +19,6 @@ class MessageBar extends StatelessWidget {
   final VoidCallback? onFileSend;
   final VoidCallback onRecording;
   final VoidCallback onStopRecording;
-  final VoidCallback onInmediateSend;
   final Function(String)? onTextFieldChanged;
   final Function(String)? onFieldSubmitted;
   final TextEditingController messageController;
@@ -34,7 +35,6 @@ class MessageBar extends StatelessWidget {
   MessageBar(
       {this.onEmojiTap,
       this.focusNode,
-      required this.onInmediateSend,
       required this.recording,
       required this.finishedRecording,
       required this.onCancelRecording,
@@ -86,13 +86,13 @@ class MessageBar extends StatelessWidget {
             onFileSend: onFileSend,
             displayEmojis: displayEmojis,
             onTextFieldTap: onTextFieldTap,
-            onInmediateSend: onInmediateSend,
           ),
           recording == null
               ? const SizedBox()
               : MessageBarPreviewRecording(
+                  model: context.watch<MessagingModel>(),
                   onCancelRecording: onCancelRecording!,
-                  recording: recording,
+                  recording: StoredAttachment.fromBuffer(recording!),
                   onSend: onSend,
                 ),
         ],

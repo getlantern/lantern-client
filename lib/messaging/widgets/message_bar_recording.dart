@@ -12,7 +12,6 @@ class MessageBarRecording extends StatelessWidget {
   final VoidCallback? onSend;
   final VoidCallback? onFileSend;
   final VoidCallback onRecording;
-  final VoidCallback onInmediateSend;
   final VoidCallback onStopRecording;
   final Function(String)? onTextFieldChanged;
   final Function(String)? onFieldSubmitted;
@@ -26,7 +25,6 @@ class MessageBarRecording extends StatelessWidget {
   const MessageBarRecording(
       {this.onEmojiTap,
       this.focusNode,
-      required this.onInmediateSend,
       required this.finishedRecording,
       required this.onTapUpListener,
       required this.stopWatchTimer,
@@ -119,7 +117,6 @@ class MessageBarRecording extends StatelessWidget {
                       ),
                 VoiceRecorder(
                   isRecording: isRecording,
-                  onInmediateSend: onInmediateSend,
                   onStopRecording: onStopRecording,
                   onTapUpListener: onTapUpListener,
                   onRecording: onRecording,

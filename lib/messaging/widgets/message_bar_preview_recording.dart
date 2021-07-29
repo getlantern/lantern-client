@@ -1,26 +1,26 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/attachment_types/audio.dart';
+import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/utils/waveform/wave_progress_bar.dart';
-import 'package:sizer/sizer.dart';
-import 'package:lantern/utils/audio_store.dart';
 import 'package:lantern/package_store.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:lantern/utils/audio_store.dart';
+import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
+import 'package:sizer/sizer.dart';
 
 class MessageBarPreviewRecording extends StatefulWidget {
-  final Uint8List? recording;
+  final MessagingModel model;
+  final StoredAttachment recording;
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
   const MessageBarPreviewRecording(
-      {required this.recording,
+      {required this.model,
+      required this.recording,
       required this.onCancelRecording,
       required this.onSend});
 
@@ -40,21 +40,27 @@ class _MessageBarPreviewRecordingState
   Duration? _position;
   PlayerState _playerState = PlayerState.stopped;
   AudioStore audioStore = AudioStore();
+
   bool get _isPlaying => _playerState == PlayerState.playing;
+
   bool get _isPaused => _playerState == PlayerState.paused;
   Random rand = Random();
-  MessagingModel? model;
   var reducedAudioWave = <double>[];
 
   @override
   void initState() {
     super.initState();
     initAudioPlayer();
+    widget.model.thumbnail(widget.recording).then((thumbnail) {
+      setState(() {
+        reducedAudioWave =
+            AudioWaveform.fromBuffer(thumbnail).bars.reducedWaveform();
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    model = context.watch<MessagingModel>();
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       leading: currentIcon(),
@@ -141,12 +147,6 @@ class _MessageBarPreviewRecordingState
     );
   }
 
-  double moveTo() {
-    var percentageAudio =
-        (_position!.inMilliseconds * 100) / (_duration!.inMilliseconds);
-    return (270 * percentageAudio * 0.01);
-  }
-
   Widget currentIcon() {
     if (_isPlaying) {
       return GestureDetector(
@@ -183,38 +183,23 @@ class _MessageBarPreviewRecordingState
   }
 
   Widget _getWaveBar(BuildContext context) {
-    var _storedAttachment = StoredAttachment.fromBuffer(widget.recording!);
-    return FutureBuilder(
-      future: model!.thumbnail(_storedAttachment),
-      builder: (context, AsyncSnapshot<Uint8List>? snapshot) {
-        AudioWaveform? audioWave;
-        if (snapshot != null && snapshot.hasData) {
-          try {
-            audioWave = AudioWaveform.fromBuffer(snapshot.data!);
-            reducedAudioWave = audioWave.bars.reducedWaveform();
-          } catch (e) {
-            reducedAudioWave = [];
-          }
-        }
+    if (reducedAudioWave.isEmpty) {
+      return const SizedBox();
+    }
 
-        return (snapshot != null && snapshot.hasData)
-            ? WaveProgressBar(
-                progressPercentage: (_position != null &&
-                        _duration != null &&
-                        _position!.inMilliseconds > 0 &&
-                        _position!.inMilliseconds < _duration!.inMilliseconds)
-                    ? (_position!.inMilliseconds / _duration!.inMilliseconds) *
-                        120
-                    : 0.0,
-                alignment: Alignment.bottomCenter,
-                listOfHeights: reducedAudioWave,
-                width: MediaQuery.of(context).size.width * 0.6,
-                initalColor: Colors.black,
-                progressColor: outboundMsgColor,
-                backgroundColor: inboundBgColor,
-              )
-            : const SizedBox();
-      },
+    return WaveProgressBar(
+      progressPercentage: (_position != null &&
+              _duration != null &&
+              _position!.inMilliseconds > 0 &&
+              _position!.inMilliseconds < _duration!.inMilliseconds)
+          ? (_position!.inMilliseconds / _duration!.inMilliseconds) * 120
+          : 0.0,
+      alignment: Alignment.bottomCenter,
+      listOfHeights: reducedAudioWave,
+      width: MediaQuery.of(context).size.width * 0.6,
+      initalColor: Colors.black,
+      progressColor: outboundMsgColor,
+      backgroundColor: inboundBgColor,
     );
   }
 
@@ -258,10 +243,6 @@ class _MessageBarPreviewRecordingState
     audioStore.audioPlayer.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
     });
-    unawaited(Future.microtask(() async {
-      await play();
-      await _pause();
-    }));
   }
 
   Future<int> _pause() async {
@@ -286,15 +267,7 @@ class _MessageBarPreviewRecordingState
   void _onComplete() => setState(() => _playerState = PlayerState.stopped);
 
   Future<int> play() async {
-    (_position != null &&
-            _duration != null &&
-            _position!.inMilliseconds > 0 &&
-            _position!.inMilliseconds < _duration!.inMilliseconds)
-        ? _position
-        : null;
-
-    var _storedAttachment = StoredAttachment.fromBuffer(widget.recording!);
-    var bytes = await model!.decryptAttachment(_storedAttachment);
+    var bytes = await widget.model.decryptAttachment(widget.recording);
     await audioStore.stop();
     final result = await audioStore.audioPlayer.playBytes(bytes);
     if (result == 1) setState(() => _playerState = PlayerState.playing);

@@ -95,9 +95,12 @@ class AudioAttachmentState extends State<AudioAttachment> {
             if (result == 1) setState(() => _playerState = PlayerState.playing);
           } else {
             context.loaderOverlay.show();
-            var bytes = await model.decryptAttachment(widget.attachment);
-            context.loaderOverlay.hide();
-            await play(bytes);
+            try {
+              var bytes = await model.decryptAttachment(widget.attachment);
+              await play(bytes);
+            } finally {
+              context.loaderOverlay.hide();
+            }
           }
         },
         style: ButtonStyle(
