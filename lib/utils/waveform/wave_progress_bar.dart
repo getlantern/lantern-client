@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:lantern/utils/waveform/background_painter.dart';
 import 'package:lantern/utils/waveform/single_bar_painter.dart';
-import 'dart:math';
 
 class WaveProgressBar extends StatelessWidget {
   final double progressPercentage;

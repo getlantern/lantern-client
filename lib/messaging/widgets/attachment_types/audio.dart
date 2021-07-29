@@ -12,8 +12,6 @@ class AudioAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
-
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING:

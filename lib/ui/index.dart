@@ -1,5 +1,5 @@
-export 'widgets/account/account.dart';
+export '../messaging/messaging.dart';
 export 'base_screen.dart';
 export 'home.dart';
-export '../messaging/messaging.dart';
+export 'widgets/account/account.dart';
 export 'widgets/vpn/vpn.dart';
