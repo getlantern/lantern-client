@@ -39,14 +39,35 @@ class ReplyMime extends StatelessWidget {
                 (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                     snapshot == null || !snapshot.hasData
                         ? const Icon(
-                            Icons.error,
+                            Icons.error_outlined,
                             size: 18,
                           )
                         : const Icon(
-                            Icons.audiotrack,
+                            Icons.volume_up,
                             size: 18,
                           ));
       case MimeTypes.VIDEO:
+        return FutureBuilder(
+          future:
+              model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
+          builder:
+              (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
+                  snapshot == null || !snapshot.hasData
+                      ? const Icon(Icons.error_outlined, size: 18)
+                      : Stack(alignment: Alignment.center, children: [
+                          Image.memory(snapshot.data!,
+                              errorBuilder: (BuildContext context, Object error,
+                                      StackTrace? stackTrace) =>
+                                  const Icon(
+                                    Icons.error_outlined,
+                                    size: 18,
+                                  ),
+                              filterQuality: FilterQuality.high,
+                              height: 56),
+                          const Icon(Icons.play_circle_outline,
+                              color: Colors.white),
+                        ]),
+        );
       case MimeTypes.IMAGE:
         return FutureBuilder(
           future:

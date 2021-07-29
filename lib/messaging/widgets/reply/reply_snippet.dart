@@ -83,6 +83,7 @@ class ReplySnippet extends StatelessWidget {
                 Container(
                   width: 56,
                   height: 56,
+                  clipBehavior: Clip.hardEdge,
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(8),
