@@ -23,7 +23,6 @@
     <string name="your_referral_code">Your Referral Code</string>
     <string name="report_an_issue">Report an Issue</string>
     <string name="select_issue">Please select an issue</string>
-    <string name="select_issue_desc">Please leave us a brief description of your issue here,\nand we will get back to you ASAP.</string>
     <string name="submit">Submit</string>
     <string name="submit_issue">Submit Issue</string>
     <string name="no_issue_selected">Please select an issue before submitting a report</string>
@@ -534,7 +533,7 @@
     <string name="device_added">Device Added</string>
     <string name="device_authorized_pro">Your new device is now Authorized to use your Pro account. Please wait a couple of minutes for changes to take effect.</string>
     <string name="report_sent">Report Sent</string>
-    <string name="thank_you_for_reporting_your_issue">Thank you for reporting your issue. If you provided your email we will get back to you as soon as we are able.</string>
+    <string name="thank_you_for_reporting_your_issue">Thank you for reporting your issue. Due to volume, we cannot respond to most issues, but we assure you we are working hard to improve Lantern based on your reports.</string>
     <string name="visit_yin_bi_to_redeem_your_ynb">Visit Yin.bi to redeem your YNB, and check your account balance. Yinbi Redemption Codes expire 30 days after purchase.</string>
     <string name="ynb"># YNB</string>
     <string name="ynb_distributed">YNB will be distributed at the end of every day, based on the quantity of Yinbi released that day, the number of people that upgrade, and the number of years or accounts you purchase. Your Yinbi redemption code will appear on this screen when today’s giveaway is complete. Check back in when the timer is finished.</string>
