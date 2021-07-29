@@ -83,6 +83,7 @@ Once the required tools are installed and the lfs are downloaded, open the proje
    - AndroidStudio
      - Edit the run config and add on the flavor option prod
 
+3. Since we are using AutoRouter we should be building it to update `lib/core/router/router.gr.dart`. This command will take care of that:  `flutter packages pub run build_runner build --delete-conflicting-outputs`
 
 ### Extra
 
