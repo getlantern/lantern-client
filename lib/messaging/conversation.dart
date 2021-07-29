@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:audioplayers/audioplayers_api.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/audio_widget.dart';
 import 'package:lantern/messaging/widgets/countdown_timer.dart';
 import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bar_preview_recording.dart';
@@ -21,8 +21,8 @@ import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
@@ -49,12 +49,12 @@ class _ConversationState extends State<Conversation>
 
   final TextEditingController _newMessage = TextEditingController();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  PlayerState? playerState;
   bool _isRecording = false;
   bool _finishedRecording = false;
   bool _isSendIconVisible = false;
   bool _isReplying = false;
-  Uint8List? recording;
+  Uint8List? _recording;
+  AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
   var displayName = '';
   bool _emojiShowing = false;
@@ -108,6 +108,7 @@ class _ConversationState extends State<Conversation>
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
+    _audioPreviewController?.stop();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
   }
@@ -134,7 +135,8 @@ class _ConversationState extends State<Conversation>
     );
     _newMessage.clear();
     setState(() {
-      recording = null;
+      _recording = null;
+      _audioPreviewController = null;
     });
     // scroll to bottom on send
     // the error is due to this segment of the code, it's appear that the assertion is not true
@@ -163,12 +165,20 @@ class _ConversationState extends State<Conversation>
     if (!_isRecording) {
       return;
     }
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-    recording = await model.stopRecordingVoiceMemo();
-    setState(() {
-      _isRecording = false;
-      _finishedRecording = true;
-    });
+
+    context.loaderOverlay.show();
+    try {
+      _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      _recording = await model.stopRecordingVoiceMemo();
+      var attachment = StoredAttachment.fromBuffer(_recording!);
+      setState(() {
+        _isRecording = false;
+        _finishedRecording = true;
+        _audioPreviewController = AudioController(context, attachment);
+      });
+    } finally {
+      context.loaderOverlay.hide();
+    }
   }
 
   void showKeyboard() => _focusNode.requestFocus();
@@ -462,17 +472,17 @@ class _ConversationState extends State<Conversation>
         index: _finishedRecording ? 1 : 0,
         children: [
           _buildMessageBarRecording(context),
-          recording == null
+          _audioPreviewController == null
               ? const SizedBox()
               : MessageBarPreviewRecording(
-                  model: context.watch<MessagingModel>(),
-                  audio: context.watch<Audio>(),
+                  model: model,
+                  audioController: _audioPreviewController!,
                   onCancelRecording: () async => setState(() {
                     _isRecording = false;
                     _finishedRecording = false;
-                    recording = null;
+                    _recording = null;
+                    _audioPreviewController = null;
                   }),
-                  recording: StoredAttachment.fromBuffer(recording!),
                   onSend: send,
                 ),
         ],
@@ -571,12 +581,12 @@ class _ConversationState extends State<Conversation>
   }
 
   void send() async {
-    if (_newMessage.value.text.trim().isEmpty && recording == null) {
+    if (_newMessage.value.text.trim().isEmpty && _recording == null) {
       return;
     }
     await _send(_newMessage.value.text,
         attachments:
-            recording != null && recording!.isNotEmpty ? [recording!] : [],
+            _recording != null && _recording!.isNotEmpty ? [_recording!] : [],
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
     setState(() {
