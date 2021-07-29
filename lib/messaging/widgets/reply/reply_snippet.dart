@@ -31,11 +31,10 @@ class ReplySnippet extends StatelessWidget {
           .firstWhereOrNull((element) => element.value.id == msg.replyToId);
       final isNotNullorDeleted =
           (quotedMessage != null && quotedMessage.value.remotelyDeletedAt == 0);
-      final mimeType =
-          isNotNullorDeleted && quotedMessage!.value.attachments.isNotEmpty
-              ? quotedMessage.value.attachments[0]!.attachment.mimeType
-                  .split('/')[0]
-              : '';
+      final isTextRespose = quotedMessage?.value.attachments.isEmpty ?? false;
+      final mimeType = quotedMessage?.value.attachments[0]!.attachment.mimeType
+              .split('/')[0] ??
+          '';
 
       return Container(
           height: 56.0,
@@ -44,37 +43,43 @@ class ReplySnippet extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  blurRadius: 4,
-                  offset: const Offset(0, 0),
+                  color: snippetShadowColor,
+                  blurRadius: 1,
+                  offset: const Offset(0.1, 0.1),
                 ),
               ],
-              color: Colors.white),
+              color: snippetBgColor),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ReplySnippetHeader(msg: msg, contact: contact),
-              isNotNullorDeleted
-                  ? Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Text(
-                          mimeType,
-                          style: tsReplySnippetSpecialCase,
-                        ),
-                        quotedMessage!.value.attachments.isEmpty
-                            ? ReplySnippetText(
-                                quotedMessage: quotedMessage.value)
-                            : ReplyMime.reply(
-                                storedMessage: quotedMessage.value,
-                                model: model,
-                                context: context),
-                      ],
-                    )
-                  // display deleted bubble
-                  : const ReplySnippetDeleted()
+              Column(
+                children: [
+                  ReplySnippetHeader(msg: msg, contact: contact),
+                  isNotNullorDeleted
+                      // display either text or mime
+                      ? isTextRespose
+                          // display text
+                          ? ReplySnippetText(
+                              quotedMessage: quotedMessage!.value)
+                          // display mime type and mime
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  mimeType,
+                                  style: tsReplySnippetSpecialCase,
+                                ),
+                                ReplyMime(
+                                    storedMessage: quotedMessage!.value,
+                                    model: model)
+                              ],
+                            )
+                      // display deleted bubble
+                      : const ReplySnippetDeleted()
+                ],
+              ),
             ],
           ));
     });
