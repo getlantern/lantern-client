@@ -6,11 +6,9 @@ import 'package:lantern/messaging/widgets/slider_audio/rectangle_slider_thumb_sh
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio.dart';
-import 'package:lantern/utils/duration_extension.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -31,8 +29,8 @@ class AudioController extends ValueNotifier<AudioValue> {
   late Audio audio;
 
   AudioController(this.context, this.attachment) : super(AudioValue()) {
-    model = context.watch<MessagingModel>();
-    audio = context.watch<Audio>();
+    model = Provider.of<MessagingModel>(context, listen: false);
+    audio = Provider.of<Audio>(context, listen: false);
 
     var milliseconds =
         (double.tryParse(attachment.attachment.metadata['duration']!)! * 1000)
@@ -135,32 +133,12 @@ class AudioWidget extends StatelessWidget {
               builder: (BuildContext context, AudioValue value, Widget? child) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _currentIcon(controller, value),
-                        Text(
-                          value.playerState == PlayerState.stopped
-                              ? value.duration!
-                                  .time(minute: true, seconds: true)
-                              : value.duration!
-                                  .calculate(inputDuration: value.position)
-                                  .time(minute: true, seconds: true),
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+                    _currentIcon(controller, value),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.6,
-                      padding: const EdgeInsets.only(top: 10),
+                      // padding: const EdgeInsets.only(top: 10),
                       height: 50,
                       child: Stack(
                         clipBehavior: Clip.hardEdge,
@@ -172,7 +150,7 @@ class AudioWidget extends StatelessWidget {
                           Positioned.fill(
                             left: -22,
                             top: 1,
-                            bottom: 10,
+                            bottom: 0,
                             right: -22,
                             child: SliderTheme(
                               data: SliderThemeData(
