@@ -15,10 +15,10 @@ enum PlayerState { stopped, playing, paused }
 class AudioValue {
   Duration? duration;
   Duration? position;
+  var reducedAudioWave = <double>[];
   PlayerState playerState = PlayerState.stopped;
 
   bool get isPlaying => playerState == PlayerState.playing;
-
   bool get isPaused => playerState == PlayerState.paused;
 }
 
@@ -36,6 +36,12 @@ class AudioController extends ValueNotifier<AudioValue> {
         (double.tryParse(attachment.attachment.metadata['duration']!)! * 1000)
             .toInt();
     value.duration = Duration(milliseconds: milliseconds);
+
+    model.thumbnail(attachment).then((t) {
+      value.reducedAudioWave =
+          AudioWaveform.fromBuffer(t).bars.reducedWaveform();
+      notifyListeners();
+    });
   }
 
   Future<int> pause() async {
@@ -120,90 +126,78 @@ class AudioWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: controller.model.thumbnail(controller.attachment),
-        builder: (context, AsyncSnapshot<Uint8List?>? snapshot) {
-          if (snapshot == null || !snapshot.hasData) {
-            return const SizedBox();
-          }
-          var reducedAudioWave =
-              AudioWaveform.fromBuffer(snapshot.data!).bars.reducedWaveform();
-          return ValueListenableBuilder(
-              valueListenable: controller,
-              builder: (BuildContext context, AudioValue value, Widget? child) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+    return ValueListenableBuilder(
+        valueListenable: controller,
+        builder: (BuildContext context, AudioValue value, Widget? child) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _currentIcon(controller, value),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                // padding: const EdgeInsets.only(top: 10),
+                height: 50,
+                child: Stack(
+                  clipBehavior: Clip.hardEdge,
+                  alignment: AlignmentDirectional.bottomCenter,
                   children: [
-                    _currentIcon(controller, value),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      // padding: const EdgeInsets.only(top: 10),
-                      height: 50,
-                      child: Stack(
-                        clipBehavior: Clip.hardEdge,
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: [
-                          reducedAudioWave.isNotEmpty
-                              ? _getWaveBar(context, value, reducedAudioWave)
-                              : const SizedBox(),
-                          Positioned.fill(
-                            left: -22,
-                            top: 1,
-                            bottom: 0,
-                            right: -22,
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                activeTrackColor: reducedAudioWave.isNotEmpty
-                                    ? Colors.transparent
-                                    : Colors.grey,
-                                inactiveTrackColor: reducedAudioWave.isNotEmpty
-                                    ? Colors.transparent
-                                    : Colors.blue,
-                                valueIndicatorColor: Colors.grey.shade200,
-                                thumbShape: const RectangleSliderThumbShapes(
-                                    height: 45),
+                    value.reducedAudioWave.isNotEmpty
+                        ? _getWaveBar(context, value, value.reducedAudioWave)
+                        : const SizedBox(),
+                    Positioned.fill(
+                      left: -22,
+                      top: 1,
+                      bottom: 0,
+                      right: -22,
+                      child: SliderTheme(
+                        data: SliderThemeData(
+                          activeTrackColor: value.reducedAudioWave.isNotEmpty
+                              ? Colors.transparent
+                              : Colors.grey,
+                          inactiveTrackColor: value.reducedAudioWave.isNotEmpty
+                              ? Colors.transparent
+                              : Colors.blue,
+                          valueIndicatorColor: Colors.grey.shade200,
+                          thumbShape:
+                              const RectangleSliderThumbShapes(height: 45),
+                        ),
+                        child: Slider(
+                          onChanged: (v) {
+                            if (value.playerState == PlayerState.stopped) {
+                              // can't seek while stopped
+                              return;
+                            }
+                            final position = v * value.duration!.inMilliseconds;
+                            controller.seek(
+                              Duration(
+                                milliseconds: position.round(),
                               ),
-                              child: Slider(
-                                onChanged: (v) {
-                                  if (value.playerState ==
-                                      PlayerState.stopped) {
-                                    // can't seek while stopped
-                                    return;
-                                  }
-                                  final position =
-                                      v * value.duration!.inMilliseconds;
-                                  controller.seek(
-                                    Duration(
-                                      milliseconds: position.round(),
-                                    ),
-                                  );
-                                },
-                                label: (value.position != null &&
-                                        value.duration != null &&
-                                        value.position!.inMilliseconds > 0 &&
-                                        value.position!.inMilliseconds <
-                                            value.duration!.inMilliseconds)
-                                    ? (value.position!.inSeconds).toString() +
-                                        ' sec.'
-                                    : '0 sec.',
-                                value: (value.position != null &&
-                                        value.duration != null &&
-                                        value.position!.inMilliseconds > 0 &&
-                                        value.position!.inMilliseconds <
-                                            value.duration!.inMilliseconds)
-                                    ? value.position!.inMilliseconds /
-                                        value.duration!.inMilliseconds
-                                    : 0.0,
-                              ),
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                          label: (value.position != null &&
+                                  value.duration != null &&
+                                  value.position!.inMilliseconds > 0 &&
+                                  value.position!.inMilliseconds <
+                                      value.duration!.inMilliseconds)
+                              ? (value.position!.inSeconds).toString() + ' sec.'
+                              : '0 sec.',
+                          value: (value.position != null &&
+                                  value.duration != null &&
+                                  value.position!.inMilliseconds > 0 &&
+                                  value.position!.inMilliseconds <
+                                      value.duration!.inMilliseconds)
+                              ? value.position!.inMilliseconds /
+                                  value.duration!.inMilliseconds
+                              : 0.0,
+                        ),
                       ),
                     ),
                   ],
-                );
-              });
+                ),
+              ),
+            ],
+          );
         });
   }
 
