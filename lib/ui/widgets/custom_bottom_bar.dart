@@ -38,7 +38,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: Text('Messaging'.i18n, style: TextStyle(fontSize: 9.sp)),
+            label: Text('Messages'.i18n, style: TextStyle(fontSize: 9.sp)),
             icon: SvgPicture.asset(
               ImagePaths.messages_icon,
               color:
@@ -48,7 +48,7 @@ class CustomBottomBar extends StatelessWidget {
             onTap: () => onTap!(0),
           ),
           label: '',
-          tooltip: 'Messaging'.i18n,
+          tooltip: 'Messages'.i18n,
         ),
         BottomNavigationBarItem(
           icon: CustomBottomItem(

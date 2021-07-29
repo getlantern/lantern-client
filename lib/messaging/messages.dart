@@ -1,12 +1,13 @@
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/conversation_item.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
-class Conversations extends StatelessWidget {
+import 'widgets/contact_message_preview.dart';
+
+class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
@@ -14,6 +15,11 @@ class Conversations extends StatelessWidget {
     return BaseScreen(
         title: 'Messages'.i18n,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Search'.i18n,
+            onPressed: () {},
+          ),
           IconButton(
             icon: const Icon(Icons.qr_code),
             tooltip: 'Your Contact Info'.i18n,
@@ -34,7 +40,8 @@ class Conversations extends StatelessWidget {
           return ListView.builder(
             itemCount: contacts.length,
             itemBuilder: (context, index) {
-              return ConversationItem(contacts[index]);
+              // false will style this as a Message preview
+              return ContactMessagePreview(contacts[index], index, false);
             },
           );
         }),

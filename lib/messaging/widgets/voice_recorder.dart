@@ -77,43 +77,6 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         ),
       ),
     );
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        widget.isRecording
-            ? Align(
-                alignment: Alignment.bottomRight,
-                child: Transform.scale(
-                  scale: 1.5,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(100),
-                        topRight: Radius.circular(100),
-                      ),
-                    ),
-                    child: const SizedBox(
-                      height: 80,
-                      width: 80,
-                    ),
-                  ),
-                ))
-            : const SizedBox(),
-        Align(
-          alignment: Alignment.centerRight,
-          child: GestureDetector(
-            onPanDown: _onTapDown,
-            onPanEnd: _onTapEnd,
-            child: Icon(
-              Icons.mic,
-              size: widget.isRecording ? 35.0 : 25,
-              color: widget.isRecording ? Colors.white : Colors.black,
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   void _onTapEnd(DragEndDetails details) => widget.onStopRecording();
