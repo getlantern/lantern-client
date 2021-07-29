@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/widgets.dart' show BuildContext, optionalTypeArgs;
+import 'package:flutter/widgets.dart' show BuildContext;
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
