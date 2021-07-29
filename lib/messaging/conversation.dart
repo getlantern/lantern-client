@@ -21,6 +21,7 @@ import 'package:lantern/messaging/widgets/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -51,7 +52,6 @@ class _ConversationState extends State<Conversation>
   PlayerState? playerState;
   bool _isRecording = false;
   bool _finishedRecording = false;
-  bool _willCancelRecording = false;
   bool _isSendIconVisible = false;
   bool _isReplying = false;
   Uint8List? recording;
@@ -168,7 +168,6 @@ class _ConversationState extends State<Conversation>
     setState(() {
       _isRecording = false;
       _finishedRecording = true;
-      _willCancelRecording = false;
     });
   }
 
@@ -467,9 +466,9 @@ class _ConversationState extends State<Conversation>
               ? const SizedBox()
               : MessageBarPreviewRecording(
                   model: context.watch<MessagingModel>(),
+                  audio: context.watch<Audio>(),
                   onCancelRecording: () async => setState(() {
                     _isRecording = false;
-                    _willCancelRecording = true;
                     _finishedRecording = false;
                     recording = null;
                   }),
@@ -583,7 +582,6 @@ class _ConversationState extends State<Conversation>
     setState(() {
       _quotedMessage = null;
       _isRecording = false;
-      _willCancelRecording = false;
       _finishedRecording = false;
       _isSendIconVisible = false;
       _isReplying = false;

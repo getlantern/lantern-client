@@ -24,12 +24,11 @@ class MimeReply {
     final _mimeType = storedMessage.attachments[0]!.attachment.fromString();
     if (MimeTypes.AUDIO == _mimeType) {
       _seconds = (double.tryParse(
-                  (storedMessage.attachments[0] as StoredAttachment)
-                      .attachment
-                      .metadata['duration']!)! *
-              1000)
+              (storedMessage.attachments[0] as StoredAttachment)
+                  .attachment
+                  .metadata['duration']!)!)
           .toInt();
-      _audioDuration = Duration(milliseconds: _seconds);
+      _audioDuration = Duration(seconds: _seconds);
     }
     return Flex(
       direction: Axis.horizontal,
@@ -121,5 +120,5 @@ class MimeReply {
     );
   }
 
-  // Generate a waveform from an audio file.
+// Generate a waveform from an audio file.
 }
