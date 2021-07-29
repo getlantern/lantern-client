@@ -19,8 +19,7 @@ class SubscribedListNotifier<T>
       {bool details = false,
       int Function(String key1, String key2)? compare,
       T Function(Uint8List serialized)? deserialize})
-      : super(ChangeTrackingList(compare ?? sortNormally),
-            removeFromCache) {
+      : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       value.clearPaths();
       updates.forEach((path, v) {

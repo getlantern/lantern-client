@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/package_store.dart';
+
 import '../../button.dart';
 
 class AuthorizeDeviceForPro extends StatelessWidget {

@@ -27,7 +27,7 @@ abstract class BaseModel(
     val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<String>()
-    private val handler = Handler(Looper.getMainLooper())
+    protected val handler = Handler(Looper.getMainLooper())
 
     companion object {
         private const val TAG = "BaseModel"
