@@ -1416,17 +1416,17 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
 class AudioWaveform extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AudioWaveform', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bars', $pb.PbFieldType.OY)
+    ..p<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bars', $pb.PbFieldType.P3)
     ..hasRequiredFields = false
   ;
 
   AudioWaveform._() : super();
   factory AudioWaveform({
-    $core.List<$core.int>? bars,
+    $core.Iterable<$core.int>? bars,
   }) {
     final _result = create();
     if (bars != null) {
-      _result.bars = bars;
+      _result.bars.addAll(bars);
     }
     return _result;
   }
@@ -1452,12 +1452,6 @@ class AudioWaveform extends $pb.GeneratedMessage {
   static AudioWaveform? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.int> get bars => $_getN(0);
-  @$pb.TagNumber(1)
-  set bars($core.List<$core.int> v) { $_setBytes(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasBars() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearBars() => clearField(1);
+  $core.List<$core.int> get bars => $_getList(0);
 }
 

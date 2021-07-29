@@ -25,7 +25,8 @@ class CustomBadge extends StatelessWidget {
       ),
       showBadge: showBadge,
       animationType: BadgeAnimationType.fade,
-      elevation: 0, // no drop-shadow
+      elevation: 0,
+      // no drop-shadow
       badgeColor: primaryPink,
       badgeContent: Text(
         count.toString(),

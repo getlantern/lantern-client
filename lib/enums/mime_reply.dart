@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lantern/enums/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:lantern/utils/duration_extension.dart';
+import 'package:lantern/utils/waveform/waveform.dart';
 import 'package:sizer/sizer.dart';
 
 enum MimeTypes { VIDEO, AUDIO, IMAGE, OTHERS, EMPTY }
@@ -24,12 +24,11 @@ class MimeReply {
     final _mimeType = storedMessage.attachments[0]!.attachment.fromString();
     if (MimeTypes.AUDIO == _mimeType) {
       _seconds = (double.tryParse(
-                  (storedMessage.attachments[0] as StoredAttachment)
-                      .attachment
-                      .metadata['duration']!)! *
-              1000)
+              (storedMessage.attachments[0] as StoredAttachment)
+                  .attachment
+                  .metadata['duration']!)!)
           .toInt();
-      _audioDuration = Duration(milliseconds: _seconds);
+      _audioDuration = Duration(seconds: _seconds);
     }
     return Flex(
       direction: Axis.horizontal,
@@ -121,5 +120,5 @@ class MimeReply {
     );
   }
 
-  // Generate a waveform from an audio file.
+// Generate a waveform from an audio file.
 }

@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lantern/config/colors.dart';
 import 'package:lantern/config/image_paths.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_bottom_item.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:lantern/ui/widgets/custom_bottom_item.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomBottomBar extends StatelessWidget {

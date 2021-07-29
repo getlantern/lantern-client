@@ -9,11 +9,9 @@ class VoiceRecorder extends StatefulWidget {
     required this.onRecording,
     required this.onStopRecording,
     required this.onTapUpListener,
-    required this.onInmediateSend,
   }) : super(key: key);
 
   final bool isRecording;
-  final VoidCallback onInmediateSend;
   final VoidCallback onRecording;
   final VoidCallback onStopRecording;
   final Function onTapUpListener;
