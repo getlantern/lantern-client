@@ -67,10 +67,7 @@ class ReplyPreview extends StatelessWidget {
                 ),
                 quotedMessage!.attachments.isEmpty
                     ? ReplySnippetText(quotedMessage: quotedMessage)
-                    : ReplyMime.reply(
-                        storedMessage: quotedMessage!,
-                        model: model,
-                        context: context),
+                    : ReplyMime(storedMessage: quotedMessage!, model: model),
               ]),
         ],
       ),
