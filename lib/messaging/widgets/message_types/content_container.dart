@@ -60,10 +60,13 @@ class ContentContainer extends StatelessWidget {
         .map((attachment) => attachmentWidget(attachment, inbound));
     return Container(
       constraints: BoxConstraints(minWidth: 30.w, maxWidth: 85.w),
-      padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
+      padding: EdgeInsets.only(
+          top: isAttachment ? 0 : 8,
+          bottom: 8,
+          left: isAttachment ? 0 : 8,
+          right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
-        border: isAttachment ? Border.all(color: grey3, width: 1) : null,
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock

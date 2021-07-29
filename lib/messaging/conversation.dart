@@ -137,10 +137,10 @@ class _ConversationState extends State<Conversation>
     // scroll to bottom on send
     // the error is due to this segment of the code, it's appear that the assertion is not true
     // and when the scroll tries to display the new message breaks.
-    await _scrollController.scrollTo(
-        index: 00,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOutCubic);
+    // await _scrollController.scrollTo(
+    //     index: 00,
+    //     duration: const Duration(seconds: 1),
+    //     curve: Curves.easeInOutCubic);
   }
 
   Future<void> _startRecording() async {
@@ -364,15 +364,11 @@ class _ConversationState extends State<Conversation>
                 ),
                 // Reply container
                 if (_isReplying)
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: ReplyPreview(
-                      quotedMessage: _quotedMessage,
-                      model: model,
-                      contact: widget._contact,
-                      onCloseListener: () =>
-                          setState(() => _isReplying = false),
-                    ),
+                  ReplyPreview(
+                    quotedMessage: _quotedMessage,
+                    model: model,
+                    contact: widget._contact,
+                    onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(

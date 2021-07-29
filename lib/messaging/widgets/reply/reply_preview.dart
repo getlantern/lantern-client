@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_description.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -24,50 +25,60 @@ class ReplyPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final isNotNullorDeleted =
         (quotedMessage != null && quotedMessage!.remotelyDeletedAt == 0);
-    final mimeType = isNotNullorDeleted && quotedMessage!.attachments.isNotEmpty
-        ? quotedMessage!.attachments[0]!.attachment.mimeType.split('/')[0]
-        : '';
+    final isTextRespose = quotedMessage?.attachments.isEmpty ?? false;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-      ),
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(color: snippetBgColor),
       child: Flex(
-        direction: Axis.vertical,
-        mainAxisAlignment: MainAxisAlignment.start,
+        direction: Axis.horizontal,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flex(
-            direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child:
-                    ReplySnippetHeader(msg: quotedMessage!, contact: contact),
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ReplySnippetHeader(msg: quotedMessage!, contact: contact),
+                  if (isNotNullorDeleted && isTextRespose)
+                    ReplySnippetText(text: quotedMessage!.text),
+                  if (isNotNullorDeleted && !isTextRespose)
+                    ReplySnippetDescription(
+                      descriptiveText: quotedMessage
+                              ?.attachments[0]!.attachment.mimeType
+                              .split('/')[0] ??
+                          'Error fetching Message Preview'.i18n,
+                    ),
+                  if (!isNotNullorDeleted)
+                    ReplySnippetDescription(
+                      descriptiveText: 'Message was deleted'.i18n,
+                    )
+                ],
               ),
-              Flexible(
-                child: GestureDetector(
-                  onTap: () => onCloseListener(),
-                  child: const Icon(Icons.close, size: 20),
-                ),
-              ),
-            ],
+            ),
           ),
-          const SizedBox(height: 4.0),
-          Flex(
-              direction: Axis.horizontal,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  mimeType,
-                  style: tsReplySnippetSpecialCase,
-                ),
-                quotedMessage!.attachments.isEmpty
-                    ? ReplySnippetText(text: quotedMessage!.text)
-                    : ReplyMime(storedMessage: quotedMessage!, model: model),
-              ]),
+          if (isNotNullorDeleted && !isTextRespose)
+            Container(
+              width: 56,
+              height: 56,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                clipBehavior: Clip.hardEdge,
+                child: ReplyMime(storedMessage: quotedMessage!, model: model),
+              ),
+            ),
+          Container(
+            width: 20,
+            padding: const EdgeInsets.all(2.0),
+            child: GestureDetector(
+              onTap: () => onCloseListener(),
+              child: const Icon(Icons.close, size: 20),
+            ),
+          ),
         ],
       ),
     );
