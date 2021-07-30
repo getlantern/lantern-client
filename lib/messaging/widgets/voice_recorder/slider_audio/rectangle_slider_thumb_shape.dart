@@ -5,7 +5,7 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
   const RectangleSliderThumbShapes({
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
-    this.height = 50,
+    required this.height,
     this.isPlaying = false,
   });
 

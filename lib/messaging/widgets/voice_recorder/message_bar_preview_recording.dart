@@ -33,7 +33,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
               backgroundColor: inboundBgColor,
               hasBeenShared: false,
               width: MediaQuery.of(context).size.width * 0.6,
-              height: 45,
+              waveHeight: 45,
             ),
           ),
           GestureDetector(
