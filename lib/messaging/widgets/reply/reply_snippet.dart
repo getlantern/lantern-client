@@ -34,7 +34,8 @@ class ReplySnippet extends StatelessWidget {
 
       return Container(
           height: 56.0,
-          constraints: const BoxConstraints(maxWidth: 280),
+          constraints:
+              BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               boxShadow: [

@@ -94,7 +94,15 @@ class ReplyMime extends StatelessWidget {
       case MimeTypes.OTHERS:
       case MimeTypes.EMPTY:
       default:
-        return errorCaseWidget;
+        return Container(
+          color: snippetBgIconColor,
+          padding: const EdgeInsets.all(8.0),
+          child: const Icon(
+            Icons.insert_drive_file_rounded,
+            size: 18,
+            color: Colors.white,
+          ),
+        );
     }
   }
 }

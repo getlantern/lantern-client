@@ -20,6 +20,7 @@ class GenericAttachment extends StatelessWidget {
         'Could not render file title';
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(

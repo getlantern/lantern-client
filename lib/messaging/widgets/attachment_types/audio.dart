@@ -11,6 +11,16 @@ class AudioAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget errorCaseWidget = Container(
+      color: snippetBgIconColor,
+      padding: const EdgeInsets.all(8.0),
+      child: const Icon(
+        Icons.error_outlined,
+        size: 18,
+        color: Colors.white,
+      ),
+    );
+
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING:
@@ -39,7 +49,7 @@ class AudioAttachment extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline),
+                errorCaseWidget,
                 const Text(
                   'Audio/File not available',
                   style: TextStyle(color: Colors.white, fontSize: 15.0),
@@ -56,7 +66,7 @@ class AudioAttachment extends StatelessWidget {
           backgroundColor: inbound ? inboundBgColor : outboundBgColor,
         );
       default:
-        return const SizedBox();
+        return errorCaseWidget;
     }
   }
 }
