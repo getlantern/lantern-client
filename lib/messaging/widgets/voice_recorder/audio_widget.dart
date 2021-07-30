@@ -193,15 +193,16 @@ class AudioWidget extends StatelessWidget {
       right: -22,
       child: SliderTheme(
         data: SliderThemeData(
-          activeTrackColor: value.reducedAudioWave.isNotEmpty
-              ? Colors.transparent
-              : Colors.grey,
-          inactiveTrackColor: value.reducedAudioWave.isNotEmpty
-              ? Colors.transparent
-              : Colors.blue,
-          valueIndicatorColor: Colors.grey.shade200,
-          thumbShape: RectangleSliderThumbShapes(height: thumbShapeHeight),
-        ),
+            activeTrackColor: value.reducedAudioWave.isNotEmpty
+                ? Colors.transparent
+                : Colors.grey,
+            inactiveTrackColor: value.reducedAudioWave.isNotEmpty
+                ? Colors.transparent
+                : Colors.blue,
+            valueIndicatorColor: Colors.grey.shade200,
+            thumbShape: RectangleSliderThumbShapes(
+                height: thumbShapeHeight,
+                isPlaying: value.playerState == PlayerState.playing)),
         child: Slider(
           onChanged: (v) {
             if (value.playerState == PlayerState.stopped) {
