@@ -120,7 +120,7 @@ class AudioWidget extends StatelessWidget {
   final Color progressColor;
   final Color backgroundColor;
   final bool hasBeenShared;
-  final double height;
+  final double waveHeight;
   final double width;
 
   AudioWidget(
@@ -129,7 +129,7 @@ class AudioWidget extends StatelessWidget {
       required this.progressColor,
       required this.backgroundColor,
       required this.hasBeenShared,
-      required this.height,
+      required this.waveHeight,
       required this.width});
 
   @override
@@ -158,7 +158,7 @@ class AudioWidget extends StatelessWidget {
               Container(
                 width: width,
                 margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
-                height: height,
+                height: waveHeight,
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
                   alignment: AlignmentDirectional.bottomCenter,
@@ -167,7 +167,7 @@ class AudioWidget extends StatelessWidget {
                         ? _getWaveBar(
                             context, value, value.reducedAudioWave, width)
                         : const SizedBox(),
-                    _getSliderOverlay(value, height),
+                    _getSliderOverlay(value, waveHeight),
                   ],
                 ),
               ),
