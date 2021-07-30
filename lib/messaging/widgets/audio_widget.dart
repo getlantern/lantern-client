@@ -32,10 +32,11 @@ class AudioController extends ValueNotifier<AudioValue> {
     model = Provider.of<MessagingModel>(context, listen: false);
     audio = Provider.of<Audio>(context, listen: false);
 
-    var milliseconds =
-        (double.tryParse(attachment.attachment.metadata['duration']!)! * 1000)
-            .toInt();
-    value.duration = Duration(milliseconds: milliseconds);
+    var durationString = attachment.attachment.metadata['duration'];
+    if (durationString != null) {
+      var milliseconds = (double.tryParse(durationString)! * 1000).toInt();
+      value.duration = Duration(milliseconds: milliseconds);
+    }
 
     model.thumbnail(attachment).then((t) {
       value.reducedAudioWave =
@@ -113,10 +114,10 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
-  AudioController controller;
-  Color initialColor;
-  Color progressColor;
-  Color backgroundColor;
+  final AudioController controller;
+  final Color initialColor;
+  final Color progressColor;
+  final Color backgroundColor;
 
   AudioWidget(
       {required this.controller,
