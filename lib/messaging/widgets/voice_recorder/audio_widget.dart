@@ -202,7 +202,8 @@ class AudioWidget extends StatelessWidget {
             valueIndicatorColor: Colors.grey.shade200,
             thumbShape: RectangleSliderThumbShapes(
                 height: thumbShapeHeight,
-                isPlaying: value.playerState == PlayerState.playing)),
+                isPlaying: value.playerState == PlayerState.playing ||
+                    value.playerState == PlayerState.paused)),
         child: Slider(
           onChanged: (v) {
             if (value.playerState == PlayerState.stopped) {
@@ -280,7 +281,7 @@ class AudioWidget extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         listOfHeights: reducedAudioWave,
         width: width,
-        initalColor: initialColor,
+        initialColor: initialColor,
         progressColor: progressColor,
         backgroundColor: backgroundColor,
       );
