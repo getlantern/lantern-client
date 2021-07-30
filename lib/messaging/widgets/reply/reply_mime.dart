@@ -26,19 +26,21 @@ class ReplyMime extends StatelessWidget {
 
   final StoredMessage storedMessage;
   final MessagingModel model;
-  final Widget errorCaseWidget = Container(
-    color: snippetBgIconColor,
-    padding: const EdgeInsets.all(8.0),
-    child: const Icon(
-      Icons.error_outlined,
-      size: 18,
-      color: Colors.white,
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
     final _mimeType = storedMessage.attachments[0]!.attachment.fromString();
+
+    final Widget errorCaseWidget = Container(
+      color: snippetBgIconColor,
+      padding: const EdgeInsets.all(8.0),
+      child: const Icon(
+        Icons.error_outlined,
+        size: 18,
+        color: Colors.white,
+      ),
+    );
+
     switch (_mimeType) {
       case MimeTypes.AUDIO:
         return FutureBuilder(
