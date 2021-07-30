@@ -59,7 +59,8 @@ class ContentContainer extends StatelessWidget {
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
     return Container(
-      constraints: const BoxConstraints(maxWidth: 300),
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.only(
           top: isAttachment ? 0 : 8,
