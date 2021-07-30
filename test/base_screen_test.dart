@@ -12,13 +12,15 @@ import 'package:sizer/sizer.dart';
 class MockNavigationObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  NavigatorObserver mockObserver;
+  final mockObserver = MockNavigationObserver();
+
+  setUp(() {
+    reset(mockObserver);
+  });
 
   group(
     'Widget startup',
     () {
-      mockObserver = MockNavigationObserver();
-
       Future<void> _buildHomeScreen(WidgetTester tester) async {
         await tester.pumpWidget(MultiProvider(
           providers: [
@@ -79,16 +81,12 @@ void main() {
                 );
               }),
         ));
-        // Check that navigator observer was called.
-        expect(mockObserver, MockNavigationObserver);
+        await tester.pumpAndSettle();
+        expect(find.byType(HomePage), findsOneWidget);
       }
 
-      testWidgets(
-          'when tapping "country" button, should navigate to details page',
-          (WidgetTester tester) async {
+      testWidgets('Should display home page', (WidgetTester tester) async {
         await _buildHomeScreen(tester);
-        // Ensure that state has ben changed
-        await tester.pump();
       });
     },
   );
