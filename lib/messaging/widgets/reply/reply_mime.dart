@@ -18,16 +18,6 @@ class ReplyMime extends StatelessWidget {
   Widget build(BuildContext context) {
     final _mimeType = storedMessage.attachments[0]!.attachment.fromString();
 
-    final Widget errorCaseWidget = Container(
-      color: snippetBgIconColor,
-      padding: const EdgeInsets.all(8.0),
-      child: const Icon(
-        Icons.error_outlined,
-        size: 18,
-        color: Colors.white,
-      ),
-    );
-
     switch (_mimeType) {
       case MimeTypes.AUDIO:
         return FutureBuilder(
@@ -36,14 +26,8 @@ class ReplyMime extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                     snapshot == null || !snapshot.hasData
-                        ? const Icon(
-                            Icons.error_outlined,
-                            size: 18,
-                          )
-                        : const Icon(
-                            Icons.volume_up,
-                            size: 18,
-                          ));
+                        ? _getIconWrapper(Icons.error_outlined)
+                        : _getIconWrapper(Icons.volume_up));
       case MimeTypes.VIDEO:
         return FutureBuilder(
           future:
@@ -51,12 +35,12 @@ class ReplyMime extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                   snapshot == null || !snapshot.hasData
-                      ? errorCaseWidget
+                      ? _getIconWrapper(Icons.error_outlined)
                       : Stack(alignment: Alignment.center, children: [
                           Image.memory(snapshot.data!,
                               errorBuilder: (BuildContext context, Object error,
                                       StackTrace? stackTrace) =>
-                                  errorCaseWidget,
+                                  _getIconWrapper(Icons.error_outlined),
                               filterQuality: FilterQuality.high,
                               height: 56),
                           const Icon(Icons.play_circle_outline,
@@ -70,11 +54,11 @@ class ReplyMime extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                   snapshot == null || !snapshot.hasData
-                      ? errorCaseWidget
+                      ? _getIconWrapper(Icons.error_outlined)
                       : Image.memory(snapshot.data!,
                           errorBuilder: (BuildContext context, Object error,
                                   StackTrace? stackTrace) =>
-                              errorCaseWidget,
+                              _getIconWrapper(Icons.error_outlined),
                           filterQuality: FilterQuality.high,
                           height: 56),
         );
@@ -91,5 +75,17 @@ class ReplyMime extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Widget _getIconWrapper(IconData icon) {
+    return Container(
+      color: snippetBgIconColor,
+      padding: const EdgeInsets.all(8.0),
+      child: Icon(
+        icon,
+        size: 18,
+        color: Colors.white,
+      ),
+    );
   }
 }
