@@ -10,7 +10,9 @@ extension AttachmentExtension on Attachment {
     if (mimeType.isEmpty) return MimeTypes.EMPTY;
     if (mimeType.contains('video')) return MimeTypes.VIDEO;
     if (mimeType.contains('image')) return MimeTypes.IMAGE;
-    if (mimeType == 'application/ogg') return MimeTypes.AUDIO;
+    if (mimeType == 'application/ogg' || mimeType == 'audio/opus') {
+      return MimeTypes.AUDIO;
+    }
     return MimeTypes.OTHERS;
   }
 }
