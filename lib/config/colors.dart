@@ -25,7 +25,7 @@ Color inboundMsgColor = HexColor('#000000');
 Color inboundBgColor = HexColor('#EBEBEB');
 Color snippetBgColor = HexColor('#F5F5F5');
 Color snippetShadowColor = const Color.fromARGB(
-  18,
+  100,
   0,
   0,
   0,
