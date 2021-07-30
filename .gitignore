@@ -32,6 +32,10 @@ app.iml
 # is commented out by default.
 .vscode/
 
+coverage
+coverage/html/
+coverage/lcov.info
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
