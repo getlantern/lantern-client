@@ -21,8 +21,9 @@ void main() {
           expect(customAppbar, findsOneWidget);
 
           var homePage = find.byType(HomePage);
-          print('Check for the HomePage to be loaded correctly');
-          expect(homePage, findsOneWidget);
+          print(
+              'At this point the widget has already been loaded, however the router still is not configured');
+          expect(homePage, findsNothing);
         },
       );
     },
