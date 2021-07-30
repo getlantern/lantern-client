@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class RectangleSliderThumbShapes extends SliderComponentShape {
   const RectangleSliderThumbShapes({
@@ -35,8 +36,8 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
     final canvas = context.canvas;
 
     final paintBorder = Paint()
-      ..color = Colors.yellow
-      ..strokeWidth = 3
+      ..color = HexColor('#FFC107')
+      ..strokeWidth = 2
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     canvas.drawRect(

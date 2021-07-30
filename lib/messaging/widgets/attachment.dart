@@ -22,7 +22,11 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     case 'audio/mp4':
     case 'audio/mkv':
     case 'audio/mpeg':
-      return Flexible(child: AudioAttachment(attachment, inbound));
+      return Flexible(
+          child: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: AudioAttachment(attachment, inbound),
+      ));
     case 'image/jpeg':
     case 'image/png':
     case 'image/bpm':

@@ -118,12 +118,18 @@ class AudioWidget extends StatelessWidget {
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
+  final bool hasBeenShared;
+  final double height;
+  final double width;
 
   AudioWidget(
       {required this.controller,
       required this.initialColor,
       required this.progressColor,
-      required this.backgroundColor});
+      required this.backgroundColor,
+      required this.hasBeenShared,
+      required this.height,
+      required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -132,68 +138,35 @@ class AudioWidget extends StatelessWidget {
         builder: (BuildContext context, AudioValue value, Widget? child) {
           return Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _currentIcon(controller, value),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      width: hasBeenShared ? 30 : 40,
+                      height: hasBeenShared ? 30 : 40,
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: _getPlayIcon(controller, value, hasBeenShared)),
+                  if (value.duration != null && hasBeenShared)
+                    _getDurationField(value),
+                ],
+              ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                // padding: const EdgeInsets.only(top: 10),
-                height: 50,
+                width: width,
+                margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
+                height: height,
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
                   alignment: AlignmentDirectional.bottomCenter,
                   children: [
                     value.reducedAudioWave.isNotEmpty
-                        ? _getWaveBar(context, value, value.reducedAudioWave)
+                        ? _getWaveBar(
+                            context, value, value.reducedAudioWave, width)
                         : const SizedBox(),
-                    Positioned.fill(
-                      left: -22,
-                      top: 1,
-                      bottom: 0,
-                      right: -22,
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                          activeTrackColor: value.reducedAudioWave.isNotEmpty
-                              ? Colors.transparent
-                              : Colors.grey,
-                          inactiveTrackColor: value.reducedAudioWave.isNotEmpty
-                              ? Colors.transparent
-                              : Colors.blue,
-                          valueIndicatorColor: Colors.grey.shade200,
-                          thumbShape:
-                              const RectangleSliderThumbShapes(height: 45),
-                        ),
-                        child: Slider(
-                          onChanged: (v) {
-                            if (value.playerState == PlayerState.stopped) {
-                              // can't seek while stopped
-                              return;
-                            }
-                            final position = v * value.duration!.inMilliseconds;
-                            controller.seek(
-                              Duration(
-                                milliseconds: position.round(),
-                              ),
-                            );
-                          },
-                          label: (value.position != null &&
-                                  value.duration != null &&
-                                  value.position!.inMilliseconds > 0 &&
-                                  value.position!.inMilliseconds <
-                                      value.duration!.inMilliseconds)
-                              ? (value.position!.inSeconds).toString() + ' sec.'
-                              : '0 sec.',
-                          value: (value.position != null &&
-                                  value.duration != null &&
-                                  value.position!.inMilliseconds > 0 &&
-                                  value.position!.inMilliseconds <
-                                      value.duration!.inMilliseconds)
-                              ? value.position!.inMilliseconds /
-                                  value.duration!.inMilliseconds
-                              : 0.0,
-                        ),
-                      ),
-                    ),
+                    _getSliderOverlay(value, height),
                   ],
                 ),
               ),
@@ -202,46 +175,97 @@ class AudioWidget extends StatelessWidget {
         });
   }
 
-  Widget _currentIcon(AudioController controller, AudioValue value) {
-    if (value.isPlaying) {
-      return TextButton(
-        onPressed: value.isPlaying ? () => controller.pause() : null,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Colors.white,
-          ),
-          shape: MaterialStateProperty.all<CircleBorder>(
-            const CircleBorder(),
-          ),
-        ),
-        child: Icon(
-          Icons.pause,
-          color: outboundBgColor,
-          size: 20.0,
-        ),
+  Widget _getDurationField(AudioValue value) => Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Text(value.duration!.time(minute: true, seconds: true),
+            style: TextStyle(
+                color: initialColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 12.0)),
       );
-    } else {
-      return TextButton(
-        onPressed: () async {
-          await controller.play();
-        },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.white),
-          shape: MaterialStateProperty.all<CircleBorder>(
-            const CircleBorder(),
-          ),
+
+  Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
+    return Positioned.fill(
+      left: -22,
+      top: 1,
+      bottom: 0,
+      right: -22,
+      child: SliderTheme(
+        data: SliderThemeData(
+          activeTrackColor: value.reducedAudioWave.isNotEmpty
+              ? Colors.transparent
+              : Colors.grey,
+          inactiveTrackColor: value.reducedAudioWave.isNotEmpty
+              ? Colors.transparent
+              : Colors.blue,
+          valueIndicatorColor: Colors.grey.shade200,
+          thumbShape: RectangleSliderThumbShapes(height: thumbShapeHeight),
         ),
-        child: Icon(
-          Icons.play_arrow,
-          color: outboundBgColor,
-          size: 20.0,
+        child: Slider(
+          onChanged: (v) {
+            if (value.playerState == PlayerState.stopped) {
+              // can't seek while stopped
+              return;
+            }
+            final position = v * value.duration!.inMilliseconds;
+            controller.seek(
+              Duration(
+                milliseconds: position.round(),
+              ),
+            );
+          },
+          label: (value.position != null &&
+                  value.duration != null &&
+                  value.position!.inMilliseconds > 0 &&
+                  value.position!.inMilliseconds <
+                      value.duration!.inMilliseconds)
+              ? (value.position!.inSeconds).toString() + ' sec.'
+              : '0 sec.',
+          value: (value.position != null &&
+                  value.duration != null &&
+                  value.position!.inMilliseconds > 0 &&
+                  value.position!.inMilliseconds <
+                      value.duration!.inMilliseconds)
+              ? value.position!.inMilliseconds / value.duration!.inMilliseconds
+              : 0.0,
         ),
-      );
-    }
+      ),
+    );
+  }
+
+  Widget _getPlayIcon(
+      AudioController controller, AudioValue value, bool hasBeenShared) {
+    return value.isPlaying
+        ? TextButton(
+            onPressed: value.isPlaying ? () => controller.pause() : null,
+            style: TextButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                alignment: Alignment.center),
+            child: Icon(
+              Icons.pause,
+              color: Colors.black,
+              size: hasBeenShared ? 15.0 : 20.0,
+            ),
+          )
+        : TextButton(
+            onPressed: () async {
+              await controller.play();
+            },
+            style: TextButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                alignment: Alignment.center),
+            child: Icon(
+              Icons.play_arrow,
+              color: Colors.black,
+              size: hasBeenShared ? 15.0 : 20.0,
+            ),
+          );
   }
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
-          List<double> reducedAudioWave) =>
+          List<double> reducedAudioWave, double width) =>
       WaveProgressBar(
         progressPercentage: (value.position != null &&
                 value.duration != null &&
@@ -253,7 +277,7 @@ class AudioWidget extends StatelessWidget {
             : 0.0,
         alignment: Alignment.bottomCenter,
         listOfHeights: reducedAudioWave,
-        width: MediaQuery.of(context).size.width * 0.6,
+        width: width,
         initalColor: initialColor,
         progressColor: progressColor,
         backgroundColor: backgroundColor,
