@@ -9,6 +9,7 @@ import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:lantern/utils/duration_extension.dart';
 
 enum PlayerState { stopped, playing, paused }
 
