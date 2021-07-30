@@ -26,6 +26,15 @@ class ReplyMime extends StatelessWidget {
 
   final StoredMessage storedMessage;
   final MessagingModel model;
+  final Widget errorCaseWidget = Container(
+    color: snippetBgIconColor,
+    padding: const EdgeInsets.all(8.0),
+    child: const Icon(
+      Icons.error_outlined,
+      size: 18,
+      color: Colors.white,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +62,12 @@ class ReplyMime extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                   snapshot == null || !snapshot.hasData
-                      ? const Icon(Icons.error_outlined, size: 18)
+                      ? errorCaseWidget
                       : Stack(alignment: Alignment.center, children: [
                           Image.memory(snapshot.data!,
                               errorBuilder: (BuildContext context, Object error,
                                       StackTrace? stackTrace) =>
-                                  const Icon(
-                                    Icons.error_outlined,
-                                    size: 18,
-                                  ),
+                                  errorCaseWidget,
                               filterQuality: FilterQuality.high,
                               height: 56),
                           const Icon(Icons.play_circle_outline,
@@ -75,29 +81,18 @@ class ReplyMime extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
                   snapshot == null || !snapshot.hasData
-                      ? const Icon(Icons.error_outlined, size: 18)
+                      ? errorCaseWidget
                       : Image.memory(snapshot.data!,
                           errorBuilder: (BuildContext context, Object error,
                                   StackTrace? stackTrace) =>
-                              const Icon(
-                                Icons.error_outlined,
-                                size: 18,
-                              ),
+                              errorCaseWidget,
                           filterQuality: FilterQuality.high,
                           height: 56),
         );
       case MimeTypes.OTHERS:
       case MimeTypes.EMPTY:
       default:
-        return Container(
-          color: snippetBgIconColor,
-          padding: const EdgeInsets.all(8.0),
-          child: const Icon(
-            Icons.insert_drive_file_rounded,
-            color: Colors.white,
-            size: 18,
-          ),
-        );
+        return errorCaseWidget;
     }
   }
 }

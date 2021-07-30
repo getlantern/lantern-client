@@ -40,8 +40,8 @@ class ReplySnippet extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: snippetShadowColor,
-                  blurRadius: 1,
-                  offset: const Offset(0.1, 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 0),
                 ),
               ],
               color: snippetBgColor),
