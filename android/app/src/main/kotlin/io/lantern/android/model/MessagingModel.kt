@@ -1,8 +1,11 @@
 package io.lantern.android.model
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.MediaMetadataRetriever
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
@@ -75,9 +78,15 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             }
             "filePickerLoadAttachment" -> {
                 val filePath = call.argument<String>("filePath")
+                val uri = Uri.parse(filePath)
                 val file = File(filePath!!)
-                val metadata = call.argument<Map<String, String>?>("metadata")
-                return messaging.createAttachment(file, "", metadata).toByteArray()
+                val duration = MediaMetadataRetriever().apply {
+                    setDataSource(activity.applicationContext, uri)
+                }.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                val metadata = call.argument<Map<String, String>?>("metadata")?.toMutableMap()?.apply {
+                    put("duration", (duration.toLongOrNull() ?: 1000.0 / 1000.0).toString())
+                }
+                return messaging.createAttachment(file, "", metadata!!.toMap()).toByteArray()
             }
             "decryptAttachment" -> {
                 val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
