@@ -84,7 +84,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     setDataSource(activity.applicationContext, uri)
                 }.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                 val metadata = call.argument<Map<String, String>?>("metadata")?.toMutableMap()?.apply {
-                    put("duration", (duration.toLongOrNull() ?: 1000.0 / 1000.0).toString())
+                    put("duration", (duration.toDoubleOrNull() ?: 1000.0 / 1000.0).toString())
                 }
                 return messaging.createAttachment(file, "", metadata!!.toMap()).toByteArray()
             }
