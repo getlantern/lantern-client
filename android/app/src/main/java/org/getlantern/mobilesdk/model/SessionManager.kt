@@ -470,8 +470,8 @@ abstract class SessionManager(application: Application) : Session {
         db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)
-        val prefsAdapter = BaseModel.masterDB.asSharedPreferences(
-            PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val prefsAdapter = db.asSharedPreferences(
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
