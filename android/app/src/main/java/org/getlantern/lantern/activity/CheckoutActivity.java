@@ -39,7 +39,6 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.lantern.fragment.ClickSpan;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.MaterialUtil;
@@ -485,12 +484,6 @@ public class CheckoutActivity extends FragmentActivity implements PurchasesUpdat
 //                break;
             case "paymentwall":
                 activityClass = PaymentWallActivity_.class;
-                break;
-            case "bulk-codes":
-                activityClass = RedeemBulkCodesActivity_.class;
-                break;
-            case "test":
-                activityClass = TestPaymentActivity_.class;
                 break;
             default:
                 Logger.error(TAG, "Unknown payment provider");
