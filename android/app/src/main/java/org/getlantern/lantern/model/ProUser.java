@@ -39,9 +39,6 @@ public class ProUser {
     @SerializedName("subscription")
     private String subscription;
 
-    @SerializedName("yinbiEnabled")
-    private Boolean yinbiEnabled;
-
     @SerializedName("expiration")
     private Long expiration;
 
@@ -62,14 +59,6 @@ public class ProUser {
 
     public String getToken() {
         return token;
-    }
-
-    public void setYinbiEnabled(final boolean enabled) {
-        this.yinbiEnabled = enabled;
-    }
-
-    public boolean getYinbiEnabled() {
-        return yinbiEnabled;
     }
 
     public void setReferral(final String referral) {
