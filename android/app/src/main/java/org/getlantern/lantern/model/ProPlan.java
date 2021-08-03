@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
@@ -57,7 +56,7 @@ public class ProPlan {
         this.id = id;
         this.price = price;
         this.priceWithoutTax = priceWithoutTax;
-        this.tax = new HashMap<String, Long>();
+        this.tax = new HashMap<>();
         this.renewalBonusExpected = new HashMap<>();
         this.bestValue = bestValue;
         this.duration = duration;
@@ -68,7 +67,7 @@ public class ProPlan {
             if (specificPriceWithoutTax == null) {
                 specificPriceWithoutTax = priceWithTax;
             }
-            Long tax = priceWithTax - specificPriceWithoutTax;
+            long tax = priceWithTax - specificPriceWithoutTax;
             if (tax > 0) {
                 this.tax.put(currency, tax);
             }
@@ -105,7 +104,7 @@ public class ProPlan {
         for (Map.Entry<String, Long> entry : this.price.entrySet()) {
             String currency = entry.getKey();
             Long priceWithTax = entry.getValue();
-            this.expectedMonthlyPrice.put(currency, new Double(priceWithTax / expectedMonths).longValue());
+            this.expectedMonthlyPrice.put(currency, Double.valueOf(priceWithTax / expectedMonths).longValue());
         }
     }
 
@@ -116,7 +115,7 @@ public class ProPlan {
     public String formatRenewalBonusExpected(Context context) {
         Integer bonusMonths = renewalBonusExpected.get("months");
         Integer bonusDays = renewalBonusExpected.get("days");
-        List<String> bonusParts = new ArrayList();
+        List<String> bonusParts = new ArrayList<>();
         if (bonusMonths != null && bonusMonths > 0) {
             bonusParts.add(context.getResources().getQuantityString(R.plurals.month, bonusMonths, bonusMonths));
         }
@@ -236,7 +235,7 @@ public class ProPlan {
             }
         } else {
             if (formatFloat) {
-                formattedPrice = String.valueOf(String.format(Locale.getDefault(), "%.2f", currencyPrice / 100f));
+                formattedPrice = String.format(Locale.getDefault(), "%.2f", currencyPrice / 100f);
             } else {
                 formattedPrice = String.valueOf(currencyPrice / 100);
             }
@@ -265,7 +264,7 @@ public class ProPlan {
     }
 
     public String getFormatPriceWithBonus(Context context, boolean useNumber) {
-        String durationFormat = "";
+        String durationFormat;
         if (useNumber) {
             durationFormat = context.getString(R.string.plan_duration, numYears());
         } else {
@@ -279,11 +278,6 @@ public class ProPlan {
         String bonus = formatRenewalBonusExpected(context);
         if (!bonus.isEmpty()) {
             durationFormat += " + " + formatRenewalBonusExpected(context);
-        }
-        if (numYears() != 1) {
-            if (isBestValue() && LanternApp.getSession().yinbiEnabled()) {
-                durationFormat += " + " + context.getString(R.string.free_extra_yinbi);
-            }
         }
         return durationFormat;
     }

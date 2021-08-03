@@ -107,31 +107,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiLauncher"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiScreenActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name="org.getlantern.lantern.activity.yinbi.YinbiRedemptionActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.TestPaymentActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.YinbiWelcomeActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name=".activity.WebViewActivity_"
             android:screenOrientation="portrait"
             />
@@ -147,27 +122,12 @@
             />
 
         <activity
-            android:name=".activity.PopUpAdActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name=".activity.PlansActivity_"
             android:screenOrientation="portrait"
             />
 
         <activity
             android:name=".activity.CheckoutActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.YinbiRedemptionActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.yinbi.RedeemBulkCodesActivity_"
             android:screenOrientation="portrait"
             />
 

@@ -24,14 +24,6 @@ class AccountMenu extends StatelessWidget {
     LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
   }
 
-  void openFreeYinbiCrypto() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_FREE_YINBI);
-  }
-
-  void openYinbiRedemption() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_YINBI_REDEMPTION);
-  }
-
   void openSettings(BuildContext context) {
     Navigator.pushNamed(context, routeSettings);
   }
@@ -60,19 +52,6 @@ class AccountMenu extends StatelessWidget {
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      sessionModel.shouldShowYinbiBadge(
-          (BuildContext context, bool shouldShowYinbiBadge, Widget? child) {
-        return SettingsItem(
-          icon: ImagePaths.yinbi_icon,
-          title: 'free_yinbi_crypto'.i18n,
-          onTap: openFreeYinbiCrypto,
-          child: CustomBadge(
-            count: 1,
-            fontSize: 14,
-            showBadge: shouldShowYinbiBadge,
-          ),
-        );
-      }),
       SettingsItem(
         icon: ImagePaths.settings_icon,
         title: 'settings'.i18n,
@@ -108,11 +87,6 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.desktop_icon,
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
-      ),
-      SettingsItem(
-        icon: ImagePaths.yinbi_icon,
-        title: 'yinbi_redemption'.i18n,
-        onTap: openYinbiRedemption,
       ),
       SettingsItem(
         icon: ImagePaths.settings_icon,
