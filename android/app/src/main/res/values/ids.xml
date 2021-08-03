@@ -20,7 +20,6 @@
     <item name="add_device" type="id"/>
     <item name="authorize_device_pro" type="id"/>
     <item name="check_for_update" type="id"/>
-    <item name="yinbi_redemption" type="id"/>
     <item name="desktop_option" type="id"/>
     <item name="language" type="id"/>
     <item name="action_settings" type="id"/>

@@ -13,7 +13,6 @@ class ImagePaths {
   static const devices_icon = 'assets/images/devices_icon.svg';
   static const star_icon = 'assets/images/star_icon.svg';
   static const desktop_icon = 'assets/images/desktop_icon.svg';
-  static const yinbi_icon = 'assets/images/yinbi_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
   static const qr_code = 'assets/images/qr_code.svg';
 

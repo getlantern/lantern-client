@@ -21,7 +21,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -32,7 +31,6 @@ import io.lantern.android.model.MessagingModel
 import io.lantern.android.model.SessionModel
 import io.lantern.android.model.VpnModel
 import okhttp3.Response
-import org.getlantern.lantern.activity.PopUpAdActivity_
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.Event
@@ -255,17 +253,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
-
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user data", throwable)
+                Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
-                runOnUiThread {
-                    user?.let {
-                        LanternApp.getSession().setYinbiEnabled(user.yinbiEnabled)
-                    }
-                }
             }
         })
     }
@@ -379,26 +371,29 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
      * @param popUpAds the popUpAds as defined in loconf
      */
     private fun handlePopUpAd(popUpAds: Map<String, PopUpAd>) {
-        var popUpAd = popUpAds[LanternApp.getSession().countryCode]
-        if (popUpAd == null) {
-            popUpAd = popUpAds[LanternApp.getSession().language]
-        }
-        if (popUpAd == null || !popUpAd.enabled) {
-            return
-        }
-        if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
-            Logger.debug(
-                    TAG,
-                    "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
-            )
-            return
-        }
-        Logger.debug(TAG, "Displaying popup ad..")
-        val numSeconds = popUpAd.displayFrequency
-        LanternApp.getSession().saveExpiringPref("popUpAd", numSeconds!!)
-        val intent = Intent(this, PopUpAdActivity_::class.java)
-        intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
-        startActivity(intent)
+        // Currently, the only use of Popup Ads was Yinbi, which is no longer used.
+        // If/when we want to start using popup ads again, we'll need to redesign the popup ad layout
+
+//        var popUpAd = popUpAds[LanternApp.getSession().countryCode]
+//        if (popUpAd == null) {
+//            popUpAd = popUpAds[LanternApp.getSession().language]
+//        }
+//        if (popUpAd == null || !popUpAd.enabled) {
+//            return
+//        }
+//        if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
+//            Logger.debug(
+//                TAG,
+//                "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
+//            )
+//            return
+//        }
+//        Logger.debug(TAG, "Displaying popup ad..")
+//        val numSeconds = popUpAd.displayFrequency
+//        LanternApp.getSession().saveExpiringPref("popUpAd", numSeconds!!)
+//        val intent = Intent(this, PopUpAdActivity_::class.java)
+//        intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
+//        startActivity(intent)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

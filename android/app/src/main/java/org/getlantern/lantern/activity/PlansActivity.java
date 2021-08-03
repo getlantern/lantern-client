@@ -6,9 +6,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import com.google.gson.JsonObject;
@@ -50,12 +48,6 @@ public class PlansActivity extends FragmentActivity {
     TextView tvRenew;
 
     @ViewById
-    TextView tvYinbi;
-
-    @ViewById
-    ImageView imgvYinbiInfo;
-
-    @ViewById
     View mostPopularYear1;
 
     @ViewById
@@ -65,7 +57,6 @@ public class PlansActivity extends FragmentActivity {
     View content;
 
     private TextView tvOneMonthCostFirst, tvTwoMonthCostSecond, tvDurationFirst, tvDurationSecond, tvTotalCostFirst, tvTotalCostSecond;
-    private AlertDialog yinbiInfoDialog;
 
     @AfterViews
     void afterViews() {
@@ -90,12 +81,6 @@ public class PlansActivity extends FragmentActivity {
         onBackPressed();
     }
 
-    @Click
-    void imgvYinbiInfo() {
-        ActivityExtKt.showAlertDialog(this, getString(R.string.yinbi_cryptocurrency), getString(R.string.the_yinbi_foundation_description),
-            ContextCompat.getDrawable(this, R.drawable.ic_yinbi_small));
-    }
-
     private void initViews() {
         tvOneMonthCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvCost);
         tvTwoMonthCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvCost);
@@ -104,13 +89,6 @@ public class PlansActivity extends FragmentActivity {
         tvDurationFirst = (TextView) itemPlanYear1.findViewById(R.id.tvDuration);
         tvDurationSecond = (TextView) itemPlanYear2.findViewById(R.id.tvDuration);
         View activateCodeContainer = findViewById(R.id.activateCodeContainer);
-        if (LanternApp.getSession().yinbiEnabled()) {
-            tvYinbi.setVisibility(View.VISIBLE);
-            imgvYinbiInfo.setVisibility(View.VISIBLE);
-        } else {
-            tvYinbi.setVisibility(View.GONE);
-            imgvYinbiInfo.setVisibility(View.GONE);
-        }
         if (LanternApp.getSession().isProUser()) {
             activateCodeContainer.setVisibility(View.GONE);
         } else {
@@ -120,13 +98,7 @@ public class PlansActivity extends FragmentActivity {
     }
 
     private void sendScreenViewEvent() {
-        final String screenType;
-        if (!LanternApp.getSession().isPlayVersion() && LanternApp.getSession().yinbiEnabled() && !LanternApp.getSession().isProUser()) {
-            screenType = "yinbi_plans_view";
-        } else {
-            screenType = "plans_view";
-        }
-        Lantern.sendEvent(this, screenType);
+        Lantern.sendEvent(this, "plans_view");
     }
 
     protected void setPaymentGateway() {

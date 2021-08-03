@@ -2,10 +2,11 @@
 <a name="6.7.7"></a>
 ## [6.7.7](https://github.com/getlantern/android-lantern/compare/6.7.6...6.7.7)
 
-> 2021-07-13
+> 2021-07-15
 
 ### Pull Requests
 
+* Merge pull request [#234](https://github.com/getlantern/android-lantern/issues/234) from getlantern/crdzbird/error_catcher
 * Merge pull request [#220](https://github.com/getlantern/android-lantern/issues/220) from getlantern/ox/issue219
 
 
