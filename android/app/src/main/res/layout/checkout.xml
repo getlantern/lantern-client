@@ -202,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_large"
                 android:textColor="?android:attr/textColorSecondary"
-                tools:text="TWO YEARS LANTERN PRO + 2x FREE YINBI"
+                tools:text="TWO YEARS LANTERN PRO"
                 android:layout_marginTop="@dimen/space_normal"
                 android:textAppearance="?attr/textAppearanceOverline"
                 android:textAllCaps="true"

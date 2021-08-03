@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/audio_widget.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';

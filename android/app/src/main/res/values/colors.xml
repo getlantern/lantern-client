@@ -9,7 +9,6 @@
     <color name="card_blue_color">#26c6da</color>
     <color name="lantern_on_color">#14bdd4</color>
     <color name="dark_pro_blue">#0097a7</color>
-    <color name="light_gray_yinbi">#cbcbcb</color>
     <color name="on_color">#FEE900</color>
     <color name="off_color">@color/black</color>
     <color name="cyan">#0297A7</color>
@@ -39,8 +38,6 @@
     <color name="footer_bg">#006064</color>
     <color name="main_sheet">#0097A7</color>
     <color name="black">#000000</color>
-    <color name="yinbi_yellow">#fce700</color>
-    <color name="yinbi_red">#ef4481</color>
     <color name="webview_header">#616262</color>
     <color name="silver">#A5A5A5</color>
     <color name="plan_text">#e0e0e0</color>
