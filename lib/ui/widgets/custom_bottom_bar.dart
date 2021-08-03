@@ -1,5 +1,4 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'custom_rounded_rectangle_border.dart';
 
@@ -120,29 +119,12 @@ class CustomBottomBar extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              tab.title == 'Account'
-                  ? sessionModel.shouldShowYinbiBadge((BuildContext context,
-                      bool shouldShowYinbiBadge, Widget? child) {
-                      return CustomBadge(
-                        count: 1,
-                        fontSize: 8.0,
-                        showBadge: shouldShowYinbiBadge,
-                        child: CustomAssetImage(
-                          path: tab.icon,
-                          size: 24,
-                          color: selected
-                              ? selectedTabLabelColor
-                              : unselectedTabLabelColor,
-                        ),
-                      );
-                    })
-                  : CustomAssetImage(
-                      path: tab.icon,
-                      size: 24,
-                      color: selected
-                          ? selectedTabLabelColor
-                          : unselectedTabLabelColor,
-                    ),
+              CustomAssetImage(
+                path: tab.icon,
+                size: 24,
+                color:
+                    selected ? selectedTabLabelColor : unselectedTabLabelColor,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

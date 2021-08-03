@@ -12,7 +12,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.activity.yinbi.RedeemBulkCodesActivity_;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.util.HttpClient;
 
@@ -213,24 +212,6 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
-    public void getYinbiAuctionInfo(final AuctionInfoCallback cb) {
-        final HttpUrl url = LanternHttpClient.createProUrl("/yinbi/next-auction-info");
-        get(url, new LanternHttpClient.ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch Yinbi auction info", throwable);
-            }
-
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                final AuctionInfo auctionInfo = new Gson().fromJson(result, AuctionInfo.class);
-                if (auctionInfo != null) {
-                    cb.onSuccess(auctionInfo);
-                }
-            }
-        });
-    }
-
     public void sendLinkRequest(final ProCallback cb) {
         final HttpUrl url = createProUrl("/user-link-request");
         final RequestBody formBody = new FormBody.Builder()
@@ -258,13 +239,6 @@ public class LanternHttpClient extends HttpClient {
                         }
                     }
                 });
-    }
-
-    public void openBulkProCodes(final Context context) {
-        final Intent intent;
-        intent = new Intent(context, RedeemBulkCodesActivity_.class);
-        intent.putExtra("userEmail", LanternApp.getSession().email());
-        context.startActivity(intent);
     }
 
     /**
