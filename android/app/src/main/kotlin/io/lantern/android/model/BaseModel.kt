@@ -2,6 +2,7 @@ package io.lantern.android.model
 
 import android.content.Context
 import android.os.Handler
+import android.os.HandlerThread
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
@@ -26,7 +27,14 @@ abstract class BaseModel(
     val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<String>()
-    private val handler = Handler(Looper.getMainLooper())
+    protected val mainHandler = Handler(Looper.getMainLooper())
+    private val asyncHandlerThread = HandlerThread("BaseModel-AsyncHandler")
+
+    init {
+        asyncHandlerThread.start()
+    }
+
+    private val asyncHandler = Handler(asyncHandlerThread.looper)
 
     companion object {
         private const val TAG = "BaseModel"
@@ -62,7 +70,36 @@ abstract class BaseModel(
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    final override fun onMethodCall(call: MethodCall, mcResult: MethodChannel.Result) {
+        // Process all calls on a separate thread to avoid blocking the UI, then post results back
+        // on the main thread.
+        asyncHandler.post {
+            doOnMethodCall(
+                call,
+                object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        mainHandler.post {
+                            mcResult.success(result)
+                        }
+                    }
+
+                    override fun error(errorCode: String?, errorMessage: String?, errorDetails: Any?) {
+                        mainHandler.post {
+                            mcResult.error(errorCode, errorMessage, errorDetails)
+                        }
+                    }
+
+                    override fun notImplemented() {
+                        mainHandler.post {
+                            mcResult.notImplemented()
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    open fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
             when (val out = doMethodCall(call, { result.notImplemented() })) {
                 is Unit -> result.success(null)
@@ -107,7 +144,7 @@ abstract class BaseModel(
         if (details) {
             val subscriber: DetailsSubscriber<Any> = object : DetailsSubscriber<Any>(subscriberID, path) {
                 override fun onChanges(changes: DetailsChangeSet<Any>) {
-                    handler.post {
+                    mainHandler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
                                 mapOf(
@@ -124,7 +161,7 @@ abstract class BaseModel(
         } else {
             val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(subscriberID, path) {
                 override fun onChanges(changes: RawChangeSet<Any>) {
-                    handler.post {
+                    mainHandler.post {
                         synchronized(this@BaseModel) {
                             activeSink.get()?.success(
                                 mapOf(
