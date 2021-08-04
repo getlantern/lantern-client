@@ -38,7 +38,9 @@ TextStyle tsPinLabel = const TextStyle(fontSize: 10);
 TextStyle tsExplanation = const TextStyle(height: 1.6);
 
 TextStyle tsMessageBody(outbound) => TextStyle(
-    color: outbound ? outboundMsgColor : inboundMsgColor, height: 1.3);
+    color: outbound ? outboundMsgColor : inboundMsgColor,
+    fontSize: 16,
+    height: 24 / 16);
 
 TextStyle tsMessageStatus(outbound) => TextStyle(
       color: outbound ? outboundMsgColor : inboundMsgColor,
@@ -80,6 +82,7 @@ TextStyle? tsInfoDialogButton = TextStyle(
 TextStyle? tsReplySnippetHeader = const TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 14,
+  height: 23 / 14,
   color: Colors.black,
 );
 

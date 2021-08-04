@@ -28,14 +28,12 @@ class ReplySnippet extends StatelessWidget {
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       final quotedMessage = messageRecords
           .firstWhereOrNull((element) => element.value.id == msg.replyToId);
-      final isNotNullorDeleted =
+      final isNotNullOrDeleted =
           (quotedMessage != null && quotedMessage.value.remotelyDeletedAt == 0);
-      final isTextRespose = quotedMessage?.value.attachments.isEmpty ?? false;
+      final isTextResponse = quotedMessage?.value.attachments.isEmpty ?? false;
 
       return Container(
           height: 56.0,
-          constraints:
-              BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               boxShadow: [
@@ -48,7 +46,7 @@ class ReplySnippet extends StatelessWidget {
               color: snippetBgColor),
           child: Flex(
             direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -61,16 +59,16 @@ class ReplySnippet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ReplySnippetHeader(msg: msg, contact: contact),
-                      if (isNotNullorDeleted && isTextRespose)
+                      if (isNotNullOrDeleted && isTextResponse)
                         ReplySnippetText(text: quotedMessage!.value.text),
-                      if (isNotNullorDeleted && !isTextRespose)
+                      if (isNotNullOrDeleted && !isTextResponse)
                         ReplySnippetDescription(
                           descriptiveText: quotedMessage
                                   ?.value.attachments[0]!.attachment.mimeType
                                   .split('/')[0] ??
                               'Error fetching Message Preview'.i18n,
                         ),
-                      if (!isNotNullorDeleted)
+                      if (!isNotNullOrDeleted)
                         ReplySnippetDescription(
                           descriptiveText: 'Message was deleted'.i18n,
                         )
@@ -78,7 +76,7 @@ class ReplySnippet extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isNotNullorDeleted && !isTextRespose)
+              if (isNotNullOrDeleted && !isTextResponse)
                 Container(
                   width: 56,
                   height: 56,
