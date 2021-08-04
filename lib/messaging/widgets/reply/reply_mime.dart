@@ -20,64 +20,61 @@ class ReplyMime extends StatelessWidget {
 
     switch (_mimeType) {
       case MimeTypes.AUDIO:
-        return _resolveFuture('audio');
+        return FutureBuilder(
+            future: model.decryptAttachment(
+                storedMessage.attachments[0] as StoredAttachment),
+            builder:
+                (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
+                    snapshot == null || !snapshot.hasData
+                        ? _getIconWrapper(Icons.error_outlined)
+                        : _getIconWrapper(Icons.volume_up));
       case MimeTypes.VIDEO:
-        return _resolveFuture('video');
+        return FutureBuilder(
+          future:
+              model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
+          builder:
+              (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
+                  snapshot == null || !snapshot.hasData
+                      ? _getIconWrapper(Icons.error_outlined)
+                      : Stack(alignment: Alignment.center, children: [
+                          Image.memory(snapshot.data!,
+                              errorBuilder: (BuildContext context, Object error,
+                                      StackTrace? stackTrace) =>
+                                  _getIconWrapper(Icons.error_outlined),
+                              filterQuality: FilterQuality.high,
+                              height: 56),
+                          const Icon(Icons.play_circle_outline,
+                              color: Colors.white),
+                        ]),
+        );
       case MimeTypes.IMAGE:
-        return _resolveFuture('image');
+        return FutureBuilder(
+          future:
+              model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
+          builder:
+              (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) =>
+                  snapshot == null || !snapshot.hasData
+                      ? _getIconWrapper(Icons.error_outlined)
+                      : Image.memory(snapshot.data!,
+                          errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) =>
+                              _getIconWrapper(Icons.error_outlined),
+                          filterQuality: FilterQuality.high,
+                          height: 56),
+        );
       case MimeTypes.OTHERS:
       case MimeTypes.EMPTY:
       default:
-        return _getDefaultWidget();
+        return Container(
+          color: snippetBgIconColor,
+          padding: const EdgeInsets.all(8.0),
+          child: const Icon(
+            Icons.insert_drive_file_rounded,
+            size: 18,
+            color: Colors.white,
+          ),
+        );
     }
-  }
-
-  Container _getDefaultWidget() {
-    return Container(
-      color: snippetBgIconColor,
-      padding: const EdgeInsets.all(8.0),
-      child: const Icon(
-        Icons.insert_drive_file_rounded,
-        size: 18,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  FutureBuilder<Uint8List> _resolveFuture(String mimeType) {
-    return FutureBuilder(
-        future: model.decryptAttachment(
-            storedMessage.attachments[0] as StoredAttachment),
-        builder: (BuildContext context, AsyncSnapshot<Uint8List?>? snapshot) {
-          // there is an error with the future
-          if (snapshot == null || !snapshot.hasData) {
-            return _getIconWrapper(Icons.error_outlined);
-          }
-          // the future will return correctly, look up mime types to determine UI
-          switch (mimeType) {
-            case 'image':
-              return Image.memory(snapshot.data!,
-                  errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) =>
-                      _getIconWrapper(Icons.error_outlined),
-                  filterQuality: FilterQuality.high,
-                  height: 56);
-            case 'video':
-              return Stack(alignment: Alignment.center, children: [
-                Image.memory(snapshot.data!,
-                    errorBuilder: (BuildContext context, Object error,
-                            StackTrace? stackTrace) =>
-                        _getIconWrapper(Icons.error_outlined),
-                    filterQuality: FilterQuality.high,
-                    height: 56),
-                const Icon(Icons.play_circle_outline, color: Colors.white),
-              ]);
-            case 'audio':
-              return _getIconWrapper(Icons.volume_up);
-            default:
-              return _getDefaultWidget();
-          }
-        });
   }
 
   Widget _getIconWrapper(IconData icon) {
