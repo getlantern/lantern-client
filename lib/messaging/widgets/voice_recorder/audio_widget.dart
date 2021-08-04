@@ -179,7 +179,7 @@ class AudioWidget extends StatelessWidget {
   Widget _getDurationField(AudioValue value) => Padding(
         padding: const EdgeInsets.only(top: 4.0),
         child: Text(
-            (value.duration! - (value.position ?? Duration()))
+            (value.duration! - (value.position ?? const Duration()))
                 .toString()
                 .substring(2, 7),
             style: TextStyle(
@@ -247,7 +247,7 @@ class AudioWidget extends StatelessWidget {
                 shape: const CircleBorder(),
                 backgroundColor: Colors.white,
                 alignment: Alignment.center),
-            child: Icon(
+            child: const Icon(
               Icons.pause,
               color: Colors.black,
               size: 20.0,
@@ -261,7 +261,7 @@ class AudioWidget extends StatelessWidget {
                 shape: const CircleBorder(),
                 backgroundColor: Colors.white,
                 alignment: Alignment.center),
-            child: Icon(
+            child: const Icon(
               Icons.play_arrow,
               color: Colors.black,
               size: 20.0,
