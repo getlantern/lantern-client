@@ -50,9 +50,9 @@ class AudioAttachment extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 errorCaseWidget,
-                const Text(
-                  'Audio/File not available',
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                Text(
+                  'Audio/File not available'.i18n,
+                  style: const TextStyle(color: Colors.white, fontSize: 15.0),
                 ),
               ],
             ),
