@@ -143,16 +143,33 @@ class AudioWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                      width: hasBeenShared ? 30 : 40,
-                      height: hasBeenShared ? 30 : 40,
-                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: _getPlayIcon(controller, value, hasBeenShared)),
-                  if (value.duration != null && hasBeenShared)
-                    _getDurationField(value),
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      if (value.duration != null && hasBeenShared)
+                        Container(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          height: 2 * waveHeight,
+                          child: Text(
+                              (value.duration! -
+                                      (value.position ?? const Duration()))
+                                  .toString()
+                                  .substring(2, 7),
+                              style: TextStyle(
+                                  color: initialColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10.0)),
+                        ),
+                      Container(
+                          width: hasBeenShared ? 30 : 40,
+                          height: hasBeenShared ? 30 : 40,
+                          margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child:
+                              _getPlayIcon(controller, value, hasBeenShared)),
+                    ],
+                  )
                 ],
               ),
               Container(
@@ -175,15 +192,6 @@ class AudioWidget extends StatelessWidget {
           );
         });
   }
-
-  Widget _getDurationField(AudioValue value) => Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Text(value.duration!.time(minute: true, seconds: true),
-            style: TextStyle(
-                color: initialColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 12.0)),
-      );
 
   Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
     return Positioned.fill(
