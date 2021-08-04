@@ -9,7 +9,6 @@ import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:lantern/utils/duration_extension.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -20,6 +19,7 @@ class AudioValue {
   PlayerState playerState = PlayerState.stopped;
 
   bool get isPlaying => playerState == PlayerState.playing;
+
   bool get isPaused => playerState == PlayerState.paused;
 }
 
@@ -178,7 +178,10 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getDurationField(AudioValue value) => Padding(
         padding: const EdgeInsets.only(top: 4.0),
-        child: Text(value.duration!.time(minute: true, seconds: true),
+        child: Text(
+            (value.duration! - (value.position ?? Duration()))
+                .toString()
+                .substring(2, 7),
             style: TextStyle(
                 color: initialColor,
                 fontWeight: FontWeight.w500,
