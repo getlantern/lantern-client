@@ -119,7 +119,7 @@ class AudioWidget extends StatelessWidget {
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
-  final bool hasBeenShared;
+  final bool showTimeRemaining;
   final double waveHeight;
   final double width;
 
@@ -128,7 +128,7 @@ class AudioWidget extends StatelessWidget {
       required this.initialColor,
       required this.progressColor,
       required this.backgroundColor,
-      required this.hasBeenShared,
+      this.showTimeRemaining = true,
       required this.waveHeight,
       required this.width});
 
@@ -147,11 +147,11 @@ class AudioWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                      width: hasBeenShared ? 30 : 40,
-                      height: hasBeenShared ? 30 : 40,
+                      width: 40,
+                      height: 40,
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: _getPlayIcon(controller, value, hasBeenShared)),
-                  if (value.duration != null && hasBeenShared)
+                      child: _getPlayIcon(controller, value)),
+                  if (showTimeRemaining && value.duration != null)
                     _getDurationField(value),
                 ],
               ),
@@ -239,8 +239,7 @@ class AudioWidget extends StatelessWidget {
     );
   }
 
-  Widget _getPlayIcon(
-      AudioController controller, AudioValue value, bool hasBeenShared) {
+  Widget _getPlayIcon(AudioController controller, AudioValue value) {
     return value.isPlaying
         ? TextButton(
             onPressed: value.isPlaying ? () => controller.pause() : null,
@@ -251,7 +250,7 @@ class AudioWidget extends StatelessWidget {
             child: Icon(
               Icons.pause,
               color: Colors.black,
-              size: hasBeenShared ? 15.0 : 20.0,
+              size: 20.0,
             ),
           )
         : TextButton(
@@ -265,7 +264,7 @@ class AudioWidget extends StatelessWidget {
             child: Icon(
               Icons.play_arrow,
               color: Colors.black,
-              size: hasBeenShared ? 15.0 : 20.0,
+              size: 20.0,
             ),
           );
   }
