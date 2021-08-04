@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'settings_item.dart';
 
@@ -19,13 +18,6 @@ class AccountMenu extends StatelessWidget {
 
   void openDesktopVersion() =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
-
-  void openFreeYinbiCrypto() {
-    LanternNavigator.startScreen(LanternNavigator.SCREEN_FREE_YINBI);
-  }
-
-  void openYinbiRedemption() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_YINBI_REDEMPTION);
 
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
@@ -53,19 +45,6 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.desktop_icon,
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
-      ),
-      sessionModel.shouldShowYinbiBadge(
-        (BuildContext context, bool shouldShowYinbiBadge, Widget? child) =>
-            SettingsItem(
-          icon: ImagePaths.yinbi_icon,
-          title: 'free_yinbi_crypto'.i18n,
-          onTap: openFreeYinbiCrypto,
-          child: CustomBadge(
-            count: 1,
-            fontSize: 14,
-            showBadge: shouldShowYinbiBadge,
-          ),
-        ),
       ),
       SettingsItem(
         icon: ImagePaths.settings_icon,
@@ -98,11 +77,6 @@ class AccountMenu extends StatelessWidget {
           icon: ImagePaths.desktop_icon,
           title: 'desktop_version'.i18n,
           onTap: openDesktopVersion,
-        ),
-        SettingsItem(
-          icon: ImagePaths.yinbi_icon,
-          title: 'yinbi_redemption'.i18n,
-          onTap: openYinbiRedemption,
         ),
         SettingsItem(
           icon: ImagePaths.settings_icon,

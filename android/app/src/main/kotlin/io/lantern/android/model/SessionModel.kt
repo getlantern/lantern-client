@@ -33,8 +33,6 @@ class SessionModel(
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
-        const val PATH_YINBI_ENABLED = "yinbienabled"
-        const val PATH_SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
         const val PATH_PROXY_ALL = "proxyAll"
     }
 
@@ -44,14 +42,6 @@ class SessionModel(
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
-            )
-            tx.put(
-                PATH_YINBI_ENABLED,
-                castToBoolean(tx.get(PATH_YINBI_ENABLED), false)
-            )
-            tx.put(
-                PATH_SHOULD_SHOW_YINBI_BADGE,
-                castToBoolean(tx.get(PATH_SHOULD_SHOW_YINBI_BADGE), true)
             )
             tx.put(
                 PATH_PROXY_ALL,
@@ -73,14 +63,14 @@ class SessionModel(
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            else -> super.onMethodCall(call, result)
+            else -> super.doOnMethodCall(call, result)
         }
     }
 
@@ -95,10 +85,6 @@ class SessionModel(
             }
             "setPaymentTestMode" -> {
                 LanternApp.getSession().setPaymentTestMode(call.argument("on") ?: false)
-                activity.restartApp()
-            }
-            "setYinbiEnabled" -> {
-                LanternApp.getSession().setYinbiEnabled(call.argument("on") ?: false)
                 activity.restartApp()
             }
             "setPlayVersion" -> {

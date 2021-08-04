@@ -64,23 +64,6 @@ class DeveloperSettingsTab extends StatelessWidget {
             }),
           ),
           SettingsItem(
-            title: 'Yinbi Enabled'.i18n,
-            child: sessionModel.paymentTestMode(
-                (BuildContext context, bool value, Widget? child) {
-              return FlutterSwitch(
-                width: 44.0,
-                height: 24.0,
-                valueFontSize: 12.0,
-                padding: 2,
-                toggleSize: 18.0,
-                value: value,
-                onToggle: (bool newValue) {
-                  sessionModel.setPaymentTestMode(newValue);
-                },
-              );
-            }),
-          ),
-          SettingsItem(
             title: 'Force Country'.i18n,
             child: sessionModel.forceCountry(
                 (BuildContext context, String value, Widget? child) {

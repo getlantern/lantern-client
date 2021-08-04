@@ -85,6 +85,53 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 3. Since we are using AutoRouter we should be building it to update `lib/core/router/router.gr.dart`. This command will take care of that:  `flutter packages pub run build_runner build --delete-conflicting-outputs`
 
+## Unit Tests
+
+To run the unit test you need to input the following setup.
+- Create a folder on the root of your project named: ```.vscode```
+- Inside .vscode create a file named: ```launch.json```
+- Add the following inside ```launch.json```
+- The segment named `program` is to specificy if you wish to run all the U.T or a specific one.
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Widget Test",
+            "program": "test/",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+              "--coverage"
+            ]
+          }
+    ]
+}
+```
+
+
+<p>&nbsp;</p>
+
+### Run Independent Tests
+
+On your terminal go to the root of the project and type:
+`flutter test test/my_folder_test.dart`
+
+in case that you need the code coverage just add the following argument.
+`flutter test --coverage test/my_folder_test.dart`
+
+
+<p>&nbsp;</p>
+
+### Unit Test Graph
+
+If you wanna visualize the current percentage of code coverage you need to do the following steps.
+
+1. On your `terminal` check if you have installed: `lcov` if not then install.
+2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
+
 ### Extra
 
 If you like that VSCode start running the project without the need of be constantly typing the command.

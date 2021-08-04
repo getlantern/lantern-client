@@ -15,6 +15,16 @@
                 "--flavor",
                 "prod",
             ]
+          },
+          {
+            "name": "Widget Test",
+            "program": "test/",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+              "--coverage"
+            ]
           }
     ]
 }

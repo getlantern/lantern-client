@@ -15,7 +15,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
-import io.sentry.Sentry;
+import io.sentry.Sentry
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -439,8 +439,6 @@ abstract class SessionManager(application: Application) : Session {
         protected const val CURRENT_TERMS_VERSION = 1
         protected const val INTERNAL_HEADERS_PREF_NAME = "LanternMeta"
 
-        @JvmStatic
-        val YINBI_ENABLED = "yinbienabled"
         protected const val DEVELOPMENT_MODE = "developmentMode"
         private const val PAYMENT_TEST_MODE = "paymentTestMode"
         protected const val FORCE_COUNTRY = "forceCountry"
@@ -470,14 +468,13 @@ abstract class SessionManager(application: Application) : Session {
         db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)
-        val prefsAdapter = BaseModel.masterDB.asSharedPreferences(
-            PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val prefsAdapter = db.asSharedPreferences(
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
             .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
-            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(

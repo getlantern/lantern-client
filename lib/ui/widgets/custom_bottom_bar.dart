@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lantern/config/colors.dart';
 import 'package:lantern/config/image_paths.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:lantern/ui/widgets/custom_bottom_item.dart';
 import 'package:sizer/sizer.dart';
 
@@ -84,19 +83,11 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: Text('Account'.i18n, style: TextStyle(fontSize: 9.sp)),
             onTap: () => onTap!(2),
-            icon: sessionModel.shouldShowYinbiBadge(
-              (context, value, child) => CustomBadge(
-                count: 1,
-                fontSize: 8.0,
-                showBadge: value,
-                child: SvgPicture.asset(
-                  ImagePaths.account_icon,
-                  color: index == 2
-                      ? selectedTabLabelColor
-                      : unselectedTabLabelColor,
-                  fit: BoxFit.contain,
-                ),
-              ),
+            icon: SvgPicture.asset(
+              ImagePaths.account_icon,
+              color:
+                  index == 2 ? selectedTabLabelColor : unselectedTabLabelColor,
+              fit: BoxFit.contain,
             ),
           ),
           label: '',

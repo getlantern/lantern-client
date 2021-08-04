@@ -51,15 +51,10 @@ class _ProBannerState extends State<ProBanner> {
                     const SizedBox(
                       height: 4,
                     ),
-                    sessionModel.yinbiEnabled((BuildContext context,
-                        bool yinbiEnabled, Widget? child) {
-                      return Text(
-                        yinbiEnabled
-                            ? 'Go Pro Description With Yinbi'.i18n
-                            : 'Go Pro Description'.i18n,
-                        style: tsCaption(context),
-                      );
-                    })
+                    Text(
+                      'Go Pro Description'.i18n,
+                      style: tsCaption(context),
+                    ),
                   ],
                 ),
               ),
