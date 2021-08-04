@@ -265,6 +265,11 @@ release-qa: require-version require-s3cmd require-changelog
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
 		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
+	for NAME in update_android_arm ; do \
+		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
+		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
+		$(S3CMD) put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
+	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
@@ -287,10 +292,19 @@ release-beta: require-s3cmd
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
-	(git commit -am "Latest android beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
+	(git commit -am "Latest lantern android beta binaries released from QA." && git push origin $(BRANCH)) || true
 
-release-autoupdate:
-	@echo $$VERSION > autoupdate-version.txt
+release-autoupdate: require-version
+	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
+	if [[ -z "$$TAG_COMMIT" ]]; then \
+		echo "Could not find given tag $(TAG)."; \
+	fi && \
+	for URL in s3://lantern/lantern_update_android_arm-$$VERSION.bz2; do \
+		NAME=$$(basename $$URL) && \
+		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//) && \
+		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
+	done
+	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-s3-git-repos copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
