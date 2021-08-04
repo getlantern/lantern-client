@@ -126,25 +126,34 @@ class _ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    await model.sendToDirectContact(
-      widget._contact.contactId.id,
-      text: text,
-      attachments: attachments,
-      replyToId: replyToId,
-      replyToSenderId: replyToSenderId,
-    );
-    _newMessage.clear();
-    setState(() {
-      _recording = null;
-      _audioPreviewController = null;
-    });
-    // scroll to bottom on send
-    // the error is due to this segment of the code, it's appear that the assertion is not true
-    // and when the scroll tries to display the new message breaks.
-    await _scrollController.scrollTo(
-        index: 00,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOutCubic);
+    if (attachments!.isNotEmpty) context.loaderOverlay.show();
+    try {
+      await model.sendToDirectContact(
+        widget._contact.contactId.id,
+        text: text,
+        attachments: attachments,
+        replyToId: replyToId,
+        replyToSenderId: replyToSenderId,
+      );
+      _newMessage.clear();
+      setState(() {
+        _recording = null;
+        _audioPreviewController = null;
+      });
+      // TODO: this complains when there are no messages in the thread
+      await _scrollController.scrollTo(
+          index: 00,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOutCubic);
+    } catch (e) {
+      showInfoDialog(context,
+          title: 'Error'.i18n,
+          des: 'Something went wrong while sending your message.'.i18n,
+          icon: ImagePaths.alert_icon,
+          buttonText: 'OK'.i18n);
+    } finally {
+      if (attachments.isNotEmpty) context.loaderOverlay.hide();
+    }
   }
 
   Future<void> _startRecording() async {
@@ -204,7 +213,7 @@ class _ConversationState extends State<Conversation>
               Navigator.of(context).pop(<AssetEntity>[result]);
             }
           },
-          // TODO(kallirroi): Refine the UI/UX
+          // TODO: Refine the UI/UX
           child: const Center(
             child: Icon(Icons.camera),
           ),
@@ -264,8 +273,7 @@ class _ConversationState extends State<Conversation>
     } catch (e) {
       showInfoDialog(context,
           title: 'Error'.i18n,
-          // TODO: Add i18n below
-          des: 'Something went wrong while sharing a media file.',
+          des: 'Something went wrong while sharing a media file.'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     }
