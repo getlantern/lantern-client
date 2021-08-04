@@ -90,18 +90,10 @@ func StopTun2Socks() {
 	}()
 
 	currentDeviceMx.Lock()
-	dev := currentDevice
 	ipp := currentIPP
 	currentDevice = nil
 	currentIPP = nil
 	currentDeviceMx.Unlock()
-	if dev != nil {
-		log.Debug("Closing TUN device")
-		if err := dev.Close(); err != nil {
-			log.Errorf("Error closing TUN device: %v", err)
-		}
-		log.Debug("Closed TUN device")
-	}
 	if ipp != nil {
 		go func() {
 			log.Debug("Closing ipproxy")

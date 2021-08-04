@@ -156,7 +156,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -173,7 +172,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -190,7 +188,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "boolean", "YINBI_ENABLED", getBoolean("enableYinbi")
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -418,9 +415,9 @@ dependencies {
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     // from https://github.com/getlantern/opus_android
     implementation(name:'opuslib-release', ext: 'aar')
-    implementation 'com.github.getlantern:secrets-android:66a9adb621'
-    implementation 'com.github.getlantern:db-android:db23e4a298'
-    implementation 'com.github.getlantern:messaging-android:3671d98446'
+    implementation 'com.github.getlantern:secrets-android:3ac588e'
+    implementation 'com.github.getlantern:db-android:4d13d81641'
+    implementation 'com.github.getlantern:messaging-android:501438de29'
 }
 
 apply plugin: 'com.google.gms.google-services'

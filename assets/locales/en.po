@@ -29,9 +29,6 @@ msgstr "Go Pro!"
 msgid "Go Pro Description"
 msgstr "Unlock faster speeds, and unlimited data!"
 
-msgid "Go Pro Description With Yinbi"
-msgstr "Unlimited data + free Yinbi cryptocurrency!"
-
 msgid "Server Location"
 msgstr "Server Location"
 
@@ -60,12 +57,6 @@ msgstr "Invite Friends"
 
 msgid "desktop_version"
 msgstr "Desktop version"
-
-msgid "free_yinbi_crypto"
-msgstr "Free Yinbi Cryptocurrency"
-
-msgid "yinbi_redemption"
-msgstr "Yinbi Redemption"
 
 msgid "settings"
 msgstr "Settings"
@@ -227,7 +218,3 @@ msgstr "Payment Test Mode"
 
 msgid "Play Version"
 msgstr "Play Version"
-
-msgid "Yinbi Enabled"
-msgstr "Yinbi Enabled"
-

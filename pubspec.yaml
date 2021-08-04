@@ -109,6 +109,7 @@ dev_dependencies:
     sdk: flutter
 
   test: ^1.15.7
+  mockito: ^5.0.12
   auto_route_generator: ^2.1.0
   build_runner: ^2.0.5
 

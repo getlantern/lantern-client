@@ -14,7 +14,6 @@ import com.google.gson.JsonObject;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WelcomeActivity_;
-import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_;
 import org.getlantern.lantern.service.BackgroundChecker_;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Lantern;
@@ -74,22 +73,12 @@ public class PaymentHandler {
         checkerIntent.putExtra("maxCalls", MAX_TRIES_CHECK_PRO);
         checkerIntent.putExtra("asBroadcast", asBroadcast);
         checkerIntent.putExtra("provider", provider);
-        if (LanternApp.getSession().yinbiEnabled()) {
-            checkerIntent.putExtra("nextActivity", "org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_");
-        } else {
-            checkerIntent.putExtra("nextActivity", "org.getlantern.lantern.activity.WelcomeActivity_");
-        }
+        checkerIntent.putExtra("nextActivity", "org.getlantern.lantern.activity.WelcomeActivity_");
         activity.startService(checkerIntent);
     }
 
     public void convertToPro() {
-        final Intent intent;
-        if (LanternApp.getSession().yinbiEnabled()) {
-            LanternApp.getSession().setShowRedemptionTable(true);
-            intent = new Intent(activity, YinbiWelcomeActivity_.class);
-        } else {
-            intent = new Intent(activity, WelcomeActivity_.class);
-        }
+        final Intent intent = new Intent(activity, WelcomeActivity_.class);
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
 
