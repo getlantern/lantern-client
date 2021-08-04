@@ -243,7 +243,7 @@ require-sentry:
 
 release-qa: require-version require-s3cmd require-changelog
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
-	VERSION_FILE_NAME="version-qa.txt" && \
+	VERSION_FILE_NAME="version-qa-android.txt" && \
 	rm -f $$BASE_NAME* && \
 	cp $(INSTALLER_NAME)-arm32.apk $$BASE_NAME.apk && \
 	cp lantern-all.aab $$BASE_NAME.aab && \
@@ -271,23 +271,23 @@ release-qa: require-version require-s3cmd require-changelog
 
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
-	VERSION_FILE_NAME="version-beta.txt" && \
+	VERSION_FILE_NAME="version-beta-android.txt" && \
 	cd $(BINARIES_PATH) && \
 	git pull && \
 	cd - && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $$BASE_NAME | awk '{print $$4}'); do \
+	for URL in s3://lantern/$$BASE_NAME.apk s3://lantern/$$BASE_NAME.aab; do \
 		NAME=$$(basename $$URL) && \
 		BETA=$$(echo $$NAME | sed s/"$$BASE_NAME"/$(BETA_BASE_NAME)/) && \
 		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$BETA && \
 		$(S3CMD) setacl s3://$(S3_BUCKET)/$$BETA --acl-public && \
 		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $(BINARIES_PATH)/$$BETA; \
 	done && \
-	$(S3CMD) cp s3://$(S3_BUCKET)/version-qa.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
+	$(S3CMD) cp s3://$(S3_BUCKET)/version-qa-android.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
 	$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
-	(git commit -am "Latest beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
+	(git commit -am "Latest android beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
 
 release-autoupdate:
 	@echo $$VERSION > autoupdate-version.txt
