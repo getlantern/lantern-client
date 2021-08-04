@@ -4,9 +4,8 @@ import 'package:lantern/config/catcher_setup.dart';
 import 'package:lantern/ui/app.dart';
 
 void main() {
-  Catcher catcher;
   setUp(() {
-    catcher = setupCatcherAndRun(LanternApp());
+    setupCatcherAndRun(LanternApp());
   });
 
   testWidgets('Test Catcher', (WidgetTester tester) async {
