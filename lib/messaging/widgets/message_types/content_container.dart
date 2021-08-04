@@ -5,7 +5,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:sizer/sizer.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -58,15 +57,11 @@ class ContentContainer extends StatelessWidget {
 
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
+
     return Container(
       constraints:
           BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
       clipBehavior: Clip.hardEdge,
-      padding: EdgeInsets.only(
-          top: isAttachment ? 0 : 8,
-          bottom: 8,
-          left: isAttachment ? 0 : 8,
-          right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
         border: isAttachment ? Border.all(color: grey4, width: 0.5) : null,
@@ -110,32 +105,38 @@ class ContentContainer extends StatelessWidget {
                       child: ReplySnippet(outbound, msg, contact),
                     ),
                 ]),
-            if (!isAttachment)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            Flex(
-                direction: Axis.horizontal,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (msg.text.isNotEmpty)
+            if (msg.text.isNotEmpty)
+              Flex(
+                  direction: Axis.horizontal,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Flexible(
                       fit: FlexFit.loose,
-                      child: Text(
-                        '${msg.text}',
-                        style: tsMessageBody(outbound),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                        child: Text(
+                          '${msg.text}',
+                          style: tsMessageBody(outbound),
+                        ),
                       ),
                     ),
-                ]),
-            ...attachments,
-            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            Flex(
-                direction: Axis.horizontal,
-                crossAxisAlignment: outbound
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StatusRow(outbound, inbound, msg, message, reactionsList)
-                ]),
+                  ]),
+            Stack(
+              fit: StackFit.loose,
+              alignment: AlignmentDirectional.bottomEnd,
+              children: [
+                ...attachments,
+                Flex(
+                    direction: Axis.horizontal,
+                    crossAxisAlignment: outbound
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StatusRow(outbound, inbound, msg, message, reactionsList)
+                    ]),
+              ],
+            )
           ]),
     );
   }

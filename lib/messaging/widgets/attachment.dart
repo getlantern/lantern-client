@@ -14,21 +14,28 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
 
   if (audioMimes.contains(mimeType)) {
     return Flexible(
-        child: Padding(
-      padding: const EdgeInsets.only(top: 10.0),
       child: AudioAttachment(attachment, inbound),
-    ));
+    );
   }
   if (imageMimes.contains(mimeType)) {
-    return Flexible(child: ImageAttachment(attachment, inbound));
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
+      child: Flexible(child: ImageAttachment(attachment, inbound)),
+    );
   }
   if (videoMimes.contains(mimeType)) {
-    return Flexible(child: VideoAttachment(attachment, inbound));
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
+      child: Flexible(child: VideoAttachment(attachment, inbound)),
+    );
   }
   return Flexible(
-    child: GenericAttachment(
-        attachmentTitle: attachmentTitle,
-        inbound: inbound,
-        icon: Icons.insert_drive_file_rounded),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
+      child: GenericAttachment(
+          attachmentTitle: attachmentTitle,
+          inbound: inbound,
+          icon: Icons.insert_drive_file_rounded),
+    ),
   );
 }

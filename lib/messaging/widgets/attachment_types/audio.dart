@@ -32,9 +32,11 @@ class AudioAttachment extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(
-                  strokeWidth: 0.5,
-                  color: inbound ? inboundMsgColor : outboundMsgColor,
+                Transform.scale(
+                  scale: 0.5,
+                  child: CircularProgressIndicator(
+                    color: inbound ? inboundMsgColor : outboundMsgColor,
+                  ),
                 ),
               ],
             ),
