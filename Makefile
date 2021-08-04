@@ -300,8 +300,8 @@ release-s3-git-repos: require-version require-s3cmd require-wget require-lantern
 		echo "Could not find given tag $(TAG)."; \
 	fi && \
 	PROD_BASE_NAME2="$(INSTALLER_NAME)-beta" && \
-	VERSION_FILE_NAME="version.txt" && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $(BETA_BASE_NAME) | awk '{print $$4}'); do \
+	VERSION_FILE_NAME="version-android.txt" && \
+	for URL in s3://lantern/$(BETA_BASE_NAME).apk s3://lantern/$(BETA_BASE_NAME).aab; do \
 		NAME=$$(basename $$URL) && \
 		PROD=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$(PROD_BASE_NAME)/) && \
 		PROD2=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$$PROD_BASE_NAME2/) && \
@@ -327,36 +327,6 @@ release-s3-git-repos: require-version require-s3cmd require-wget require-lantern
 	git commit -m "$$COMMIT_MESSAGE" && \
 	git push origin $(BRANCH) \
 	) || true
-
-copy-beta-installers-to-mirrors: require-secrets-dir
-	@URLS="$$(make get-beta-installer-urls)" && \
-	VERSION_FILE_NAME="version.txt" && \
-	for BUCKET in $(shell cat "$(SECRETS_DIR)/website-mirrors.txt"); do \
-		echo "Copying installers to mirror bucket $$BUCKET"; \
-		for URL in $$URLS; do \
-			PROD_NAME=$$(echo $$URL | sed s/$(BETA_BASE_NAME)/$(PROD_BASE_NAME)/) && \
-			$(S3CMD) cp s3://$(S3_BUCKET)/$$URL s3://$$BUCKET/$$PROD_NAME && \
-			$(S3CMD) setacl s3://$$BUCKET/$$PROD_NAME --acl-public; \
-		done; \
-		echo "Copying $$VERSION_FILE_NAME to $$BUCKET" && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$VERSION_FILE_NAME s3://$$BUCKET && \
-		$(S3CMD) setacl s3://$$BUCKET/$$VERSION_FILE_NAME --acl-public; \
-	done; \
-	echo "Finished copying installers to mirrors"
-
-get-beta-installer-urls: require-wget
-	@URLS="" && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $(BETA_BASE_NAME) | awk '{print $$4}'); do \
-		NAME=$$(basename $$URL) && \
-		URLS+=$$(echo " $$NAME"); \
-	done && \
-	echo "$$URLS" | xargs
-
-invalidate-getlantern-dot-org: require-awscli
-	@echo "Invalidating getlantern.org" && \
-	$(AWSCLI) configure set preview.cloudfront true && \
-	$(AWSCLI) cloudfront --output text create-invalidation --paths /$(INSTALLER_NAME)* /version*.txt --distribution-id E1UX00QZB0FGKH && \
-	./set_latest_version.py "$$VERSION"
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
