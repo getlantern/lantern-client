@@ -5,7 +5,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:sizer/sizer.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
