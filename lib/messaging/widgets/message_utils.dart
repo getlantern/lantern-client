@@ -40,7 +40,9 @@ List<dynamic> _humanizeReactorIdList(
 }
 
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
-  return contactIdToMatch == contact.contactId.id ? contact.displayName : 'me';
+  return contactIdToMatch == contact.contactId.id
+      ? contact.displayName
+      : 'me'.i18n;
 }
 
 Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
