@@ -64,7 +64,6 @@ class AudioAttachment extends StatelessWidget {
           initialColor: inbound ? Colors.black : Colors.white,
           progressColor: inbound ? outboundMsgColor : inboundMsgColor,
           backgroundColor: inbound ? inboundBgColor : outboundBgColor,
-          hasBeenShared: true,
           width: MediaQuery.of(context).size.width * 0.5,
           waveHeight: 50,
         );

@@ -9,7 +9,6 @@ import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:lantern/utils/duration_extension.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -20,6 +19,7 @@ class AudioValue {
   PlayerState playerState = PlayerState.stopped;
 
   bool get isPlaying => playerState == PlayerState.playing;
+
   bool get isPaused => playerState == PlayerState.paused;
 }
 
@@ -119,7 +119,7 @@ class AudioWidget extends StatelessWidget {
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
-  final bool hasBeenShared;
+  final bool showTimeRemaining;
   final double waveHeight;
   final double width;
 
@@ -128,7 +128,7 @@ class AudioWidget extends StatelessWidget {
       required this.initialColor,
       required this.progressColor,
       required this.backgroundColor,
-      required this.hasBeenShared,
+      this.showTimeRemaining = true,
       required this.waveHeight,
       required this.width});
 
@@ -147,11 +147,11 @@ class AudioWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                      width: hasBeenShared ? 30 : 40,
-                      height: hasBeenShared ? 30 : 40,
+                      width: 40,
+                      height: 40,
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: _getPlayIcon(controller, value, hasBeenShared)),
-                  if (value.duration != null && hasBeenShared)
+                      child: _getPlayIcon(controller, value)),
+                  if (showTimeRemaining && value.duration != null)
                     _getDurationField(value),
                 ],
               ),
@@ -178,7 +178,10 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getDurationField(AudioValue value) => Padding(
         padding: const EdgeInsets.only(top: 4.0),
-        child: Text(value.duration!.time(minute: true, seconds: true),
+        child: Text(
+            (value.duration! - (value.position ?? const Duration()))
+                .toString()
+                .substring(2, 7),
             style: TextStyle(
                 color: initialColor,
                 fontWeight: FontWeight.w500,
@@ -236,8 +239,7 @@ class AudioWidget extends StatelessWidget {
     );
   }
 
-  Widget _getPlayIcon(
-      AudioController controller, AudioValue value, bool hasBeenShared) {
+  Widget _getPlayIcon(AudioController controller, AudioValue value) {
     return value.isPlaying
         ? TextButton(
             onPressed: value.isPlaying ? () => controller.pause() : null,
@@ -245,10 +247,10 @@ class AudioWidget extends StatelessWidget {
                 shape: const CircleBorder(),
                 backgroundColor: Colors.white,
                 alignment: Alignment.center),
-            child: Icon(
+            child: const Icon(
               Icons.pause,
               color: Colors.black,
-              size: hasBeenShared ? 15.0 : 20.0,
+              size: 20.0,
             ),
           )
         : TextButton(
@@ -259,10 +261,10 @@ class AudioWidget extends StatelessWidget {
                 shape: const CircleBorder(),
                 backgroundColor: Colors.white,
                 alignment: Alignment.center),
-            child: Icon(
+            child: const Icon(
               Icons.play_arrow,
               color: Colors.black,
-              size: hasBeenShared ? 15.0 : 20.0,
+              size: 20.0,
             ),
           );
   }
