@@ -1,10 +1,10 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
-import 'package:lantern/messaging/widgets/message_types/reply_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:sizer/sizer.dart';
 
 class ContentContainer extends StatelessWidget {
@@ -58,21 +58,31 @@ class ContentContainer extends StatelessWidget {
 
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
+
+    final isAudio = msg.attachments.values.any(
+        (attachment) => audioMimes.contains(attachment.attachment.mimeType));
     return Container(
-      constraints: BoxConstraints(minWidth: 30.w, maxWidth: 85.w),
-      padding: const EdgeInsets.only(top: 4, bottom: 8, left: 8, right: 8),
+      constraints: BoxConstraints(maxWidth: 80.w),
+      clipBehavior: Clip.hardEdge,
+      padding: EdgeInsets.only(
+          top: msg.replyToId.isNotEmpty ? 8 : 0,
+          bottom: 8,
+          left: isAttachment ? 0 : 8,
+          right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
-        border: isAttachment ? Border.all(color: grey3, width: 1) : null,
+        border: isAttachment && !isAudio
+            ? Border.all(color: grey4, width: 0.5)
+            : null,
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock
-                  ? const Radius.circular(1)
+                  ? Radius.circular(startOfBlock ? 8 : 1)
                   : const Radius.circular(8)
               : const Radius.circular(8),
           topRight: outbound
               ? endOfBlock
-                  ? const Radius.circular(1)
+                  ? Radius.circular(startOfBlock ? 8 : 1)
                   : const Radius.circular(8)
               : const Radius.circular(8),
           bottomRight: outbound
@@ -94,40 +104,51 @@ class ContentContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Flex(
-                direction: Axis.horizontal,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (msg.replyToId.isNotEmpty)
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () => onTapReply(message),
-                      child: ReplyBubble(outbound, msg, contact),
-                    ),
-                ]),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            Flex(
-                direction: Axis.horizontal,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (msg.text.isNotEmpty)
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (msg.replyToId.isNotEmpty)
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => onTapReply(message),
+                    child: ReplySnippet(outbound, msg, contact),
+                  ),
+              ],
+            ),
+            if (msg.text.isNotEmpty)
+              Flex(
+                  direction: Axis.horizontal,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Flexible(
-                      child: Text(
-                        '${msg.text}',
-                        style: tsMessageBody(outbound),
+                      fit: FlexFit.loose,
+                      child: Container(
+                        padding: const EdgeInsets.only(
+                            top: 8, bottom: 4, left: 8, right: 8),
+                        child: Text(
+                          '${msg.text}',
+                          style: tsMessageBody(outbound),
+                        ),
                       ),
                     ),
-                ]),
-            ...attachments,
-            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-            Flex(
-                direction: Axis.horizontal,
-                crossAxisAlignment: outbound
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StatusRow(outbound, inbound, msg, message, reactionsList)
-                ]),
+                  ]),
+            Stack(
+              fit: StackFit.passthrough,
+              alignment: isAudio
+                  ? AlignmentDirectional.bottomEnd
+                  : outbound
+                      ? AlignmentDirectional.bottomEnd
+                      : AlignmentDirectional.bottomStart,
+              children: [
+                ...attachments,
+                Flex(
+                    direction: Axis.horizontal,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StatusRow(outbound, inbound, msg, message, reactionsList)
+                    ]),
+              ],
+            )
           ]),
     );
   }

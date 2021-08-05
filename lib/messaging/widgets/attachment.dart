@@ -1,8 +1,9 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:sizer/sizer.dart';
 
-import 'attachment_types/generic.dart';
 import 'attachment_types/audio.dart';
+import 'attachment_types/generic.dart';
 import 'attachment_types/image.dart';
 import 'attachment_types/video.dart';
 
@@ -11,41 +12,35 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final mimeType = attachment.attachment.mimeType;
   // https://developer.android.com/guide/topics/media/media-formats
-  switch (mimeType) {
-    case 'application/ogg':
-    case 'audio/ogg':
-    case 'audio/mp3':
-    case 'audio/m4a':
-    case 'audio/flac':
-    case 'audio/opus':
-    case 'audio/aac':
-    case 'audio/mp4':
-    case 'audio/mkv':
-    case 'audio/mpeg':
-      return Flexible(child: AudioAttachment(attachment, inbound));
-    case 'image/jpeg':
-    case 'image/png':
-    case 'image/bpm':
-    case 'image/gif':
-    case 'image/webp':
-    case 'image/wav':
-    case 'image/heif':
-    case 'image/heic':
-      return Flexible(child: ImageAttachment(attachment, inbound));
-    case 'video/mp4':
-    case 'video/mkv':
-    case 'video/mov':
-    case 'video/quicktime':
-    case 'video/3gp':
-    case 'video/webm':
-      return Flexible(child: VideoAttachment(attachment, inbound));
-    default:
-      // render generic file type as an icon
-      return Flexible(
-        child: GenericAttachment(
-            attachmentTitle: attachmentTitle,
-            inbound: inbound,
-            icon: Icons.insert_drive_file_rounded),
-      );
+
+  if (audioMimes.contains(mimeType)) {
+    return AudioAttachment(attachment, inbound);
   }
+
+  if (imageMimes.contains(mimeType)) {
+    return _paddedMaximizedWidget(ImageAttachment(attachment, inbound));
+  }
+
+  if (videoMimes.contains(mimeType)) {
+    return _paddedMaximizedWidget(VideoAttachment(attachment, inbound));
+  }
+
+  return GenericAttachment(
+      attachmentTitle: attachmentTitle,
+      inbound: inbound,
+      icon: Icons.insert_drive_file_rounded);
+}
+
+Widget _paddedMaximizedWidget(Widget child) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
+    child: FittedBox(
+      child: SizedBox(
+        width: 100.w,
+        child: FittedBox(
+          child: child,
+        ),
+      ),
+    ),
+  );
 }
