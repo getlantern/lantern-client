@@ -93,6 +93,7 @@ class AudioController extends ValueNotifier<AudioValue> {
       },
       onDetached: () {
         value.playerState = PlayerState.stopped;
+        value.position = const Duration(); // reset position to start
         notifyListeners();
       },
       onDurationChanged: ((d) {
