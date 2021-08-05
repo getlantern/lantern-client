@@ -20,12 +20,7 @@ class ReplyMime extends StatelessWidget {
 
     switch (_mimeType) {
       case MimeTypes.AUDIO:
-        return _PreviewBuilder(
-          future: model.decryptAttachment(
-              storedMessage.attachments[0] as StoredAttachment),
-          builder: (BuildContext context, Uint8List data) =>
-              _getIconWrapper(Icons.volume_up),
-        );
+        return _getIconWrapper(Icons.volume_up);
       case MimeTypes.VIDEO:
         return _PreviewBuilder(
           future:
