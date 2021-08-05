@@ -146,11 +146,11 @@ class AudioWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Stack(
-                    alignment: AlignmentDirectional.center,
+                    alignment: AlignmentDirectional.bottomCenter,
                     children: [
                       Container(
                           width: 40,
-                          height: 40,
+                          height: showTimeRemaining ? 80 : 40,
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: _getPlayIcon(controller, value)),
                       if (showTimeRemaining && value.duration != null)
@@ -180,7 +180,7 @@ class AudioWidget extends StatelessWidget {
         });
   }
 
-  Widget _getDurationField(AudioValue value) => Padding(
+  Widget _getDurationField(AudioValue value) => Container(
         padding: const EdgeInsets.only(top: 4.0),
         child: Text(
             (value.duration! - (value.position ?? const Duration()))
@@ -189,7 +189,7 @@ class AudioWidget extends StatelessWidget {
             style: TextStyle(
                 color: initialColor,
                 fontWeight: FontWeight.w500,
-                fontSize: 12.0)),
+                fontSize: 10.0)),
       );
 
   Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
