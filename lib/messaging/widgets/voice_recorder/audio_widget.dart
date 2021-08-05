@@ -154,7 +154,7 @@ class AudioWidget extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: _getPlayIcon(controller, value)),
                       if (showTimeRemaining && value.duration != null)
-                        _getDurationField(value),
+                        _getTimeRemaining(value),
                     ],
                   )
                 ],
@@ -180,7 +180,7 @@ class AudioWidget extends StatelessWidget {
         });
   }
 
-  Widget _getDurationField(AudioValue value) => Container(
+  Widget _getTimeRemaining(AudioValue value) => Container(
         padding: const EdgeInsets.only(top: 4.0),
         child: Text(
             (value.duration! - (value.position ?? const Duration()))
