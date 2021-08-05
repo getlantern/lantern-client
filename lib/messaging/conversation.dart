@@ -487,7 +487,10 @@ class _ConversationState extends State<Conversation>
                     _recording = null;
                     _audioPreviewController = null;
                   }),
-                  onSend: send,
+                  onSend: () {
+                    _audioPreviewController!.audio.stop();
+                    send();
+                  },
                 ),
         ],
       ),
