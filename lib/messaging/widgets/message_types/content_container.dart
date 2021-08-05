@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
+import 'package:lantern/messaging/widgets/attachment_types/audio.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
@@ -59,6 +60,8 @@ class ContentContainer extends StatelessWidget {
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
 
+    final isAudio = msg.attachments.values.any(
+        (attachment) => audioMimes.contains(attachment.attachment.mimeType));
     return Container(
       constraints: BoxConstraints(maxWidth: 80.w),
       clipBehavior: Clip.hardEdge,
@@ -117,12 +120,9 @@ class ContentContainer extends StatelessWidget {
                   children: [
                     Flexible(
                       fit: FlexFit.loose,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                        child: Text(
-                          '${msg.text}',
-                          style: tsMessageBody(outbound),
-                        ),
+                      child: Text(
+                        '${msg.text}',
+                        style: tsMessageBody(outbound),
                       ),
                     ),
                   ]),
@@ -134,8 +134,8 @@ class ContentContainer extends StatelessWidget {
                 Flex(
                     direction: Axis.horizontal,
                     crossAxisAlignment: outbound
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       StatusRow(outbound, inbound, msg, message, reactionsList)
