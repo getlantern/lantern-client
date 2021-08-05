@@ -13,29 +13,16 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   // https://developer.android.com/guide/topics/media/media-formats
 
   if (audioMimes.contains(mimeType)) {
-    return Flexible(
-      child: AudioAttachment(attachment, inbound),
-    );
+    return AudioAttachment(attachment, inbound);
   }
   if (imageMimes.contains(mimeType)) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-      child: Flexible(child: ImageAttachment(attachment, inbound)),
-    );
+    return ImageAttachment(attachment, inbound);
   }
   if (videoMimes.contains(mimeType)) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-      child: Flexible(child: VideoAttachment(attachment, inbound)),
-    );
+    return VideoAttachment(attachment, inbound);
   }
-  return Flexible(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-      child: GenericAttachment(
-          attachmentTitle: attachmentTitle,
-          inbound: inbound,
-          icon: Icons.insert_drive_file_rounded),
-    ),
-  );
+  return GenericAttachment(
+      attachmentTitle: attachmentTitle,
+      inbound: inbound,
+      icon: Icons.insert_drive_file_rounded);
 }

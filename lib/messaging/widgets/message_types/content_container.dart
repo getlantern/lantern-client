@@ -136,7 +136,12 @@ class ContentContainer extends StatelessWidget {
                       ? AlignmentDirectional.bottomEnd
                       : AlignmentDirectional.bottomStart,
               children: [
-                ...attachments,
+                Column(
+                  children: [
+                    ...attachments,
+                    if (!isAudio) const SizedBox(height: 20),
+                  ],
+                ),
                 Flex(
                     direction: Axis.horizontal,
                     mainAxisSize: MainAxisSize.min,
