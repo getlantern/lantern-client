@@ -122,9 +122,13 @@ class ContentContainer extends StatelessWidget {
                   children: [
                     Flexible(
                       fit: FlexFit.loose,
-                      child: Text(
-                        '${msg.text}',
-                        style: tsMessageBody(outbound),
+                      child: Container(
+                        padding: const EdgeInsets.only(
+                            top: 8, bottom: 4, left: 8, right: 8),
+                        child: Text(
+                          '${msg.text}',
+                          style: tsMessageBody(outbound),
+                        ),
                       ),
                     ),
                   ]),
@@ -136,12 +140,7 @@ class ContentContainer extends StatelessWidget {
                       ? AlignmentDirectional.bottomEnd
                       : AlignmentDirectional.bottomStart,
               children: [
-                Column(
-                  children: [
-                    ...attachments,
-                    if (!isAudio) const SizedBox(height: 20),
-                  ],
-                ),
+                ...attachments,
                 Flex(
                     direction: Axis.horizontal,
                     mainAxisSize: MainAxisSize.min,
