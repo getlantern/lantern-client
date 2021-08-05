@@ -148,20 +148,6 @@ class AudioWidget extends StatelessWidget {
                   Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
-                      if (value.duration != null && hasBeenShared)
-                        Container(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          height: 2 * waveHeight,
-                          child: Text(
-                              (value.duration! -
-                                      (value.position ?? const Duration()))
-                                  .toString()
-                                  .substring(2, 7),
-                              style: TextStyle(
-                                  color: initialColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10.0)),
-                        ),
                       Container(
                           width: 40,
                           height: 40,

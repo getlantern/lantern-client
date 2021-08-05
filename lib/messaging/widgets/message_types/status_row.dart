@@ -43,16 +43,19 @@ class StatusRowState extends State<StatusRow> {
                 children: [
                   ...widget.reactionsList,
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: Text(
                       widget.message.value.ts.toInt().humanizeDate(),
                       style: tsMessageStatus(widget.outbound),
                     ),
                   ),
                   Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: renderStatusIcon(
                           widget.inbound, widget.outbound, widget.msg)),
                   // TODO: This should not appear if the message never self-deletes
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: CustomAssetImage(
                         path: ImagePaths.countdownPaths[index],
                         size: 12,
