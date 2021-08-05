@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
-import 'package:lantern/messaging/widgets/attachment_types/audio.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
@@ -105,16 +104,17 @@ class ContentContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Flex(
-                direction: Axis.horizontal,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (msg.replyToId.isNotEmpty)
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () => onTapReply(message),
-                      child: ReplySnippet(outbound, msg, contact),
-                    ),
-                ]),
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (msg.replyToId.isNotEmpty)
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => onTapReply(message),
+                    child: ReplySnippet(outbound, msg, contact),
+                  ),
+              ],
+            ),
             if (msg.text.isNotEmpty)
               Flex(
                   direction: Axis.horizontal,
