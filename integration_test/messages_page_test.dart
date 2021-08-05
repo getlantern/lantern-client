@@ -34,7 +34,7 @@ void main() {
       expect(find.byType(Messages), findsOneWidget);
     });
 
-    testWidgets('Check for components loaded correctly on MessagesPages',
+    testWidgets('Check for components loaded correctly on MessagesPages AppBar',
         (WidgetTester tester) async {
       await tester.pumpWidget(LanternApp());
       await tester.pumpAndSettle();
