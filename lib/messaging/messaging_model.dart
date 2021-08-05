@@ -101,7 +101,9 @@ class MessagingModel extends Model {
         'filePickerLoadAttachment', <String, dynamic>{
       'filePath': filePath,
       'metadata': metadata
-    }).then((value) => value as Uint8List);
+    }).then((value) {
+      return value as Uint8List;
+    });
   }
 
   Future<Uint8List> thumbnail(StoredAttachment attachment) async {
@@ -111,7 +113,9 @@ class MessagingModel extends Model {
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       'attachment': attachment.writeToBuffer(),
-    }).then((value) => value as Uint8List);
+    }).then((value) {
+      return value as Uint8List;
+    });
   }
 
   Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {

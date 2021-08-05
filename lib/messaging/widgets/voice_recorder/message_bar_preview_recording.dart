@@ -22,17 +22,19 @@ class MessageBarPreviewRecording extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(right: 8, bottom: 8, top: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AudioWidget(
-            controller: audioController,
-            initialColor: Colors.black,
-            progressColor: outboundMsgColor,
-            backgroundColor: inboundBgColor,
-            showTimeRemaining: false,
-            width: MediaQuery.of(context).size.width * 0.6,
-            waveHeight: 45,
+          FittedBox(
+            child: AudioWidget(
+              controller: audioController,
+              initialColor: Colors.black,
+              progressColor: outboundMsgColor,
+              backgroundColor: inboundBgColor,
+              showTimeRemaining: false,
+              width: MediaQuery.of(context).size.width * 0.6,
+              waveHeight: 45,
+            ),
           ),
           GestureDetector(
             onTap: onCancelRecording,
