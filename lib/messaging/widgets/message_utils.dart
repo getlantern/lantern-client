@@ -42,7 +42,7 @@ List<dynamic> _humanizeReactorIdList(
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
   return contactIdToMatch == contact.contactId.id
       ? contact.displayName
-      : 'me'; // TODO: i18n
+      : 'me'.i18n;
 }
 
 Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
@@ -56,8 +56,8 @@ Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
             )
           : msg.status == StoredMessage_DeliveryStatus.SENDING
               ? SizedBox(
-                  width: 10,
-                  height: 10,
+                  width: 8,
+                  height: 8,
                   child: CircularProgressIndicator(
                     strokeWidth: 0.5,
                     color: outbound ? outboundMsgColor : inboundMsgColor,

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:lantern/package_store.dart';
 
 class RectangleSliderThumbShapes extends SliderComponentShape {
   const RectangleSliderThumbShapes({
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
-    this.height = 50,
+    required this.height,
+    this.isPlaying = false,
   });
 
   final double enabledThumbRadius;
   final double height;
+  final bool isPlaying;
 
   final double? disabledThumbRadius;
 
@@ -35,11 +38,15 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
     final canvas = context.canvas;
 
     final paintBorder = Paint()
-      ..color = Colors.yellow
-      ..strokeWidth = 3
+      ..color = primaryYellow
+      ..strokeWidth = isPlaying ? 2 : 0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     canvas.drawRect(
-        Rect.fromCenter(center: center, width: 1, height: height), paintBorder);
+        Rect.fromCenter(
+            center: center,
+            width: isPlaying ? 2 : 0,
+            height: isPlaying ? height : 0),
+        paintBorder);
   }
 }

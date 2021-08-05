@@ -9,15 +9,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/audio_widget.dart';
-import 'package:lantern/messaging/widgets/countdown_timer.dart';
-import 'package:lantern/messaging/widgets/disappearing_timer_action.dart';
-import 'package:lantern/messaging/widgets/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
-import 'package:lantern/messaging/widgets/staging_container_item.dart';
-import 'package:lantern/messaging/widgets/voice_recorder.dart';
+import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -126,25 +126,34 @@ class _ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    await model.sendToDirectContact(
-      widget._contact.contactId.id,
-      text: text,
-      attachments: attachments,
-      replyToId: replyToId,
-      replyToSenderId: replyToSenderId,
-    );
-    _newMessage.clear();
-    setState(() {
-      _recording = null;
-      _audioPreviewController = null;
-    });
-    // scroll to bottom on send
-    // the error is due to this segment of the code, it's appear that the assertion is not true
-    // and when the scroll tries to display the new message breaks.
-    //await _scrollController.scrollTo(
-    //index: 00,
-    //duration: const Duration(seconds: 1),
-    //curve: Curves.easeInOutCubic);
+    if (attachments!.isNotEmpty) context.loaderOverlay.show();
+    try {
+      await model.sendToDirectContact(
+        widget._contact.contactId.id,
+        text: text,
+        attachments: attachments,
+        replyToId: replyToId,
+        replyToSenderId: replyToSenderId,
+      );
+      _newMessage.clear();
+      setState(() {
+        _recording = null;
+        _audioPreviewController = null;
+      });
+      // TODO: this complains when there are no messages in the thread
+      await _scrollController.scrollTo(
+          index: 00,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOutCubic);
+    } catch (e) {
+      showInfoDialog(context,
+          title: 'Error'.i18n,
+          des: 'Something went wrong while sending your message.'.i18n,
+          icon: ImagePaths.alert_icon,
+          buttonText: 'OK'.i18n);
+    } finally {
+      if (attachments.isNotEmpty) context.loaderOverlay.hide();
+    }
   }
 
   Future<void> _startRecording() async {
@@ -204,7 +213,7 @@ class _ConversationState extends State<Conversation>
               Navigator.of(context).pop(<AssetEntity>[result]);
             }
           },
-          // TODO(kallirroi): Refine the UI/UX
+          // TODO: Refine the UI/UX
           child: const Center(
             child: Icon(Icons.camera),
           ),
@@ -264,8 +273,7 @@ class _ConversationState extends State<Conversation>
     } catch (e) {
       showInfoDialog(context,
           title: 'Error'.i18n,
-          // TODO: Add i18n below
-          des: 'Something went wrong while sharing a media file.',
+          des: 'Something went wrong while sharing a media file.'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     }
@@ -342,15 +350,11 @@ class _ConversationState extends State<Conversation>
                 ),
                 // Reply container
                 if (_isReplying)
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: StagingContainerItem(
-                      quotedMessage: _quotedMessage,
-                      model: model,
-                      contact: widget._contact,
-                      onCloseListener: () =>
-                          setState(() => _isReplying = false),
-                    ),
+                  ReplyPreview(
+                    quotedMessage: _quotedMessage,
+                    model: model,
+                    contact: widget._contact,
+                    onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
@@ -483,7 +487,10 @@ class _ConversationState extends State<Conversation>
                     _recording = null;
                     _audioPreviewController = null;
                   }),
-                  onSend: send,
+                  onSend: () {
+                    _audioPreviewController!.audio.stop();
+                    send();
+                  },
                 ),
         ],
       ),

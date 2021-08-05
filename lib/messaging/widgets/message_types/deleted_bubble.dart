@@ -11,14 +11,14 @@ class DeletedBubble extends StatelessWidget {
     // more at https://pub.dev/packages/dotted_border
     return DottedBorder(
       color: Colors.black38,
-      radius: const Radius.circular(50),
-      dashPattern: [6],
+      radius: const Radius.circular(8),
+      dashPattern: [3],
       strokeWidth: 1,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(50)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Text(deletedBubbleContent), // TODO: Add i18n
+          child: Text(deletedBubbleContent),
         ),
       ),
     );

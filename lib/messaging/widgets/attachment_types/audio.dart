@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/widgets/audio_widget.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
@@ -11,6 +11,16 @@ class AudioAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget errorCaseWidget = Container(
+      color: snippetBgIconColor,
+      padding: const EdgeInsets.all(8.0),
+      child: const Icon(
+        Icons.error_outlined,
+        size: 18,
+        color: Colors.white,
+      ),
+    );
+
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING_UPLOAD:
       case StoredAttachment_Status.PENDING:
@@ -22,9 +32,14 @@ class AudioAttachment extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(
-                  strokeWidth: 0.5,
-                  color: inbound ? inboundMsgColor : outboundMsgColor,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Transform.scale(
+                    scale: 0.5,
+                    child: CircularProgressIndicator(
+                      color: inbound ? inboundMsgColor : outboundMsgColor,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -39,10 +54,10 @@ class AudioAttachment extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline),
-                const Text(
-                  'Audio/File not available',
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                errorCaseWidget,
+                Text(
+                  'Audio/File not available'.i18n,
+                  style: const TextStyle(color: Colors.white, fontSize: 15.0),
                 ),
               ],
             ),
@@ -54,9 +69,11 @@ class AudioAttachment extends StatelessWidget {
           initialColor: inbound ? Colors.black : Colors.white,
           progressColor: inbound ? outboundMsgColor : inboundMsgColor,
           backgroundColor: inbound ? inboundBgColor : outboundBgColor,
+          width: MediaQuery.of(context).size.width * 0.5,
+          waveHeight: 50,
         );
       default:
-        return const SizedBox();
+        return errorCaseWidget;
     }
   }
 }
