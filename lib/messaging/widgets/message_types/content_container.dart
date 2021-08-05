@@ -1,10 +1,9 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
-import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
-import 'package:lantern/messaging/widgets/message_types/status_row.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:sizer/sizer.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -59,9 +58,13 @@ class ContentContainer extends StatelessWidget {
         .map((attachment) => attachmentWidget(attachment, inbound));
 
     return Container(
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
+      constraints: BoxConstraints(maxWidth: 80.w),
       clipBehavior: Clip.hardEdge,
+      padding: EdgeInsets.only(
+          top: msg.replyToId.isNotEmpty ? 8 : 0,
+          bottom: 8,
+          left: isAttachment ? 0 : 8,
+          right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
         border: isAttachment ? Border.all(color: grey4, width: 0.5) : null,
