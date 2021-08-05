@@ -72,7 +72,9 @@ class ContentContainer extends StatelessWidget {
           right: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: outbound ? outboundBgColor : inboundBgColor,
-        border: isAttachment ? Border.all(color: grey4, width: 0.5) : null,
+        border: isAttachment && !isAudio
+            ? Border.all(color: grey4, width: 0.5)
+            : null,
         borderRadius: BorderRadius.only(
           topLeft: inbound
               ? endOfBlock
@@ -127,15 +129,16 @@ class ContentContainer extends StatelessWidget {
                     ),
                   ]),
             Stack(
-              fit: StackFit.loose,
-              alignment: AlignmentDirectional.bottomEnd,
+              fit: StackFit.passthrough,
+              alignment: isAudio
+                  ? AlignmentDirectional.bottomEnd
+                  : outbound
+                      ? AlignmentDirectional.bottomEnd
+                      : AlignmentDirectional.bottomStart,
               children: [
                 ...attachments,
                 Flex(
                     direction: Axis.horizontal,
-                    crossAxisAlignment: outbound
-                        ? CrossAxisAlignment.start
-                        : CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       StatusRow(outbound, inbound, msg, message, reactionsList)

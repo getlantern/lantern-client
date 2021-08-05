@@ -35,6 +35,7 @@ class StatusRowState extends State<StatusRow> {
         builder: (BuildContext context, int time, Widget? child) {
           var index = widget.msg.position(segments: segments);
           return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
             child: Opacity(
               opacity: 0.9,
               child: Row(
