@@ -23,9 +23,9 @@ class ReplyPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isNotNullorDeleted =
+    final isNotNullOrDeleted =
         (quotedMessage != null && quotedMessage!.remotelyDeletedAt == 0);
-    final isTextRespose = quotedMessage?.attachments.isEmpty ?? false;
+    final isTextResponse = quotedMessage?.attachments.isEmpty ?? false;
     return Container(
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -46,16 +46,16 @@ class ReplyPreview extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.all(2.0),
                   ),
-                  if (isNotNullorDeleted && isTextRespose)
+                  if (isNotNullOrDeleted && isTextResponse)
                     ReplySnippetText(text: quotedMessage!.text),
-                  if (isNotNullorDeleted && !isTextRespose)
+                  if (isNotNullOrDeleted && !isTextResponse)
                     ReplySnippetDescription(
                       descriptiveText: quotedMessage
                               ?.attachments[0]!.attachment.mimeType
                               .split('/')[0] ??
                           'Error fetching Message Preview'.i18n,
                     ),
-                  if (!isNotNullorDeleted)
+                  if (!isNotNullOrDeleted)
                     ReplySnippetDescription(
                       descriptiveText: 'Message was deleted'.i18n,
                     )
@@ -63,7 +63,7 @@ class ReplyPreview extends StatelessWidget {
               ),
             ),
           ),
-          if (isNotNullorDeleted && !isTextRespose)
+          if (isNotNullOrDeleted && !isTextResponse)
             Container(
               width: 56,
               height: 56,
