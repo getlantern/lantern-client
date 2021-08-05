@@ -212,6 +212,12 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<void> addMyself() async {
+    final serializedInfo = await get('/me');
+    final contact = Contact.fromBuffer(serializedInfo);
+    await addOrUpdateDirectContact(contact.contactId.id, 'me');
+  }
+
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
         ? 'd/${contactId.id}'
