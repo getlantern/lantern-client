@@ -1,6 +1,5 @@
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:sizer/sizer.dart';
 
 import 'attachment_types/audio.dart';
 import 'attachment_types/generic.dart';
@@ -18,11 +17,11 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   }
 
   if (imageMimes.contains(mimeType)) {
-    return _paddedMaximizedWidget(ImageAttachment(attachment, inbound));
+    return _paddedWidget(ImageAttachment(attachment, inbound));
   }
 
   if (videoMimes.contains(mimeType)) {
-    return _paddedMaximizedWidget(VideoAttachment(attachment, inbound));
+    return _paddedWidget(VideoAttachment(attachment, inbound));
   }
 
   return GenericAttachment(
@@ -31,16 +30,11 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
       icon: Icons.insert_drive_file_rounded);
 }
 
-Widget _paddedMaximizedWidget(Widget child) {
+Widget _paddedWidget(Widget child) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
     child: FittedBox(
-      child: SizedBox(
-        width: 100.w,
-        child: FittedBox(
-          child: child,
-        ),
-      ),
+      child: child,
     ),
   );
 }
