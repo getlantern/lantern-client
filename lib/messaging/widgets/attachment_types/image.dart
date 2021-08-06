@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:lantern/messaging/widgets/attachment_builder.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/basic_memory_image.dart';
 import 'package:sizer/sizer.dart';
 
 class ImageAttachment extends StatelessWidget {
@@ -22,13 +23,13 @@ class ImageAttachment extends StatelessWidget {
             // this box keeps the image from being too tall
             height: 80.w,
             child: FittedBox(
-              child: Image.memory(thumbnail,
-                  errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) =>
-                      Icon(Icons.error_outlined,
-                          color: inbound ? inboundMsgColor : outboundMsgColor),
-                  filterQuality: FilterQuality.high,
-                  scale: 3),
+              child: BasicMemoryImage(
+                thumbnail,
+                errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) =>
+                    Icon(Icons.error_outlined,
+                        color: inbound ? inboundMsgColor : outboundMsgColor),
+              ),
             ),
           );
         });
