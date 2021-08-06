@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:sizer/sizer.dart';
 
 import 'attachment_types/audio.dart';
 import 'attachment_types/generic.dart';
@@ -17,20 +21,108 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   }
 
   if (imageMimes.contains(mimeType)) {
-    return _paddedWidget(ImageAttachment(attachment, inbound));
+    return ImageAttachment(attachment, inbound);
   }
 
   if (videoMimes.contains(mimeType)) {
-    return _paddedWidget(VideoAttachment(attachment, inbound));
+    return VideoAttachment(attachment, inbound);
   }
 
-  return GenericAttachment(
+  return _padded(GenericAttachment(
       attachmentTitle: attachmentTitle,
       inbound: inbound,
-      icon: Icons.insert_drive_file_rounded);
+      icon: Icons.insert_drive_file_rounded));
 }
 
-Widget _paddedWidget(Widget child) {
+/// AttachmentBuilder is a builder for attachments that handles progress
+/// indicators, error indicators and maximizing the displayed size
+/// given constraints.
+class AttachmentBuilder extends StatelessWidget {
+  final StoredAttachment attachment;
+  final bool inbound;
+  final bool
+      maximized; // set to true to make attachment use all available space in the message bubble
+  final bool padAttachment;
+  final IconData
+      defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
+  final Widget Function(BuildContext context, Uint8List thumbnail) builder;
+
+  AttachmentBuilder(
+      {Key? key,
+      required this.attachment,
+      required this.inbound,
+      this.maximized = false,
+      this.padAttachment = true,
+      required this.defaultIcon,
+      required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
+
+    // we are first downloading attachments and then decrypting them by calling
+    // _getDecryptedAttachment() in the FutureBuilder
+    switch (attachment.status) {
+      case StoredAttachment_Status.PENDING_UPLOAD:
+        // pending download
+        return _progressIndicator();
+      case StoredAttachment_Status.FAILED:
+        // error with download
+        return _errorIndicator();
+      default:
+        // successful download/upload, on to decrypting
+        return FutureBuilder(
+          future: model.thumbnail(attachment),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return _progressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return _errorIndicator();
+              }
+              var result = builder(context, snapshot.data!!);
+              if (maximized) {
+                result = SizedBox(
+                  width: 100.w,
+                  child: FittedBox(
+                    child: result,
+                  ),
+                );
+              }
+              if (padAttachment) {
+                result = _padded(result);
+              }
+              return result;
+            } else {
+              return Icon(defaultIcon,
+                  color: inbound ? inboundMsgColor : outboundMsgColor);
+            }
+          },
+        );
+    }
+  }
+
+  Widget _progressIndicator() {
+    return _padded(
+      Transform.scale(
+        scale: 0.5,
+        child: CircularProgressIndicator(
+          color: inbound ? inboundMsgColor : outboundMsgColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _errorIndicator() {
+    return _padded(
+      Icon(Icons.error_outlined,
+          color: inbound ? inboundMsgColor : outboundMsgColor),
+    );
+  }
+}
+
+Widget _padded(Widget child) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
     child: FittedBox(

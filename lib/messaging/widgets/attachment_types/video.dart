@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/attachment_builder.dart';
+import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/basic_memory_image.dart';
