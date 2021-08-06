@@ -65,4 +65,4 @@ gradle.properties
 *.aab
 *.bz2
 *.sha256
-version-qa.txt
+version-qa*.txt
