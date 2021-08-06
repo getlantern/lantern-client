@@ -324,7 +324,7 @@ class AudioWidget extends StatelessWidget {
         Container(
           color: Colors.black,
           padding: const EdgeInsets.all(2.0),
-          child: Text('${progressPercentage.round().toString()}%',
+          child: Text('${progressPercentage.toStringAsFixed(2)}%',
               style: TextStyle(
                   color: initialColor,
                   fontWeight: FontWeight.w700,
