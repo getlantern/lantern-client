@@ -9,6 +9,7 @@ const List<String> audioMimes = [
   'audio/mp4',
   'audio/mkv',
   'audio/mpeg',
+  'audio/vorbis',
 ];
 
 const List<String> imageMimes = [
@@ -29,4 +30,5 @@ const List<String> videoMimes = [
   'video/quicktime',
   'video/3gp',
   'video/webm',
+  'video/ogg',
 ];

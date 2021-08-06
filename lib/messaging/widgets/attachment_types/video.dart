@@ -30,7 +30,7 @@ class VideoAttachmentState extends State<VideoAttachment> {
       case StoredAttachment_Status.PENDING_UPLOAD:
         // pending download
         return Transform.scale(
-            scale: 0.5,
+            scale: 0.1,
             child: CircularProgressIndicator(
                 color: widget.inbound ? inboundMsgColor : outboundMsgColor));
       case StoredAttachment_Status.FAILED:
