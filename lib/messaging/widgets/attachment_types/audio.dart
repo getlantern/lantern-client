@@ -65,6 +65,7 @@ class AudioAttachment extends StatelessWidget {
         );
       case StoredAttachment_Status.DONE:
         return AudioWidget(
+          durationString: attachment.attachment.metadata['duration'],
           controller: AudioController(context, attachment),
           initialColor: inbound ? Colors.black : Colors.white,
           progressColor: inbound ? outboundMsgColor : inboundMsgColor,

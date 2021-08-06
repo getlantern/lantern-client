@@ -35,7 +35,7 @@ class WaveProgressBar extends StatelessWidget {
           containerHeight: listOfHeights.reduce(max),
           progresPercentage: progressPercentage,
           initialColor: initialColor,
-          progressColor: progressColor,
+          progressColor: Colors.red,
         ),
       ),
     );

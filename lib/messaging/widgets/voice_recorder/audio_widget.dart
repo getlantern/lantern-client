@@ -93,7 +93,7 @@ class AudioController extends ValueNotifier<AudioValue> {
       },
       onDetached: () {
         value.playerState = PlayerState.stopped;
-        value.position = const Duration(); // reset position to start
+        // value.position = const Duration(); // reset position to start
         notifyListeners();
       },
       onDurationChanged: ((d) {
@@ -123,6 +123,7 @@ class AudioWidget extends StatelessWidget {
   final bool showTimeRemaining;
   final double waveHeight;
   final double width;
+  final String? durationString;
 
   AudioWidget(
       {required this.controller,
@@ -131,7 +132,8 @@ class AudioWidget extends StatelessWidget {
       required this.backgroundColor,
       this.showTimeRemaining = true,
       required this.waveHeight,
-      required this.width});
+      required this.width,
+      this.durationString = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -151,11 +153,12 @@ class AudioWidget extends StatelessWidget {
                     children: [
                       Container(
                           width: 40,
-                          height: showTimeRemaining ? 80 : 40,
+                          height: showTimeRemaining ? 120 : 40,
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: _getPlayIcon(controller, value)),
-                      if (showTimeRemaining && value.duration != null)
-                        _getTimeRemaining(value),
+                      // if (showTimeRemaining && value.duration != null)
+                      //   _getTimeRemaining(value),
+                      _debugTime(value),
                     ],
                   )
                 ],
@@ -193,6 +196,28 @@ class AudioWidget extends StatelessWidget {
                 fontSize: 10.0)),
       );
 
+  Widget _debugTime(AudioValue value) => Container(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Column(
+          children: [
+            Text(
+                (value.position ?? const Duration())
+                    .toString()
+                    .substring(2, 11),
+                style: TextStyle(
+                    color: initialColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10.0)),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
+            Text(durationString.toString(),
+                style: TextStyle(
+                    color: initialColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 10.0)),
+          ],
+        ),
+      );
+
   Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
     return Positioned.fill(
       left: -22,
@@ -225,13 +250,13 @@ class AudioWidget extends StatelessWidget {
               ),
             );
           },
-          label: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? (value.position!.inSeconds).toString() + ' sec.'
-              : '0 sec.',
+          // label: (value.position != null &&
+          //         value.duration != null &&
+          //         value.position!.inMilliseconds > 0 &&
+          //         value.position!.inMilliseconds <
+          //             value.duration!.inMilliseconds)
+          //     ? (value.position!.inSeconds).toString() + ' sec.'
+          //     : '0 sec.',
           value: (value.position != null &&
                   value.duration != null &&
                   value.position!.inMilliseconds > 0 &&
@@ -275,21 +300,37 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
-          List<double> reducedAudioWave, double width) =>
-      WaveProgressBar(
-        progressPercentage: (value.position != null &&
-                value.duration != null &&
-                value.position!.inMilliseconds > 0 &&
-                value.position!.inMilliseconds < value.duration!.inMilliseconds)
-            ? (value.position!.inMilliseconds /
-                    value.duration!.inMilliseconds) *
-                100
-            : 0.0,
-        alignment: Alignment.bottomCenter,
-        listOfHeights: reducedAudioWave,
-        width: width,
-        initialColor: initialColor,
-        progressColor: progressColor,
-        backgroundColor: backgroundColor,
-      );
+      List<double> reducedAudioWave, double width) {
+    final progressPercentage = (value.position != null &&
+            value.duration != null &&
+            value.position!.inMilliseconds >= 0 &&
+            value.position!.inMilliseconds < value.duration!.inMilliseconds)
+        ? (value.position!.inMilliseconds / value.duration!.inMilliseconds) *
+            reducedAudioWave.length
+        : 0.0;
+
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: [
+        WaveProgressBar(
+          progressPercentage: progressPercentage,
+          alignment: Alignment.bottomCenter,
+          listOfHeights: reducedAudioWave,
+          width: width,
+          initialColor: initialColor,
+          progressColor: progressColor,
+          backgroundColor: backgroundColor,
+        ),
+        Container(
+          color: Colors.black,
+          padding: const EdgeInsets.all(2.0),
+          child: Text('${progressPercentage.round().toString()}%',
+              style: TextStyle(
+                  color: initialColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 10.0)),
+        ),
+      ],
+    );
+  }
 }
