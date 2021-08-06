@@ -16,7 +16,7 @@ class ImageAttachment extends StatelessWidget {
       case StoredAttachment_Status.PENDING:
         // pending download
         return Transform.scale(
-            scale: 0.5,
+            scale: 0.1,
             child: CircularProgressIndicator(
                 color: inbound ? inboundMsgColor : outboundMsgColor));
       case StoredAttachment_Status.FAILED:
