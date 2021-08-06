@@ -82,6 +82,8 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
     return Stack(
       alignment: Alignment.center,
       children: [
+        // Always render the thumbnail in order to preserve the size of the stack
+        // while the video starts playing
         SizedBox(
           // this box keeps the video from being too tall
           height: 80.w,
@@ -98,10 +100,11 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                   return Container();
                 }
                 return SizedBox(
+                  // Size video to the same absolute size as the thumbnail
+                  // This will get scaled to fit into the message bubble by the
+                  // containing AttachmentBuilder.
                   width: 80.w * value.aspectRatio,
                   height: 80.w,
-                  // width: _controller!.value.size.width,
-                  // height: _controller!.value.size.height,
                   child: AspectRatio(
                     aspectRatio: _controller!.value.aspectRatio,
                     child: Stack(
