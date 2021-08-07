@@ -24,6 +24,7 @@ class LRUCache<K, V> {
         _entries.remove(element.key);
       });
     }
+    _entries[key] = entry;
     return entry.value!;
   }
 }
