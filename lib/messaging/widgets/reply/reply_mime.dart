@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lantern/config/colors.dart';
 import 'package:lantern/enums/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/ui/widgets/basic_memory_image.dart';
 
@@ -24,7 +26,7 @@ class ReplyMime extends StatelessWidget {
         return _getIconWrapper(Icons.volume_up);
       case MimeTypes.VIDEO:
         return _PreviewBuilder(
-          future:
+          valueListenable:
               model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
           builder: (BuildContext context, Uint8List data) =>
               Stack(alignment: Alignment.center, children: [
@@ -38,7 +40,7 @@ class ReplyMime extends StatelessWidget {
         );
       case MimeTypes.IMAGE:
         return _PreviewBuilder(
-          future:
+          valueListenable:
               model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
           builder: (BuildContext context, Uint8List data) => BasicMemoryImage(
               data,
@@ -63,18 +65,24 @@ class ReplyMime extends StatelessWidget {
   }
 }
 
-class _PreviewBuilder<T> extends FutureBuilder<T> {
+class _PreviewBuilder<T> extends ValueListenableBuilder<CachedValue<T>> {
   _PreviewBuilder({
     Key? key,
-    required Future<T> future,
+    required ValueListenable<CachedValue<T>> valueListenable,
     required Widget Function(BuildContext context, T value) builder,
   }) : super(
             key: key,
-            future: future,
-            builder: (BuildContext context, AsyncSnapshot<T>? snapshot) =>
-                snapshot == null || !snapshot.hasData
-                    ? _getIconWrapper(Icons.error_outlined)
-                    : builder(context, snapshot.data!));
+            valueListenable: valueListenable,
+            builder: (BuildContext context, CachedValue<T> cachedValue,
+                Widget? child) {
+              if (cachedValue.error != null) {
+                return _getIconWrapper(Icons.error_outlined);
+              } else if (cachedValue.value == null) {
+                return const SizedBox();
+              } else {
+                return builder(context, cachedValue.value!);
+              }
+            });
 }
 
 Widget _getIconWrapper(IconData icon) {

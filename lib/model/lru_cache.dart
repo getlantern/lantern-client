@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 typedef LoadFunc<K, V> = Future<V> Function(K key);
 
 class LRUCache<K, V> {
@@ -11,10 +13,18 @@ class LRUCache<K, V> {
 
   LRUCache(this._limit, this._load);
 
-  Future<V> get(K key) {
+  ValueListenable<CachedValue<V>> get(K key) {
     var entry = _entries[key];
-    entry ??= CacheEntry(key);
-    entry.value ??= _load(key);
+    if (entry == null) {
+      entry = CacheEntry(key);
+      _load(key).then((v) {
+        entry!.value.value = CachedValue(loading: false, value: v);
+      }).catchError((e) {
+        entry!.value.value = CachedValue(loading: false, error: e);
+        _entries.remove(entry.key);
+      });
+      _entries[key] = entry;
+    }
     entry.updateUseTime();
     var numEntriesToRemove = _entries.length - _limit;
     if (numEntriesToRemove > 0) {
@@ -24,14 +34,13 @@ class LRUCache<K, V> {
         _entries.remove(element.key);
       });
     }
-    _entries[key] = entry;
-    return entry.value!;
+    return entry.value;
   }
 }
 
 class CacheEntry<K, V> {
   K key;
-  Future<V>? value;
+  ValueNotifier<CachedValue<V>> value = ValueNotifier(CachedValue());
   DateTime lastUse = DateTime.now();
 
   CacheEntry(this.key);
@@ -39,4 +48,12 @@ class CacheEntry<K, V> {
   void updateUseTime() {
     lastUse = DateTime.now();
   }
+}
+
+class CachedValue<V> {
+  final bool loading;
+  final V? value;
+  final Object? error;
+
+  CachedValue({this.loading = true, this.value, this.error});
 }
