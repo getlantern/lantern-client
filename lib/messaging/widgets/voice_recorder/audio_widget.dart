@@ -249,8 +249,6 @@ class AudioWidget extends StatelessWidget {
               return;
             }
             final position = v * value.duration!.inMilliseconds;
-            print('position: $position');
-            //
             controller.seek(
               Duration(
                 milliseconds: position.round(),
