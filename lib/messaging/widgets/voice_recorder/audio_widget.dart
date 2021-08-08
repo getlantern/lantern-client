@@ -14,7 +14,9 @@ enum PlayerState { stopped, playing, paused }
 
 class AudioValue {
   Duration? duration;
+  Duration? realDuration;
   Duration? position;
+  int? pendingPercentage;
   var reducedAudioWave = <double>[];
   PlayerState playerState = PlayerState.stopped;
 
@@ -22,6 +24,17 @@ class AudioValue {
 
   bool get isPaused => playerState == PlayerState.paused;
 }
+
+// (crdzbird): For some reason we have 2 different final times.
+//2887: is from the thumbnail or decrypted audio.
+//2388: is the final time from the audio.
+// 2594: is the final time from the audio using audioplayers.
+// When we start the player, we always receive a progress percentage below 100%.
+// the missing difference is obtained from the thumbnail `2887` and the final time `2594`.
+// once we have that time difference we can override the thumbnail time with the new final time.
+
+int percentageOf(int value, int maxValue) =>
+    (100 - (((value) / maxValue) * 100)).toInt();
 
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
@@ -97,7 +110,9 @@ class AudioController extends ValueNotifier<AudioValue> {
         notifyListeners();
       },
       onDurationChanged: ((d) {
-        value.duration = d;
+        value.realDuration = d;
+        value.pendingPercentage =
+            percentageOf(d.inMilliseconds, value.duration!.inMilliseconds);
         notifyListeners();
       }),
       onPositionChanged: ((p) {
@@ -197,6 +212,20 @@ class AudioWidget extends StatelessWidget {
       );
 
   Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
+    var _progress = 0.0;
+    if (value.position != null &&
+        value.realDuration != null &&
+        value.position!.inMilliseconds > 0 &&
+        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
+      _progress = (value.position!.inMilliseconds /
+                      value.realDuration!.inMilliseconds) *
+                  (100 + value.pendingPercentage!) >
+              100
+          ? 100
+          : (value.position!.inMilliseconds /
+                  value.realDuration!.inMilliseconds) *
+              (100 + value.pendingPercentage!);
+    }
     return Align(
       alignment: Alignment.center,
       child: SliderTheme(
@@ -220,19 +249,17 @@ class AudioWidget extends StatelessWidget {
               return;
             }
             final position = v * value.duration!.inMilliseconds;
+            print('position: $position');
+            //
             controller.seek(
               Duration(
                 milliseconds: position.round(),
               ),
             );
           },
-          value: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? value.position!.inMilliseconds / value.duration!.inMilliseconds
-              : 0.0,
+          min: 0,
+          max: 100,
+          value: _progress,
         ),
       ),
     );
@@ -269,27 +296,34 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
-          List<double> reducedAudioWave, double width) =>
-      Padding(
-        padding: padding,
-        child: WaveProgressBar(
-          height: height,
-          progressPercentage: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? (value.position!.inMilliseconds /
-                      value.duration!.inMilliseconds) *
-                  100
-              : 0.0,
-          alignment: Alignment.topCenter,
-          listOfHeights: reducedAudioWave,
-          width: width,
-          initialColor: initialColor,
-          progressColor: progressColor,
-          backgroundColor: backgroundColor,
-          heightBarPadding: 0.5,
-        ),
-      );
+      List<double> reducedAudioWave, double width) {
+    var _progress = 0.0;
+    if (value.position != null &&
+        value.realDuration != null &&
+        value.position!.inMilliseconds > 0 &&
+        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
+      _progress = (value.position!.inMilliseconds /
+                      value.realDuration!.inMilliseconds) *
+                  (100 + value.pendingPercentage!) >
+              100
+          ? 100
+          : (value.position!.inMilliseconds /
+                  value.realDuration!.inMilliseconds) *
+              (100 + value.pendingPercentage!);
+    }
+    return Padding(
+      padding: padding,
+      child: WaveProgressBar(
+        height: height,
+        progressPercentage: _progress,
+        alignment: Alignment.topCenter,
+        listOfHeights: reducedAudioWave,
+        width: width,
+        initialColor: initialColor,
+        progressColor: progressColor,
+        backgroundColor: backgroundColor,
+        heightBarPadding: 0.5,
+      ),
+    );
+  }
 }
