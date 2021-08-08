@@ -117,18 +117,22 @@ class AudioController extends ValueNotifier<AudioValue> {
 
 class AudioWidget extends StatelessWidget {
   final AudioController controller;
+  final double? height;
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
   final bool showTimeRemaining;
   final double waveHeight;
   final double width;
+  final EdgeInsets padding;
 
   AudioWidget(
       {required this.controller,
       required this.initialColor,
       required this.progressColor,
       required this.backgroundColor,
+      this.padding = EdgeInsets.zero,
+      this.height,
       this.showTimeRemaining = true,
       required this.waveHeight,
       required this.width});
@@ -166,7 +170,6 @@ class AudioWidget extends StatelessWidget {
                 height: waveHeight,
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
-                  alignment: AlignmentDirectional.bottomCenter,
                   children: [
                     value.reducedAudioWave.isNotEmpty
                         ? _getWaveBar(
@@ -193,12 +196,9 @@ class AudioWidget extends StatelessWidget {
                 fontSize: 10.0)),
       );
 
-  Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
-    return Positioned.fill(
-      left: -22,
-      top: 1,
-      bottom: 0,
-      right: -22,
+  Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
+    return Align(
+      alignment: Alignment.center,
       child: SliderTheme(
         data: SliderThemeData(
             activeTrackColor: value.reducedAudioWave.isNotEmpty
@@ -208,6 +208,7 @@ class AudioWidget extends StatelessWidget {
                 ? Colors.transparent
                 : Colors.blue,
             valueIndicatorColor: Colors.grey.shade200,
+            trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
                 height: thumbShapeHeight,
                 isPlaying: value.playerState == PlayerState.playing ||
@@ -225,13 +226,6 @@ class AudioWidget extends StatelessWidget {
               ),
             );
           },
-          label: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? (value.position!.inSeconds).toString() + ' sec.'
-              : '0 sec.',
           value: (value.position != null &&
                   value.duration != null &&
                   value.position!.inMilliseconds > 0 &&
@@ -276,20 +270,26 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
           List<double> reducedAudioWave, double width) =>
-      WaveProgressBar(
-        progressPercentage: (value.position != null &&
-                value.duration != null &&
-                value.position!.inMilliseconds > 0 &&
-                value.position!.inMilliseconds < value.duration!.inMilliseconds)
-            ? (value.position!.inMilliseconds /
-                    value.duration!.inMilliseconds) *
-                100
-            : 0.0,
-        alignment: Alignment.bottomCenter,
-        listOfHeights: reducedAudioWave,
-        width: width,
-        initialColor: initialColor,
-        progressColor: progressColor,
-        backgroundColor: backgroundColor,
+      Padding(
+        padding: padding,
+        child: WaveProgressBar(
+          height: height,
+          progressPercentage: (value.position != null &&
+                  value.duration != null &&
+                  value.position!.inMilliseconds > 0 &&
+                  value.position!.inMilliseconds <
+                      value.duration!.inMilliseconds)
+              ? (value.position!.inMilliseconds /
+                      value.duration!.inMilliseconds) *
+                  100
+              : 0.0,
+          alignment: Alignment.topCenter,
+          listOfHeights: reducedAudioWave,
+          width: width,
+          initialColor: initialColor,
+          progressColor: progressColor,
+          backgroundColor: backgroundColor,
+          heightBarPadding: 0.5,
+        ),
       );
 }
