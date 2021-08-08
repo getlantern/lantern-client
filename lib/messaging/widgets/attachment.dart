@@ -64,12 +64,15 @@ class AttachmentBuilder extends StatelessWidget {
     // we are first downloading attachments and then decrypting them by calling
     // _getDecryptedAttachment() in the FutureBuilder
     switch (attachment.status) {
-      case StoredAttachment_Status.PENDING_UPLOAD:
-        // pending download
+      case StoredAttachment_Status.PENDING:
         return _progressIndicator();
       case StoredAttachment_Status.FAILED:
         // error with download
         return _errorIndicator();
+      case StoredAttachment_Status.PENDING_UPLOAD:
+        continue alsoDone;
+      alsoDone:
+      case StoredAttachment_Status.DONE:
       default:
         // successful download/upload, on to decrypting
         return ValueListenableBuilder(
