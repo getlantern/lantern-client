@@ -71,6 +71,7 @@ class AudioAttachment extends StatelessWidget {
           backgroundColor: inbound ? inboundBgColor : outboundBgColor,
           width: MediaQuery.of(context).size.width * 0.5,
           waveHeight: 50,
+          height: 50,
         );
       default:
         return errorCaseWidget;
