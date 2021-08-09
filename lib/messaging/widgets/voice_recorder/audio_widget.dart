@@ -52,6 +52,8 @@ class AudioController extends ValueNotifier<AudioValue> {
     if (durationString != null) {
       var milliseconds = (double.tryParse(durationString)! * 1000).toInt();
       value.duration = Duration(milliseconds: milliseconds);
+      value.realDuration = Duration(milliseconds: milliseconds);
+      value.pendingPercentage = 0;
     }
 
     var thumbnailFuture = thumbnail != null
@@ -78,6 +80,8 @@ class AudioController extends ValueNotifier<AudioValue> {
     if (result == 1) {
       value.playerState = PlayerState.paused;
       value.position = const Duration();
+      value.realDuration = const Duration();
+      value.pendingPercentage = 0;
       notifyListeners();
     }
     return result;
@@ -217,20 +221,7 @@ class AudioWidget extends StatelessWidget {
       );
 
   Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
-    var _progress = 0.0;
-    if (value.position != null &&
-        value.realDuration != null &&
-        value.position!.inMilliseconds > 0 &&
-        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
-      _progress = (value.position!.inMilliseconds /
-                      value.realDuration!.inMilliseconds) *
-                  (100 + value.pendingPercentage!) >
-              100
-          ? 100
-          : (value.position!.inMilliseconds /
-                  value.realDuration!.inMilliseconds) *
-              (100 + value.pendingPercentage!);
-    }
+    var _progress = _updateProgress(value);
     return Align(
       alignment: Alignment.center,
       child: SliderTheme(
@@ -300,20 +291,7 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
       List<double> reducedAudioWave, double width) {
-    var _progress = 0.0;
-    if (value.position != null &&
-        value.realDuration != null &&
-        value.position!.inMilliseconds > 0 &&
-        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
-      _progress = (value.position!.inMilliseconds /
-                      value.realDuration!.inMilliseconds) *
-                  (100 + value.pendingPercentage!) >
-              100
-          ? 100
-          : (value.position!.inMilliseconds /
-                  value.realDuration!.inMilliseconds) *
-              (100 + value.pendingPercentage!);
-    }
+    var _progress = _updateProgress(value);
     return Padding(
       padding: padding,
       child: WaveProgressBar(
@@ -328,5 +306,24 @@ class AudioWidget extends StatelessWidget {
         heightBarPadding: 0.5,
       ),
     );
+  }
+
+  double _updateProgress(AudioValue value) {
+    var _progress = 0.0;
+    if (value.position != null &&
+        value.realDuration != null &&
+        value.pendingPercentage != null &&
+        value.position!.inMilliseconds > 0 &&
+        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
+      _progress = (value.position!.inMilliseconds /
+                      value.realDuration!.inMilliseconds) *
+                  (100 + value.pendingPercentage!) >
+              100
+          ? 100
+          : (value.position!.inMilliseconds /
+                  value.realDuration!.inMilliseconds) *
+              (100 + value.pendingPercentage!);
+    }
+    return _progress;
   }
 }
