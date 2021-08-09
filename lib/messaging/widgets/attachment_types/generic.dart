@@ -4,20 +4,20 @@ class GenericAttachment extends StatelessWidget {
   const GenericAttachment({
     Key? key,
     required this.attachmentTitle,
+    required this.fileExtension,
     required this.inbound,
     required this.icon,
   }) : super(key: key);
 
   final String? attachmentTitle;
+  final String? fileExtension;
   final bool inbound;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    final fileType = attachmentTitle?.toString().split('.')[1] ??
-        'Could not render filetype'.i18n;
-    final title = attachmentTitle?.toString().split('.')[0] ??
-        'Could not render file title'.i18n;
+    final title = attachmentTitle ?? 'Could not render file title'.i18n;
+    final fileType = fileExtension ?? 'Could not render filetype'.i18n;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

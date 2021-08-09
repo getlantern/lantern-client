@@ -27,8 +27,8 @@ import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:lantern/messaging/widgets/custom_file_picker/custom_file_picker.dart';
+import 'package:flutter/services.dart';
 
 class Conversation extends StatefulWidget {
   final Contact _contact;
@@ -64,6 +64,8 @@ class _ConversationState extends State<Conversation>
   StreamSubscription<bool>? keyboardStream;
   bool _keyboardState = true;
 
+  late CustomFilePicker filePicker = CustomFilePicker();
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -97,9 +99,6 @@ class _ConversationState extends State<Conversation>
     BackButtonInterceptor.add(_interceptBackButton);
     WidgetsBinding.instance!.addObserver(this);
   }
-
-  // Filepicker vars
-  List<AssetEntity> assets = <AssetEntity>[];
 
   @override
   void dispose() {
@@ -193,49 +192,25 @@ class _ConversationState extends State<Conversation>
 
   void showKeyboard() => _focusNode.requestFocus();
 
-  Future<List<AssetEntity>?> _renderFilePicker() async {
-    AssetPicker.registerObserve();
-    return await AssetPicker.pickAssets(
-      context,
-      selectedAssets: assets,
-      textDelegate: EnglishTextDelegate(),
-      // DefaultAssetsPickerTextDelegate for Chinese
-      requestType: RequestType.all,
-      specialItemPosition: SpecialItemPosition.prepend,
-      specialItemBuilder: (BuildContext context) {
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () async {
-            final result = await CameraPicker.pickFromCamera(
-              context,
-              enableRecording: true,
-            );
-            if (result != null) {
-              Navigator.of(context).pop(<AssetEntity>[result]);
-            }
-          },
-          // TODO: Refine the UI/UX
-          child: const Center(
-            child: Icon(Icons.camera),
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> _selectFilesToShare() async {
     try {
-      var pickedAssets = await _renderFilePicker();
-      if (pickedAssets == null) {
+      var selectedFilePaths = await filePicker.openFileExplorer();
+      if (selectedFilePaths!.isEmpty) {
         return;
       }
       context.loaderOverlay.show();
-      pickedAssets.forEach((el) async {
-        final absolutePath =
-            await el.originFile.then((file) async => file?.path) as String;
-        final metadata = {'title': el.title as String};
+      selectedFilePaths.forEach((el) async {
+        // TODO: we might need to sanitize titles here
+        // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
+        final title = el.path.toString().split('file_picker/')[1].split('.')[0];
+        final fileExtension =
+            el.path.toString().split('file_picker/')[1].split('.')[1];
+        final metadata = {
+          'title': title,
+          'fileExtension': fileExtension,
+        };
         final attachment =
-            await model.filePickerLoadAttachment(absolutePath, metadata);
+            await model.filePickerLoadAttachment(el.path.toString(), metadata);
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
@@ -247,7 +222,6 @@ class _ConversationState extends State<Conversation>
     } finally {
       context.loaderOverlay.hide();
     }
-    AssetPicker.unregisterObserve();
   }
 
   void dismissKeyboard() {

@@ -1,3 +1,4 @@
+// https://developer.android.com/guide/topics/media/media-formats
 const List<String> audioMimes = [
   'application/ogg',
   'audio/ogg',
@@ -14,6 +15,7 @@ const List<String> audioMimes = [
 
 const List<String> imageMimes = [
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/bpm',
   'image/gif',
@@ -32,3 +34,13 @@ const List<String> videoMimes = [
   'video/webm',
   'video/ogg',
 ];
+
+String getMimeFromExtension(String fileExtension) {
+  if (audioMimes.toString().contains(fileExtension)) return 'audio';
+  if (videoMimes.toString().contains(fileExtension)) return 'video';
+  if (imageMimes.toString().contains(fileExtension)) return 'image';
+  return '';
+}
+
+List<String> getExtensionFromMimeList(List<String> list) =>
+    list.map((val) => val.split('/')[1]).toList();
