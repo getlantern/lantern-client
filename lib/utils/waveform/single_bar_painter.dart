@@ -34,7 +34,7 @@ class SingleBarPainter extends CustomPainter {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(startingPosition, -heightOfContainer / 1.9,
-            singleBarWidth, outerSideHeight / 2),
+            singleBarWidth, outerSideHeight),
         const Radius.circular(0),
       ),
       aboveAndBelowPaint,
@@ -46,22 +46,10 @@ class SingleBarPainter extends CustomPainter {
             startingPosition,
             outerSideHeight / 2 - heightOfContainer / 2,
             singleBarWidth,
-            actualSeekBarHeight),
+            actualSeekBarHeight / 2),
         Radius.circular(barBorderRadius),
       ),
       trackPaint,
-    );
-
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(
-            startingPosition,
-            (outerSideHeight / 2) - heightOfContainer / 2 + actualSeekBarHeight,
-            singleBarWidth,
-            outerSideHeight / 2),
-        const Radius.circular(0),
-      ),
-      aboveAndBelowPaint,
     );
 
     canvas.drawRRect(

@@ -14,7 +14,9 @@ enum PlayerState { stopped, playing, paused }
 
 class AudioValue {
   Duration? duration;
+  Duration? realDuration;
   Duration? position;
+  int? pendingPercentage;
   var reducedAudioWave = <double>[];
   PlayerState playerState = PlayerState.stopped;
 
@@ -22,6 +24,17 @@ class AudioValue {
 
   bool get isPaused => playerState == PlayerState.paused;
 }
+
+// (crdzbird): For some reason we have 2 different final times.
+//2887: is from the thumbnail or decrypted audio.
+//2388: is the final time from the audio.
+// 2594: is the final time from the audio using audioplayers.
+// When we start the player, we always receive a progress percentage below 100%.
+// the missing difference is obtained from the thumbnail `2887` and the final time `2594`.
+// once we have that time difference we can override the thumbnail time with the new final time.
+
+int percentageOf(int value, int maxValue) =>
+    (100 - (((value) / maxValue) * 100)).toInt();
 
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
@@ -39,6 +52,8 @@ class AudioController extends ValueNotifier<AudioValue> {
     if (durationString != null) {
       var milliseconds = (double.tryParse(durationString)! * 1000).toInt();
       value.duration = Duration(milliseconds: milliseconds);
+      value.realDuration = Duration(milliseconds: milliseconds);
+      value.pendingPercentage = 0;
     }
 
     var thumbnailFuture = thumbnail != null
@@ -71,6 +86,8 @@ class AudioController extends ValueNotifier<AudioValue> {
     if (result == 1) {
       value.playerState = PlayerState.paused;
       value.position = const Duration();
+      value.realDuration = const Duration();
+      value.pendingPercentage = 0;
       notifyListeners();
     }
     return result;
@@ -108,7 +125,9 @@ class AudioController extends ValueNotifier<AudioValue> {
         notifyListeners();
       },
       onDurationChanged: ((d) {
-        value.duration = d;
+        value.realDuration = d;
+        value.pendingPercentage =
+            percentageOf(d.inMilliseconds, value.duration!.inMilliseconds);
         notifyListeners();
       }),
       onPositionChanged: ((p) {
@@ -128,21 +147,27 @@ class AudioController extends ValueNotifier<AudioValue> {
 
 class AudioWidget extends StatelessWidget {
   final AudioController controller;
+  final double? widgetHeight;
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
   final bool showTimeRemaining;
   final double waveHeight;
-  final double width;
+  final double previewBarHeight;
+  final double widgetWidth;
+  final EdgeInsets padding;
 
   AudioWidget(
       {required this.controller,
       required this.initialColor,
       required this.progressColor,
       required this.backgroundColor,
+      this.padding = EdgeInsets.zero,
+      this.widgetHeight,
       this.showTimeRemaining = true,
       required this.waveHeight,
-      required this.width});
+      this.previewBarHeight = 40,
+      required this.widgetWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +187,9 @@ class AudioWidget extends StatelessWidget {
                     children: [
                       Container(
                           width: 40,
-                          height: showTimeRemaining ? 80 : 40,
+                          height: showTimeRemaining
+                              ? 2 * widgetHeight!
+                              : previewBarHeight,
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: _getPlayIcon(controller, value)),
                       if (showTimeRemaining && value.duration != null)
@@ -172,16 +199,15 @@ class AudioWidget extends StatelessWidget {
                 ],
               ),
               Container(
-                width: width,
+                width: widgetWidth,
                 margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
                 height: waveHeight,
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
-                  alignment: AlignmentDirectional.bottomCenter,
                   children: [
                     value.reducedAudioWave.isNotEmpty
                         ? _getWaveBar(
-                            context, value, value.reducedAudioWave, width)
+                            context, value, value.reducedAudioWave, widgetWidth)
                         : const SizedBox(),
                     _getSliderOverlay(value, waveHeight),
                   ],
@@ -204,12 +230,10 @@ class AudioWidget extends StatelessWidget {
                 fontSize: 10.0)),
       );
 
-  Positioned _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
-    return Positioned.fill(
-      left: -22,
-      top: 1,
-      bottom: 0,
-      right: -22,
+  Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
+    var _progress = _updateProgress(value);
+    return Align(
+      alignment: Alignment.center,
       child: SliderTheme(
         data: SliderThemeData(
             activeTrackColor: value.reducedAudioWave.isNotEmpty
@@ -219,6 +243,7 @@ class AudioWidget extends StatelessWidget {
                 ? Colors.transparent
                 : Colors.blue,
             valueIndicatorColor: Colors.grey.shade200,
+            trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
                 height: thumbShapeHeight,
                 isPlaying: value.playerState == PlayerState.playing ||
@@ -236,20 +261,9 @@ class AudioWidget extends StatelessWidget {
               ),
             );
           },
-          label: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? (value.position!.inSeconds).toString() + ' sec.'
-              : '0 sec.',
-          value: (value.position != null &&
-                  value.duration != null &&
-                  value.position!.inMilliseconds > 0 &&
-                  value.position!.inMilliseconds <
-                      value.duration!.inMilliseconds)
-              ? value.position!.inMilliseconds / value.duration!.inMilliseconds
-              : 0.0,
+          min: 0,
+          max: 100,
+          value: _progress,
         ),
       ),
     );
@@ -286,21 +300,40 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getWaveBar(BuildContext context, AudioValue value,
-          List<double> reducedAudioWave, double width) =>
-      WaveProgressBar(
-        progressPercentage: (value.position != null &&
-                value.duration != null &&
-                value.position!.inMilliseconds > 0 &&
-                value.position!.inMilliseconds < value.duration!.inMilliseconds)
-            ? (value.position!.inMilliseconds /
-                    value.duration!.inMilliseconds) *
-                100
-            : 0.0,
-        alignment: Alignment.bottomCenter,
+      List<double> reducedAudioWave, double width) {
+    var _progress = _updateProgress(value);
+    return Padding(
+      padding: padding,
+      child: WaveProgressBar(
+        progressPercentage: _progress,
+        alignment: Alignment.topCenter,
         listOfHeights: reducedAudioWave,
-        width: width,
         initialColor: initialColor,
         progressColor: progressColor,
         backgroundColor: backgroundColor,
-      );
+        width: width,
+        height: widgetHeight,
+        barHeightScaling: 0.5,
+      ),
+    );
+  }
+
+  double _updateProgress(AudioValue value) {
+    var _progress = 0.0;
+    if (value.position != null &&
+        value.realDuration != null &&
+        value.pendingPercentage != null &&
+        value.position!.inMilliseconds > 0 &&
+        value.position!.inMilliseconds < value.realDuration!.inMilliseconds) {
+      _progress = (value.position!.inMilliseconds /
+                      value.realDuration!.inMilliseconds) *
+                  (100 + value.pendingPercentage!) >
+              100
+          ? 100
+          : (value.position!.inMilliseconds /
+                  value.realDuration!.inMilliseconds) *
+              (100 + value.pendingPercentage!);
+    }
+    return _progress;
+  }
 }
