@@ -38,6 +38,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
               widgetHeight: 50,
               widgetWidth: MediaQuery.of(context).size.width * 0.6,
               waveHeight: 50,
+              previewBarHeight: 40,
             ),
           ),
           GestureDetector(

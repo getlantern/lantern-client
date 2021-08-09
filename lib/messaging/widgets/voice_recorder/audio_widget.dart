@@ -147,6 +147,7 @@ class AudioWidget extends StatelessWidget {
   final Color backgroundColor;
   final bool showTimeRemaining;
   final double waveHeight;
+  final double previewBarHeight;
   final double widgetWidth;
   final EdgeInsets padding;
 
@@ -159,6 +160,7 @@ class AudioWidget extends StatelessWidget {
       this.widgetHeight,
       this.showTimeRemaining = true,
       required this.waveHeight,
+      this.previewBarHeight = 40,
       required this.widgetWidth});
 
   @override
@@ -179,7 +181,9 @@ class AudioWidget extends StatelessWidget {
                     children: [
                       Container(
                           width: 40,
-                          height: showTimeRemaining ? 80 : 40,
+                          height: showTimeRemaining
+                              ? 2 * widgetHeight!
+                              : previewBarHeight,
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: _getPlayIcon(controller, value)),
                       if (showTimeRemaining && value.duration != null)
