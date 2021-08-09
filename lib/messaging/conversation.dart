@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -27,7 +28,6 @@ import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:lantern/messaging/widgets/custom_file_picker/custom_file_picker.dart';
 import 'package:flutter/services.dart';
 
 class Conversation extends StatefulWidget {
@@ -63,8 +63,6 @@ class _ConversationState extends State<Conversation>
   final _scrollController = ItemScrollController();
   StreamSubscription<bool>? keyboardStream;
   bool _keyboardState = true;
-
-  late CustomFilePicker filePicker = CustomFilePicker();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -194,12 +192,14 @@ class _ConversationState extends State<Conversation>
 
   Future<void> _selectFilesToShare() async {
     try {
-      var selectedFilePaths = await filePicker.openFileExplorer();
-      if (selectedFilePaths!.isEmpty) {
+      var result = await FilePicker.platform
+          .pickFiles(type: FileType.any, allowMultiple: true);
+      if (result == null || result.files.isEmpty) {
+        // user didn't pick any files, don't share anything
         return;
       }
       context.loaderOverlay.show();
-      selectedFilePaths.forEach((el) async {
+      result.files.forEach((el) async {
         // TODO: we might need to sanitize titles here
         // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
         final title = el.path.toString().split('file_picker/')[1].split('.')[0];
