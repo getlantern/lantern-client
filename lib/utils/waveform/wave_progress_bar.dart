@@ -13,7 +13,7 @@ class WaveProgressBar extends StatelessWidget {
   final Color progressColor;
   final Color backgroundColor;
   final double begin;
-  final double heightBarPadding;
+  final double barHeightScaling;
   final double? height;
 
   WaveProgressBar({
@@ -21,7 +21,7 @@ class WaveProgressBar extends StatelessWidget {
     required this.initialColor,
     required this.progressColor,
     required this.backgroundColor,
-    this.heightBarPadding = 1,
+    this.barHeightScaling = 1,
     this.height,
     this.alignment = Alignment.center,
     this.begin = 0,
@@ -51,7 +51,7 @@ class WaveProgressBar extends StatelessWidget {
             startingPosition: i * (width / listOfHeights.length),
             singleBarWidth: width / listOfHeights.length,
             maxSeekBarHeight: height ?? listOfHeights.reduce(math.max) + 1,
-            actualSeekBarHeight: listOfHeights[i] * heightBarPadding,
+            actualSeekBarHeight: listOfHeights[i] * barHeightScaling,
             heightOfContainer: height ?? listOfHeights.reduce(math.max),
             backgroundColor: backgroundColor,
           ),

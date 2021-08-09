@@ -141,13 +141,13 @@ class AudioController extends ValueNotifier<AudioValue> {
 
 class AudioWidget extends StatelessWidget {
   final AudioController controller;
-  final double? height;
+  final double? widgetHeight;
   final Color initialColor;
   final Color progressColor;
   final Color backgroundColor;
   final bool showTimeRemaining;
   final double waveHeight;
-  final double width;
+  final double widgetWidth;
   final EdgeInsets padding;
 
   AudioWidget(
@@ -156,10 +156,10 @@ class AudioWidget extends StatelessWidget {
       required this.progressColor,
       required this.backgroundColor,
       this.padding = EdgeInsets.zero,
-      this.height,
+      this.widgetHeight,
       this.showTimeRemaining = true,
       required this.waveHeight,
-      required this.width});
+      required this.widgetWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +189,7 @@ class AudioWidget extends StatelessWidget {
                 ],
               ),
               Container(
-                width: width,
+                width: widgetWidth,
                 margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
                 height: waveHeight,
                 child: Stack(
@@ -197,7 +197,7 @@ class AudioWidget extends StatelessWidget {
                   children: [
                     value.reducedAudioWave.isNotEmpty
                         ? _getWaveBar(
-                            context, value, value.reducedAudioWave, width)
+                            context, value, value.reducedAudioWave, widgetWidth)
                         : const SizedBox(),
                     _getSliderOverlay(value, waveHeight),
                   ],
@@ -295,15 +295,15 @@ class AudioWidget extends StatelessWidget {
     return Padding(
       padding: padding,
       child: WaveProgressBar(
-        height: height,
         progressPercentage: _progress,
         alignment: Alignment.topCenter,
         listOfHeights: reducedAudioWave,
-        width: width,
         initialColor: initialColor,
         progressColor: progressColor,
         backgroundColor: backgroundColor,
-        heightBarPadding: 0.5,
+        width: width,
+        height: widgetHeight,
+        barHeightScaling: 0.5,
       ),
     );
   }
