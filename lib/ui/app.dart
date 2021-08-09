@@ -30,6 +30,7 @@ class LanternApp extends StatelessWidget {
         Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),
       ],
+      // We typically don't use FutureBuilder, but it's okay here
       child: FutureBuilder(
           future: Localization.loadTranslations(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {

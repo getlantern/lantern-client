@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -106,7 +107,8 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<Uint8List> thumbnail(StoredAttachment attachment) async {
+  ValueListenable<CachedValue<Uint8List>> thumbnail(
+      StoredAttachment attachment) {
     return _thumbnailCache.get(attachment);
   }
 
