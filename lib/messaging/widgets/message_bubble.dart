@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/conversation.dart';
-import 'package:lantern/messaging/widgets/reactions.dart';
+import 'package:lantern/messaging/widgets/message_bubble_components/reactions.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -119,8 +119,7 @@ class MessageBubble extends StatelessWidget {
     if (wasDeleted) {
       final humanizedSenderName =
           matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
-      return DeletedBubble(
-          '$humanizedSenderName deleted this message for everyone'); // TODO: Add i18n
+      return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
 
     return FocusedMenuHolder(

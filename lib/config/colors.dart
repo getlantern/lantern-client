@@ -23,6 +23,14 @@ Color outboundBgColor = HexColor('#007A7C');
 Color outboundMsgColor = HexColor('#FFFFFF');
 Color inboundMsgColor = HexColor('#000000');
 Color inboundBgColor = HexColor('#EBEBEB');
+Color snippetBgColor = HexColor('#F5F5F5');
+Color snippetShadowColor = const Color.fromARGB(
+  100,
+  0,
+  0,
+  0,
+);
+Color snippetBgIconColor = HexColor('#707070');
 
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;

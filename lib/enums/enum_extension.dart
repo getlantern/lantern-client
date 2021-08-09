@@ -1,4 +1,5 @@
-import 'package:lantern/enums/mime_reply.dart';
+import 'package:lantern/config/mime_types.dart';
+import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
 extension EnumExtension on MimeTypes {
@@ -8,9 +9,9 @@ extension EnumExtension on MimeTypes {
 extension AttachmentExtension on Attachment {
   MimeTypes fromString() {
     if (mimeType.isEmpty) return MimeTypes.EMPTY;
-    if (mimeType.contains('video')) return MimeTypes.VIDEO;
-    if (mimeType.contains('image')) return MimeTypes.IMAGE;
-    if (mimeType == 'application/ogg') return MimeTypes.AUDIO;
+    if (audioMimes.contains(mimeType)) return MimeTypes.AUDIO;
+    if (imageMimes.contains(mimeType)) return MimeTypes.IMAGE;
+    if (videoMimes.contains(mimeType)) return MimeTypes.VIDEO;
     return MimeTypes.OTHERS;
   }
 }

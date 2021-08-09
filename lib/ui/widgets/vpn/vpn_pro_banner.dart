@@ -11,7 +11,6 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
     return InkWell(
       // TODO make InkWell ripple effect works with BoxDecoration
       onTap: () {

@@ -20,7 +20,6 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
     var vpnModel = context.watch<VpnModel>();
 
     return BottomNavigationBar(

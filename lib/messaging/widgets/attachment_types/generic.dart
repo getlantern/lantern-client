@@ -14,15 +14,17 @@ class GenericAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fileType = attachmentTitle.toString().split('.')[1];
-    final title = attachmentTitle.toString().split('.')[0];
+    final fileType = attachmentTitle?.toString().split('.')[1] ??
+        'Could not render filetype'.i18n;
+    final title = attachmentTitle?.toString().split('.')[0] ??
+        'Could not render file title'.i18n;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // TODO: create a utils function that looks up file extension and returns corresponding icon
         Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 10.0, 0),
+          margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             border: Border.all(

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -101,17 +102,22 @@ class MessagingModel extends Model {
         'filePickerLoadAttachment', <String, dynamic>{
       'filePath': filePath,
       'metadata': metadata
-    }).then((value) => value as Uint8List);
+    }).then((value) {
+      return value as Uint8List;
+    });
   }
 
-  Future<Uint8List> thumbnail(StoredAttachment attachment) async {
+  ValueListenable<CachedValue<Uint8List>> thumbnail(
+      StoredAttachment attachment) {
     return _thumbnailCache.get(attachment);
   }
 
   Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
     return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
       'attachment': attachment.writeToBuffer(),
-    }).then((value) => value as Uint8List);
+    }).then((value) {
+      return value as Uint8List;
+    });
   }
 
   Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {
