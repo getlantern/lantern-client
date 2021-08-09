@@ -30,14 +30,14 @@ class MessageBarPreviewRecording extends StatelessWidget {
           Flexible(
             fit: FlexFit.tight,
             child: AudioWidget(
-              height: 50,
               controller: audioController,
               initialColor: Colors.black,
               progressColor: outboundMsgColor,
               backgroundColor: inboundBgColor,
               showTimeRemaining: false,
-              width: MediaQuery.of(context).size.width * 0.6,
-              waveHeight: 45,
+              widgetHeight: 50,
+              widgetWidth: MediaQuery.of(context).size.width * 0.6,
+              waveHeight: 50,
             ),
           ),
           GestureDetector(
