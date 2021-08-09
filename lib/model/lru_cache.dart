@@ -16,11 +16,14 @@ class LRUCache<K, V> {
   ValueListenable<CachedValue<V>> get(K key) {
     var entry = _entries[key];
     if (entry == null) {
-      entry = CacheEntry(key);
-      _load(key).then((v) {
-        entry!.value.value = CachedValue(loading: false, value: v);
+      var future = _load(key);
+      entry = CacheEntry(key: key, future: future);
+      future.then((v) {
+        entry!.value.value =
+            CachedValue(future: future, loading: false, value: v);
       }).catchError((e) {
-        entry!.value.value = CachedValue(loading: false, error: e);
+        entry!.value.value =
+            CachedValue(future: future, loading: false, error: e);
         _entries.remove(entry.key);
       });
       _entries[key] = entry;
@@ -39,21 +42,41 @@ class LRUCache<K, V> {
 }
 
 class CacheEntry<K, V> {
-  K key;
-  ValueNotifier<CachedValue<V>> value = ValueNotifier(CachedValue());
+  final K key;
+  late ValueNotifier<CachedValue<V>> value;
   DateTime lastUse = DateTime.now();
 
-  CacheEntry(this.key);
+  CacheEntry({required this.key, required Future<V> future}) {
+    value = ValueNotifier(CachedValue(future: future));
+  }
 
   void updateUseTime() {
     lastUse = DateTime.now();
   }
 }
 
+/**
+ * An asynchronously loaded value cached in an LRU cache. CachedValues are
+ * immutable.
+ *
+ * [loading] indicates if the value is still asynchronously loading
+ * [value] will have the loaded value if loading completed successfully
+ * [error] if loading fails, this contains the error encountered
+ *
+ */
 class CachedValue<V> {
+  /// a future that can be used to watch for completion of the value loading
+  Future<V> future;
+
+  /// indicates if the value is still asynchronously loading
   final bool loading;
+
+  /// will have the loaded value if loading completed successfully
   final V? value;
+
+  /// will contain the error if loading failed
   final Object? error;
 
-  CachedValue({this.loading = true, this.value, this.error});
+  CachedValue(
+      {required this.future, this.loading = true, this.value, this.error});
 }

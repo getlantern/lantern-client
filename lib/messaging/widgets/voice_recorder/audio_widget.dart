@@ -41,21 +41,14 @@ class AudioController extends ValueNotifier<AudioValue> {
       value.duration = Duration(milliseconds: milliseconds);
     }
 
-    if (thumbnail != null) {
-      _setThumbnail(thumbnail);
-    } else {
-      // load thumbnail
-      var thumb = model.thumbnail(attachment);
-      if (thumb.value.loading) {
-        thumb.addListener(() {
-          if (thumb.value.value != null) {
-            _setThumbnail(thumb.value.value!);
-          }
-        });
-      } else if (thumb.value.value != null) {
-        _setThumbnail(thumb.value.value!);
-      }
-    }
+    var thumbnailFuture = thumbnail != null
+        ? Future.value(thumbnail)
+        : model.thumbnail(attachment).value.future;
+    thumbnailFuture.then((t) {
+      value.reducedAudioWave =
+          AudioWaveform.fromBuffer(t).bars.reducedWaveform();
+      notifyListeners();
+    });
   }
 
   void _setThumbnail(Uint8List thumbnail) {

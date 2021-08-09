@@ -59,12 +59,9 @@ dependencies:
 
   pedantic: ^1.11.0
 
-  photo_manager: ^1.2.5
+  wechat_assets_picker: ^6.0.1
 
-  wechat_assets_picker:
-    git: https://github.com/getlantern/wechat_assets_picker.git
-
-  wechat_camera_picker: ^2.1.0
+  wechat_camera_picker: ^2.3.0
 
   flutter_keyboard_visibility: ^5.0.2
 
