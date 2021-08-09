@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 typedef LoadFunc<K, V> = Future<V> Function(K key);
 
 class LRUCache<K, V> {
@@ -11,10 +13,21 @@ class LRUCache<K, V> {
 
   LRUCache(this._limit, this._load);
 
-  Future<V> get(K key) {
+  ValueListenable<CachedValue<V>> get(K key) {
     var entry = _entries[key];
-    entry ??= CacheEntry(key);
-    entry.value ??= _load(key);
+    if (entry == null) {
+      var future = _load(key);
+      entry = CacheEntry(key: key, future: future);
+      future.then((v) {
+        entry!.value.value =
+            CachedValue(future: future, loading: false, value: v);
+      }).catchError((e) {
+        entry!.value.value =
+            CachedValue(future: future, loading: false, error: e);
+        _entries.remove(entry.key);
+      });
+      _entries[key] = entry;
+    }
     entry.updateUseTime();
     var numEntriesToRemove = _entries.length - _limit;
     if (numEntriesToRemove > 0) {
@@ -24,18 +37,46 @@ class LRUCache<K, V> {
         _entries.remove(element.key);
       });
     }
-    return entry.value!;
+    return entry.value;
   }
 }
 
 class CacheEntry<K, V> {
-  K key;
-  Future<V>? value;
+  final K key;
+  late ValueNotifier<CachedValue<V>> value;
   DateTime lastUse = DateTime.now();
 
-  CacheEntry(this.key);
+  CacheEntry({required this.key, required Future<V> future}) {
+    value = ValueNotifier(CachedValue(future: future));
+  }
 
   void updateUseTime() {
     lastUse = DateTime.now();
   }
+}
+
+/**
+ * An asynchronously loaded value cached in an LRU cache. CachedValues are
+ * immutable.
+ *
+ * [loading] indicates if the value is still asynchronously loading
+ * [value] will have the loaded value if loading completed successfully
+ * [error] if loading fails, this contains the error encountered
+ *
+ */
+class CachedValue<V> {
+  /// a future that can be used to watch for completion of the value loading
+  Future<V> future;
+
+  /// indicates if the value is still asynchronously loading
+  final bool loading;
+
+  /// will have the loaded value if loading completed successfully
+  final V? value;
+
+  /// will contain the error if loading failed
+  final Object? error;
+
+  CachedValue(
+      {required this.future, this.loading = true, this.value, this.error});
 }
