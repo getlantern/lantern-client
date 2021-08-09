@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:lantern/utils/waveform/background_painter.dart';
@@ -13,12 +13,16 @@ class WaveProgressBar extends StatelessWidget {
   final Color progressColor;
   final Color backgroundColor;
   final double begin;
+  final double barHeightScaling;
+  final double? height;
 
   WaveProgressBar({
     required this.listOfHeights,
     required this.initialColor,
     required this.progressColor,
     required this.backgroundColor,
+    this.barHeightScaling = 1,
+    this.height,
     this.alignment = Alignment.center,
     this.begin = 0,
     required this.width,
@@ -32,7 +36,7 @@ class WaveProgressBar extends StatelessWidget {
       CustomPaint(
         painter: BackgroundBarPainter(
           containerWidth: width,
-          containerHeight: listOfHeights.reduce(max),
+          containerHeight: height ?? listOfHeights.reduce(math.max),
           progresPercentage: progressPercentage,
           initialColor: initialColor,
           progressColor: progressColor,
@@ -46,19 +50,18 @@ class WaveProgressBar extends StatelessWidget {
           painter: SingleBarPainter(
             startingPosition: i * (width / listOfHeights.length),
             singleBarWidth: width / listOfHeights.length,
-            maxSeekBarHeight: listOfHeights.reduce(max) + 1,
-            actualSeekBarHeight: listOfHeights[i],
-            heightOfContainer: listOfHeights.reduce(max),
+            maxSeekBarHeight: height ?? listOfHeights.reduce(math.max) + 1,
+            actualSeekBarHeight: listOfHeights[i] * barHeightScaling,
+            heightOfContainer: height ?? listOfHeights.reduce(math.max),
             backgroundColor: backgroundColor,
           ),
         ),
       );
     }
 
-    return Container(
-      height: listOfHeights.reduce(max),
+    return SizedBox(
+      height: height ?? listOfHeights.reduce(math.max),
       width: width,
-      alignment: alignment,
       child: Row(
         children: arrayOfBars,
       ),
