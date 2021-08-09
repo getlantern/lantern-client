@@ -43,12 +43,18 @@ class AudioController extends ValueNotifier<AudioValue> {
 
     var thumbnailFuture = thumbnail != null
         ? Future.value(thumbnail)
-        : model.thumbnail(attachment);
+        : model.thumbnail(attachment).value.future;
     thumbnailFuture.then((t) {
       value.reducedAudioWave =
           AudioWaveform.fromBuffer(t).bars.reducedWaveform();
       notifyListeners();
     });
+  }
+
+  void _setThumbnail(Uint8List thumbnail) {
+    value.reducedAudioWave =
+        AudioWaveform.fromBuffer(thumbnail).bars.reducedWaveform();
+    notifyListeners();
   }
 
   Future<int> pause() async {

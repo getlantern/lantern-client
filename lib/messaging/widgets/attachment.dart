@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:sizer/sizer.dart';
@@ -63,25 +64,27 @@ class AttachmentBuilder extends StatelessWidget {
     // we are first downloading attachments and then decrypting them by calling
     // _getDecryptedAttachment() in the FutureBuilder
     switch (attachment.status) {
-      case StoredAttachment_Status.PENDING_UPLOAD:
-        // pending download
+      case StoredAttachment_Status.PENDING:
         return _progressIndicator();
       case StoredAttachment_Status.FAILED:
         // error with download
         return _errorIndicator();
+      case StoredAttachment_Status.PENDING_UPLOAD:
+        continue alsoDone;
+      alsoDone:
+      case StoredAttachment_Status.DONE:
       default:
         // successful download/upload, on to decrypting
-        return FutureBuilder(
-          future: model.thumbnail(attachment),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (!snapshot.hasData ||
-                snapshot.connectionState == ConnectionState.waiting) {
+        return ValueListenableBuilder(
+          valueListenable: model.thumbnail(attachment),
+          builder: (BuildContext context,
+              CachedValue<Uint8List> cachedThumbnail, Widget? child) {
+            if (cachedThumbnail.loading) {
               return _progressIndicator();
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return _errorIndicator();
-              }
-              var result = builder(context, snapshot.data!!);
+            } else if (cachedThumbnail.error != null) {
+              return _errorIndicator();
+            } else if (cachedThumbnail.value != null) {
+              var result = builder(context, cachedThumbnail.value!);
               if (maximized) {
                 result = SizedBox(
                   width: 100.w,
