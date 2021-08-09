@@ -9,13 +9,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
+import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
 import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
-import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
@@ -183,7 +183,8 @@ class _ConversationState extends State<Conversation>
       setState(() {
         _isRecording = false;
         _finishedRecording = true;
-        _audioPreviewController = AudioController(context, attachment);
+        _audioPreviewController =
+            AudioController(context: context, attachment: attachment);
       });
     } finally {
       context.loaderOverlay.hide();

@@ -5,6 +5,7 @@ import 'package:lantern/config/colors.dart';
 import 'package:lantern/enums/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/ui/widgets/basic_memory_image.dart';
 
 enum MimeTypes { VIDEO, AUDIO, IMAGE, OTHERS, EMPTY }
 
@@ -27,11 +28,10 @@ class ReplyMime extends StatelessWidget {
               model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
           builder: (BuildContext context, Uint8List data) =>
               Stack(alignment: Alignment.center, children: [
-            Image.memory(data,
+            BasicMemoryImage(data,
                 errorBuilder: (BuildContext context, Object error,
                         StackTrace? stackTrace) =>
                     _getIconWrapper(Icons.error_outlined),
-                filterQuality: FilterQuality.high,
                 height: 56),
             const Icon(Icons.play_circle_outline, color: Colors.white),
           ]),
@@ -40,11 +40,11 @@ class ReplyMime extends StatelessWidget {
         return _PreviewBuilder(
           future:
               model.thumbnail(storedMessage.attachments[0] as StoredAttachment),
-          builder: (BuildContext context, Uint8List data) => Image.memory(data,
+          builder: (BuildContext context, Uint8List data) => BasicMemoryImage(
+              data,
               errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) =>
                   _getIconWrapper(Icons.error_outlined),
-              filterQuality: FilterQuality.high,
               height: 56),
         );
       case MimeTypes.OTHERS:

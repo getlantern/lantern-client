@@ -42,7 +42,9 @@ class AudioController extends ValueNotifier<AudioValue> {
   late MessagingModel model;
   late Audio audio;
 
-  AudioController(this.context, this.attachment) : super(AudioValue()) {
+  AudioController(
+      {required this.context, required this.attachment, Uint8List? thumbnail})
+      : super(AudioValue()) {
     model = Provider.of<MessagingModel>(context, listen: false);
     audio = Provider.of<Audio>(context, listen: false);
 
@@ -52,7 +54,10 @@ class AudioController extends ValueNotifier<AudioValue> {
       value.duration = Duration(milliseconds: milliseconds);
     }
 
-    model.thumbnail(attachment).then((t) {
+    var thumbnailFuture = thumbnail != null
+        ? Future.value(thumbnail)
+        : model.thumbnail(attachment);
+    thumbnailFuture.then((t) {
       value.reducedAudioWave =
           AudioWaveform.fromBuffer(t).bars.reducedWaveform();
       notifyListeners();
