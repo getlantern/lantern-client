@@ -23,7 +23,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactMessagePreview, 'me'));
+      await tester.tap(find.widgetWithText(ContactMessagePreview, 'Me'));
       await tester.pumpAndSettle();
       expect(find.byType(Conversation), findsOneWidget);
     });
@@ -35,7 +35,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactMessagePreview, 'me'));
+      await tester.tap(find.widgetWithText(ContactMessagePreview, 'Me'));
       await tester.pumpAndSettle();
       print('Enter `hello this a message send from Flutter Test`');
       await tester.enterText(find.byType(TextFormField),
