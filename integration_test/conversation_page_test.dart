@@ -57,7 +57,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
-      await tester.pageBack();
+      final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
+      await widgetsAppState.didPopRoute();
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
     });
