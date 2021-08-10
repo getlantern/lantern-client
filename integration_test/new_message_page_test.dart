@@ -61,7 +61,7 @@ void main() {
       await tester.drag(find.byType(ListView), const Offset(0.0, -300.0));
       print('Flush the widget tree');
       await tester.pumpAndSettle();
-      var contactElement = find.widgetWithText(ContactMessagePreview, 'me');
+      var contactElement = find.widgetWithText(ContactMessagePreview, 'Me');
       expect(contactElement, findsOneWidget);
     });
 
