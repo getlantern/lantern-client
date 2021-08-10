@@ -1,8 +1,6 @@
 {
- "defaultDnsServer": "8.8.8.8",
  "httpProxyHost": "127.0.0.1",
  "httpProxyPort": 49125,
- "enableAdBlocking": false,
  "stickyConfig": false,
  "startTimeoutMillis": 60000
 }
