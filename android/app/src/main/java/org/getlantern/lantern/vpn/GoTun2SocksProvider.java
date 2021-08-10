@@ -9,6 +9,7 @@ import internalsdk.Internalsdk; // Lantern's go android package
 
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.SessionManager;
 
 import java.util.Locale;
 
@@ -18,10 +19,6 @@ public class GoTun2SocksProvider implements Provider {
   private final static String sessionName = "LanternVpn";
 
   private final static String privateAddress = "10.0.0.2";
-  private final static String gwAddress = "10.0.0.1";
-  private final static String dnsIP = "8.8.8.8";
-  private final static String dnsAddr = dnsIP + ":53";
-
   private final static int VPN_MTU = 1500;
 
   private ParcelFileDescriptor mInterface;
@@ -38,8 +35,17 @@ public class GoTun2SocksProvider implements Provider {
     builder.setMtu(VPN_MTU);
 
     builder.addAddress(privateAddress, 24);
+    // route IPv4 through VPN
     builder.addRoute("0.0.0.0", 0);
-    builder.addDnsServer(dnsIP);
+    // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
+    // see https://github.com/getlantern/lantern-internal/issues/4961
+    // Note - if someone performs a DNS lookup for an IPv6 only host like ipv6.google.com, dnsgrab
+    // will return an IPv4 address for that site, causing the traffic to get routed through the VPN.
+    // builder.addRoute("0:0:0:0:0:0:0:0", 0);
+
+    // this is a fake DNS server. The precise IP doesn't matter because Lantern will intercept and
+    // route all DNS traffic to dnsgrab internally anyway.
+    builder.addDnsServer(SessionManager.getFakeDnsIP());
 
     Intent intent = new Intent(vpnService, MainActivity.class);
     PendingIntent pendingIntent = PendingIntent.getActivity(vpnService, 0, intent, 0);
@@ -53,8 +59,7 @@ public class GoTun2SocksProvider implements Provider {
     return mInterface;
   }
 
-  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr)
-      throws Exception {
+  public void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr) {
     Logger.d(TAG, "run");
 
     if (socksAddr == null || socksAddr.length() == 0) {
@@ -63,8 +68,10 @@ public class GoTun2SocksProvider implements Provider {
 
     final Locale defaultLocale = Locale.getDefault();
     try {
+      Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks");
       ParcelFileDescriptor intf = createBuilder(vpnService, builder);
-      Internalsdk.tun2Socks((long) intf.getFd(), socksAddr, dnsAddr, dnsGrabAddr, (long) VPN_MTU);
+      Logger.debug(TAG, "Running tun2socks");
+      Internalsdk.tun2Socks((long) intf.getFd(), socksAddr, dnsGrabAddr, (long) VPN_MTU);
     } catch (Throwable t) {
       Logger.e(TAG, "Exception while handling TUN device", t);
     } finally {
