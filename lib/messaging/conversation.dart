@@ -200,9 +200,9 @@ class _ConversationState extends State<Conversation>
       }
       context.loaderOverlay.show();
       result.files.forEach((el) async {
-        // TODO: we might need to sanitize titles here
-        // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
-        final title = el.path.toString().split('file_picker/')[1].split('.')[0];
+        // TODO: we might need to sanitize title
+        final title = el.path.toString().split('file_picker/')[1].split('.')[
+            0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
         final fileExtension =
             el.path.toString().split('file_picker/')[1].split('.')[1];
         final metadata = {
