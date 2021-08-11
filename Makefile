@@ -33,6 +33,7 @@ BUNDLER   := $(call get-command,bundle)
 ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
 GMSAAS    := $(call get-command,gmsaas)
+SENTRY    := $(call get-command,sentry-cli)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
 GIT_REVISION := $(shell git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)
@@ -40,9 +41,11 @@ GIT_REVISION_DATE := $(shell git show -s --format=%ci $(GIT_REVISION_SHORTCODE))
 
 REVISION_DATE := $(shell date -u -j -f "%F %T %z" "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S" 2>/dev/null || date -u -d "$(GIT_REVISION_DATE)" +"%Y%m%d.%H%M%S")
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
+# We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
+BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS_NOSTRIP := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+LDFLAGS_NOSTRIP := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
 LDFLAGS := $(LDFLAGS_NOSTRIP) -s
 
 BINARIES_PATH ?= ../lantern-binaries
@@ -150,9 +153,6 @@ define build-tags
 	else \
 		echo "**  Not forcing replica build"; \
 	fi && \
-	if [[ ! -z "$$YINBI" ]]; then \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/config.EnableYinbiFeatures=true"; \
-	fi && \
 	BUILD_TAGS=$$(echo $$BUILD_TAGS | xargs) && echo "Build tags: $$BUILD_TAGS" && \
 	EXTRA_LDFLAGS=$$(echo $$EXTRA_LDFLAGS | xargs) && echo "Extra ldflags: $$EXTRA_LDFLAGS"
 endef
@@ -237,9 +237,13 @@ require-wget:
 require-magick:
 	@if [[ -z "$(MAGICK)" ]]; then echo 'Missing "magick" command. Try brew install imagemagick.'; exit 1; fi
 
+.PHONY: require-sentry
+require-sentry:
+	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
+
 release-qa: require-version require-s3cmd require-changelog
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
-	VERSION_FILE_NAME="version-qa.txt" && \
+	VERSION_FILE_NAME="version-qa-android.txt" && \
 	rm -f $$BASE_NAME* && \
 	cp $(INSTALLER_NAME)-arm32.apk $$BASE_NAME.apk && \
 	cp lantern-all.aab $$BASE_NAME.aab && \
@@ -261,29 +265,46 @@ release-qa: require-version require-s3cmd require-changelog
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
 		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
+	for NAME in update_android_arm ; do \
+		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
+		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
+		$(S3CMD) put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
+	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
 
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
-	VERSION_FILE_NAME="version-beta.txt" && \
+	VERSION_FILE_NAME="version-beta-android.txt" && \
 	cd $(BINARIES_PATH) && \
 	git pull && \
 	cd - && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $$BASE_NAME | awk '{print $$4}'); do \
+	for URL in s3://lantern/$$BASE_NAME.apk s3://lantern/$$BASE_NAME.aab; do \
 		NAME=$$(basename $$URL) && \
 		BETA=$$(echo $$NAME | sed s/"$$BASE_NAME"/$(BETA_BASE_NAME)/) && \
 		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$BETA && \
 		$(S3CMD) setacl s3://$(S3_BUCKET)/$$BETA --acl-public && \
 		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $(BINARIES_PATH)/$$BETA; \
 	done && \
-	$(S3CMD) cp s3://$(S3_BUCKET)/version-qa.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
+	$(S3CMD) cp s3://$(S3_BUCKET)/version-qa-android.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
 	$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
-	(git commit -am "Latest beta binaries for $(CAPITALIZED_APP) released from QA." && git push origin $(BRANCH)) || true
+	(git commit -am "Latest lantern android beta binaries released from QA." && git push origin $(BRANCH)) || true
+
+release-autoupdate: require-version
+	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
+	if [[ -z "$$TAG_COMMIT" ]]; then \
+		echo "Could not find given tag $(TAG)."; \
+	fi && \
+	for URL in s3://lantern/lantern_update_android_arm-$$VERSION.bz2; do \
+		NAME=$$(basename $$URL) && \
+		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//) && \
+		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
+	done
+	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-s3-git-repos copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
@@ -293,8 +314,8 @@ release-s3-git-repos: require-version require-s3cmd require-wget require-lantern
 		echo "Could not find given tag $(TAG)."; \
 	fi && \
 	PROD_BASE_NAME2="$(INSTALLER_NAME)-beta" && \
-	VERSION_FILE_NAME="version.txt" && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $(BETA_BASE_NAME) | awk '{print $$4}'); do \
+	VERSION_FILE_NAME="version-android.txt" && \
+	for URL in s3://lantern/$(BETA_BASE_NAME).apk s3://lantern/$(BETA_BASE_NAME).aab; do \
 		NAME=$$(basename $$URL) && \
 		PROD=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$(PROD_BASE_NAME)/) && \
 		PROD2=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$$PROD_BASE_NAME2/) && \
@@ -321,36 +342,6 @@ release-s3-git-repos: require-version require-s3cmd require-wget require-lantern
 	git push origin $(BRANCH) \
 	) || true
 
-copy-beta-installers-to-mirrors: require-secrets-dir
-	@URLS="$$(make get-beta-installer-urls)" && \
-	VERSION_FILE_NAME="version.txt" && \
-	for BUCKET in $(shell cat "$(SECRETS_DIR)/website-mirrors.txt"); do \
-		echo "Copying installers to mirror bucket $$BUCKET"; \
-		for URL in $$URLS; do \
-			PROD_NAME=$$(echo $$URL | sed s/$(BETA_BASE_NAME)/$(PROD_BASE_NAME)/) && \
-			$(S3CMD) cp s3://$(S3_BUCKET)/$$URL s3://$$BUCKET/$$PROD_NAME && \
-			$(S3CMD) setacl s3://$$BUCKET/$$PROD_NAME --acl-public; \
-		done; \
-		echo "Copying $$VERSION_FILE_NAME to $$BUCKET" && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$VERSION_FILE_NAME s3://$$BUCKET && \
-		$(S3CMD) setacl s3://$$BUCKET/$$VERSION_FILE_NAME --acl-public; \
-	done; \
-	echo "Finished copying installers to mirrors"
-
-get-beta-installer-urls: require-wget
-	@URLS="" && \
-	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep $(BETA_BASE_NAME) | awk '{print $$4}'); do \
-		NAME=$$(basename $$URL) && \
-		URLS+=$$(echo " $$NAME"); \
-	done && \
-	echo "$$URLS" | xargs
-
-invalidate-getlantern-dot-org: require-awscli
-	@echo "Invalidating getlantern.org" && \
-	$(AWSCLI) configure set preview.cloudfront true && \
-	$(AWSCLI) cloudfront --output text create-invalidation --paths /$(INSTALLER_NAME)* /version*.txt --distribution-id E1UX00QZB0FGKH && \
-	./set_latest_version.py "$$VERSION"
-
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(call build-tags) && \
@@ -369,11 +360,10 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) lib/model/protos_shared/vpn.pb.dart
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
-	YINBI_ENABLED="$$YINBI_ENABLED" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
-	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -b $(MOBILE_DIR)/app/build.gradle \
+	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -b $(MOBILE_DIR)/app/build.gradle \
 		assembleProdDebug
 
 pubget:
@@ -384,38 +374,32 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
-	YINBI_ENABLED="$$YINBI_ENABLED" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	VERSION_CODE="$$VERSION_CODE" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -b $(MOBILE_DIR)/app/build.gradle \
+	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -b $(MOBILE_DIR)/app/build.gradle \
 		assembleProdRelease && \
-	echo "Theoretically we should be able to run both gradle tasks at once, but it doesn't work" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -b $(MOBILE_DIR)/app/build.gradle \
-		uploadCrashlyticsSymbolFileProdRelease && \
+	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
-$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
-	YINBI_ENABLED="$$YINBI_ENABLED" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
+	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
 		bundleRelease && \
-	echo "Theoretically we should be able to run both gradle tasks at once, but it doesn't work" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PenableYinbi=$(YINBI_ENABLED) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
-		uploadCrashlyticsSymbolFileProdRelease && \
+	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-pull-translations:
@@ -436,12 +420,10 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-# Note, the below executes both android-release and android-bundle with ANDROID_ARCH=all because Crashlytics
-# needs the stripped native libs, which aren't built by bundle-android for some reason.
 package-android: require-version require-android-keystore
 	@cp ~/.gradle/gradle.properties gradle.properties.user && \
 	make pubget android-release && \
-	ANDROID_ARCH=all make android-release android-bundle && \
+	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
 
 upload-aab-to-play: require-release-track require-pip

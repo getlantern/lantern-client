@@ -29,7 +29,7 @@ app.iml
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -57,4 +57,4 @@ gradle.properties
 *.aab
 *.bz2
 *.sha256
-version-qa.txt
+version-qa*.txt

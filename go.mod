@@ -8,16 +8,18 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20210120195910-d879cb272122
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20210604161640-154236899665
+	github.com/getlantern/flashlight v0.0.0-20210721035221-d60547da339c
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
-	github.com/getlantern/golog v0.0.0-20201105130739-9586b8bde3a9
+	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20201229185957-3fadd2c8f5ba
+	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20190111224713-cc3b5f4a0fb8
+	github.com/getsentry/sentry-go v0.11.0 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0

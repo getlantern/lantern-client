@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings.Secure
 import android.text.TextUtils
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
@@ -16,6 +15,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
+import io.sentry.Sentry
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -234,7 +234,6 @@ abstract class SessionManager(application: Application) : Session {
         }
         Logger.debug(TAG, "Setting user ID to $userId, token to $token")
         prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).apply()
-        FirebaseCrashlytics.getInstance().setUserId(userId.toString())
     }
 
     private fun setDeviceId(deviceId: String?) {
@@ -264,7 +263,7 @@ abstract class SessionManager(application: Application) : Session {
             // production environment but that gets special treatment from the proserver to hit
             // payment providers' test endpoints.
             9007199254740992L
-        } else getLong(USER_ID, 0)
+        } else prefs.getLong(USER_ID, 0)
     }
 
     override fun getToken(): String {
@@ -359,34 +358,6 @@ abstract class SessionManager(application: Application) : Session {
         )
     }
 
-    protected fun getInt(name: String?, defaultValue: Int): Int {
-        return try {
-            prefs.getInt(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
-            try {
-                prefs.getLong(name, defaultValue.toLong()).toInt()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                Integer.valueOf(prefs.getString(name, defaultValue.toString())!!)
-            }
-        }
-    }
-
-    private fun getLong(name: String?, defaultValue: Long): Long {
-        return try {
-            prefs.getLong(name, defaultValue)
-        } catch (e: ClassCastException) {
-            Logger.error(TAG, e.message)
-            try {
-                prefs.getInt(name, defaultValue.toInt()).toLong()
-            } catch (e2: ClassCastException) {
-                Logger.error(TAG, e2.message)
-                prefs.getString(name, defaultValue.toString())?.toLong() ?: 0L
-            }
-        }
-    }
-
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
@@ -431,6 +402,12 @@ abstract class SessionManager(application: Application) : Session {
         return gson.toJson(headers)
     }
 
+    override fun setSentryExtra(key: String, value: String) {
+        Sentry.configureScope { scope ->
+            scope.setExtra(key, value)
+        }
+    }
+
     companion object {
         private val TAG = SessionManager::class.java.name
         private const val PREFERENCES_SCHEMA = "session"
@@ -462,8 +439,6 @@ abstract class SessionManager(application: Application) : Session {
         protected const val CURRENT_TERMS_VERSION = 1
         protected const val INTERNAL_HEADERS_PREF_NAME = "LanternMeta"
 
-        @JvmStatic
-        val YINBI_ENABLED = "yinbienabled"
         protected const val DEVELOPMENT_MODE = "developmentMode"
         private const val PAYMENT_TEST_MODE = "paymentTestMode"
         protected const val FORCE_COUNTRY = "forceCountry"
@@ -490,18 +465,17 @@ abstract class SessionManager(application: Application) : Session {
         context = application
         vpnModel = VpnModel()
         Logger.debug(TAG, "VpnModel() finished at ${System.currentTimeMillis() - start}")
-        val prefsAdapter = BaseModel.masterDB.asSharedPreferences(
-            PREFERENCES_SCHEMA, context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
+        db.registerType(2000, Vpn.Device::class.java)
+        db.registerType(2001, Vpn.Devices::class.java)
+        val prefsAdapter = db.asSharedPreferences(
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         )
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
             .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
-            .putBoolean(YINBI_ENABLED, prefs.getBoolean(YINBI_ENABLED, false))
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
-        db = prefsAdapter.db
-        db.registerType(2000, Vpn.Device::class.java)
-        db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,

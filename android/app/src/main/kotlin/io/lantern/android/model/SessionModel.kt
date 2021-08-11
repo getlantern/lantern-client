@@ -33,8 +33,6 @@ class SessionModel(
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
-        const val PATH_YINBI_ENABLED = "yinbienabled"
-        const val PATH_SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
         const val PATH_PROXY_ALL = "proxyAll"
     }
 
@@ -43,31 +41,36 @@ class SessionModel(
             // initialize data for fresh install // TODO remove the need to do this for each data path
             tx.put(
                 PATH_PRO_USER,
-                tx.get(PATH_PRO_USER) ?: false
-            )
-            tx.put(
-                PATH_YINBI_ENABLED,
-                tx.get(PATH_YINBI_ENABLED) ?: false
-            )
-            tx.put(
-                PATH_SHOULD_SHOW_YINBI_BADGE,
-                tx.get(PATH_SHOULD_SHOW_YINBI_BADGE) ?: true
+                castToBoolean(tx.get(PATH_PRO_USER), false)
             )
             tx.put(
                 PATH_PROXY_ALL,
-                tx.get(PATH_PROXY_ALL) ?: false
+                castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    /**
+     * Sometimes, preferences values from old clients that are supposed to be booleans will actually
+     * be stored as numeric values or as strings. This normalizes them all to Booleans.
+     */
+    private fun castToBoolean(value: Any?, defaultValue: Boolean): Boolean {
+        return when (value) {
+            is Boolean -> value
+            is Number -> value.toInt() == 1
+            is String -> value.toBoolean()
+            else -> defaultValue
+        }
+    }
+
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            else -> super.onMethodCall(call, result)
+            else -> super.doOnMethodCall(call, result)
         }
     }
 
@@ -82,10 +85,6 @@ class SessionModel(
             }
             "setPaymentTestMode" -> {
                 LanternApp.getSession().setPaymentTestMode(call.argument("on") ?: false)
-                activity.restartApp()
-            }
-            "setYinbiEnabled" -> {
-                LanternApp.getSession().setYinbiEnabled(call.argument("on") ?: false)
                 activity.restartApp()
             }
             "setPlayVersion" -> {

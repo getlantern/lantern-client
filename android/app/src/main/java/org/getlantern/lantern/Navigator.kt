@@ -13,7 +13,6 @@ import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
-import org.getlantern.lantern.activity.yinbi.YinbiLauncher
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
 import kotlin.system.exitProcess
 
@@ -26,8 +25,6 @@ class Navigator(
         const val SCREEN_PLANS = "SCREEN_PLANS"
         const val SCREEN_INVITE_FRIEND = "SCREEN_INVITE_FRIEND"
         const val SCREEN_DESKTOP_VERSION = "SCREEN_DESKTOP_VERSION"
-        const val SCREEN_FREE_YINBI = "SCREEN_FREE_YINBI"
-        const val SCREEN_YINBI_REDEMPTION = "SCREEN_YINBI_REDEMPTION"
         const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
         const val SCREEN_UPGRADE_TO_LANTERN_PRO = "SCREEN_UPGRADE_TO_LANTERN_PRO"
@@ -60,8 +57,6 @@ class Navigator(
             SCREEN_PLANS -> LanternApp.getSession().plansActivity()
             SCREEN_INVITE_FRIEND -> InviteActivity_::class.java
             SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
-            SCREEN_FREE_YINBI -> YinbiLauncher::class.java
-            SCREEN_YINBI_REDEMPTION -> YinbiLauncher::class.java
             SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             SCREEN_UPGRADE_TO_LANTERN_PRO -> PlansActivity_::class.java
