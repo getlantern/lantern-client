@@ -8,7 +8,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
       ? 'Unnamed contact'.i18n
-      : contact.displayName;
+      : contact.displayName.toString();
 }
 
 Map<String, List<dynamic>> constructReactionsMap(
