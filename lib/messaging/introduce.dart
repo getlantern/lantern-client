@@ -77,7 +77,6 @@ class _IntroduceState extends State<Introduce> {
                       var avatarLetters = displayName.substring(0, 2);
                       return Column(
                         children: [
-                          // true will style this as a Contact preview
                           ContactIntroPreview(
                             contact,
                             index,
