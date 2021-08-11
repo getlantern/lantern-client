@@ -5,6 +5,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:sizer/sizer.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
@@ -29,7 +30,7 @@ class ContactConnectionCard extends StatelessWidget {
         : contact.displayName;
     // TODO: temporary
     var requestAccepted = false;
-    var actionTaken = true;
+    var requestRejected = false;
     return Flex(
       direction: Axis.vertical,
       crossAxisAlignment:
@@ -37,6 +38,7 @@ class ContactConnectionCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
+          width: outbound ? 60.w : 100.w,
           padding: const EdgeInsets.only(top: 10),
           child: ListTile(
             leading: CircleAvatar(
@@ -45,30 +47,43 @@ class ContactConnectionCard extends StatelessWidget {
               child: Text(avatarLetters.toUpperCase(),
                   style: const TextStyle(color: Colors.white)),
             ),
-            title: Text(contactName),
-            trailing: FittedBox(
-              child: IconButton(
-                icon: Icon(
-                    !actionTaken
-                        ? Icons.info_outline_rounded
-                        : requestAccepted
-                            ? Icons.arrow_right_outlined
-                            : Icons.cancel,
-                    size: 20.0,
-                    color: Colors.black),
-                onPressed: () async {
-                  if (!actionTaken) {
-                    await _showOptions(
-                      context,
-                      contactName,
-                    );
-                  }
-                  if (requestAccepted) {
-                    await context.pushRoute(const NewMessage());
-                  }
-                },
-              ),
-            ),
+            title: Text(contactName,
+                style: TextStyle(
+                    color: outbound ? outboundMsgColor : inboundMsgColor)),
+            trailing: outbound
+                ? const SizedBox()
+                : FittedBox(
+                    child: Row(
+                      children: [
+                        if (requestAccepted)
+                          Icon(Icons.check_circle,
+                              color: outbound
+                                  ? outboundMsgColor
+                                  : inboundMsgColor),
+                        IconButton(
+                          icon: Icon(
+                              !(requestAccepted && requestRejected)
+                                  ? Icons.info_outline_rounded
+                                  : Icons.arrow_right_outlined,
+                              size: 20.0,
+                              color: outbound
+                                  ? outboundMsgColor
+                                  : inboundMsgColor),
+                          onPressed: () async {
+                            if (!(requestAccepted && requestRejected)) {
+                              await _showOptions(
+                                context,
+                                contactName,
+                              );
+                            }
+                            if (requestAccepted) {
+                              await context.pushRoute(const NewMessage());
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
           ),
         ),
         Flex(
@@ -109,10 +124,17 @@ class ContactConnectionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ListTile(
+                      dense: true,
                       leading:
                           const Icon(Icons.check_circle, color: Colors.black),
                       title: Text('Accept'.i18n),
-                      onTap: () {},
+                      onTap: () {
+                        // requestAccepted = true
+                        // model.acceptReq()
+                        // slight delay to let checkbox show
+                        // dismiss modal
+                        // navigate to conversation
+                      },
                     ),
                     Divider(thickness: 1, color: grey2),
                     ListTile(
@@ -121,7 +143,11 @@ class ContactConnectionCard extends StatelessWidget {
                         color: Colors.black,
                       ),
                       title: Text('Reject'.i18n),
-                      onTap: () {},
+                      onTap: () {
+                        // requestAccepted = false
+                        // model.rejectReq()
+                        // dismiss modal
+                      },
                     ),
                   ],
                 ),

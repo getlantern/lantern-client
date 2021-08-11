@@ -50,6 +50,9 @@ TextStyle tsMessageStatus(outbound) => TextStyle(
 TextStyle tsBaseScreenBodyText =
     const TextStyle(color: Colors.black, fontSize: 16, height: 23 / 16);
 
+TextStyle txConversationSticker =
+    TextStyle(color: grey5, fontSize: 12, height: 19 / 12);
+
 // Dialogs
 TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 
