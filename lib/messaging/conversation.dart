@@ -57,6 +57,7 @@ class _ConversationState extends State<Conversation>
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
   var displayName = '';
+  var messageCount = 0;
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
@@ -140,11 +141,13 @@ class _ConversationState extends State<Conversation>
         _recording = null;
         _audioPreviewController = null;
       });
-      // TODO: this complains when there are no messages in the thread
-      await _scrollController.scrollTo(
-          index: 00,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeInOutCubic);
+      (messageCount > 0)
+          ? await _scrollController.scrollTo(
+              index: 00,
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeInOutCubic)
+          : null;
+      ;
     } catch (e) {
       showInfoDialog(context,
           title: 'Error'.i18n,
@@ -239,6 +242,7 @@ class _ConversationState extends State<Conversation>
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
+      print("FLUTTER EXCEPTION: ${e.toString()}");
       showInfoDialog(context,
           title: 'Error'.i18n,
           des: 'Something went wrong while sharing a media file.'.i18n,
@@ -390,6 +394,7 @@ class _ConversationState extends State<Conversation>
     return model.contactMessages(widget._contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
+      messageCount = messageRecords.length;
       return messageRecords.isEmpty
           ? Container()
           : ScrollablePositionedList.builder(
