@@ -5,6 +5,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -181,24 +182,24 @@ class MessageBubble extends StatelessWidget {
           crossAxisAlignment:
               outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            Wrap(
-              direction: Axis.vertical,
-              children: [
-                if (isDateMarker != '') DateMarker(isDateMarker),
-                ContentContainer(
-                    outbound,
-                    inbound,
-                    msg,
-                    message,
-                    contact,
-                    onTapReply,
-                    startOfBlock,
-                    endOfBlock,
-                    newestMessage,
-                    reactions,
-                    isAttachment),
-              ],
-            ),
+            if (isDateMarker != '')
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 10),
+                  // width: 100.w,
+                  child: DateMarker(isDateMarker)),
+            ContentContainer(
+                outbound,
+                inbound,
+                msg,
+                message,
+                contact,
+                onTapReply,
+                startOfBlock,
+                endOfBlock,
+                newestMessage,
+                reactions,
+                isAttachment),
           ],
         ));
   }
