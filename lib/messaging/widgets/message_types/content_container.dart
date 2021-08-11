@@ -63,7 +63,7 @@ class ContentContainer extends StatelessWidget {
     final isAudio = msg.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
 
-    final isContactConnectionCard = true;
+    final isContactConnectionCard = false;
     return Container(
       constraints: BoxConstraints(maxWidth: 80.w),
       clipBehavior: Clip.hardEdge,
@@ -101,7 +101,6 @@ class ContentContainer extends StatelessWidget {
         ),
       ),
       child: isContactConnectionCard
-          // TODO: The vars below are temporary
           ? ContactConnectionCard(contact, inbound, outbound, msg, message)
           : Flex(
               direction: Axis.vertical,

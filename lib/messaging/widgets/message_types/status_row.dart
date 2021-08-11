@@ -27,6 +27,7 @@ class StatusRowState extends State<StatusRow> {
     final end = widget.msg.disappearAt.toInt();
     final lifeSpan = end - begin;
     final segments = widget.msg.segments(iterations: 12);
+    final msgSelfDeletes = widget.msg.disappearAt.isZero;
     return TweenAnimationBuilder<int>(
         key: Key('tween_${widget.msg.id}'),
         tween: IntTween(begin: DateTime.now().millisecondsSinceEpoch, end: end),
@@ -53,16 +54,16 @@ class StatusRowState extends State<StatusRow> {
                       padding: const EdgeInsets.only(right: 2.0),
                       child: renderStatusIcon(
                           widget.inbound, widget.outbound, widget.msg)),
-                  // TODO: This should not appear if the message never self-deletes
-                  Container(
-                    padding: const EdgeInsets.only(right: 2.0),
-                    child: CustomAssetImage(
-                        path: ImagePaths.countdownPaths[index],
-                        size: 12,
-                        color: widget.outbound
-                            ? outboundMsgColor
-                            : inboundMsgColor),
-                  ),
+                  if (msgSelfDeletes)
+                    Container(
+                      padding: const EdgeInsets.only(right: 2.0),
+                      child: CustomAssetImage(
+                          path: ImagePaths.countdownPaths[index],
+                          size: 12,
+                          color: widget.outbound
+                              ? outboundMsgColor
+                              : inboundMsgColor),
+                    ),
                 ],
               ),
             ),

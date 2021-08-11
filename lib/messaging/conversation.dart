@@ -309,10 +309,11 @@ class _ConversationState extends State<Conversation>
               direction: Axis.vertical,
               children: [
                 Card(
-                  color: Colors.white70,
+                  color: grey1,
                   child: Container(
                     width: 70.w,
-                    child: _buildMessagesLifeExpectancy(),
+                    // TODO: should change widget._contact to requestedContact
+                    child: _buildConversationSticker(false, widget._contact),
                   ),
                 ),
                 Flexible(
@@ -367,22 +368,40 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-  Widget _buildMessagesLifeExpectancy() => model.singleContact(
+  Widget _buildConversationSticker(
+          bool pendingRequest, Contact requestedContact) =>
+      model.singleContact(
         context,
         widget._contact,
         (context, contact, child) => ListTile(
           dense: true,
           minLeadingWidth: 18,
-          leading: contact.messagesDisappearAfterSeconds > 0
-              ? const Icon(Icons.timer, size: 18)
-              : const Icon(Icons.lock_clock, size: 18),
-          title: contact.messagesDisappearAfterSeconds > 0
-              ? Text(
-                  'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-                  style: const TextStyle(fontSize: 13),
-                )
-              : const Text('New messages do not disappear',
-                  style: TextStyle(fontSize: 13)),
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: pendingRequest
+                ? contact.messagesDisappearAfterSeconds > 0
+                    ? const Icon(Icons.timer, size: 18, color: Colors.black)
+                    : const Icon(Icons.lock_clock,
+                        size: 18, color: Colors.black)
+                : const Icon(Icons.more_horiz_rounded,
+                    size: 18, color: Colors.black),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: (pendingRequest)
+                ? contact.messagesDisappearAfterSeconds > 0
+                    ? Text(
+                        'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
+                        style: txConversationSticker,
+                        overflow: TextOverflow.ellipsis)
+                    : Text('New messages do not disappear',
+                        style: txConversationSticker,
+                        overflow: TextOverflow.ellipsis)
+                : Text(
+                    'Waiting for ${requestedContact.displayName}. They will receive your messages once they accept the introduction.'
+                        .i18n,
+                    style: txConversationSticker),
+          ),
         ),
       );
 
