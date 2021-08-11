@@ -6,7 +6,6 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-import 'widgets/add_contact_username.dart';
 import 'widgets/contact_message_preview.dart';
 
 class NewMessage extends StatelessWidget {
@@ -32,21 +31,25 @@ class NewMessage extends StatelessWidget {
       ],
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ListTile(
-          leading: const Icon(Icons.person_add),
-          title: Text('Add Contact by username'.i18n),
-          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () async => await context.router.push(
-            FullScreenDialogPage(widget: AddViaUsername()),
+          leading: const Icon(
+            Icons.qr_code,
+            color: Colors.black,
           ),
-        ),
-        Divider(thickness: 1, color: grey2),
-        ListTile(
-          leading: const Icon(Icons.qr_code),
           title: Text('Scan QR Code'.i18n),
           trailing: const Icon(Icons.keyboard_arrow_right_outlined),
           onTap: () async => await context.router.push(
             FullScreenDialogPage(widget: AddViaQR()),
           ),
+        ),
+        Divider(thickness: 1, color: grey2),
+        ListTile(
+          leading: const Icon(
+            Icons.people,
+            color: Colors.black,
+          ),
+          title: Text('Introduce Contacts'.i18n),
+          trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+          onTap: () async => await context.pushRoute(const Introduce()),
         ),
         Divider(thickness: 1, color: grey2),
         Container(
