@@ -109,22 +109,28 @@ class _IntroduceState extends State<Introduce> {
                     },
                   ),
                 ),
-                if (selectedContacts.isNotEmpty)
-                  Expanded(
-                    child: Container(
-                      color: grey1,
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Button(
-                              width: 200,
-                              text: 'Send Invitantios'.i18n.toUpperCase(),
-                              onPressed: () {},
-                            ),
-                          ]),
-                    ),
-                  )
+                // if (selectedContacts.isNotEmpty)
+                Expanded(
+                  child: Container(
+                    color: grey1,
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Button(
+                            width: 200,
+                            text: 'Send Invitations'.i18n.toUpperCase(),
+                            onPressed: () async {
+                              showSnackbar(context, 'Introductions Sent!'.i18n);
+                              await Future.delayed(
+                                const Duration(milliseconds: 1000),
+                                () async => await context.router.pop(),
+                              );
+                            },
+                          ),
+                        ]),
+                  ),
+                )
               ],
             );
           }),

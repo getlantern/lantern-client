@@ -81,6 +81,12 @@ TextStyle? tsInfoDialogButton = TextStyle(
   color: primaryPink,
 );
 
+TextStyle txSnackBarText = const TextStyle(
+  fontSize: 14,
+  color: Colors.white,
+  height: 23 / 14,
+);
+
 // Message bubble StyleSheet
 TextStyle? tsReplySnippetHeader = const TextStyle(
   fontWeight: FontWeight.w600,

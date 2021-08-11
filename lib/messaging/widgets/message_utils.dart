@@ -154,20 +154,22 @@ void showSnackbar(BuildContext context, String text) {
     content: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.check_circle, color: Colors.white),
+        // const Icon(Icons.check_circle, color: Colors.white),
         Expanded(
             child: Text(
           text,
-          style: const TextStyle(fontSize: 14, color: Colors.white),
-          textAlign: TextAlign.center,
+          style: txSnackBarText,
+          textAlign: TextAlign.left,
         )),
       ],
     ),
-    backgroundColor: Colors.green,
-    duration: const Duration(milliseconds: 700),
+    backgroundColor: Colors.black,
+    duration: const Duration(milliseconds: 1000),
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
     behavior: SnackBarBehavior.floating,
     elevation: 1,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0))),
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
