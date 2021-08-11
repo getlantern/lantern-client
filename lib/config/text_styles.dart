@@ -47,6 +47,9 @@ TextStyle tsMessageStatus(outbound) => TextStyle(
       fontSize: 10,
     );
 
+TextStyle tsBaseScreenBodyText =
+    const TextStyle(color: Colors.black, fontSize: 16, height: 23 / 16);
+
 // Dialogs
 TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 

@@ -147,12 +147,12 @@ class MessagingModel extends Model {
         'id': id,
       });
 
-  Future<Contact> getContactFromUsername<T>(String username) async {
-    return methodChannel
-        .invokeMethod('getContactFromUsername', <String, dynamic>{
-      'username': username,
-    }).then((value) => value as Contact);
-  }
+  // Future<Contact> getContactFromUsername<T>(String username) async {
+  //   return methodChannel
+  //       .invokeMethod('getContactFromUsername', <String, dynamic>{
+  //     'username': username,
+  //   }).then((value) => value as Contact);
+  // }
 
   Widget contactsByActivity(
       {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
