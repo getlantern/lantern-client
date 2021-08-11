@@ -8,7 +8,6 @@ import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.activity.yinbi.YinbiWelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -127,11 +126,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun welcomeActivity(): Class<*> {
-        return if (yinbiEnabled()) {
-            YinbiWelcomeActivity_::class.java
-        } else {
-            WelcomeActivity_::class.java
-        }
+        return WelcomeActivity_::class.java
     }
 
     fun setVerifyCode(code: String) {
@@ -157,28 +152,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getLong(DEVICE_CODE_EXP, 0)
     }
 
-    fun yinbiEnabled(): Boolean {
-        return BuildConfig.YINBI_ENABLED || prefs.getBoolean(YINBI_ENABLED, false)
-    }
-
-    fun setYinbiEnabled(enabled: Boolean) {
-        prefs.edit().putBoolean(YINBI_ENABLED, enabled).apply()
-    }
-
-    fun setShouldShowYinbiBadge(shouldShow: Boolean) {
-        prefs.edit().putBoolean(SHOULD_SHOW_YINBI_BADGE, shouldShow).apply()
-    }
-
-    fun showYinbiRedemptionTable(): Boolean {
-        return prefs.getBoolean(SHOW_YINBI_REDEMPTION, false)
-    }
-
-    fun setShowRedemptionTable(v: Boolean) {
-        prefs.edit().putBoolean(SHOW_YINBI_REDEMPTION, v).apply()
-    }
-
     fun getProDaysLeft(): Int {
-        return getInt(PRO_DAYS_LEFT, 0)
+        return prefs.getInt(PRO_DAYS_LEFT, 0)
     }
 
     private fun setExpiration(expiration: Long?) {
@@ -216,7 +191,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun numProMonths(): Int {
-        return getInt(PRO_MONTHS_LEFT, 0)
+        return prefs.getInt(PRO_MONTHS_LEFT, 0)
     }
 
     fun setWelcomeLastSeen() {
@@ -256,7 +231,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(REFERRAL_CODE, "")
     }
 
-    override fun setCode(referral: String?) {
+    fun setCode(referral: String?) {
         prefs.edit().putString(REFERRAL_CODE, referral).apply()
     }
 
@@ -306,17 +281,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             setEmail(user.email)
         }
 
-        setYinbiEnabled(user.yinbiEnabled)
-
         if (!TextUtils.isEmpty(user.code)) {
             setCode(user.code)
         }
 
         if (user.isActive) {
             linkDevice()
-            setShowRedemptionTable(true)
-        } else if (isProUser) {
-            setShowRedemptionTable(true)
         }
 
         setExpiration(user.expiration)
@@ -378,14 +348,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PW_SIGNATURE = "pwsignature"
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"
         private const val DEVICE_CODE_EXP = "devicecodeexp"
-        private const val SHOW_YINBI_REDEMPTION = "showyinbiredemption"
         private const val REMOTE_CONFIG_PAYMENT_PROVIDER = "remoteConfigPaymentProvider"
         private const val USER_PAYMENT_GATEWAY = "userPaymentGateway"
         private const val WELCOME_LAST_SEEN = "welcomeseen"
         private const val RENEWAL_LAST_SEEN = "renewalseen"
         private const val PROVIDER = "provider"
         private const val RESELLER_CODE = "resellercode"
-        private const val SHOULD_SHOW_YINBI_BADGE = "should_show_yinbi_badge"
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200

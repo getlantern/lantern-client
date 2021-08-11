@@ -12,21 +12,6 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
 
-  Widget yinbiEnabled(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('yinbienabled', builder: builder);
-  }
-
-  Future<void> setYinbiEnabled(bool on) {
-    return methodChannel.invokeMethod('setYinbiEnabled', <String, dynamic>{
-      'on': on,
-    });
-  }
-
-  Widget shouldShowYinbiBadge(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('should_show_yinbi_badge',
-        builder: builder);
-  }
-
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }

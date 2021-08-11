@@ -1,4 +1,77 @@
 
+<a name="6.7.8"></a>
+## [6.7.8](https://github.com/getlantern/android-lantern/compare/6.7.7...6.7.8)
+
+> 2021-08-04
+
+### Pull Requests
+
+* Merge pull request [#272](https://github.com/getlantern/android-lantern/issues/272) from getlantern/ox/asyncmethodhandler
+* Merge pull request [#271](https://github.com/getlantern/android-lantern/issues/271) from getlantern/ox/issue254
+* Merge pull request [#260](https://github.com/getlantern/android-lantern/issues/260) from getlantern/ox/issue206
+* Merge pull request [#242](https://github.com/getlantern/android-lantern/issues/242) from getlantern/ox/issue197
+* Merge pull request [#212](https://github.com/getlantern/android-lantern/issues/212) from getlantern/ox/issue203
+
+
+<a name="6.7.7"></a>
+## [6.7.7](https://github.com/getlantern/android-lantern/compare/6.7.6...6.7.7)
+
+> 2021-07-15
+
+### Pull Requests
+
+* Merge pull request [#234](https://github.com/getlantern/android-lantern/issues/234) from getlantern/crdzbird/error_catcher
+* Merge pull request [#220](https://github.com/getlantern/android-lantern/issues/220) from getlantern/ox/issue219
+
+
+<a name="6.7.6"></a>
+## [6.7.6](https://github.com/getlantern/android-lantern/compare/6.7.4...6.7.6)
+
+> 2021-07-13
+
+### Pull Requests
+
+* Merge pull request [#218](https://github.com/getlantern/android-lantern/issues/218) from getlantern/ox/issue217
+* Merge pull request [#216](https://github.com/getlantern/android-lantern/issues/216) from getlantern/ox/issue4924-2
+
+
+<a name="6.7.4"></a>
+## [6.7.4](https://github.com/getlantern/android-lantern/compare/6.7.3...6.7.4)
+
+> 2021-07-08
+
+### Pull Requests
+
+* Merge pull request [#193](https://github.com/getlantern/android-lantern/issues/193) from getlantern/ox/issue187-2
+
+
+<a name="6.7.3"></a>
+## [6.7.3](https://github.com/getlantern/android-lantern/compare/6.7.2...6.7.3)
+
+> 2021-06-24
+
+### Reverts
+
+* Updated to latest version of ipproxy using gvisor
+
+### Pull Requests
+
+* Merge pull request [#175](https://github.com/getlantern/android-lantern/issues/175) from getlantern/ox/miscupdates
+* Merge pull request [#170](https://github.com/getlantern/android-lantern/issues/170) from getlantern/ox/issue169
+* Merge pull request [#160](https://github.com/getlantern/android-lantern/issues/160) from getlantern/ox/switch_back_to_gvisor
+
+
+<a name="6.7.2"></a>
+## [6.7.2](https://github.com/getlantern/android-lantern/compare/6.7.1...6.7.2)
+
+> 2021-06-17
+
+### Pull Requests
+
+* Merge pull request [#157](https://github.com/getlantern/android-lantern/issues/157) from getlantern/ox/issue155
+* Merge pull request [#144](https://github.com/getlantern/android-lantern/issues/144) from getlantern/ox/issue143
+
+
 <a name="6.7.1"></a>
 ## [6.7.1](https://github.com/getlantern/android-lantern/compare/lantern-6.7.0...6.7.1)
 
