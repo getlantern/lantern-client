@@ -1,9 +1,12 @@
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+
+import 'contact_message_preview.dart';
 
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
@@ -316,4 +319,33 @@ Future<void> displayConversationOptions(
               ),
             ],
           ));
+}
+
+ListView groupedContactListGenerator(
+    Map<String, List<PathAndValue<Contact>>> groupedContactList) {
+  return ListView.builder(
+    itemCount: groupedContactList.length,
+    itemBuilder: (context, index) {
+      var letter = groupedContactList.keys.elementAt(index);
+      var contactsPerLetter = groupedContactList.values.elementAt(index);
+      return Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
+                child: Text(letter.toUpperCase()),
+              ),
+            ],
+          ),
+          Divider(height: 1.0, color: grey3),
+          if (contactsPerLetter.isNotEmpty)
+            // true will style this as a Contact preview
+            ...contactsPerLetter
+                .map((_contact) => ContactMessagePreview(_contact, index, true))
+        ],
+      );
+    },
+  );
 }

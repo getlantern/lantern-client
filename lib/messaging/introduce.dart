@@ -7,6 +7,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
+import 'package:lantern/utils/iterable_extension.dart';
 
 class Introduce extends StatefulWidget {
   @override
@@ -34,19 +35,23 @@ class _IntroduceState extends State<Introduce> {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+            // TODO: this should not be _contacts but [contactRequestees]
             var contacts = _contacts.toList()
-              ..sort((a, b) => sanitizeContactName(a.value)[0]
+              ..sort((a, b) => sanitizeContactName(a.value)
                   .toLowerCase()
                   .toString()
-                  .compareTo(sanitizeContactName(b.value)[0]
-                      .toLowerCase()
-                      .toString()));
+                  .compareTo(
+                      sanitizeContactName(b.value).toLowerCase().toString()));
+
+            var groupedConnectRequests = contacts.groupBy((el) =>
+                sanitizeContactName(el.value)[0].toLowerCase().toString());
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 2,
+                  // child: groupedContactListGenerator(groupedConnectRequests),
                   child: ListView.builder(
                     itemCount: contacts.length,
                     itemBuilder: (context, index) {
