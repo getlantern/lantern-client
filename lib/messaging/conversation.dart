@@ -378,7 +378,7 @@ class _ConversationState extends State<Conversation>
           minLeadingWidth: 18,
           leading: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: pendingRequest
+            child: !pendingRequest
                 ? contact.messagesDisappearAfterSeconds > 0
                     ? const Icon(Icons.timer, size: 18, color: Colors.black)
                     : const Icon(Icons.lock_clock,
@@ -388,7 +388,7 @@ class _ConversationState extends State<Conversation>
           ),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: (pendingRequest)
+            child: !pendingRequest
                 ? contact.messagesDisappearAfterSeconds > 0
                     ? Text(
                         'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
