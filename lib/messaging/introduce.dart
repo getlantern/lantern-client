@@ -7,7 +7,6 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
-import 'package:sizer/sizer.dart';
 
 class Introduce extends StatefulWidget {
   @override
@@ -22,18 +21,6 @@ class _IntroduceState extends State<Introduce> {
     // contacts.forEach((contact) =>
     //     selectedContacts.add({'contact': contact, 'isSelected': false}));
 
-    Color getColor(Set<MaterialState> states) {
-      const interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.white;
-      }
-      return Colors.black;
-    }
-
     return BaseScreen(
       title: 'Introduce Contacts (${selectedContacts.length})'.i18n,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -47,7 +34,13 @@ class _IntroduceState extends State<Introduce> {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            var contacts = _contacts.toList();
+            var contacts = _contacts.toList()
+              ..sort((a, b) => sanitizeContactName(a.value)[0]
+                  .toLowerCase()
+                  .toString()
+                  .compareTo(sanitizeContactName(b.value)[0]
+                      .toLowerCase()
+                      .toString()));
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,8 +68,8 @@ class _IntroduceState extends State<Introduce> {
                             FittedBox(
                               child: Checkbox(
                                 checkColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith(getColor),
+                                fillColor: MaterialStateProperty.resolveWith(
+                                    getCheckboxColor),
                                 // value: selectedContacts[index]['isSelected'],
                                 value: false,
                                 shape:
