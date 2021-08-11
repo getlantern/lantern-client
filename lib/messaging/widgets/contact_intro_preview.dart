@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -29,9 +30,7 @@ class ContactIntroPreview extends StatelessWidget {
         child: ListTile(
           leading: leading,
           title: Text(
-            contact.displayName.isEmpty
-                ? 'Unnamed contact'.i18n
-                : contact.displayName,
+            sanitizeContactName(contact),
           ),
           trailing: trailing,
         ),

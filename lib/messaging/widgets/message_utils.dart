@@ -5,6 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+String sanitizeContactName(Contact contact) {
+  return contact.displayName.isEmpty
+      ? 'Unnamed contact'.i18n
+      : contact.displayName;
+}
+
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
   // hardcode the list of available emoticons in a way that is convenient to parse

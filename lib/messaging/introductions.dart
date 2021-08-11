@@ -7,8 +7,6 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
 
 class Introductions extends StatelessWidget {
-  static const NUM_RECENT_CONTACTS = 10;
-
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
@@ -27,24 +25,11 @@ class Introductions extends StatelessWidget {
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var contacts = _contacts.toList();
-            var all = contacts.take(NUM_RECENT_CONTACTS).toList();
-            if (contacts.length > NUM_RECENT_CONTACTS) {
-              contacts.sort((a, b) {
-                var dc = (a.value.displayName).compareTo(b.value.displayName);
-                if (dc != 0) {
-                  return dc;
-                }
-                return a.value.contactId.id.compareTo(b.value.contactId.id);
-              });
-              all += contacts;
-            }
             return ListView.builder(
-              itemCount: all.length,
+              itemCount: contacts.length,
               itemBuilder: (context, index) {
-                var contact = all[index];
-                var displayName = contact.value.displayName.isEmpty
-                    ? 'Unnamed contact'.i18n
-                    : contact.value.displayName;
+                var contact = contacts[index];
+                var displayName = sanitizeContactName(contact.value);
                 var avatarLetters = displayName.substring(0, 2);
                 return Column(
                   children: [

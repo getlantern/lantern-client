@@ -71,7 +71,8 @@ class NewMessage extends StatelessWidget {
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var contacts = _contacts.toList();
-            var all = contacts.take(NUM_RECENT_CONTACTS).toList();
+            var recentConversations =
+                contacts.take(NUM_RECENT_CONTACTS).toList();
             if (contacts.length > NUM_RECENT_CONTACTS) {
               contacts.sort((a, b) {
                 var dc = (a.value.displayName).compareTo(b.value.displayName);
@@ -80,12 +81,12 @@ class NewMessage extends StatelessWidget {
                 }
                 return a.value.contactId.id.compareTo(b.value.contactId.id);
               });
-              all += contacts;
+              recentConversations += contacts;
             }
             return ListView.builder(
-              itemCount: all.length,
+              itemCount: recentConversations.length,
               itemBuilder: (context, index) {
-                var contact = all[index];
+                var contact = recentConversations[index];
                 return Column(
                   children: [
                     // true will style this as a Contact preview

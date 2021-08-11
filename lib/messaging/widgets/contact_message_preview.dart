@@ -22,9 +22,7 @@ class ContactMessagePreview extends StatelessWidget {
         (BuildContext context, Contact contact, Widget? child) {
       var topBorderWidth = _index.isEven ? 0.5 : 0.0;
       var bottomBorderWidth = _index.isOdd ? 0.0 : 0.5;
-      var displayName = contact.displayName.isEmpty
-          ? 'Unnamed contact'.i18n
-          : contact.displayName;
+      var displayName = sanitizeContactName(contact);
       var avatarLetters = displayName.substring(0, 2);
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -40,10 +38,7 @@ class ContactMessagePreview extends StatelessWidget {
             child: Text(avatarLetters.toUpperCase(),
                 style: const TextStyle(color: Colors.white)),
           ),
-          title: Text(
-              contact.displayName.isEmpty
-                  ? 'Unnamed contact'.i18n
-                  : contact.displayName,
+          title: Text(sanitizeContactName(contact),
               style: TextStyle(
                   fontWeight:
                       _isContactPreview ? FontWeight.normal : FontWeight.w500)),

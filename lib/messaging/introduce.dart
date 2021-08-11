@@ -10,8 +10,6 @@ import 'package:lantern/ui/widgets/button.dart';
 import 'package:sizer/sizer.dart';
 
 class Introduce extends StatefulWidget {
-  static const NUM_RECENT_CONTACTS = 10;
-
   @override
   _IntroduceState createState() => _IntroduceState();
 }
@@ -37,7 +35,7 @@ class _IntroduceState extends State<Introduce> {
     }
 
     return BaseScreen(
-      title: 'Introduce Contacts'.i18n,
+      title: 'Introduce Contacts (${selectedContacts.length})'.i18n,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
@@ -50,17 +48,6 @@ class _IntroduceState extends State<Introduce> {
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var contacts = _contacts.toList();
-            var all = contacts.take(Introduce.NUM_RECENT_CONTACTS).toList();
-            if (contacts.length > Introduce.NUM_RECENT_CONTACTS) {
-              contacts.sort((a, b) {
-                var dc = (a.value.displayName).compareTo(b.value.displayName);
-                if (dc != 0) {
-                  return dc;
-                }
-                return a.value.contactId.id.compareTo(b.value.contactId.id);
-              });
-              all += contacts;
-            }
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,12 +55,10 @@ class _IntroduceState extends State<Introduce> {
                 Expanded(
                   flex: 2,
                   child: ListView.builder(
-                    itemCount: all.length,
+                    itemCount: contacts.length,
                     itemBuilder: (context, index) {
-                      var contact = all[index];
-                      var displayName = contact.value.displayName.isEmpty
-                          ? 'Unnamed contact'.i18n
-                          : contact.value.displayName;
+                      var contact = contacts[index];
+                      var displayName = sanitizeContactName(contact.value);
                       var avatarLetters = displayName.substring(0, 2);
                       return Column(
                         children: [
@@ -108,28 +93,29 @@ class _IntroduceState extends State<Introduce> {
                     },
                   ),
                 ),
-                // if (selectedContacts.isNotEmpty)
-                Expanded(
-                  child: Container(
-                    color: grey1,
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Button(
-                            width: 200,
-                            text: 'Send Invitations'.i18n.toUpperCase(),
-                            onPressed: () async {
-                              showSnackbar(context, 'Introductions Sent!'.i18n);
-                              await Future.delayed(
-                                const Duration(milliseconds: 1000),
-                                () async => await context.router.pop(),
-                              );
-                            },
-                          ),
-                        ]),
-                  ),
-                )
+                if (selectedContacts.isNotEmpty)
+                  Expanded(
+                    child: Container(
+                      color: grey1,
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Button(
+                              width: 200,
+                              text: 'Send Invitations'.i18n.toUpperCase(),
+                              onPressed: () async {
+                                showSnackbar(
+                                    context, 'Introductions Sent!'.i18n);
+                                await Future.delayed(
+                                  const Duration(milliseconds: 1000),
+                                  () async => await context.router.pop(),
+                                );
+                              },
+                            ),
+                          ]),
+                    ),
+                  )
               ],
             );
           }),

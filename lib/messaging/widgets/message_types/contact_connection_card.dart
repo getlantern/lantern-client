@@ -25,9 +25,7 @@ class ContactConnectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var avatarLetters = contact.displayName.substring(0, 2);
-    var contactName = contact.displayName.isEmpty
-        ? 'Unnamed contact'.i18n
-        : contact.displayName;
+    var contactName = sanitizeContactName(contact);
     // TODO: temporary
     var requestAccepted = false;
     var requestRejected = false;
