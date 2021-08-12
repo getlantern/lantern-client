@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/contacts/generate_grouped_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -14,13 +15,17 @@ class Introduce extends StatefulWidget {
 }
 
 class _IntroduceState extends State<Introduce> {
+  var selectedContacts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    var selectedContacts = [];
-    // contacts.forEach((contact) =>
-    //     selectedContacts.add({'contact': contact, 'isSelected': false}));
-
     return BaseScreen(
       title: 'Introduce Contacts (${selectedContacts.length})'.i18n,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -52,9 +57,8 @@ class _IntroduceState extends State<Introduce> {
                 Expanded(
                   flex: 2,
                   child: groupedContactListGenerator(
-                      groupedSortedContacts,
-                      '',
-                      (Contact contact) => CircleAvatar(
+                      groupedSortedList: groupedSortedContacts,
+                      leadingCallback: (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],
                             child: Text(
@@ -63,16 +67,18 @@ class _IntroduceState extends State<Introduce> {
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                      Checkbox(
-                        checkColor: Colors.white,
-                        fillColor:
-                            MaterialStateProperty.resolveWith(getCheckboxColor),
-                        value: false,
-                        shape: const CircleBorder(side: BorderSide.none),
-                        onChanged: (bool? value) => {},
-                      ),
-                      null),
+                      trailingCallback: (int index) => Checkbox(
+                            checkColor: Colors.white,
+                            fillColor: MaterialStateProperty.resolveWith(
+                                getCheckboxColor),
+                            value: false,
+                            shape: const CircleBorder(side: BorderSide.none),
+                            onChanged: (bool? value) => setState(() {
+                              // TODO: handle saving selected status
+                            }),
+                          )),
                 ),
+                // TODO (Connect Friends) create method for identifying True in selectedContacts map
                 if (selectedContacts.isNotEmpty)
                   Expanded(
                     child: Container(
@@ -85,6 +91,7 @@ class _IntroduceState extends State<Introduce> {
                               width: 200,
                               text: 'Send Invitations'.i18n.toUpperCase(),
                               onPressed: () async {
+                                // TODO (Connect Friends) add model.SendReqs()
                                 showSnackbar(
                                     context, 'Introductions Sent!'.i18n);
                                 await Future.delayed(

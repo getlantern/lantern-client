@@ -1,0 +1,49 @@
+import 'package:lantern/model/model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/package_store.dart';
+import '../generic_list_item.dart';
+import '../message_utils.dart';
+
+//
+// Renders the alphabetically grouped sorted list of contacts/messages
+//
+ListView groupedContactListGenerator({
+  Map<String, List<PathAndValue<Contact>>>? groupedSortedList,
+  String? separatorText = '',
+  Function? leadingCallback,
+  Function? trailingCallback,
+  Function? onTapCallback,
+}) {
+  return ListView.builder(
+    itemCount: groupedSortedList!.length,
+    itemBuilder: (context, index) {
+      var key = groupedSortedList.keys.elementAt(index);
+      var itemsPerKey = groupedSortedList.values.elementAt(index);
+      return Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
+                child: Text(separatorText! + key.toUpperCase()),
+              ),
+            ],
+          ),
+          Divider(height: 1.0, color: grey3),
+          if (itemsPerKey.isNotEmpty)
+            ...itemsPerKey.map((contact) => GenericListItem(
+                  contact: contact,
+                  index: index,
+                  leading: leadingCallback!(contact.value),
+                  title: sanitizeContactName(contact.value),
+                  trailing: trailingCallback!(index),
+                  onTap: onTapCallback != null
+                      ? () => onTapCallback(contact.value)
+                      : null,
+                ))
+        ],
+      );
+    },
+  );
+}

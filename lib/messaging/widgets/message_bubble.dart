@@ -9,6 +9,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 
 import 'message_types/content_container.dart';
 import 'message_types/date_marker_bubble.dart';
@@ -206,39 +207,27 @@ class MessageBubble extends StatelessWidget {
 
 Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     bool isLocal, PathAndValue<StoredMessage> message) async {
-  return showDialog<void>(
+  return showAlertDialog(
     context: context,
     barrierDismissible: true,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: isLocal
-            ? Text('Delete for me', style: tsAlertDialogTitle)
-            : Text('Delete for everyone', style: tsAlertDialogTitle),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              isLocal
-                  ? Text(
-                      'This will delete the message for you only. Everyone else will still be able to see it.'
-                          .i18n,
-                      style: tsAlertDialogBody)
-                  : Text('This will delete the message for everyone.'.i18n,
-                      style: tsAlertDialogBody),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              isLocal
-                  ? model.deleteLocally(message)
-                  : model.deleteGlobally(message);
-              Navigator.of(context).pop();
-            },
-            child: Text('Delete'.i18n, style: tsAlertDialogButtonPink),
-          )
+    content: SingleChildScrollView(
+      child: ListBody(
+        children: <Widget>[
+          isLocal
+              ? Text(
+                  'This will delete the message for you only. Everyone else will still be able to see it.'
+                      .i18n,
+                  style: tsAlertDialogBody)
+              : Text('This will delete the message for everyone.'.i18n,
+                  style: tsAlertDialogBody),
         ],
-      );
-    },
+      ),
+    ),
+    title: isLocal
+        ? Text('Delete for me', style: tsAlertDialogTitle)
+        : Text('Delete for everyone', style: tsAlertDialogTitle),
+    agreeAction: () =>
+        isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
+    agreeText: 'Delete',
   );
 }
