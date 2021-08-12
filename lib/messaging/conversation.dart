@@ -312,7 +312,7 @@ class _ConversationState extends State<Conversation>
                   color: grey1,
                   child: Container(
                     width: 70.w,
-                    // TODO (Connect Friends PR): should change widget._contact to requestedContact
+                    // TODO Connect Contacts : should change widget._contact to requestedContact
                     child: _buildConversationSticker(false, widget._contact),
                   ),
                 ),

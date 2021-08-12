@@ -25,11 +25,11 @@ class ContactConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var avatarLetters = contact.displayName.substring(0, 2);
-    var contactName = sanitizeContactName(contact);
-    // TODO (Connect Friends PR): temporary
-    var requestAccepted = false;
-    var requestRejected = false;
+    final avatarLetters = contact.displayName.substring(0, 2);
+    final contactName = sanitizeContactName(contact);
+    // TODO Connect Contacts temporary
+    final requestAccepted = false;
+    final requestRejected = false;
     return Flex(
       direction: Axis.vertical,
       crossAxisAlignment:
@@ -128,6 +128,7 @@ class ContactConnectionCard extends StatelessWidget {
                             const Icon(Icons.check_circle, color: Colors.black),
                         title: Text('Accept'.i18n),
                         onTap: () {
+                          // TODO Connect Contacts
                           // requestAccepted = true
                           // model.acceptReq()
                           // slight delay to let checkbox show
@@ -142,6 +143,7 @@ class ContactConnectionCard extends StatelessWidget {
                       ),
                       title: Text('Reject'.i18n),
                       onTap: () {
+                        // TODO Connect Contacts
                         // requestAccepted = false
                         // model.rejectReq()
                         // dismiss modal
