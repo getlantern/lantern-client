@@ -1,17 +1,33 @@
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
-class ContactIntroPreview extends StatelessWidget {
+/*
+* Generic widget that renders a row with an avatar, a name and a trailing widget. 
+* Used in displaying lists of messages, contacts and contact requests.
+*/
+class GenericListItem extends StatelessWidget {
+  GenericListItem({
+    Key? key,
+    required this.contact,
+    required this.index,
+    this.isContactPreview,
+    required this.title,
+    this.subtitle,
+    required this.leading,
+    required this.trailing,
+    this.onTap,
+  }) : super();
+
   final PathAndValue<Contact> contact;
   final int index;
+  final bool? isContactPreview;
+  final String title;
+  final Widget? subtitle;
   final Widget leading;
   final Widget trailing;
-
-  ContactIntroPreview(this.contact, this.index, this.leading, this.trailing)
-      : super();
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +45,10 @@ class ContactIntroPreview extends StatelessWidget {
         )),
         child: ListTile(
           leading: leading,
-          title: Text(
-            sanitizeContactName(contact),
-          ),
+          title: Text(title.toString()),
+          subtitle: subtitle,
           trailing: trailing,
+          onTap: onTap,
         ),
       );
     });

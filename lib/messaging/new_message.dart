@@ -77,8 +77,7 @@ class NewMessage extends StatelessWidget {
               var contacts = _contacts.toList();
 
               var recentContacts = contacts.take(NUM_RECENT_CONTACTS).toList();
-              // TODO (Connect Friends PR) this fails for title starting with emojis
-              // separate ticket: https://github.com/getlantern/android-lantern/issues/299
+              // TODO (Connect Friends PR) related https://github.com/getlantern/android-lantern/issues/299
               var sortedRecentContacts = recentContacts
                 ..sort((a, b) => sanitizeContactName(a.value)
                     .toLowerCase()
@@ -91,9 +90,13 @@ class NewMessage extends StatelessWidget {
                       .toLowerCase()
                       .toString());
 
+              Future<void> onTap(Contact contact) async =>
+                  await context.pushRoute(Conversation(contact: contact));
+
               return groupedSortedRecentContacts.isEmpty
                   ? Container()
-                  : groupedContactListGenerator(groupedSortedRecentContacts);
+                  : groupedContactListGenerator(groupedSortedRecentContacts,
+                      null, const SizedBox(), onTap);
             }))
           ]),
     );
