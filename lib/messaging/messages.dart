@@ -6,7 +6,7 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
 
-import 'widgets/contact_message_preview.dart';
+import 'widgets/contacts/contact_message_preview.dart';
 
 class Messages extends StatelessWidget {
   @override

@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-import 'connect_request_card.dart';
-import 'contact_message_preview.dart';
+import 'contacts/connect_request_card.dart';
+import 'contacts/contact_message_preview.dart';
 
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
