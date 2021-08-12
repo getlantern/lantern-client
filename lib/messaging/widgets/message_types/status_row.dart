@@ -27,7 +27,7 @@ class StatusRowState extends State<StatusRow> {
     final end = widget.msg.disappearAt.toInt();
     final lifeSpan = end - begin;
     final segments = widget.msg.segments(iterations: 12);
-    final msgSelfDeletes = widget.msg.disappearAt.isZero;
+    final msgSelfDeletes = !widget.msg.disappearAt.isZero;
     return TweenAnimationBuilder<int>(
         key: Key('tween_${widget.msg.id}'),
         tween: IntTween(begin: DateTime.now().millisecondsSinceEpoch, end: end),
