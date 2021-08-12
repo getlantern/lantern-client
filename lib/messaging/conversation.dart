@@ -141,13 +141,12 @@ class _ConversationState extends State<Conversation>
         _recording = null;
         _audioPreviewController = null;
       });
-      (messageCount > 0)
-          ? await _scrollController.scrollTo(
-              index: 00,
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOutCubic)
-          : null;
-      ;
+      if (messageCount > 0) {
+        await _scrollController.scrollTo(
+            index: 00,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOutCubic);
+      }
     } catch (e) {
       showInfoDialog(context,
           title: 'Error'.i18n,
@@ -535,6 +534,7 @@ class _ConversationState extends State<Conversation>
             ),
       trailing: _isSendIconVisible && !_isRecording
           ? IconButton(
+              key: const ValueKey('send_message'),
               icon: const Icon(Icons.send, color: Colors.black),
               onPressed: send,
             )
