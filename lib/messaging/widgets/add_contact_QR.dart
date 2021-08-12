@@ -83,8 +83,7 @@ class _AddViaQRState extends State<AddViaQR> {
         });
         showInfoDialog(context,
             title: 'Error'.i18n,
-            des:
-                'Something went wrong while scanning the QR code', // TODO: Add i18n
+            des: 'Something went wrong while scanning the QR code'.i18n,
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       } finally {
@@ -128,7 +127,7 @@ class _AddViaQRState extends State<AddViaQR> {
               children: [
                 Flexible(
                   child: Text(
-                      "Scan your friend's QR code and ask them to scan yours." // TODO: Add i18n
+                      "Scan your friend's QR code and ask them to scan yours."
                           .i18n,
                       textAlign: TextAlign.center,
                       style: const TextStyle(

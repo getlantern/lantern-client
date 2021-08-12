@@ -6,11 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import 'connect_request_card.dart';
 import 'contact_message_preview.dart';
 
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
-      ? 'Unnamed contact'.i18n
+      ? 'Unnamed Contact'.i18n
       : contact.displayName.toString();
 }
 
@@ -124,7 +125,7 @@ Container displayEmojiCount(
   final reactorsToKey = reactions[reactionKey]!;
   return Container(
       decoration: const BoxDecoration(
-        color: Colors.white, // TODO generalize in theme
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(999)),
       ),
       child: Padding(
@@ -261,8 +262,9 @@ Future<void> displayConversationOptions(
                               child: ListBody(
                                 children: <Widget>[
                                   Text(
-                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
-                                      style: tsAlertDialogBody) // TODO: i18n
+                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.'
+                                          .i18n,
+                                      style: tsAlertDialogBody)
                                 ],
                               ),
                             ),
@@ -322,12 +324,12 @@ Future<void> displayConversationOptions(
 }
 
 ListView groupedContactListGenerator(
-    Map<String, List<PathAndValue<Contact>>> groupedContactList) {
+    Map<String, List<PathAndValue<Contact>>> groupedSortedList) {
   return ListView.builder(
-    itemCount: groupedContactList.length,
+    itemCount: groupedSortedList.length,
     itemBuilder: (context, index) {
-      var letter = groupedContactList.keys.elementAt(index);
-      var contactsPerLetter = groupedContactList.values.elementAt(index);
+      var key = groupedSortedList.keys.elementAt(index);
+      var itemsPerKey = groupedSortedList.values.elementAt(index);
       return Column(
         children: [
           Row(
@@ -335,15 +337,44 @@ ListView groupedContactListGenerator(
               Padding(
                 padding:
                     const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(letter.toUpperCase()),
+                child: Text(key.toUpperCase()),
               ),
             ],
           ),
           Divider(height: 1.0, color: grey3),
-          if (contactsPerLetter.isNotEmpty)
+          if (itemsPerKey.isNotEmpty)
             // true will style this as a Contact preview
-            ...contactsPerLetter
+            ...itemsPerKey
                 .map((_contact) => ContactMessagePreview(_contact, index, true))
+        ],
+      );
+    },
+  );
+}
+
+ListView groupedRequestListGenerator(
+    Map<String, List<PathAndValue<Contact>>> groupedSortedRequests) {
+  return ListView.builder(
+    itemCount: groupedSortedRequests.length,
+    itemBuilder: (context, index) {
+      var key = groupedSortedRequests.keys.elementAt(index);
+      var itemsPerKey = groupedSortedRequests.values.elementAt(index);
+      return Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
+                child: Text(key.toUpperCase()),
+              ),
+            ],
+          ),
+          Divider(height: 1.0, color: grey3),
+          if (itemsPerKey.isNotEmpty)
+            // true will style this as a Contact preview
+            ...itemsPerKey.map((_contact) =>
+                ConnectRequestCard(contact: _contact, index: index))
         ],
       );
     },

@@ -26,7 +26,7 @@ class ContactConnectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var avatarLetters = contact.displayName.substring(0, 2);
     var contactName = sanitizeContactName(contact);
-    // TODO: temporary
+    // TODO (Connect Friends PR): temporary
     var requestAccepted = false;
     var requestRejected = false;
     return Flex(
