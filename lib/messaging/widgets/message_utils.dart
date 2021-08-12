@@ -1,3 +1,4 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -5,9 +6,7 @@ import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-
-import 'contacts/connect_request_card.dart';
-import 'contacts/contact_message_preview.dart';
+import 'generic_list_item.dart';
 
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
@@ -323,13 +322,20 @@ Future<void> displayConversationOptions(
           ));
 }
 
+//
+// Renders the alphabetically grouped sorted list of contacts/messages
+//
 ListView groupedContactListGenerator(
-    Map<String, List<PathAndValue<Contact>>> groupedSortedList) {
+  Map<String, List<PathAndValue<Contact>>> _groupedSortedList,
+  Function? _wrapLeading,
+  Widget _trailing,
+  Function? _onTapCallback,
+) {
   return ListView.builder(
-    itemCount: groupedSortedList.length,
-    itemBuilder: (context, index) {
-      var key = groupedSortedList.keys.elementAt(index);
-      var itemsPerKey = groupedSortedList.values.elementAt(index);
+    itemCount: _groupedSortedList.length,
+    itemBuilder: (context, _index) {
+      var key = _groupedSortedList.keys.elementAt(_index);
+      var itemsPerKey = _groupedSortedList.values.elementAt(_index);
       return Column(
         children: [
           Row(
@@ -343,38 +349,37 @@ ListView groupedContactListGenerator(
           ),
           Divider(height: 1.0, color: grey3),
           if (itemsPerKey.isNotEmpty)
-            // true will style this as a Contact preview
-            ...itemsPerKey
-                .map((_contact) => ContactMessagePreview(_contact, index, true))
-        ],
-      );
-    },
-  );
-}
-
-ListView groupedRequestListGenerator(
-    Map<String, List<PathAndValue<Contact>>> groupedSortedRequests) {
-  return ListView.builder(
-    itemCount: groupedSortedRequests.length,
-    itemBuilder: (context, index) {
-      var key = groupedSortedRequests.keys.elementAt(index);
-      var itemsPerKey = groupedSortedRequests.values.elementAt(index);
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(key.toUpperCase()),
-              ),
-            ],
-          ),
-          Divider(height: 1.0, color: grey3),
-          if (itemsPerKey.isNotEmpty)
-            // true will style this as a Contact preview
-            ...itemsPerKey.map((_contact) =>
-                ConnectRequestCard(contact: _contact, index: index))
+            ...itemsPerKey.map((_contact) => GenericListItem(
+                  contact: _contact,
+                  index: _index,
+                  leading: (_wrapLeading != null)
+                      ? CircleAvatar(
+                          backgroundColor: avatarBgColors[
+                              generateUniqueColorIndex(
+                                  _contact.value.contactId.id)],
+                          child: Text(
+                              sanitizeContactName(_contact.value)
+                                  .substring(0, 2)
+                                  .toUpperCase(),
+                              style: const TextStyle(color: Colors.white)),
+                        )
+                      : _wrapLeading!(
+                          child: CircleAvatar(
+                          backgroundColor: avatarBgColors[
+                              generateUniqueColorIndex(
+                                  _contact.value.contactId.id)],
+                          child: Text(
+                              sanitizeContactName(_contact.value)
+                                  .substring(0, 2)
+                                  .toUpperCase(),
+                              style: const TextStyle(color: Colors.white)),
+                        )),
+                  title: sanitizeContactName(_contact.value),
+                  trailing: _trailing,
+                  onTap: _onTapCallback != null
+                      ? _onTapCallback(_contact.value)
+                      : () {},
+                ))
         ],
       );
     },

@@ -1,10 +1,11 @@
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/contacts/contact_intro_preview.dart';
+import 'package:lantern/messaging/widgets/generic_list_item.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:lantern/utils/iterable_extension.dart';
 
 class Introductions extends StatelessWidget {
   @override
@@ -24,52 +25,41 @@ class Introductions extends StatelessWidget {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            var contacts = _contacts.toList();
-            return ListView.builder(
-              itemCount: contacts.length,
-              itemBuilder: (context, index) {
-                var contact = contacts[index];
-                var displayName = sanitizeContactName(contact.value);
-                var avatarLetters = displayName.substring(0, 2);
-                return Column(
-                  children: [
-                    // true will style this as a Contact preview
-                    ContactIntroPreview(
-                      contact,
-                      index,
-                      CustomBadge(
-                        showBadge: true,
-                        top: 25,
-                        customBadge: const Icon(Icons.timer,
-                            size: 16.0, color: Colors.black),
-                        child: CircleAvatar(
-                          backgroundColor: avatarBgColors[
-                              generateUniqueColorIndex(
-                                  contact.value.contactId.id)],
-                          child: Text(avatarLetters.toUpperCase(),
-                              style: const TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                      FittedBox(
-                          child: Row(
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            child: Text('Reject'.i18n.toUpperCase(),
-                                style: tsAlertDialogButtonGrey),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text('Accept'.i18n.toUpperCase(),
-                                style: tsAlertDialogButtonPink),
-                          )
-                        ],
-                      )),
+            var sortedRequests = _contacts.toList()
+              ..sort((a, b) => sanitizeContactName(a.value)
+                  .toLowerCase()
+                  .toString()
+                  .compareTo(
+                      sanitizeContactName(b.value).toLowerCase().toString()));
+
+            var groupedSortedRequests = sortedRequests.groupBy(
+                (el) => sanitizeContactName(el.value)[0].toLowerCase());
+
+            return groupedContactListGenerator(
+                groupedSortedRequests,
+                () => CustomBadge(
+                      showBadge: true,
+                      top: 25,
+                      customBadge: const Icon(Icons.timer,
+                          size: 16.0, color: Colors.black),
+                      child: child,
                     ),
+                FittedBox(
+                    child: Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Reject'.i18n.toUpperCase(),
+                          style: tsAlertDialogButtonGrey),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Accept'.i18n.toUpperCase(),
+                          style: tsAlertDialogButtonPink),
+                    )
                   ],
-                );
-              },
-            );
+                )),
+                null);
           }),
         )
       ]),

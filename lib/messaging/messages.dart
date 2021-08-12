@@ -1,12 +1,13 @@
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/generic_list_item.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
-
-import 'widgets/contacts/contact_message_preview.dart';
+import 'package:lantern/utils/humanize.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -64,9 +65,33 @@ class Messages extends StatelessWidget {
                   itemCount: contacts.length,
                   itemBuilder: (context, index) {
                     // false will style this as a Message preview
+                    var contact = contacts[index];
                     return Column(
                       children: [
-                        ContactMessagePreview(contacts[index], index, false),
+                        GenericListItem(
+                          contact: contact,
+                          index: index,
+                          leading: CircleAvatar(
+                            backgroundColor: avatarBgColors[
+                                generateUniqueColorIndex(
+                                    contact.value.contactId.id)],
+                            child: Text(
+                                sanitizeContactName(contact.value)
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(color: Colors.white)),
+                          ),
+                          title: sanitizeContactName(contact.value),
+                          subtitle: Text(
+                              "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
+                              overflow: TextOverflow.ellipsis),
+                          onTap: () async => await context
+                              .pushRoute(Conversation(contact: contact.value)),
+                          trailing: Text(contact.value.mostRecentMessageTs
+                              .toInt()
+                              .humanizeDate()
+                              .toString()),
+                        ),
                       ],
                     );
                   },

@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/contacts/contact_intro_preview.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -36,14 +35,14 @@ class _IntroduceState extends State<Introduce> {
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             // TODO (Connect Friends PR) this should not be _contacts but [contactRequestees]
-            var sortedRequests = _contacts.toList()
+            var sortedContacts = _contacts.toList()
               ..sort((a, b) => sanitizeContactName(a.value)
                   .toLowerCase()
                   .toString()
                   .compareTo(
                       sanitizeContactName(b.value).toLowerCase().toString()));
 
-            var groupedSortedRequests = sortedRequests.groupBy(
+            var groupedSortedContacts = sortedContacts.groupBy(
                 (el) => sanitizeContactName(el.value)[0].toLowerCase());
 
             return Column(
@@ -52,7 +51,18 @@ class _IntroduceState extends State<Introduce> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: groupedRequestListGenerator(groupedSortedRequests),
+                  child: groupedContactListGenerator(
+                      groupedSortedContacts,
+                      null,
+                      Checkbox(
+                        checkColor: Colors.white,
+                        fillColor:
+                            MaterialStateProperty.resolveWith(getCheckboxColor),
+                        value: false,
+                        shape: const CircleBorder(side: BorderSide.none),
+                        onChanged: (bool? value) => {},
+                      ),
+                      null),
                 ),
                 if (selectedContacts.isNotEmpty)
                   Expanded(
