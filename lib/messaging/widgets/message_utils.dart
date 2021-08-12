@@ -327,6 +327,7 @@ Future<void> displayConversationOptions(
 //
 ListView groupedContactListGenerator(
   Map<String, List<PathAndValue<Contact>>> _groupedSortedList,
+  String? _separatorText,
   Function _leadingCallback,
   Widget _trailing,
   Function? _onTapCallback,
@@ -343,7 +344,7 @@ ListView groupedContactListGenerator(
               Padding(
                 padding:
                     const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(key.toUpperCase()),
+                child: Text(_separatorText! + key.toUpperCase()),
               ),
             ],
           ),

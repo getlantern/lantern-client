@@ -34,9 +34,9 @@ class Introductions extends StatelessWidget {
 
             var groupedSortedRequests = sortedRequests.groupBy(
                 (el) => sanitizeContactName(el.value)[0].toLowerCase());
-
             return groupedContactListGenerator(
                 groupedSortedRequests,
+                'Introduced by '.i18n,
                 (Contact contact) => CustomBadge(
                       showBadge: true,
                       top: 25,
