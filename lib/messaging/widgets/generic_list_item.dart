@@ -34,6 +34,7 @@ class GenericListItem extends StatelessWidget {
     var model = context.watch<MessagingModel>();
     return model.contact(context, contact,
         (BuildContext context, Contact contact, Widget? child) {
+      // TODO this needs a slight tweaking since we are grouping elements now
       var topBorderWidth = index.isEven ? 0.5 : 0.0;
       var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
       return Container(

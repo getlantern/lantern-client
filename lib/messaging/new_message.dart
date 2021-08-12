@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/contacts/generate_grouped_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -93,9 +94,8 @@ class NewMessage extends StatelessWidget {
               return groupedSortedRecentContacts.isEmpty
                   ? Container()
                   : groupedContactListGenerator(
-                      groupedSortedRecentContacts,
-                      '',
-                      (Contact contact) => CircleAvatar(
+                      groupedSortedList: groupedSortedRecentContacts,
+                      leadingCallback: (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],
                             child: Text(
@@ -104,8 +104,8 @@ class NewMessage extends StatelessWidget {
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                      const SizedBox(),
-                      (Contact contact) async => await context
+                      trailingCallback: (_) => const SizedBox(),
+                      onTapCallback: (Contact contact) async => await context
                           .pushRoute(Conversation(contact: contact)));
             }))
           ]),

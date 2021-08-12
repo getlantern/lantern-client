@@ -1,12 +1,9 @@
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'generic_list_item.dart';
 
 String sanitizeContactName(Contact contact) {
   return contact.displayName.isEmpty
@@ -320,48 +317,4 @@ Future<void> displayConversationOptions(
               ),
             ],
           ));
-}
-
-//
-// Renders the alphabetically grouped sorted list of contacts/messages
-//
-ListView groupedContactListGenerator(
-  Map<String, List<PathAndValue<Contact>>> _groupedSortedList,
-  String? _separatorText,
-  Function _leadingCallback,
-  Widget _trailing,
-  Function? _onTapCallback,
-) {
-  return ListView.builder(
-    itemCount: _groupedSortedList.length,
-    itemBuilder: (context, _index) {
-      var key = _groupedSortedList.keys.elementAt(_index);
-      var itemsPerKey = _groupedSortedList.values.elementAt(_index);
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(_separatorText! + key.toUpperCase()),
-              ),
-            ],
-          ),
-          Divider(height: 1.0, color: grey3),
-          if (itemsPerKey.isNotEmpty)
-            ...itemsPerKey.map((_contact) => GenericListItem(
-                  contact: _contact,
-                  index: _index,
-                  leading: _leadingCallback(_contact.value),
-                  title: sanitizeContactName(_contact.value),
-                  trailing: _trailing,
-                  onTap: _onTapCallback != null
-                      ? () => _onTapCallback(_contact.value)
-                      : () {},
-                ))
-        ],
-      );
-    },
-  );
 }
