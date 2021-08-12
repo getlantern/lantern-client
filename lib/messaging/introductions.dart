@@ -35,7 +35,7 @@ class Introductions extends StatelessWidget {
             var groupedSortedRequests = sortedRequests.groupBy(
                 (el) => sanitizeContactName(el.value)[0].toLowerCase());
 
-            // TODO Connect Friends - temporary
+            // TODO Connect Contacts - temporary
             var pendingRequest = true;
 
             return groupedContactListGenerator(
@@ -69,14 +69,19 @@ class Introductions extends StatelessWidget {
                                       'You will not be able to message this contact if you reject the introduction.'
                                           .i18n,
                                       style: tsAlertDialogBody),
+                                  // naming is confusing here because we are using the Alert Dialog which by default has a [Reject vs Accept] field
+                                  // but in this case it corresponds to [Cancel vs Reject]
                                   dismissText: 'Cancel'.i18n,
-                                  agreeText: 'Reject'.i18n),
+                                  agreeText: 'Reject'.i18n,
+                                  agreeAction: () {
+                                    // TODO Connect Contacts model.reject()
+                                  }),
                               child: Text('Reject'.i18n.toUpperCase(),
                                   style: tsAlertDialogButtonGrey),
                             ),
                             TextButton(
                               onPressed: () {
-                                // TODO (Connect Friends) model.accept()
+                                // TODO Connect Contacts model.accept()
                               },
                               child: Text('Accept'.i18n.toUpperCase(),
                                   style: tsAlertDialogButtonPink),

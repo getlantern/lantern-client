@@ -84,7 +84,7 @@ class NewMessage extends StatelessWidget {
               var contacts = _contacts.toList();
 
               var recentContacts = contacts.take(NUM_RECENT_CONTACTS).toList();
-              // TODO (Connect Friends PR) related https://github.com/getlantern/android-lantern/issues/299
+              // related https://github.com/getlantern/android-lantern/issues/299
               var sortedRecentContacts = recentContacts
                 ..sort((a, b) => sanitizeContactName(a.value)
                     .toLowerCase()

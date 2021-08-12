@@ -63,6 +63,7 @@ class ContentContainer extends StatelessWidget {
     final isAudio = msg.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
 
+    // TODO Connect Contacts - temporary
     final isContactConnectionCard = false;
     return Container(
       constraints: BoxConstraints(maxWidth: 80.w),
