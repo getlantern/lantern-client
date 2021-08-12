@@ -45,7 +45,10 @@ class Messages extends StatelessWidget {
                   ),
                 ),
                 title: Text('Introductions'.i18n, style: tsBaseScreenBodyText),
-                trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                trailing: const CustomAssetImage(
+                  path: ImagePaths.keyboard_arrow_right_icon,
+                  size: 24,
+                ),
                 onTap: () async =>
                     await context.pushRoute(const Introductions()),
               ),

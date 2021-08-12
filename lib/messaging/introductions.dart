@@ -12,7 +12,6 @@ class Introductions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'Introductions'.i18n,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -35,6 +34,10 @@ class Introductions extends StatelessWidget {
 
             var groupedSortedRequests = sortedRequests.groupBy(
                 (el) => sanitizeContactName(el.value)[0].toLowerCase());
+
+            // TODO Connect Friends - temporary
+            var pendingRequest = true;
+
             return groupedContactListGenerator(
               groupedSortedList: groupedSortedRequests,
               separatorText: 'Introduced by '.i18n,
@@ -53,32 +56,37 @@ class Introductions extends StatelessWidget {
                       style: const TextStyle(color: Colors.white)),
                 ),
               ),
-              trailingCallback: (_) => FittedBox(
-                  child: Row(
-                children: [
-                  TextButton(
-                    onPressed: () => showAlertDialog(
-                        context: context,
-                        title: Text('Reject Introduction?'.i18n,
-                            style: tsAlertDialogTitle),
-                        content: Text(
-                            'You will not be able to message this contact if you reject the introduction.'
-                                .i18n,
-                            style: tsAlertDialogBody),
-                        dismissText: 'Cancel'.i18n,
-                        agreeText: 'Reject'.i18n),
-                    child: Text('Reject'.i18n.toUpperCase(),
-                        style: tsAlertDialogButtonGrey),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // TODO (Connect Friends) model.accept()
-                    },
-                    child: Text('Accept'.i18n.toUpperCase(),
-                        style: tsAlertDialogButtonPink),
-                  )
-                ],
-              )),
+              trailingCallback: (int index, Contact contact) => FittedBox(
+                  child: pendingRequest
+                      ? Row(
+                          children: [
+                            TextButton(
+                              onPressed: () => showAlertDialog(
+                                  context: context,
+                                  title: Text('Reject Introduction?'.i18n,
+                                      style: tsAlertDialogTitle),
+                                  content: Text(
+                                      'You will not be able to message this contact if you reject the introduction.'
+                                          .i18n,
+                                      style: tsAlertDialogBody),
+                                  dismissText: 'Cancel'.i18n,
+                                  agreeText: 'Reject'.i18n),
+                              child: Text('Reject'.i18n.toUpperCase(),
+                                  style: tsAlertDialogButtonGrey),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // TODO (Connect Friends) model.accept()
+                              },
+                              child: Text('Accept'.i18n.toUpperCase(),
+                                  style: tsAlertDialogButtonPink),
+                            )
+                          ],
+                        )
+                      : const CustomAssetImage(
+                          path: ImagePaths.keyboard_arrow_right_icon,
+                          size: 24,
+                        )),
             );
           }),
         )
