@@ -53,7 +53,15 @@ class _IntroduceState extends State<Introduce> {
                   flex: 2,
                   child: groupedContactListGenerator(
                       groupedSortedContacts,
-                      null,
+                      (Contact contact) => CircleAvatar(
+                            backgroundColor: avatarBgColors[
+                                generateUniqueColorIndex(contact.contactId.id)],
+                            child: Text(
+                                sanitizeContactName(contact)
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(color: Colors.white)),
+                          ),
                       Checkbox(
                         checkColor: Colors.white,
                         fillColor:

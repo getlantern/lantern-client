@@ -327,7 +327,7 @@ Future<void> displayConversationOptions(
 //
 ListView groupedContactListGenerator(
   Map<String, List<PathAndValue<Contact>>> _groupedSortedList,
-  Function? _wrapLeading,
+  Function _leadingCallback,
   Widget _trailing,
   Function? _onTapCallback,
 ) {
@@ -352,32 +352,11 @@ ListView groupedContactListGenerator(
             ...itemsPerKey.map((_contact) => GenericListItem(
                   contact: _contact,
                   index: _index,
-                  leading: (_wrapLeading != null)
-                      ? CircleAvatar(
-                          backgroundColor: avatarBgColors[
-                              generateUniqueColorIndex(
-                                  _contact.value.contactId.id)],
-                          child: Text(
-                              sanitizeContactName(_contact.value)
-                                  .substring(0, 2)
-                                  .toUpperCase(),
-                              style: const TextStyle(color: Colors.white)),
-                        )
-                      : _wrapLeading!(
-                          child: CircleAvatar(
-                          backgroundColor: avatarBgColors[
-                              generateUniqueColorIndex(
-                                  _contact.value.contactId.id)],
-                          child: Text(
-                              sanitizeContactName(_contact.value)
-                                  .substring(0, 2)
-                                  .toUpperCase(),
-                              style: const TextStyle(color: Colors.white)),
-                        )),
+                  leading: _leadingCallback(_contact.value),
                   title: sanitizeContactName(_contact.value),
                   trailing: _trailing,
                   onTap: _onTapCallback != null
-                      ? _onTapCallback(_contact.value)
+                      ? () => _onTapCallback(_contact.value)
                       : () {},
                 ))
         ],

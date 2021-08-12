@@ -37,12 +37,20 @@ class Introductions extends StatelessWidget {
 
             return groupedContactListGenerator(
                 groupedSortedRequests,
-                () => CustomBadge(
+                (Contact contact) => CustomBadge(
                       showBadge: true,
                       top: 25,
                       customBadge: const Icon(Icons.timer,
                           size: 16.0, color: Colors.black),
-                      child: child,
+                      child: CircleAvatar(
+                        backgroundColor: avatarBgColors[
+                            generateUniqueColorIndex(contact.contactId.id)],
+                        child: Text(
+                            sanitizeContactName(contact)
+                                .substring(0, 2)
+                                .toUpperCase(),
+                            style: const TextStyle(color: Colors.white)),
+                      ),
                     ),
                 FittedBox(
                     child: Row(

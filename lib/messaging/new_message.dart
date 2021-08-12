@@ -90,13 +90,22 @@ class NewMessage extends StatelessWidget {
                       .toLowerCase()
                       .toString());
 
-              Future<void> onTap(Contact contact) async =>
-                  await context.pushRoute(Conversation(contact: contact));
-
               return groupedSortedRecentContacts.isEmpty
                   ? Container()
-                  : groupedContactListGenerator(groupedSortedRecentContacts,
-                      null, const SizedBox(), onTap);
+                  : groupedContactListGenerator(
+                      groupedSortedRecentContacts,
+                      (Contact contact) => CircleAvatar(
+                            backgroundColor: avatarBgColors[
+                                generateUniqueColorIndex(contact.contactId.id)],
+                            child: Text(
+                                sanitizeContactName(contact)
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(color: Colors.white)),
+                          ),
+                      const SizedBox(),
+                      (Contact contact) async => await context
+                          .pushRoute(Conversation(contact: contact)));
             }))
           ]),
     );
