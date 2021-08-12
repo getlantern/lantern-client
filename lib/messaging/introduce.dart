@@ -35,61 +35,24 @@ class _IntroduceState extends State<Introduce> {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            // TODO: this should not be _contacts but [contactRequestees]
-            var contacts = _contacts.toList()
+            // TODO (Connect Friends PR) this should not be _contacts but [contactRequestees]
+            var sortedRequests = _contacts.toList()
               ..sort((a, b) => sanitizeContactName(a.value)
                   .toLowerCase()
                   .toString()
                   .compareTo(
                       sanitizeContactName(b.value).toLowerCase().toString()));
 
-            var groupedConnectRequests = contacts.groupBy((el) =>
-                sanitizeContactName(el.value)[0].toLowerCase().toString());
+            var groupedSortedRequests = sortedRequests.groupBy(
+                (el) => sanitizeContactName(el.value)[0].toLowerCase());
+
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 2,
-                  // child: groupedContactListGenerator(groupedConnectRequests),
-                  child: ListView.builder(
-                    itemCount: contacts.length,
-                    itemBuilder: (context, index) {
-                      var contact = contacts[index];
-                      var displayName = sanitizeContactName(contact.value);
-                      var avatarLetters = displayName.substring(0, 2);
-                      return Column(
-                        children: [
-                          ContactIntroPreview(
-                            contact,
-                            index,
-                            CircleAvatar(
-                              backgroundColor: avatarBgColors[
-                                  generateUniqueColorIndex(
-                                      contact.value.contactId.id)],
-                              child: Text(avatarLetters.toUpperCase(),
-                                  style: const TextStyle(color: Colors.white)),
-                            ),
-                            FittedBox(
-                              child: Checkbox(
-                                checkColor: Colors.white,
-                                fillColor: MaterialStateProperty.resolveWith(
-                                    getCheckboxColor),
-                                // value: selectedContacts[index]['isSelected'],
-                                value: false,
-                                shape:
-                                    const CircleBorder(side: BorderSide.none),
-                                // onChanged: (bool? value) => setState(() {
-                                //   selectedContacts[index]['isSelected'] = value;
-                                // }),
-                                onChanged: (bool? value) => {},
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  child: groupedRequestListGenerator(groupedSortedRequests),
                 ),
                 if (selectedContacts.isNotEmpty)
                   Expanded(

@@ -219,10 +219,11 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
             children: <Widget>[
               isLocal
                   ? Text(
-                      'This will delete the message for you only. Everyone else will still be able to see it.',
-                      style: tsAlertDialogBody) // TODO: i18n
-                  : Text('This will delete the message for everyone.',
-                      style: tsAlertDialogBody), // TODO: i18n
+                      'This will delete the message for you only. Everyone else will still be able to see it.'
+                          .i18n,
+                      style: tsAlertDialogBody)
+                  : Text('This will delete the message for everyone.'.i18n,
+                      style: tsAlertDialogBody),
             ],
           ),
         ),

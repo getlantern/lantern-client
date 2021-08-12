@@ -76,27 +76,24 @@ class NewMessage extends StatelessWidget {
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
               var contacts = _contacts.toList();
 
-              // TODO:define a List extension?
-              // alphabetically sort contacts
-              var recentConversations = contacts
-                  .take(NUM_RECENT_CONTACTS)
-                  .toList()
-                    ..sort((a, b) => sanitizeContactName(a.value)
-                        .toLowerCase()
-                        .toString()
-                        .compareTo(sanitizeContactName(b.value)
-                            .toLowerCase()
-                            .toString()));
+              var recentContacts = contacts.take(NUM_RECENT_CONTACTS).toList();
+              // TODO (Connect Friends PR) this fails for title starting with emojis
+              // separate ticket: https://github.com/getlantern/android-lantern/issues/299
+              var sortedRecentContacts = recentContacts
+                ..sort((a, b) => sanitizeContactName(a.value)
+                    .toLowerCase()
+                    .toString()
+                    .compareTo(
+                        sanitizeContactName(b.value).toLowerCase().toString()));
 
-              // TODO:this fails for title starting with emojis
-              var groupedRecentConversations = recentConversations.groupBy(
+              var groupedSortedRecentContacts = sortedRecentContacts.groupBy(
                   (el) => sanitizeContactName(el.value)[0]
                       .toLowerCase()
                       .toString());
 
-              groupedRecentConversations.isEmpty
+              return groupedSortedRecentContacts.isEmpty
                   ? Container()
-                  : groupedContactListGenerator(groupedRecentConversations);
+                  : groupedContactListGenerator(groupedSortedRecentContacts);
             }))
           ]),
     );

@@ -43,11 +43,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                     ),
                     validator: (value) {
                       try {
-                        // setState(() {
-                        //   // TODO: missing
-                        //   contact = model.getContactFromUsername(
-                        //       usernameController.value.text) as Contact;
-                        // });
+                        // get contact from username
                       } catch (e) {
                         return 'An error occurred while searching for this username'
                             .i18n;
