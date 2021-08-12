@@ -15,7 +15,7 @@ class Introduce extends StatefulWidget {
 }
 
 class _IntroduceState extends State<Introduce> {
-  var selectedContacts = [];
+  List<String> selectedContactIds = [];
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _IntroduceState extends State<Introduce> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-      title: 'Introduce Contacts (${selectedContacts.length})'.i18n,
+      title: 'Introduce Contacts (${selectedContactIds.length})'.i18n,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
@@ -67,42 +67,44 @@ class _IntroduceState extends State<Introduce> {
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                      trailingCallback: (int index) => Checkbox(
+                      trailingCallback: (int index, Contact contact) =>
+                          Checkbox(
                             checkColor: Colors.white,
                             fillColor: MaterialStateProperty.resolveWith(
                                 getCheckboxColor),
-                            value: false,
+                            value: selectedContactIds.contains(contact.contactId
+                                .id), // TODO: Confirm this is a good idea for scaling to more contacts
                             shape: const CircleBorder(side: BorderSide.none),
                             onChanged: (bool? value) => setState(() {
-                              // TODO: handle saving selected status
+                              value! // TODO: Confirm this is a good idea for scaling to more contacts
+                                  ? selectedContactIds.add(contact.contactId.id)
+                                  : selectedContactIds
+                                      .remove(contact.contactId.id);
                             }),
                           )),
                 ),
-                // TODO (Connect Friends) create method for identifying True in selectedContacts map
-                if (selectedContacts.isNotEmpty)
-                  Expanded(
-                    child: Container(
-                      color: grey1,
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Button(
-                              width: 200,
-                              text: 'Send Invitations'.i18n.toUpperCase(),
-                              onPressed: () async {
-                                // TODO (Connect Friends) add model.SendReqs()
-                                showSnackbar(
-                                    context, 'Introductions Sent!'.i18n);
-                                await Future.delayed(
-                                  const Duration(milliseconds: 1000),
-                                  () async => await context.router.pop(),
-                                );
-                              },
-                            ),
-                          ]),
-                    ),
-                  )
+                // TODO (Connect Friends) create method for identifying True in selectedContactIds list
+                if (selectedContactIds.isNotEmpty)
+                  Container(
+                    color: grey1,
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Button(
+                            width: 200,
+                            text: 'Send Invitations'.i18n.toUpperCase(),
+                            onPressed: () async {
+                              // TODO (Connect Friends) add model.SendReqs()
+                              showSnackbar(context, 'Introductions Sent!'.i18n);
+                              await Future.delayed(
+                                const Duration(milliseconds: 1000),
+                                () async => await context.router.pop(),
+                              );
+                            },
+                          ),
+                        ]),
+                  ),
               ],
             );
           }),

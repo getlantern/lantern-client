@@ -37,7 +37,9 @@ ListView groupedContactListGenerator({
                   index: index,
                   leading: leadingCallback!(contact.value),
                   title: sanitizeContactName(contact.value),
-                  trailing: trailingCallback!(index),
+                  trailing: trailingCallback != null
+                      ? trailingCallback(index, contact.value)
+                      : null,
                   onTap: onTapCallback != null
                       ? () => onTapCallback(contact.value)
                       : null,

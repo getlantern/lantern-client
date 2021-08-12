@@ -40,7 +40,10 @@ class NewMessage extends StatelessWidget {
                 color: Colors.black,
               ),
               title: Text('Scan QR Code'.i18n),
-              trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+              trailing: const CustomAssetImage(
+                path: ImagePaths.keyboard_arrow_right_icon,
+                size: 24,
+              ),
               onTap: () async => await context.router.push(
                 FullScreenDialogPage(widget: AddViaQR()),
               ),
@@ -52,7 +55,10 @@ class NewMessage extends StatelessWidget {
                 color: Colors.black,
               ),
               title: Text('Introduce Contacts'.i18n),
-              trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+              trailing: const CustomAssetImage(
+                path: ImagePaths.keyboard_arrow_right_icon,
+                size: 24,
+              ),
               onTap: () async => await context.pushRoute(const Introduce()),
             ),
             Divider(thickness: 1, color: grey2),
@@ -104,7 +110,6 @@ class NewMessage extends StatelessWidget {
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                      trailingCallback: (_) => const SizedBox(),
                       onTapCallback: (Contact contact) async => await context
                           .pushRoute(Conversation(contact: contact)));
             }))
