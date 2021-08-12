@@ -53,6 +53,7 @@ class _IntroduceState extends State<Introduce> {
                   flex: 2,
                   child: groupedContactListGenerator(
                       groupedSortedContacts,
+                      '',
                       (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],

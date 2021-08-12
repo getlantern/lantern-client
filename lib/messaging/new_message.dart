@@ -94,6 +94,7 @@ class NewMessage extends StatelessWidget {
                   ? Container()
                   : groupedContactListGenerator(
                       groupedSortedRecentContacts,
+                      '',
                       (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],
