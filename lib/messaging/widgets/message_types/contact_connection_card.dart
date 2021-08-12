@@ -5,6 +5,7 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 class ContactConnectionCard extends StatelessWidget {
@@ -122,18 +123,17 @@ class ContactConnectionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ListTile(
-                      dense: true,
-                      leading:
-                          const Icon(Icons.check_circle, color: Colors.black),
-                      title: Text('Accept'.i18n),
-                      onTap: () {
-                        // requestAccepted = true
-                        // model.acceptReq()
-                        // slight delay to let checkbox show
-                        // dismiss modal
-                        // navigate to conversation
-                      },
-                    ),
+                        dense: true,
+                        leading:
+                            const Icon(Icons.check_circle, color: Colors.black),
+                        title: Text('Accept'.i18n),
+                        onTap: () {
+                          // requestAccepted = true
+                          // model.acceptReq()
+                          // slight delay to let checkbox show
+                          // dismiss modal
+                          // navigate to conversation
+                        }),
                     Divider(thickness: 1, color: grey2),
                     ListTile(
                       leading: const Icon(
@@ -145,6 +145,16 @@ class ContactConnectionCard extends StatelessWidget {
                         // requestAccepted = false
                         // model.rejectReq()
                         // dismiss modal
+                        showAlertDialog(
+                            context: context,
+                            title: Text('Reject Introduction?'.i18n,
+                                style: tsAlertDialogTitle),
+                            content: Text(
+                                'You will not be able to message this contact if you reject the introduction.'
+                                    .i18n,
+                                style: tsAlertDialogBody),
+                            dismissText: 'Cancel'.i18n,
+                            agreeText: 'Reject'.i18n);
                       },
                     ),
                   ],

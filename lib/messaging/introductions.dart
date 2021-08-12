@@ -64,7 +64,9 @@ class Introductions extends StatelessWidget {
                         content: Text(
                             'You will not be able to message this contact if you reject the introduction.'
                                 .i18n,
-                            style: tsAlertDialogBody)),
+                            style: tsAlertDialogBody),
+                        dismissText: 'Cancel'.i18n,
+                        agreeText: 'Reject'.i18n),
                     child: Text('Reject'.i18n.toUpperCase(),
                         style: tsAlertDialogButtonGrey),
                   ),
