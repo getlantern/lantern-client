@@ -87,11 +87,14 @@ class _ConversationState extends State<Conversation>
     WidgetsBinding.instance!.addObserver(this);
     var keyboardVisibilityController = KeyboardVisibilityController();
     _keyboardState = !keyboardVisibilityController.isVisible;
-    keyboardStream = keyboardVisibilityController.onChange.listen(
-      (bool visible) => setState(
-        () => _keyboardState = !visible,
-      ),
-    );
+    keyboardStream =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (mounted) {
+        setState(
+          () => _keyboardState = !visible,
+        );
+      }
+    });
     displayName = widget._contact.displayName.isEmpty
         ? widget._contact.contactId.id
         : widget._contact.displayName;
@@ -257,11 +260,13 @@ class _ConversationState extends State<Conversation>
   }
 
   Future<void> _handleSubmit(TextEditingController _newMessage) async {
-    setState(() {
-      _isSendIconVisible = false;
-      _isReplying = false;
-      _emojiShowing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isSendIconVisible = false;
+        _isReplying = false;
+        _emojiShowing = false;
+      });
+    }
     await _send(_newMessage.value.text,
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
@@ -349,7 +354,9 @@ class _ConversationState extends State<Conversation>
                           TextPosition(offset: _newMessage.text.length));
                   },
                   onEmojiSelected: (category, emoji) async {
-                    if (_customEmojiResponse && _storedMessage != null) {
+                    if (mounted &&
+                        _customEmojiResponse &&
+                        _storedMessage != null) {
                       dismissKeyboard();
                       await model.react(_storedMessage!, emoji.emoji);
                       _storedMessage = null;
@@ -570,14 +577,16 @@ class _ConversationState extends State<Conversation>
             _recording != null && _recording!.isNotEmpty ? [_recording!] : [],
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
-    setState(() {
-      _quotedMessage = null;
-      _isRecording = false;
-      _finishedRecording = false;
-      _isSendIconVisible = false;
-      _isReplying = false;
-      _emojiShowing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _quotedMessage = null;
+        _isRecording = false;
+        _finishedRecording = false;
+        _isSendIconVisible = false;
+        _isReplying = false;
+        _emojiShowing = false;
+      });
+    }
   }
 }
 

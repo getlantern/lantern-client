@@ -98,7 +98,7 @@ void main() {
       await tester.tap(find.text('Delete'));
       await waitUntilSended(tester);
       print('The alert dialog should has been dismissed');
-      expect(AlertDialog, findsNothing);
+      expect(find.byType(AlertDialog), findsNothing);
       print('We shouldn\'t have any bubble widget');
       expect(
           find.widgetWithText(
