@@ -13,7 +13,6 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.mobilesdk.model.SessionManager
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
