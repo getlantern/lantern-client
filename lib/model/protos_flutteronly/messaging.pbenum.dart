@@ -58,6 +58,21 @@ class StoredAttachment_Status extends $pb.ProtobufEnum {
   const StoredAttachment_Status._($core.int v, $core.String n) : super(v, n);
 }
 
+class IntroductionDetails_IntroductionStatus extends $pb.ProtobufEnum {
+  static const IntroductionDetails_IntroductionStatus PENDING = IntroductionDetails_IntroductionStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING');
+  static const IntroductionDetails_IntroductionStatus ACCEPTED = IntroductionDetails_IntroductionStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ACCEPTED');
+
+  static const $core.List<IntroductionDetails_IntroductionStatus> values = <IntroductionDetails_IntroductionStatus> [
+    PENDING,
+    ACCEPTED,
+  ];
+
+  static final $core.Map<$core.int, IntroductionDetails_IntroductionStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static IntroductionDetails_IntroductionStatus? valueOf($core.int value) => _byValue[value];
+
+  const IntroductionDetails_IntroductionStatus._($core.int v, $core.String n) : super(v, n);
+}
+
 class StoredMessage_DeliveryStatus extends $pb.ProtobufEnum {
   static const StoredMessage_DeliveryStatus SENDING = StoredMessage_DeliveryStatus._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SENDING');
   static const StoredMessage_DeliveryStatus PARTIALLY_SENT = StoredMessage_DeliveryStatus._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIALLY_SENT');
