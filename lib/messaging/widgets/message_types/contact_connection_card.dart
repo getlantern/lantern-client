@@ -4,21 +4,20 @@ import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pbenum.dart';
 import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 class ContactConnectionCard extends StatelessWidget {
-  final IntroductionDetails introduction;
+  final Contact contact;
   final bool inbound;
   final bool outbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
 
   ContactConnectionCard(
-    this.introduction,
+    this.contact,
     this.inbound,
     this.outbound,
     this.msg,
@@ -28,87 +27,87 @@ class ContactConnectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<MessagingModel>();
-    final avatarLetters = introduction.displayName.substring(0, 2);
-    return model.me((BuildContext context, Contact me, Widget? child) {
-      final myContactId = me.contactId.id;
-      return Flex(
-        direction: Axis.vertical,
-        crossAxisAlignment:
-            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: outbound ? 60.w : 100.w,
-            padding: const EdgeInsets.only(top: 10),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: avatarBgColors[
-                    generateUniqueColorIndex(introduction.to.id)],
-                child: Text(avatarLetters.toUpperCase(),
-                    style: const TextStyle(color: Colors.white)),
-              ),
-              title: Text(introduction.displayName,
-                  style: TextStyle(
-                      color: outbound ? outboundMsgColor : inboundMsgColor)),
-              trailing: outbound
-                  ? const SizedBox()
-                  : FittedBox(
-                      child: Row(
-                        children: [
-                          if (msg.introduction.status ==
-                              IntroductionDetails_IntroductionStatus.ACCEPTED)
-                            Icon(Icons.check_circle,
-                                color: outbound
-                                    ? outboundMsgColor
-                                    : inboundMsgColor),
-                          IconButton(
-                            icon: Icon(
-                                (msg.introduction.status ==
-                                        IntroductionDetails_IntroductionStatus
-                                            .PENDING)
-                                    ? Icons.info_outline_rounded
-                                    : Icons.arrow_right_outlined,
-                                size: 20.0,
-                                color: outbound
-                                    ? outboundMsgColor
-                                    : inboundMsgColor),
-                            onPressed: () async {
-                              if (msg.introduction.status ==
-                                  IntroductionDetails_IntroductionStatus
-                                      .PENDING) {
-                                await _showOptions(
-                                  context,
-                                  introduction,
-                                  model,
-                                  myContactId,
-                                );
-                              }
-                              if (msg.introduction.status ==
-                                  IntroductionDetails_IntroductionStatus
-                                      .ACCEPTED) {
-                                await context.pushRoute(const NewMessage());
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+    final introduction = msg.introduction;
+    final avatarLetters = introduction.displayName != ''
+        ? introduction.displayName.substring(0, 2)
+        : 'UC';
+
+    return Flex(
+      direction: Axis.vertical,
+      crossAxisAlignment:
+          outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: outbound ? 60.w : 100.w,
+          padding: const EdgeInsets.only(top: 10),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor:
+                  avatarBgColors[generateUniqueColorIndex(introduction.to.id)],
+              child: Text(avatarLetters.toUpperCase(),
+                  style: const TextStyle(color: Colors.white)),
             ),
+            title: Text(introduction.displayName,
+                style: TextStyle(
+                    color: outbound ? outboundMsgColor : inboundMsgColor)),
+            trailing: outbound
+                ? const SizedBox()
+                : FittedBox(
+                    child: Row(
+                      children: [
+                        if (msg.introduction.status ==
+                            IntroductionDetails_IntroductionStatus.ACCEPTED)
+                          Icon(Icons.check_circle,
+                              color: outbound
+                                  ? outboundMsgColor
+                                  : inboundMsgColor),
+                        IconButton(
+                          icon: Icon(
+                              (msg.introduction.status ==
+                                      IntroductionDetails_IntroductionStatus
+                                          .PENDING)
+                                  ? Icons.info_outline_rounded
+                                  : Icons.arrow_right_outlined,
+                              size: 20.0,
+                              color: outbound
+                                  ? outboundMsgColor
+                                  : inboundMsgColor),
+                          onPressed: () async {
+                            if (msg.introduction.status ==
+                                IntroductionDetails_IntroductionStatus
+                                    .PENDING) {
+                              await _showOptions(
+                                context,
+                                introduction,
+                                model,
+                                contact,
+                              );
+                            }
+                            if (msg.introduction.status ==
+                                IntroductionDetails_IntroductionStatus
+                                    .ACCEPTED) {
+                              // TODO: we need to go from IntroductionDetails introduction.to.id to Contact
+                              // await context
+                              //     .pushRoute(Conversation(contact: newlyAddedContact));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
           ),
-          Flex(
-              direction: Axis.horizontal,
-              mainAxisSize: MainAxisSize.min,
-              children: [StatusRow(outbound, inbound, msg, message, [])])
-        ],
-      );
-    });
+        ),
+        Flex(
+            direction: Axis.horizontal,
+            mainAxisSize: MainAxisSize.min,
+            children: [StatusRow(outbound, inbound, msg, message, [])])
+      ],
+    );
   }
 
-  Future<dynamic> _showOptions(
-      BuildContext context,
-      IntroductionDetails introduction,
-      MessagingModel model,
-      String myContactId) {
+  Future<dynamic> _showOptions(BuildContext context,
+      IntroductionDetails introduction, MessagingModel model, Contact contact) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -144,11 +143,24 @@ class ContactConnectionCard extends StatelessWidget {
                             const Icon(Icons.check_circle, color: Colors.black),
                         title: Text('Accept'.i18n),
                         onTap: () async {
-                          await model.acceptIntroduction(
-                              introduction.to.id, myContactId);
-                          // TODO slight delay to let checkbox show
-                          // TODO  dismiss modal
-                          // TODO  navigate to conversation
+                          try {
+                            // model.acceptIntroduction(from the person we are talking to, to the person who they want to connect us to)
+                            await model.acceptIntroduction(
+                                contact.contactId.id, introduction.to.id);
+                          } catch (e) {
+                            showInfoDialog(context,
+                                title: 'Error'.i18n,
+                                des:
+                                    'Something went wrong while accepting this connect request.'
+                                        .i18n,
+                                icon: ImagePaths.alert_icon,
+                                buttonText: 'OK'.i18n);
+                          } finally {
+                            await context.router.pop();
+                            // TODO: we need to go from IntroductionDetails introduction.to.id to Contact
+                            // await context
+                            //     .pushRoute(Conversation(contact: newlyAddedContact));
+                          }
                         }),
                     Divider(thickness: 1, color: grey2),
                     ListTile(
@@ -158,8 +170,6 @@ class ContactConnectionCard extends StatelessWidget {
                       ),
                       title: Text('Reject'.i18n),
                       onTap: () async {
-                        await model.rejectIntroduction(
-                            introduction.to.id, myContactId);
                         showAlertDialog(
                             context: context,
                             title: Text('Reject Introduction?'.i18n,
@@ -169,7 +179,24 @@ class ContactConnectionCard extends StatelessWidget {
                                     .i18n,
                                 style: tsAlertDialogBody),
                             dismissText: 'Cancel'.i18n,
-                            agreeText: 'Reject'.i18n);
+                            agreeText: 'Reject'.i18n,
+                            agreeAction: () async {
+                              try {
+                                // model.rejectIntroduction(from the person we are talking to, to the person who they want to connect us to)
+                                await model.rejectIntroduction(
+                                    contact.contactId.id, introduction.to.id);
+                              } catch (e) {
+                                showInfoDialog(context,
+                                    title: 'Error'.i18n,
+                                    des:
+                                        'Something went wrong while rejecting this connect request.'
+                                            .i18n,
+                                    icon: ImagePaths.alert_icon,
+                                    buttonText: 'OK'.i18n);
+                              } finally {
+                                await context.router.pop();
+                              }
+                            });
                       },
                     ),
                   ],
