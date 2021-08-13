@@ -1,4 +1,22 @@
 
+<a name="6.8.1"></a>
+## [6.8.1](https://github.com/getlantern/android-lantern/compare/6.5.7...6.8.1)
+
+> 2021-08-13
+
+### Pull Requests
+
+* Merge pull request [#300](https://github.com/getlantern/android-lantern/issues/300) from getlantern/ox/ipv6
+* Merge pull request [#298](https://github.com/getlantern/android-lantern/issues/298) from getlantern/crdzbird/app_signature
+* Merge pull request [#277](https://github.com/getlantern/android-lantern/issues/277) from getlantern/ox/issue240
+
+
+<a name="6.5.7"></a>
+## [6.5.7](https://github.com/getlantern/android-lantern/compare/6.7.8...6.5.7)
+
+> 2021-08-04
+
+
 <a name="6.7.8"></a>
 ## [6.7.8](https://github.com/getlantern/android-lantern/compare/6.7.7...6.7.8)
 
