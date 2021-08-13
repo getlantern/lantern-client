@@ -39,7 +39,6 @@ class _IntroduceState extends State<Introduce> {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            // TODO Connect Contacts this should not be _contacts but List<ContactRequestees>
             var sortedContacts = _contacts.toList()
               ..sort((a, b) => sanitizeContactName(a.value)
                   .toLowerCase()
@@ -83,8 +82,7 @@ class _IntroduceState extends State<Introduce> {
                             }),
                           )),
                 ),
-                // TODO Connect Contacts create method for identifying True in selectedContactIds list
-                if (selectedContactIds.isNotEmpty)
+                if (selectedContactIds.length > 1)
                   Container(
                     color: grey1,
                     padding: const EdgeInsets.all(20.0),
@@ -95,7 +93,7 @@ class _IntroduceState extends State<Introduce> {
                             width: 200,
                             text: 'Send Invitations'.i18n.toUpperCase(),
                             onPressed: () async {
-                              // TODO Connect Contacts add model.SendReqs()
+                              await model.introduce(selectedContactIds);
                               showSnackbar(context, 'Introductions Sent!'.i18n);
                               await Future.delayed(
                                 const Duration(milliseconds: 1000),

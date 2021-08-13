@@ -1,4 +1,5 @@
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
@@ -25,6 +26,7 @@ class ContactConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<MessagingModel>();
     final avatarLetters = contact.displayName.substring(0, 2);
     final contactName = sanitizeContactName(contact);
     // TODO Connect Contacts temporary
@@ -73,6 +75,7 @@ class ContactConnectionCard extends StatelessWidget {
                               await _showOptions(
                                 context,
                                 contactName,
+                                model,
                               );
                             }
                             if (requestAccepted) {
@@ -93,7 +96,8 @@ class ContactConnectionCard extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _showOptions(BuildContext context, String contactName) {
+  Future<dynamic> _showOptions(
+      BuildContext context, String contactName, MessagingModel model) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -127,10 +131,11 @@ class ContactConnectionCard extends StatelessWidget {
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
                         title: Text('Accept'.i18n),
-                        onTap: () {
+                        onTap: () async {
                           // TODO Connect Contacts
                           // requestAccepted = true
-                          // model.acceptReq()
+                          await model.acceptIntroduction(
+                              'requesterId', 'myContactId');
                           // slight delay to let checkbox show
                           // dismiss modal
                           // navigate to conversation
@@ -142,10 +147,11 @@ class ContactConnectionCard extends StatelessWidget {
                         color: Colors.black,
                       ),
                       title: Text('Reject'.i18n),
-                      onTap: () {
+                      onTap: () async {
                         // TODO Connect Contacts
                         // requestAccepted = false
-                        // model.rejectReq()
+                        await model.rejectIntroduction(
+                            'requesterId', 'myContactId');
                         // dismiss modal
                         showAlertDialog(
                             context: context,

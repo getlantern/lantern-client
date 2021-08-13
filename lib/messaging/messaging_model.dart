@@ -24,13 +24,13 @@ class MessagingModel extends Model {
             }).then((value) => value as Uint8List));
   }
 
-  Future<void> setMyDisplayName<T>(String displayName) {
+  Future<void> setMyDisplayName(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
       'displayName': displayName,
     });
   }
 
-  Future<void> addOrUpdateDirectContact<T>(
+  Future<void> addOrUpdateDirectContact(
       String identityKey, String displayName) {
     return methodChannel.invokeMethod(
         'addOrUpdateDirectContact', <String, dynamic>{
@@ -142,9 +142,26 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
-  Future<void> deleteDirectContact<T>(String id) async =>
+  Future<void> deleteDirectContact(String id) async =>
       methodChannel.invokeMethod('deleteDirectContact', <String, dynamic>{
         'id': id,
+      });
+
+  Future<void> introduce(List<String> recipientIds) async =>
+      methodChannel.invokeMethod('introduce', <String, dynamic>{
+        'recipientIds': recipientIds,
+      });
+
+  Future<void> acceptIntroduction(String fromId, String toId) async =>
+      methodChannel.invokeMethod('acceptIntroduction', <String, dynamic>{
+        'fromId': fromId,
+        'toId': toId,
+      });
+
+  Future<void> rejectIntroduction(String fromId, String toId) async =>
+      methodChannel.invokeMethod('rejectIntroduction', <String, dynamic>{
+        'fromId': fromId,
+        'toId': toId,
       });
 
   // Future<Contact> getContactFromUsername<T>(String username) async {
