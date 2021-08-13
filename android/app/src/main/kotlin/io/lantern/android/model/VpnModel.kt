@@ -2,7 +2,6 @@ package io.lantern.android.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 
 class VpnModel(
