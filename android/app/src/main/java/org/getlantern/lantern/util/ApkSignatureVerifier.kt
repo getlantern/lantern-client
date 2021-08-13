@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.content.pm.SigningInfo
+import org.getlantern.mobilesdk.Logger
 import java.io.File
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -18,6 +19,9 @@ class SignatureVerificationException(message: String) : Exception(message)
  * Utility for verifying APK signatures
  */
 object ApkSignatureVerifier {
+
+    private const val TAG = "ApkSignatureVerifier"
+
     /**
      * Verifies that the given APK has one and only one Signature whose SHA256matches the expected
      * value.
@@ -123,7 +127,7 @@ object ApkSignatureVerifier {
             val digester = MessageDigest.getInstance("SHA256")
             value = bytes2Hex(digester.digest(data))
         } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
+            Logger.error(TAG, "ApkSignature error: ${e.message}, caused by: ${e.cause.toString()}")
         }
         return value
     }
