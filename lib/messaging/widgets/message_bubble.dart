@@ -163,8 +163,8 @@ class MessageBubble extends StatelessWidget {
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
               title: Text('Delete for everyone'.i18n),
-              onPressed: () {
-                _showDeleteDialog(context, model, false, message);
+              onPressed: () async {
+                await _showDeleteDialog(context, model, false, message);
               },
             ),
         ],
@@ -211,6 +211,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
+        key: const ValueKey('deleteDialog'),
         title: isLocal
             ? Text('Delete for me', style: tsAlertDialogTitle)
             : Text('Delete for everyone', style: tsAlertDialogTitle),
@@ -228,6 +229,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
         ),
         actions: <Widget>[
           TextButton(
+            key: const ValueKey('alertActionDelete'),
             onPressed: () {
               isLocal
                   ? model.deleteLocally(message)
