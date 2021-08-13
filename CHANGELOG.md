@@ -1,4 +1,10 @@
 
+<a name="6.8.2"></a>
+## [6.8.2](https://github.com/getlantern/android-lantern/compare/6.8.1...6.8.2)
+
+> 2021-08-13
+
+
 <a name="6.8.1"></a>
 ## [6.8.1](https://github.com/getlantern/android-lantern/compare/6.5.7...6.8.1)
 
