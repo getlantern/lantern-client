@@ -241,7 +241,6 @@ class _ConversationState extends State<Conversation>
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
-      print("FLUTTER EXCEPTION: ${e.toString()}");
       showInfoDialog(context,
           title: 'Error'.i18n,
           des: 'Something went wrong while sharing a media file.'.i18n,
