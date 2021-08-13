@@ -101,7 +101,8 @@ class ContentContainer extends StatelessWidget {
         ),
       ),
       child: isContactConnectionCard
-          ? ContactConnectionCard(contact, inbound, outbound, msg, message)
+          ? ContactConnectionCard(
+              msg.introduction, inbound, outbound, msg, message)
           : Flex(
               direction: Axis.vertical,
               crossAxisAlignment:
