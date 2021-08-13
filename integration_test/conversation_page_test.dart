@@ -17,6 +17,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   group('Conversation Page Test', () {
+    /// This function is called during each new message, to ensure that the
+    /// message is displayed correctly.
     Future<void> waitUntilSended(WidgetTester tester) async {
       await tester.pump(const Duration(seconds: 2));
       await tester.pump(const Duration(seconds: 2));
@@ -71,6 +73,21 @@ void main() {
           find.widgetWithText(
               ContentContainer, 'hello this a message send from Flutter Test'),
           findsOneWidget);
+    });
+
+    testWidgets('Remove the message sended', (WidgetTester tester) async {
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.longPress(find.widgetWithText(
+          ContentContainer, 'hello this a message send from Flutter Test'));
+      await waitUntilSended(tester);
     });
 
     testWidgets('Go back using physical button to New Message Page',
