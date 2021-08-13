@@ -56,9 +56,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
-            "introduce" -> messaging.introduce(recipientIds = call.argument<Array<String>>("recipientIds")!!)
+            "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
             "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            // "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {

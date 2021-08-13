@@ -164,6 +164,8 @@ class MessagingModel extends Model {
         'toId': toId,
       });
 
+  // method that fetches a username from server
+  // not in use until we implement AUTH
   // Future<Contact> getContactFromUsername<T>(String username) async {
   //   return methodChannel
   //       .invokeMethod('getContactFromUsername', <String, dynamic>{
