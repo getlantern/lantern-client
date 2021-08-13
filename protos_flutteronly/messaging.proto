@@ -67,6 +67,27 @@ message AttachmentWithThumbnail {
   Attachment thumbnail = 2;
 }
 
+// Introduction is an introduction to a potential direct Contact
+message Introduction {
+  bytes id = 1; // the id of the person to whom you're being introduced
+  string displayName = 2; // the display name of person to whom you're being introduced
+}
+
+// Details of an Introduction (attached to both a StoredMessage as well as a StoredIntroduction
+message IntroductionDetails {
+  enum IntroductionStatus {
+    PENDING = 0; // introduction has been made but has not yet been accepted/rejected
+    ACCEPTED = 1; // introduction has been accepted
+  }
+
+  ContactId to = 1; // the id of the contact to which we're being introduced
+  string displayName = 2; // the display name of the contact to whom we're being introduced. This
+                          // may change when accepting an Introduction to the same contact made by
+                          // someone else.
+  string originalDisplayName = 3; // the original display name of the introduction, this will never change
+  IntroductionStatus status = 4; // the status of the introduction
+}
+
 // A text message with attachments, the primary type of message exchanged by users.
 message Message {
   bytes id = 1; // the id of the message, unique under the given sender
@@ -75,6 +96,7 @@ message Message {
   string text = 4;
   map<int32, AttachmentWithThumbnail> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
   int32 disappearAfterSeconds = 6; // if > 0, message should disappear within this many seconds of first being viewed
+  Introduction introduction = 7; // an introduction to another Contact
 }
 
 // A locally stored Message
@@ -104,6 +126,7 @@ message StoredMessage {
   int64 disappearAt = 14; // the unix timestamp in milliseconds of when this message will automatically disappear
   int64 remotelyDeletedAt = 16; // the unix timestamp in milliseconds of when an authorized party remotely deleted this message (will be 0 if the message hasn't been remotely deleted)
   ContactId remotelyDeletedBy = 17; // the id of the contact who remotely deleted this message
+  IntroductionDetails introduction = 18; // if this message was an introduction, this stores details of that introduction
 }
 
 // A reaction to a message
