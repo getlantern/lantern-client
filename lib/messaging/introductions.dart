@@ -23,6 +23,7 @@ class Introductions extends StatelessWidget {
               style: tsBaseScreenBodyText),
         ),
         Expanded(
+          // TODO Connect Contacts need to update the subscription for this one
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var sortedRequests = _contacts.toList()
@@ -35,64 +36,71 @@ class Introductions extends StatelessWidget {
             var groupedSortedRequests = sortedRequests.groupBy(
                 (el) => sanitizeContactName(el.value)[0].toLowerCase());
 
-            // TODO Connect Contacts - temporary
+            // TODO Connect Contacts - this controls the > animation, will leave for later
             var pendingRequest = true;
 
-            return groupedContactListGenerator(
-              groupedSortedList: groupedSortedRequests,
-              separatorText: 'Introduced by '.i18n,
-              leadingCallback: (Contact contact) => CustomBadge(
-                showBadge: true,
-                top: 25,
-                customBadge:
-                    const Icon(Icons.timer, size: 16.0, color: Colors.black),
-                child: CircleAvatar(
-                  backgroundColor: avatarBgColors[
-                      generateUniqueColorIndex(contact.contactId.id)],
-                  child: Text(
-                      sanitizeContactName(contact)
-                          .substring(0, 2)
-                          .toUpperCase(),
-                      style: const TextStyle(color: Colors.white)),
+            return model.me((BuildContext context, Contact me, Widget? child) {
+              final myContactId = me.contactId.id;
+              return groupedContactListGenerator(
+                groupedSortedList: groupedSortedRequests,
+                separatorText: 'Introduced by '.i18n,
+                leadingCallback: (Contact contact) => CustomBadge(
+                  showBadge: true,
+                  top: 25,
+                  customBadge:
+                      const Icon(Icons.timer, size: 16.0, color: Colors.black),
+                  child: CircleAvatar(
+                    backgroundColor: avatarBgColors[
+                        generateUniqueColorIndex(contact.contactId.id)],
+                    child: Text(
+                        sanitizeContactName(contact)
+                            .substring(0, 2)
+                            .toUpperCase(),
+                        style: const TextStyle(color: Colors.white)),
+                  ),
                 ),
-              ),
-              trailingCallback: (int index, Contact contact) => FittedBox(
-                  child: pendingRequest
-                      ? Row(
-                          children: [
-                            TextButton(
-                              onPressed: () => showAlertDialog(
-                                  context: context,
-                                  title: Text('Reject Introduction?'.i18n,
-                                      style: tsAlertDialogTitle),
-                                  content: Text(
-                                      'You will not be able to message this contact if you reject the introduction.'
-                                          .i18n,
-                                      style: tsAlertDialogBody),
-                                  // naming is confusing here because we are using the Alert Dialog which by default has a [Reject vs Accept] field
-                                  // but in this case it corresponds to [Cancel vs Reject]
-                                  dismissText: 'Cancel'.i18n,
-                                  agreeText: 'Reject'.i18n,
-                                  agreeAction: () {
-                                    // TODO Connect Contacts model.reject()
-                                  }),
-                              child: Text('Reject'.i18n.toUpperCase(),
-                                  style: tsAlertDialogButtonGrey),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                // TODO Connect Contacts model.accept()
-                              },
-                              child: Text('Accept'.i18n.toUpperCase(),
-                                  style: tsAlertDialogButtonPink),
-                            )
-                          ],
-                        )
-                      : const CustomAssetImage(
-                          path: ImagePaths.keyboard_arrow_right_icon,
-                          size: 24,
-                        )),
-            );
+                trailingCallback: (int index, Contact contact) => FittedBox(
+                    child: pendingRequest
+                        ? Row(
+                            children: [
+                              TextButton(
+                                onPressed: () => showAlertDialog(
+                                    context: context,
+                                    title: Text('Reject Introduction?'.i18n,
+                                        style: tsAlertDialogTitle),
+                                    content: Text(
+                                        'You will not be able to message this contact if you reject the introduction.'
+                                            .i18n,
+                                        style: tsAlertDialogBody),
+                                    // naming is confusing here because we are using the Alert Dialog which by default has a [Reject vs Accept] field
+                                    // but in this case it corresponds to [Cancel vs Reject]
+                                    dismissText: 'Cancel'.i18n,
+                                    agreeText: 'Reject'.i18n,
+                                    agreeAction: () async {
+                                      // (fromId, toId)
+                                      await model.rejectIntroduction(
+                                          'requesterId', myContactId);
+                                    }),
+                                child: Text('Reject'.i18n.toUpperCase(),
+                                    style: tsAlertDialogButtonGrey),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  // (fromId, toId)
+                                  await model.acceptIntroduction(
+                                      'requesterId', myContactId);
+                                },
+                                child: Text('Accept'.i18n.toUpperCase(),
+                                    style: tsAlertDialogButtonPink),
+                              )
+                            ],
+                          )
+                        : const CustomAssetImage(
+                            path: ImagePaths.keyboard_arrow_right_icon,
+                            size: 24,
+                          )),
+              );
+            });
           }),
         )
       ]),
