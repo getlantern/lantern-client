@@ -124,6 +124,40 @@ const AttachmentWithThumbnail$json = const {
 
 /// Descriptor for `AttachmentWithThumbnail`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List attachmentWithThumbnailDescriptor = $convert.base64Decode('ChdBdHRhY2htZW50V2l0aFRodW1ibmFpbBIxCgphdHRhY2htZW50GAEgASgLMhEubW9kZWwuQXR0YWNobWVudFIKYXR0YWNobWVudBIvCgl0aHVtYm5haWwYAiABKAsyES5tb2RlbC5BdHRhY2htZW50Ugl0aHVtYm5haWw=');
+@$core.Deprecated('Use introductionDescriptor instead')
+const Introduction$json = const {
+  '1': 'Introduction',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 12, '10': 'id'},
+    const {'1': 'displayName', '3': 2, '4': 1, '5': 9, '10': 'displayName'},
+  ],
+};
+
+/// Descriptor for `Introduction`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List introductionDescriptor = $convert.base64Decode('CgxJbnRyb2R1Y3Rpb24SDgoCaWQYASABKAxSAmlkEiAKC2Rpc3BsYXlOYW1lGAIgASgJUgtkaXNwbGF5TmFtZQ==');
+@$core.Deprecated('Use introductionDetailsDescriptor instead')
+const IntroductionDetails$json = const {
+  '1': 'IntroductionDetails',
+  '2': const [
+    const {'1': 'to', '3': 1, '4': 1, '5': 11, '6': '.model.ContactId', '10': 'to'},
+    const {'1': 'displayName', '3': 2, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'originalDisplayName', '3': 3, '4': 1, '5': 9, '10': 'originalDisplayName'},
+    const {'1': 'status', '3': 4, '4': 1, '5': 14, '6': '.model.IntroductionDetails.IntroductionStatus', '10': 'status'},
+  ],
+  '4': const [IntroductionDetails_IntroductionStatus$json],
+};
+
+@$core.Deprecated('Use introductionDetailsDescriptor instead')
+const IntroductionDetails_IntroductionStatus$json = const {
+  '1': 'IntroductionStatus',
+  '2': const [
+    const {'1': 'PENDING', '2': 0},
+    const {'1': 'ACCEPTED', '2': 1},
+  ],
+};
+
+/// Descriptor for `IntroductionDetails`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List introductionDetailsDescriptor = $convert.base64Decode('ChNJbnRyb2R1Y3Rpb25EZXRhaWxzEiAKAnRvGAEgASgLMhAubW9kZWwuQ29udGFjdElkUgJ0bxIgCgtkaXNwbGF5TmFtZRgCIAEoCVILZGlzcGxheU5hbWUSMAoTb3JpZ2luYWxEaXNwbGF5TmFtZRgDIAEoCVITb3JpZ2luYWxEaXNwbGF5TmFtZRJFCgZzdGF0dXMYBCABKA4yLS5tb2RlbC5JbnRyb2R1Y3Rpb25EZXRhaWxzLkludHJvZHVjdGlvblN0YXR1c1IGc3RhdHVzIi8KEkludHJvZHVjdGlvblN0YXR1cxILCgdQRU5ESU5HEAASDAoIQUNDRVBURUQQAQ==');
 @$core.Deprecated('Use messageDescriptor instead')
 const Message$json = const {
   '1': 'Message',
@@ -134,6 +168,7 @@ const Message$json = const {
     const {'1': 'text', '3': 4, '4': 1, '5': 9, '10': 'text'},
     const {'1': 'attachments', '3': 5, '4': 3, '5': 11, '6': '.model.Message.AttachmentsEntry', '10': 'attachments'},
     const {'1': 'disappearAfterSeconds', '3': 6, '4': 1, '5': 5, '10': 'disappearAfterSeconds'},
+    const {'1': 'introduction', '3': 7, '4': 1, '5': 11, '6': '.model.Introduction', '10': 'introduction'},
   ],
   '3': const [Message_AttachmentsEntry$json],
 };
@@ -149,7 +184,7 @@ const Message_AttachmentsEntry$json = const {
 };
 
 /// Descriptor for `Message`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List messageDescriptor = $convert.base64Decode('CgdNZXNzYWdlEg4KAmlkGAEgASgMUgJpZBIoCg9yZXBseVRvU2VuZGVySWQYAiABKAxSD3JlcGx5VG9TZW5kZXJJZBIcCglyZXBseVRvSWQYAyABKAxSCXJlcGx5VG9JZBISCgR0ZXh0GAQgASgJUgR0ZXh0EkEKC2F0dGFjaG1lbnRzGAUgAygLMh8ubW9kZWwuTWVzc2FnZS5BdHRhY2htZW50c0VudHJ5UgthdHRhY2htZW50cxI0ChVkaXNhcHBlYXJBZnRlclNlY29uZHMYBiABKAVSFWRpc2FwcGVhckFmdGVyU2Vjb25kcxpeChBBdHRhY2htZW50c0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EjQKBXZhbHVlGAIgASgLMh4ubW9kZWwuQXR0YWNobWVudFdpdGhUaHVtYm5haWxSBXZhbHVlOgI4AQ==');
+final $typed_data.Uint8List messageDescriptor = $convert.base64Decode('CgdNZXNzYWdlEg4KAmlkGAEgASgMUgJpZBIoCg9yZXBseVRvU2VuZGVySWQYAiABKAxSD3JlcGx5VG9TZW5kZXJJZBIcCglyZXBseVRvSWQYAyABKAxSCXJlcGx5VG9JZBISCgR0ZXh0GAQgASgJUgR0ZXh0EkEKC2F0dGFjaG1lbnRzGAUgAygLMh8ubW9kZWwuTWVzc2FnZS5BdHRhY2htZW50c0VudHJ5UgthdHRhY2htZW50cxI0ChVkaXNhcHBlYXJBZnRlclNlY29uZHMYBiABKAVSFWRpc2FwcGVhckFmdGVyU2Vjb25kcxI3CgxpbnRyb2R1Y3Rpb24YByABKAsyEy5tb2RlbC5JbnRyb2R1Y3Rpb25SDGludHJvZHVjdGlvbhpeChBBdHRhY2htZW50c0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EjQKBXZhbHVlGAIgASgLMh4ubW9kZWwuQXR0YWNobWVudFdpdGhUaHVtYm5haWxSBXZhbHVlOgI4AQ==');
 @$core.Deprecated('Use storedMessageDescriptor instead')
 const StoredMessage$json = const {
   '1': 'StoredMessage',
@@ -171,6 +206,7 @@ const StoredMessage$json = const {
     const {'1': 'disappearAt', '3': 14, '4': 1, '5': 3, '10': 'disappearAt'},
     const {'1': 'remotelyDeletedAt', '3': 16, '4': 1, '5': 3, '10': 'remotelyDeletedAt'},
     const {'1': 'remotelyDeletedBy', '3': 17, '4': 1, '5': 11, '6': '.model.ContactId', '10': 'remotelyDeletedBy'},
+    const {'1': 'introduction', '3': 18, '4': 1, '5': 11, '6': '.model.IntroductionDetails', '10': 'introduction'},
   ],
   '3': const [StoredMessage_AttachmentsEntry$json, StoredMessage_ThumbnailsEntry$json, StoredMessage_ReactionsEntry$json],
   '4': const [StoredMessage_DeliveryStatus$json],
@@ -219,7 +255,7 @@ const StoredMessage_DeliveryStatus$json = const {
 };
 
 /// Descriptor for `StoredMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storedMessageDescriptor = $convert.base64Decode('Cg1TdG9yZWRNZXNzYWdlEi4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIOCgJpZBgDIAEoCVICaWQSDgoCdHMYBCABKANSAnRzEigKD3JlcGx5VG9TZW5kZXJJZBgFIAEoCVIPcmVwbHlUb1NlbmRlcklkEhwKCXJlcGx5VG9JZBgGIAEoCVIJcmVwbHlUb0lkEhIKBHRleHQYByABKAlSBHRleHQSNAoVZGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAggASgFUhVkaXNhcHBlYXJBZnRlclNlY29uZHMSRwoLYXR0YWNobWVudHMYCSADKAsyJS5tb2RlbC5TdG9yZWRNZXNzYWdlLkF0dGFjaG1lbnRzRW50cnlSC2F0dGFjaG1lbnRzEkQKCnRodW1ibmFpbHMYDyADKAsyJC5tb2RlbC5TdG9yZWRNZXNzYWdlLlRodW1ibmFpbHNFbnRyeVIKdGh1bWJuYWlscxI1CglkaXJlY3Rpb24YCiABKA4yFy5tb2RlbC5NZXNzYWdlRGlyZWN0aW9uUglkaXJlY3Rpb24SQQoJcmVhY3Rpb25zGAsgAygLMiMubW9kZWwuU3RvcmVkTWVzc2FnZS5SZWFjdGlvbnNFbnRyeVIJcmVhY3Rpb25zEjsKBnN0YXR1cxgMIAEoDjIjLm1vZGVsLlN0b3JlZE1lc3NhZ2UuRGVsaXZlcnlTdGF0dXNSBnN0YXR1cxIkCg1maXJzdFZpZXdlZEF0GA0gASgDUg1maXJzdFZpZXdlZEF0EiAKC2Rpc2FwcGVhckF0GA4gASgDUgtkaXNhcHBlYXJBdBIsChFyZW1vdGVseURlbGV0ZWRBdBgQIAEoA1IRcmVtb3RlbHlEZWxldGVkQXQSPgoRcmVtb3RlbHlEZWxldGVkQnkYESABKAsyEC5tb2RlbC5Db250YWN0SWRSEXJlbW90ZWx5RGVsZXRlZEJ5GlcKEEF0dGFjaG1lbnRzRW50cnkSEAoDa2V5GAEgASgFUgNrZXkSLQoFdmFsdWUYAiABKAsyFy5tb2RlbC5TdG9yZWRBdHRhY2htZW50UgV2YWx1ZToCOAEaPQoPVGh1bWJuYWlsc0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EhQKBXZhbHVlGAIgASgFUgV2YWx1ZToCOAEaTQoOUmVhY3Rpb25zRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSJQoFdmFsdWUYAiABKAsyDy5tb2RlbC5SZWFjdGlvblIFdmFsdWU6AjgBInMKDkRlbGl2ZXJ5U3RhdHVzEgsKB1NFTkRJTkcQABISCg5QQVJUSUFMTFlfU0VOVBABEhMKD0NPTVBMRVRFTFlfU0VOVBACEhQKEFBBUlRJQUxMWV9GQUlMRUQQAxIVChFDT01QTEVURUxZX0ZBSUxFRBAE');
+final $typed_data.Uint8List storedMessageDescriptor = $convert.base64Decode('Cg1TdG9yZWRNZXNzYWdlEi4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhoKCHNlbmRlcklkGAIgASgJUghzZW5kZXJJZBIOCgJpZBgDIAEoCVICaWQSDgoCdHMYBCABKANSAnRzEigKD3JlcGx5VG9TZW5kZXJJZBgFIAEoCVIPcmVwbHlUb1NlbmRlcklkEhwKCXJlcGx5VG9JZBgGIAEoCVIJcmVwbHlUb0lkEhIKBHRleHQYByABKAlSBHRleHQSNAoVZGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAggASgFUhVkaXNhcHBlYXJBZnRlclNlY29uZHMSRwoLYXR0YWNobWVudHMYCSADKAsyJS5tb2RlbC5TdG9yZWRNZXNzYWdlLkF0dGFjaG1lbnRzRW50cnlSC2F0dGFjaG1lbnRzEkQKCnRodW1ibmFpbHMYDyADKAsyJC5tb2RlbC5TdG9yZWRNZXNzYWdlLlRodW1ibmFpbHNFbnRyeVIKdGh1bWJuYWlscxI1CglkaXJlY3Rpb24YCiABKA4yFy5tb2RlbC5NZXNzYWdlRGlyZWN0aW9uUglkaXJlY3Rpb24SQQoJcmVhY3Rpb25zGAsgAygLMiMubW9kZWwuU3RvcmVkTWVzc2FnZS5SZWFjdGlvbnNFbnRyeVIJcmVhY3Rpb25zEjsKBnN0YXR1cxgMIAEoDjIjLm1vZGVsLlN0b3JlZE1lc3NhZ2UuRGVsaXZlcnlTdGF0dXNSBnN0YXR1cxIkCg1maXJzdFZpZXdlZEF0GA0gASgDUg1maXJzdFZpZXdlZEF0EiAKC2Rpc2FwcGVhckF0GA4gASgDUgtkaXNhcHBlYXJBdBIsChFyZW1vdGVseURlbGV0ZWRBdBgQIAEoA1IRcmVtb3RlbHlEZWxldGVkQXQSPgoRcmVtb3RlbHlEZWxldGVkQnkYESABKAsyEC5tb2RlbC5Db250YWN0SWRSEXJlbW90ZWx5RGVsZXRlZEJ5Ej4KDGludHJvZHVjdGlvbhgSIAEoCzIaLm1vZGVsLkludHJvZHVjdGlvbkRldGFpbHNSDGludHJvZHVjdGlvbhpXChBBdHRhY2htZW50c0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5Ei0KBXZhbHVlGAIgASgLMhcubW9kZWwuU3RvcmVkQXR0YWNobWVudFIFdmFsdWU6AjgBGj0KD1RodW1ibmFpbHNFbnRyeRIQCgNrZXkYASABKAVSA2tleRIUCgV2YWx1ZRgCIAEoBVIFdmFsdWU6AjgBGk0KDlJlYWN0aW9uc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5EiUKBXZhbHVlGAIgASgLMg8ubW9kZWwuUmVhY3Rpb25SBXZhbHVlOgI4ASJzCg5EZWxpdmVyeVN0YXR1cxILCgdTRU5ESU5HEAASEgoOUEFSVElBTExZX1NFTlQQARITCg9DT01QTEVURUxZX1NFTlQQAhIUChBQQVJUSUFMTFlfRkFJTEVEEAMSFQoRQ09NUExFVEVMWV9GQUlMRUQQBA==');
 @$core.Deprecated('Use reactionDescriptor instead')
 const Reaction$json = const {
   '1': 'Reaction',

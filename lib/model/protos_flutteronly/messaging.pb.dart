@@ -541,6 +541,158 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
   Attachment ensureThumbnail() => $_ensure(1);
 }
 
+class Introduction extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Introduction', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OY)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..hasRequiredFields = false
+  ;
+
+  Introduction._() : super();
+  factory Introduction({
+    $core.List<$core.int>? id,
+    $core.String? displayName,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (displayName != null) {
+      _result.displayName = displayName;
+    }
+    return _result;
+  }
+  factory Introduction.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Introduction.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Introduction clone() => Introduction()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Introduction copyWith(void Function(Introduction) updates) => super.copyWith((message) => updates(message as Introduction)) as Introduction; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Introduction create() => Introduction._();
+  Introduction createEmptyInstance() => create();
+  static $pb.PbList<Introduction> createRepeated() => $pb.PbList<Introduction>();
+  @$core.pragma('dart2js:noInline')
+  static Introduction getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Introduction>(create);
+  static Introduction? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get id => $_getN(0);
+  @$pb.TagNumber(1)
+  set id($core.List<$core.int> v) { $_setBytes(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get displayName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set displayName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDisplayName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDisplayName() => clearField(2);
+}
+
+class IntroductionDetails extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'IntroductionDetails', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOM<ContactId>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'to', subBuilder: ContactId.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'originalDisplayName', protoName: 'originalDisplayName')
+    ..e<IntroductionDetails_IntroductionStatus>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: IntroductionDetails_IntroductionStatus.PENDING, valueOf: IntroductionDetails_IntroductionStatus.valueOf, enumValues: IntroductionDetails_IntroductionStatus.values)
+    ..hasRequiredFields = false
+  ;
+
+  IntroductionDetails._() : super();
+  factory IntroductionDetails({
+    ContactId? to,
+    $core.String? displayName,
+    $core.String? originalDisplayName,
+    IntroductionDetails_IntroductionStatus? status,
+  }) {
+    final _result = create();
+    if (to != null) {
+      _result.to = to;
+    }
+    if (displayName != null) {
+      _result.displayName = displayName;
+    }
+    if (originalDisplayName != null) {
+      _result.originalDisplayName = originalDisplayName;
+    }
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory IntroductionDetails.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory IntroductionDetails.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  IntroductionDetails clone() => IntroductionDetails()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  IntroductionDetails copyWith(void Function(IntroductionDetails) updates) => super.copyWith((message) => updates(message as IntroductionDetails)) as IntroductionDetails; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static IntroductionDetails create() => IntroductionDetails._();
+  IntroductionDetails createEmptyInstance() => create();
+  static $pb.PbList<IntroductionDetails> createRepeated() => $pb.PbList<IntroductionDetails>();
+  @$core.pragma('dart2js:noInline')
+  static IntroductionDetails getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<IntroductionDetails>(create);
+  static IntroductionDetails? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  ContactId get to => $_getN(0);
+  @$pb.TagNumber(1)
+  set to(ContactId v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasTo() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTo() => clearField(1);
+  @$pb.TagNumber(1)
+  ContactId ensureTo() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get displayName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set displayName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDisplayName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDisplayName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get originalDisplayName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set originalDisplayName($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasOriginalDisplayName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOriginalDisplayName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  IntroductionDetails_IntroductionStatus get status => $_getN(3);
+  @$pb.TagNumber(4)
+  set status(IntroductionDetails_IntroductionStatus v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasStatus() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStatus() => clearField(4);
+}
+
 class Message extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Message', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OY)
@@ -549,6 +701,7 @@ class Message extends $pb.GeneratedMessage {
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'text')
     ..m<$core.int, AttachmentWithThumbnail>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attachments', entryClassName: 'Message.AttachmentsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OM, valueCreator: AttachmentWithThumbnail.create, packageName: const $pb.PackageName('model'))
     ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'disappearAfterSeconds')
+    ..aOM<Introduction>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'introduction', subBuilder: Introduction.create)
     ..hasRequiredFields = false
   ;
 
@@ -560,6 +713,7 @@ class Message extends $pb.GeneratedMessage {
     $core.String? text,
     $core.Map<$core.int, AttachmentWithThumbnail>? attachments,
     $core.int? disappearAfterSeconds,
+    Introduction? introduction,
   }) {
     final _result = create();
     if (id != null) {
@@ -579,6 +733,9 @@ class Message extends $pb.GeneratedMessage {
     }
     if (disappearAfterSeconds != null) {
       _result.disappearAfterSeconds = disappearAfterSeconds;
+    }
+    if (introduction != null) {
+      _result.introduction = introduction;
     }
     return _result;
   }
@@ -650,6 +807,17 @@ class Message extends $pb.GeneratedMessage {
   $core.bool hasDisappearAfterSeconds() => $_has(5);
   @$pb.TagNumber(6)
   void clearDisappearAfterSeconds() => clearField(6);
+
+  @$pb.TagNumber(7)
+  Introduction get introduction => $_getN(6);
+  @$pb.TagNumber(7)
+  set introduction(Introduction v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasIntroduction() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearIntroduction() => clearField(7);
+  @$pb.TagNumber(7)
+  Introduction ensureIntroduction() => $_ensure(6);
 }
 
 class StoredMessage extends $pb.GeneratedMessage {
@@ -671,6 +839,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..m<$core.int, $core.int>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'thumbnails', entryClassName: 'StoredMessage.ThumbnailsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.O3, packageName: const $pb.PackageName('model'))
     ..aInt64(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remotelyDeletedAt', protoName: 'remotelyDeletedAt')
     ..aOM<ContactId>(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remotelyDeletedBy', protoName: 'remotelyDeletedBy', subBuilder: ContactId.create)
+    ..aOM<IntroductionDetails>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'introduction', subBuilder: IntroductionDetails.create)
     ..hasRequiredFields = false
   ;
 
@@ -693,6 +862,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     $core.Map<$core.int, $core.int>? thumbnails,
     $fixnum.Int64? remotelyDeletedAt,
     ContactId? remotelyDeletedBy,
+    IntroductionDetails? introduction,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -745,6 +915,9 @@ class StoredMessage extends $pb.GeneratedMessage {
     }
     if (remotelyDeletedBy != null) {
       _result.remotelyDeletedBy = remotelyDeletedBy;
+    }
+    if (introduction != null) {
+      _result.introduction = introduction;
     }
     return _result;
   }
@@ -907,6 +1080,17 @@ class StoredMessage extends $pb.GeneratedMessage {
   void clearRemotelyDeletedBy() => clearField(17);
   @$pb.TagNumber(17)
   ContactId ensureRemotelyDeletedBy() => $_ensure(16);
+
+  @$pb.TagNumber(18)
+  IntroductionDetails get introduction => $_getN(17);
+  @$pb.TagNumber(18)
+  set introduction(IntroductionDetails v) { setField(18, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasIntroduction() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearIntroduction() => clearField(18);
+  @$pb.TagNumber(18)
+  IntroductionDetails ensureIntroduction() => $_ensure(17);
 }
 
 class Reaction extends $pb.GeneratedMessage {
