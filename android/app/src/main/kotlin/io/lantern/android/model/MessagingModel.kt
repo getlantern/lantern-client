@@ -58,7 +58,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
             "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
             "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
-            // "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {

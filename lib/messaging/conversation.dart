@@ -313,7 +313,7 @@ class _ConversationState extends State<Conversation>
                   child: Container(
                     width: 70.w,
                     // TODO Connect Contacts : derive pendingRequest status by checking if this contact exists
-                    // by checking /intro/to/toIdentityKey/fromIdentityKey
+                    // via /intro/to/toIdentityKey/fromIdentityKey
                     // (pendingRequest, contact) - derive status from
                     child: _buildConversationSticker(false, widget._contact),
                   ),

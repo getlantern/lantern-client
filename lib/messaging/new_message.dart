@@ -96,7 +96,6 @@ class NewMessage extends StatelessWidget {
                   (el) => sanitizeContactName(el.value)[0]
                       .toLowerCase()
                       .toString());
-
               return groupedSortedRecentContacts.isEmpty
                   ? Container()
                   : groupedContactListGenerator(
