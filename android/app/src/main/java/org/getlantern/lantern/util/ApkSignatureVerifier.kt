@@ -48,7 +48,7 @@ object ApkSignatureVerifier {
                 file.absolutePath,
                 PackageManager.GET_SIGNING_CERTIFICATES
             )
-            if (info.signingInfo == null) {
+            if (info?.signingInfo == null) {
                 info = packageManager.getPackageArchiveInfo(
                     file.absolutePath,
                     PackageManager.GET_SIGNATURES
@@ -65,7 +65,7 @@ object ApkSignatureVerifier {
                 file.absolutePath,
                 PackageManager.GET_SIGNATURES
             )
-            return getSignatureSha256(info.signatures, file)
+            return getSignatureSha256(info?.signatures, file)
         }
     }
 
@@ -127,7 +127,7 @@ object ApkSignatureVerifier {
             val digester = MessageDigest.getInstance("SHA256")
             value = bytes2Hex(digester.digest(data))
         } catch (e: NoSuchAlgorithmException) {
-            Logger.error(TAG, "ApkSignature error: ${e.message}, caused by: ${e.cause.toString()}")
+            Logger.error(TAG, "Unable to decode message into a encrypted string", e)
         }
         return value
     }
