@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focused_menu/focused_menu.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
@@ -18,11 +17,10 @@ void main() {
 
   group('Conversation Page Test', () {
     /// This function is called during each new message, to ensure that the
-    /// message is displayed correctly.
+    /// message is displayed correctly, we need to wait for the message to be
+    /// displayed.
     Future<void> waitUntilSended(WidgetTester tester) async {
-      await tester.pump(const Duration(seconds: 2));
-      await tester.pump(const Duration(seconds: 2));
-      await tester.pump(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 1));
     }
 
     testWidgets(
@@ -75,7 +73,8 @@ void main() {
           findsOneWidget);
     });
 
-    testWidgets('Remove the message sended', (WidgetTester tester) async {
+    testWidgets('Remove the message sended just for me',
+        (WidgetTester tester) async {
       await tester.pumpWidget(LanternApp());
       await tester.pumpAndSettle();
       await tester.pumpAndSettle();
@@ -88,6 +87,23 @@ void main() {
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
       await waitUntilSended(tester);
+      print('Proceed to tap on the option "DELETE FOR ME"');
+      await tester.tap(find.text('Delete for me'));
+      print('Refresh the screen after doing a tap on "DELETE FOR ME"');
+      await waitUntilSended(tester);
+      print(
+          'We should see an AlertDialog with a text "This will delete the message for you only. Everyone else will still be able to see it."');
+      expect(find.byType(AlertDialog), findsOneWidget);
+      await waitUntilSended(tester);
+      await tester.tap(find.text('Delete'));
+      await waitUntilSended(tester);
+      print('The alert dialog should has been dismissed');
+      expect(AlertDialog, findsNothing);
+      print('We shouldn\'t have any bubble widget');
+      expect(
+          find.widgetWithText(
+              ContentContainer, 'hello this a message send from Flutter Test'),
+          findsNothing);
     });
 
     testWidgets('Go back using physical button to New Message Page',
