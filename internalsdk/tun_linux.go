@@ -26,11 +26,11 @@ var (
 // Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
 // does the following:
 //
-// 1. dns packets bound for fakeDNSAddr are routed to dnsGrabAddr
+// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 //
-func Tun2Socks(fd int, socksAddr, fakeDNSAddr, dnsGrabAddr string, mtu int) error {
+func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	runtime.LockOSThread()
 
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
@@ -52,7 +52,8 @@ func Tun2Socks(fd int, socksAddr, fakeDNSAddr, dnsGrabAddr string, mtu int) erro
 			return socksDialer.Dial(network, addr)
 		},
 		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
-			isDNS := addr == fakeDNSAddr
+			_, port, _ := net.SplitHostPort(addr)
+			isDNS := port == "53"
 			if isDNS {
 				// reroute DNS requests to dnsgrab
 				addr = dnsGrabAddr
