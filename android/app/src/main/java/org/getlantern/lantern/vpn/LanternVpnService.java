@@ -129,8 +129,7 @@ public class LanternVpnService extends VpnService implements Runnable {
     @Override
     public void run() {
         try {
-            final String dns = LanternApp.getSession().getDNSServer();
-            Logger.d(TAG, "Loading Lantern library with DNS server " + dns);
+            Logger.d(TAG, "Loading Lantern library");
             Internalsdk.protectConnections(new SocketProtector() {
                 // Protect is used to exclude a socket specified by fileDescriptor
                 // from the VPN connection. Once protected, the underlying connection
@@ -141,7 +140,11 @@ public class LanternVpnService extends VpnService implements Runnable {
                         throw new Exception("protect socket failed");
                     }
                 }
-            }, dns);
+
+                public String dnsServerIP() {
+                    return LanternApp.getSession().getDNSServer();
+                }
+            });
 
             getOrInitProvider().run(this, new Builder(), LanternApp.getSession().getSOCKS5Addr(), LanternApp.getSession().getDNSGrabAddr());
         } catch (Exception e) {

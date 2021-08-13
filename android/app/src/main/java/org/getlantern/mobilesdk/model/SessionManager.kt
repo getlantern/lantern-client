@@ -23,16 +23,13 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
+import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
 import java.util.Locale
 import kotlin.collections.HashMap
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
-import kotlin.collections.listOf
 import kotlin.collections.set
 
 abstract class SessionManager(application: Application) : Session {
@@ -50,6 +47,7 @@ abstract class SessionManager(application: Application) : Session {
     private val appVersion: String
     private var startResult: StartResult? = null
     private var locale: Locale? = null
+    private val dnsDetector = DnsDetector(application, fakeDnsIP)
 
     fun setStartResult(result: StartResult?) {
         startResult = result
@@ -171,22 +169,7 @@ abstract class SessionManager(application: Application) : Session {
      * Return the system DNS servers of the current device
      */
     override fun getDNSServer(): String {
-        try {
-            val systemProperties = Class.forName("android.os.SystemProperties")
-            val method = systemProperties.getMethod("get", String::class.java)
-            for (name in arrayOf("net.dns1", "net.dns2", "net.dns3", "net.dns4")) {
-                val value = method.invoke(null, name) as String
-                if ("" != value) {
-                    return "[$value]"
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Logger.error(TAG, "Fatal error", e)
-        }
-        // use the default DNS server from settings.yaml if we were unable to
-        // detect the system DNS info
-        return settings.defaultDnsServer()
+        return dnsDetector.dnsServer
     }
 
     override fun proxyAll(): Boolean {
@@ -420,6 +403,9 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val DEVICE_ID = "deviceid"
+
+        @JvmStatic
+        val fakeDnsIP = "1.1.1.1"
 
         @JvmStatic
         val USER_ID = "userid"
