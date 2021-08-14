@@ -56,8 +56,7 @@ class MessageBubble extends StatelessWidget {
       final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
 
-      return InkWell(
-          child: Flex(
+      return Flex(
         direction: Axis.horizontal,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
@@ -96,7 +95,7 @@ class MessageBubble extends StatelessWidget {
                 )),
           ),
         ],
-      ));
+      );
     });
   }
 
