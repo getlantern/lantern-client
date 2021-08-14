@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:focused_menu/focused_menu.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
@@ -372,6 +373,68 @@ void main() {
       await tester.tap(find.text('🥰'));
       await waitUntilSended(tester);
       expect(find.widgetWithText(StatusRow, '🥰'), findsOneWidget);
+    });
+
+    testWidgets(
+        'Remove a reply intent for the message "hello this is a message send from Flutter Test"',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.longPress(find.widgetWithText(
+          FocusedMenuHolder, 'hello this a message send from Flutter Test'));
+      await waitUntilSended(tester);
+      print('Proceed to tap on the reply option');
+      await tester.tap(find.text('Reply'));
+      print('Refresh the screen after doing a tap on "Reply"');
+      await waitUntilSended(tester);
+      print('Check if "Reply" was rendered');
+      expect(find.widgetWithText(Row, 'Replying to me'), findsOneWidget);
+      print('Close the reply intent');
+      await tester.tap(find.byKey(const ValueKey('close_reply')));
+      await waitUntilSended(tester);
+      expect(find.widgetWithText(Row, 'Replying to me'), findsNothing);
+    });
+
+    testWidgets(
+        'Send a reply intent for the message "hello this is a message send from Flutter Test"',
+        (WidgetTester tester) async {
+      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.longPress(find.widgetWithText(
+          FocusedMenuHolder, 'hello this a message send from Flutter Test'));
+      await waitUntilSended(tester);
+      print('Proceed to tap on the reply option');
+      await tester.tap(find.text('Reply'));
+      print('Refresh the screen after doing a tap on "Reply"');
+      await waitUntilSended(tester);
+      print('Check if "Reply" was rendered');
+      await tester.enterText(
+          find.byType(TextFormField), 'Replying: TERI TERI! DAISHORI!! :D');
+      await tester.pump();
+      await tester.tap(sendButtonFinder);
+      print('message has been send');
+      await waitUntilSended(tester);
+      expect(
+          find.widgetWithText(Row, 'Replying to Note to self'), findsOneWidget);
+      expect(
+          find.widgetWithText(
+              ContentContainer, 'Replying: TERI TERI! DAISHORI!! :D'),
+          findsOneWidget);
     });
 
     testWidgets('Go back using physical button to New Message Page',

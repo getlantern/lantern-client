@@ -36,12 +36,12 @@ class MessagingEmojiPicker extends StatelessWidget {
           config: Config(
             initCategory: Category.SMILEYS,
             columns: 10,
-            emojiSizeMax: 17.0,
+            emojiSizeMax: 16.0,
             iconColor: Theme.of(context).primaryIconTheme.color ?? Colors.grey,
             iconColorSelected:
                 Theme.of(context).accentIconTheme.color ?? Colors.blue,
             noRecentsStyle: Theme.of(context).textTheme.bodyText1 ??
-                const TextStyle(fontSize: 16, color: Colors.black26),
+                const TextStyle(fontSize: 15, color: Colors.black26),
             progressIndicatorColor: Theme.of(context).indicatorColor,
             noRecentsText: emptySuggestions,
             bgColor: Theme.of(context).backgroundColor,
