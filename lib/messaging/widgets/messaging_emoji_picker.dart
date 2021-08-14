@@ -18,19 +18,17 @@ class MessagingEmojiPicker extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => AnimatedCrossFade(
-        firstChild: const SizedBox(),
-        secondChild: _showEmojiKeyBoard(context: context),
-        firstCurve: Curves.easeIn,
-        secondCurve: Curves.easeOut,
-        reverseDuration: const Duration(milliseconds: 600),
-        crossFadeState:
-            !showEmojis ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+  Widget build(BuildContext context) => AnimatedContainer(
+        curve: Curves.easeInOut,
+        width: MediaQuery.of(context).size.width,
+        height: !showEmojis ? 0.0 : height,
         duration: const Duration(milliseconds: 600),
+        child: _showEmojiKeyBoard(context: context),
       );
 
   Widget _showEmojiKeyBoard({required BuildContext context}) => Container(
         height: height,
+        width: MediaQuery.of(context).size.width,
         child: EmojiPicker(
           key: key,
           onBackspacePressed: onBackspacePressed,
