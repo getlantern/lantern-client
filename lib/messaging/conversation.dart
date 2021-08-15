@@ -300,6 +300,7 @@ class _ConversationState extends State<Conversation>
                   onPressed: () {},
                 ),
                 IconButton(
+                    key: const ValueKey('disappearingSelect'),
                     onPressed: () {},
                     icon: DisappearingTimerAction(widget._contact)),
                 IconButton(
