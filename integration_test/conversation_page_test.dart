@@ -437,6 +437,41 @@ void main() {
           findsOneWidget);
     });
 
+    testWidgets('Set a disappearing time and wait till is gone',
+        (WidgetTester tester) async {
+      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.tap(find.byKey(const ValueKey('disappearingSelect')));
+      await waitUntilSended(tester);
+      print('A dropdown should render');
+      await tester.tap(find.widgetWithText(ListTile, '5 seconds'));
+      await waitUntilSended(tester);
+      print('Now we should have an indicator saying 5 seconds');
+      expect(find.text('5S'), findsOneWidget);
+      print('We write the text that is gonna be visible for 5 seconds');
+      await tester.enterText(
+          find.byType(TextFormField), 'This will be shortly gone');
+      await tester.pump();
+      await tester.tap(sendButtonFinder);
+      print('message has been send');
+      await waitUntilSended(tester);
+      expect(find.widgetWithText(ContentContainer, 'This will be shortly gone'),
+          findsOneWidget);
+      await Future.delayed(const Duration(seconds: 5), () {});
+      await waitUntilSended(tester);
+      print('Check if the message has been removed');
+      expect(find.widgetWithText(ContentContainer, 'This will be shortly gone'),
+          findsNothing);
+    });
+
     testWidgets('Go back using physical button to New Message Page',
         (WidgetTester tester) async {
       await tester.pumpWidget(LanternApp());
