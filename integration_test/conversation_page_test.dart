@@ -86,35 +86,6 @@ void main() {
           findsOneWidget);
     });
 
-    testWidgets('Send a custom emoji', (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
-      print('The emoji picker should appear');
-      await waitUntilSended(tester);
-      print('We tap on the "😆"');
-      await tester.tap(find.text('😆'));
-      await waitUntilSended(tester);
-      var textformfield =
-          tester.widget<TextFormField>(find.byType(TextFormField));
-      expect(textformfield.controller!.text, equals('😆'));
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      print('check if MessageBubble was rendered');
-      expect(find.byType(MessageBubble), findsOneWidget);
-      print('Conversation should have a new widget with a text message');
-      expect(find.widgetWithText(ContentContainer, '😆'), findsOneWidget);
-    });
-
     testWidgets('Remove the message sended just for me',
         (WidgetTester tester) async {
       await tester.pumpWidget(LanternApp());
@@ -499,6 +470,35 @@ void main() {
       print('Refresh the screen after doing a tap on "😄"');
       await waitUntilSended(tester);
       expect(find.widgetWithText(StatusRow, '😄'), findsOneWidget);
+    });
+
+    testWidgets('Send a custom emoji', (WidgetTester tester) async {
+      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
+      print('The emoji picker should appear');
+      await waitUntilSended(tester);
+      print('We tap on the "😆"');
+      await tester.tap(find.text('😆'));
+      await waitUntilSended(tester);
+      var textformfield =
+          tester.widget<TextFormField>(find.byType(TextFormField));
+      expect(textformfield.controller!.text, equals('😆'));
+      await tester.tap(sendButtonFinder);
+      print('message has been send');
+      await waitUntilSended(tester);
+      print('check if MessageBubble was rendered');
+      expect(find.byType(MessageBubble), findsOneWidget);
+      print('Conversation should have a new widget with a text message');
+      expect(find.widgetWithText(ContentContainer, '😆'), findsOneWidget);
     });
 
     testWidgets('Go back using physical button to New Message Page',
