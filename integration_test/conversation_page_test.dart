@@ -495,8 +495,6 @@ void main() {
       await tester.tap(sendButtonFinder);
       print('message has been send');
       await waitUntilSended(tester);
-      print('check if MessageBubble was rendered');
-      expect(find.byType(MessageBubble), findsOneWidget);
       print('Conversation should have a new widget with a text message');
       expect(find.widgetWithText(ContentContainer, '😆'), findsOneWidget);
     });

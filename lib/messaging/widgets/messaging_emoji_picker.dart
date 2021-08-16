@@ -18,35 +18,32 @@ class MessagingEmojiPicker extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
-        curve: Curves.easeInOut,
-        width: MediaQuery.of(context).size.width,
-        height: !showEmojis ? 0.0 : height,
-        duration: const Duration(milliseconds: 600),
-        child: _showEmojiKeyBoard(context: context),
+  Widget build(BuildContext context) => Offstage(
+        offstage: !showEmojis,
+        child: SizedBox(
+          height: height,
+          width: MediaQuery.of(context).size.width,
+          child: _showEmojiKeyBoard(context: context),
+        ),
       );
 
-  Widget _showEmojiKeyBoard({required BuildContext context}) => Container(
-        height: height,
-        width: MediaQuery.of(context).size.width,
-        child: EmojiPicker(
-          key: key,
-          onBackspacePressed: onBackspacePressed,
-          onEmojiSelected: onEmojiSelected,
-          config: Config(
-            initCategory: Category.SMILEYS,
-            columns: 10,
-            emojiSizeMax: 16.0,
-            iconColor: Theme.of(context).primaryIconTheme.color ?? Colors.grey,
-            iconColorSelected:
-                Theme.of(context).accentIconTheme.color ?? Colors.blue,
-            noRecentsStyle: Theme.of(context).textTheme.bodyText1 ??
-                const TextStyle(fontSize: 15, color: Colors.black26),
-            progressIndicatorColor: Theme.of(context).indicatorColor,
-            noRecentsText: emptySuggestions,
-            bgColor: Theme.of(context).backgroundColor,
-            indicatorColor: Theme.of(context).indicatorColor,
-          ),
+  Widget _showEmojiKeyBoard({required BuildContext context}) => EmojiPicker(
+        key: key,
+        onBackspacePressed: onBackspacePressed,
+        onEmojiSelected: onEmojiSelected,
+        config: Config(
+          initCategory: Category.SMILEYS,
+          columns: 10,
+          emojiSizeMax: 16.0,
+          iconColor: Theme.of(context).primaryIconTheme.color ?? Colors.grey,
+          iconColorSelected:
+              Theme.of(context).accentIconTheme.color ?? Colors.blue,
+          noRecentsStyle: Theme.of(context).textTheme.bodyText1 ??
+              const TextStyle(fontSize: 15, color: Colors.black26),
+          progressIndicatorColor: Theme.of(context).indicatorColor,
+          noRecentsText: emptySuggestions,
+          bgColor: Theme.of(context).backgroundColor,
+          indicatorColor: Theme.of(context).indicatorColor,
         ),
       );
 }
