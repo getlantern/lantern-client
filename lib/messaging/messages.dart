@@ -33,26 +33,33 @@ class Messages extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: ListTile(
-                leading: CustomBadge(
-                  count: 1,
-                  showBadge: true,
-                  child: const Icon(
-                    Icons.people,
-                    color: Colors.black,
-                  ),
-                ),
-                title: Text('Introductions'.i18n, style: tsBaseScreenBodyText),
-                trailing: const CustomAssetImage(
-                  path: ImagePaths.keyboard_arrow_right_icon,
-                  size: 24,
-                ),
-                onTap: () async =>
-                    await context.pushRoute(const Introductions()),
-              ),
-            ),
+            model.introductionsFromContact(
+                builder: (context,
+                        Iterable<PathAndValue<StoredMessage>> introductions,
+                        Widget? child) =>
+                    (introductions.isNotEmpty)
+                        ? Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              leading: CustomBadge(
+                                count: introductions.length,
+                                showBadge: true,
+                                child: const Icon(
+                                  Icons.people,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              title: Text('Introductions'.i18n,
+                                  style: tsBaseScreenBodyText),
+                              trailing: const CustomAssetImage(
+                                path: ImagePaths.keyboard_arrow_right_icon,
+                                size: 24,
+                              ),
+                              onTap: () async => await context
+                                  .pushRoute(const Introductions()),
+                            ),
+                          )
+                        : Container()),
             Expanded(
               child: model.contactsByActivity(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
@@ -72,19 +79,19 @@ class Messages extends StatelessWidget {
                     return Column(
                       children: [
                         GenericListItem(
-                          contact: contact,
+                          contact: contact.value,
                           index: index,
                           leading: CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(
                                     contact.value.contactId.id)],
                             child: Text(
-                                sanitizeContactName(contact.value)
+                                sanitizeContactName(contact.value.displayName)
                                     .substring(0, 2)
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                          title: sanitizeContactName(contact.value),
+                          title: sanitizeContactName(contact.value.displayName),
                           subtitle: Text(
                               "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
                               overflow: TextOverflow.ellipsis),

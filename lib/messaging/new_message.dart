@@ -86,14 +86,15 @@ class NewMessage extends StatelessWidget {
               var recentContacts = contacts.take(NUM_RECENT_CONTACTS).toList();
               // related https://github.com/getlantern/android-lantern/issues/299
               var sortedRecentContacts = recentContacts
-                ..sort((a, b) => sanitizeContactName(a.value)
+                ..sort((a, b) => sanitizeContactName(a.value.displayName)
                     .toLowerCase()
                     .toString()
-                    .compareTo(
-                        sanitizeContactName(b.value).toLowerCase().toString()));
+                    .compareTo(sanitizeContactName(b.value.displayName)
+                        .toLowerCase()
+                        .toString()));
 
               var groupedSortedRecentContacts = sortedRecentContacts.groupBy(
-                  (el) => sanitizeContactName(el.value)[0]
+                  (el) => sanitizeContactName(el.value.displayName)
                       .toLowerCase()
                       .toString());
               return groupedSortedRecentContacts.isEmpty
@@ -104,7 +105,7 @@ class NewMessage extends StatelessWidget {
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],
                             child: Text(
-                                sanitizeContactName(contact)
+                                sanitizeContactName(contact.displayName)
                                     .substring(0, 2)
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),

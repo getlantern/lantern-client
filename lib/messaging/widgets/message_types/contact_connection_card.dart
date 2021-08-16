@@ -63,13 +63,18 @@ class ContactConnectionCard extends StatelessWidget {
                                   ? outboundMsgColor
                                   : inboundMsgColor),
                         IconButton(
+                          splashRadius: 20.0,
                           icon: Icon(
                               (msg.introduction.status ==
                                       IntroductionDetails_IntroductionStatus
                                           .PENDING)
                                   ? Icons.info_outline_rounded
-                                  : Icons.arrow_right_outlined,
-                              size: 20.0,
+                                  : Icons.keyboard_arrow_right_outlined,
+                              size: (msg.introduction.status ==
+                                      IntroductionDetails_IntroductionStatus
+                                          .PENDING)
+                                  ? 20.0
+                                  : 30.0,
                               color: outbound
                                   ? outboundMsgColor
                                   : inboundMsgColor),
@@ -144,7 +149,7 @@ class ContactConnectionCard extends StatelessWidget {
                         title: Text('Accept'.i18n),
                         onTap: () async {
                           try {
-                            // model.acceptIntroduction(from the person we are talking to, to the person who they want to connect us to)
+                            // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                             await model.acceptIntroduction(
                                 contact.contactId.id, introduction.to.id);
                           } catch (e) {
@@ -182,7 +187,7 @@ class ContactConnectionCard extends StatelessWidget {
                             agreeText: 'Reject'.i18n,
                             agreeAction: () async {
                               try {
-                                // model.rejectIntroduction(from the person we are talking to, to the person who they want to connect us to)
+                                // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                                 await model.rejectIntroduction(
                                     contact.contactId.id, introduction.to.id);
                               } catch (e) {

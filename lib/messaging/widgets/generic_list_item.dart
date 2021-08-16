@@ -1,10 +1,8 @@
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 /*
-* Generic widget that renders a row with an avatar, a name and a trailing widget. 
+* Generic widget that renders a row with a Contact avatar, a Contact name and a trailing widget. 
 * Used in displaying lists of messages, contacts and contact requests.
 */
 class GenericListItem extends StatelessWidget {
@@ -20,7 +18,7 @@ class GenericListItem extends StatelessWidget {
     this.onTap,
   }) : super();
 
-  final PathAndValue<Contact> contact;
+  final Contact contact;
   final int index;
   final bool? isContactPreview;
   final String title;
@@ -31,27 +29,22 @@ class GenericListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-    return model.contact(context, contact,
-        (BuildContext context, Contact contact, Widget? child) {
-      // TODO this needs a slight tweaking since we are grouping elements now
-      var topBorderWidth = index.isEven ? 0.5 : 0.0;
-      var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-            border: Border(
-          top: BorderSide(width: topBorderWidth, color: Colors.black12),
-          bottom: BorderSide(width: bottomBorderWidth, color: Colors.black12),
-        )),
-        child: ListTile(
-          leading: leading,
-          title: Text(title.toString()),
-          subtitle: subtitle,
-          trailing: trailing,
-          onTap: onTap,
-        ),
-      );
-    });
+    var topBorderWidth = index.isEven ? 0.5 : 0.0;
+    var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+          border: Border(
+        top: BorderSide(width: topBorderWidth, color: Colors.black12),
+        bottom: BorderSide(width: bottomBorderWidth, color: Colors.black12),
+      )),
+      child: ListTile(
+        leading: leading,
+        title: Text(title.toString()),
+        subtitle: subtitle,
+        trailing: trailing,
+        onTap: onTap,
+      ),
+    );
   }
 }
