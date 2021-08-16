@@ -321,26 +321,6 @@ void main() {
       expect(find.widgetWithText(StatusRow, '👎'), findsOneWidget);
     });
 
-    testWidgets('Generate a 😄 reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the 😄 reaction');
-      await tester.tap(find.byKey(const ValueKey('😄')));
-      print('Refresh the screen after doing a tap on "😄"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '😄'), findsOneWidget);
-    });
-
     testWidgets('Generate a ❤ reaction', (WidgetTester tester) async {
       await tester.pumpWidget(LanternApp());
       await tester.pumpAndSettle();
@@ -499,6 +479,26 @@ void main() {
       print('Check if the message has been removed');
       expect(find.widgetWithText(ContentContainer, 'This will be shortly gone'),
           findsNothing);
+    });
+
+    testWidgets('Generate a 😄 reaction', (WidgetTester tester) async {
+      await tester.pumpWidget(LanternApp());
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewMessage), findsOneWidget);
+      await tester
+          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await waitUntilSended(tester);
+      await tester.longPress(find.widgetWithText(
+          ContentContainer, 'hello this a message send from Flutter Test'));
+      await waitUntilSended(tester);
+      print('Proceed to tap on the 😄 reaction');
+      await tester.tap(find.byKey(const ValueKey('😄')));
+      print('Refresh the screen after doing a tap on "😄"');
+      await waitUntilSended(tester);
+      expect(find.widgetWithText(StatusRow, '😄'), findsOneWidget);
     });
 
     testWidgets('Go back using physical button to New Message Page',
