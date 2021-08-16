@@ -39,6 +39,17 @@ class _IntroduceState extends State<Introduce> {
         Expanded(
           child: model.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+            if (_contacts.isEmpty) {
+              return Container(
+                alignment: AlignmentDirectional.center,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
+                child: Text(
+                    'No contacts yet. Once you have two or more contacts you will be able to create introductions.'
+                        .i18n,
+                    style: tsBaseScreenBodyText),
+              );
+            }
             var sortedContacts = _contacts.toList()
               ..sort((a, b) => sanitizeContactName(a.value.displayName)
                   .toLowerCase()
@@ -83,27 +94,29 @@ class _IntroduceState extends State<Introduce> {
                             }),
                           )),
                 ),
-                if (selectedContactIds.length > 1)
-                  Container(
-                    color: grey1,
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Button(
-                            width: 200,
-                            text: 'Send Invitations'.i18n.toUpperCase(),
-                            onPressed: () async {
-                              await model.introduce(selectedContactIds);
-                              showSnackbar(context, 'Introductions Sent!'.i18n);
-                              await Future.delayed(
-                                const Duration(milliseconds: 1000),
-                                () async => await context.router.pop(),
-                              );
-                            },
-                          ),
-                        ]),
-                  ),
+                (selectedContactIds.isNotEmpty)
+                    ? Container(
+                        color: grey1,
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Button(
+                                width: 200,
+                                text: 'Send Invitations'.i18n.toUpperCase(),
+                                onPressed: () async {
+                                  await model.introduce(selectedContactIds);
+                                  showSnackbar(
+                                      context, 'Introductions Sent!'.i18n);
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 1000),
+                                    () async => await context.router.pop(),
+                                  );
+                                },
+                              ),
+                            ]),
+                      )
+                    : const SizedBox()
               ],
             );
           }),
