@@ -8,6 +8,7 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:lantern/utils/introduction_extension.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -37,12 +38,12 @@ class Messages extends StatelessWidget {
                 builder: (context,
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
-                    (introductions.isNotEmpty)
+                    (introductions.getPending().isNotEmpty)
                         ? Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: ListTile(
                               leading: CustomBadge(
-                                count: introductions.length,
+                                count: introductions.getPending().length,
                                 showBadge: true,
                                 child: const Icon(
                                   Icons.people,
