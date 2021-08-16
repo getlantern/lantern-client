@@ -312,9 +312,6 @@ class _ConversationState extends State<Conversation>
                   color: grey1,
                   child: Container(
                     width: 70.w,
-                    // TODOderive pendingRequest status by checking if this contact exists
-                    // via /intro/to/toIdentityKey/fromIdentityKey
-                    // (pendingRequest, contact) - derive status from
                     child: _buildConversationSticker(widget._contact),
                   ),
                 ),

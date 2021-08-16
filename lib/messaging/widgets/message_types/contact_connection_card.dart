@@ -92,9 +92,9 @@ class ContactConnectionCard extends StatelessWidget {
                             if (msg.introduction.status ==
                                 IntroductionDetails_IntroductionStatus
                                     .ACCEPTED) {
-                              // TODO: we need to go from IntroductionDetails introduction.to.id to Contact
+                              // TODO
                               // await context
-                              //     .pushRoute(Conversation(contact: newlyAddedContact));
+                              //     .pushRoute(Conversation(contact: introductee));
                             }
                           },
                         ),
@@ -161,10 +161,9 @@ class ContactConnectionCard extends StatelessWidget {
                                 icon: ImagePaths.alert_icon,
                                 buttonText: 'OK'.i18n);
                           } finally {
-                            await context.router.pop();
-                            // TODO: we need to go from IntroductionDetails introduction.to.id to Contact
-                            // await context
-                            //     .pushRoute(Conversation(contact: newlyAddedContact));
+                            // TODO
+                            // await context.pushRoute(
+                            //     Conversation(contact: introductee));
                           }
                         }),
                     Divider(thickness: 1, color: grey2),

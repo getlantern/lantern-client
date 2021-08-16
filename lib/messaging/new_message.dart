@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/contacts/generate_grouped_list.dart';
+import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -87,19 +87,13 @@ class NewMessage extends StatelessWidget {
               // related https://github.com/getlantern/android-lantern/issues/299
               var sortedRecentContacts = recentContacts
                 ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                    .toLowerCase()
-                    .toString()
-                    .compareTo(sanitizeContactName(b.value.displayName)
-                        .toLowerCase()
-                        .toString()));
+                    .compareTo(sanitizeContactName(b.value.displayName)));
 
-              var groupedSortedRecentContacts = sortedRecentContacts.groupBy(
-                  (el) => sanitizeContactName(el.value.displayName)
-                      .toLowerCase()
-                      .toString());
-              return groupedSortedRecentContacts.isEmpty
-                  ? Container()
-                  : groupedContactListGenerator(
+              var groupedSortedRecentContacts = sortedRecentContacts
+                  .groupBy((el) => sanitizeContactName(el.value.displayName));
+
+              return groupedSortedRecentContacts.isNotEmpty
+                  ? groupedContactListGenerator(
                       groupedSortedList: groupedSortedRecentContacts,
                       leadingCallback: (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
@@ -111,7 +105,8 @@ class NewMessage extends StatelessWidget {
                                 style: const TextStyle(color: Colors.white)),
                           ),
                       onTapCallback: (Contact contact) async => await context
-                          .pushRoute(Conversation(contact: contact)));
+                          .pushRoute(Conversation(contact: contact)))
+                  : Container(); // rendering this instead of SizedBox() to avoid null dimension errors
             }))
           ]),
     );

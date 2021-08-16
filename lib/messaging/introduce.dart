@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/contacts/generate_grouped_list.dart';
+import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -52,14 +52,10 @@ class _IntroduceState extends State<Introduce> {
             }
             var sortedContacts = _contacts.toList()
               ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                  .toLowerCase()
-                  .toString()
-                  .compareTo(sanitizeContactName(b.value.displayName)
-                      .toLowerCase()
-                      .toString()));
+                  .compareTo(sanitizeContactName(b.value.displayName)));
 
-            var groupedSortedContacts = sortedContacts.groupBy((el) =>
-                sanitizeContactName(el.value.displayName).toLowerCase());
+            var groupedSortedContacts = sortedContacts
+                .groupBy((el) => sanitizeContactName(el.value.displayName));
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -83,11 +79,11 @@ class _IntroduceState extends State<Introduce> {
                             checkColor: Colors.white,
                             fillColor: MaterialStateProperty.resolveWith(
                                 getCheckboxColor),
-                            value: selectedContactIds.contains(contact.contactId
-                                .id), // TODO: Confirm this is a good idea for scaling to more contacts
+                            value: selectedContactIds
+                                .contains(contact.contactId.id),
                             shape: const CircleBorder(side: BorderSide.none),
                             onChanged: (bool? value) => setState(() {
-                              value! // TODO: Confirm this is a good idea for scaling to more contacts
+                              value!
                                   ? selectedContactIds.add(contact.contactId.id)
                                   : selectedContactIds
                                       .remove(contact.contactId.id);
@@ -116,7 +112,7 @@ class _IntroduceState extends State<Introduce> {
                               ),
                             ]),
                       )
-                    : const SizedBox()
+                    : Container()
               ],
             );
           }),

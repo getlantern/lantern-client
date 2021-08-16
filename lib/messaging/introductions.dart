@@ -33,10 +33,11 @@ class Introductions extends StatelessWidget {
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductions,
                   Widget? child) {
-                final groupedIntroductions = introductions.getPending().groupBy(
-                    (intro) => intro.value
-                        .contactId); // group by the contactId of the user who made the introduction
-
+                // group by the contactId of the user who made the introduction
+                final groupedIntroductions = introductions
+                    .getPending()
+                    .groupBy((intro) => intro.value.contactId);
+                // if we want to be even more economical we can mod GroupedListGenerator to accept Map<String, List<PathAndValue<StoredMessage>>>? as well
                 return ListView.builder(
                   itemCount: groupedIntroductions.length,
                   itemBuilder: (context, index) {
@@ -140,8 +141,7 @@ class Introductions extends StatelessWidget {
                                                       'You will not be able to message this contact if you reject the introduction.'
                                                           .i18n,
                                                       style: tsAlertDialogBody),
-                                                  // naming is confusing here because we are using the Alert Dialog which by default has a [Reject vs Accept] field
-                                                  // but in this case it corresponds to [Cancel vs Reject]
+                                                  // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                   dismissText: 'Cancel'.i18n,
                                                   agreeText: 'Reject'.i18n,
                                                   agreeAction: () async {
@@ -200,9 +200,6 @@ class Introductions extends StatelessWidget {
                                                       buttonText: 'OK'.i18n);
                                                 } finally {
                                                   await context.router.pop();
-                                                  // TODO: we need to go from IntroductionDetails introduction.to.id to Contact
-                                                  // await context
-                                                  //     .pushRoute(Conversation(contact: intro.value.introduction.to.id));
                                                 }
                                               },
                                               child: Text(

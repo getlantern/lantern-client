@@ -4,9 +4,9 @@ import 'package:lantern/package_store.dart';
 import '../generic_list_item.dart';
 import '../message_utils.dart';
 
-//
-// Renders the alphabetically grouped sorted list of contacts/messages
-//
+/*
+Renders an alphabetically grouped sorted list of contacts/conversations
+*/
 ListView groupedContactListGenerator({
   Map<String, List<PathAndValue<Contact>>>? groupedSortedList,
   Function? leadingCallback,
