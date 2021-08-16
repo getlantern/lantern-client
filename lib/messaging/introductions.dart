@@ -31,8 +31,12 @@ class Introductions extends StatelessWidget {
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductions,
                   Widget? child) {
-                final groupedIntroductions = introductions.toList().groupBy(
-                    (intro) => intro.value
+                final groupedIntroductions = introductions
+                    .toList()
+                    .where((intro) =>
+                        intro.value.introduction.status ==
+                        IntroductionDetails_IntroductionStatus.PENDING)
+                    .groupBy((intro) => intro.value
                         .contactId); // group by the contactId of the user who made the introduction
 
                 return ListView.builder(
