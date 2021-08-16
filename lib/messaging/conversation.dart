@@ -312,10 +312,10 @@ class _ConversationState extends State<Conversation>
                   color: grey1,
                   child: Container(
                     width: 70.w,
-                    // TODO Connect Contacts : derive pendingRequest status by checking if this contact exists
+                    // TODOderive pendingRequest status by checking if this contact exists
                     // via /intro/to/toIdentityKey/fromIdentityKey
                     // (pendingRequest, contact) - derive status from
-                    child: _buildConversationSticker(false, widget._contact),
+                    child: _buildConversationSticker(widget._contact),
                   ),
                 ),
                 Flexible(
@@ -370,18 +370,19 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-// TODO: update this
-  Widget _buildConversationSticker(
-          bool pendingRequest, Contact requestedContact) =>
-      model.singleContact(
-        context,
-        widget._contact,
-        (context, contact, child) => ListTile(
+  Widget _buildConversationSticker(Contact contact) =>
+      model.introductionsToContact(builder: (context,
+          Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
+        final isPendingIntroduction = introductions
+            .toList()
+            .where((intro) => intro.value.contactId == contact.contactId)
+            .isNotEmpty;
+        return ListTile(
           dense: true,
           minLeadingWidth: 18,
           leading: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: !pendingRequest
+            child: isPendingIntroduction
                 ? contact.messagesDisappearAfterSeconds > 0
                     ? const Icon(Icons.timer, size: 18, color: Colors.black)
                     : const Icon(Icons.lock_clock,
@@ -391,7 +392,7 @@ class _ConversationState extends State<Conversation>
           ),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: !pendingRequest
+            child: isPendingIntroduction
                 ? contact.messagesDisappearAfterSeconds > 0
                     ? Text(
                         'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
@@ -401,12 +402,12 @@ class _ConversationState extends State<Conversation>
                         style: txConversationSticker,
                         overflow: TextOverflow.ellipsis)
                 : Text(
-                    'Waiting for ${requestedContact.displayName}. They will receive your messages once they accept the introduction.'
+                    'Waiting for ${contact.displayName}. They will receive your messages once they accept the introduction.'
                         .i18n,
                     style: txConversationSticker),
           ),
-        ),
-      );
+        );
+      });
 
   Widget _buildMessageBubbles() {
     return model.contactMessages(widget._contact, builder: (context,

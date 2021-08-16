@@ -9,6 +9,8 @@ import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:lantern/utils/iterable_extension.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/utils/introduction_extension.dart';
+import 'package:lantern/utils/stored_message_extension.dart';
 
 class Introductions extends StatelessWidget {
   @override
@@ -31,12 +33,8 @@ class Introductions extends StatelessWidget {
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductions,
                   Widget? child) {
-                final groupedIntroductions = introductions
-                    .toList()
-                    .where((intro) =>
-                        intro.value.introduction.status ==
-                        IntroductionDetails_IntroductionStatus.PENDING)
-                    .groupBy((intro) => intro.value
+                final groupedIntroductions = introductions.getPending().groupBy(
+                    (intro) => intro.value
                         .contactId); // group by the contactId of the user who made the introduction
 
                 return ListView.builder(
@@ -76,8 +74,40 @@ class Introductions extends StatelessWidget {
                                         leading: CustomBadge(
                                           showBadge: true,
                                           top: 25,
-                                          customBadge: const Icon(Icons.timer,
-                                              size: 16.0, color: Colors.black),
+                                          // Render the countdown timer for the introduction's expiry
+                                          // the backend is taking care of assigning a different duration to these messages
+                                          customBadge: TweenAnimationBuilder<
+                                                  int>(
+                                              key: Key(
+                                                  'tween_${intro.value.id}'),
+                                              tween: IntTween(
+                                                  begin: DateTime.now()
+                                                      .millisecondsSinceEpoch,
+                                                  end: intro.value.disappearAt
+                                                      .toInt()),
+                                              duration: Duration(
+                                                  milliseconds: intro
+                                                          .value.disappearAt
+                                                          .toInt() -
+                                                      intro.value
+                                                          .firstViewedAt // we start counting from when the message containing the introduction is seen
+                                                          .toInt()),
+                                              curve: Curves.linear,
+                                              builder: (BuildContext context,
+                                                  int time, Widget? child) {
+                                                var index = intro.value
+                                                    .position(
+                                                        segments: intro
+                                                            .value
+                                                            .segments(
+                                                                iterations:
+                                                                    12));
+                                                return CustomAssetImage(
+                                                    path: ImagePaths
+                                                        .countdownPaths[index],
+                                                    size: 12,
+                                                    color: Colors.black);
+                                              }),
                                           child: CircleAvatar(
                                             backgroundColor: avatarBgColors[
                                                 generateUniqueColorIndex(intro
