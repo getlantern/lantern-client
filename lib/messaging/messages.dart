@@ -11,7 +11,6 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    //model.addMyself();
     return BaseScreen(
         title: 'Messages'.i18n,
         actions: [
