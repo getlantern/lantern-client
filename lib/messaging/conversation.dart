@@ -370,6 +370,7 @@ class _ConversationState extends State<Conversation>
     );
   }
 
+// TODO: update this
   Widget _buildConversationSticker(
           bool pendingRequest, Contact requestedContact) =>
       model.singleContact(

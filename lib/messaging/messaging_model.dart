@@ -164,8 +164,39 @@ class MessagingModel extends Model {
         'toId': toId,
       });
 
-  // method that fetches a username from server
-  // not in use until we implement AUTH
+  /*
+  Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
+  whom we're being introduced.
+  */
+  Widget introductionsFromContact(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
+          builder}) {
+    return subscribedListBuilder<StoredMessage>('/intro/from/',
+        details: true,
+        compare: sortReversed,
+        builder: builder, deserialize: (Uint8List serialized) {
+      return StoredMessage.fromBuffer(serialized);
+    });
+  }
+
+  /*
+  Returns an index of Introduction messages keyed to the contact to whom we're being introduced and then the
+  contact who introduced us.
+  */
+  Widget introductionsToContact(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
+          builder}) {
+    return subscribedListBuilder<StoredMessage>('/intro/to/',
+        details: true,
+        compare: sortReversed,
+        builder: builder, deserialize: (Uint8List serialized) {
+      return StoredMessage.fromBuffer(serialized);
+    });
+  }
+
+  /*
+  Returns the Contact corresponding to a displayName. Not in use until we implement AUTH.
+  */
   // Future<Contact> getContactFromUsername<T>(String username) async {
   //   return methodChannel
   //       .invokeMethod('getContactFromUsername', <String, dynamic>{
@@ -199,6 +230,18 @@ class MessagingModel extends Model {
       ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder(
         '/contacts/${_contactPathSegment(contact.contactId)}',
+        builder: builder, deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
+  }
+
+  /*
+  Matches a ContactId to a direct or group Contact
+  */
+  Widget singleContactById(BuildContext context, ContactId contactId,
+      ValueWidgetBuilder<Contact> builder) {
+    return subscribedSingleValueBuilder(
+        '/contacts/${_contactPathSegment(contactId)}',
         builder: builder, deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });

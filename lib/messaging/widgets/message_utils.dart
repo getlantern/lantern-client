@@ -5,10 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-String sanitizeContactName(Contact contact) {
-  return contact.displayName.isEmpty
-      ? 'Unnamed Contact'.i18n
-      : contact.displayName.toString();
+String sanitizeContactName(String displayName) {
+  return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
 }
 
 Map<String, List<dynamic>> constructReactionsMap(

@@ -9,7 +9,6 @@ import '../message_utils.dart';
 //
 ListView groupedContactListGenerator({
   Map<String, List<PathAndValue<Contact>>>? groupedSortedList,
-  String? separatorText = '',
   Function? leadingCallback,
   Function? trailingCallback,
   Function? onTapCallback,
@@ -26,17 +25,17 @@ ListView groupedContactListGenerator({
               Padding(
                 padding:
                     const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(separatorText! + key.toUpperCase()),
+                child: Text(key[0].toUpperCase()),
               ),
             ],
           ),
           Divider(height: 1.0, color: grey3),
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map((contact) => GenericListItem(
-                  contact: contact,
+                  contact: contact.value,
                   index: index,
                   leading: leadingCallback!(contact.value),
-                  title: sanitizeContactName(contact.value),
+                  title: sanitizeContactName(contact.value.displayName),
                   trailing: trailingCallback != null
                       ? trailingCallback(index, contact.value)
                       : null,
