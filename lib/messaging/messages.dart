@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/generic_list_item.dart';
+import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -79,7 +79,7 @@ class Messages extends StatelessWidget {
                     var contact = contacts[index];
                     return Column(
                       children: [
-                        GenericListItem(
+                        ContactListItem(
                           contact: contact.value,
                           index: index,
                           leading: CircleAvatar(

@@ -5,8 +5,8 @@ import 'package:lantern/package_store.dart';
 * Generic widget that renders a row with a Contact avatar, a Contact name and a trailing widget. 
 * Used in displaying lists of messages, contacts and contact requests.
 */
-class GenericListItem extends StatelessWidget {
-  GenericListItem({
+class ContactListItem extends StatelessWidget {
+  ContactListItem({
     Key? key,
     required this.contact,
     required this.index,
