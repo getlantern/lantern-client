@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -90,7 +89,7 @@ class _IntroduceState extends State<Introduce> {
                             }),
                           )),
                 ),
-                (selectedContactIds.isNotEmpty)
+                (selectedContactIds.length >= 2)
                     ? Container(
                         color: grey1,
                         padding: const EdgeInsets.all(20.0),
@@ -99,7 +98,7 @@ class _IntroduceState extends State<Introduce> {
                             children: [
                               Button(
                                 width: 200,
-                                text: 'Send Invitations'.i18n.toUpperCase(),
+                                text: 'Send Introductions'.i18n.toUpperCase(),
                                 onPressed: () async {
                                   await model.introduce(selectedContactIds);
                                   showSnackbar(

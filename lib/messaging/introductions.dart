@@ -1,4 +1,3 @@
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/generic_list_item.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
