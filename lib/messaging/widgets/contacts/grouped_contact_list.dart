@@ -1,7 +1,7 @@
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import '../generic_list_item.dart';
+import '../contact_list_item.dart';
 import '../message_utils.dart';
 
 /*
@@ -31,7 +31,7 @@ ListView groupedContactListGenerator({
           ),
           Divider(height: 1.0, color: grey3),
           if (itemsPerKey.isNotEmpty)
-            ...itemsPerKey.map((contact) => GenericListItem(
+            ...itemsPerKey.map((contact) => ContactListItem(
                   contact: contact.value,
                   index: index,
                   leading: leadingCallback!(contact.value),
