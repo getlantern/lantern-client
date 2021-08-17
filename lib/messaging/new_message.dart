@@ -70,13 +70,8 @@ class NewMessage extends StatelessWidget {
                     title: Text(
                         contacts.isNotEmpty
                             ? 'Recent contacts'.i18n.toUpperCase()
-                            : 'No contacts have been added yet'
-                                .i18n
-                                .toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                        )));
+                            : '',
+                        style: tsEmptyContactState));
               }),
             ),
             Flexible(child: model.contacts(builder: (context,
@@ -106,7 +101,10 @@ class NewMessage extends StatelessWidget {
                           ),
                       onTapCallback: (Contact contact) async => await context
                           .pushRoute(Conversation(contact: contact)))
-                  : Container(); // rendering this instead of SizedBox() to avoid null dimension errors
+                  : Center(
+                      child: Text('No contacts yet.'.i18n,
+                          style:
+                              tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
             }))
           ]),
     );

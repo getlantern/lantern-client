@@ -24,7 +24,7 @@ class GenericListItem extends StatelessWidget {
   final String title;
   final Widget? subtitle;
   final Widget leading;
-  final Widget trailing;
+  final Widget? trailing;
   final void Function()? onTap;
 
   @override
