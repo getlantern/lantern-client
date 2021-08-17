@@ -40,7 +40,7 @@ class _IntroduceState extends State<Introduce> {
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (sortedContacts.isNotEmpty)
+                if (sortedContacts.length > 1)
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
@@ -50,7 +50,7 @@ class _IntroduceState extends State<Introduce> {
                         style: tsEmptyContactState),
                   ),
                 Expanded(
-                    child: (sortedContacts.isEmpty)
+                    child: (sortedContacts.length <= 1)
                         ? Container(
                             alignment: AlignmentDirectional.center,
                             padding: const EdgeInsets.symmetric(
@@ -58,6 +58,7 @@ class _IntroduceState extends State<Introduce> {
                             child: Text(
                                 'Once you have two or more contacts you will be able to create introductions.'
                                     .i18n,
+                                textAlign: TextAlign.center,
                                 style: tsBaseScreenBodyText),
                           )
                         : Column(

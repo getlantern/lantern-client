@@ -65,13 +65,11 @@ class NewMessage extends StatelessWidget {
             Container(
               child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                var contacts = _contacts.toList();
-                return ListTile(
-                    title: Text(
-                        contacts.isNotEmpty
-                            ? 'Recent contacts'.i18n.toUpperCase()
-                            : '',
-                        style: tsEmptyContactState));
+                return _contacts.toList().isNotEmpty
+                    ? ListTile(
+                        title: Text('Recent contacts'.i18n.toUpperCase(),
+                            style: tsEmptyContactState))
+                    : Container();
               }),
             ),
             Flexible(child: model.contacts(builder: (context,
@@ -101,8 +99,12 @@ class NewMessage extends StatelessWidget {
                           ),
                       onTapCallback: (Contact contact) async => await context
                           .pushRoute(Conversation(contact: contact)))
-                  : Center(
+                  : Container(
+                    alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 16.0),
                       child: Text('No contacts yet.'.i18n,
+                          textAlign: TextAlign.center,
                           style:
                               tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
             }))
