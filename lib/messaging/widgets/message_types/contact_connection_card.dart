@@ -61,45 +61,39 @@ class ContactConnectionCard extends StatelessWidget {
                               color: outbound
                                   ? outboundMsgColor
                                   : inboundMsgColor),
-                        IconButton(
-                          splashRadius: 20.0,
-                          icon: Icon(
-                              (msg.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? Icons.info_outline_rounded
-                                  : Icons.keyboard_arrow_right_outlined,
-                              size: (msg.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? 20.0
-                                  : 30.0,
-                              color: outbound
-                                  ? outboundMsgColor
-                                  : inboundMsgColor),
-                          onPressed: () async {
-                            if (msg.introduction.status ==
-                                IntroductionDetails_IntroductionStatus
-                                    .PENDING) {
-                              await _showOptions(
-                                context,
-                                introduction,
-                                model,
-                                contact,
-                              );
-                            }
-                            if (msg.introduction.status ==
-                                IntroductionDetails_IntroductionStatus
-                                    .ACCEPTED) {
-                              // TODO
-                              // await context
-                              //     .pushRoute(Conversation(contact: introductee));
-                            }
-                          },
-                        ),
+                        Icon(
+                            (msg.introduction.status ==
+                                    IntroductionDetails_IntroductionStatus
+                                        .PENDING)
+                                ? Icons.info_outline_rounded
+                                : Icons.keyboard_arrow_right_outlined,
+                            size: (msg.introduction.status ==
+                                    IntroductionDetails_IntroductionStatus
+                                        .PENDING)
+                                ? 20.0
+                                : 30.0,
+                            color:
+                                outbound ? outboundMsgColor : inboundMsgColor),
                       ],
                     ),
                   ),
+            onTap: () async {
+              if (msg.introduction.status ==
+                  IntroductionDetails_IntroductionStatus.PENDING) {
+                await _showOptions(
+                  context,
+                  introduction,
+                  model,
+                  contact,
+                );
+              }
+              if (msg.introduction.status ==
+                  IntroductionDetails_IntroductionStatus.ACCEPTED) {
+                // TODO
+                // await context
+                //     .pushRoute(Conversation(contact: introductee));
+              }
+            },
           ),
         ),
         Flex(
@@ -145,7 +139,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: Text('Accept'.i18n),
+                        title: Text('Accept'.i18n, style: tsAlertDialogTitle),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -160,6 +154,7 @@ class ContactConnectionCard extends StatelessWidget {
                                 icon: ImagePaths.alert_icon,
                                 buttonText: 'OK'.i18n);
                           } finally {
+                            await context.router.pop();
                             // TODO
                             // await context.pushRoute(
                             //     Conversation(contact: introductee));
