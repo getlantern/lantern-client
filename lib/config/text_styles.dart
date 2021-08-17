@@ -47,6 +47,12 @@ TextStyle tsMessageStatus(outbound) => TextStyle(
       fontSize: 10,
     );
 
+TextStyle tsEmptyContactState = const TextStyle(
+  color: Colors.black,
+  fontSize: 16,
+  height: 26 / 16,
+);
+
 TextStyle tsBaseScreenBodyText =
     const TextStyle(color: Colors.black, fontSize: 16, height: 23 / 16);
 
