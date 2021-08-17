@@ -17,6 +17,7 @@ class AddViaQR extends StatefulWidget {
 class _AddViaQRState extends State<AddViaQR> {
   final _qrKey = GlobalKey(debugLabel: 'QR');
 
+  late MessagingModel model;
   QRViewController? qrController;
 
   bool scanning = false;
@@ -74,8 +75,6 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scanning = false;
         });
-        // TODO: if the error was due to the contact already existing, show a
-        // appropriate message.
         showInfoDialog(context,
             title: 'Error'.i18n,
             des: 'Something went wrong while scanning the QR code'.i18n,
@@ -91,17 +90,20 @@ class _AddViaQRState extends State<AddViaQR> {
   void dispose() {
     subscription?.cancel();
     qrController?.dispose();
+    if (scannedContactId != null) {
+      // when exiting this screen, immediately delete any provisional contact
+      model.deleteProvisionalContact(scannedContactId!);
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
-    return buildBody(context, model);
+    model = context.watch<MessagingModel>();
+    return buildBody(context);
   }
 
-  Widget buildBody(BuildContext context, MessagingModel model) {
+  Widget buildBody(BuildContext context) {
     return model.me((BuildContext context, Contact me, Widget? child) {
       return fullScreenDialogLayout(Colors.black, Colors.white, context, [
         Flexible(
