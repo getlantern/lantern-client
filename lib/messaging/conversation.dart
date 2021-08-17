@@ -371,7 +371,6 @@ class _ConversationState extends State<Conversation>
   Widget _buildConversationSticker(Contact contact) =>
       model.introductionsToContact(builder: (context,
           Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
-        final noIntroductions = introductions.isEmpty;
         final isPendingIntroduction = !contact.hasReceivedMessage &&
             introductions
                 .toList()
@@ -379,9 +378,7 @@ class _ConversationState extends State<Conversation>
                     (intro) => intro.value.introduction.to == contact.contactId)
                 .isNotEmpty;
         return ConversationSticker(
-            contact: contact,
-            noIntroductions: noIntroductions,
-            isPendingIntroduction: noIntroductions || isPendingIntroduction);
+            contact: contact, isPendingIntroduction: isPendingIntroduction);
       });
 
   Widget _buildMessageBubbles(Contact contact) {
