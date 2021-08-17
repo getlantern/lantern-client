@@ -33,6 +33,7 @@ message Contact {
   int32 messagesDisappearAfterSeconds = 9; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
   int64 firstReceivedMessageTs = 10; // the timestamp of when the first message was received from this contact (excluding control messages)
   bool hasReceivedMessage = 11; // boolean indicating whether or not the contact has received any message (including control messages)
+  int64 mostRecentHelloTs = 12; // the timestamp of the most recent hello received from this Contact (used for bidirectional contact adding)
 }
 
 // A provisional direct contact that is not yet in the address book. If we receive a Hello from that
