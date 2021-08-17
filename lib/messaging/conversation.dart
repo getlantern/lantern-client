@@ -9,9 +9,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
-import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/conversation_components/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
@@ -370,40 +371,15 @@ class _ConversationState extends State<Conversation>
   Widget _buildConversationSticker(Contact contact) =>
       model.introductionsToContact(builder: (context,
           Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
+        final noIntroductions = introductions.isEmpty;
         final isPendingIntroduction = introductions
             .toList()
             .where((intro) => intro.value.contactId == contact.contactId)
             .isNotEmpty;
-        return ListTile(
-          dense: true,
-          minLeadingWidth: 18,
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: isPendingIntroduction
-                ? contact.messagesDisappearAfterSeconds > 0
-                    ? const Icon(Icons.timer, size: 18, color: Colors.black)
-                    : const Icon(Icons.lock_clock,
-                        size: 18, color: Colors.black)
-                : const Icon(Icons.more_horiz_rounded,
-                    size: 18, color: Colors.black),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: isPendingIntroduction
-                ? contact.messagesDisappearAfterSeconds > 0
-                    ? Text(
-                        'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-                        style: txConversationSticker,
-                        overflow: TextOverflow.ellipsis)
-                    : Text('New messages do not disappear',
-                        style: txConversationSticker,
-                        overflow: TextOverflow.ellipsis)
-                : Text(
-                    'Waiting for ${contact.displayName}. They will receive your messages once they accept the introduction.'
-                        .i18n,
-                    style: txConversationSticker),
-          ),
-        );
+        return ConversationSticker(
+            contact: contact,
+            noIntroductions: noIntroductions,
+            isPendingIntroduction: noIntroductions || isPendingIntroduction);
       });
 
   Widget _buildMessageBubbles() {
