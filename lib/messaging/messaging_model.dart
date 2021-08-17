@@ -249,7 +249,7 @@ class MessagingModel extends Model {
   }
 
   ValueNotifier<Contact?> contactNotifier(String contactId) {
-    return singleValueNotifier('/contacts/d/contactId', null,
+    return singleValueNotifier('/contacts/d/$contactId', null,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
