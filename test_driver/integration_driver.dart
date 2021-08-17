@@ -9,20 +9,20 @@ Future<void> main() async {
   /// we need to execute a custom command with android adb in order to grant
   /// permissions to the app.
 
-  /// Please change the following line to your own adb path.
-  final adbPath = '/Users/crdzbird/Library/Android/sdk/platform-tools/adb';
+  final envVars = Platform.environment;
+  final adbPath = '${envVars['ANDROID_HOME']}/platform-tools/adb';
   await Process.run(adbPath, [
     'shell',
     'pm',
     'grant',
-    'org.getlantern.lantern.LanternApp',
+    'org.getlantern.lantern',
     'android.permission.READ_EXTERNAL_STORAGE'
   ]);
   await Process.run(adbPath, [
     'shell',
     'pm',
     'grant',
-    'org.getlantern.lantern.LanternApp',
+    'org.getlantern.lantern',
     'android.permission.RECORD_AUDIO'
   ]);
   await integrationDriver();
