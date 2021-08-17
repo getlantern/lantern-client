@@ -56,11 +56,12 @@ const Contact$json = const {
     const {'1': 'messagesDisappearAfterSeconds', '3': 9, '4': 1, '5': 5, '10': 'messagesDisappearAfterSeconds'},
     const {'1': 'firstReceivedMessageTs', '3': 10, '4': 1, '5': 3, '10': 'firstReceivedMessageTs'},
     const {'1': 'hasReceivedMessage', '3': 11, '4': 1, '5': 8, '10': 'hasReceivedMessage'},
+    const {'1': 'mostRecentHelloTs', '3': 12, '4': 1, '5': 3, '10': 'mostRecentHelloTs'},
   ],
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIcCgljcmVhdGVkVHMYBCABKANSCWNyZWF0ZWRUcxIwChNtb3N0UmVjZW50TWVzc2FnZVRzGAUgASgDUhNtb3N0UmVjZW50TWVzc2FnZVRzElcKGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uGAYgASgOMhcubW9kZWwuTWVzc2FnZURpcmVjdGlvblIabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24SNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSQgocbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRgIIAEoCVIcbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRJECh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxgJIAEoBVIdbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHMSNgoWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxgKIAEoA1IWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxIuChJoYXNSZWNlaXZlZE1lc3NhZ2UYCyABKAhSEmhhc1JlY2VpdmVkTWVzc2FnZQ==');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIcCgljcmVhdGVkVHMYBCABKANSCWNyZWF0ZWRUcxIwChNtb3N0UmVjZW50TWVzc2FnZVRzGAUgASgDUhNtb3N0UmVjZW50TWVzc2FnZVRzElcKGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uGAYgASgOMhcubW9kZWwuTWVzc2FnZURpcmVjdGlvblIabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24SNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSQgocbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRgIIAEoCVIcbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRJECh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxgJIAEoBVIdbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHMSNgoWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxgKIAEoA1IWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxIuChJoYXNSZWNlaXZlZE1lc3NhZ2UYCyABKAhSEmhhc1JlY2VpdmVkTWVzc2FnZRIsChFtb3N0UmVjZW50SGVsbG9UcxgMIAEoA1IRbW9zdFJlY2VudEhlbGxvVHM=');
 @$core.Deprecated('Use provisionalContactDescriptor instead')
 const ProvisionalContact$json = const {
   '1': 'ProvisionalContact',

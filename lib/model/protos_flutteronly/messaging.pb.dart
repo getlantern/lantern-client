@@ -88,6 +88,7 @@ class Contact extends $pb.GeneratedMessage {
     ..a<$core.int>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messagesDisappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'messagesDisappearAfterSeconds')
     ..aInt64(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstReceivedMessageTs', protoName: 'firstReceivedMessageTs')
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasReceivedMessage', protoName: 'hasReceivedMessage')
+    ..aInt64(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentHelloTs', protoName: 'mostRecentHelloTs')
     ..hasRequiredFields = false
   ;
 
@@ -104,6 +105,7 @@ class Contact extends $pb.GeneratedMessage {
     $core.int? messagesDisappearAfterSeconds,
     $fixnum.Int64? firstReceivedMessageTs,
     $core.bool? hasReceivedMessage,
+    $fixnum.Int64? mostRecentHelloTs,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -138,6 +140,9 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (hasReceivedMessage != null) {
       _result.hasReceivedMessage = hasReceivedMessage;
+    }
+    if (mostRecentHelloTs != null) {
+      _result.mostRecentHelloTs = mostRecentHelloTs;
     }
     return _result;
   }
@@ -256,6 +261,15 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasHasReceivedMessage() => $_has(10);
   @$pb.TagNumber(11)
   void clearHasReceivedMessage() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $fixnum.Int64 get mostRecentHelloTs => $_getI64(11);
+  @$pb.TagNumber(12)
+  set mostRecentHelloTs($fixnum.Int64 v) { $_setInt64(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasMostRecentHelloTs() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearMostRecentHelloTs() => clearField(12);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {

@@ -59,23 +59,22 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scannedContactId = contactId;
         });
-        if (await model.addProvisionalContact(contactId)) {
-          // we successfully added a provisional contact, listen for a Contact
-          var contactNotifier = model.contactNotifier(contactId);
-          late void Function() listener;
-          listener = () async {
-            var updatedContact = contactNotifier.value;
-            if (updatedContact != null) {
-              contactNotifier.removeListener(listener);
-              Navigator.of(context).pop(); // close the full screen dialog
-              await context.openConversation(updatedContact);
-            }
-          };
-          contactNotifier.addListener(listener);
-          // immediately invoke listener in case the contactNotifier already has
-          // a contact.
-          listener();
-        }
+        var mostRecentHelloTs = await model.addProvisionalContact(contactId);
+        var contactNotifier = model.contactNotifier(contactId);
+        late void Function() listener;
+        listener = () async {
+          var updatedContact = contactNotifier.value;
+          if (updatedContact != null &&
+              updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
+            contactNotifier.removeListener(listener);
+            Navigator.of(context).pop(); // close the full screen dialog
+            await context.openConversation(updatedContact);
+          }
+        };
+        contactNotifier.addListener(listener);
+        // immediately invoke listener in case the contactNotifier already has
+        // an up-to-date contact.
+        listener();
       } catch (e) {
         setState(() {
           scanning = false;
