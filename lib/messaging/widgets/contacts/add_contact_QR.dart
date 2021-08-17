@@ -70,6 +70,7 @@ class _AddViaQRState extends State<AddViaQR> {
           }
         };
         contactNotifier.addListener(listener);
+        listener();
         await model.addProvisionalContact(contactId);
       } catch (e) {
         setState(() {
