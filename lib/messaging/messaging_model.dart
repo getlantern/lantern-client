@@ -30,9 +30,11 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> addProvisionalContact(String contactId) {
+  Future<bool> addProvisionalContact(String contactId) {
     return methodChannel.invokeMethod(
-        'addProvisionalContact', <String, dynamic>{'contactId': contactId});
+        'addProvisionalContact', <String, dynamic>{
+      'contactId': contactId
+    }).then((value) => value as bool);
   }
 
   Future<void> deleteProvisionalContact(String contactId) {

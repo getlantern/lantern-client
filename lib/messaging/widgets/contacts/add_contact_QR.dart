@@ -59,31 +59,23 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scannedContactId = contactId;
         });
-        var contactNotifier = model.contactNotifier(contactId);
-        late void Function() listener;
-        listener = () async {
-          var updatedContact = contactNotifier.value;
-          if (updatedContact != null) {
-            contactNotifier.removeListener(listener);
-
-            // TODO: There's a weird edge case that we don't handle very well.
-            // Let's say that A and B were already connected, but B deletes A.
-            // If A and B enter the scanning flow, when B scans A's QR code,
-            // they successfully connect again and B's UI immediately advances
-            // to the conversation view. A remains stuck on the QR code screen
-            // but can manually close it. That's not perfect, but workable.
-            // However, if A scans B's QR code, A's UI immediately advances to
-            // the conversation screen, but B is stuck because it still needs to
-            // scan A's QR code.
-            //
-            // If both A and B deleted each other, this is not an issue.
-            Navigator.of(context).pop(); // close the full screen dialog
-            await context.openConversation(updatedContact);
-          }
-        };
-        contactNotifier.addListener(listener);
-        listener();
-        await model.addProvisionalContact(contactId);
+        if (await model.addProvisionalContact(contactId)) {
+          // we successfully added a provisional contact, listen for a Contact
+          var contactNotifier = model.contactNotifier(contactId);
+          late void Function() listener;
+          listener = () async {
+            var updatedContact = contactNotifier.value;
+            if (updatedContact != null) {
+              contactNotifier.removeListener(listener);
+              Navigator.of(context).pop(); // close the full screen dialog
+              await context.openConversation(updatedContact);
+            }
+          };
+          contactNotifier.addListener(listener);
+          // immediately invoke listener in case the contactNotifier already has
+          // a contact.
+          listener();
+        }
       } catch (e) {
         setState(() {
           scanning = false;
