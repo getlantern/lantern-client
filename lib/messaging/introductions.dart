@@ -1,6 +1,6 @@
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/generic_list_item.dart';
+import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -67,7 +67,7 @@ class Introductions extends StatelessWidget {
                                 ),
                                 Divider(height: 1.0, color: grey3),
                                 ...introductionsPerIntroductor.map((intro) =>
-                                    GenericListItem(
+                                    ContactListItem(
                                         contact: introductor,
                                         index: index,
                                         title: sanitizeContactName(intro
