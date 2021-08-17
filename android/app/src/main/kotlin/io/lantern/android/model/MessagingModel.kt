@@ -32,9 +32,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
             "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
-                call.argument("identityKey")!!,
-                call.argument("displayName")!!
+            "addProvisionalContact" -> messaging.addProvisionalContact(
+                call.argument("contactId")!!
+            )
+            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+                call.argument("identityKey")!!
             )
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,

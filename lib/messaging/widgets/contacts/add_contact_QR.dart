@@ -20,7 +20,8 @@ class _AddViaQRState extends State<AddViaQR> {
   QRViewController? qrController;
 
   bool scanning = false;
-  Contact? scannedContact;
+  String? scannedContactId;
+  StreamSubscription<Barcode>? subscription;
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -47,47 +48,40 @@ class _AddViaQRState extends State<AddViaQR> {
     setState(() {
       scanning = true;
     });
-    late StreamSubscription<Barcode>? subscription;
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        if (scannedContact != null) {
+        if (scannedContactId != null) {
           // we've already scanned the contact, don't bother processing again
           return;
         }
-        var parts = scanData.code.split('\|');
-        var contact = Contact.create();
-        contact.contactId = ContactId.create();
-        contact.contactId.type = ContactType.DIRECT;
-        contact.contactId.id = parts[0];
-        contact.displayName = parts[1];
+        final contactId = scanData.code;
         setState(() {
-          scannedContact = contact;
+          scannedContactId = contactId;
         });
-        var contactNotifier = model.contactNotifier(contact);
+        var contactNotifier = model.contactNotifier(contactId);
         late void Function() listener;
         listener = () async {
           var updatedContact = contactNotifier.value;
-          if (updatedContact != null &&
-              updatedContact.firstReceivedMessageTs > 0) {
+          if (updatedContact != null) {
             contactNotifier.removeListener(listener);
             Navigator.of(context).pop(); // close the full screen dialog
             await context.openConversation(updatedContact);
           }
         };
         contactNotifier.addListener(listener);
-        await model.addOrUpdateDirectContact(
-            contact.contactId.id, contact.displayName);
+        await model.addProvisionalContact(contactId);
       } catch (e) {
         setState(() {
           scanning = false;
         });
+        // TODO: if the error was due to the contact already existing, show a
+        // appropriate message.
         showInfoDialog(context,
             title: 'Error'.i18n,
             des: 'Something went wrong while scanning the QR code'.i18n,
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       } finally {
-        await subscription?.cancel();
         await qrController?.pauseCamera();
       }
     });
@@ -95,6 +89,7 @@ class _AddViaQRState extends State<AddViaQR> {
 
   @override
   void dispose() {
+    subscription?.cancel();
     qrController?.dispose();
     super.dispose();
   }
@@ -107,16 +102,6 @@ class _AddViaQRState extends State<AddViaQR> {
   }
 
   Widget buildBody(BuildContext context, MessagingModel model) {
-    if (scannedContact == null) {
-      return doBuildBody(context, model, null);
-    }
-
-    return model.singleContact(context, scannedContact!,
-        (context, contact, child) => doBuildBody(context, model, contact));
-  }
-
-  Widget doBuildBody(
-      BuildContext context, MessagingModel model, Contact? contact) {
     return model.me((BuildContext context, Contact me, Widget? child) {
       return fullScreenDialogLayout(Colors.black, Colors.white, context, [
         Flexible(
@@ -167,7 +152,7 @@ class _AddViaQRState extends State<AddViaQR> {
                   ),
                 ),
                 child: QrImage(
-                  data: '${me.contactId.id}|${me.displayName}',
+                  data: me.contactId.id,
                   errorCorrectionLevel: QrErrorCorrectLevel.H,
                 ),
               ),
@@ -189,7 +174,7 @@ class _AddViaQRState extends State<AddViaQR> {
                         _onQRViewCreated(controller, model),
                   ),
                 ),
-                if (contact != null)
+                if (scannedContactId != null)
                   const CustomAssetImage(
                       path: ImagePaths.check_grey, size: 200),
               ],
