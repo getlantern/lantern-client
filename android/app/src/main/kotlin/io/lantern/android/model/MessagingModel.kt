@@ -36,7 +36,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 call.argument("contactId")!!
             )
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
-                call.argument("identityKey")!!
+                call.argument("contactId")!!
             )
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
