@@ -31,7 +31,7 @@ class _IntroduceState extends State<Introduce> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Text(
-              'Select two or more contacts to introduce.  They will be sent invitations to start messaging each other. '
+              'Select two or more contacts to introduce. They will be sent introductions to start messaging each other. '
                   .i18n,
               style: tsBaseScreenBodyText),
         ),

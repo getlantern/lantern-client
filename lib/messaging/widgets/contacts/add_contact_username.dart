@@ -1,5 +1,4 @@
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -21,8 +20,6 @@ class _AddViaUsernameState extends State<AddViaUsername> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
     return fullScreenDialogLayout(Colors.white, Colors.black, context, [
       Form(
         key: _formKey,
