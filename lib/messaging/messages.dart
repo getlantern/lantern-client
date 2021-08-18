@@ -96,8 +96,8 @@ class Messages extends StatelessWidget {
                           subtitle: Text(
                               "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
                               overflow: TextOverflow.ellipsis),
-                          onTap: () async => await context
-                              .pushRoute(Conversation(contact: contact.value)),
+                          onTap: () async => await context.pushRoute(
+                              Conversation(contactId: contact.value.contactId)),
                           trailing: Text(contact.value.mostRecentMessageTs
                               .toInt()
                               .humanizeDate()

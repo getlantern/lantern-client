@@ -1,3 +1,4 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -10,11 +11,13 @@ import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/introduction_extension.dart';
 import 'package:lantern/utils/stored_message_extension.dart';
+import 'package:lantern/core/router/router_extensions.dart';
 
 class Introductions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
+
     return BaseScreen(
         title: 'Introductions'.i18n,
         body: Column(
@@ -202,7 +205,6 @@ class Introductions extends StatelessWidget {
                                                           ImagePaths.alert_icon,
                                                       buttonText: 'OK'.i18n);
                                                 } finally {
-                                                  // TODO upon Accept the intro does not get removed
                                                   showSnackbar(
                                                       context: context,
                                                       content: Row(
@@ -235,10 +237,14 @@ class Introductions extends StatelessWidget {
                                                         label: 'START CHAT'
                                                             .toUpperCase()
                                                             .i18n,
-                                                        onPressed: () {
-                                                          // TODO uncomment after we merge #314
-                                                          // await context
-                                                          //     .pushRoute(Conversation(contact: intro.value.introduction.to));
+                                                        onPressed: () async {
+                                                          // TODO
+                                                          await context.pushRoute(
+                                                              Conversation(
+                                                                  contactId: intro
+                                                                      .value
+                                                                      .introduction
+                                                                      .to));
                                                         },
                                                       ));
                                                 }

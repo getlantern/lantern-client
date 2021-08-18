@@ -97,10 +97,11 @@ class NewMessage extends StatelessWidget {
                                     .toUpperCase(),
                                 style: const TextStyle(color: Colors.white)),
                           ),
-                      onTapCallback: (Contact contact) async => await context
-                          .pushRoute(Conversation(contact: contact)))
+                      onTapCallback: (Contact contact) async =>
+                          await context.pushRoute(
+                              Conversation(contactId: contact.contactId)))
                   : Container(
-                    alignment: AlignmentDirectional.center,
+                      alignment: AlignmentDirectional.center,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24.0, vertical: 16.0),
                       child: Text('No contacts yet.'.i18n,
