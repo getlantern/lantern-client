@@ -119,9 +119,23 @@ class _IntroduceState extends State<Introduce> {
                                                   await model.introduce(
                                                       selectedContactIds);
                                                   showSnackbar(
-                                                      context,
-                                                      'Introductions Sent!'
-                                                          .i18n);
+                                                    context: context,
+                                                    content: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Expanded(
+                                                            child: Text(
+                                                          'Introductions Sent!'
+                                                              .i18n,
+                                                          style: txSnackBarText,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        )),
+                                                      ],
+                                                    ),
+                                                  );
                                                   await Future.delayed(
                                                     const Duration(
                                                         milliseconds: 1000),
