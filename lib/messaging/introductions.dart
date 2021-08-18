@@ -184,15 +184,15 @@ class Introductions extends StatelessWidget {
                                               onPressed: () async {
                                                 try {
                                                   // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                                  // await model
-                                                  //     .acceptIntroduction(
-                                                  //         introductor
-                                                  //             .contactId.id,
-                                                  //         intro
-                                                  //             .value
-                                                  //             .introduction
-                                                  //             .to
-                                                  //             .id);
+                                                  await model
+                                                      .acceptIntroduction(
+                                                          introductor
+                                                              .contactId.id,
+                                                          intro
+                                                              .value
+                                                              .introduction
+                                                              .to
+                                                              .id);
                                                 } catch (e) {
                                                   showInfoDialog(context,
                                                       title: 'Error'.i18n,
