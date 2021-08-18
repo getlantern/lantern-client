@@ -153,22 +153,16 @@ bool determineDeletionStatus(StoredMessage msg) {
   return msg.remotelyDeletedAt != 0; // is 0 if message hasn't been deleted
 }
 
-void showSnackbar(BuildContext context, String text) {
+void showSnackbar(
+    {required BuildContext context,
+    required Widget content,
+    Duration duration = const Duration(milliseconds: 1000),
+    SnackBarAction? action}) {
   final snackBar = SnackBar(
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // const Icon(Icons.check_circle, color: Colors.white),
-        Expanded(
-            child: Text(
-          text,
-          style: txSnackBarText,
-          textAlign: TextAlign.left,
-        )),
-      ],
-    ),
+    content: content,
+    action: action,
     backgroundColor: Colors.black,
-    duration: const Duration(milliseconds: 1000),
+    duration: duration,
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
     behavior: SnackBarBehavior.floating,
     elevation: 1,

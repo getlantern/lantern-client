@@ -37,7 +37,6 @@ class Introductions extends StatelessWidget {
                 final groupedIntroductions = introductions
                     .getPending()
                     .groupBy((intro) => intro.value.contactId);
-                // if we want to be even more economical we can mod GroupedListGenerator to accept Map<String, List<PathAndValue<StoredMessage>>>? as well
                 return ListView.builder(
                   itemCount: groupedIntroductions.length,
                   itemBuilder: (context, index) {
@@ -167,8 +166,13 @@ class Introductions extends StatelessWidget {
                                                           buttonText:
                                                               'OK'.i18n);
                                                     } finally {
-                                                      await context.router
-                                                          .pop();
+                                                      // pop router if we just went through all the requests
+                                                      if (introductions
+                                                          .toList()
+                                                          .isEmpty) {
+                                                        await context.router
+                                                            .pop();
+                                                      }
                                                     }
                                                   }),
                                               child: Text(
@@ -180,15 +184,15 @@ class Introductions extends StatelessWidget {
                                               onPressed: () async {
                                                 try {
                                                   // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                                  await model
-                                                      .acceptIntroduction(
-                                                          introductor
-                                                              .contactId.id,
-                                                          intro
-                                                              .value
-                                                              .introduction
-                                                              .to
-                                                              .id);
+                                                  // await model
+                                                  //     .acceptIntroduction(
+                                                  //         introductor
+                                                  //             .contactId.id,
+                                                  //         intro
+                                                  //             .value
+                                                  //             .introduction
+                                                  //             .to
+                                                  //             .id);
                                                 } catch (e) {
                                                   showInfoDialog(context,
                                                       title: 'Error'.i18n,
@@ -199,7 +203,45 @@ class Introductions extends StatelessWidget {
                                                           ImagePaths.alert_icon,
                                                       buttonText: 'OK'.i18n);
                                                 } finally {
-                                                  await context.router.pop();
+                                                  // TODO upon Accept the intro does not get removed
+                                                  showSnackbar(
+                                                      context: context,
+                                                      content: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      bottom:
+                                                                          50.0),
+                                                              child: Text(
+                                                                'Introduction to ${intro.value.introduction.displayName} approved!'
+                                                                    .i18n,
+                                                                style:
+                                                                    txSnackBarText,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      duration: const Duration(
+                                                          milliseconds: 2000),
+                                                      action: SnackBarAction(
+                                                        textColor:
+                                                            secondaryPink,
+                                                        label: 'START CHAT'
+                                                            .toUpperCase()
+                                                            .i18n,
+                                                        onPressed: () {
+                                                          // TODO uncomment after we merge #314
+                                                          // await context
+                                                          //     .pushRoute(Conversation(contact: intro.value.introduction.to));
+                                                        },
+                                                      ));
                                                 }
                                               },
                                               child: Text(
