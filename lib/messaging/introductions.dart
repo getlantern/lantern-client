@@ -224,21 +224,24 @@ class Introductions extends StatelessWidget {
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
                                                                         .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
                                                                 children: [
-                                                                  Container(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          bottom:
-                                                                              50.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'Introduction to ${value.introduction.displayName} approved!'
-                                                                            .i18n,
-                                                                        style:
-                                                                            txSnackBarText,
-                                                                        textAlign:
-                                                                            TextAlign.left,
-                                                                      )),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      'Introduction to ${value.introduction.displayName} approved approved approved approved approved!'
+                                                                          .i18n,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .visible,
+                                                                      style:
+                                                                          txSnackBarText,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .left,
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
                                                               duration:
