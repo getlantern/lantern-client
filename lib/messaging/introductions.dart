@@ -238,7 +238,6 @@ class Introductions extends StatelessWidget {
                                                             .toUpperCase()
                                                             .i18n,
                                                         onPressed: () async {
-                                                          // TODO
                                                           await context.pushRoute(
                                                               Conversation(
                                                                   contactId: intro
