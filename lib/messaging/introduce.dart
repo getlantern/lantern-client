@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
