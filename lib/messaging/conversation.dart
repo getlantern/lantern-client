@@ -32,9 +32,9 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 class Conversation extends StatefulWidget {
-  final Contact _contact;
+  final ContactId _contactId;
 
-  Conversation(this._contact) : super();
+  Conversation(this._contactId) : super();
 
   @override
   _ConversationState createState() => _ConversationState();
@@ -57,7 +57,6 @@ class _ConversationState extends State<Conversation>
   Uint8List? _recording;
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
-  var displayName = '';
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
@@ -76,7 +75,7 @@ class _ConversationState extends State<Conversation>
         break;
       case AppLifecycleState.resumed:
       default:
-        model.setCurrentConversationContact(widget._contact.contactId.id);
+        model.setCurrentConversationContact(widget._contactId.id);
         break;
     }
   }
@@ -92,9 +91,6 @@ class _ConversationState extends State<Conversation>
         () => _keyboardState = !visible,
       ),
     );
-    displayName = widget._contact.displayName.isEmpty
-        ? widget._contact.contactId.id
-        : widget._contact.displayName;
     BackButtonInterceptor.add(_interceptBackButton);
     WidgetsBinding.instance!.addObserver(this);
   }
@@ -130,7 +126,7 @@ class _ConversationState extends State<Conversation>
     if (attachments!.isNotEmpty) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
-        widget._contact.contactId.id,
+        widget._contactId.id,
         text: text,
         attachments: attachments,
         replyToId: replyToId,
@@ -273,14 +269,17 @@ class _ConversationState extends State<Conversation>
     (context.router.currentChild!.name == router_gr.Conversation.name &&
             context.router.routeData.router.current.name ==
                 router_gr.MessagesRouter.name)
-        ? unawaited(
-            model.setCurrentConversationContact(widget._contact.contactId.id))
+        ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
     return WillPopScope(
       onWillPop: () => Future<bool>.value(_keyboardState),
-      child: BaseScreen(
+      child: model.singleContactById(context, widget._contactId,
+          (context, contact, child) {
+        return BaseScreen(
           // Conversation title (contact name)
-          title: displayName,
+          title: contact.displayName.isEmpty
+              ? contact.contactId.id
+              : contact.displayName,
           centerTitle: false,
           actions: [
             Flex(
@@ -294,13 +293,12 @@ class _ConversationState extends State<Conversation>
                   onPressed: () {},
                 ),
                 IconButton(
-                    onPressed: () {},
-                    icon: DisappearingTimerAction(widget._contact)),
+                    onPressed: () {}, icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
-                  onPressed: () => displayConversationOptions(
-                      model, context, widget._contact),
+                  onPressed: () =>
+                      displayConversationOptions(model, context, contact),
                 )
               ],
             )
@@ -313,18 +311,18 @@ class _ConversationState extends State<Conversation>
                   color: grey1,
                   child: Container(
                     width: 70.w,
-                    child: _buildConversationSticker(widget._contact),
+                    child: _buildConversationSticker(contact),
                   ),
                 ),
                 Flexible(
-                  child: _buildMessageBubbles(),
+                  child: _buildMessageBubbles(contact),
                 ),
                 // Reply container
                 if (_isReplying)
                   ReplyPreview(
                     quotedMessage: _quotedMessage,
                     model: model,
-                    contact: widget._contact,
+                    contact: contact,
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
@@ -364,26 +362,27 @@ class _ConversationState extends State<Conversation>
                 ),
               ],
             ),
-          ])),
+          ]),
+        );
+      }),
     );
   }
 
   Widget _buildConversationSticker(Contact contact) =>
       model.introductionsToContact(builder: (context,
           Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
-        final noIntroductions = introductions.isEmpty;
-        final isPendingIntroduction = introductions
-            .toList()
-            .where((intro) => intro.value.contactId == contact.contactId)
-            .isNotEmpty;
+        final isPendingIntroduction = !contact.hasReceivedMessage &&
+            introductions
+                .toList()
+                .where(
+                    (intro) => intro.value.introduction.to == contact.contactId)
+                .isNotEmpty;
         return ConversationSticker(
-            contact: contact,
-            noIntroductions: noIntroductions,
-            isPendingIntroduction: noIntroductions || isPendingIntroduction);
+            contact: contact, isPendingIntroduction: isPendingIntroduction);
       });
 
-  Widget _buildMessageBubbles() {
-    return model.contactMessages(widget._contact, builder: (context,
+  Widget _buildMessageBubbles(Contact contact) {
+    return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       return messageRecords.isEmpty
@@ -401,7 +400,7 @@ class _ConversationState extends State<Conversation>
                   nextMessage: index == 0
                       ? null
                       : messageRecords.elementAt(index - 1).value,
-                  contact: widget._contact,
+                  contact: contact,
                   onEmojiTap: (showEmoji, messageSelected) => setState(() {
                     _emojiShowing = true;
                     _customEmojiResponse = true;

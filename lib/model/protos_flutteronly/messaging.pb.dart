@@ -87,6 +87,8 @@ class Contact extends $pb.GeneratedMessage {
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentAttachmentMimeType', protoName: 'mostRecentAttachmentMimeType')
     ..a<$core.int>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'messagesDisappearAfterSeconds', $pb.PbFieldType.O3, protoName: 'messagesDisappearAfterSeconds')
     ..aInt64(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstReceivedMessageTs', protoName: 'firstReceivedMessageTs')
+    ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasReceivedMessage', protoName: 'hasReceivedMessage')
+    ..aInt64(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentHelloTs', protoName: 'mostRecentHelloTs')
     ..hasRequiredFields = false
   ;
 
@@ -102,6 +104,8 @@ class Contact extends $pb.GeneratedMessage {
     $core.String? mostRecentAttachmentMimeType,
     $core.int? messagesDisappearAfterSeconds,
     $fixnum.Int64? firstReceivedMessageTs,
+    $core.bool? hasReceivedMessage,
+    $fixnum.Int64? mostRecentHelloTs,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -133,6 +137,12 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (firstReceivedMessageTs != null) {
       _result.firstReceivedMessageTs = firstReceivedMessageTs;
+    }
+    if (hasReceivedMessage != null) {
+      _result.hasReceivedMessage = hasReceivedMessage;
+    }
+    if (mostRecentHelloTs != null) {
+      _result.mostRecentHelloTs = mostRecentHelloTs;
     }
     return _result;
   }
@@ -242,6 +252,85 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasFirstReceivedMessageTs() => $_has(9);
   @$pb.TagNumber(10)
   void clearFirstReceivedMessageTs() => clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.bool get hasReceivedMessage => $_getBF(10);
+  @$pb.TagNumber(11)
+  set hasReceivedMessage($core.bool v) { $_setBool(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasHasReceivedMessage() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearHasReceivedMessage() => clearField(11);
+
+  @$pb.TagNumber(12)
+  $fixnum.Int64 get mostRecentHelloTs => $_getI64(11);
+  @$pb.TagNumber(12)
+  set mostRecentHelloTs($fixnum.Int64 v) { $_setInt64(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasMostRecentHelloTs() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearMostRecentHelloTs() => clearField(12);
+}
+
+class ProvisionalContact extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ProvisionalContact', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId')
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'expiresAt', protoName: 'expiresAt')
+    ..hasRequiredFields = false
+  ;
+
+  ProvisionalContact._() : super();
+  factory ProvisionalContact({
+    $core.String? contactId,
+    $fixnum.Int64? expiresAt,
+  }) {
+    final _result = create();
+    if (contactId != null) {
+      _result.contactId = contactId;
+    }
+    if (expiresAt != null) {
+      _result.expiresAt = expiresAt;
+    }
+    return _result;
+  }
+  factory ProvisionalContact.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ProvisionalContact.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ProvisionalContact clone() => ProvisionalContact()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ProvisionalContact copyWith(void Function(ProvisionalContact) updates) => super.copyWith((message) => updates(message as ProvisionalContact)) as ProvisionalContact; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ProvisionalContact create() => ProvisionalContact._();
+  ProvisionalContact createEmptyInstance() => create();
+  static $pb.PbList<ProvisionalContact> createRepeated() => $pb.PbList<ProvisionalContact>();
+  @$core.pragma('dart2js:noInline')
+  static ProvisionalContact getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProvisionalContact>(create);
+  static ProvisionalContact? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get contactId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set contactId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasContactId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearContactId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get expiresAt => $_getI64(1);
+  @$pb.TagNumber(2)
+  set expiresAt($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasExpiresAt() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearExpiresAt() => clearField(2);
 }
 
 class Attachment extends $pb.GeneratedMessage {
@@ -1215,11 +1304,73 @@ class DisappearSettings extends $pb.GeneratedMessage {
   void clearMessagesDisappearAfterSeconds() => clearField(1);
 }
 
+class Hello extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Hello', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'final')
+    ..hasRequiredFields = false
+  ;
+
+  Hello._() : super();
+  factory Hello({
+    $core.String? displayName,
+    $core.bool? final_2,
+  }) {
+    final _result = create();
+    if (displayName != null) {
+      _result.displayName = displayName;
+    }
+    if (final_2 != null) {
+      _result.final_2 = final_2;
+    }
+    return _result;
+  }
+  factory Hello.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Hello.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Hello clone() => Hello()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Hello copyWith(void Function(Hello) updates) => super.copyWith((message) => updates(message as Hello)) as Hello; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Hello create() => Hello._();
+  Hello createEmptyInstance() => create();
+  static $pb.PbList<Hello> createRepeated() => $pb.PbList<Hello>();
+  @$core.pragma('dart2js:noInline')
+  static Hello getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Hello>(create);
+  static Hello? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get displayName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set displayName($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDisplayName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDisplayName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get final_2 => $_getBF(1);
+  @$pb.TagNumber(2)
+  set final_2($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFinal_2() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFinal_2() => clearField(2);
+}
+
 enum TransferMessage_Content {
   message, 
   reaction, 
   deleteMessageId, 
   disappearSettings, 
+  hello, 
   notSet
 }
 
@@ -1229,14 +1380,16 @@ class TransferMessage extends $pb.GeneratedMessage {
     2 : TransferMessage_Content.reaction,
     3 : TransferMessage_Content.deleteMessageId,
     4 : TransferMessage_Content.disappearSettings,
+    5 : TransferMessage_Content.hello,
     0 : TransferMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4])
+    ..oo(0, [1, 2, 3, 4, 5])
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
     ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
+    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hello', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -1246,6 +1399,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? reaction,
     $core.List<$core.int>? deleteMessageId,
     $core.List<$core.int>? disappearSettings,
+    $core.List<$core.int>? hello,
   }) {
     final _result = create();
     if (message != null) {
@@ -1259,6 +1413,9 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     if (disappearSettings != null) {
       _result.disappearSettings = disappearSettings;
+    }
+    if (hello != null) {
+      _result.hello = hello;
     }
     return _result;
   }
@@ -1321,6 +1478,15 @@ class TransferMessage extends $pb.GeneratedMessage {
   $core.bool hasDisappearSettings() => $_has(3);
   @$pb.TagNumber(4)
   void clearDisappearSettings() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.int> get hello => $_getN(4);
+  @$pb.TagNumber(5)
+  set hello($core.List<$core.int> v) { $_setBytes(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasHello() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearHello() => clearField(5);
 }
 
 enum OutboundMessage_Content {
@@ -1328,6 +1494,7 @@ enum OutboundMessage_Content {
   reaction, 
   deleteMessageId, 
   disappearSettings, 
+  hello, 
   notSet
 }
 
@@ -1337,10 +1504,11 @@ class OutboundMessage extends $pb.GeneratedMessage {
     32 : OutboundMessage_Content.reaction,
     33 : OutboundMessage_Content.deleteMessageId,
     34 : OutboundMessage_Content.disappearSettings,
+    35 : OutboundMessage_Content.hello,
     0 : OutboundMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OutboundMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [31, 32, 33, 34])
+    ..oo(0, [31, 32, 33, 34, 35])
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'senderId', protoName: 'senderId')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientId', protoName: 'recipientId')
@@ -1350,6 +1518,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(32, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(33, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
     ..a<$core.List<$core.int>>(34, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
+    ..a<$core.List<$core.int>>(35, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hello', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -1364,6 +1533,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? reaction,
     $core.List<$core.int>? deleteMessageId,
     $core.List<$core.int>? disappearSettings,
+    $core.List<$core.int>? hello,
   }) {
     final _result = create();
     if (id != null) {
@@ -1392,6 +1562,9 @@ class OutboundMessage extends $pb.GeneratedMessage {
     }
     if (disappearSettings != null) {
       _result.disappearSettings = disappearSettings;
+    }
+    if (hello != null) {
+      _result.hello = hello;
     }
     return _result;
   }
@@ -1493,6 +1666,15 @@ class OutboundMessage extends $pb.GeneratedMessage {
   $core.bool hasDisappearSettings() => $_has(8);
   @$pb.TagNumber(34)
   void clearDisappearSettings() => clearField(34);
+
+  @$pb.TagNumber(35)
+  $core.List<$core.int> get hello => $_getN(9);
+  @$pb.TagNumber(35)
+  set hello($core.List<$core.int> v) { $_setBytes(9, v); }
+  @$pb.TagNumber(35)
+  $core.bool hasHello() => $_has(9);
+  @$pb.TagNumber(35)
+  void clearHello() => clearField(35);
 }
 
 class InboundAttachment extends $pb.GeneratedMessage {
