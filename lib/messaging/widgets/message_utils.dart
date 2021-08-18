@@ -187,6 +187,7 @@ void showSnackbar(
     backgroundColor: Colors.black,
     duration: duration,
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
     behavior: SnackBarBehavior.floating,
     elevation: 1,
     shape: const RoundedRectangleBorder(
