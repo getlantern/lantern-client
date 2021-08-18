@@ -43,6 +43,29 @@ List<dynamic> _humanizeReactorIdList(
   return humanizedList;
 }
 
+List<dynamic> constructReactionsList(BuildContext context,
+    Map<String, List<dynamic>> reactions, StoredMessage msg) {
+  var reactionsList = [];
+  reactions.forEach(
+    (key, value) {
+      if (value.isNotEmpty) {
+        reactionsList.add(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            // Tap on emoji to bring modal with breakdown of interactions
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
+              child: displayEmojiCount(reactions, key),
+            ),
+          ),
+        );
+      }
+    },
+  );
+  return reactionsList;
+}
+
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
   return contactIdToMatch == contact.contactId.id
       ? contact.displayName

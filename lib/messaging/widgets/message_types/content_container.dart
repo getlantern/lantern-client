@@ -37,33 +37,14 @@ class ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reactionsList = [];
-    reactions.forEach(
-      (key, value) {
-        if (value.isNotEmpty) {
-          reactionsList.add(
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              // Tap on emoji to bring modal with breakdown of interactions
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () =>
-                    displayEmojiBreakdownPopup(context, msg, reactions),
-                child: displayEmojiCount(reactions, key),
-              ),
-            ),
-          );
-        }
-      },
-    );
-
+    final reactionsList = constructReactionsList(context, reactions, msg);
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
 
     final isAudio = msg.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
-
     final isContactConnectionCard = msg.hasIntroduction();
+
     return Container(
       constraints: BoxConstraints(maxWidth: 80.w),
       clipBehavior: Clip.hardEdge,
@@ -101,7 +82,8 @@ class ContentContainer extends StatelessWidget {
         ),
       ),
       child: isContactConnectionCard
-          ? ContactConnectionCard(contact, inbound, outbound, msg, message)
+          ? ContactConnectionCard(
+              contact, inbound, outbound, msg, message, reactionsList)
           : Flex(
               direction: Axis.vertical,
               crossAxisAlignment:
