@@ -114,7 +114,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ConversationArgs>();
-          return _i8.Conversation(args.contact.contactId);
+          return _i8.Conversation(args.contactId);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -371,17 +371,17 @@ class NewMessage extends _i1.PageRouteInfo {
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i20.Contact contact})
+  Conversation({required _i20.ContactId contactId})
       : super(name,
-            path: 'conversation', args: ConversationArgs(contact: contact));
+            path: 'conversation', args: ConversationArgs(contactId: contactId));
 
   static const String name = 'Conversation';
 }
 
 class ConversationArgs {
-  const ConversationArgs({required this.contact});
+  const ConversationArgs({required this.contactId});
 
-  final _i20.Contact contact;
+  final _i20.ContactId contactId;
 }
 
 class Introduce extends _i1.PageRouteInfo {

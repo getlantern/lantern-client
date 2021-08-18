@@ -1,3 +1,4 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -7,6 +8,7 @@ import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
+import 'package:lantern/core/router/router_extensions.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
@@ -89,9 +91,8 @@ class ContactConnectionCard extends StatelessWidget {
               }
               if (msg.introduction.status ==
                   IntroductionDetails_IntroductionStatus.ACCEPTED) {
-                // TODO
-                // await context
-                //     .pushRoute(Conversation(contact: introductee));
+                await context
+                    .pushRoute(Conversation(contactId: introduction.to));
               }
             },
           ),
@@ -155,9 +156,8 @@ class ContactConnectionCard extends StatelessWidget {
                                 buttonText: 'OK'.i18n);
                           } finally {
                             await context.router.pop();
-                            // TODO
-                            // await context.pushRoute(
-                            //     Conversation(contact: introductee));
+                            await context.pushRoute(
+                                Conversation(contactId: introduction.to));
                           }
                         }),
                     Divider(thickness: 1, color: grey2),

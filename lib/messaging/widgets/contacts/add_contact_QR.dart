@@ -68,7 +68,7 @@ class _AddViaQRState extends State<AddViaQR> {
               updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
             contactNotifier.removeListener(listener);
             Navigator.of(context).pop(); // close the full screen dialog
-            await context.openConversation(updatedContact);
+            await context.openConversation(updatedContact.contactId);
           }
         };
         contactNotifier.addListener(listener);

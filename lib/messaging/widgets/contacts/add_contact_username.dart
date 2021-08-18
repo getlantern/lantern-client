@@ -59,7 +59,8 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                   if (_formKey.currentState!.validate()) {
                     context.loaderOverlay.show();
                     try {
-                      await context.pushRoute(Conversation(contact: contact!));
+                      await context.pushRoute(
+                          Conversation(contactId: contact!.contactId));
                     } finally {
                       context.loaderOverlay.hide();
                     }
