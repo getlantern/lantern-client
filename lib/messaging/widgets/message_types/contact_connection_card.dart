@@ -16,6 +16,7 @@ class ContactConnectionCard extends StatelessWidget {
   final bool outbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
+  final List<dynamic> reactionsList;
 
   ContactConnectionCard(
     this.contact,
@@ -23,6 +24,7 @@ class ContactConnectionCard extends StatelessWidget {
     this.outbound,
     this.msg,
     this.message,
+    this.reactionsList,
   ) : super();
 
   @override
@@ -32,7 +34,6 @@ class ContactConnectionCard extends StatelessWidget {
     final avatarLetters = introduction.displayName != ''
         ? introduction.displayName.substring(0, 2)
         : 'UC';
-
     return Flex(
       direction: Axis.vertical,
       crossAxisAlignment:
@@ -80,8 +81,9 @@ class ContactConnectionCard extends StatelessWidget {
                     ),
                   ),
             onTap: () async {
-              if (msg.introduction.status ==
-                  IntroductionDetails_IntroductionStatus.PENDING) {
+              if (inbound &&
+                  msg.introduction.status ==
+                      IntroductionDetails_IntroductionStatus.PENDING) {
                 await _showOptions(
                   context,
                   introduction,
@@ -100,7 +102,9 @@ class ContactConnectionCard extends StatelessWidget {
         Flex(
             direction: Axis.horizontal,
             mainAxisSize: MainAxisSize.min,
-            children: [StatusRow(outbound, inbound, msg, message, [])])
+            children: [
+              StatusRow(outbound, inbound, msg, message, reactionsList)
+            ])
       ],
     );
   }
