@@ -288,8 +288,8 @@ Future<void> displayConversationOptions(
                                             buttonText: 'OK'.i18n);
                                       } finally {
                                         context.loaderOverlay.hide();
-                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
-                                        //and then pop the root screen.
+                                        // In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        // and then pop the root screen.
                                         context.router.popUntilRoot();
                                         parentContext.router.popUntilRoot();
                                       }

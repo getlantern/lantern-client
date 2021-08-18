@@ -6,12 +6,10 @@ import 'package:lantern/utils/humanize.dart';
 
 class ConversationSticker extends StatelessWidget {
   final Contact contact;
-  final bool noIntroductions;
   final bool isPendingIntroduction;
   const ConversationSticker({
     Key? key,
     required this.contact,
-    required this.noIntroductions,
     required this.isPendingIntroduction,
   }) : super(key: key);
 
@@ -22,19 +20,13 @@ class ConversationSticker extends StatelessWidget {
       minLeadingWidth: 18,
       leading: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: noIntroductions
-            ? _fullyAddedIcon()
-            : isPendingIntroduction
-                ? _fullyAddedIcon()
-                : _partiallyAddedIcon(),
+        child:
+            !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
       ),
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: noIntroductions
-            ? _fullyAddedText()
-            : isPendingIntroduction
-                ? _fullyAddedText()
-                : _partiallyAddedText(),
+        child:
+            !isPendingIntroduction ? _fullyAddedText() : _partiallyAddedText(),
       ),
     );
   }

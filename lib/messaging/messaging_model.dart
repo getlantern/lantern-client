@@ -30,13 +30,16 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> addOrUpdateDirectContact(
-      String identityKey, String displayName) {
+  Future<int> addProvisionalContact(String contactId) {
     return methodChannel.invokeMethod(
-        'addOrUpdateDirectContact', <String, dynamic>{
-      'identityKey': identityKey,
-      'displayName': displayName
-    });
+        'addProvisionalContact', <String, dynamic>{
+      'contactId': contactId
+    }).then((value) => value as int);
+  }
+
+  Future<void> deleteProvisionalContact(String contactId) {
+    return methodChannel.invokeMethod(
+        'deleteProvisionalContact', <String, dynamic>{'contactId': contactId});
   }
 
   Future<void> sendToDirectContact(
@@ -247,9 +250,8 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueNotifier<Contact?> contactNotifier(Contact contact) {
-    return singleValueNotifier(
-        '/contacts/${_contactPathSegment(contact.contactId)}', contact,
+  ValueNotifier<Contact?> contactNotifier(String contactId) {
+    return singleValueNotifier('/contacts/d/$contactId', null,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });

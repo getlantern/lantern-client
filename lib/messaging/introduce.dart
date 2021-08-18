@@ -45,7 +45,7 @@ class _IntroduceState extends State<Introduce> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
                     child: Text(
-                        'Select two or more contacts to introduce.  They will be sent invitations to start messaging each other. '
+                        'Select two or more contacts to introduce.  They will be sent introductions to start messaging each other. '
                             .i18n,
                         style: tsEmptyContactState),
                   ),
@@ -102,7 +102,7 @@ class _IntroduceState extends State<Introduce> {
                                             }),
                                           )),
                                 ),
-                                (selectedContactIds.isNotEmpty)
+                                (selectedContactIds.length >= 2)
                                     ? Container(
                                         color: grey1,
                                         padding: const EdgeInsets.all(20.0),
@@ -112,7 +112,7 @@ class _IntroduceState extends State<Introduce> {
                                             children: [
                                               Button(
                                                 width: 200,
-                                                text: 'Send Invitations'
+                                                text: 'Send Introductions'
                                                     .i18n
                                                     .toUpperCase(),
                                                 onPressed: () async {
