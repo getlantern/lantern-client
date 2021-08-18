@@ -149,7 +149,20 @@ class MessageBubble extends StatelessWidget {
               trailingIcon: const Icon(Icons.copy),
               title: Text('Copy Text'.i18n),
               onPressed: () {
-                showSnackbar(context, 'Text copied'.i18n);
+                showSnackbar(
+                  context: context,
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: Text(
+                        'Text Copied'.i18n,
+                        style: txSnackBarText,
+                        textAlign: TextAlign.left,
+                      )),
+                    ],
+                  ),
+                );
                 Clipboard.setData(ClipboardData(text: message.value.text));
               },
             ),
