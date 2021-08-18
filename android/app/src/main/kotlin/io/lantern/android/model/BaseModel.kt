@@ -49,9 +49,35 @@ abstract class BaseModel(
             Logger.debug(TAG, "getSharedPreferences() finished at ${System.currentTimeMillis() - start}")
             val secrets = Secrets("lanternMasterKey", secretsPreferences)
             Logger.debug(TAG, "Secrets() finished at ${System.currentTimeMillis() - start}")
-            val dbLocation = File(File(context.filesDir, ".lantern"), "db").absolutePath
+            val dbDir = File(context.filesDir, "masterDB")
+            dbDir.mkdirs()
+            val oldDbDir = File(context.filesDir, ".lantern")
+            // Migrate database from old location. Putting the database in its new location prevents
+            // corruption on older Android devices as described in
+            // https://github.com/getlantern/android-lantern/issues/305
+            var migrated = false
+            oldDbDir.listFiles().forEach { file ->
+                if (file.name.startsWith("db")) {
+                    val dest = File(dbDir, file.name)
+                    Logger.debug(TAG, "Migrating ${file.absolutePath} to ${dest.absolutePath}")
+                    migrated = migrated && file.renameTo(dest)
+                }
+            }
+            val dbLocation = File(dbDir, "db").absolutePath
             val dbPassword = secrets.get("dbPassword", 32)
-            masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
+            masterDB = try {
+                DB.createOrOpen(context, dbLocation, dbPassword)
+            } catch (e: Exception) {
+                if (!migrated || e.message?.contains("file is not a database") == false) {
+                    throw e
+                }
+                // This means that we just migrated the database and the old database was corrupted.
+                // There's no way to recover the data, so just delete it and start fresh
+                Logger.debug(TAG, "Migrated database was corrupted, delete and start fresh")
+                dbDir.deleteRecursively()
+                dbDir.mkdirs()
+                DB.createOrOpen(context, dbLocation, dbPassword)
+            }
             Logger.debug(TAG, "createOrOpen finished at ${System.currentTimeMillis() - start}")
         }
     }
