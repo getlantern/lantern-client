@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 Color primaryBlue = HexColor('#007A7C');
@@ -50,3 +51,15 @@ List<Color> avatarBgColors = [
   HexColor('#8B4910'),
   HexColor('#957000')
 ];
+
+Color getCheckboxColor(Set<MaterialState> states) {
+  const interactiveStates = <MaterialState>{
+    MaterialState.pressed,
+    MaterialState.hovered,
+    MaterialState.focused,
+  };
+  if (states.any(interactiveStates.contains)) {
+    return Colors.white;
+  }
+  return Colors.black;
+}

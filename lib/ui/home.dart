@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     switch (methodCall.method) {
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
-        await _context!.openConversation(contact);
+        await _context!.openConversation(contact.contactId);
         break;
       default:
         return;

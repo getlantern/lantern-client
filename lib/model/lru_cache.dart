@@ -55,15 +55,13 @@ class CacheEntry<K, V> {
   }
 }
 
-/**
- * An asynchronously loaded value cached in an LRU cache. CachedValues are
- * immutable.
- *
- * [loading] indicates if the value is still asynchronously loading
- * [value] will have the loaded value if loading completed successfully
- * [error] if loading fails, this contains the error encountered
- *
- */
+/// An asynchronously loaded value cached in an LRU cache. CachedValues are
+/// immutable.
+///
+/// [loading] indicates if the value is still asynchronously loading
+/// [value] will have the loaded value if loading completed successfully
+/// [error] if loading fails, this contains the error encountered
+///
 class CachedValue<V> {
   /// a future that can be used to watch for completion of the value loading
   Future<V> future;
