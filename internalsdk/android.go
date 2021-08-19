@@ -57,7 +57,6 @@ var (
 
 type Settings interface {
 	StickyConfig() bool
-	DefaultDnsServer() string
 	GetHttpProxyHost() string
 	GetHttpProxyPort() int
 	TimeoutMillis() int
@@ -170,6 +169,9 @@ func newUserConfig(session panickingSession) *userConfig {
 // meaning those sockets will not be passed through the VPN.
 type SocketProtector interface {
 	ProtectConn(fileDescriptor int) error
+	// The DNS server is used to resolve host only when dialing a protected connection
+	// from within Lantern client.
+	DNSServerIP() string
 }
 
 // ProtectConnections allows connections made by Lantern to be protected from
@@ -177,17 +179,14 @@ type SocketProtector interface {
 // because it keeps Lantern's own connections from being captured by the VPN and
 // resulting in an infinite loop.
 
-// The DNS server is used to resolve host only when dialing a protected connection
-// from within Lantern client.
-func ProtectConnections(protector SocketProtector, dnsServer string) {
+func ProtectConnections(protector SocketProtector) {
 	defer sentryRecover(nil)
 
 	log.Debug("Protecting connections")
-	p := protected.New(protector.ProtectConn, dnsServer)
+	p := protected.New(protector.ProtectConn, protector.DNSServerIP)
 	netx.OverrideDial(p.DialContext)
 	netx.OverrideDialUDP(p.DialUDP)
-	netx.OverrideResolve(p.ResolveTCP)
-	netx.OverrideResolveUDP(p.ResolveUDP)
+	netx.OverrideResolveIPs(p.ResolveIPs)
 	netx.OverrideListenUDP(p.ListenUDP)
 	bal := getBalancer(0)
 	if bal != nil {
@@ -356,7 +355,7 @@ func run(configDir, locale string,
 
 	grabber, err := dnsgrab.ListenWithCache(
 		"127.0.0.1:0",
-		session.GetDNSServer(),
+		session.GetDNSServer,
 		cache,
 	)
 	if err != nil {
@@ -422,6 +421,7 @@ func run(configDir, locale string,
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
 		func() string { return "" },
+		func(category, action, label string) {},
 	)
 	if err != nil {
 		log.Fatalf("Failed to start flashlight: %v", err)
