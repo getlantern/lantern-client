@@ -56,11 +56,20 @@ abstract class BaseModel(
             // corruption on older Android devices as described in
             // https://github.com/getlantern/android-lantern/issues/305
             var migrated = false
+            // TODO: we can/should remove this logic after a few releases just to avoid any issues
+            // with some future code saving files named db* to the .lantern folder.
             oldDbDir.listFiles().forEach { file ->
                 if (file.name.startsWith("db")) {
                     val dest = File(dbDir, file.name)
                     Logger.debug(TAG, "Migrating ${file.absolutePath} to ${dest.absolutePath}")
-                    migrated = migrated && file.renameTo(dest)
+                    try {
+                        file.copyTo(dest)
+                        migrated = true
+                    } catch (e: Exception) {
+                        Logger.error(TAG, "Failed to migrate ${file.absolutePath} to ${dest.absolutePath}", e)
+                    } finally {
+                        file.delete()
+                    }
                 }
             }
             val dbLocation = File(dbDir, "db").absolutePath
