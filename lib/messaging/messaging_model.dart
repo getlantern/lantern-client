@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -8,9 +9,11 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import '../model/list_subscriber.dart';
 import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
+import 'calling/signaling.dart';
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
+  late Signaling signaling;
 
   MessagingModel() : super('messaging') {
     _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
@@ -22,6 +25,41 @@ class MessagingModel extends Model {
                       : attachment)
                   .writeToBuffer(),
             }).then((value) => value as Uint8List));
+
+    signaling = Signaling(
+        mc: methodChannel,
+        onCallStateChange: (Session session, CallState state) {
+          switch (state) {
+            case CallState.CallStateNew:
+              // setState(() {
+              //   _session = session;
+              //   _inCalling = true;
+              // });
+              break;
+            case CallState.CallStateBye:
+              // setState(() {
+              //   _localRenderer.srcObject = null;
+              //   _remoteRenderer.srcObject = null;
+              //   _inCalling = false;
+              //   _session = null;
+              // });
+              break;
+            case CallState.CallStateInvite:
+            case CallState.CallStateConnected:
+            case CallState.CallStateRinging:
+          }
+        });
+
+    methodChannel.setMethodCallHandler((call) async {
+      switch (call.method) {
+        case 'onSignal':
+          var args = call.arguments as Map;
+          signaling.onMessage(args['senderId'], args['content']);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   Future<void> setMyDisplayName(String displayName) {

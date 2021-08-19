@@ -34,6 +34,8 @@ class ImagePaths {
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
 
+  static const phone_icon = 'assets/images/phone_icon.svg';
+
   static const _countdownPaths = [
     'assets/images/disappear/timer_12.svg',
     'assets/images/disappear/timer_11.svg',

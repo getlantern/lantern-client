@@ -31,6 +31,8 @@ import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/services.dart';
 
+import 'widgets/call_action.dart';
+
 class Conversation extends StatefulWidget {
   final ContactId _contactId;
 
@@ -261,11 +263,7 @@ class _ConversationState extends State<Conversation>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.call),
-                  tooltip: 'Call'.i18n,
-                  onPressed: () {},
-                ),
+                CallAction(contact),
                 IconButton(
                     onPressed: () {}, icon: DisappearingTimerAction(contact)),
                 IconButton(
