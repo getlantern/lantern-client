@@ -5,6 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+String sanitizeContactName(String displayName) {
+  return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
+}
+
 Map<String, List<dynamic>> constructReactionsMap(
     StoredMessage msg, Contact contact) {
   // hardcode the list of available emoticons in a way that is convenient to parse
@@ -37,6 +41,29 @@ List<dynamic> _humanizeReactorIdList(
   reactorIdList.forEach((reactorId) =>
       humanizedList.add(matchIdToDisplayName(reactorId, contact)));
   return humanizedList;
+}
+
+List<dynamic> constructReactionsList(BuildContext context,
+    Map<String, List<dynamic>> reactions, StoredMessage msg) {
+  var reactionsList = [];
+  reactions.forEach(
+    (key, value) {
+      if (value.isNotEmpty) {
+        reactionsList.add(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            // Tap on emoji to bring modal with breakdown of interactions
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
+              child: displayEmojiCount(reactions, key),
+            ),
+          ),
+        );
+      }
+    },
+  );
+  return reactionsList;
 }
 
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
@@ -115,7 +142,7 @@ Container displayEmojiCount(
   final reactorsToKey = reactions[reactionKey]!;
   return Container(
       decoration: const BoxDecoration(
-        color: Colors.white, // TODO generalize in theme
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(999)),
       ),
       child: Padding(
@@ -149,25 +176,22 @@ bool determineDeletionStatus(StoredMessage msg) {
   return msg.remotelyDeletedAt != 0; // is 0 if message hasn't been deleted
 }
 
-void showSnackbar(BuildContext context, String text) {
+void showSnackbar(
+    {required BuildContext context,
+    required Widget content,
+    Duration duration = const Duration(milliseconds: 1000),
+    SnackBarAction? action}) {
   final snackBar = SnackBar(
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(Icons.check_circle, color: Colors.white),
-        Expanded(
-            child: Text(
-          text,
-          style: const TextStyle(fontSize: 14, color: Colors.white),
-          textAlign: TextAlign.center,
-        )),
-      ],
-    ),
-    backgroundColor: Colors.green,
-    duration: const Duration(milliseconds: 700),
+    content: content,
+    action: action,
+    backgroundColor: Colors.black,
+    duration: duration,
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
     behavior: SnackBarBehavior.floating,
     elevation: 1,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8.0))),
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -250,8 +274,9 @@ Future<void> displayConversationOptions(
                               child: ListBody(
                                 children: <Widget>[
                                   Text(
-                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.',
-                                      style: tsAlertDialogBody) // TODO: i18n
+                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.'
+                                          .i18n,
+                                      style: tsAlertDialogBody)
                                 ],
                               ),
                             ),
@@ -287,8 +312,8 @@ Future<void> displayConversationOptions(
                                             buttonText: 'OK'.i18n);
                                       } finally {
                                         context.loaderOverlay.hide();
-                                        //In order to be capable to return to the root screen, we need to pop the bottom sheet
-                                        //and then pop the root screen.
+                                        // In order to be capable to return to the root screen, we need to pop the bottom sheet
+                                        // and then pop the root screen.
                                         context.router.popUntilRoot();
                                         parentContext.router.popUntilRoot();
                                       }

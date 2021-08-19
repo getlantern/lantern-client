@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/widgets/attachment.dart';
+import 'package:lantern/messaging/widgets/message_types/contact_connection_card.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
@@ -36,31 +37,14 @@ class ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reactionsList = [];
-    reactions.forEach(
-      (key, value) {
-        if (value.isNotEmpty) {
-          reactionsList.add(
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              // Tap on emoji to bring modal with breakdown of interactions
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () =>
-                    displayEmojiBreakdownPopup(context, msg, reactions),
-                child: displayEmojiCount(reactions, key),
-              ),
-            ),
-          );
-        }
-      },
-    );
-
+    final reactionsList = constructReactionsList(context, reactions, msg);
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
 
     final isAudio = msg.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
+    final isContactConnectionCard = msg.hasIntroduction();
+
     return Container(
       constraints: BoxConstraints(maxWidth: 80.w),
       clipBehavior: Clip.hardEdge,
@@ -97,59 +81,62 @@ class ContentContainer extends StatelessWidget {
               : const Radius.circular(8),
         ),
       ),
-      child: Flex(
-          direction: Axis.vertical,
-          crossAxisAlignment:
-              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flex(
-              direction: Axis.horizontal,
+      child: isContactConnectionCard
+          ? ContactConnectionCard(
+              contact, inbound, outbound, msg, message, reactionsList)
+          : Flex(
+              direction: Axis.vertical,
+              crossAxisAlignment:
+                  outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (msg.replyToId.isNotEmpty)
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () => onTapReply(message),
-                    child: ReplySnippet(outbound, msg, contact),
-                  ),
-              ],
-            ),
-            if (msg.text.isNotEmpty)
-              Flex(
-                  direction: Axis.horizontal,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            top: 8, bottom: 4, left: 8, right: 8),
-                        child: Text(
-                          '${msg.text}',
-                          style: tsMessageBody(outbound),
-                        ),
-                      ),
-                    ),
-                  ]),
-            Stack(
-              fit: StackFit.passthrough,
-              alignment: isAudio
-                  ? AlignmentDirectional.bottomEnd
-                  : outbound
-                      ? AlignmentDirectional.bottomEnd
-                      : AlignmentDirectional.bottomStart,
-              children: [
-                ...attachments,
-                Flex(
+                  Flex(
                     direction: Axis.horizontal,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      StatusRow(outbound, inbound, msg, message, reactionsList)
-                    ]),
-              ],
-            )
-          ]),
+                      if (msg.replyToId.isNotEmpty)
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () => onTapReply(message),
+                          child: ReplySnippet(outbound, msg, contact),
+                        ),
+                    ],
+                  ),
+                  if (msg.text.isNotEmpty)
+                    Flex(
+                        direction: Axis.horizontal,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 8, right: 8),
+                              child: Text(
+                                '${msg.text}',
+                                style: tsMessageBody(outbound),
+                              ),
+                            ),
+                          ),
+                        ]),
+                  Stack(
+                    fit: StackFit.passthrough,
+                    alignment: isAudio
+                        ? AlignmentDirectional.bottomEnd
+                        : outbound
+                            ? AlignmentDirectional.bottomEnd
+                            : AlignmentDirectional.bottomStart,
+                    children: [
+                      ...attachments,
+                      Flex(
+                          direction: Axis.horizontal,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StatusRow(
+                                outbound, inbound, msg, message, reactionsList)
+                          ]),
+                    ],
+                  )
+                ]),
     );
   }
 }

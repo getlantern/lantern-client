@@ -4,14 +4,16 @@ import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_bubble_components/countdown_timer.dart';
-import 'package:lantern/messaging/widgets/message_bubble_components/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/conversation_components/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
@@ -27,13 +29,12 @@ import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:flutter/services.dart';
 
 class Conversation extends StatefulWidget {
-  final Contact _contact;
+  final ContactId _contactId;
 
-  Conversation(this._contact) : super();
+  Conversation(this._contactId) : super();
 
   @override
   _ConversationState createState() => _ConversationState();
@@ -56,7 +57,6 @@ class _ConversationState extends State<Conversation>
   Uint8List? _recording;
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
-  var displayName = '';
   var messageCount = 0;
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
@@ -76,7 +76,7 @@ class _ConversationState extends State<Conversation>
         break;
       case AppLifecycleState.resumed:
       default:
-        model.setCurrentConversationContact(widget._contact.contactId.id);
+        model.setCurrentConversationContact(widget._contactId.id);
         break;
     }
   }
@@ -95,15 +95,9 @@ class _ConversationState extends State<Conversation>
         );
       }
     });
-    displayName = widget._contact.displayName.isEmpty
-        ? widget._contact.contactId.id
-        : widget._contact.displayName;
     BackButtonInterceptor.add(_interceptBackButton);
     WidgetsBinding.instance!.addObserver(this);
   }
-
-  // Filepicker vars
-  List<AssetEntity> assets = <AssetEntity>[];
 
   @override
   void dispose() {
@@ -133,7 +127,7 @@ class _ConversationState extends State<Conversation>
     if (attachments!.isNotEmpty) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
-        widget._contact.contactId.id,
+        widget._contactId.id,
         text: text,
         attachments: attachments,
         replyToId: replyToId,
@@ -198,49 +192,27 @@ class _ConversationState extends State<Conversation>
 
   void showKeyboard() => _focusNode.requestFocus();
 
-  Future<List<AssetEntity>?> _renderFilePicker() async {
-    AssetPicker.registerObserve();
-    return await AssetPicker.pickAssets(
-      context,
-      selectedAssets: assets,
-      textDelegate: EnglishTextDelegate(),
-      // DefaultAssetsPickerTextDelegate for Chinese
-      requestType: RequestType.all,
-      specialItemPosition: SpecialItemPosition.prepend,
-      specialItemBuilder: (BuildContext context) {
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () async {
-            final result = await CameraPicker.pickFromCamera(
-              context,
-              enableRecording: true,
-            );
-            if (result != null) {
-              Navigator.of(context).pop(<AssetEntity>[result]);
-            }
-          },
-          // TODO: Refine the UI/UX
-          child: const Center(
-            child: Icon(Icons.camera),
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> _selectFilesToShare() async {
     try {
-      var pickedAssets = await _renderFilePicker();
-      if (pickedAssets == null) {
+      var result = await FilePicker.platform
+          .pickFiles(type: FileType.any, allowMultiple: true);
+      if (result == null || result.files.isEmpty) {
+        // user didn't pick any files, don't share anything
         return;
       }
       context.loaderOverlay.show();
-      pickedAssets.forEach((el) async {
-        final absolutePath =
-            await el.originFile.then((file) async => file?.path) as String;
-        final metadata = {'title': el.title as String};
+      result.files.forEach((el) async {
+        // TODO: we might need to sanitize title
+        final title = el.path.toString().split('file_picker/')[1].split('.')[
+            0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
+        final fileExtension =
+            el.path.toString().split('file_picker/')[1].split('.')[1];
+        final metadata = {
+          'title': title,
+          'fileExtension': fileExtension,
+        };
         final attachment =
-            await model.filePickerLoadAttachment(absolutePath, metadata);
+            await model.filePickerLoadAttachment(el.path.toString(), metadata);
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e) {
@@ -252,7 +224,6 @@ class _ConversationState extends State<Conversation>
     } finally {
       context.loaderOverlay.hide();
     }
-    AssetPicker.unregisterObserve();
   }
 
   void dismissKeyboard() {
@@ -279,14 +250,17 @@ class _ConversationState extends State<Conversation>
     (context.router.currentChild!.name == router_gr.Conversation.name &&
             context.router.routeData.router.current.name ==
                 router_gr.MessagesRouter.name)
-        ? unawaited(
-            model.setCurrentConversationContact(widget._contact.contactId.id))
+        ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
     return WillPopScope(
       onWillPop: () => Future<bool>.value(_keyboardState),
-      child: BaseScreen(
+      child: model.singleContactById(context, widget._contactId,
+          (context, contact, child) {
+        return BaseScreen(
           // Conversation title (contact name)
-          title: displayName,
+          title: contact.displayName.isEmpty
+              ? contact.contactId.id
+              : contact.displayName,
           centerTitle: false,
           actions: [
             Flex(
@@ -302,12 +276,12 @@ class _ConversationState extends State<Conversation>
                 IconButton(
                     key: const ValueKey('disappearingSelect'),
                     onPressed: () {},
-                    icon: DisappearingTimerAction(widget._contact)),
+                    icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
-                  onPressed: () => displayConversationOptions(
-                      model, context, widget._contact),
+                  onPressed: () =>
+                      displayConversationOptions(model, context, contact),
                 )
               ],
             )
@@ -317,21 +291,21 @@ class _ConversationState extends State<Conversation>
               direction: Axis.vertical,
               children: [
                 Card(
-                  color: Colors.white70,
+                  color: grey1,
                   child: Container(
                     width: 70.w,
-                    child: _buildMessagesLifeExpectancy(),
+                    child: _buildConversationSticker(contact),
                   ),
                 ),
                 Flexible(
-                  child: _buildMessageBubbles(),
+                  child: _buildMessageBubbles(contact),
                 ),
                 // Reply container
                 if (_isReplying)
                   ReplyPreview(
                     quotedMessage: _quotedMessage,
                     model: model,
-                    contact: widget._contact,
+                    contact: contact,
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
@@ -373,31 +347,27 @@ class _ConversationState extends State<Conversation>
                 ),
               ],
             ),
-          ])),
+          ]),
+        );
+      }),
     );
   }
 
-  Widget _buildMessagesLifeExpectancy() => model.singleContact(
-        context,
-        widget._contact,
-        (context, contact, child) => ListTile(
-          dense: true,
-          minLeadingWidth: 18,
-          leading: contact.messagesDisappearAfterSeconds > 0
-              ? const Icon(Icons.timer, size: 18)
-              : const Icon(Icons.lock_clock, size: 18),
-          title: contact.messagesDisappearAfterSeconds > 0
-              ? Text(
-                  'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-                  style: const TextStyle(fontSize: 13),
-                )
-              : const Text('New messages do not disappear',
-                  style: TextStyle(fontSize: 13)),
-        ),
-      );
+  Widget _buildConversationSticker(Contact contact) =>
+      model.introductionsToContact(builder: (context,
+          Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
+        final isPendingIntroduction = !contact.hasReceivedMessage &&
+            introductions
+                .toList()
+                .where(
+                    (intro) => intro.value.introduction.to == contact.contactId)
+                .isNotEmpty;
+        return ConversationSticker(
+            contact: contact, isPendingIntroduction: isPendingIntroduction);
+      });
 
-  Widget _buildMessageBubbles() {
-    return model.contactMessages(widget._contact, builder: (context,
+  Widget _buildMessageBubbles(Contact contact) {
+    return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       messageCount = messageRecords.length;
@@ -416,7 +386,7 @@ class _ConversationState extends State<Conversation>
                   nextMessage: index == 0
                       ? null
                       : messageRecords.elementAt(index - 1).value,
-                  contact: widget._contact,
+                  contact: contact,
                   onEmojiTap: (showEmoji, messageSelected) => setState(() {
                     _emojiShowing = true;
                     _customEmojiResponse = true;

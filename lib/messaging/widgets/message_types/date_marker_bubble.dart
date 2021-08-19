@@ -7,24 +7,16 @@ class DateMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(),
-          child: Container(
-            width: 100,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            child: Text(isDateMarker!, // TODO: Add i18n
-                style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-          ))
-    ]);
+    return Container(
+      width: 130,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+      ),
+      child: Text(isDateMarker!.i18n.toUpperCase(),
+          style: const TextStyle(fontSize: 10, color: Colors.white)),
+    );
   }
 }
