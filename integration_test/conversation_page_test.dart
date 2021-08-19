@@ -5,7 +5,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
-import 'package:lantern/messaging/widgets/contact_message_preview.dart';
+import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
@@ -45,8 +45,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       expect(find.byType(Conversation), findsOneWidget);
     });
@@ -60,8 +59,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('Enter `hello this a message send from Flutter Test`');
       await tester.enterText(find.byType(TextFormField),
@@ -94,8 +92,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -128,8 +125,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('Enter `hello this a message send from Flutter Test`');
       await tester.enterText(find.byType(TextFormField),
@@ -162,8 +158,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -196,8 +191,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('Enter `hello this a message send from Flutter Test`');
       await tester.enterText(find.byType(TextFormField),
@@ -230,8 +224,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -259,8 +252,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -279,8 +271,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -299,8 +290,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -319,8 +309,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -340,8 +329,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -364,8 +352,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           FocusedMenuHolder, 'hello this a message send from Flutter Test'));
@@ -392,8 +379,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           FocusedMenuHolder, 'hello this a message send from Flutter Test'));
@@ -426,8 +412,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.tap(find.byKey(const ValueKey('disappearingSelect')));
       await waitUntilSended(tester);
@@ -459,8 +444,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.longPress(find.widgetWithText(
           ContentContainer, 'hello this a message send from Flutter Test'));
@@ -480,8 +464,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
       print('The emoji picker should appear');

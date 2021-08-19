@@ -8,7 +8,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
-import 'package:lantern/messaging/widgets/contact_message_preview.dart';
+import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
@@ -43,8 +43,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('We should hold the recording button for 5 seconds');
       print(
@@ -75,8 +74,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('We should hold the recording button for 5 seconds');
       print(
@@ -116,8 +114,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('We should hold the recording button for 5 seconds');
       print(
@@ -150,8 +147,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await tester.pumpAndSettle();
       print('We should hold the recording button for 5 seconds');
       print(
@@ -178,8 +174,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(NewMessage), findsOneWidget);
-      await tester
-          .tap(find.widgetWithText(ContactMessagePreview, 'Note to self'));
+      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
       await waitUntilSended(tester);
       print('Press the play button');
       await tester.tap(find.widgetWithIcon(TextButton, Icons.play_arrow));
