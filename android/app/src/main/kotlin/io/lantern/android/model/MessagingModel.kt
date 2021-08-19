@@ -25,6 +25,21 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         // delete any lingering data in temporary media files (e.g. if we crashed during recording)
         voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
         videoFile.delete()
+
+        // subscribe to WebRTC signals and forward them to flutter
+        // TODO: handle incoming calls when UI is closed (similar to how we handle message
+        // notifications when UI is closed)
+        messaging.subscribeToWebRTCSignals("webrtc") { signal ->
+            mainHandler.post {
+                methodChannel.invokeMethod(
+                    "onSignal",
+                    mapOf(
+                        "senderId" to signal.senderId,
+                        "content" to signal.content.toString(Charsets.UTF_8),
+                    )
+                )
+            }
+        }
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
@@ -98,6 +113,14 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     }
                 }
                 return videoFile.absolutePath
+            }
+            "sendSignal" -> {
+                val signalResult = messaging.sendWebRTCSignal(
+                    call.argument("recipientId")!!,
+                    call.argument<String>("content")!!.toByteArray(Charsets.UTF_8)
+                ).get()
+                // for now, if there are any errors sending to any devices, we throw the first error
+                signalResult.errors.values.firstOrNull()?.let { throw it }
             }
             else -> super.doMethodCall(call, notImplemented)
         }

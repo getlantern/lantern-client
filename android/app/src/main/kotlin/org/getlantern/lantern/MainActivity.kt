@@ -65,6 +65,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
+    private lateinit var flutterSignaling: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
 
     private val lanternClient = LanternApp.getLanternHttpClient()

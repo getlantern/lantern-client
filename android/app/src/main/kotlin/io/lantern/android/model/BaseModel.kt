@@ -37,10 +37,13 @@ abstract class BaseModel(
 
     private val asyncHandler = Handler(asyncHandlerThread.looper)
 
+    protected lateinit var eventChannel: EventChannel
+    protected lateinit var methodChannel: MethodChannel
+
     companion object {
         private const val TAG = "BaseModel"
 
-        internal val masterDB: DB
+        val masterDB: DB
 
         init {
             val start = System.currentTimeMillis()
@@ -96,15 +99,17 @@ abstract class BaseModel(
 
     init {
         flutterEngine?.let {
-            EventChannel(
+            eventChannel = EventChannel(
                 flutterEngine.dartExecutor,
                 "${name}_event_channel"
-            ).setStreamHandler(this)
+            )
+            eventChannel.setStreamHandler(this)
 
-            MethodChannel(
+            methodChannel = MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
                 "${name}_method_channel"
-            ).setMethodCallHandler(this)
+            )
+            methodChannel.setMethodCallHandler(this)
         }
     }
 
