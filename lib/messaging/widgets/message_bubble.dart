@@ -1,5 +1,5 @@
 import 'package:lantern/messaging/conversation.dart';
-import 'package:lantern/messaging/widgets/message_bubble_components/reactions.dart';
+import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -9,6 +9,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 
 import 'message_types/content_container.dart';
 import 'message_types/date_marker_bubble.dart';
@@ -148,7 +149,20 @@ class MessageBubble extends StatelessWidget {
               trailingIcon: const Icon(Icons.copy),
               title: Text('Copy Text'.i18n),
               onPressed: () {
-                showSnackbar(context, 'Text copied'.i18n);
+                showSnackbar(
+                  context: context,
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: Text(
+                        'Text Copied'.i18n,
+                        style: txSnackBarText,
+                        textAlign: TextAlign.left,
+                      )),
+                    ],
+                  ),
+                );
                 Clipboard.setData(ClipboardData(text: message.value.text));
               },
             ),
@@ -181,24 +195,24 @@ class MessageBubble extends StatelessWidget {
           crossAxisAlignment:
               outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            Wrap(
-              direction: Axis.vertical,
-              children: [
-                if (isDateMarker != '') DateMarker(isDateMarker),
-                ContentContainer(
-                    outbound,
-                    inbound,
-                    msg,
-                    message,
-                    contact,
-                    onTapReply,
-                    startOfBlock,
-                    endOfBlock,
-                    newestMessage,
-                    reactions,
-                    isAttachment),
-              ],
-            ),
+            if (isDateMarker != '')
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 10),
+                  // width: 100.w,
+                  child: DateMarker(isDateMarker)),
+            ContentContainer(
+                outbound,
+                inbound,
+                msg,
+                message,
+                contact,
+                onTapReply,
+                startOfBlock,
+                endOfBlock,
+                newestMessage,
+                reactions,
+                isAttachment),
           ],
         ));
   }
@@ -206,38 +220,27 @@ class MessageBubble extends StatelessWidget {
 
 Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     bool isLocal, PathAndValue<StoredMessage> message) async {
-  return showDialog<void>(
+  return showAlertDialog(
     context: context,
     barrierDismissible: true,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: isLocal
-            ? Text('Delete for me', style: tsAlertDialogTitle)
-            : Text('Delete for everyone', style: tsAlertDialogTitle),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              isLocal
-                  ? Text(
-                      'This will delete the message for you only. Everyone else will still be able to see it.',
-                      style: tsAlertDialogBody) // TODO: i18n
-                  : Text('This will delete the message for everyone.',
-                      style: tsAlertDialogBody), // TODO: i18n
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              isLocal
-                  ? model.deleteLocally(message)
-                  : model.deleteGlobally(message);
-              Navigator.of(context).pop();
-            },
-            child: Text('Delete'.i18n, style: tsAlertDialogButtonPink),
-          )
+    content: SingleChildScrollView(
+      child: ListBody(
+        children: <Widget>[
+          isLocal
+              ? Text(
+                  'This will delete the message for you only. Everyone else will still be able to see it.'
+                      .i18n,
+                  style: tsAlertDialogBody)
+              : Text('This will delete the message for everyone.'.i18n,
+                  style: tsAlertDialogBody),
         ],
-      );
-    },
+      ),
+    ),
+    title: isLocal
+        ? Text('Delete for me', style: tsAlertDialogTitle)
+        : Text('Delete for everyone', style: tsAlertDialogTitle),
+    agreeAction: () =>
+        isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
+    agreeText: 'Delete',
   );
 }

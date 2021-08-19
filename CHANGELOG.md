@@ -1,4 +1,20 @@
 
+<a name="6.8.5"></a>
+## [6.8.5](https://github.com/getlantern/android-lantern/compare/6.8.4...6.8.5)
+
+> 2021-08-19
+
+
+<a name="6.8.4"></a>
+## [6.8.4](https://github.com/getlantern/android-lantern/compare/6.8.3...6.8.4)
+
+> 2021-08-18
+
+### Pull Requests
+
+* Merge pull request [#316](https://github.com/getlantern/android-lantern/issues/316) from getlantern/ox/issue305-2
+
+
 <a name="6.8.3"></a>
 ## [6.8.3](https://github.com/getlantern/android-lantern/compare/6.8.2...6.8.3)
 

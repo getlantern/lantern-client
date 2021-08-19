@@ -60,7 +60,7 @@ abstract class Model {
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
 
-  ValueNotifier<T?> singleValueNotifier<T>(String path, T defaultValue,
+  ValueNotifier<T?> singleValueNotifier<T>(String path, T? defaultValue,
       {bool details = false, T Function(Uint8List serialized)? deserialize}) {
     var result =
         _singleValueNotifierCache[path] as SubscribedSingleValueNotifier<T>?;

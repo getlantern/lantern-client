@@ -32,9 +32,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
             "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
-                call.argument("identityKey")!!,
-                call.argument("displayName")!!
+            "addProvisionalContact" -> messaging.addProvisionalContact(
+                call.argument("contactId")!!
+            )
+            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+                call.argument("contactId")!!
             )
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
@@ -56,6 +58,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
+            "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {

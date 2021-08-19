@@ -1,5 +1,4 @@
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -21,8 +20,6 @@ class _AddViaUsernameState extends State<AddViaUsername> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
     return fullScreenDialogLayout(Colors.white, Colors.black, context, [
       Form(
         key: _formKey,
@@ -43,11 +40,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                     ),
                     validator: (value) {
                       try {
-                        setState(() {
-                          // TODO: missing
-                          contact = model.getContactFromUsername(
-                              usernameController.value.text) as Contact;
-                        });
+                        // get contact from username
                       } catch (e) {
                         return 'An error occurred while searching for this username'
                             .i18n;
@@ -66,7 +59,8 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                   if (_formKey.currentState!.validate()) {
                     context.loaderOverlay.show();
                     try {
-                      await context.pushRoute(Conversation(contact: contact!));
+                      await context.pushRoute(
+                          Conversation(contactId: contact!.contactId));
                     } finally {
                       context.loaderOverlay.hide();
                     }

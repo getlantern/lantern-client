@@ -73,7 +73,7 @@ dependencies:
 
   url_launcher: ^6.0.3
 
-  fluttertoast: ^8.0.7
+  fluttertoast: ^8.0.8
 
   catcher: ^0.6.7
 
