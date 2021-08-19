@@ -48,6 +48,8 @@ dependencies:
   share: ^2.0.1
 
   audioplayers: ^0.19.1
+  
+  matrix4_transform: ^2.0.0
 
   auto_route: ^2.2.0
 
@@ -73,7 +75,7 @@ dependencies:
 
   url_launcher: ^6.0.3
 
-  fluttertoast: ^8.0.7
+  fluttertoast: ^8.0.8
 
   catcher: ^0.6.7
 

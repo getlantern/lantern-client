@@ -4,6 +4,7 @@ import 'package:lantern/core/router/tabs/account_tab_router.dart';
 import 'package:lantern/core/router/tabs/developer_tab_router.dart';
 import 'package:lantern/core/router/tabs/message_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
+import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/ui/home.dart';
 import 'package:lantern/ui/widgets/full_screen_dialog.dart';
 
@@ -26,6 +27,13 @@ import 'package:lantern/ui/widgets/full_screen_dialog.dart';
         page: FullScreenDialog,
         name: 'FullScreenDialogPage',
         path: 'fullScreenDialogPage',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: Conversation,
+        name: 'Conversation',
+        path: 'conversation',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

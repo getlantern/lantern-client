@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/package_store.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 
 class VoiceRecorder extends StatefulWidget {
   VoiceRecorder({
@@ -21,10 +22,23 @@ class VoiceRecorder extends StatefulWidget {
 }
 
 class _VoiceRecorderState extends State<VoiceRecorder>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
+  late AnimationController _controllerA;
+  var scaleBoundary;
+
   @override
   void initState() {
     super.initState();
+    scaleBoundary = widget.isRecording ? 2.0 : 1.0;
+    _controllerA = AnimationController(
+      vsync: this,
+      lowerBound: 1.0,
+      upperBound: 2.0,
+      duration: const Duration(milliseconds: 400),
+    );
+    _controllerA.addListener(
+      () => setState(() => scaleBoundary = _controllerA.value),
+    );
     WidgetsBinding.instance!.addObserver(this);
   }
 
@@ -46,15 +60,21 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanDown: _onTapDown,
-      onPanEnd: _onTapEnd,
+      onPanDown: (details) {
+        _controllerA.forward(from: 1.0);
+        _onTapDown(details);
+      },
+      onPanEnd: (details) {
+        _controllerA.reverse();
+        _onTapEnd(details);
+      },
       child: Transform.scale(
-        scale: widget.isRecording ? 2 : 1,
+        scale: scaleBoundary,
         alignment: Alignment.bottomRight,
         child: Container(
-          width: 50,
-          height: 50,
-          margin: widget.isRecording ? const EdgeInsets.only(top: 10) : null,
+          margin: widget.isRecording
+              ? const EdgeInsets.only(top: 10)
+              : const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             color: widget.isRecording ? Colors.red : Colors.transparent,
             borderRadius:
@@ -83,6 +103,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   @override
   void dispose() {
+    _controllerA.dispose();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }

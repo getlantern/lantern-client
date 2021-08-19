@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:lantern/core/router/router_extensions.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -71,7 +71,7 @@ class _AddViaQRState extends State<AddViaQR> {
               updatedContact.firstReceivedMessageTs > 0) {
             contactNotifier.removeListener(listener);
             Navigator.of(context).pop(); // close the full screen dialog
-            await context.openConversation(updatedContact);
+            await context.router.push(Conversation(contact: updatedContact));
           }
         };
         contactNotifier.addListener(listener);

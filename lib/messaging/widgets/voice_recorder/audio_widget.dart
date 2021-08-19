@@ -289,11 +289,11 @@ class AudioWidget extends StatelessWidget {
             },
             style: TextButton.styleFrom(
                 shape: const CircleBorder(),
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.black,
                 alignment: Alignment.center),
             child: const Icon(
               Icons.play_arrow,
-              color: Colors.black,
+              color: Colors.white,
               size: 20.0,
             ),
           );

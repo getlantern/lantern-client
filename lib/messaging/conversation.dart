@@ -22,6 +22,7 @@ import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/pulsing_indicator.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
@@ -243,9 +244,7 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    (context.router.currentChild!.name == router_gr.Conversation.name &&
-            context.router.routeData.router.current.name ==
-                router_gr.MessagesRouter.name)
+    (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(
             model.setCurrentConversationContact(widget._contact.contactId.id))
         : unawaited(model.clearCurrentConversationContact());
@@ -300,10 +299,14 @@ class _ConversationState extends State<Conversation>
                     contact: widget._contact,
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
-                Divider(height: 1.0, color: grey3),
+                const Divider(
+                  height: 1,
+                  thickness: 1.5,
+                  color: Color.fromRGBO(235, 235, 235, 1.0),
+                ),
                 Container(
-                  color: _isRecording || _finishedRecording
-                      ? Colors.grey[200]
+                  color: _isRecording
+                      ? const Color.fromRGBO(245, 245, 245, 1)
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
@@ -453,19 +456,22 @@ class _ConversationState extends State<Conversation>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 6.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 12,
-                    ),
+                Flexible(
+                  child: PulsatingContainer(
+                    width: 30,
+                    height: 30,
+                    duration: const Duration(milliseconds: 700),
+                    pulseColor: Colors.red[900],
+                    color: Colors.red,
                   ),
                 ),
+                SizedBox(width: 4.0.w),
                 Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 6.0),
-                    child: CountdownTimer(stopWatchTimer: _stopWatchTimer),
+                  child: CountdownTimer(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.red.shade900,
+                    stopWatchTimer: _stopWatchTimer,
                   ),
                 ),
               ],
@@ -517,7 +523,8 @@ class _ConversationState extends State<Conversation>
                     ? const SizedBox()
                     : IconButton(
                         onPressed: () async => await _selectFilesToShare(),
-                        icon: const Icon(Icons.add_circle_rounded),
+                        icon: const Icon(Icons.add_circle_rounded,
+                            color: Colors.black),
                       ),
                 VoiceRecorder(
                   isRecording: _isRecording,

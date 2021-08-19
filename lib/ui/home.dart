@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/event/Event.dart';
 import 'package:lantern/event/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -70,7 +69,7 @@ class _HomePageState extends State<HomePage> {
     switch (methodCall.method) {
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
-        await _context!.openConversation(contact);
+        await _context?.router.push(Conversation(contact: contact));
         break;
       default:
         return;

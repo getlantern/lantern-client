@@ -11,6 +11,8 @@ class MessageBarPreviewRecording extends StatelessWidget {
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
+//50 PREVIEW WIDGET
+//58 AUDIO WIDGET
   const MessageBarPreviewRecording(
       {required this.model,
       required this.audioController,
@@ -23,7 +25,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8, bottom: 8, top: 8),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
@@ -31,11 +33,11 @@ class MessageBarPreviewRecording extends StatelessWidget {
               child: AudioWidget(
                 controller: audioController,
                 initialColor: Colors.black,
-                progressColor: outboundMsgColor,
-                backgroundColor: inboundBgColor,
+                progressColor: Colors.grey,
+                backgroundColor: Colors.white,
                 showTimeRemaining: false,
                 widgetHeight: 50,
-                widgetWidth: MediaQuery.of(context).size.width * 0.6,
+                widgetWidth: MediaQuery.of(context).size.width,
                 waveHeight: 50,
                 previewBarHeight: 40,
               ),
@@ -49,7 +51,11 @@ class MessageBarPreviewRecording extends StatelessWidget {
               size: 20.sp,
             ),
           ),
-          const VerticalDivider(color: Colors.transparent),
+          const VerticalDivider(
+            color: Color.fromRGBO(235, 235, 235, 1),
+            width: 10,
+            thickness: 1,
+          ),
           GestureDetector(
             onTap: onSend,
             child: Icon(
