@@ -1,3 +1,4 @@
+// https://developer.android.com/guide/topics/media/media-formats
 const List<String> audioMimes = [
   'application/ogg',
   'audio/ogg',
@@ -14,6 +15,7 @@ const List<String> audioMimes = [
 
 const List<String> imageMimes = [
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/bpm',
   'image/gif',

@@ -1,7 +1,5 @@
 package org.getlantern.lantern.activity;
 
-import internalsdk.Internalsdk;
-import internalsdk.Updater;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,7 +13,6 @@ import android.provider.Settings;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -25,10 +22,17 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.Utils;
+import org.getlantern.lantern.util.ApkSignatureVerifier;
+import org.getlantern.lantern.util.SignatureVerificationException;
 import org.getlantern.mobilesdk.Logger;
 
 import java.io.File;
+
+import internalsdk.Internalsdk;
+import internalsdk.Updater;
 
 @EActivity(R.layout.activity_updater)
 public class UpdateActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -134,7 +138,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Logger.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+            Logger.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
             installUpdate();
         }
     }
@@ -210,18 +214,20 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
         // and mention where the user can download the latest version
         // this also dismisses the current updater activity
         private void displayError() {
+            Utils.showAlertDialog(
+                    activity,
+                    context.getString(R.string.error_update),
+                    context.getString(R.string.tampered_apk),
+                    true);
+        }
 
-            AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-            alertDialog.setTitle(context.getString(R.string.error_update));
-            alertDialog.setMessage(context.getString(R.string.manual_update));
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            activity.finish();
-                        }
-                    });
-            alertDialog.show();
+        // show an alert notifying the user that the downloaded apk has been tampered
+        private void displayTamperedApk() {
+            Utils.showAlertDialog(
+                    activity,
+                    context.getString(R.string.error_install_update),
+                    context.getString(R.string.manual_update),
+                    true);
         }
 
         /**
@@ -251,17 +257,26 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
             if (!result) {
                 Logger.debug(TAG, "Error trying to install Lantern update");
-                displayError();
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
                 return;
             }
 
             Logger.debug(TAG, "About to install new version of Lantern Android");
             if (!apkPath.isFile()) {
                 Logger.error(TAG, "Error loading APK; not found at " + apkPath);
-                displayError();
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
                 return;
             }
-
+            try {
+                ApkSignatureVerifier.verify(
+                        context,
+                        apkPath,
+                        BuildConfig.SIGNING_CERTIFICATE_SHA256);
+            } catch (SignatureVerificationException sfe) {
+                Logger.error(TAG, "Error installing update", sfe);
+                displayTamperedApk();
+                return;
+            }
             Intent i = new Intent();
             i.setAction(Intent.ACTION_VIEW);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -273,11 +288,8 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
                         "org.getlantern.lantern.fileProvider",
                         apkPath);
             }
-            ;
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
-
             this.context.startActivity(i);
-
             activity.finish();
         }
     }

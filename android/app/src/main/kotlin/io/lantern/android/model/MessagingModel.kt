@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
     private val videoFile = File(activity.cacheDir, "_playingvideo") // TODO: would be nice to expose this via a MediaDataSource instead
-    private val startedRecording = AtomicReference<Long>()
     private val stopRecording = AtomicReference<Runnable>()
 
     init {
@@ -33,9 +32,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
             "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
-                call.argument("identityKey")!!,
-                call.argument("displayName")!!
+            "addProvisionalContact" -> messaging.addProvisionalContact(
+                call.argument("contactId")!!
+            )
+            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+                call.argument("contactId")!!
             )
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
@@ -57,16 +58,16 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
+            "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
-                    val started = startedRecording.get()
                     stopRecordingVoiceMemo()
-                    val duration = (System.currentTimeMillis() - started).toDouble() / 1000.0
                     return messaging.createAttachment(
                         voiceMemoFile,
                         "audio/ogg",
-                        mapOf("duration" to duration.toString(), "role" to "voiceMemo"),
                         lazy = false
                     ).toByteArray()
                 } finally {
@@ -117,10 +118,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     }
 
     //(TODO): On ocassions OPUS breaks the app, throwing the following error, need to investigate how to fix this.
-    //F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), 
+    //F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
     //fault addr 0x90 in tid 28989 (OpusRecorder re), pid 12804 (lantern.lantern)
     private fun doStartRecordingVoiceMemo() {
-        startedRecording.set(System.currentTimeMillis())
         stopRecording.set(
             OpusRecorder.startRecording(
                 voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000

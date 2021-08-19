@@ -47,6 +47,18 @@ TextStyle tsMessageStatus(outbound) => TextStyle(
       fontSize: 10,
     );
 
+TextStyle tsEmptyContactState = const TextStyle(
+  color: Colors.black,
+  fontSize: 16,
+  height: 26 / 16,
+);
+
+TextStyle tsBaseScreenBodyText =
+    const TextStyle(color: Colors.black, fontSize: 16, height: 23 / 16);
+
+TextStyle txConversationSticker =
+    TextStyle(color: grey5, fontSize: 12, height: 19 / 12);
+
 // Dialogs
 TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 
@@ -76,6 +88,12 @@ TextStyle? tsInfoDialogButton = TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 14,
   color: primaryPink,
+);
+
+TextStyle txSnackBarText = const TextStyle(
+  fontSize: 14,
+  color: Colors.white,
+  height: 23 / 14,
 );
 
 // Message bubble StyleSheet

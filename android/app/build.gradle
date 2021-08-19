@@ -159,6 +159,7 @@ android {
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
+            buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
             buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
@@ -173,6 +174,7 @@ android {
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "String", "COUNTRY", userCountry()
+            buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
@@ -189,6 +191,7 @@ android {
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
             buildConfigField "String", "COUNTRY", userCountry()
+            buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"108f612ae55354078ec12b10bb705362840d48fa78b9262c11b6d0adeff6f289\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"'
@@ -417,8 +420,7 @@ dependencies {
     implementation(name:'opuslib-release', ext: 'aar')
     implementation 'com.github.getlantern:secrets-android:3ac588e'
     implementation 'com.github.getlantern:db-android:4d13d81641'
-    implementation 'com.github.getlantern:messaging-android:crdzbird~myself_chat-SNAPSHOT'
-
+    implementation 'com.github.getlantern:messaging-android:f1f2756f2d'
 }
 
 apply plugin: 'com.google.gms.google-services'

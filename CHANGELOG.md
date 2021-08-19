@@ -1,4 +1,54 @@
 
+<a name="6.8.5"></a>
+## [6.8.5](https://github.com/getlantern/android-lantern/compare/6.8.4...6.8.5)
+
+> 2021-08-19
+
+
+<a name="6.8.4"></a>
+## [6.8.4](https://github.com/getlantern/android-lantern/compare/6.8.3...6.8.4)
+
+> 2021-08-18
+
+### Pull Requests
+
+* Merge pull request [#316](https://github.com/getlantern/android-lantern/issues/316) from getlantern/ox/issue305-2
+
+
+<a name="6.8.3"></a>
+## [6.8.3](https://github.com/getlantern/android-lantern/compare/6.8.2...6.8.3)
+
+> 2021-08-17
+
+### Pull Requests
+
+* Merge pull request [#306](https://github.com/getlantern/android-lantern/issues/306) from getlantern/ox/issue304
+
+
+<a name="6.8.2"></a>
+## [6.8.2](https://github.com/getlantern/android-lantern/compare/6.8.1...6.8.2)
+
+> 2021-08-13
+
+
+<a name="6.8.1"></a>
+## [6.8.1](https://github.com/getlantern/android-lantern/compare/6.5.7...6.8.1)
+
+> 2021-08-13
+
+### Pull Requests
+
+* Merge pull request [#300](https://github.com/getlantern/android-lantern/issues/300) from getlantern/ox/ipv6
+* Merge pull request [#298](https://github.com/getlantern/android-lantern/issues/298) from getlantern/crdzbird/app_signature
+* Merge pull request [#277](https://github.com/getlantern/android-lantern/issues/277) from getlantern/ox/issue240
+
+
+<a name="6.5.7"></a>
+## [6.5.7](https://github.com/getlantern/android-lantern/compare/6.7.8...6.5.7)
+
+> 2021-08-04
+
+
 <a name="6.7.8"></a>
 ## [6.7.8](https://github.com/getlantern/android-lantern/compare/6.7.7...6.7.8)
 

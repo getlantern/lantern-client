@@ -31,7 +31,18 @@ message Contact {
   string mostRecentMessageText = 7; // the text of the most recent message with this contact
   string mostRecentAttachmentMimeType = 8; // the mime type of the most recent attachment with this contact
   int32 messagesDisappearAfterSeconds = 9; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
-  int64 firstReceivedMessageTs = 10; // the timestamp of when the first message was received from this contact (including control messages)
+  int64 firstReceivedMessageTs = 10; // the timestamp of when the first message was received from this contact (excluding control messages)
+  bool hasReceivedMessage = 11; // boolean indicating whether or not the contact has received any message (including control messages)
+  int64 mostRecentHelloTs = 12; // the timestamp of the most recent hello received from this Contact (used for bidirectional contact adding)
+}
+
+// A provisional direct contact that is not yet in the address book. If we receive a Hello from that
+// Contact before the ProvisionalContact expires, then the contact is added to the address book.
+// Otherwise, the provisional contact is deleted and the contactId is deleted from our Signal
+// protocol store, ensuring no trace is left of this contact.
+message ProvisionalContact {
+  string contactId = 1; // the ID of the contact (base32 encoded)
+  int64 expiresAt = 2; // the unix timestamp in milliseconds of when this provisional contact expires
 }
 
 // An attachment to a Message
@@ -67,6 +78,27 @@ message AttachmentWithThumbnail {
   Attachment thumbnail = 2;
 }
 
+// Introduction is an introduction to a potential direct Contact
+message Introduction {
+  bytes id = 1; // the id of the person to whom you're being introduced
+  string displayName = 2; // the display name of person to whom you're being introduced
+}
+
+// Details of an Introduction (attached to both a StoredMessage as well as a StoredIntroduction
+message IntroductionDetails {
+  enum IntroductionStatus {
+    PENDING = 0; // introduction has been made but has not yet been accepted/rejected
+    ACCEPTED = 1; // introduction has been accepted
+  }
+
+  ContactId to = 1; // the id of the contact to which we're being introduced
+  string displayName = 2; // the display name of the contact to whom we're being introduced. This
+  // may change when accepting an Introduction to the same contact made by
+  // someone else.
+  string originalDisplayName = 3; // the original display name of the introduction, this will never change
+  IntroductionStatus status = 4; // the status of the introduction
+}
+
 // A text message with attachments, the primary type of message exchanged by users.
 message Message {
   bytes id = 1; // the id of the message, unique under the given sender
@@ -75,6 +107,7 @@ message Message {
   string text = 4;
   map<int32, AttachmentWithThumbnail> attachments = 5; // attachments keyed to unique IDs for each attachment within this message
   int32 disappearAfterSeconds = 6; // if > 0, message should disappear within this many seconds of first being viewed
+  Introduction introduction = 7; // an introduction to another Contact
 }
 
 // A locally stored Message
@@ -104,6 +137,7 @@ message StoredMessage {
   int64 disappearAt = 14; // the unix timestamp in milliseconds of when this message will automatically disappear
   int64 remotelyDeletedAt = 16; // the unix timestamp in milliseconds of when an authorized party remotely deleted this message (will be 0 if the message hasn't been remotely deleted)
   ContactId remotelyDeletedBy = 17; // the id of the contact who remotely deleted this message
+  IntroductionDetails introduction = 18; // if this message was an introduction, this stores details of that introduction
 }
 
 // A reaction to a message
@@ -118,6 +152,13 @@ message DisappearSettings {
   int32 messagesDisappearAfterSeconds = 1; // the number of seconds after which new messages will automatically disappear. <=0 means they won't disappear.
 }
 
+// A Hello from a Contact. If this Hello is not marked as final, we'll respond with a final Hello of
+// our own. Hellos are only processed in conjunction with ProvisionalContacts.
+message Hello {
+  string displayName = 1; // the display name that we should use for this Contact
+  bool final = 2; // indicates whether this is a final hello
+}
+
 // An envelope for messages to be transferred via the message broker
 message TransferMessage {
   oneof content {
@@ -125,6 +166,7 @@ message TransferMessage {
     bytes reaction = 2; // serialized Reaction
     bytes deleteMessageId = 3; // the id of a message from this Sender to delete
     bytes disappearSettings = 4; // serialized DisappearSettings
+    bytes hello = 5; // serialized Hello
   }
 }
 
@@ -145,6 +187,7 @@ message OutboundMessage {
     bytes reaction = 32; // serialized Reaction
     bytes deleteMessageId = 33; // the id of a message from this Sender to delete
     bytes disappearSettings = 34; // serialized DisappearSettings
+    bytes hello = 35; // serialized Hello
   }
 }
 
