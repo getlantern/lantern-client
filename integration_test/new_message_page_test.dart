@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/messages.dart';
 import 'package:lantern/messaging/new_message.dart';
-import 'package:lantern/messaging/widgets/contact_message_preview.dart';
+import 'package:lantern/messaging/widgets/contact_list_item.dart';
 import 'package:lantern/ui/app.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:i18n_extension/i18n_widget.dart';
@@ -61,7 +61,7 @@ void main() {
       await tester.drag(find.byType(ListView), const Offset(0.0, -300.0));
       print('Flush the widget tree');
       await tester.pumpAndSettle();
-      var contactElement = find.widgetWithText(ContactMessagePreview, 'Me');
+      var contactElement = find.widgetWithText(ContactListItem, 'Me');
       expect(contactElement, findsOneWidget);
     });
 
