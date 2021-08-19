@@ -14,8 +14,8 @@ import 'attachment_types/video.dart';
 /// Factory for attachment widgets that can render the given attachment.
 Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
+  final fileExtension = attachment.attachment.metadata['fileExtension'];
   final mimeType = attachment.attachment.mimeType;
-  // https://developer.android.com/guide/topics/media/media-formats
 
   if (audioMimes.contains(mimeType)) {
     return AudioAttachment(attachment, inbound);
@@ -31,6 +31,7 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
 
   return _padded(GenericAttachment(
       attachmentTitle: attachmentTitle,
+      fileExtension: fileExtension,
       inbound: inbound,
       icon: Icons.insert_drive_file_rounded));
 }

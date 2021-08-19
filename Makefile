@@ -442,7 +442,6 @@ changelog: require-version require-changelog require-app
 
 clean:
 	rm -f liblantern*.aar && \
-	rm -f $(MOBILE_LIBS)/$(ANDROID_LIB_BASE)* && \
 	rm -f $(MOBILE_ANDROID_LIB) && \
 	rm -Rf app/build && \
 	rm -Rf app/unstripped_libs && \

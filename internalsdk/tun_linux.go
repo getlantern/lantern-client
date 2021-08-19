@@ -13,6 +13,7 @@ import (
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
 	"github.com/getlantern/netx"
+
 	"golang.org/x/net/proxy"
 )
 
@@ -25,14 +26,14 @@ var (
 // Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
 // does the following:
 //
-// 1. dns packets bound for dnsAddr are rerouted to dnsgrab at dnsGrabAddr
+// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 //
-func Tun2Socks(fd int, socksAddr, dnsAddr, dnsGrabAddr string, mtu int) error {
+func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	runtime.LockOSThread()
 
-	log.Debugf("Starting tun2socks connecting to socks at %v with dns %v", socksAddr, dnsAddr)
+	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
 	dev := os.NewFile(uintptr(fd), "tun")
 	defer dev.Close()
 
@@ -51,7 +52,8 @@ func Tun2Socks(fd int, socksAddr, dnsAddr, dnsGrabAddr string, mtu int) error {
 			return socksDialer.Dial(network, addr)
 		},
 		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
-			isDNS := addr == dnsAddr
+			_, port, _ := net.SplitHostPort(addr)
+			isDNS := port == "53"
 			if isDNS {
 				// reroute DNS requests to dnsgrab
 				addr = dnsGrabAddr
@@ -75,7 +77,7 @@ func Tun2Socks(fd int, socksAddr, dnsAddr, dnsGrabAddr string, mtu int) error {
 
 	err = ipp.Serve()
 	if err != io.EOF {
-		return err
+		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}
 	return nil
 }
