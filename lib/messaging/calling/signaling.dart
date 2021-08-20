@@ -40,7 +40,7 @@ class Session {
 
 class SignalingState {
   CallState callState = CallState.New;
-  var muted = true;
+  var muted = false;
   var speakerphoneOn = false;
 }
 
@@ -311,9 +311,9 @@ class Signaling extends ValueNotifier<SignalingState> {
 
     var mediaDevices = await navigator.mediaDevices.enumerateDevices();
     final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    // mute all audio tracks and disable speakerphone by default
+    // unmute all audio tracks and disable speakerphone by default
     stream.getAudioTracks().forEach((track) {
-      track.setMicrophoneMute(true);
+      track.setMicrophoneMute(false);
       track.enableSpeakerphone(false);
     });
     return stream;
