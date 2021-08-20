@@ -25,30 +25,7 @@ class MessagingModel extends Model {
                   .writeToBuffer(),
             }).then((value) => value as Uint8List));
 
-    signaling = Signaling(
-        model: this,
-        mc: methodChannel,
-        onCallStateChange: (Session session, CallState state) {
-          switch (state) {
-            case CallState.CallStateNew:
-              // setState(() {
-              //   _session = session;
-              //   _inCalling = true;
-              // });
-              break;
-            case CallState.CallStateBye:
-              // setState(() {
-              //   _localRenderer.srcObject = null;
-              //   _remoteRenderer.srcObject = null;
-              //   _inCalling = false;
-              //   _session = null;
-              // });
-              break;
-            case CallState.CallStateInvite:
-            case CallState.CallStateConnected:
-            case CallState.CallStateRinging:
-          }
-        });
+    signaling = Signaling(model: this, mc: methodChannel);
 
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {

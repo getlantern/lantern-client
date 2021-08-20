@@ -1,35 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
+import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/calling/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/app.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:pedantic/pedantic.dart';
 
-enum SignalingState {
-  ConnectionOpen,
-  ConnectionClosed,
-  ConnectionError,
-}
-
 enum CallState {
-  CallStateNew,
-  CallStateRinging,
-  CallStateInvite,
-  CallStateConnected,
-  CallStateBye,
+  New,
+  Ringing,
+  Connected,
+  Bye,
 }
 
 /*
  * callbacks for Signaling API.
  */
-typedef SignalingStateCallback = void Function(SignalingState state);
-typedef CallStateCallback = void Function(Session session, CallState state);
 typedef StreamStateCallback = void Function(
     Session? session, MediaStream stream);
 typedef OtherEventCallback = void Function(dynamic event);
@@ -43,9 +38,15 @@ class Session {
   List<RTCIceCandidate> remoteCandidates = [];
 }
 
-class Signaling {
-  Signaling(
-      {required this.model, required this.mc, required this.onCallStateChange});
+class SignalingState {
+  CallState callState = CallState.New;
+  var muted = true;
+  var speakerphoneOn = false;
+}
+
+/// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
+class Signaling extends ValueNotifier<SignalingState> {
+  Signaling({required this.model, required this.mc}) : super(SignalingState());
 
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
@@ -56,17 +57,13 @@ class Signaling {
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
 
-  CallStateCallback onCallStateChange;
-  StreamStateCallback? onLocalStream;
-  StreamStateCallback? onAddRemoteStream;
-  StreamStateCallback? onRemoveRemoteStream;
-
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
 
   Map<String, dynamic> _iceServers = {
     'iceServers': [
       {'url': 'stun:stun.l.google.com:19302'},
+      // TODO: add our own TURN server(s)
       /*
        * turn server configuration example.
       {
@@ -103,11 +100,24 @@ class Signaling {
     }
   }
 
-  void muteMic() {
+  void toggleMute() {
+    value.muted = !value.muted;
     if (_localStream != null) {
-      var enabled = _localStream!.getAudioTracks()[0].enabled;
-      _localStream!.getAudioTracks()[0].enabled = !enabled;
+      _localStream!.getAudioTracks().forEach((track) {
+        track.setMicrophoneMute(value.muted);
+      });
     }
+    notifyListeners();
+  }
+
+  void toggleSpeakerphone() {
+    value.speakerphoneOn = !value.speakerphoneOn;
+    if (_localStream != null) {
+      _localStream!.getAudioTracks().forEach((track) {
+        track.enableSpeakerphone(value.speakerphoneOn);
+      });
+    }
+    notifyListeners();
   }
 
   Future<Session> call(String peerId, String media) async {
@@ -117,7 +127,8 @@ class Signaling {
         peerId: peerId, sessionId: sessionId, media: media);
     _sessions[sessionId] = session;
     await _createOffer(session, media);
-    onCallStateChange(session, CallState.CallStateNew);
+    value.callState = CallState.Ringing;
+    notifyListeners();
     return session;
   }
 
@@ -126,7 +137,8 @@ class Signaling {
       'session_id': session.sid,
     });
 
-    onCallStateChange(session, CallState.CallStateBye);
+    value.callState = CallState.Bye;
+    notifyListeners();
     _closeSession(_sessions[session.sid]);
   }
 
@@ -145,6 +157,10 @@ class Signaling {
           // IMPORTANT - instead of immediately accepting the offer, we first
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
+          //
+          // IMPORTANT - if someone declines a call, we don't send anything to
+          // the caller to avoid leaking any sort of information about us. On
+          // the caller's end, it will appear as if it's still ringing.
           var contact = await model.getDirectContact(peerId);
           showAlertDialog(
               context: navigatorKey.currentContext!,
@@ -168,7 +184,18 @@ class Signaling {
                   });
                   newSession.remoteCandidates.clear();
                 }
-                onCallStateChange(newSession, CallState.CallStateNew);
+
+                value.callState = CallState.Connected;
+                notifyListeners();
+
+                await navigatorKey.currentContext?.pushRoute(
+                  FullScreenDialogPage(
+                      widget: Call(
+                    contact: contact,
+                    model: model,
+                    initialSession: newSession,
+                  )),
+                );
               });
         }
         break;
@@ -177,6 +204,10 @@ class Signaling {
           var description = data['description'];
           var sessionId = data['session_id'];
           var session = _sessions[sessionId];
+
+          value.callState = CallState.Connected;
+          notifyListeners();
+
           await session?.pc?.setRemoteDescription(
               RTCSessionDescription(description['sdp'], description['type']));
         }
@@ -213,7 +244,8 @@ class Signaling {
           print('bye: ' + sessionId);
           var session = _sessions.remove(sessionId);
           if (session != null) {
-            onCallStateChange(session, CallState.CallStateBye);
+            value.callState = CallState.Bye;
+            notifyListeners();
           }
           unawaited(_closeSession(session));
         }
@@ -230,25 +262,23 @@ class Signaling {
 
   Future<void> connect() async {
     if (_turnCredential == null) {
-      try {
-        _turnCredential = await getTurnCredential('demo.cloudwebrtc.com', 8086);
-        /*{
+      _turnCredential = await getTurnCredential('demo.cloudwebrtc.com', 8086);
+      /*{
             "username": "1584195784:mbzrxpgjys",
             "password": "isyl6FF6nqMTB9/ig5MrMRUXqZg",
             "ttl": 86400,
             "uris": ["turn:127.0.0.1:19302?transport=udp"]
           }
         */
-        _iceServers = {
-          'iceServers': [
-            {
-              'urls': _turnCredential['uris'][0],
-              'username': _turnCredential['username'],
-              'credential': _turnCredential['password']
-            },
-          ]
-        };
-      } catch (e) {}
+      _iceServers = {
+        'iceServers': [
+          {
+            'urls': _turnCredential['uris'][0],
+            'username': _turnCredential['username'],
+            'credential': _turnCredential['password']
+          },
+        ]
+      };
     }
   }
 
@@ -279,8 +309,13 @@ class Signaling {
       // }
     };
 
+    var mediaDevices = await navigator.mediaDevices.enumerateDevices();
     final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    onLocalStream?.call(null, stream);
+    // mute all audio tracks and disable speakerphone by default
+    stream.getAudioTracks().forEach((track) {
+      track.setMicrophoneMute(true);
+      track.enableSpeakerphone(false);
+    });
     return stream;
   }
 
@@ -292,14 +327,14 @@ class Signaling {
     var newSession = session ?? Session(sid: sessionId, pid: peerId);
     _localStream = await createStream();
     print(_iceServers);
-    RTCPeerConnection pc = await createPeerConnection({
+    var pc = await createPeerConnection({
       ..._iceServers,
       ...{'sdpSemantics': sdpSemantics}
     }, _config);
     switch (sdpSemantics) {
       case 'plan-b':
         pc.onAddStream = (MediaStream stream) {
-          onAddRemoteStream?.call(newSession, stream);
+          // onAddRemoteStream?.call(newSession, stream);
           _remoteStreams.add(stream);
         };
         await pc.addStream(_localStream!);
@@ -308,7 +343,7 @@ class Signaling {
         // Unified-Plan
         pc.onTrack = (event) {
           if (event.track.kind == 'video') {
-            onAddRemoteStream?.call(newSession, event.streams[0]);
+            // onAddRemoteStream?.call(newSession, event.streams[0]);
           }
         };
         _localStream!.getTracks().forEach((track) {
@@ -361,10 +396,6 @@ class Signaling {
       */
     }
     pc.onIceCandidate = (candidate) {
-      if (candidate == null) {
-        print('onIceCandidate: complete!');
-        return;
-      }
       _send(peerId, 'candidate', {
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
@@ -378,7 +409,7 @@ class Signaling {
     pc.onIceConnectionState = (state) {};
 
     pc.onRemoveStream = (stream) {
-      onRemoveRemoteStream?.call(newSession, stream);
+      // onRemoveRemoteStream?.call(newSession, stream);
       _remoteStreams.removeWhere((it) {
         return (it.id == stream.id);
       });
@@ -390,7 +421,7 @@ class Signaling {
 
   Future<void> _createOffer(Session session, String media) async {
     try {
-      RTCSessionDescription s =
+      var s =
           await session.pc!.createOffer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
       await _send(session.pid, 'offer', {
@@ -405,7 +436,7 @@ class Signaling {
 
   Future<void> _createAnswer(Session session, String media) async {
     try {
-      RTCSessionDescription s =
+      var s =
           await session.pc!.createAnswer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
       await _send(session.pid, 'answer', {
@@ -418,9 +449,9 @@ class Signaling {
   }
 
   Future<void> _send(peerId, event, data) async {
-    var request = Map();
-    request["type"] = event;
-    request["data"] = data;
+    var request = {};
+    request['type'] = event;
+    request['data'] = data;
     await mc.invokeMethod('sendSignal', {
       'recipientId': peerId,
       'content': _encoder.convert(request),
@@ -450,7 +481,8 @@ class Signaling {
     });
     if (session != null) {
       _closeSession(session);
-      onCallStateChange.call(session, CallState.CallStateBye);
+      value.callState = CallState.Bye;
+      notifyListeners();
     }
   }
 
