@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calling/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -26,22 +28,24 @@ class CallAction extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8.0),
                     topRight: Radius.circular(8.0))),
-            builder: (context) => SizedBox(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading:
-                        const CustomAssetImage(path: ImagePaths.phone_icon),
-                    title: Text('Call'.i18n),
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                          PageRouteBuilder(
-                              pageBuilder: (BuildContext context, _, __) =>
-                                  Call(contact, model)));
-                    },
-                  ),
-                ],
-              ),
+            builder: (context) => Wrap(
+              children: [
+                ListTile(
+                  leading: const CustomAssetImage(path: ImagePaths.phone_icon),
+                  title: Text('Call'.i18n),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await context.router.push(
+                      FullScreenDialogPage(widget: Call(contact, model)),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const CustomAssetImage(path: ImagePaths.cancel_icon),
+                  title: Text('Cancel'.i18n),
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
             ),
           );
         },

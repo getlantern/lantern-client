@@ -13,7 +13,8 @@ import 'package:lantern/utils/audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sizer/sizer.dart';
 
-final globalRouter = AppRouter();
+final navigatorKey = GlobalKey<NavigatorState>();
+final globalRouter = AppRouter(navigatorKey);
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);

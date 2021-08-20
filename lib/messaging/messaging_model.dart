@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -27,6 +26,7 @@ class MessagingModel extends Model {
             }).then((value) => value as Uint8List));
 
     signaling = Signaling(
+        model: this,
         mc: methodChannel,
         onCallStateChange: (Session session, CallState state) {
           switch (state) {
@@ -289,7 +289,7 @@ class MessagingModel extends Model {
   }
 
   ValueNotifier<Contact?> contactNotifier(String contactId) {
-    return singleValueNotifier('/contacts/d/$contactId', null,
+    return singleValueNotifier(_directContactPath(contactId), null,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
@@ -305,6 +305,12 @@ class MessagingModel extends Model {
         builder: builder, deserialize: (Uint8List serialized) {
       return StoredMessage.fromBuffer(serialized);
     });
+  }
+
+  Future<Contact> getDirectContact(String contactId) {
+    return methodChannel
+        .invokeMethod('get', _directContactPath(contactId))
+        .then((value) => Contact.fromBuffer(value as Uint8List));
   }
 
   Widget message(BuildContext context, PathAndValue<StoredMessage> message,
@@ -325,4 +331,6 @@ class MessagingModel extends Model {
         ? 'd/${contactId.id}'
         : 'g/${contactId.id}';
   }
+
+  String _directContactPath(String contactId) => '/contacts/d/$contactId';
 }
