@@ -2,8 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/app.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:pedantic/pedantic.dart';
 
 enum SignalingState {
@@ -39,7 +44,8 @@ class Session {
 }
 
 class Signaling {
-  Signaling({required this.mc, required this.onCallStateChange});
+  Signaling(
+      {required this.model, required this.mc, required this.onCallStateChange});
 
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
@@ -48,6 +54,7 @@ class Signaling {
   final Map<String, Session> _sessions = {};
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
+  final MessagingModel model;
 
   CallStateCallback onCallStateChange;
   StreamStateCallback? onLocalStream;
@@ -134,24 +141,35 @@ class Signaling {
           var media = data['media'];
           var sessionId = data['session_id'];
           var session = _sessions[sessionId];
-          // TODO: need to "ring" the user first and only create the session
-          // once the user accepts the call
-          var newSession = await _createSession(
-              session: session,
-              peerId: peerId,
-              sessionId: sessionId,
-              media: media);
-          _sessions[sessionId] = newSession;
-          await newSession.pc!.setRemoteDescription(
-              RTCSessionDescription(description['sdp'], description['type']));
-          await _createAnswer(newSession, media);
-          if (newSession.remoteCandidates.isNotEmpty) {
-            newSession.remoteCandidates.forEach((candidate) async {
-              await newSession.pc!.addCandidate(candidate);
-            });
-            newSession.remoteCandidates.clear();
-          }
-          onCallStateChange(newSession, CallState.CallStateNew);
+
+          // IMPORTANT - instead of immediately accepting the offer, we first
+          // prompt the user. This prevents the system from transmitting audio
+          // or video without the user's knowledge.
+          var contact = await model.getDirectContact(peerId);
+          showAlertDialog(
+              context: navigatorKey.currentContext!,
+              autoDismissAfter: const Duration(seconds: 30),
+              title: Text('Incoming Call'.i18n),
+              content: Text('From '.i18n + contact.displayName),
+              dismissText: 'Dismiss'.i18n,
+              agreeAction: () async {
+                var newSession = await _createSession(
+                    session: session,
+                    peerId: peerId,
+                    sessionId: sessionId,
+                    media: media);
+                _sessions[sessionId] = newSession;
+                await newSession.pc!.setRemoteDescription(RTCSessionDescription(
+                    description['sdp'], description['type']));
+                await _createAnswer(newSession, media);
+                if (newSession.remoteCandidates.isNotEmpty) {
+                  newSession.remoteCandidates.forEach((candidate) async {
+                    await newSession.pc!.addCandidate(candidate);
+                  });
+                  newSession.remoteCandidates.clear();
+                }
+                onCallStateChange(newSession, CallState.CallStateNew);
+              });
         }
         break;
       case 'answer':

@@ -35,6 +35,10 @@ class ImagePaths {
   static const number_2 = 'assets/images/number_2.svg';
 
   static const phone_icon = 'assets/images/phone_icon.svg';
+  static const speaker_icon = 'assets/images/speaker_icon.svg';
+  static const mute_icon = 'assets/images/mute_icon.svg';
+  static const hangup_icon = 'assets/images/hangup_icon.svg';
+  static const cancel_icon = 'assets/images/cancel_icon.svg';
 
   static const _countdownPaths = [
     'assets/images/disappear/timer_12.svg',
