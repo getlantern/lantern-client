@@ -35,8 +35,9 @@ class CallAction extends StatelessWidget {
                   title: Text('Call'.i18n),
                   onTap: () async {
                     Navigator.pop(context);
-                    await context.router.push(
-                      FullScreenDialogPage(widget: Call(contact, model)),
+                    await context.pushRoute(
+                      FullScreenDialogPage(
+                          widget: Call(contact: contact, model: model)),
                     );
                   },
                 ),
