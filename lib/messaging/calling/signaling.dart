@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:http/http.dart' as http;
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calling/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
@@ -51,7 +50,6 @@ class Signaling extends ValueNotifier<SignalingState> {
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
   final MethodChannel mc;
-  dynamic _turnCredential;
   final Map<String, Session> _sessions = {};
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
@@ -60,18 +58,16 @@ class Signaling extends ValueNotifier<SignalingState> {
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
 
-  Map<String, dynamic> _iceServers = {
+  final Map<String, dynamic> _iceServers = {
     'iceServers': [
-      {'url': 'stun:stun.l.google.com:19302'},
-      // TODO: add our own TURN server(s)
-      /*
-       * turn server configuration example.
+      // {'url': 'stun:stun.l.google.com:19302'},
+      // TODO: use our own TURN server
+      {'url': 'stun:numb.viagenie.ca:3478'},
       {
-        'url': 'turn:123.45.67.89:3478',
-        'username': 'change_to_real_user',
-        'credential': 'change_to_real_secret'
+        'urls': 'turn:numb.viagenie.ca:3478',
+        'username': 'ox@getlantern.org',
+        'credential': 'g7gwQSn6rlJ4U19JI48F',
       },
-      */
     ]
   };
 
@@ -127,6 +123,8 @@ class Signaling extends ValueNotifier<SignalingState> {
         peerId: peerId, sessionId: sessionId, media: media);
     _sessions[sessionId] = session;
     await _createOffer(session, media);
+    value.muted = false;
+    value.speakerphoneOn = false;
     value.callState = CallState.Ringing;
     notifyListeners();
     return session;
@@ -205,6 +203,8 @@ class Signaling extends ValueNotifier<SignalingState> {
           var sessionId = data['session_id'];
           var session = _sessions[sessionId];
 
+          value.muted = false;
+          value.speakerphoneOn = false;
           value.callState = CallState.Connected;
           notifyListeners();
 
@@ -258,40 +258,6 @@ class Signaling extends ValueNotifier<SignalingState> {
       default:
         break;
     }
-  }
-
-  Future<void> connect() async {
-    if (_turnCredential == null) {
-      _turnCredential = await getTurnCredential('demo.cloudwebrtc.com', 8086);
-      /*{
-            "username": "1584195784:mbzrxpgjys",
-            "password": "isyl6FF6nqMTB9/ig5MrMRUXqZg",
-            "ttl": 86400,
-            "uris": ["turn:127.0.0.1:19302?transport=udp"]
-          }
-        */
-      _iceServers = {
-        'iceServers': [
-          {
-            'urls': _turnCredential['uris'][0],
-            'username': _turnCredential['username'],
-            'credential': _turnCredential['password']
-          },
-        ]
-      };
-    }
-  }
-
-  Future<Map> getTurnCredential(String host, int port) async {
-    var url =
-        'https://$host:$port/api/turn?service=turn&username=flutter-webrtc';
-    final res = await http.get(Uri.parse(url));
-    if (res.statusCode == 200) {
-      var data = json.decode(res.body);
-      print('getTurnCredential:response => $data.');
-      return data;
-    }
-    return {};
   }
 
   Future<MediaStream> createStream() async {
