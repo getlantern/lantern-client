@@ -60,13 +60,13 @@ class Signaling extends ValueNotifier<SignalingState> {
 
   final Map<String, dynamic> _iceServers = {
     'iceServers': [
+      // Note - we currently don't use STUN because it exposes clients' IP
+      // addresses to each other.
       // {'url': 'stun:stun.l.google.com:19302'},
-      // TODO: use our own TURN server
-      {'url': 'stun:numb.viagenie.ca:3478'},
       {
-        'urls': 'turn:numb.viagenie.ca:3478',
-        'username': 'ox@getlantern.org',
-        'credential': 'g7gwQSn6rlJ4U19JI48F',
+        'urls': 'turn:turn.getlantern.org:3478',
+        'username': 'lantern',
+        'credential': 'IIs6WhQ1zE0lQJhfnFwE',
       },
     ]
   };
@@ -131,13 +131,17 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void bye(Session session) {
-    _send(session.pid, 'bye', {
-      'session_id': session.sid,
-    });
+    _sendBye(session.pid, session.sid);
 
     value.callState = CallState.Bye;
     notifyListeners();
     _closeSession(_sessions[session.sid]);
+  }
+
+  void _sendBye(String peerId, String sessionId) {
+    _send(peerId, 'bye', {
+      'session_id': sessionId,
+    });
   }
 
   void onMessage(String peerId, String messageJson) async {
@@ -166,6 +170,9 @@ class Signaling extends ValueNotifier<SignalingState> {
               title: Text('Incoming Call'.i18n),
               content: Text('From '.i18n + contact.displayName),
               dismissText: 'Dismiss'.i18n,
+              dismissAction: () async {
+                _sendBye(peerId, sessionId);
+              },
               agreeAction: () async {
                 var newSession = await _createSession(
                     session: session,
