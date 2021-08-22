@@ -122,6 +122,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 // for now, if there are any errors sending to any devices, we throw the first error
                 signalResult.errors.values.firstOrNull()?.let { throw it }
             }
+            "allocateRelayAddress" -> {
+                return internalsdk.Internalsdk.allocateRelayAddress(call.arguments as String)
+            }
+            "relayTo" -> {
+                return internalsdk.Internalsdk.relayTo(call.arguments as String)
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

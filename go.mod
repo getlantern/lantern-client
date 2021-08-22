@@ -8,7 +8,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20210813193242-5b74f2fa306f
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20210813194118-9414f770bcc0
+	github.com/getlantern/flashlight v0.0.0-20210821233234-1be1bfc771d8
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
@@ -19,12 +19,15 @@ require (
 	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210813193231-51494eb326a4
+	github.com/getlantern/uuid v1.2.0 // indirect
 	github.com/getsentry/sentry-go v0.11.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+	gortc.io/turn v0.11.2 // indirect
+	nhooyr.io/websocket v1.8.7 // indirect
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.7.1-0.20210422183034-b5805f4c233b
