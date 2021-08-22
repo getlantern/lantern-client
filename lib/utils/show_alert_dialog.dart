@@ -16,7 +16,7 @@ void showAlertDialog({
 }) {
   Timer? autoDismissTimer;
   if (autoDismissAfter != null) {
-    autoDismissTimer = Timer(const Duration(seconds: 10), () {
+    autoDismissTimer = Timer(autoDismissAfter, () {
       Navigator.pop(context);
     });
   }

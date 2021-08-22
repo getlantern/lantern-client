@@ -21,6 +21,11 @@ enum CallState {
   Bye,
 }
 
+final localTCPCandidateRegExp =
+    RegExp(r'.+tcp [0-9]+ (127.0.0.1 [0-9]{1,5}).+');
+
+final remoteTCPCandidateRegExp = RegExp(r'.+tcp [0-9]+ (ws[^\s]+).+');
+
 /*
  * callbacks for Signaling API.
  */
@@ -29,8 +34,9 @@ typedef StreamStateCallback = void Function(
 typedef OtherEventCallback = void Function(dynamic event);
 
 class Session {
-  Session({required this.sid, required this.pid});
+  Session({required this.isInitiator, required this.sid, required this.pid});
 
+  bool isInitiator;
   String pid;
   String sid;
   RTCPeerConnection? pc;
@@ -58,33 +64,33 @@ class Signaling extends ValueNotifier<SignalingState> {
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
 
-  final Map<String, dynamic> _iceServers = {
-    'iceServers': [
-      // Note - we currently don't use STUN because it exposes clients' IP
-      // addresses to each other.
-      // {'url': 'stun:stun.l.google.com:19302'},
-      {
-        'urls': 'turn:turn.getlantern.org:3478',
-        'username': 'lantern',
-        'credential': 'IIs6WhQ1zE0lQJhfnFwE',
-      },
-    ]
-  };
+  Map<String, dynamic> get _iceServers => {
+        'iceServers': [
+          // Note - we currently don't use STUN because it exposes clients' IP
+          // addresses to each other.
+          // {'url': 'stun:stun.l.google.com:19302'},
+          // {
+          //   'urls': 'turn:turn.getlantern.org:3478?transport=tcp',
+          //   'username': 'lantern',
+          //   'credential': 'IIs6WhQ1zE0lQJhfnFwE',
+          // },
+        ]
+      };
 
-  final Map<String, dynamic> _config = {
-    'mandatory': {},
-    'optional': [
-      {'DtlsSrtpKeyAgreement': true},
-    ]
-  };
+  Map<String, dynamic> get _config => {
+        'mandatory': {},
+        'optional': [
+          {'DtlsSrtpKeyAgreement': true},
+        ]
+      };
 
-  final Map<String, dynamic> _dcConstraints = {
-    'mandatory': {
-      'OfferToReceiveAudio': false,
-      'OfferToReceiveVideo': false,
-    },
-    'optional': [],
-  };
+  Map<String, dynamic> get _dcConstraints => {
+        'mandatory': {
+          'OfferToReceiveAudio': false,
+          'OfferToReceiveVideo': false,
+        },
+        'optional': [],
+      };
 
   void close() async {
     await _cleanSessions();
@@ -120,7 +126,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
-        peerId: peerId, sessionId: sessionId, media: media);
+        isInitiator: true, peerId: peerId, sessionId: sessionId, media: media);
     _sessions[sessionId] = session;
     await _createOffer(session, media);
     value.muted = false;
@@ -154,7 +160,6 @@ class Signaling extends ValueNotifier<SignalingState> {
           var description = data['description'];
           var media = data['media'];
           var sessionId = data['session_id'];
-          var session = _sessions[sessionId];
 
           // IMPORTANT - instead of immediately accepting the offer, we first
           // prompt the user. This prevents the system from transmitting audio
@@ -175,7 +180,8 @@ class Signaling extends ValueNotifier<SignalingState> {
               },
               agreeAction: () async {
                 var newSession = await _createSession(
-                    session: session,
+                    isInitiator: false,
+                    session: _sessions[sessionId],
                     peerId: peerId,
                     sessionId: sessionId,
                     media: media);
@@ -185,7 +191,7 @@ class Signaling extends ValueNotifier<SignalingState> {
                 await _createAnswer(newSession, media);
                 if (newSession.remoteCandidates.isNotEmpty) {
                   newSession.remoteCandidates.forEach((candidate) async {
-                    await newSession.pc!.addCandidate(candidate);
+                    await _addRemoteCandidate(newSession, candidate);
                   });
                   newSession.remoteCandidates.clear();
                 }
@@ -222,20 +228,22 @@ class Signaling extends ValueNotifier<SignalingState> {
       case 'candidate':
         {
           var candidateMap = data['candidate'];
+          var candidateString = candidateMap['candidate'] as String;
           var sessionId = data['session_id'];
           var session = _sessions[sessionId];
-          var candidate = RTCIceCandidate(candidateMap['candidate'],
+          var candidate = RTCIceCandidate(candidateString,
               candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
 
           if (session != null) {
             if (session.pc != null) {
-              await session.pc!.addCandidate(candidate);
+              await _addRemoteCandidate(session, candidate);
             } else {
               session.remoteCandidates.add(candidate);
             }
           } else {
-            _sessions[sessionId] = Session(pid: peerId, sid: sessionId)
-              ..remoteCandidates.add(candidate);
+            _sessions[sessionId] =
+                Session(isInitiator: false, pid: peerId, sid: sessionId)
+                  ..remoteCandidates.add(candidate);
           }
         }
         break;
@@ -293,16 +301,20 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   Future<Session> _createSession(
-      {Session? session,
+      {required bool isInitiator,
+      Session? session,
       required String peerId,
       required String sessionId,
       required String media}) async {
-    var newSession = session ?? Session(sid: sessionId, pid: peerId);
+    var newSession = session ??
+        Session(isInitiator: isInitiator, sid: sessionId, pid: peerId);
     _localStream = await createStream();
-    print(_iceServers);
     var pc = await createPeerConnection({
       ..._iceServers,
-      ...{'sdpSemantics': sdpSemantics}
+      ...{
+        'sdpSemantics': sdpSemantics,
+        // 'iceTransportPolicy': 'relay',
+      }
     }, _config);
     switch (sdpSemantics) {
       case 'plan-b':
@@ -368,15 +380,28 @@ class Signaling extends ValueNotifier<SignalingState> {
         sender.setParameters(parameters);
       */
     }
-    pc.onIceCandidate = (candidate) {
-      _send(peerId, 'candidate', {
-        'candidate': {
-          'sdpMLineIndex': candidate.sdpMlineIndex,
-          'sdpMid': candidate.sdpMid,
-          'candidate': candidate.candidate,
-        },
-        'session_id': sessionId,
-      });
+    pc.onIceCandidate = (candidate) async {
+      // Only the initiator transmits candidates
+      if (newSession.isInitiator && candidate.candidate != null) {
+        // look specifically for localhost TCP candidates
+        var candidateString = candidate.candidate!;
+        var match = localTCPCandidateRegExp.firstMatch(candidateString);
+        if (match != null) {
+          var hostAndPort = match.group(1)!;
+          var relayAddr = await model
+              .allocateRelayAddress(hostAndPort.replaceFirst(' ', ':'));
+          candidateString =
+              candidateString.replaceFirst(hostAndPort, relayAddr);
+          unawaited(_send(peerId, 'candidate', {
+            'candidate': {
+              'sdpMLineIndex': candidate.sdpMlineIndex,
+              'sdpMid': candidate.sdpMid,
+              'candidate': candidateString,
+            },
+            'session_id': sessionId,
+          }));
+        }
+      }
     };
 
     pc.onIceConnectionState = (state) {};
@@ -390,6 +415,24 @@ class Signaling extends ValueNotifier<SignalingState> {
 
     newSession.pc = pc;
     return newSession;
+  }
+
+  Future<void> _addRemoteCandidate(
+      Session session, RTCIceCandidate candidate) async {
+    if (!session.isInitiator && candidate.candidate != null) {
+      var match = remoteTCPCandidateRegExp.firstMatch(candidate.candidate!);
+      if (match != null) {
+        var relayAddr = match.group(1)!;
+        var localRelayAddr = await model.relayTo(relayAddr);
+        var localCandidate = RTCIceCandidate(
+          candidate.candidate!
+              .replaceFirst(relayAddr, localRelayAddr.replaceFirst(':', ' ')),
+          candidate.sdpMid,
+          candidate.sdpMlineIndex,
+        );
+        await session.pc!.addCandidate(localCandidate);
+      }
+    }
   }
 
   Future<void> _createOffer(Session session, String media) async {
