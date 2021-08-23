@@ -155,6 +155,10 @@ class MessagingModel extends Model {
         'clearCurrentConversationContact',
       );
 
+  Future<bool> activityVisible() async => methodChannel
+      .invokeMethod('activityVisible')
+      .then((value) => value as bool);
+
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));

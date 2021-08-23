@@ -1,17 +1,14 @@
 package org.getlantern.lantern.model;
 
-import android.content.Context;
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import org.getlantern.lantern.LanternApp;
+import org.getlantern.lantern.util.Json;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.util.HttpClient;
 
@@ -148,13 +145,12 @@ public class LanternHttpClient extends HttpClient {
 
     private void processPlans(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
         Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        final Gson gson = new Gson();
         String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
         LanternApp.getSession().setStripePubKey(stripePubKey);
         Type listType = new TypeToken<List<ProPlan>>() {
         }.getType();
         Logger.debug(TAG, "Plans: " + result.get("plans"));
-        final List<ProPlan> fetched = (List<ProPlan>) gson.fromJson(result.get("plans"), listType);
+        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
         Logger.debug(TAG, "Pro plans: " + fetched);
         for (ProPlan plan : fetched) {
             if (plan != null) {
@@ -261,7 +257,7 @@ public class LanternHttpClient extends HttpClient {
             public void onSuccess(final Response response, final JsonObject result) {
                 try {
                     Logger.debug(TAG, "JSON response" + result.toString());
-                    final ProUser user = new Gson().fromJson(result, ProUser.class);
+                    final ProUser user = Json.gson.fromJson(result, ProUser.class);
                     if (user != null) {
                         Logger.debug(TAG, "User ID is " + user.getUserId());
                         LanternApp.getSession().storeUserData(user);
