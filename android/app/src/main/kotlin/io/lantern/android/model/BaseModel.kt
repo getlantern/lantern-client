@@ -6,7 +6,6 @@ import android.os.HandlerThread
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.messaging.AttachmentTooBigException
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -15,6 +14,7 @@ import io.lantern.db.DetailsChangeSet
 import io.lantern.db.DetailsSubscriber
 import io.lantern.db.RawChangeSet
 import io.lantern.db.RawSubscriber
+import io.lantern.messaging.AttachmentTooBigException
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger

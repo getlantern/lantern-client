@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calling/call.dart';
@@ -60,6 +61,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
+  String? currentlyRingingSessionId;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -106,7 +108,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     value.muted = !value.muted;
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
-        track.setMicrophoneMute(value.muted);
+        track.enabled = !value.muted;
       });
     }
     notifyListeners();
@@ -151,10 +153,10 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void onMessage(String peerId, String messageJson) async {
-    Map<String, dynamic> mapData = _decoder.convert(messageJson);
-    var data = mapData['data'];
+    Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
+    var data = parsedMessage['data'];
 
-    switch (mapData['type']) {
+    switch (parsedMessage['type']) {
       case 'offer':
         {
           var description = data['description'];
@@ -164,21 +166,30 @@ class Signaling extends ValueNotifier<SignalingState> {
           // IMPORTANT - instead of immediately accepting the offer, we first
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
-          //
-          // IMPORTANT - if someone declines a call, we don't send anything to
-          // the caller to avoid leaking any sort of information about us. On
-          // the caller's end, it will appear as if it's still ringing.
           var contact = await model.getDirectContact(peerId);
+          currentlyRingingSessionId = sessionId;
+          var activityVisible = await model.activityVisible();
+          if (!activityVisible) {
+            // don't show ringer notification if the activity isn't visible
+            return;
+          }
+          unawaited(FlutterRingtonePlayer.playRingtone());
           showAlertDialog(
               context: navigatorKey.currentContext!,
               autoDismissAfter: const Duration(seconds: 30),
+              // force dismissal through actual dismiss action to make sure we stop ringtone, etc
+              barrierDismissible: false,
               title: Text('Incoming Call'.i18n),
               content: Text('From '.i18n + contact.displayName),
               dismissText: 'Dismiss'.i18n,
               dismissAction: () async {
+                currentlyRingingSessionId = null;
+                await FlutterRingtonePlayer.stop();
                 _sendBye(peerId, sessionId);
               },
               agreeAction: () async {
+                currentlyRingingSessionId = null;
+                await FlutterRingtonePlayer.stop();
                 var newSession = await _createSession(
                     isInitiator: false,
                     session: _sessions[sessionId],
@@ -261,6 +272,10 @@ class Signaling extends ValueNotifier<SignalingState> {
           if (session != null) {
             value.callState = CallState.Bye;
             notifyListeners();
+          } else if (currentlyRingingSessionId != null) {
+            await FlutterRingtonePlayer.stop();
+            Navigator.of(navigatorKey.currentContext!).pop();
+            currentlyRingingSessionId = null;
           }
           unawaited(_closeSession(session));
         }
@@ -294,7 +309,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     // unmute all audio tracks and disable speakerphone by default
     stream.getAudioTracks().forEach((track) {
-      track.setMicrophoneMute(false);
+      track.enabled = true;
       track.enableSpeakerphone(false);
     });
     return stream;
@@ -475,13 +490,6 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   Future<void> _cleanSessions() async {
-    if (_localStream != null) {
-      _localStream!.getTracks().forEach((element) async {
-        await element.stop();
-      });
-      await _localStream!.dispose();
-      _localStream = null;
-    }
     _sessions.forEach((key, sess) async {
       await sess.pc?.close();
     });
@@ -503,12 +511,11 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   Future<void> _closeSession(Session? session) async {
-    _localStream?.getTracks().forEach((element) async {
-      await element.stop();
+    _localStream?.getTracks().forEach((track) async {
+      await track.stop();
     });
     await _localStream?.dispose();
     _localStream = null;
-
     await session?.pc?.close();
   }
 }
