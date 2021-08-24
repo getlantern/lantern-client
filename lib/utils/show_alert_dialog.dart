@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:lantern/package_store.dart';
 
-void showAlertDialog({
+Function() showAlertDialog({
   required BuildContext context,
   barrierDismissible = true,
   required Widget title,
@@ -21,6 +21,15 @@ void showAlertDialog({
     });
   }
 
+  var closed = false;
+  void close() {
+    if (!closed) {
+      autoDismissTimer?.cancel();
+      Navigator.pop(context);
+      closed = true;
+    }
+  }
+
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -33,8 +42,7 @@ void showAlertDialog({
           TextButton(
             onPressed: () {
               if (dismissAction != null) dismissAction();
-              autoDismissTimer?.cancel();
-              Navigator.pop(context);
+              close();
             },
             child: Text(
               dismissText.i18n.toUpperCase(),
@@ -45,8 +53,7 @@ void showAlertDialog({
           TextButton(
             onPressed: () {
               if (agreeAction != null) agreeAction();
-              autoDismissTimer?.cancel();
-              Navigator.pop(context);
+              close();
             },
             child: Text(
               agreeText.i18n.toUpperCase(),
@@ -57,4 +64,6 @@ void showAlertDialog({
       );
     },
   );
+
+  return close;
 }

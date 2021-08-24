@@ -220,7 +220,7 @@ class MessageBubble extends StatelessWidget {
 
 Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     bool isLocal, PathAndValue<StoredMessage> message) async {
-  return showAlertDialog(
+  showAlertDialog(
     context: context,
     barrierDismissible: true,
     content: SingleChildScrollView(
