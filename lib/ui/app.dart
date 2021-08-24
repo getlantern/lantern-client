@@ -19,6 +19,7 @@ class LanternApp extends StatelessWidget {
       providers: [
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => SessionModel()),
+        Provider(create: (context) => AuthModel()),
         Provider(create: (context) => EventManager('lantern_event_channel')),
         Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),

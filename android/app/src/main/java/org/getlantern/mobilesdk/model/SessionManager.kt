@@ -463,7 +463,7 @@ abstract class SessionManager(application: Application) : Session {
 
         @JvmStatic
         val EMAIL_ADDRESS = "emailAddress"
-        val USERNAME      = "username"
+        val USERNAME = "username"
         protected const val PREF_USE_VPN = "pref_vpn"
         protected const val PREF_BOOTUP_VPN = "pref_bootup_vpn"
         protected const val ACCEPTED_TERMS_VERSION = "accepted_terms_version"

@@ -122,6 +122,20 @@ class AccountMenu extends StatelessWidget {
             Navigator.pushNamed(context, routeApproveDevice);
           }),
       SettingsItem(
+        icon: ImagePaths.settings_icon,
+        title: 'Create Account'.i18n,
+        onTap: () {
+          createAccount(context);
+        },
+      ),
+      SettingsItem(
+        icon: ImagePaths.settings_icon,
+        title: 'Sign In'.i18n,
+        onTap: () {
+          login(context);
+        },
+      ),
+      SettingsItem(
         icon: ImagePaths.star_icon,
         title: 'invite_friends'.i18n,
         onTap: inviteFriends,
