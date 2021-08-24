@@ -15,19 +15,20 @@ Function() showAlertDialog({
   Duration? autoDismissAfter,
 }) {
   Timer? autoDismissTimer;
-  if (autoDismissAfter != null) {
-    autoDismissTimer = Timer(autoDismissAfter, () {
-      Navigator.pop(context);
-    });
-  }
-
   var closed = false;
+
   void close() {
+    autoDismissTimer?.cancel();
     if (!closed) {
-      autoDismissTimer?.cancel();
       Navigator.pop(context);
       closed = true;
     }
+  }
+
+  if (autoDismissAfter != null) {
+    autoDismissTimer = Timer(autoDismissAfter, () {
+      dismissAction?.call();
+    });
   }
 
   showDialog(
