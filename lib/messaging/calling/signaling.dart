@@ -61,7 +61,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
-  String? currentlyRingingSessionId;
+  Function? closeAlertDialog;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -167,14 +167,14 @@ class Signaling extends ValueNotifier<SignalingState> {
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
-          currentlyRingingSessionId = sessionId;
           var activityVisible = await model.activityVisible();
           if (!activityVisible) {
             // don't show ringer notification if the activity isn't visible
             return;
           }
           unawaited(FlutterRingtonePlayer.playRingtone());
-          showAlertDialog(
+          closeAlertDialog?.call();
+          closeAlertDialog = showAlertDialog(
               context: navigatorKey.currentContext!,
               autoDismissAfter: const Duration(seconds: 30),
               // force dismissal through actual dismiss action to make sure we stop ringtone, etc
@@ -183,12 +183,10 @@ class Signaling extends ValueNotifier<SignalingState> {
               content: Text('From '.i18n + contact.displayName),
               dismissText: 'Dismiss'.i18n,
               dismissAction: () async {
-                currentlyRingingSessionId = null;
                 await FlutterRingtonePlayer.stop();
                 _sendBye(peerId, sessionId);
               },
               agreeAction: () async {
-                currentlyRingingSessionId = null;
                 await FlutterRingtonePlayer.stop();
                 var newSession = await _createSession(
                     isInitiator: false,
@@ -272,11 +270,8 @@ class Signaling extends ValueNotifier<SignalingState> {
           if (session != null) {
             value.callState = CallState.Bye;
             notifyListeners();
-          } else if (currentlyRingingSessionId != null) {
-            await FlutterRingtonePlayer.stop();
-            Navigator.of(navigatorKey.currentContext!).pop();
-            currentlyRingingSessionId = null;
           }
+          closeAlertDialog?.call();
           unawaited(_closeSession(session));
         }
         break;

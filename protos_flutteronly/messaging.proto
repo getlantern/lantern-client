@@ -167,6 +167,7 @@ message TransferMessage {
     bytes deleteMessageId = 3; // the id of a message from this Sender to delete
     bytes disappearSettings = 4; // serialized DisappearSettings
     bytes hello = 5; // serialized Hello
+    bytes webRTCSignal = 6; // the content of a WebRTCSignal
   }
 }
 
@@ -177,7 +178,7 @@ message OutboundMessage {
     SENT = 1; // message has been sent to specific deviceId
   }
 
-  string id = 1; // a unique identifier for this
+  string id = 1; // a unique identifier for this message
   string senderId = 2; // the id of who sent this message (same as on StoredMessage)
   string recipientId = 3; // the id of the recipient
   int64 sent = 4; // The unix timestamp in millisecond for when the message was sent
