@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focused_menu/focused_menu.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
-import 'package:lantern/messaging/widgets/contact_list_item.dart';
-import 'package:lantern/messaging/widgets/message_bubble.dart';
-import 'package:lantern/messaging/widgets/message_types/content_container.dart';
-import 'package:lantern/messaging/widgets/message_types/status_row.dart';
-import 'package:lantern/ui/app.dart';
 
-import 'helper_test.dart';
-import 'mock_clipboard.dart';
+import 'action/input_test.dart';
+import 'action/navigation_action_test.dart';
+import 'enums/disappearing_test.dart';
+import 'enums/screens_test.dart';
+import 'helpers/clipboard_test.dart';
+
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:i18n_extension/i18n_widget.dart';
 export 'package:lantern/i18n/i18n.dart';
@@ -22,10 +20,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   group('Conversation Page Test', () {
-    MockClipboard? mockClipboard;
+    ClipboardMock? mockClipboard;
 
     setUp(() {
-      mockClipboard = MockClipboard();
+      mockClipboard = ClipboardMock();
       SystemChannels.platform
           .setMockMethodCallHandler(mockClipboard?.handleMethodCall);
     });
@@ -33,391 +31,176 @@ void main() {
     testWidgets(
         'Navigate from Messages Page into New Message Page into Conversation Page',
         (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await tester.pumpAndSettle();
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
       expect(find.byType(Conversation), findsOneWidget);
     });
 
     testWidgets('Input message to send and evaluate if the text was received',
         (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await tester.pumpAndSettle();
-      print('Enter `hello this a message send from Flutter Test`');
-      await tester.enterText(find.byType(TextFormField),
-          'hello this a message send from Flutter Test');
-      await tester.pump();
-      print(
-          'await 2 seconds just to visualize the message in our TextFormField');
-      await tester.pump(const Duration(seconds: 2));
-      var textformfield =
-          tester.widget<TextFormField>(find.byType(TextFormField));
-      expect(textformfield.controller!.text,
-          equals('hello this a message send from Flutter Test'));
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      print('check if MessageBubble was rendered');
-      expect(find.byType(MessageBubble), findsOneWidget);
-      print('Conversation should have a new widget with a text message');
-      expect(
-          find.widgetWithText(
-              ContentContainer, 'hello this a message send from Flutter Test'),
-          findsOneWidget);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setTextMessage(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          seconds: 2,
+          visualize: true);
+      await Input.sendMessage(tester, find,
+          checkForBubble: true,
+          text: 'hello this is a message from Flutter Test');
     });
 
     testWidgets('Remove the message sended just for me',
         (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the option "DELETE FOR ME"');
-      await tester.tap(find.text('Delete for me'));
-      print('Refresh the screen after doing a tap on "DELETE FOR ME"');
-      await waitUntilSended(tester);
-      print(
-          'We should see an AlertDialog with a text "This will delete the message for you only. Everyone else will still be able to see it."');
-      expect(find.byType(AlertDialog), findsOneWidget);
-      await waitUntilSended(tester);
-      await tester.tap(find.text('DELETE'));
-      await waitUntilSended(tester);
-      print('The alert dialog should has been dismissed');
-      expect(find.byType(AlertDialog), findsNothing);
-      print('We shouldn\'t have any bubble widget');
-      expect(
-          find.widgetWithText(
-              ContentContainer, 'hello this a message send from Flutter Test'),
-          findsNothing);
-    });
-
-    testWidgets('Input a message to send and evaluate if the text was received',
-        (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await tester.pumpAndSettle();
-      print('Enter `hello this a message send from Flutter Test`');
-      await tester.enterText(find.byType(TextFormField),
-          'hello this a message send from Flutter Test');
-      await tester.pump();
-      print(
-          'await 2 seconds just to visualize the message in our TextFormField');
-      await tester.pump(const Duration(seconds: 2));
-      var textformfield =
-          tester.widget<TextFormField>(find.byType(TextFormField));
-      expect(textformfield.controller!.text,
-          equals('hello this a message send from Flutter Test'));
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      print('check if MessageBubble was rendered');
-      expect(find.byType(MessageBubble), findsOneWidget);
-      print('Conversation should have a new widget with a text message');
-      expect(
-          find.widgetWithText(
-              ContentContainer, 'hello this a message send from Flutter Test'),
-          findsOneWidget);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.removeMessageForMe(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          checkDialog: true,
+          optionTitle: 'Delete for me',
+          removeBtnTitle: 'delete'.toUpperCase());
     });
 
     testWidgets('Copy the content into the Clipboard event',
         (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the option "COPY TEXT"');
-      await tester.tap(find.text('Copy Text'));
-      print('Refresh the screen after doing a tap on "COPY TEXT"');
-      await tester.pump();
-      await waitUntilSended(tester);
-      print('The clipboard should have the same content as our MessageBubble');
-      expect(
-        mockClipboard?.clipboardData,
-        equals(
-          {'text': 'hello this a message send from Flutter Test'},
-        ),
-      );
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setTextMessage(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          seconds: 2,
+          visualize: true);
+      await Input.sendMessage(tester, find,
+          checkForBubble: true,
+          text: 'hello this is a message from Flutter Test');
+      await Input.copyTextMessage(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          optionTitle: 'Copy Text');
+      await Input.checkClipboard(tester, find, mockClipboard!,
+          text: 'hello this is a message from Flutter Test');
     });
 
-    testWidgets('Generate a 👍 reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the 👍 reaction');
-      await tester.tap(find.byKey(const ValueKey('👍')));
-      print('Refresh the screen after doing a tap on "👍"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '👍'), findsOneWidget);
-    });
-
-    testWidgets('Generate a 👎 reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the 👎 reaction');
-      await tester.tap(find.byKey(const ValueKey('👎')));
-      print('Refresh the screen after doing a tap on "👎"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '👎'), findsOneWidget);
-    });
-
-    testWidgets('Generate a 😄 reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the 😄 reaction');
-      await tester.tap(find.byKey(const ValueKey('😄')));
-      print('Refresh the screen after doing a tap on "😄"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '😄'), findsOneWidget);
-    });
-
-    testWidgets('Generate a ❤ reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the ❤ reaction');
-      await tester.tap(find.byKey(const ValueKey('❤')));
-      print('Refresh the screen after doing a tap on "❤"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '❤'), findsOneWidget);
-    });
-
-    testWidgets('Generate a 😢 reaction', (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the 😢 reaction');
-      await tester.tap(find.byKey(const ValueKey('😢')));
-      print('Refresh the screen after doing a tap on "😢"');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '😢'), findsOneWidget);
-    });
-
-    testWidgets('Generate a custom reaction from •••',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          ContentContainer, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the ••• reaction');
-      await tester.tap(find.byKey(const ValueKey('•••')));
-      print('Refresh the screen after doing a tap on "•••"');
-      await waitUntilSended(tester);
-      await tester.tap(find.text('🥰'));
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(StatusRow, '🥰'), findsOneWidget);
+    testWidgets('Test preset reactions', (WidgetTester tester) async {
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test', reaction: '👍');
+      await GoTo.navigateBack(tester);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test', reaction: '👎');
+      await GoTo.navigateBack(tester);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test', reaction: '😄');
+      await GoTo.navigateBack(tester);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test', reaction: '❤');
+      await GoTo.navigateBack(tester);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test', reaction: '😢');
+      await GoTo.navigateBack(tester);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReaction(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          customReaction: '🙃',
+          reaction: '•••',
+          isCustomReaction: true);
     });
 
     testWidgets(
         'Remove a reply intent for the message "hello this is a message send from Flutter Test"',
         (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          FocusedMenuHolder, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the reply option');
-      await tester.tap(find.text('Reply'));
-      print('Refresh the screen after doing a tap on "Reply"');
-      await waitUntilSended(tester);
-      print('Check if "Reply" was rendered');
-      expect(find.widgetWithText(Row, 'Replying to me'), findsOneWidget);
-      print('Close the reply intent');
-      await tester.tap(find.byKey(const ValueKey('close_reply')));
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(Row, 'Replying to me'), findsNothing);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReply(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          checkReply: true,
+          optionTitle: 'Reply');
+      await Input.closeReply(tester, find, key: 'close_reply');
     });
 
     testWidgets(
         'Send a reply intent for the message "hello this is a message send from Flutter Test"',
         (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.longPress(find.widgetWithText(
-          FocusedMenuHolder, 'hello this a message send from Flutter Test'));
-      await waitUntilSended(tester);
-      print('Proceed to tap on the reply option');
-      await tester.tap(find.text('Reply'));
-      print('Refresh the screen after doing a tap on "Reply"');
-      await waitUntilSended(tester);
-      print('Check if "Reply" was rendered');
-      await tester.enterText(
-          find.byType(TextFormField), 'Replying: TERI TERI! DAISHORI!! :D');
-      await tester.pump();
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      expect(
-          find.widgetWithText(Row, 'Replying to Note to self'), findsOneWidget);
-      expect(
-          find.widgetWithText(
-              ContentContainer, 'Replying: TERI TERI! DAISHORI!! :D'),
-          findsOneWidget);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setReply(tester, find,
+          text: 'hello this is a message from Flutter Test',
+          checkReply: true,
+          optionTitle: 'Reply');
+      await Input.setTextMessage(tester, find,
+          text: 'Replying: TERI TERI! DAISHORI!! :D',
+          seconds: 2,
+          visualize: true);
+      await Input.sendMessage(tester, find,
+          checkForBubble: true, text: 'Replying: TERI TERI! DAISHORI!! :D');
     });
 
     testWidgets('Set a disappearing time and wait till is gone',
         (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.tap(find.byKey(const ValueKey('disappearingSelect')));
-      await waitUntilSended(tester);
-      print('A dropdown should render');
-      await tester.tap(find.widgetWithText(ListTile, '5 seconds'));
-      await waitUntilSended(tester);
-      print('Now we should have an indicator saying 5 seconds');
-      expect(find.text('5S'), findsOneWidget);
-      print('We write the text that is gonna be visible for 5 seconds');
-      await tester.enterText(
-          find.byType(TextFormField), 'This will be shortly gone');
-      await tester.pump();
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      expect(find.widgetWithText(ContentContainer, 'This will be shortly gone'),
-          findsOneWidget);
-      await Future.delayed(const Duration(seconds: 5), () {});
-      await waitUntilSended(tester);
-      print('Check if the message has been removed');
-      expect(find.widgetWithText(ContentContainer, 'This will be shortly gone'),
-          findsNothing);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setDisappearingMessage(tester, find,
+          key: 'disappearingSelect',
+          checkDurationStatus: true,
+          disappearing: DISAPPEARING.SECONDS_5);
+      await Input.setTextMessage(tester, find,
+          text: 'This will be shortly gone', seconds: 1, visualize: true);
+      await Input.sendMessage(tester, find,
+          checkForBubble: true, text: 'This will be shortly gone');
+      await Input.checkRemovedTextMessageWithDelay(tester, find,
+          delay: const Duration(seconds: 5), text: 'This will be shortly gone');
     });
 
     testWidgets('Send a custom emoji', (WidgetTester tester) async {
-      final sendButtonFinder = find.byKey(const ValueKey('send_message'));
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(NewMessage), findsOneWidget);
-      await tester.tap(find.widgetWithText(ContactListItem, 'Note to self'));
-      await waitUntilSended(tester);
-      await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
-      print('The emoji picker should appear');
-      await waitUntilSended(tester);
-      print('We tap on the "😆"');
-      await tester.tap(find.text('😆'));
-      await waitUntilSended(tester);
-      var textformfield =
-          tester.widget<TextFormField>(find.byType(TextFormField));
-      expect(textformfield.controller!.text, equals('😆'));
-      await tester.tap(sendButtonFinder);
-      print('message has been send');
-      await waitUntilSended(tester);
-      print('Conversation should have a new widget with a text message');
-      expect(find.widgetWithText(ContentContainer, '😆'), findsOneWidget);
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await Input.setTextMessage(tester, find,
+          emojiSelection: '😇', seconds: 2, visualize: true);
+      await Input.sendMessage(tester, find, checkForBubble: true, text: '😇');
     });
 
     testWidgets('Go back using physical button to New Message Page',
         (WidgetTester tester) async {
-      await tester.pumpWidget(LanternApp());
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
-      await widgetsAppState.didPopRoute();
-      await tester.pumpAndSettle();
+      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
+      await GoTo.navigateTo(tester,
+          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateBack(tester);
       expect(find.byType(NewMessage), findsOneWidget);
     });
   });
