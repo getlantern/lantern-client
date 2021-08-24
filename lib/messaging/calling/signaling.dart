@@ -152,6 +152,31 @@ class Signaling extends ValueNotifier<SignalingState> {
     });
   }
 
+  Future<MediaStream> createStream() async {
+    final mediaConstraints = <String, dynamic>{
+      'audio': true,
+      // 'video': {
+      //   'mandatory': {
+      //     'minWidth':
+      //         '640', // Provide your own width, height and frame rate here
+      //     'minHeight': '480',
+      //     'minFrameRate': '30',
+      //   },
+      //   'facingMode': 'user',
+      //   'optional': [],
+      // }
+    };
+
+    var mediaDevices = await navigator.mediaDevices.enumerateDevices();
+    final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    // unmute all audio tracks and disable speakerphone by default
+    stream.getAudioTracks().forEach((track) {
+      track.enabled = true;
+      track.enableSpeakerphone(false);
+    });
+    return stream;
+  }
+
   void onMessage(String peerId, String messageJson) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
@@ -272,6 +297,7 @@ class Signaling extends ValueNotifier<SignalingState> {
             notifyListeners();
           }
           closeAlertDialog?.call();
+          unawaited(FlutterRingtonePlayer.stop());
           unawaited(_closeSession(session));
         }
         break;
@@ -283,31 +309,6 @@ class Signaling extends ValueNotifier<SignalingState> {
       default:
         break;
     }
-  }
-
-  Future<MediaStream> createStream() async {
-    final mediaConstraints = <String, dynamic>{
-      'audio': true,
-      // 'video': {
-      //   'mandatory': {
-      //     'minWidth':
-      //         '640', // Provide your own width, height and frame rate here
-      //     'minHeight': '480',
-      //     'minFrameRate': '30',
-      //   },
-      //   'facingMode': 'user',
-      //   'optional': [],
-      // }
-    };
-
-    var mediaDevices = await navigator.mediaDevices.enumerateDevices();
-    final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    // unmute all audio tracks and disable speakerphone by default
-    stream.getAudioTracks().forEach((track) {
-      track.enabled = true;
-      track.enableSpeakerphone(false);
-    });
-    return stream;
   }
 
   Future<Session> _createSession(

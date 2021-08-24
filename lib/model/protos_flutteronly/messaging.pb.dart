@@ -1371,6 +1371,7 @@ enum TransferMessage_Content {
   deleteMessageId, 
   disappearSettings, 
   hello, 
+  webRTCSignal, 
   notSet
 }
 
@@ -1381,15 +1382,17 @@ class TransferMessage extends $pb.GeneratedMessage {
     3 : TransferMessage_Content.deleteMessageId,
     4 : TransferMessage_Content.disappearSettings,
     5 : TransferMessage_Content.hello,
+    6 : TransferMessage_Content.webRTCSignal,
     0 : TransferMessage_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TransferMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5])
+    ..oo(0, [1, 2, 3, 4, 5, 6])
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'reaction', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deleteMessageId', $pb.PbFieldType.OY, protoName: 'deleteMessageId')
     ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
     ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hello', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'webRTCSignal', $pb.PbFieldType.OY, protoName: 'webRTCSignal')
     ..hasRequiredFields = false
   ;
 
@@ -1400,6 +1403,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? deleteMessageId,
     $core.List<$core.int>? disappearSettings,
     $core.List<$core.int>? hello,
+    $core.List<$core.int>? webRTCSignal,
   }) {
     final _result = create();
     if (message != null) {
@@ -1416,6 +1420,9 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     if (hello != null) {
       _result.hello = hello;
+    }
+    if (webRTCSignal != null) {
+      _result.webRTCSignal = webRTCSignal;
     }
     return _result;
   }
@@ -1487,6 +1494,15 @@ class TransferMessage extends $pb.GeneratedMessage {
   $core.bool hasHello() => $_has(4);
   @$pb.TagNumber(5)
   void clearHello() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.List<$core.int> get webRTCSignal => $_getN(5);
+  @$pb.TagNumber(6)
+  set webRTCSignal($core.List<$core.int> v) { $_setBytes(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasWebRTCSignal() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearWebRTCSignal() => clearField(6);
 }
 
 enum OutboundMessage_Content {
