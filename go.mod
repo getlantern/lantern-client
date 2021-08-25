@@ -8,7 +8,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20210813193242-5b74f2fa306f
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20210813194118-9414f770bcc0
+	github.com/getlantern/flashlight v0.0.0-20210825172455-43ff6fe5d08b
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
