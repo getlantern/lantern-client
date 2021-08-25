@@ -8,7 +8,6 @@ import 'package:lantern/package_store.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
