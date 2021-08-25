@@ -11,8 +11,6 @@ class MessageBarPreviewRecording extends StatelessWidget {
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
-//50 PREVIEW WIDGET
-//58 AUDIO WIDGET
   const MessageBarPreviewRecording(
       {required this.model,
       required this.audioController,
