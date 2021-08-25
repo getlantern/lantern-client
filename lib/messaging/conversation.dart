@@ -485,6 +485,7 @@ class _ConversationState extends State<Conversation>
       title: _isRecording
           ? const SizedBox()
           : TextFormField(
+              textDirection: TextDirection.ltr,
               autofocus: false,
               textInputAction: TextInputAction.send,
               controller: _newMessage,
