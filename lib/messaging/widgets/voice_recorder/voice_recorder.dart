@@ -59,6 +59,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: const ValueKey('btnRecord'),
       onPanDown: (details) {
         _animationController.forward(from: 1.0);
         _onTapDown(details);

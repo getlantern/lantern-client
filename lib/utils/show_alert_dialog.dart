@@ -2,6 +2,7 @@ import 'package:lantern/package_store.dart';
 
 void showAlertDialog({
   required BuildContext context,
+  Key? key,
   barrierDismissible = true,
   required Widget title,
   required Widget content,
@@ -16,6 +17,7 @@ void showAlertDialog({
       barrierDismissible: barrierDismissible,
       builder: (context) {
         return AlertDialog(
+          key: key,
           title: title,
           content: content,
           actions: <Widget>[

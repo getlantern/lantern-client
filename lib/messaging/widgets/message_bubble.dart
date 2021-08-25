@@ -57,8 +57,7 @@ class MessageBubble extends StatelessWidget {
       final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
 
-      return InkWell(
-          child: Flex(
+      return Flex(
         direction: Axis.horizontal,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
@@ -97,7 +96,7 @@ class MessageBubble extends StatelessWidget {
                 )),
           ),
         ],
-      ));
+      );
     });
   }
 
@@ -177,8 +176,8 @@ class MessageBubble extends StatelessWidget {
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
               title: Text('Delete for everyone'.i18n),
-              onPressed: () {
-                _showDeleteDialog(context, model, false, message);
+              onPressed: () async {
+                await _showDeleteDialog(context, model, false, message);
               },
             ),
         ],
@@ -222,6 +221,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     bool isLocal, PathAndValue<StoredMessage> message) async {
   return showAlertDialog(
     context: context,
+    key: const ValueKey('deleteDialog'),
     barrierDismissible: true,
     content: SingleChildScrollView(
       child: ListBody(

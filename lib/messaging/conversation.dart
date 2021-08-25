@@ -57,6 +57,7 @@ class _ConversationState extends State<Conversation>
   Uint8List? _recording;
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
+  var messageCount = 0;
   bool _emojiShowing = false;
   final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
@@ -86,11 +87,14 @@ class _ConversationState extends State<Conversation>
     WidgetsBinding.instance!.addObserver(this);
     var keyboardVisibilityController = KeyboardVisibilityController();
     _keyboardState = !keyboardVisibilityController.isVisible;
-    keyboardStream = keyboardVisibilityController.onChange.listen(
-      (bool visible) => setState(
-        () => _keyboardState = !visible,
-      ),
-    );
+    keyboardStream =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (mounted) {
+        setState(
+          () => _keyboardState = !visible,
+        );
+      }
+    });
     BackButtonInterceptor.add(_interceptBackButton);
     WidgetsBinding.instance!.addObserver(this);
   }
@@ -134,11 +138,12 @@ class _ConversationState extends State<Conversation>
         _recording = null;
         _audioPreviewController = null;
       });
-      // TODO: this complains when there are no messages in the thread
-      await _scrollController.scrollTo(
-          index: 00,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeInOutCubic);
+      if (messageCount > 0) {
+        await _scrollController.scrollTo(
+            index: 00,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOutCubic);
+      }
     } catch (e) {
       showInfoDialog(context,
           title: 'Error'.i18n,
@@ -226,11 +231,13 @@ class _ConversationState extends State<Conversation>
   }
 
   Future<void> _handleSubmit(TextEditingController _newMessage) async {
-    setState(() {
-      _isSendIconVisible = false;
-      _isReplying = false;
-      _emojiShowing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isSendIconVisible = false;
+        _isReplying = false;
+        _emojiShowing = false;
+      });
+    }
     await _send(_newMessage.value.text,
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
@@ -265,7 +272,9 @@ class _ConversationState extends State<Conversation>
                   onPressed: () {},
                 ),
                 IconButton(
-                    onPressed: () {}, icon: DisappearingTimerAction(contact)),
+                    key: const ValueKey('disappearingSelect'),
+                    onPressed: () {},
+                    icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
@@ -322,7 +331,9 @@ class _ConversationState extends State<Conversation>
                           TextPosition(offset: _newMessage.text.length));
                   },
                   onEmojiSelected: (category, emoji) async {
-                    if (_customEmojiResponse && _storedMessage != null) {
+                    if (mounted &&
+                        _customEmojiResponse &&
+                        _storedMessage != null) {
                       dismissKeyboard();
                       await model.react(_storedMessage!, emoji.emoji);
                       _storedMessage = null;
@@ -361,6 +372,7 @@ class _ConversationState extends State<Conversation>
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
+      messageCount = messageRecords.length;
       return messageRecords.isEmpty
           ? Container()
           : ScrollablePositionedList.builder(
@@ -505,6 +517,7 @@ class _ConversationState extends State<Conversation>
             ),
       trailing: _isSendIconVisible && !_isRecording
           ? IconButton(
+              key: const ValueKey('send_message'),
               icon: const Icon(Icons.send, color: Colors.black),
               onPressed: send,
             )
@@ -542,14 +555,16 @@ class _ConversationState extends State<Conversation>
             _recording != null && _recording!.isNotEmpty ? [_recording!] : [],
         replyToSenderId: _quotedMessage?.senderId,
         replyToId: _quotedMessage?.id);
-    setState(() {
-      _quotedMessage = null;
-      _isRecording = false;
-      _finishedRecording = false;
-      _isSendIconVisible = false;
-      _isReplying = false;
-      _emojiShowing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _quotedMessage = null;
+        _isRecording = false;
+        _finishedRecording = false;
+        _isSendIconVisible = false;
+        _isReplying = false;
+        _emojiShowing = false;
+      });
+    }
   }
 }
 

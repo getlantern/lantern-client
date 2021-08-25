@@ -63,7 +63,7 @@ dependencies:
 
   # wechat_camera_picker: ^2.3.0
 
-  flutter_keyboard_visibility: ^5.0.2
+  flutter_keyboard_visibility: ^5.0.3
 
   video_player: ^2.1.5
 
@@ -102,9 +102,15 @@ dependencies:
   sizer: ^2.0.13
 
   file_picker: ^3.0.4
+
+  flutter_markdown: ^0.6.4
   
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
     sdk: flutter
 
   test: ^1.15.7

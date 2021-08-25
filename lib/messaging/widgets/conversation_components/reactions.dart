@@ -26,6 +26,7 @@ class Reactions extends StatelessWidget {
             .map(
               (e) => Flexible(
                 child: TextButton(
+                  key: ValueKey(e),
                   onPressed: () async {
                     if (e == '•••') {
                       onEmojiTap(true, message);
