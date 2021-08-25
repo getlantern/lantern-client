@@ -35,7 +35,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
                 backgroundColor: inboundBgColor,
                 showTimeRemaining: false,
                 widgetHeight: 50,
-                widgetWidth: MediaQuery.of(context).size.width * 0.6,
+                widgetWidth: MediaQuery.of(context).size.width * 0.7,
                 waveHeight: 50,
                 previewBarHeight: 40,
               ),
