@@ -132,6 +132,20 @@ If you wanna visualize the current percentage of code coverage you need to do th
 1. On your `terminal` check if you have installed: `lcov` if not then install.
 2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
 
+<p>&nbsp;</p>
+
+### Flutter Test Drive
+
+This test is to ensure the correct functionality of the Flutter application. In case that you need to test the functionality of the Flutter application, you need to do the following steps.
+
+1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --target integration_test/my_file_test.dart --flavor prod`
+2. This will start doing a simulated build of the project and run the tests.
+
+If you modify the code and you want to test the changes, you need to do the following steps.
+1. If the file has their own test, you will need to adjust the test to the new code.
+2. Finally run all the integration tests to ensure that the new code is working properly with the rest of the code.
+
+
 ### Extra
 
 If you like that VSCode start running the project without the need of be constantly typing the command.
