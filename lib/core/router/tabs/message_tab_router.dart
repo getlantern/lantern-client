@@ -43,7 +43,7 @@ const message_tab_router = CustomRoute<void>(
         name: 'Introductions',
         path: 'introductions',
         transitionsBuilder: defaultTransition,
-        reverseDurationInMilliseconds: defaultTransitionMillis),
         durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
   ],
 );

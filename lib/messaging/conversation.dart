@@ -24,7 +24,6 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/pulsing_indicator.dart';
-import 'package:lantern/utils/humanize.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -242,8 +241,7 @@ class _ConversationState extends State<Conversation>
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
     (context.router.currentChild!.name == router_gr.Conversation.name)
-        ? unawaited(
-            model.setCurrentConversationContact(widget._contact.contactId.id))
+        ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
     return WillPopScope(
       onWillPop: () => Future<bool>.value(_keyboardState),
