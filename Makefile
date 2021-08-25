@@ -301,7 +301,7 @@ release-autoupdate: require-version
 	fi && \
 	for URL in s3://lantern/lantern_update_android_arm-$$VERSION.bz2; do \
 		NAME=$$(basename $$URL) && \
-		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//) && \
+		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//).bz2 && \
 		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
 	done
 	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
@@ -345,7 +345,7 @@ release-s3-git-repos: require-version require-s3cmd require-wget require-lantern
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(call build-tags) && \
-	echo "Running gomobile with `which gomobile` version `gomobile version` ..." && \
+	echo "Running gomobile with `which gomobile` ..." && \
 	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS_NOSTRIP) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)

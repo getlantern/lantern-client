@@ -24,7 +24,11 @@ require (
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
+	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
+	golang.org/x/mod v0.5.0 // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/tools v0.1.5 // indirect
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.7.1-0.20210422183034-b5805f4c233b
