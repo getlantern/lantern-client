@@ -102,6 +102,8 @@ dependencies:
   sizer: ^2.0.13
 
   file_picker: ^3.0.4
+
+  flutter_markdown: ^0.6.4
   
 dev_dependencies:
   flutter_test:
