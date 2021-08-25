@@ -66,12 +66,6 @@ class AudioController extends ValueNotifier<AudioValue> {
     });
   }
 
-  void _setThumbnail(Uint8List thumbnail) {
-    value.reducedAudioWave =
-        AudioWaveform.fromBuffer(thumbnail).bars.reducedWaveform();
-    notifyListeners();
-  }
-
   Future<int> pause() async {
     final result = await audio.pause();
     if (result == 1) {

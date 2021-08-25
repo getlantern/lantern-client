@@ -24,19 +24,22 @@ class MessagingModel extends Model {
             }).then((value) => value as Uint8List));
   }
 
-  Future<void> setMyDisplayName<T>(String displayName) {
+  Future<void> setMyDisplayName(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
       'displayName': displayName,
     });
   }
 
-  Future<void> addOrUpdateDirectContact<T>(
-      String identityKey, String displayName) {
+  Future<int> addProvisionalContact(String contactId) {
     return methodChannel.invokeMethod(
-        'addOrUpdateDirectContact', <String, dynamic>{
-      'identityKey': identityKey,
-      'displayName': displayName
-    });
+        'addProvisionalContact', <String, dynamic>{
+      'contactId': contactId
+    }).then((value) => value as int);
+  }
+
+  Future<void> deleteProvisionalContact(String contactId) {
+    return methodChannel.invokeMethod(
+        'deleteProvisionalContact', <String, dynamic>{'contactId': contactId});
   }
 
   Future<void> sendToDirectContact(
@@ -142,17 +145,67 @@ class MessagingModel extends Model {
         serialized == null ? null : Contact.fromBuffer(serialized));
   }
 
-  Future<void> deleteDirectContact<T>(String id) async =>
+  Future<void> deleteDirectContact(String id) async =>
       methodChannel.invokeMethod('deleteDirectContact', <String, dynamic>{
         'id': id,
       });
 
-  Future<Contact> getContactFromUsername<T>(String username) async {
-    return methodChannel
-        .invokeMethod('getContactFromUsername', <String, dynamic>{
-      'username': username,
-    }).then((value) => value as Contact);
+  Future<void> introduce(List<String> recipientIds) async =>
+      methodChannel.invokeMethod('introduce', <String, dynamic>{
+        'recipientIds': recipientIds,
+      });
+
+  Future<void> acceptIntroduction(String fromId, String toId) async =>
+      methodChannel.invokeMethod('acceptIntroduction', <String, dynamic>{
+        'fromId': fromId,
+        'toId': toId,
+      });
+
+  Future<void> rejectIntroduction(String fromId, String toId) async =>
+      methodChannel.invokeMethod('rejectIntroduction', <String, dynamic>{
+        'fromId': fromId,
+        'toId': toId,
+      });
+
+  /*
+  Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
+  whom we're being introduced.
+  */
+  Widget introductionsFromContact(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
+          builder}) {
+    return subscribedListBuilder<StoredMessage>('/intro/from/',
+        details: true,
+        compare: sortReversed,
+        builder: builder, deserialize: (Uint8List serialized) {
+      return StoredMessage.fromBuffer(serialized);
+    });
   }
+
+  /*
+  Returns an index of Introduction messages keyed to the contact to whom we're being introduced and then the
+  contact who introduced us.
+  */
+  Widget introductionsToContact(
+      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
+          builder}) {
+    return subscribedListBuilder<StoredMessage>('/intro/to/',
+        details: true,
+        compare: sortReversed,
+        builder: builder, deserialize: (Uint8List serialized) {
+      return StoredMessage.fromBuffer(serialized);
+    });
+  }
+
+  /*
+  Returns the Contact corresponding to a displayName. Not in use until we implement AUTH.
+  */
+  // Future<Contact> getContactFromUsername<T>(String username) async {
+  //   return methodChannel
+  //       .invokeMethod('getContactFromUsername', <String, dynamic>{
+  //     'username': username,
+  //   }).then((value) => value as Contact);
+  // }
 
   Widget contactsByActivity(
       {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
@@ -185,9 +238,20 @@ class MessagingModel extends Model {
     });
   }
 
-  ValueNotifier<Contact?> contactNotifier(Contact contact) {
-    return singleValueNotifier(
-        '/contacts/${_contactPathSegment(contact.contactId)}', contact,
+  /*
+  Matches a ContactId to a direct or group Contact
+  */
+  Widget singleContactById(BuildContext context, ContactId contactId,
+      ValueWidgetBuilder<Contact> builder) {
+    return subscribedSingleValueBuilder(
+        '/contacts/${_contactPathSegment(contactId)}',
+        builder: builder, deserialize: (Uint8List serialized) {
+      return Contact.fromBuffer(serialized);
+    });
+  }
+
+  ValueNotifier<Contact?> contactNotifier(String contactId) {
+    return singleValueNotifier('/contacts/d/$contactId', null,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
