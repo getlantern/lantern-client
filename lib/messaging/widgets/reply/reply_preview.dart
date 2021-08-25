@@ -77,6 +77,7 @@ class ReplyPreview extends StatelessWidget {
             width: 20,
             padding: const EdgeInsets.all(2.0),
             child: GestureDetector(
+              key: const ValueKey('close_reply'),
               onTap: () => onCloseListener(),
               child: const Icon(Icons.close, size: 20),
             ),
