@@ -123,7 +123,7 @@ void main() {
           from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
       await Input.setReaction(tester, find,
           text: 'hello this is a message from Flutter Test',
-          customReaction: '🙃',
+          customReaction: '😉',
           reaction: '•••',
           isCustomReaction: true);
     });
