@@ -23,7 +23,6 @@ import 'package:lantern/messaging/widgets/voice_recorder/voice_recorder.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/humanize.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
