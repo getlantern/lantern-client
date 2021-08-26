@@ -306,14 +306,17 @@ class _ConversationState extends State<Conversation>
                     contact: contact,
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
-                const Divider(
-                  height: 12,
-                  color: Color.fromRGBO(235, 235, 235, 1.0),
-                ),
+                const SizedBox(height: 12),
                 Container(
-                  color: _isRecording
-                      ? const Color.fromRGBO(245, 245, 245, 1)
-                      : Colors.white,
+                  decoration: BoxDecoration(
+                    border: const Border(
+                      top: BorderSide(
+                          width: 0.0, color: Color.fromRGBO(235, 235, 235, 1)),
+                    ),
+                    color: _isRecording
+                        ? const Color.fromRGBO(245, 245, 245, 1)
+                        : Colors.white,
+                  ),
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
                   child: _buildMessageBar(),
