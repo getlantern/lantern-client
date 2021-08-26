@@ -46,6 +46,13 @@ public class DnsDetector {
                 new ConnectivityManager.NetworkCallback() {
                     @Override
                     public void onAvailable(@NonNull Network network) {
+                        super.onAvailable(network);
+                        update();
+                    }
+
+                    @Override
+                    public void onLinkPropertiesChanged(@NonNull Network network, @NonNull LinkProperties linkProperties) {
+                        super.onLinkPropertiesChanged(network, linkProperties);
                         update();
                     }
                 }
