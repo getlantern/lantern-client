@@ -25,6 +25,7 @@ import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
+import org.getlantern.lantern.util.SentryUtil;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
 import org.getlantern.mobilesdk.util.HttpClient;
@@ -71,6 +72,8 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
             // Current process is dedicated to LeakCanary for heap analysis.
             return;
         }
+
+        SentryUtil.enableGoPanicEnrichment(this);
 
         ProdLogger.enable(getApplicationContext());
         Logger.debug(TAG, "ProdLogger.enable() finished at " + (System.currentTimeMillis() - start));
