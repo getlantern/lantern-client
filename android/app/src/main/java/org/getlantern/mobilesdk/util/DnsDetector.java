@@ -63,14 +63,15 @@ public class DnsDetector {
                 try {
                     if (address instanceof Inet6Address) {
                         Inet6Address ipv6Address = (Inet6Address) address;
-                        if (ipv6Address.isLinkLocalAddress() && !ip.contains("%")) {
+                        if (ipv6Address.isLinkLocalAddress()) {
                             // For IPv6, the DNS server address can be a link-local address.
                             // For Go to know how to route this, it needs to know the zone
-                            // (interface ID). In some cases, that seems to be missing from
-                            // the ip, so we add it manually here.
+                            // (interface ID). In some cases, that's missing, in other cases it's a
+                            // name rather than an interface ID (which our Go code can't handle).
+                            // This fixes that.
                             NetworkInterface intf = NetworkInterface.getByInetAddress(
                                     linkProperties.getLinkAddresses().get(0).getAddress());
-                            ip = ip + "%" + intf.getIndex();
+                            ip = ip.split("%")[0] + "%" + intf.getIndex();
                         }
                     }
                     return ip;
