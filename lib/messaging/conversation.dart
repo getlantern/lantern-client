@@ -182,8 +182,8 @@ class _ConversationState extends State<Conversation>
       setState(() {
         _isRecording = false;
         _finishedRecording = true;
-        _audioPreviewController =
-            AudioController(context: context, attachment: attachment);
+        _audioPreviewController = AudioController(
+            barsLimit: 75, context: context, attachment: attachment);
       });
     } finally {
       context.loaderOverlay.hide();
@@ -307,8 +307,7 @@ class _ConversationState extends State<Conversation>
                     onCloseListener: () => setState(() => _isReplying = false),
                   ),
                 const Divider(
-                  height: 1,
-                  thickness: 1.5,
+                  height: 12,
                   color: Color.fromRGBO(235, 235, 235, 1.0),
                 ),
                 Container(

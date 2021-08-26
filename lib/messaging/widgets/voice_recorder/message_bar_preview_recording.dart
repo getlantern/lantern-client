@@ -29,6 +29,8 @@ class MessageBarPreviewRecording extends StatelessWidget {
           Expanded(
             child: FittedBox(
               child: AudioWidget(
+                inbound: true,
+                gap: 0.7,
                 controller: audioController,
                 initialColor: Colors.black,
                 progressColor: Colors.grey,
@@ -52,13 +54,12 @@ class MessageBarPreviewRecording extends StatelessWidget {
           const VerticalDivider(
             color: Color.fromRGBO(235, 235, 235, 1),
             width: 10,
-            thickness: 1,
           ),
           GestureDetector(
             onTap: onSend,
             child: Icon(
               Icons.send,
-              color: Colors.black,
+              color: const Color.fromRGBO(219, 10, 91, 1.0),
               size: 20.sp,
             ),
           ),

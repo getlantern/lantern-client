@@ -23,13 +23,18 @@ class AudioAttachment extends StatelessWidget {
         builder: (BuildContext context, Uint8List thumbnail) {
           return AudioWidget(
             controller: AudioController(
-                context: context, attachment: attachment, thumbnail: thumbnail),
+                context: context,
+                barsLimit: 80,
+                attachment: attachment,
+                thumbnail: thumbnail),
+            inbound: inbound,
             initialColor: inbound ? Colors.black : Colors.white,
             progressColor: inbound ? outboundMsgColor : inboundMsgColor,
             backgroundColor: inbound ? inboundBgColor : outboundBgColor,
-            widgetWidth: 50.w,
-            waveHeight: 50,
-            widgetHeight: 50,
+            widgetWidth: 70.w,
+            gap: 0.7,
+            waveHeight: 39,
+            widgetHeight: 40,
           );
         });
   }

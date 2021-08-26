@@ -33,17 +33,21 @@ class AudioValue {
 // the missing difference is obtained from the thumbnail `2887` and the final time `2594`.
 // once we have that time difference we can override the thumbnail time with the new final time.
 
-int percentageOf(int value, int maxValue) =>
-    (100 - (((value) / maxValue) * 100)).toInt();
+int percentageOf(int value, int maxValue, int limit) =>
+    (100 - (((value) / maxValue) * limit)).toInt();
 
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
   final StoredAttachment attachment;
+  final double barsLimit;
   late MessagingModel model;
   late Audio audio;
 
   AudioController(
-      {required this.context, required this.attachment, Uint8List? thumbnail})
+      {required this.context,
+      required this.attachment,
+      Uint8List? thumbnail,
+      this.barsLimit = 100.0})
       : super(AudioValue()) {
     model = Provider.of<MessagingModel>(context, listen: false);
     audio = Provider.of<Audio>(context, listen: false);
@@ -61,7 +65,7 @@ class AudioController extends ValueNotifier<AudioValue> {
         : model.thumbnail(attachment).value.future;
     thumbnailFuture.then((t) {
       value.reducedAudioWave =
-          AudioWaveform.fromBuffer(t).bars.reducedWaveform();
+          AudioWaveform.fromBuffer(t).bars.reducedWaveform(limit: barsLimit);
       notifyListeners();
     });
   }
@@ -120,8 +124,8 @@ class AudioController extends ValueNotifier<AudioValue> {
       },
       onDurationChanged: ((d) {
         value.realDuration = d;
-        value.pendingPercentage =
-            percentageOf(d.inMilliseconds, value.duration!.inMilliseconds);
+        value.pendingPercentage = percentageOf(d.inMilliseconds,
+            value.duration!.inMilliseconds, barsLimit.toInt());
         notifyListeners();
       }),
       onPositionChanged: ((p) {
@@ -150,18 +154,23 @@ class AudioWidget extends StatelessWidget {
   final double previewBarHeight;
   final double widgetWidth;
   final EdgeInsets padding;
+  final double gap;
+  final bool inbound;
 
   AudioWidget(
       {required this.controller,
       required this.initialColor,
       required this.progressColor,
       required this.backgroundColor,
+      required this.inbound,
       this.padding = EdgeInsets.zero,
+      this.gap = 0.8,
       this.widgetHeight,
       this.showTimeRemaining = true,
       required this.waveHeight,
       this.previewBarHeight = 40,
-      required this.widgetWidth});
+      required this.widgetWidth})
+      : assert(gap > 0.0 && gap < 1.0);
 
   @override
   Widget build(BuildContext context) {
@@ -283,11 +292,11 @@ class AudioWidget extends StatelessWidget {
             },
             style: TextButton.styleFrom(
                 shape: const CircleBorder(),
-                backgroundColor: Colors.black,
+                backgroundColor: !inbound ? Colors.white : Colors.black,
                 alignment: Alignment.center),
-            child: const Icon(
+            child: Icon(
               Icons.play_arrow,
-              color: Colors.white,
+              color: !inbound ? outboundBgColor : Colors.white,
               size: 20.0,
             ),
           );
@@ -308,6 +317,7 @@ class AudioWidget extends StatelessWidget {
         width: width,
         height: widgetHeight,
         barHeightScaling: 0.5,
+        gap: gap,
       ),
     );
   }
