@@ -4,10 +4,13 @@ import android.content.Context
 import android.os.Process
 import io.sentry.SentryOptions
 import io.sentry.android.core.SentryAndroid
+import org.getlantern.mobilesdk.Logger
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 object SentryUtil {
+    private val TAG = SentryUtil::class.java.name
+
     /**
      * Enables enrichment of sentry crash reports with the most recent Go panic from logcat.
      * Keep in mind that Sentry only finds panics the next time that it runs after the processed
@@ -41,6 +44,7 @@ object SentryUtil {
                     }
 
                     if (goErrorLog.isNotEmpty()) {
+                        Logger.debug(TAG, "Attaching latestgopanic to event")
                         event.setExtra("latestgopanic", goErrorLog.toString())
                     }
                 }
