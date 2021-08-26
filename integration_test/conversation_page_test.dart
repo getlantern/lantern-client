@@ -41,11 +41,7 @@ void main() {
 
     testWidgets('Input message to send and evaluate if the text was received',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setTextMessage(tester, find,
           text: 'hello this is a message from Flutter Test',
           seconds: 2,
@@ -57,11 +53,7 @@ void main() {
 
     testWidgets('Remove the message sended just for me',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.removeMessageForMe(tester, find,
           text: 'hello this is a message from Flutter Test',
           checkDialog: true,
@@ -71,11 +63,7 @@ void main() {
 
     testWidgets('Copy the content into the Clipboard event',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setTextMessage(tester, find,
           text: 'hello this is a message from Flutter Test',
           seconds: 2,
@@ -91,11 +79,7 @@ void main() {
     });
 
     testWidgets('Test preset reactions', (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setReaction(tester, find,
           text: 'hello this is a message from Flutter Test', reaction: '👍');
       await GoTo.navigateBack(tester);
@@ -131,11 +115,7 @@ void main() {
     testWidgets(
         'Remove a reply intent for the message "hello this is a message send from Flutter Test"',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setReply(tester, find,
           text: 'hello this is a message from Flutter Test',
           checkReply: true,
@@ -146,11 +126,7 @@ void main() {
     testWidgets(
         'Send a reply intent for the message "hello this is a message send from Flutter Test"',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setReply(tester, find,
           text: 'hello this is a message from Flutter Test',
           checkReply: true,
@@ -165,11 +141,7 @@ void main() {
 
     testWidgets('Set a disappearing time and wait till is gone',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setDisappearingMessage(tester, find,
           key: 'disappearingSelect',
           checkDurationStatus: true,
@@ -183,25 +155,10 @@ void main() {
     });
 
     testWidgets('Send a custom emoji', (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.setTextMessage(tester, find,
           emojiSelection: '😇', seconds: 2, visualize: true);
       await Input.sendMessage(tester, find, checkForBubble: true, text: '😇');
-    });
-
-    testWidgets('Go back using physical button to New Message Page',
-        (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
-      await GoTo.navigateBack(tester);
-      expect(find.byType(NewMessage), findsOneWidget);
     });
   });
 }

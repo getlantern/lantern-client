@@ -32,6 +32,11 @@ class GoTo {
           await tester.pumpAndSettle();
         }
         break;
+      case SCREENS.FULL_SCREEN:
+        await tester.pumpWidget(LanternApp());
+        await awaitFor(tester, duration: const Duration(seconds: 1));
+        await awaitFor(tester, duration: const Duration(seconds: 1));
+        break;
       case SCREENS.CONVERSATION:
         if (from == SCREENS.MESSAGES) {
           await tester
@@ -46,7 +51,9 @@ class GoTo {
         }
         break;
       default:
-        return;
+        await tester.pumpWidget(LanternApp());
+        await awaitFor(tester, duration: const Duration(seconds: 1));
+        break;
     }
   }
 

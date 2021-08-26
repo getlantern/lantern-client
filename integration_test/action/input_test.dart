@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
@@ -18,6 +19,8 @@ class Input {
     var textformfield =
         tester.widget<TextFormField>(find.byType(TextFormField));
     if (emojiSelection == null) {
+      await tester.showKeyboard(find.byType(TextFormField));
+      await awaitFor(tester, duration: const Duration(seconds: 1));
       await tester.enterText(find.byType(TextFormField), text);
     } else {
       await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
@@ -37,7 +40,10 @@ class Input {
       {String text = '', Duration delay = Duration.zero}) async {
     await Future.delayed(delay);
     await awaitFor(tester, duration: const Duration(seconds: 1));
-    expect(find.widgetWithText(ContentContainer, text), findsNothing);
+    expect(
+        find.byWidgetPredicate(
+            (widget) => widget is ContentContainer && widget.msg.text == text),
+        findsNothing);
   }
 
   static Future<void> setDisappearingMessage(
@@ -66,7 +72,10 @@ class Input {
     await awaitFor(tester, duration: const Duration(seconds: 1));
     if (checkForBubble) {
       if (text != null) {
-        expect(find.widgetWithText(ContentContainer, text), findsOneWidget);
+        expect(
+            find.byWidgetPredicate((widget) =>
+                widget is ContentContainer && widget.msg.text == text),
+            findsOneWidget);
       }
       if (isAudio) {
         print('await for the audio to be sended');
@@ -85,7 +94,8 @@ class Input {
       optionTitle = '',
       removeBtnTitle = '',
       bool checkDialog = false}) async {
-    await tester.longPress(find.widgetWithText(ContentContainer, text));
+    await tester.longPress(find.byWidgetPredicate(
+        (widget) => widget is ContentContainer && widget.msg.text == text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
@@ -94,12 +104,16 @@ class Input {
     }
     await tester.tap(find.text(removeBtnTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
-    expect(find.widgetWithText(ContentContainer, text), findsNothing);
+    expect(
+        find.byWidgetPredicate(
+            (widget) => widget is ContentContainer && widget.msg.text == text),
+        findsNothing);
   }
 
   static Future<void> copyTextMessage(WidgetTester tester, CommonFinders find,
       {String text = '', optionTitle = ''}) async {
-    await tester.longPress(find.widgetWithText(ContentContainer, text));
+    await tester.longPress(find.byWidgetPredicate(
+        (widget) => widget is ContentContainer && widget.msg.text == text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await tester.pump();
@@ -107,7 +121,8 @@ class Input {
 
   static Future<void> setReply(WidgetTester tester, CommonFinders find,
       {String text = '', optionTitle = '', bool checkReply = false}) async {
-    await tester.longPress(find.widgetWithText(ContentContainer, text));
+    await tester.longPress(find.byWidgetPredicate(
+        (widget) => widget is ContentContainer && widget.msg.text == text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
@@ -128,7 +143,8 @@ class Input {
       reaction = '',
       customReaction,
       bool isCustomReaction = false}) async {
-    await tester.longPress(find.widgetWithText(ContentContainer, text));
+    await tester.longPress(find.byWidgetPredicate(
+        (widget) => widget is ContentContainer && widget.msg.text == text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.byKey(Key(reaction)));
     await awaitFor(tester, duration: const Duration(seconds: 1));

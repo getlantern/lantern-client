@@ -41,11 +41,7 @@ void main() {
     testWidgets(
         'Check if the audio can be played and the wave components should match with the slider',
         (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.startRecording(tester, find,
           checkAudioPreviewComponents: true,
           key: 'btnRecord',
@@ -57,11 +53,7 @@ void main() {
     });
 
     testWidgets('Delete an AudioPreview', (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.startRecording(tester, find,
           checkAudioPreviewComponents: true,
           key: 'btnRecord',
@@ -74,25 +66,15 @@ void main() {
           checkAudioPreviewComponents: true);
     });
 
-    testWidgets('Send an AudioPreview', (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      await GoTo.navigateTo(tester,
-          from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
+    testWidgets('Send an AudioPreview and Play it',
+        (WidgetTester tester) async {
+      await GoTo.navigateTo(tester, to: SCREENS.FULL_SCREEN);
       await Input.startRecording(tester, find,
           checkAudioPreviewComponents: true,
           key: 'btnRecord',
           recordFor: const Duration(seconds: 5));
       await Input.sendMessage(tester, find,
           checkForBubble: true, isAudio: true);
-    });
-
-    testWidgets('Play the audio bubble', (WidgetTester tester) async {
-      await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      await tester.pump(const Duration(seconds: 20));
-      await GoTo.navigateTo(tester,
-          from: SCREENS.MESSAGES, to: SCREENS.CONVERSATION);
       await Input.playAudioPreview(tester, find,
           checkAudioPreviewComponents: true,
           expectedAudioCompletion: 33,
