@@ -189,30 +189,33 @@ class MessageBubble extends StatelessWidget {
         duration: const Duration(seconds: 0),
         animateMenuItems: false,
         onPressed: () {},
-        child: Flex(
-          direction: Axis.vertical,
-          crossAxisAlignment:
-              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            if (isDateMarker != '')
-              Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 10),
-                  // width: 100.w,
-                  child: DateMarker(isDateMarker)),
-            ContentContainer(
-                outbound,
-                inbound,
-                msg,
-                message,
-                contact,
-                onTapReply,
-                startOfBlock,
-                endOfBlock,
-                newestMessage,
-                reactions,
-                isAttachment),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Flex(
+            direction: Axis.vertical,
+            crossAxisAlignment:
+                outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              if (isDateMarker != '')
+                Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    // width: 100.w,
+                    child: DateMarker(isDateMarker)),
+              ContentContainer(
+                  outbound,
+                  inbound,
+                  msg,
+                  message,
+                  contact,
+                  onTapReply,
+                  startOfBlock,
+                  endOfBlock,
+                  newestMessage,
+                  reactions,
+                  isAttachment),
+            ],
+          ),
         ));
   }
 }
