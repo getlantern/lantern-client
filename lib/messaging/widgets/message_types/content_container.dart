@@ -49,7 +49,7 @@ class ContentContainer extends StatelessWidget {
     final isContactConnectionCard = msg.hasIntroduction();
 
     return Container(
-      constraints: BoxConstraints(maxWidth: 90.w, maxHeight: 20.h),
+      constraints: BoxConstraints(maxWidth: 90.w),
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsets.only(
           top: msg.replyToId.isNotEmpty ? 8 : 0,
