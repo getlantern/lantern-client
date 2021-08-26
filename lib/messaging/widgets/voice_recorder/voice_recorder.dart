@@ -33,7 +33,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
       vsync: this,
       lowerBound: 1.0,
       upperBound: 2.0,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 300),
     );
     _animationController.addListener(
       () => setState(() => scaleBoundary = _animationController.value),
@@ -72,26 +72,27 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         scale: scaleBoundary,
         alignment: Alignment.bottomRight,
         child: Container(
+          width: widget.isRecording ? 50 : 20,
+          height: widget.isRecording ? 50 : 55,
           margin: widget.isRecording
-              ? const EdgeInsets.only(top: 10)
+              ? const EdgeInsets.only(top: 13)
               : const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             color: widget.isRecording ? Colors.red : Colors.transparent,
             borderRadius:
                 const BorderRadius.only(topLeft: Radius.circular(100)),
           ),
-          child: widget.isRecording
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 10, left: 10),
-                  child: Icon(
-                    Icons.mic,
-                    color: Colors.white,
-                  ),
-                )
-              : const Icon(
-                  Icons.mic,
-                  color: Colors.black,
-                ),
+          child: Visibility(
+            replacement: const Icon(
+              Icons.mic,
+              color: Colors.black,
+            ),
+            visible: widget.isRecording,
+            child: const Icon(
+              Icons.mic,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
