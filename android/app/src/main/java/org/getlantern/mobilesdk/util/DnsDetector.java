@@ -84,12 +84,16 @@ public class DnsDetector {
                             InetAddress address = network.getByName(dnsHost);
                             String ip = address.getHostAddress();
                             if (address instanceof Inet6Address) {
-                                // For IPv6, the DNS server address can be a link-local address.
-                                // For Go to know how to route this, it needs to know the zone
-                                // (interface ID), so we append it to the address here.
-                                NetworkInterface intf = NetworkInterface.getByInetAddress(
-                                        linkProperties.getLinkAddresses().get(0).getAddress());
-                                ip = ip + "%" + intf.getIndex();
+                                Inet6Address ipv6Address = (Inet6Address) address;
+                                if (ipv6Address.isLinkLocalAddress() && !ip.contains("%")) {
+                                    // For IPv6, the DNS server address can be a link-local address.
+                                    // For Go to know how to route this, it needs to know the zone
+                                    // (interface ID). In some cases, that seems to be missing from
+                                    // the ip, so we add it manually here.
+                                    NetworkInterface intf = NetworkInterface.getByInetAddress(
+                                            linkProperties.getLinkAddresses().get(0).getAddress());
+                                    ip = ip + "%" + intf.getIndex();
+                                }
                             }
                             Logger.debug(TAG, "Setting DNS server to " + ip);
                             dnsServer.set(ip);
