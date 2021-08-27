@@ -54,7 +54,7 @@ class SignalingState {
 class Signaling extends ValueNotifier<SignalingState>
     with WidgetsBindingObserver {
   Signaling({required this.model, required this.mc}) : super(SignalingState()) {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   final JsonEncoder _encoder = const JsonEncoder();
