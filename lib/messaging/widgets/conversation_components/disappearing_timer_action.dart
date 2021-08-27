@@ -30,7 +30,10 @@ class DisappearingTimerAction extends StatelessWidget {
                     .humanizeSeconds()
                     .toUpperCase(),
                 style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold))
-            : const SizedBox(),
+            : Text(
+                'Off'.i18n,
+                style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold),
+              ),
       ]),
     );
   }
