@@ -299,6 +299,8 @@ Future<void> displayConversationOptions(
                                   thickness: 1,
                                   color: const Color.fromRGBO(235, 235, 235, 1),
                                   height: 2.h,
+                                  indent: 3.w,
+                                  endIndent: 3.w,
                                 ),
                                 Container(
                                   height: 50.h,
@@ -306,6 +308,7 @@ Future<void> displayConversationOptions(
                                   child: Scrollbar(
                                     interactive: true,
                                     showTrackOnHover: true,
+                                    radius: const Radius.circular(50),
                                     child: ListView.builder(
                                       scrollDirection: Axis.vertical,
                                       shrinkWrap: true,
@@ -347,7 +350,7 @@ Future<void> displayConversationOptions(
                                           ),
                                           title: Text(
                                               seconds[index] == 0
-                                                  ? 'Never'.i18n
+                                                  ? 'Off'.i18n
                                                   : seconds[index]
                                                       .humanizeSeconds(
                                                           longForm: true),
@@ -371,6 +374,8 @@ Future<void> displayConversationOptions(
                               thickness: 1,
                               color: const Color.fromRGBO(235, 235, 235, 1),
                               height: 1.h,
+                              indent: 3.w,
+                              endIndent: 3.w,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
