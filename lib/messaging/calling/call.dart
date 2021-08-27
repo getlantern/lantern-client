@@ -19,8 +19,9 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> {
-  late Session session;
+  late Future<Session> session;
   late Signaling signaling;
+  var closed = false;
 
   @override
   void initState() {
@@ -28,24 +29,25 @@ class _CallState extends State<Call> {
     signaling = widget.model.signaling;
     signaling.addListener(onSignalingStateChange);
     if (widget.initialSession != null) {
-      session = widget.initialSession!;
+      session = Future.value(widget.initialSession!);
     } else {
-      signaling.call(widget.contact.contactId.id, 'audio').then((newSession) {
-        session = newSession;
-      });
+      session = signaling.call(widget.contact.contactId.id, 'audio');
     }
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     signaling.removeListener(onSignalingStateChange);
-    signaling.bye(session);
+    signaling.bye(await session);
   }
 
   void onSignalingStateChange() {
     if (signaling.value.callState == CallState.Bye) {
-      Navigator.pop(context);
+      if (!closed) {
+        Navigator.pop(context);
+        closed = true;
+      }
     }
   }
 
@@ -127,8 +129,8 @@ class _CallState extends State<Call> {
                           icon: const CustomAssetImage(
                               path: ImagePaths.hangup_icon),
                           backgroundColor: indicatorRed,
-                          onPressed: () {
-                            signaling.bye(session);
+                          onPressed: () async {
+                            signaling.bye(await session);
                           },
                         ),
                       ]),

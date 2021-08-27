@@ -51,8 +51,11 @@ class SignalingState {
 }
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
-class Signaling extends ValueNotifier<SignalingState> {
-  Signaling({required this.model, required this.mc}) : super(SignalingState());
+class Signaling extends ValueNotifier<SignalingState>
+    with WidgetsBindingObserver {
+  Signaling({required this.model, required this.mc}) : super(SignalingState()) {
+    WidgetsBinding.instance?.addObserver(this);
+  }
 
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
@@ -62,6 +65,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
   Function? closeAlertDialog;
+  var visible = true;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -93,6 +97,23 @@ class Signaling extends ValueNotifier<SignalingState> {
         },
         'optional': [],
       };
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        visible = false;
+        break;
+      case AppLifecycleState.resumed:
+        visible = true;
+        break;
+      default:
+        break;
+    }
+  }
 
   void close() async {
     await _cleanSessions();
@@ -192,8 +213,7 @@ class Signaling extends ValueNotifier<SignalingState> {
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
-          var activityVisible = await model.activityVisible();
-          if (!activityVisible) {
+          if (!visible) {
             // don't show ringer notification if the activity isn't visible
             return;
           }
