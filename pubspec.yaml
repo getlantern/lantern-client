@@ -104,8 +104,11 @@ dependencies:
   file_picker: ^3.0.4
 
   flutter_webrtc: ^0.6.5
+
   flutter_ringtone_player: ^3.0.0
 
+  flutter_markdown: ^0.6.4
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

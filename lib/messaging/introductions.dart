@@ -9,9 +9,7 @@ import 'package:lantern/ui/widgets/custom_badge.dart';
 import 'package:lantern/utils/iterable_extension.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/utils/introduction_extension.dart';
 import 'package:lantern/utils/stored_message_extension.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 
 class Introductions extends StatelessWidget {
   @override

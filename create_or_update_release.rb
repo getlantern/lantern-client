@@ -4,9 +4,10 @@ if ARGV.length < 4
   abort "\nUsage create_or_update_release.rb $user $GH_repo $TAG $FILE_NAME\n\n"
 end
 
-require "net/https"
+require 'net/https'
 require "json"
 require 'octokit'
+require 'mime/types'
 
 user=ARGV[0]
 repo=ARGV[1]
@@ -49,16 +50,16 @@ if response.body.include? "already_exists"
       @client.delete_release_asset(asset.url)
     end
   end
+
+  # Then upload the assets
+  filenames.each do |filename|
+    begin
+      ct = MIME::Types.of(filename).first.to_str || "application/octet-stream"
+      @client.upload_asset(target_release.url, filename, {content_type: ct})
+    rescue Octokit::UnprocessableEntity
+      abort "\nAsset already exists? Should never happen\n"
+    end
+  end
 else
   abort response.body unless response.is_a?(Net::HTTPSuccess)
-end
-
-# Then upload the assets
-filenames.each do |filename|
-  begin
-    #ct = MIME::Types.of(file).first || "application/octet-stream"
-    @client.upload_asset(target_release.url, filename)
-  rescue Octokit::UnprocessableEntity
-    abort "\nAsset already exists? Should never happen\n"
-  end
 end
