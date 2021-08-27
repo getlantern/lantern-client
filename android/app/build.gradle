@@ -1,5 +1,5 @@
 plugins {
-    id "io.sentry.android.gradle" version "2.0.1"
+    id "io.sentry.android.gradle" version "2.1.2"
 }
 
 def localProperties = new Properties()
@@ -34,7 +34,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
 
-    ndkVersion "22.1.7171670"
+    ndkVersion "23.0.7599858"
 
     bundle {
         density {
