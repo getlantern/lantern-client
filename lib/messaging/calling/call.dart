@@ -5,6 +5,7 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/round_button.dart';
+import 'package:lantern/utils/notifications.dart';
 
 class Call extends StatefulWidget {
   final Contact contact;
@@ -18,7 +19,7 @@ class Call extends StatefulWidget {
   _CallState createState() => _CallState();
 }
 
-class _CallState extends State<Call> {
+class _CallState extends State<Call> with WidgetsBindingObserver {
   late Future<Session> session;
   late Signaling signaling;
   var closed = false;
@@ -26,6 +27,7 @@ class _CallState extends State<Call> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     signaling = widget.model.signaling;
     signaling.addListener(onSignalingStateChange);
     if (widget.initialSession != null) {
@@ -48,6 +50,22 @@ class _CallState extends State<Call> {
         Navigator.pop(context);
         closed = true;
       }
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        notifications.showInCallNotification(widget.contact);
+        break;
+      case AppLifecycleState.resumed:
+        break;
+      default:
+        break;
     }
   }
 
