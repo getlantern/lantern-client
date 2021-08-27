@@ -40,7 +40,7 @@ class Reactions extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (states) => states.contains(MaterialState.pressed)
                           ? Colors.white
-                          : Colors.teal.withOpacity(0.1),
+                          : const Color.fromRGBO(245, 245, 245, 1),
                     ),
                     minimumSize:
                         MaterialStateProperty.all<Size>(Size(8.w, 8.w)),

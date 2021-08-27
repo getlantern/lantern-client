@@ -3,6 +3,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
+import 'package:sizer/sizer.dart';
 
 class DisappearingTimerAction extends StatelessWidget {
   final Contact contact;
@@ -16,35 +17,21 @@ class DisappearingTimerAction extends StatelessWidget {
     return model.singleContact(
       context,
       contact,
-      (context, contact, child) => PopupMenuButton(
-        itemBuilder: (BuildContext context) => [5, 60, 3600, 86400]
-            .map((e) => DisappearingTimerMenuItem(contact, e))
-            .toList(),
-        onSelected: (int value) {
-          model.setDisappearSettings(contact, value);
-        },
-        child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Flexible(
-                flex: 2,
-                child: Icon(
-                  Icons.timer,
-                ),
-              ),
-              contact.messagesDisappearAfterSeconds > 0
-                  ? Flexible(
-                      child: Text(
-                          contact.messagesDisappearAfterSeconds
-                              .humanizeSeconds()
-                              .toUpperCase(),
-                          style: const TextStyle(
-                              fontSize: 10.0, fontWeight: FontWeight.bold)),
-                    )
-                  : const SizedBox(),
-            ]),
-      ),
+      (context, contact, child) =>
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Icon(
+          Icons.timer,
+          size: 8.sp,
+        ),
+        SizedBox(width: 0.5.w),
+        contact.messagesDisappearAfterSeconds > 0
+            ? Text(
+                contact.messagesDisappearAfterSeconds
+                    .humanizeSeconds()
+                    .toUpperCase(),
+                style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold))
+            : const SizedBox(),
+      ]),
     );
   }
 }

@@ -17,7 +17,10 @@ class Introductions extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-        title: 'Introductions'.i18n,
+        title: Text(
+          'Introductions'.i18n,
+          style: tsTitleAppbar,
+        ),
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

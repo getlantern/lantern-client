@@ -6,9 +6,12 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
+import 'package:sizer/sizer.dart';
 import 'package:lantern/utils/iterable_extension.dart';
 
 class Introduce extends StatefulWidget {
+  final String? preSelectedContact;
+  const Introduce({this.preSelectedContact});
   @override
   _IntroduceState createState() => _IntroduceState();
 }
@@ -19,6 +22,9 @@ class _IntroduceState extends State<Introduce> {
   @override
   void initState() {
     super.initState();
+    if (widget.preSelectedContact != null) {
+      selectedContactIds.add(widget.preSelectedContact!);
+    }
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
   }
 
@@ -26,7 +32,10 @@ class _IntroduceState extends State<Introduce> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-        title: 'Introduce Contacts (${selectedContactIds.length})'.i18n,
+        title: Text(
+          'Introduce Contacts (${selectedContactIds.length})'.i18n,
+          style: tsTitleAppbar,
+        ),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList()
@@ -78,8 +87,11 @@ class _IntroduceState extends State<Introduce> {
                                                         contact.displayName)
                                                     .substring(0, 2)
                                                     .toUpperCase(),
+                                                textDirection:
+                                                    TextDirection.ltr,
                                                 style: const TextStyle(
-                                                    color: Colors.white)),
+                                                  color: Colors.white,
+                                                )),
                                           ),
                                       trailingCallback: (int index,
                                               Contact contact) =>
@@ -105,44 +117,49 @@ class _IntroduceState extends State<Introduce> {
                                     ? Container(
                                         color: grey1,
                                         padding: const EdgeInsets.all(20.0),
-                                        child: Row(
+                                        child: Flex(
+                                            direction: Axis.horizontal,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Button(
-                                                width: 200,
-                                                text: 'Send Introductions'
-                                                    .i18n
-                                                    .toUpperCase(),
-                                                onPressed: () async {
-                                                  await model.introduce(
-                                                      selectedContactIds);
-                                                  showSnackbar(
-                                                    context: context,
-                                                    content: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Expanded(
-                                                            child: Text(
-                                                          'Introductions Sent!'
-                                                              .i18n,
-                                                          style: txSnackBarText,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                        )),
-                                                      ],
-                                                    ),
-                                                  );
-                                                  await Future.delayed(
-                                                    const Duration(
-                                                        milliseconds: 1000),
-                                                    () async => await context
-                                                        .router
-                                                        .pop(),
-                                                  );
-                                                },
+                                              Flexible(
+                                                child: Button(
+                                                  width: 50.w,
+                                                  text: 'Send Invitations'
+                                                      .toUpperCase()
+                                                      .i18n
+                                                      .toUpperCase(),
+                                                  onPressed: () async {
+                                                    await model.introduce(
+                                                        selectedContactIds);
+                                                    showSnackbar(
+                                                      context: context,
+                                                      content: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Expanded(
+                                                              child: Text(
+                                                            'Introductions Sent!'
+                                                                .i18n,
+                                                            style:
+                                                                txSnackBarText,
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          )),
+                                                        ],
+                                                      ),
+                                                    );
+                                                    await Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 1000),
+                                                      () async => await context
+                                                          .router
+                                                          .pop(),
+                                                    );
+                                                  },
+                                                ),
                                               ),
                                             ]),
                                       )

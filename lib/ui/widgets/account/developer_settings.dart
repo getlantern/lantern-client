@@ -10,7 +10,10 @@ class DeveloperSettingsTab extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'Developer Settings'.i18n,
+      title: Text(
+        'Developer Settings'.i18n,
+        style: tsTitleAppbar,
+      ),
       body: ListView(
         padding: const EdgeInsetsDirectional.only(
           top: 2,

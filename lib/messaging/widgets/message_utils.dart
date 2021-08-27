@@ -1,9 +1,12 @@
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:lantern/utils/humanize.dart';
+import 'package:sizer/sizer.dart';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
@@ -235,6 +238,7 @@ int generateUniqueColorIndex(String str) {
 
 Future<void> displayConversationOptions(
     MessagingModel model, BuildContext parentContext, Contact contact) {
+  final seconds = <int>[5, 60, 3600, 10800, 21600, 86400, 604800, 0];
   return showModalBottomSheet(
       context: parentContext,
       isDismissible: true,
@@ -243,13 +247,174 @@ Future<void> displayConversationOptions(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
       builder: (bottomContext) => Wrap(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(12),
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 2.h),
+                child: Text(
+                  'Conversation Menu',
+                  style: TextStyle(fontSize: 12.0.sp),
+                ),
               ),
-              const Center(
-                  child: Text('Message Options',
-                      style: TextStyle(fontSize: 18.0))),
-              Divider(thickness: 1, color: grey2),
+              const Divider(
+                  thickness: 1, color: Color.fromRGBO(235, 235, 235, 1)),
+              ListTile(
+                leading: const Icon(
+                  Icons.timer,
+                  color: Colors.black,
+                ),
+                title: Text('Disappearing Messages'.i18n),
+                onTap: () async {
+                  var selectedPosition = -1;
+                  return showDialog(
+                    context: bottomContext,
+                    barrierDismissible: true,
+                    barrierColor: Colors.black.withOpacity(0.8),
+                    builder: (context) => AlertDialog(
+                      contentPadding: const EdgeInsets.all(0),
+                      title: Container(
+                        color: Colors.white,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Disappearing Messages'.i18n,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 12.0.sp),
+                        ),
+                      ),
+                      content: Container(
+                        child: StatefulBuilder(
+                          builder: (context, setState) {
+                            return Flex(
+                              mainAxisSize: MainAxisSize.min,
+                              direction: Axis.vertical,
+                              children: [
+                                SizedBox(height: 2.h),
+                                Text(
+                                  'All messages will disappear after 1 day\n for you and your contact',
+                                  style: TextStyle(
+                                      color: const Color.fromRGBO(
+                                          112, 112, 112, 1),
+                                      fontSize: 10.0.sp),
+                                ),
+                                Divider(
+                                  thickness: 1,
+                                  color: const Color.fromRGBO(235, 235, 235, 1),
+                                  height: 2.h,
+                                ),
+                                Container(
+                                  height: 50.h,
+                                  width: 100.w,
+                                  child: Scrollbar(
+                                    interactive: true,
+                                    showTrackOnHover: true,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: seconds.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.only(),
+                                          horizontalTitleGap: 7,
+                                          minLeadingWidth: 20,
+                                          onTap: () async {
+                                            setState(() {
+                                              selectedPosition = index;
+                                            });
+                                          },
+                                          selectedTileColor: Colors.white,
+                                          tileColor: const Color.fromRGBO(
+                                              245, 245, 245, 1),
+                                          selected: selectedPosition != -1
+                                              ? seconds[index] !=
+                                                  seconds[selectedPosition]
+                                              : contact
+                                                      .messagesDisappearAfterSeconds !=
+                                                  seconds[index],
+                                          leading: Radio(
+                                            value: selectedPosition != -1
+                                                ? seconds[index] !=
+                                                    seconds[selectedPosition]
+                                                : contact
+                                                        .messagesDisappearAfterSeconds !=
+                                                    seconds[index],
+                                            groupValue: false,
+                                            onChanged: (value) async {
+                                              setState(() {
+                                                selectedPosition = index;
+                                              });
+                                            },
+                                          ),
+                                          title: Text(
+                                              seconds[index] == 0
+                                                  ? 'Never'.i18n
+                                                  : seconds[index]
+                                                      .humanizeSeconds(
+                                                          longForm: true),
+                                              style: const TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold)),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      actions: [
+                        Column(
+                          children: [
+                            Divider(
+                              thickness: 1,
+                              color: const Color.fromRGBO(235, 235, 235, 1),
+                              height: 1.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () async => context.router.pop(),
+                                  child: Text('Cancel'.i18n.toUpperCase(),
+                                      style: tsAlertDialogButtonGrey),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    if (selectedPosition != -1) {
+                                      await model.setDisappearSettings(
+                                          contact, seconds[selectedPosition]);
+                                    }
+                                    await context.router.pop();
+                                    await parentContext.router.pop();
+                                  },
+                                  child: Text('Set'.i18n.toUpperCase(),
+                                      style: tsAlertDialogButtonPink),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                //await model.setDisappearSettings(contact, value);
+              ),
+              const Divider(
+                  thickness: 1, color: Color.fromRGBO(235, 235, 235, 1)),
+              ListTile(
+                leading: const Icon(
+                  Icons.people,
+                  color: Colors.black,
+                ),
+                title: Text('Introduce Contacts'.i18n),
+                onTap: () async => await bottomContext.pushRoute(
+                    Introduce(preSelectedContact: contact.contactId.id)),
+              ),
+              const Divider(
+                  thickness: 1, color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
                   leading: const Icon(Icons.delete, color: Colors.black),
                   title: Text('Delete ${contact.displayName}'),

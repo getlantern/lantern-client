@@ -256,9 +256,39 @@ class _ConversationState extends State<Conversation>
           (context, contact, child) {
         return BaseScreen(
           // Conversation title (contact name)
-          title: contact.displayName.isEmpty
-              ? contact.contactId.id
-              : contact.displayName,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: avatarBgColors[generateUniqueColorIndex(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName)],
+                child: Text(
+                  sanitizeContactName(contact.displayName.isEmpty
+                          ? contact.contactId.id
+                          : contact.displayName)
+                      .substring(0, 2)
+                      .toUpperCase(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+              SizedBox(width: 3.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName,
+                    style: tsTitleAppbar,
+                  ),
+                  DisappearingTimerAction(contact),
+                ],
+              ),
+            ],
+          ),
           centerTitle: false,
           actions: [
             Flex(
@@ -271,10 +301,6 @@ class _ConversationState extends State<Conversation>
                   tooltip: 'Call'.i18n,
                   onPressed: () {},
                 ),
-                IconButton(
-                    key: const ValueKey('disappearingSelect'),
-                    onPressed: () {},
-                    icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,

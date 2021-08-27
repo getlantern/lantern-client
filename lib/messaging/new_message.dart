@@ -17,7 +17,10 @@ class NewMessage extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'New Message'.i18n,
+      title: Text(
+        'New Message'.i18n,
+        style: tsTitleAppbar,
+      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
@@ -59,7 +62,7 @@ class NewMessage extends StatelessWidget {
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
               ),
-              onTap: () async => await context.pushRoute(const Introduce()),
+              onTap: () async => await context.pushRoute(Introduce()),
             ),
             Divider(thickness: 1, color: grey2),
             Container(

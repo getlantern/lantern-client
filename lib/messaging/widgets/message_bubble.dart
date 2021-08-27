@@ -137,16 +137,26 @@ class MessageBubble extends StatelessWidget {
             onPressed: () {},
           ),
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.reply),
-            title: Text('Reply'.i18n),
+            title: Row(
+              children: [
+                const Icon(Icons.reply),
+                const SizedBox(width: 12),
+                Text('Reply'.i18n),
+              ],
+            ),
             onPressed: () {
               onReply(msg);
             },
           ),
           if (!isAttachment)
             FocusedMenuItem(
-              trailingIcon: const Icon(Icons.copy),
-              title: Text('Copy Text'.i18n),
+              title: Row(
+                children: [
+                  const Icon(Icons.copy),
+                  const SizedBox(width: 12),
+                  Text('Copy Text'.i18n),
+                ],
+              ),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -166,16 +176,26 @@ class MessageBubble extends StatelessWidget {
               },
             ),
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete),
-            title: Text('Delete for me'.i18n),
+            title: Row(
+              children: [
+                const Icon(Icons.delete),
+                const SizedBox(width: 12),
+                Text('Delete for me'.i18n),
+              ],
+            ),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
           ),
           if (outbound)
             FocusedMenuItem(
-              trailingIcon: const Icon(Icons.delete_forever),
-              title: Text('Delete for everyone'.i18n),
+              title: Row(
+                children: [
+                  const Icon(Icons.delete_forever),
+                  const SizedBox(width: 12),
+                  Text('Delete for everyone'.i18n),
+                ],
+              ),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },

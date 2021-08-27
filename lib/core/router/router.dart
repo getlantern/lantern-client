@@ -5,6 +5,8 @@ import 'package:lantern/core/router/tabs/developer_tab_router.dart';
 import 'package:lantern/core/router/tabs/message_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/messaging/conversation.dart';
+import 'package:lantern/messaging/introduce.dart';
+import 'package:lantern/messaging/new_message.dart';
 import 'package:lantern/ui/home.dart';
 import 'package:lantern/ui/widgets/full_screen_dialog.dart';
 
@@ -34,6 +36,20 @@ import 'package:lantern/ui/widgets/full_screen_dialog.dart';
         page: Conversation,
         name: 'Conversation',
         path: 'conversation',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: NewMessage,
+        name: 'NewMessage',
+        path: 'newMessage',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: Introduce,
+        name: 'Introduce',
+        path: 'introduce',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

@@ -38,7 +38,10 @@ class ApproveDevice extends StatelessWidget {
     return sessionModel.emailAddress(
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
-        title: 'Add Device'.i18n,
+        title: Text(
+          'Add Device'.i18n,
+          style: tsTitleAppbar,
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(
