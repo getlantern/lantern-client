@@ -1,3 +1,4 @@
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/message_types/contact_connection_card.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
@@ -6,7 +7,9 @@ import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContentContainer extends StatelessWidget {
   final bool outbound;
@@ -110,10 +113,31 @@ class ContentContainer extends StatelessWidget {
                           Flexible(
                             fit: FlexFit.loose,
                             child: Container(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
-                              child: Text(
-                                '${msg.text}',
-                                style: tsMessageBody(outbound),
+                              padding: const EdgeInsets.all(8),
+                              child: MarkdownBody(
+                                data: '${msg.text}',
+                                onTapLink: (String text, String? href,
+                                    String title) async {
+                                  if (href != null && await canLaunch(href)) {
+                                    showAlertDialog(
+                                        context: context,
+                                        title: Text('Open URL'.i18n,
+                                            style: tsAlertDialogTitle),
+                                        content: Text(
+                                            'Are you sure you want to open $href?',
+                                            style: tsAlertDialogBody),
+                                        dismissText: 'Cancel'.i18n,
+                                        agreeText: 'Continue'.i18n,
+                                        agreeAction: () async {
+                                          await launch(href);
+                                        });
+                                  }
+                                },
+                                styleSheet: MarkdownStyleSheet(
+                                  a: tsMessageBody(outbound).copyWith(
+                                      decoration: TextDecoration.underline),
+                                  p: tsMessageBody(outbound),
+                                ),
                               ),
                             ),
                           ),
