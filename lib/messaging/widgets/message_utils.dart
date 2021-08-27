@@ -444,7 +444,7 @@ Future<void> displayConversationOptions(
                               child: ListBody(
                                 children: <Widget>[
                                   Text(
-                                      'Are you sure you want to delete ${contact.displayName} from your contacts list? Once deleted, If you want to message them again, you will need to scan their QR code or have a friend share their contact information.'
+                                      'Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again.'
                                           .i18n,
                                       style: tsAlertDialogBody)
                                 ],
@@ -452,8 +452,7 @@ Future<void> displayConversationOptions(
                             ),
                             actions: <Widget>[
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   TextButton(
@@ -461,6 +460,7 @@ Future<void> displayConversationOptions(
                                     child: Text('Cancel'.i18n.toUpperCase(),
                                         style: tsAlertDialogButtonGrey),
                                   ),
+                                  const SizedBox(width: 15),
                                   TextButton(
                                     onPressed: () async {
                                       context.loaderOverlay.show(
