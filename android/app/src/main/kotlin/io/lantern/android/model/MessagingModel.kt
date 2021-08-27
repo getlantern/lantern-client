@@ -50,7 +50,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         return when (call.method) {
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
-            "activityVisible" -> MainActivity.visible
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("contactId")!!

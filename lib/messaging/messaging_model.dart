@@ -155,10 +155,6 @@ class MessagingModel extends Model {
         'clearCurrentConversationContact',
       );
 
-  Future<bool> activityVisible() async => methodChannel
-      .invokeMethod('activityVisible')
-      .then((value) => value as bool);
-
   Future<Contact?> getContact(String contactPath) async {
     return get<Uint8List?>(contactPath).then((serialized) =>
         serialized == null ? null : Contact.fromBuffer(serialized));
@@ -309,13 +305,13 @@ class MessagingModel extends Model {
 
   Future<String> allocateRelayAddress(String localAddr) {
     return methodChannel
-        .invokeMethod("allocateRelayAddress", localAddr)
+        .invokeMethod('allocateRelayAddress', localAddr)
         .then((value) => value as String);
   }
 
   Future<String> relayTo(String relayAddr) {
     return methodChannel
-        .invokeMethod("relayTo", relayAddr)
+        .invokeMethod('relayTo', relayAddr)
         .then((value) => value as String);
   }
 

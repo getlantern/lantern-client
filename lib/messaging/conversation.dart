@@ -125,7 +125,7 @@ class _ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    if (attachments!.isNotEmpty) context.loaderOverlay.show();
+    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
         widget._contactId.id,
@@ -152,7 +152,7 @@ class _ConversationState extends State<Conversation>
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     } finally {
-      if (attachments.isNotEmpty) context.loaderOverlay.hide();
+      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
   }
 
