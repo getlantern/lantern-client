@@ -12,6 +12,7 @@ import 'package:lantern/messaging/calling/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/app.dart';
+import 'package:lantern/utils/notifications.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -198,7 +199,7 @@ class Signaling extends ValueNotifier<SignalingState>
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson) async {
+  void onMessage(String peerId, String messageJson, {bool ring = true}) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
 
@@ -213,11 +214,15 @@ class Signaling extends ValueNotifier<SignalingState>
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
+          if (ring) {
+            unawaited(FlutterRingtonePlayer.playRingtone());
+          }
           if (!visible) {
-            // don't show ringer notification if the activity isn't visible
+            // show ringer as a system notification
+            await notifications.showRingingNotification(
+                contact, peerId, messageJson);
             return;
           }
-          unawaited(FlutterRingtonePlayer.playRingtone());
           closeAlertDialog?.call();
           closeAlertDialog = showAlertDialog(
               context: navigatorKey.currentContext!,
