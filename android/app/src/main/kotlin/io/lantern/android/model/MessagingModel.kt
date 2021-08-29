@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
@@ -14,6 +15,7 @@ import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
@@ -43,6 +45,29 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "content" to signal.content.toString(Charsets.UTF_8),
                 )
             )
+        }
+    }
+
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "sendSignal" -> {
+                messaging.sendWebRTCSignal(
+                    call.argument("recipientId")!!,
+                    call.argument<String>("content")!!.toByteArray(Charsets.UTF_8)
+                ) {
+                    if (it.succeeded) {
+                        result.success(null)
+                    } else {
+                        // for now, if there are any errors sending to any devices, we use the first
+                        result.error(
+                            "failed",
+                            it.error?.toString() ?: it.deviceErrors?.values?.first()?.toString(),
+                            null
+                        )
+                    }
+                }
+            }
+            else -> super.doOnMethodCall(call, result)
         }
     }
 
@@ -118,14 +143,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 }
                 return videoFile.absolutePath
             }
-            "sendSignal" -> {
-                val signalResult = messaging.sendWebRTCSignal(
-                    call.argument("recipientId")!!,
-                    call.argument<String>("content")!!.toByteArray(Charsets.UTF_8)
-                ).get()
-                // for now, if there are any errors sending to any devices, we throw the first error
-                signalResult.errors.values.firstOrNull()?.let { throw it }
-            }
             "allocateRelayAddress" -> {
                 return internalsdk.Internalsdk.allocateRelayAddress(call.arguments as String)
             }
@@ -150,7 +167,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         }
     }
 
-    // (TODO): On ocassions OPUS breaks the app, throwing the following error, need to investigate how to fix this.
+    // (TODO): Occasionally, OPUS breaks the app, throwing the following error, need to investigate how to fix this.
     // F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
     // fault addr 0x90 in tid 28989 (OpusRecorder re), pid 12804 (lantern.lantern)
     private fun doStartRecordingVoiceMemo() {

@@ -6,6 +6,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/round_button.dart';
 import 'package:lantern/utils/notifications.dart';
+import 'package:lantern/utils/show_alert_dialog.dart';
 
 class Call extends StatefulWidget {
   final Contact contact;
@@ -33,13 +34,28 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     if (widget.initialSession != null) {
       session = Future.value(widget.initialSession!);
     } else {
-      session = signaling.call(widget.contact.contactId.id, 'audio');
+      session = signaling.call(
+          peerId: widget.contact.contactId.id,
+          media: 'audio',
+          onError: () {
+            showAlertDialog(
+                context: context,
+                title: Text('Unable to complete call'.i18n,
+                    style: tsAlertDialogTitle),
+                content:
+                    Text('Please try again'.i18n, style: tsAlertDialogBody),
+                agreeText: 'Close'.i18n,
+                agreeAction: () async {
+                  signaling.bye(await session);
+                });
+          });
     }
   }
 
   @override
   void dispose() async {
     super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     signaling.removeListener(onSignalingStateChange);
     signaling.bye(await session);
   }

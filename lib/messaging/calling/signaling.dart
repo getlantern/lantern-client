@@ -146,13 +146,16 @@ class Signaling extends ValueNotifier<SignalingState>
     notifyListeners();
   }
 
-  Future<Session> call(String peerId, String media) async {
+  Future<Session> call(
+      {required String peerId,
+      required String media,
+      required Function() onError}) async {
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
         isInitiator: true, peerId: peerId, sessionId: sessionId, media: media);
     _sessions[sessionId] = session;
-    await _createOffer(session, media);
+    await _createOffer(session, media, onError);
     value.muted = false;
     value.speakerphoneOn = false;
     value.callState = CallState.Ringing;
@@ -471,16 +474,17 @@ class Signaling extends ValueNotifier<SignalingState>
     }
   }
 
-  Future<void> _createOffer(Session session, String media) async {
+  Future<void> _createOffer(
+      Session session, String media, Function() onError) async {
     try {
       var s =
           await session.pc!.createOffer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
-      await _send(session.pid, 'offer', {
+      unawaited(_send(session.pid, 'offer', {
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': session.sid,
         'media': media,
-      });
+      }).onError((error, stackTrace) => onError()));
     } catch (e) {
       print(e.toString());
     }
