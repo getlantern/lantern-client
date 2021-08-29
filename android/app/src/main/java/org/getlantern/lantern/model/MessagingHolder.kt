@@ -30,7 +30,6 @@ internal const val defaultNotificationChannelId = "default"
 class MessagingHolder {
     lateinit var messaging: Messaging
     private val contactNotificationIds = HashMap<Model.ContactId, Int>()
-    private val callNotificationIds = HashMap<String, Int>()
     private var nextNotificationId = 5000
 
     fun init(application: Application) {
@@ -40,7 +39,8 @@ class MessagingHolder {
             messaging = Messaging(
                 BaseModel.masterDB,
                 File(application.filesDir, "attachments"),
-                WebSocketTransportFactory("wss://tassis.lantern.io/api")
+                WebSocketTransportFactory("wss://tassis.lantern.io/api"),
+                numInitialPreKeysToRegister = 25,
             )
 
             val notificationManager =
