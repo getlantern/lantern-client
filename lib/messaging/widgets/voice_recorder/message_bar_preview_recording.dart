@@ -20,48 +20,56 @@ class MessageBarPreviewRecording extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 8, bottom: 8, top: 8),
-      child: Row(
+      width: 100.w,
+      height: kBottomNavigationBarHeight,
+      child: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: FittedBox(
-              child: AudioWidget(
-                inbound: true,
-                gap: 0.7,
-                controller: audioController,
-                initialColor: Colors.black,
-                progressColor: Colors.grey,
-                backgroundColor: Colors.white,
-                showTimeRemaining: false,
-                widgetHeight: 50,
-                widgetWidth: MediaQuery.of(context).size.width,
-                waveHeight: 50,
-                previewBarHeight: 40,
+          Flexible(
+            child: AudioWidget(
+              inbound: true,
+              gap: 0.6,
+              controller: audioController,
+              initialColor: Colors.black,
+              progressColor: Colors.grey,
+              backgroundColor: Colors.white,
+              showTimeRemaining: false,
+              widgetHeight: 40,
+              widgetWidth: 65.w,
+              waveHeight: 40,
+              previewBarHeight: 40,
+            ),
+          ),
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: onCancelRecording,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.black,
+                  size: 20.sp,
+                ),
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: onCancelRecording,
-            child: Icon(
-              Icons.delete,
-              color: Colors.black,
-              size: 20.sp,
-            ),
-          ),
-          const VerticalDivider(
-            color: Color.fromRGBO(235, 235, 235, 1),
-            width: 10,
-          ),
-          GestureDetector(
-            onTap: onSend,
-            child: Icon(
-              Icons.send,
-              color: const Color.fromRGBO(219, 10, 91, 1.0),
-              size: 20.sp,
-            ),
+              VerticalDivider(
+                color: const Color.fromRGBO(235, 235, 235, 1),
+                indent: 1.h,
+                endIndent: 1.h,
+              ),
+              GestureDetector(
+                onTap: onSend,
+                child: Icon(
+                  Icons.send,
+                  color: const Color.fromRGBO(219, 10, 91, 1.0),
+                  size: 20.sp,
+                ),
+              ),
+              SizedBox(width: 2.w),
+            ],
           ),
         ],
       ),

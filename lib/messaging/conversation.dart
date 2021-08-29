@@ -308,6 +308,8 @@ class _ConversationState extends State<Conversation>
                   ),
                 const SizedBox(height: 12),
                 Container(
+                  width: 100.w,
+                  height: kBottomNavigationBarHeight,
                   decoration: BoxDecoration(
                     border: const Border(
                       top: BorderSide(
@@ -317,8 +319,6 @@ class _ConversationState extends State<Conversation>
                         ? const Color.fromRGBO(245, 245, 245, 1)
                         : Colors.white,
                   ),
-                  width: MediaQuery.of(context).size.width,
-                  height: kBottomNavigationBarHeight,
                   child: _buildMessageBar(),
                 ),
                 MessagingEmojiPicker(
@@ -422,13 +422,14 @@ class _ConversationState extends State<Conversation>
 
   Widget _buildMessageBar() {
     return Container(
-      width: size!.width,
-      height: 55,
+      width: 100.w,
+      height: kBottomNavigationBarHeight,
       margin: _isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
           : EdgeInsets.zero,
       child: IndexedStack(
         index: _finishedRecording ? 1 : 0,
+        sizing: StackFit.expand,
         children: [
           _buildMessageBarRecording(context),
           _audioPreviewController == null
