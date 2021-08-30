@@ -1,6 +1,5 @@
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/routes.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
 
 import 'settings_item.dart';
 

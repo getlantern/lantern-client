@@ -7,10 +7,8 @@ import 'widgets/vpn/vpn.dart';
 
 class HomePage extends StatefulWidget {
   final String _initialRoute;
-  final dynamic _initialRouteArguments;
 
-  HomePage(this._initialRoute, this._initialRouteArguments, {Key? key})
-      : super(key: key);
+  HomePage(this._initialRoute, {Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState(_initialRoute);

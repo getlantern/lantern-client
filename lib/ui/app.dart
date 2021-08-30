@@ -57,7 +57,7 @@ class LanternApp extends StatelessWidget {
                     useDefaultLoading: true,
                     child: I18n(
                       initialLocale: const Locale('en', 'US'),
-                      child: HomePage(settings.name!, settings.arguments),
+                      child: HomePage(settings.name!),
                     ),
                   );
                 },
