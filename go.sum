@@ -246,6 +246,8 @@ github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0 h1:8DQSmWtwBy8Z0Zr/
 github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0/go.mod h1:nd1wZuSxVB7DZVqZT1hCFkdWcMqbuO5XQSd+1Duk/fs=
 github.com/getlantern/dnsgrab v0.0.0-20210813193242-5b74f2fa306f h1:I34wilWaDZ9HrlsUo1Uo1lZ12iD3EUampumT8yIcMzs=
 github.com/getlantern/dnsgrab v0.0.0-20210813193242-5b74f2fa306f/go.mod h1:5GwF/pPObuqMzWoCQ26QDowRMysQ61Sa1Gbc/9mQUZM=
+github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954 h1:4Os+mNFdupMkcwS78wgse+xqyOgT119QZbiY2sin34Y=
+github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954/go.mod h1:5GwF/pPObuqMzWoCQ26QDowRMysQ61Sa1Gbc/9mQUZM=
 github.com/getlantern/domains v0.0.0-20200402172102-34a8db1e0e83 h1:KUQkZaAOrpCdbtJWfL0WqaFoB5IxbQdchLUIq6+dG1Y=
 github.com/getlantern/domains v0.0.0-20200402172102-34a8db1e0e83/go.mod h1:au2O/xaJUN17QP5ndAXBS8tSp0P7G9WnitSvuO/k9k0=
 github.com/getlantern/elevate v0.0.0-20180207094634-c2e2e4901072/go.mod h1:T4VB2POK13lsPLFV98WJQrL7gAXYD9TyJxBU2P8c8p4=
