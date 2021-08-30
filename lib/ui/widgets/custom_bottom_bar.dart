@@ -59,7 +59,6 @@ class CustomBottomBar extends StatelessWidget {
       {required TabItem tab,
       bool isActive = false,
       required BuildContext context}) {
-    var sessionModel = context.watch<SessionModel>();
     var selected = currentIndex == tab.index;
     var tabIsFirst = tab.index == 0;
     var tabIsLast = tab.index == tabs.length - 1;
