@@ -13,7 +13,7 @@ class AddViaUsername extends StatefulWidget {
 }
 
 class _AddViaUsernameState extends State<AddViaUsername> {
-  final _formKey = GlobalKey<FormState>(debugLabel: 'Contact Form');
+  final _formKey = GlobalKey<FormState>(debugLabel: 'Add via username form');
   Contact? contact;
 
   TextEditingController usernameController = TextEditingController();
@@ -29,23 +29,18 @@ class _AddViaUsernameState extends State<AddViaUsername> {
             child: Wrap(
               children: [
                 CustomTextField(
-                    controller: usernameController,
-                    label: 'Username'.i18n,
-                    helperText:
-                        'Enter a username to start a message conversation'.i18n,
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const Icon(
-                      Icons.email,
-                      color: Colors.black,
-                    ),
-                    validator: (value) {
-                      try {
-                        // get contact from username
-                      } catch (e) {
-                        return 'An error occurred while searching for this username'
-                            .i18n;
-                      }
-                    }),
+                  controller: usernameController,
+                  label: 'Username'.i18n,
+                  helperText:
+                      'Enter a username to start a message conversation'.i18n,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const Icon(
+                    Icons.email,
+                    color: Colors.black,
+                  ),
+                  validator: (value) =>
+                      value != '' ? null : 'Please enter a valid username'.i18n,
+                ),
               ],
             ),
           ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
@@ -59,22 +58,7 @@ class _AddViaQRState extends State<AddViaQR> {
         setState(() {
           scannedContactId = contactId;
         });
-        var mostRecentHelloTs = await model.addProvisionalContact(contactId);
-        var contactNotifier = model.contactNotifier(contactId);
-        late void Function() listener;
-        listener = () async {
-          var updatedContact = contactNotifier.value;
-          if (updatedContact != null &&
-              updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
-            contactNotifier.removeListener(listener);
-            Navigator.of(context).pop(); // close the full screen dialog
-            await context.openConversation(updatedContact.contactId);
-          }
-        };
-        contactNotifier.addListener(listener);
-        // immediately invoke listener in case the contactNotifier already has
-        // an up-to-date contact.
-        listener();
+        doContactAddingDance(context, model, scannedContactId!);
       } catch (e) {
         setState(() {
           scanning = false;

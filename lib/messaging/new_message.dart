@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
@@ -46,6 +47,21 @@ class NewMessage extends StatelessWidget {
               ),
               onTap: () async => await context.router.push(
                 FullScreenDialogPage(widget: AddViaQR()),
+              ),
+            ),
+            Divider(thickness: 1, color: grey2),
+            ListTile(
+              leading: const Icon(
+                Icons.vpn_key,
+                color: Colors.black,
+              ),
+              title: Text('Add via Contact ID'.i18n),
+              trailing: const CustomAssetImage(
+                path: ImagePaths.keyboard_arrow_right_icon,
+                size: 24,
+              ),
+              onTap: () async => await context.router.push(
+                FullScreenDialogPage(widget: AddViaContactId()),
               ),
             ),
             Divider(thickness: 1, color: grey2),
