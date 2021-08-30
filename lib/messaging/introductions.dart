@@ -228,7 +228,7 @@ class Introductions extends StatelessWidget {
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      'Introduction to ${value.introduction.displayName} approved approved approved approved approved!'
+                                                                      'Introduction to ${value.introduction.displayName} approved!'
                                                                           .i18n,
                                                                       overflow:
                                                                           TextOverflow

@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   late final String? helperText;
   late final Icon? prefixIcon;
   late final TextInputType? keyboardType;
+  late final bool? enabled;
 
   CustomTextField({
     required this.controller,
@@ -19,6 +20,7 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.validator,
     this.keyboardType,
+    this.enabled = true,
   });
 
   @override
@@ -51,6 +53,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           padding: const EdgeInsetsDirectional.only(top: 7),
           child: TextFormField(
             key: fieldKey,
+            enabled: widget.enabled,
             controller: widget.controller,
             focusNode: focusNode,
             keyboardType: widget.keyboardType,
