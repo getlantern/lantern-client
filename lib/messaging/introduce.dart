@@ -144,7 +144,7 @@ class _IntroduceState extends State<Introduce> {
                                                             'Introductions Sent!'
                                                                 .i18n,
                                                             style:
-                                                                txSnackBarText,
+                                                                tsSnackBarText,
                                                             textAlign:
                                                                 TextAlign.left,
                                                           )),

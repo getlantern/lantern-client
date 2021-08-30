@@ -237,7 +237,7 @@ class Introductions extends StatelessWidget {
                                                                           TextOverflow
                                                                               .visible,
                                                                       style:
-                                                                          txSnackBarText,
+                                                                          tsSnackBarText,
                                                                       textAlign:
                                                                           TextAlign
                                                                               .left,

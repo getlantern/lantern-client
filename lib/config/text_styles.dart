@@ -1,4 +1,5 @@
 import 'package:lantern/package_store.dart';
+import 'package:sizer/sizer.dart';
 
 //
 // This file will contain text styles (font weight, size, line height, color) for text that figures in reusable components such as Alert and Info Dialogs, Messages etc
@@ -60,6 +61,10 @@ TextStyle txConversationSticker =
     TextStyle(color: grey5, fontSize: 12, height: 19 / 12);
 
 // Dialogs
+TextStyle tsBottomModalTitle = const TextStyle(fontSize: 16, height: 26 / 16);
+
+TextStyle tsBottomModalList = const TextStyle(fontSize: 16, height: 18.75 / 16);
+
 TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 
 TextStyle tsAlertDialogBody = const TextStyle(fontSize: 14, height: 1.5);
@@ -90,7 +95,7 @@ TextStyle? tsInfoDialogButton = TextStyle(
   color: primaryPink,
 );
 
-TextStyle txSnackBarText = const TextStyle(
+TextStyle tsSnackBarText = const TextStyle(
   fontSize: 14,
   color: Colors.white,
   height: 23 / 14,

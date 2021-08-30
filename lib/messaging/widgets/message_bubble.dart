@@ -166,7 +166,7 @@ class MessageBubble extends StatelessWidget {
                       Expanded(
                           child: Text(
                         'Text Copied'.i18n,
-                        style: txSnackBarText,
+                        style: tsSnackBarText,
                         textAlign: TextAlign.left,
                       )),
                     ],
