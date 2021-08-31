@@ -103,7 +103,13 @@ dependencies:
 
   file_picker: ^4.0.0
 
+  flutter_webrtc: ^0.6.5
+
+  flutter_ringtone_player: ^3.0.0
+
   flutter_markdown: ^0.6.4
+
+  flutter_local_notifications: ^8.1.1+1
   
 dev_dependencies:
   flutter_test:

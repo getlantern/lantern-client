@@ -30,6 +30,8 @@ import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/services.dart';
 
+import 'widgets/call_action.dart';
+
 class Conversation extends StatefulWidget {
   final ContactId _contactId;
 
@@ -123,7 +125,7 @@ class _ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    if (attachments!.isNotEmpty) context.loaderOverlay.show();
+    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
         widget._contactId.id,
@@ -150,7 +152,7 @@ class _ConversationState extends State<Conversation>
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     } finally {
-      if (attachments.isNotEmpty) context.loaderOverlay.hide();
+      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
   }
 
@@ -267,11 +269,7 @@ class _ConversationState extends State<Conversation>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.call),
-                  tooltip: 'Call'.i18n,
-                  onPressed: () {},
-                ),
+                CallAction(contact),
                 IconButton(
                     key: const ValueKey('disappearingSelect'),
                     onPressed: () {},

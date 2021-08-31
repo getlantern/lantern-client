@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.androidannotations.annotations.EService;
@@ -20,6 +19,7 @@ import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternStatus;
 import org.getlantern.lantern.model.LanternStatus.Status;
 import org.getlantern.lantern.model.AccountInitializationStatus;
+import org.getlantern.lantern.util.Json;
 import org.getlantern.mobilesdk.model.LoConf;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
@@ -163,7 +163,7 @@ public class LanternService extends Service implements Runnable {
 
         @Override
         public void onSuccess(final Response response, final JsonObject result) {
-            final ProUser user = new Gson().fromJson(result, ProUser.class);
+            final ProUser user = Json.gson.fromJson(result, ProUser.class);
             if (user == null) {
                 Logger.error(TAG, "Unable to parse user from JSON");
                 return;

@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:lantern/package_store.dart';
 
-void showAlertDialog({
+Function() showAlertDialog({
   required BuildContext context,
   Key? key,
   barrierDismissible = true,
@@ -11,39 +13,60 @@ void showAlertDialog({
   Function? dismissAction,
   String agreeText = 'Accept',
   Function? agreeAction,
-}) =>
-    showDialog(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      builder: (context) {
-        return AlertDialog(
-          key: key,
-          title: title,
-          content: content,
-          actions: <Widget>[
-            // DISMISS
-            TextButton(
-              onPressed: () {
-                if (dismissAction != null) dismissAction();
-                Navigator.pop(context);
-              },
-              child: Text(
-                dismissText.i18n.toUpperCase(),
-                style: tsAlertDialogButtonGrey,
-              ),
+  Duration? autoDismissAfter,
+}) {
+  Timer? autoDismissTimer;
+  var closed = false;
+
+  void close() {
+    autoDismissTimer?.cancel();
+    if (!closed) {
+      Navigator.pop(context);
+      closed = true;
+    }
+  }
+
+  if (autoDismissAfter != null) {
+    autoDismissTimer = Timer(autoDismissAfter, () {
+      dismissAction?.call();
+    });
+  }
+
+  showDialog(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    builder: (context) {
+      return AlertDialog(
+        key: key,
+        title: title,
+        content: content,
+        actions: <Widget>[
+          // DISMISS
+          TextButton(
+            onPressed: () {
+              if (dismissAction != null) dismissAction();
+              close();
+            },
+            child: Text(
+              dismissText.i18n.toUpperCase(),
+              style: tsAlertDialogButtonGrey,
             ),
-            // AGREE
-            TextButton(
-              onPressed: () {
-                if (agreeAction != null) agreeAction();
-                Navigator.pop(context);
-              },
-              child: Text(
-                agreeText.i18n.toUpperCase(),
-                style: tsAlertDialogButtonPink,
-              ),
+          ),
+          // AGREE
+          TextButton(
+            onPressed: () {
+              if (agreeAction != null) agreeAction();
+              close();
+            },
+            child: Text(
+              agreeText.i18n.toUpperCase(),
+              style: tsAlertDialogButtonPink,
             ),
-          ],
-        );
-      },
-    );
+          ),
+        ],
+      );
+    },
+  );
+
+  return close;
+}

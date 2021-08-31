@@ -426,7 +426,7 @@ func Start(configDir string,
 		log.Error(err.Error())
 		return nil, err
 	}
-	log.Debugf("Starting socks proxy at %s", socksAddr)
+	log.Debugf("Started socks proxy at %s", socksAddr)
 
 	dnsGrabberAddr, ok := dnsGrabAddr.Get(startTimeout - elapsed())
 	if !ok {

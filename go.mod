@@ -8,7 +8,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20210826120604-3f5857347446
+	github.com/getlantern/flashlight v0.0.0-20210827120602-cc390f17f62a
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
@@ -23,11 +23,12 @@ require (
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
-	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
+	golang.org/x/mobile v0.0.0-20210831184057-f7a629369e7a // indirect
 	golang.org/x/mod v0.5.0 // indirect
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
 	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
 	golang.org/x/tools v0.1.5 // indirect
+	nhooyr.io/websocket v1.8.7
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.7.1-0.20210422183034-b5805f4c233b

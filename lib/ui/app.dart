@@ -10,10 +10,13 @@ import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio.dart';
+import 'package:lantern/utils/notifications.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sizer/sizer.dart';
 
-final globalRouter = AppRouter();
+final navigatorKey = GlobalKey<NavigatorState>();
+final globalRouter = AppRouter(navigatorKey);
+final messagingModel = MessagingModel();
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => MessagingModel()),
+        Provider(create: (context) => messagingModel),
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => Audio()),
         Provider(create: (context) => SessionModel()),

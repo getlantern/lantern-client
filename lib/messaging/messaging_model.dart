@@ -8,9 +8,11 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import '../model/list_subscriber.dart';
 import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
+import 'calling/signaling.dart';
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
+  late Signaling signaling;
 
   MessagingModel() : super('messaging') {
     _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
@@ -22,6 +24,19 @@ class MessagingModel extends Model {
                       : attachment)
                   .writeToBuffer(),
             }).then((value) => value as Uint8List));
+
+    signaling = Signaling(model: this, mc: methodChannel);
+
+    methodChannel.setMethodCallHandler((call) async {
+      switch (call.method) {
+        case 'onSignal':
+          var args = call.arguments as Map;
+          signaling.onMessage(args['senderId'], args['content']);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   Future<void> setMyDisplayName(String displayName) {
@@ -251,7 +266,7 @@ class MessagingModel extends Model {
   }
 
   ValueNotifier<Contact?> contactNotifier(String contactId) {
-    return singleValueNotifier('/contacts/d/$contactId', null,
+    return singleValueNotifier(_directContactPath(contactId), null,
         deserialize: (Uint8List serialized) {
       return Contact.fromBuffer(serialized);
     });
@@ -269,6 +284,12 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<Contact> getDirectContact(String contactId) {
+    return methodChannel
+        .invokeMethod('get', _directContactPath(contactId))
+        .then((value) => Contact.fromBuffer(value as Uint8List));
+  }
+
   Widget message(BuildContext context, PathAndValue<StoredMessage> message,
       ValueWidgetBuilder<StoredMessage> builder) {
     return listChildBuilder(context, message.path,
@@ -282,9 +303,23 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<String> allocateRelayAddress(String localAddr) {
+    return methodChannel
+        .invokeMethod('allocateRelayAddress', localAddr)
+        .then((value) => value as String);
+  }
+
+  Future<String> relayTo(String relayAddr) {
+    return methodChannel
+        .invokeMethod('relayTo', relayAddr)
+        .then((value) => value as String);
+  }
+
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
         ? 'd/${contactId.id}'
         : 'g/${contactId.id}';
   }
+
+  String _directContactPath(String contactId) => '/contacts/d/$contactId';
 }
