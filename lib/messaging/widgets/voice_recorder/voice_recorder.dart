@@ -91,7 +91,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
             ),
             visible: widget.isRecording,
             child: const Padding(
-              padding: EdgeInsets.only(top: 5, left: 5),
+              padding: EdgeInsets.only(top: 7, left: 7),
               child: Icon(
                 Icons.mic,
                 color: Colors.white,
