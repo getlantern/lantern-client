@@ -4,6 +4,7 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:lantern/core/router/router_extensions.dart';
 
 class AddViaContactId extends StatefulWidget {
   @override
@@ -17,24 +18,58 @@ class _AddViaContactIdState extends State<AddViaContactId> {
   TextEditingController contactIdController = TextEditingController();
   bool waitingForOtherSide = false;
 
-  @override
-  void dispose() {
-    if (pastedContactId != '') {
-      // when exiting this screen, immediately delete any provisional contact
-      model.deleteProvisionalContact(pastedContactId!);
-    }
-    contactIdController.dispose();
-    super.dispose();
-  }
-
   void _onContactIdAdd() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        pastedContactId = contactIdController.value.text;
+      });
       try {
-        setState(() {
-          pastedContactId = contactIdController.value.text;
-        });
+        var mostRecentHelloTs =
+            await model.addProvisionalContact(pastedContactId!);
+        var contactNotifier = model.contactNotifier(pastedContactId!);
+        late void Function() listener;
+        listener = () async {
+          var updatedContact = contactNotifier.value;
+          if (updatedContact != null &&
+              updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
+            contactNotifier.removeListener(listener);
 
-        doContactAddingDance(context, model, pastedContactId!);
+            // go back to New Message
+            Navigator.of(context).pop();
+
+            // TODO: scroll to convo
+
+            // showSnackbar(
+            //     context: context,
+            //     content: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       crossAxisAlignment: CrossAxisAlignment.end,
+            //       children: [
+            //         Expanded(
+            //           child: Text(
+            //             'Contact added'.i18n,
+            //             overflow: TextOverflow.visible,
+            //             style: txSnackBarText,
+            //             textAlign: TextAlign.left,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //     duration: const Duration(milliseconds: 4000),
+            //     action: SnackBarAction(
+            //       textColor: secondaryPink,
+            //       label: 'START CHAT'.toUpperCase().i18n,
+            //       onPressed: () async {
+            //         // TODO: fix error with context here
+            //         await context.openConversation(updatedContact.contactId);
+            //       },
+            //     ));
+          }
+        };
+        contactNotifier.addListener(listener);
+        // immediately invoke listener in case the contactNotifier already has
+        // an up-to-date contact.
+        listener();
 
         // hide button, show animation
         setState(() {
@@ -44,6 +79,7 @@ class _AddViaContactIdState extends State<AddViaContactId> {
         setState(() {
           pastedContactId = '';
         });
+        contactIdController.text = '';
         showInfoDialog(context,
             title: 'Error'.i18n,
             des: 'Something went wrong while adding this contact'.i18n,
@@ -51,6 +87,16 @@ class _AddViaContactIdState extends State<AddViaContactId> {
             buttonText: 'OK'.i18n);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    contactIdController.dispose();
+    if (pastedContactId != null || pastedContactId != '') {
+      // when exiting this screen, immediately delete any provisional contact
+      model.deleteProvisionalContact(pastedContactId!);
+    }
+    super.dispose();
   }
 
   @override
