@@ -182,8 +182,8 @@ class _ConversationState extends State<Conversation>
       setState(() {
         _isRecording = false;
         _finishedRecording = true;
-        _audioPreviewController = AudioController(
-            barsLimit: 75, context: context, attachment: attachment);
+        _audioPreviewController =
+            AudioController(context: context, attachment: attachment);
       });
     } finally {
       context.loaderOverlay.hide();
@@ -334,6 +334,8 @@ class _ConversationState extends State<Conversation>
                   ),
                 const SizedBox(height: 12),
                 Container(
+                  width: 100.w,
+                  height: kBottomNavigationBarHeight,
                   decoration: BoxDecoration(
                     border: const Border(
                       top: BorderSide(
@@ -343,8 +345,6 @@ class _ConversationState extends State<Conversation>
                         ? const Color.fromRGBO(245, 245, 245, 1)
                         : Colors.white,
                   ),
-                  width: MediaQuery.of(context).size.width,
-                  height: kBottomNavigationBarHeight,
                   child: _buildMessageBar(),
                 ),
                 MessagingEmojiPicker(
@@ -448,31 +448,37 @@ class _ConversationState extends State<Conversation>
 
   Widget _buildMessageBar() {
     return Container(
-      width: size!.width,
-      height: 55,
+      width: 100.w,
+      height: kBottomNavigationBarHeight,
       margin: _isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
           : EdgeInsets.zero,
       child: IndexedStack(
         index: _finishedRecording ? 1 : 0,
+        sizing: StackFit.expand,
         children: [
           _buildMessageBarRecording(context),
           _audioPreviewController == null
               ? const SizedBox()
-              : MessageBarPreviewRecording(
-                  model: model,
-                  audioController: _audioPreviewController!,
-                  onCancelRecording: () async => setState(() {
-                    _isRecording = false;
-                    _finishedRecording = false;
-                    _recording = null;
-                    _audioPreviewController = null;
-                  }),
-                  onSend: () {
-                    _audioPreviewController!.audio.stop();
-                    send();
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    return MessageBarPreviewRecording(
+                      constraints: constraints,
+                      model: model,
+                      audioController: _audioPreviewController!,
+                      onCancelRecording: () async => setState(() {
+                        _isRecording = false;
+                        _finishedRecording = false;
+                        _recording = null;
+                        _audioPreviewController = null;
+                      }),
+                      onSend: () {
+                        _audioPreviewController!.audio.stop();
+                        send();
+                      },
+                    );
                   },
-                ),
+                )
         ],
       ),
     );
@@ -569,6 +575,7 @@ class _ConversationState extends State<Conversation>
                       _hasPermission ? await _finishRecording() : null,
                   onTapUpListener: () async => await _finishRecording(),
                 ),
+                SizedBox(width: 1.0.w),
               ],
             ),
     );

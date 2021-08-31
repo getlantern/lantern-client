@@ -9,6 +9,7 @@ import 'package:lantern/utils/audio.dart';
 import 'package:lantern/utils/waveform/wave_progress_bar.dart';
 import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:sizer/sizer.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -39,7 +40,7 @@ int percentageOf(int value, int maxValue, int limit) =>
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
   final StoredAttachment attachment;
-  final double barsLimit;
+  double barsLimit;
   late MessagingModel model;
   late Audio audio;
 
@@ -156,6 +157,7 @@ class AudioWidget extends StatelessWidget {
   final EdgeInsets padding;
   final double gap;
   final bool inbound;
+  double? iconSize;
 
   AudioWidget(
       {required this.controller,
@@ -164,6 +166,7 @@ class AudioWidget extends StatelessWidget {
       required this.backgroundColor,
       required this.inbound,
       this.padding = EdgeInsets.zero,
+      this.iconSize = 24.0,
       this.gap = 0.8,
       this.widgetHeight,
       this.showTimeRemaining = true,
@@ -177,36 +180,42 @@ class AudioWidget extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable: controller,
         builder: (BuildContext context, AudioValue value, Widget? child) {
-          return Row(
+          return Flex(
+            direction: Axis.horizontal,
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      Container(
-                          width: 40,
-                          height: showTimeRemaining
-                              ? 2 * widgetHeight!
-                              : previewBarHeight,
-                          margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: _getPlayIcon(controller, value)),
-                      if (showTimeRemaining && value.duration != null)
-                        _getTimeRemaining(value),
-                    ],
-                  )
-                ],
+              Flexible(
+                child: Flex(
+                  direction: Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        Container(
+                            width: 35,
+                            height: showTimeRemaining
+                                ? 2 * widgetHeight!
+                                : previewBarHeight * 0.8,
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: _getPlayIcon(controller, value)),
+                        if (showTimeRemaining && value.duration != null)
+                          _getTimeRemaining(value),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Container(
                 width: widgetWidth,
+                height: widgetHeight ?? (showTimeRemaining ? 9.h : 7.h),
                 margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
-                height: waveHeight,
                 child: Stack(
-                  clipBehavior: Clip.hardEdge,
+                  alignment: Alignment.center,
                   children: [
                     value.reducedAudioWave.isNotEmpty
                         ? _getWaveBar(
@@ -235,39 +244,36 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
     var _progress = _updateProgress(value);
-    return Align(
-      alignment: Alignment.center,
-      child: SliderTheme(
-        data: SliderThemeData(
-            activeTrackColor: value.reducedAudioWave.isNotEmpty
-                ? Colors.transparent
-                : Colors.grey,
-            inactiveTrackColor: value.reducedAudioWave.isNotEmpty
-                ? Colors.transparent
-                : Colors.blue,
-            valueIndicatorColor: Colors.grey.shade200,
-            trackShape: CustomTrackShape(),
-            thumbShape: RectangleSliderThumbShapes(
-                height: thumbShapeHeight,
-                isPlaying: value.playerState == PlayerState.playing ||
-                    value.playerState == PlayerState.paused)),
-        child: Slider(
-          onChanged: (v) {
-            if (value.playerState == PlayerState.stopped) {
-              // can't seek while stopped
-              return;
-            }
-            final position = v * value.duration!.inMilliseconds;
-            controller.seek(
-              Duration(
-                milliseconds: position.round(),
-              ),
-            );
-          },
-          min: 0,
-          max: 100,
-          value: _progress,
-        ),
+    return SliderTheme(
+      data: SliderThemeData(
+          activeTrackColor: value.reducedAudioWave.isNotEmpty
+              ? Colors.transparent
+              : Colors.grey,
+          inactiveTrackColor: value.reducedAudioWave.isNotEmpty
+              ? Colors.transparent
+              : Colors.blue,
+          valueIndicatorColor: Colors.grey.shade200,
+          trackShape: CustomTrackShape(),
+          thumbShape: RectangleSliderThumbShapes(
+              height: thumbShapeHeight,
+              isPlaying: value.playerState == PlayerState.playing ||
+                  value.playerState == PlayerState.paused)),
+      child: Slider(
+        onChanged: (v) {
+          if (value.playerState == PlayerState.stopped) {
+            // can't seek while stopped
+            return;
+          }
+          final position = v * value.duration!.inMilliseconds;
+          controller.seek(
+            Duration(
+              milliseconds: position.round(),
+            ),
+          );
+        },
+        min: 0,
+        max: 100,
+        value: _progress,
       ),
     );
   }
@@ -277,13 +283,13 @@ class AudioWidget extends StatelessWidget {
         ? TextButton(
             onPressed: value.isPlaying ? () => controller.pause() : null,
             style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                alignment: Alignment.center),
-            child: const Icon(
+              shape: const CircleBorder(),
+              backgroundColor: Colors.white,
+            ),
+            child: Icon(
               Icons.pause,
               color: Colors.black,
-              size: 20.0,
+              size: iconSize,
             ),
           )
         : TextButton(
@@ -291,13 +297,15 @@ class AudioWidget extends StatelessWidget {
               await controller.play();
             },
             style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: !inbound ? Colors.white : Colors.black,
-                alignment: Alignment.center),
+              padding: const EdgeInsets.all(0),
+              fixedSize: const Size(16, 16),
+              shape: const CircleBorder(),
+              backgroundColor: !inbound ? Colors.white : Colors.black,
+            ),
             child: Icon(
               Icons.play_arrow,
+              size: iconSize,
               color: !inbound ? outboundBgColor : Colors.white,
-              size: 20.0,
             ),
           );
   }
@@ -316,7 +324,7 @@ class AudioWidget extends StatelessWidget {
         backgroundColor: backgroundColor,
         width: width,
         height: widgetHeight,
-        barHeightScaling: 0.5,
+        barHeightScaling: 0.6,
         gap: gap,
       ),
     );

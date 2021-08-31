@@ -83,14 +83,20 @@ class _VoiceRecorderState extends State<VoiceRecorder>
                 const BorderRadius.only(topLeft: Radius.circular(100)),
           ),
           child: Visibility(
-            replacement: const Icon(
-              Icons.mic,
-              color: Colors.black,
+            replacement: const Center(
+              child: Icon(
+                Icons.mic,
+                color: Colors.black,
+              ),
             ),
             visible: widget.isRecording,
-            child: const Icon(
-              Icons.mic,
-              color: Colors.white,
+            child: const Padding(
+              padding: EdgeInsets.only(top: 7, left: 7),
+              child: Icon(
+                Icons.mic,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         ),

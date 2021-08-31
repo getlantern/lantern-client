@@ -75,7 +75,7 @@ dependencies:
 
   fluttertoast: ^8.0.8
 
-  catcher: ^0.6.7
+  catcher: ^0.6.8
 
   sentry: ^5.1.0
 
@@ -101,7 +101,7 @@ dependencies:
 
   sizer: ^2.0.13
 
-  file_picker: ^3.0.4
+  file_picker: ^4.0.0
 
   flutter_markdown: ^0.6.4
   
