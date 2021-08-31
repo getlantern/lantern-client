@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:lantern/core/router/router_extensions.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -68,37 +70,8 @@ class _AddViaQRState extends State<AddViaQR> {
           if (updatedContact != null &&
               updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
             contactNotifier.removeListener(listener);
-
-            // go back to New Message
-            Navigator.of(context).pop();
-
-            // TODO: scroll to convo
-
-            // showSnackbar(
-            //     context: context,
-            //     content: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       crossAxisAlignment: CrossAxisAlignment.end,
-            //       children: [
-            //         Expanded(
-            //           child: Text(
-            //             'Contact added'.i18n,
-            //             overflow: TextOverflow.visible,
-            //             style: txSnackBarText,
-            //             textAlign: TextAlign.left,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //     duration: const Duration(milliseconds: 4000),
-            //     action: SnackBarAction(
-            //       textColor: secondaryPink,
-            //       label: 'START CHAT'.toUpperCase().i18n,
-            //       onPressed: () async {
-            //         // TODO: fix error with context here
-            //         await context.openConversation(updatedContact.contactId);
-            //       },
-            //     ));
+            // go back to New Message with the updatedContact info
+            Navigator.pop(context, updatedContact);
           }
         };
         contactNotifier.addListener(listener);
@@ -147,7 +120,7 @@ class _AddViaQRState extends State<AddViaQR> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Scan to add contact'.i18n,
+                Text("Scan your Contact's QR code".i18n,
                     style: const TextStyle(
                       color: Colors.black,
                     )),
@@ -240,10 +213,18 @@ class _AddViaQRState extends State<AddViaQR> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Trouble scanning?'.i18n,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    )),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    await context.router.push(
+                      FullScreenDialogPage(widget: AddViaContactId()),
+                    );
+                  },
+                  child: Text('Trouble scanning?'.i18n,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      )),
+                ),
               ],
             ),
           ),

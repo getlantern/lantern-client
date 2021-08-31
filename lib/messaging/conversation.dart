@@ -402,7 +402,7 @@ class _ConversationState extends State<Conversation>
                     final _scrollToIndex = messageRecords.toList().indexWhere(
                         (element) =>
                             element.value.id == _tappedMessage.value.replyToId);
-                    if (_scrollToIndex != -1) {
+                    if (_scrollToIndex != -1 && _scrollController.isAttached) {
                       _scrollController.scrollTo(
                           index: _scrollToIndex,
                           duration: const Duration(seconds: 1),
