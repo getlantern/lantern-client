@@ -33,37 +33,8 @@ class _AddViaContactIdState extends State<AddViaContactId> {
           if (updatedContact != null &&
               updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
             contactNotifier.removeListener(listener);
-
-            // go back to New Message
-            Navigator.of(context).pop();
-
-            // TODO: scroll to convo
-
-            // showSnackbar(
-            //     context: context,
-            //     content: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       crossAxisAlignment: CrossAxisAlignment.end,
-            //       children: [
-            //         Expanded(
-            //           child: Text(
-            //             'Contact added'.i18n,
-            //             overflow: TextOverflow.visible,
-            //             style: txSnackBarText,
-            //             textAlign: TextAlign.left,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //     duration: const Duration(milliseconds: 4000),
-            //     action: SnackBarAction(
-            //       textColor: secondaryPink,
-            //       label: 'START CHAT'.toUpperCase().i18n,
-            //       onPressed: () async {
-            //         // TODO: fix error with context here
-            //         await context.openConversation(updatedContact.contactId);
-            //       },
-            //     ));
+            // go back to New Message with the updatedContact info
+            Navigator.pop(context, updatedContact);
           }
         };
         contactNotifier.addListener(listener);
@@ -92,7 +63,7 @@ class _AddViaContactIdState extends State<AddViaContactId> {
   @override
   void dispose() {
     contactIdController.dispose();
-    if (pastedContactId != null || pastedContactId != '') {
+    if (pastedContactId != null && pastedContactId != '') {
       // when exiting this screen, immediately delete any provisional contact
       model.deleteProvisionalContact(pastedContactId!);
     }
