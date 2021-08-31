@@ -1,4 +1,21 @@
 
+<a name="6.8.8"></a>
+## [6.8.8](https://github.com/getlantern/android-lantern/compare/6.8.7...6.8.8)
+
+> 2021-08-30
+
+
+<a name="6.8.7"></a>
+## [6.8.7](https://github.com/getlantern/android-lantern/compare/6.8.5...6.8.7)
+
+> 2021-08-26
+
+### Pull Requests
+
+* Merge pull request [#332](https://github.com/getlantern/android-lantern/issues/332) from getlantern/ox/capturegopanic
+* Merge pull request [#329](https://github.com/getlantern/android-lantern/issues/329) from getlantern/harry/4809
+
+
 <a name="6.8.5"></a>
 ## [6.8.5](https://github.com/getlantern/android-lantern/compare/6.8.4...6.8.5)
 

@@ -5,6 +5,7 @@ import (
 	"runtime/debug"
 
 	"github.com/getlantern/flashlight/common"
+	"github.com/getlantern/hidden"
 	"github.com/getlantern/ops"
 	"github.com/getsentry/sentry-go"
 )
@@ -54,36 +55,27 @@ func sentryPanicIfNecessary(session Session, err interface{}) {
 		return
 	}
 
-	sentry.Recover()
-	if !common.InDevelopment() {
-		log.Errorf("Sending panic to Sentry: %v", err)
-		sentry.WithScope(func(scope *sentry.Scope) {
-			// include whitelisted context
-			opsContext := ops.AsMap(nil, true)
-			for _, prop := range whitelistedContext {
-				val, found := opsContext[prop]
-				if found {
-					scope.SetExtra(prop, val)
-					if session != nil {
-						session.SetSentryExtra(prop, fmt.Sprintf("%v", val))
-					}
+	log.Errorf("Sending panic to Sentry: %v", err)
+	sentry.WithScope(func(scope *sentry.Scope) {
+		// include whitelisted context
+		opsContext := ops.AsMap(nil, true)
+		for _, prop := range whitelistedContext {
+			val, found := opsContext[prop]
+			if found {
+				stringVal := fmt.Sprintf("%v", val)
+				scope.SetExtra(prop, stringVal)
+				if session != nil {
+					session.SetSentryExtra(prop, stringVal)
 				}
 			}
-			session.SetSentryExtra("gostack", string(debug.Stack()))
-
-			scope.SetLevel(sentry.LevelFatal)
-
-			switch err := err.(type) {
-			case error:
-				sentry.CaptureException(err)
-			default:
-				sentry.CaptureMessage(fmt.Sprintf("%v", err))
-			}
-		})
-
-		if result := sentry.Flush(common.SentryTimeout); !result {
-			log.Error("Flushing to Sentry timed out")
 		}
+		session.SetSentryExtra("gostack", string(debug.Stack()))
+		scope.SetLevel(sentry.LevelFatal)
+		sentry.CaptureMessage(hidden.Clean(fmt.Sprintf("%v", err)))
+	})
+
+	if result := sentry.Flush(common.SentryTimeout); !result {
+		log.Error("Flushing to Sentry timed out")
 	}
 
 	panic(err)
