@@ -15,7 +15,6 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
 import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
-import io.sentry.Sentry
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -383,12 +382,6 @@ abstract class SessionManager(application: Application) : Session {
         val headers = getInternalHeaders()
         val gson = GsonBuilder().disableHtmlEscaping().create()
         return gson.toJson(headers)
-    }
-
-    override fun setSentryExtra(key: String, value: String) {
-        Sentry.configureScope { scope ->
-            scope.setExtra(key, value)
-        }
     }
 
     companion object {
