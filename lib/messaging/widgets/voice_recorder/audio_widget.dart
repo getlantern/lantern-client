@@ -40,7 +40,7 @@ int percentageOf(int value, int maxValue, int limit) =>
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
   final StoredAttachment attachment;
-  final double barsLimit;
+  double barsLimit;
   late MessagingModel model;
   late Audio audio;
 
@@ -157,6 +157,7 @@ class AudioWidget extends StatelessWidget {
   final EdgeInsets padding;
   final double gap;
   final bool inbound;
+  double? iconSize;
 
   AudioWidget(
       {required this.controller,
@@ -165,6 +166,7 @@ class AudioWidget extends StatelessWidget {
       required this.backgroundColor,
       required this.inbound,
       this.padding = EdgeInsets.zero,
+      this.iconSize = 24.0,
       this.gap = 0.8,
       this.widgetHeight,
       this.showTimeRemaining = true,
@@ -197,7 +199,7 @@ class AudioWidget extends StatelessWidget {
                             width: 35,
                             height: showTimeRemaining
                                 ? 2 * widgetHeight!
-                                : previewBarHeight,
+                                : previewBarHeight * 0.8,
                             margin:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
                             child: _getPlayIcon(controller, value)),
@@ -284,10 +286,10 @@ class AudioWidget extends StatelessWidget {
               shape: const CircleBorder(),
               backgroundColor: Colors.white,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.pause,
               color: Colors.black,
-              size: 15,
+              size: iconSize,
             ),
           )
         : TextButton(
@@ -302,6 +304,7 @@ class AudioWidget extends StatelessWidget {
             ),
             child: Icon(
               Icons.play_arrow,
+              size: iconSize,
               color: !inbound ? outboundBgColor : Colors.white,
             ),
           );

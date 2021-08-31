@@ -182,8 +182,8 @@ class _ConversationState extends State<Conversation>
       setState(() {
         _isRecording = false;
         _finishedRecording = true;
-        _audioPreviewController = AudioController(
-            barsLimit: 75, context: context, attachment: attachment);
+        _audioPreviewController =
+            AudioController(context: context, attachment: attachment);
       });
     } finally {
       context.loaderOverlay.hide();
@@ -434,20 +434,25 @@ class _ConversationState extends State<Conversation>
           _buildMessageBarRecording(context),
           _audioPreviewController == null
               ? const SizedBox()
-              : MessageBarPreviewRecording(
-                  model: model,
-                  audioController: _audioPreviewController!,
-                  onCancelRecording: () async => setState(() {
-                    _isRecording = false;
-                    _finishedRecording = false;
-                    _recording = null;
-                    _audioPreviewController = null;
-                  }),
-                  onSend: () {
-                    _audioPreviewController!.audio.stop();
-                    send();
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    return MessageBarPreviewRecording(
+                      constraints: constraints,
+                      model: model,
+                      audioController: _audioPreviewController!,
+                      onCancelRecording: () async => setState(() {
+                        _isRecording = false;
+                        _finishedRecording = false;
+                        _recording = null;
+                        _audioPreviewController = null;
+                      }),
+                      onSend: () {
+                        _audioPreviewController!.audio.stop();
+                        send();
+                      },
+                    );
                   },
-                ),
+                )
         ],
       ),
     );
@@ -544,6 +549,7 @@ class _ConversationState extends State<Conversation>
                       _hasPermission ? await _finishRecording() : null,
                   onTapUpListener: () async => await _finishRecording(),
                 ),
+                SizedBox(width: 1.0.w),
               ],
             ),
     );
