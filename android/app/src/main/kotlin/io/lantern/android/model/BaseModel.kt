@@ -62,7 +62,7 @@ abstract class BaseModel(
             var migrated = false
             // TODO: we can/should remove this logic after a few releases just to avoid any issues
             // with some future code saving files named db* to the .lantern folder.
-            oldDbDir.listFiles().forEach { source ->
+            oldDbDir.listFiles()?.forEach { source ->
                 if (source.name.startsWith("db")) {
                     val dest = File(dbDir, source.name)
                     Logger.debug(TAG, "Migrating ${source.absolutePath} to ${dest.absolutePath}")

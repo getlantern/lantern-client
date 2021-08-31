@@ -32,8 +32,6 @@ func (msg *EmailMessage) putVar(key string, val interface{}) {
 
 // Send sends this EmailMessage using the email package.
 func (msg *EmailMessage) Send(handler EmailResponseHandler) {
-	defer sentryRecover(nil)
-
 	emsg := email.Message(*msg)
 	err := email.Send(&emsg)
 	if err != nil {

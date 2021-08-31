@@ -16,8 +16,6 @@ import (
 func Tun2PacketForward(fd int, mtu int) error {
 	runtime.LockOSThread()
 
-	defer sentryRecover(nil)
-
 	log.Debugf("Starting tun2packetforward")
 	dev := os.NewFile(uintptr(fd), "tun")
 	defer dev.Close()
