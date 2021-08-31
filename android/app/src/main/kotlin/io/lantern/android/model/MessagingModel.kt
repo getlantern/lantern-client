@@ -35,7 +35,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("contactId")!!
             )
-            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+            "deleteProvisionalContact" -> messaging.deleteDirectContact(
                 call.argument("contactId")!!
             )
             "setDisappearSettings" -> messaging.setDisappearSettings(
@@ -44,11 +44,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             )
             "sendToDirectContact" ->
                 messaging.sendToDirectContact(
-                    call.argument("identityKey")!!,
+                    unsafeRecipientId = call.argument("identityKey")!!,
                     text = call.argument("text"),
-                    attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
+                    unsafeReplyToSenderId = call.argument("replyToSenderId"),
                     replyToId = call.argument("replyToId"),
-                    replyToSenderId = call.argument("replyToSenderId")
+                    attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
                 )
             // "getContactFromUsername" -> messaging.getContactFromUsername(
             //     call.argument("username")!!,
@@ -58,9 +58,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
-            "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "introduce" -> messaging.introduce(unsafeRecipientIds
+ = call.argument<List<String>>("recipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(unsafeFromId= call.argument<String>("unsafeFromId")!!, unsafeToId = call.argument<String>("unsafeToId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(unsafeFromId= call.argument<String>("fromId")!!, unsafeToId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
