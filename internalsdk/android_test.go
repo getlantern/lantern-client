@@ -62,8 +62,6 @@ func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
 }
 
-func (c testSession) SetSentryExtra(key, value string) error { return nil }
-
 func TestProxying(t *testing.T) {
 
 	baseListenPort := 24000
@@ -218,7 +216,7 @@ func TestInternalHeaders(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		s := userConfig{&panicLoggingSession{testSession{serializedInternalHeaders: test.input}}}
+		s := userConfig{&panickingSessionImpl{testSession{serializedInternalHeaders: test.input}}}
 		got := s.GetInternalHeaders()
 		assert.Equal(t, test.expected, got, "Headers did not decode as expected")
 	}
