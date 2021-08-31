@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
@@ -14,6 +15,7 @@ import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
@@ -25,12 +27,54 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         // delete any lingering data in temporary media files (e.g. if we crashed during recording)
         voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
         videoFile.delete()
+
+        // subscribe to WebRTC signals and forward them to flutter
+        // TODO: handle incoming calls when UI is closed (similar to how we handle message
+        // notifications when UI is closed)
+        messaging.subscribeToWebRTCSignals("webrtc") { signal ->
+            sendSignal(signal)
+        }
+    }
+
+    fun sendSignal(signal: WebRTCSignal) {
+        mainHandler.post {
+            methodChannel.invokeMethod(
+                "onSignal",
+                mapOf(
+                    "senderId" to signal.senderId,
+                    "content" to signal.content.toString(Charsets.UTF_8),
+                )
+            )
+        }
+    }
+
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "sendSignal" -> {
+                messaging.sendWebRTCSignal(
+                    call.argument("recipientId")!!,
+                    call.argument<String>("content")!!.toByteArray(Charsets.UTF_8)
+                ) {
+                    if (it.succeeded) {
+                        result.success(null)
+                    } else {
+                        // for now, if there are any errors sending to any devices, we use the first
+                        result.error(
+                            "failed",
+                            it.error?.toString() ?: it.deviceErrors?.values?.first()?.toString(),
+                            null
+                        )
+                    }
+                }
+            }
+            else -> super.doOnMethodCall(call, result)
+        }
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-            "setCurrentConversationContact" -> CurrentConversationContact.id = (call.arguments as String)
-            "clearCurrentConversationContact" -> CurrentConversationContact.id = ""
+            "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
+            "clearCurrentConversationContact" -> currentConversationContact = ""
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("contactId")!!
@@ -59,8 +103,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
             "introduce" -> messaging.introduce(recipientIds = call.argument<List<String>>("recipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(fromId= call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(fromId = call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(fromId = call.argument<String>("fromId")!!, toId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
@@ -99,6 +143,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 }
                 return videoFile.absolutePath
             }
+            "allocateRelayAddress" -> {
+                return internalsdk.Internalsdk.allocateRelayAddress(call.arguments as String)
+            }
+            "relayTo" -> {
+                return internalsdk.Internalsdk.relayTo(call.arguments as String)
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -117,9 +167,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         }
     }
 
-    //(TODO): On ocassions OPUS breaks the app, throwing the following error, need to investigate how to fix this.
-    //F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
-    //fault addr 0x90 in tid 28989 (OpusRecorder re), pid 12804 (lantern.lantern)
+    // (TODO): Occasionally, OPUS breaks the app, throwing the following error, need to investigate how to fix this.
+    // F/libc    (12804): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
+    // fault addr 0x90 in tid 28989 (OpusRecorder re), pid 12804 (lantern.lantern)
     private fun doStartRecordingVoiceMemo() {
         stopRecording.set(
             OpusRecorder.startRecording(
@@ -154,5 +204,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             }
             bytes
         }
+    }
+
+    companion object {
+        var currentConversationContact = ""
     }
 }

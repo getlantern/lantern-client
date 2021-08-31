@@ -24,10 +24,12 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
                 // If earlier version channel ID is not used
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
             }
-            val openMainActivity = PendingIntent.getActivity(service, 0, Intent(service, MainActivity::class.java),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+            val openMainActivity = PendingIntent.getActivity(
+                service, 0, Intent(service, MainActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
             val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
-                    ?: NotificationCompat.Builder(service)
+                ?: NotificationCompat.Builder(service)
             notificationBuilder.setSmallIcon(smallIcon)
             val largeIcon = (service.getResources().getDrawable(largeIcon) as BitmapDrawable).bitmap
             notificationBuilder.setLargeIcon(largeIcon)
@@ -57,11 +59,12 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
         val channelId = "lantern_service"
         val mNotificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.createNotificationChannel(
-                NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT))
+            NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT)
+        )
         return channelId
     }
 
     companion object ServiceHelper {
-        private val serviceDeque = LinkedBlockingDeque<() -> Unit>();
+        private val serviceDeque = LinkedBlockingDeque<() -> Unit>()
     }
 }

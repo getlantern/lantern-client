@@ -6,7 +6,6 @@ import android.os.HandlerThread
 import android.os.Looper
 import com.google.protobuf.GeneratedMessageLite
 import io.flutter.embedding.engine.FlutterEngine
-import io.lantern.messaging.AttachmentTooBigException
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -15,6 +14,7 @@ import io.lantern.db.DetailsChangeSet
 import io.lantern.db.DetailsSubscriber
 import io.lantern.db.RawChangeSet
 import io.lantern.db.RawSubscriber
+import io.lantern.messaging.AttachmentTooBigException
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
@@ -37,10 +37,13 @@ abstract class BaseModel(
 
     private val asyncHandler = Handler(asyncHandlerThread.looper)
 
+    protected lateinit var eventChannel: EventChannel
+    protected lateinit var methodChannel: MethodChannel
+
     companion object {
         private const val TAG = "BaseModel"
 
-        internal val masterDB: DB
+        val masterDB: DB
 
         init {
             val start = System.currentTimeMillis()
@@ -96,15 +99,17 @@ abstract class BaseModel(
 
     init {
         flutterEngine?.let {
-            EventChannel(
+            eventChannel = EventChannel(
                 flutterEngine.dartExecutor,
                 "${name}_event_channel"
-            ).setStreamHandler(this)
+            )
+            eventChannel.setStreamHandler(this)
 
-            MethodChannel(
+            methodChannel = MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
                 "${name}_method_channel"
-            ).setMethodCallHandler(this)
+            )
+            methodChannel.setMethodCallHandler(this)
         }
     }
 

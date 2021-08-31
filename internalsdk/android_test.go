@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -68,18 +69,15 @@ func TestProxying(t *testing.T) {
 	if assert.NoError(t, err, "Unable to create temp configDir") {
 		defer helper.Close()
 		result, err := Start(helper.ConfigDir, "en_US", testSettings{}, testSession{})
-		if assert.NoError(t, err, "Should have been able to start lantern") {
-			newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
-			if assert.NoError(t, err, "Should have been able to start lantern twice") {
-				if assert.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address") {
-					err := testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
-					if assert.NoError(t, err, "Proxying request via HTTP should have worked") {
-						err := testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
-						assert.NoError(t, err, "Proxying request via SOCKS should have worked")
-					}
-				}
-			}
-		}
+		require.NoError(t, err, "Should have been able to start lantern")
+		newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
+		require.NoError(t, err, "Should have been able to start lantern twice")
+		require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
+		err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
+		require.NoError(t, err, "Proxying request via HTTP should have worked")
+		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
+		assert.NoError(t, err, "Proxying request via SOCKS should have worked")
+		testRelay(t)
 	}
 }
 
@@ -150,6 +148,41 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 	}
 
 	return nil
+}
+
+func testRelay(t *testing.T) {
+	l, err := net.Listen("tcp", "127.0.0.1:0")
+	require.NoError(t, err, "should listen")
+	defer l.Close()
+
+	log.Debug("allocating relay")
+	relayAddr, err := AllocateRelayAddress(l.Addr().String())
+	require.NoError(t, err, "should allocate relay")
+
+	log.Debugf("relaying to %v", relayAddr)
+	localRelayAddr, err := RelayTo(relayAddr)
+	require.NoError(t, err, "should get relayAddr")
+
+	log.Debug("dialing relay")
+	peer, err := net.Dial("tcp", localRelayAddr)
+	require.NoError(t, err)
+	defer peer.Close()
+
+	log.Debug("writing hello")
+	_, err = peer.Write([]byte("hello"))
+	require.NoError(t, err)
+
+	log.Debug("accepting")
+	client, err := l.Accept()
+	require.NoError(t, err)
+	defer client.Close()
+
+	log.Debug("reading")
+	b := make([]byte, 5)
+	_, err = io.ReadFull(client, b)
+	require.NoError(t, err)
+
+	require.Equal(t, "hello", string(b), "client should read hello")
 }
 
 func TestInternalHeaders(t *testing.T) {
