@@ -393,7 +393,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
 
-    implementation 'io.sentry:sentry-android:5.0.1'
+    implementation 'io.sentry:sentry-android:5.1.2'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
