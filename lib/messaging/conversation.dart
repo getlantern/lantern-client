@@ -248,9 +248,7 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    (context.router.currentChild!.name == router_gr.Conversation.name &&
-            context.router.routeData.router.current.name ==
-                router_gr.MessagesRouter.name)
+    (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
     return WillPopScope(
