@@ -6,12 +6,12 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:lantern/messaging/conversation.dart' as _i8;
+import 'package:lantern/messaging/conversation.dart' as _i5;
 import 'package:lantern/messaging/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions.dart' as _i10;
-import 'package:lantern/messaging/messages.dart' as _i5;
-import 'package:lantern/messaging/new_message.dart' as _i7;
-import 'package:lantern/messaging/your_contact_info.dart' as _i6;
+import 'package:lantern/messaging/messages.dart' as _i7;
+import 'package:lantern/messaging/new_message.dart' as _i6;
+import 'package:lantern/messaging/your_contact_info.dart' as _i8;
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i20;
 import 'package:lantern/package_store.dart' as _i11;
 import 'package:lantern/ui/home.dart' as _i3;
@@ -52,6 +52,27 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 450,
         opaque: true,
         barrierDismissible: false),
+    Conversation.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<ConversationArgs>();
+          return _i5.Conversation(args.contactId);
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 450,
+        reverseDurationInMilliseconds: 450,
+        opaque: true,
+        barrierDismissible: false),
+    NewMessage.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i6.NewMessage();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 450,
+        reverseDurationInMilliseconds: 450,
+        opaque: true,
+        barrierDismissible: false),
     MessagesRouter.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
@@ -83,7 +104,7 @@ class AppRouter extends _i1.RootStackRouter {
     MessagesRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i5.Messages();
+          return _i7.Messages();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -93,28 +114,7 @@ class AppRouter extends _i1.RootStackRouter {
     ContactInfo.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i6.YourContactInfo();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
-    NewMessage.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i7.NewMessage();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
-    Conversation.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (data) {
-          final args = data.argsAs<ConversationArgs>();
-          return _i8.Conversation(args.contactId);
+          return _i8.YourContactInfo();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -266,8 +266,6 @@ class AppRouter extends _i1.RootStackRouter {
           _i1.RouteConfig(MessagesRouter.name, path: 'messages', children: [
             _i1.RouteConfig(MessagesRoute.name, path: ''),
             _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
-            _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
-            _i1.RouteConfig(Conversation.name, path: 'conversation'),
             _i1.RouteConfig(Introduce.name, path: 'introduce'),
             _i1.RouteConfig(Introductions.name, path: 'introductions')
           ]),
@@ -289,7 +287,10 @@ class AppRouter extends _i1.RootStackRouter {
               path: 'developer',
               children: [_i1.RouteConfig(DeveloperSettings.name, path: '')])
         ]),
-        _i1.RouteConfig(FullScreenDialogPage.name, path: 'fullScreenDialogPage')
+        _i1.RouteConfig(FullScreenDialogPage.name,
+            path: 'fullScreenDialogPage'),
+        _i1.RouteConfig(Conversation.name, path: 'conversation'),
+        _i1.RouteConfig(NewMessage.name, path: 'newMessage')
       ];
 }
 
@@ -322,6 +323,26 @@ class FullScreenDialogPageArgs {
   final _i11.Widget widget;
 
   final _i11.Key? key;
+}
+
+class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
+  Conversation({required _i20.ContactId contactId})
+      : super(name,
+            path: 'conversation', args: ConversationArgs(contactId: contactId));
+
+  static const String name = 'Conversation';
+}
+
+class ConversationArgs {
+  const ConversationArgs({required this.contactId});
+
+  final _i20.ContactId contactId;
+}
+
+class NewMessage extends _i1.PageRouteInfo {
+  const NewMessage() : super(name, path: 'newMessage');
+
+  static const String name = 'NewMessage';
 }
 
 class MessagesRouter extends _i1.PageRouteInfo {
@@ -362,26 +383,6 @@ class ContactInfo extends _i1.PageRouteInfo {
   const ContactInfo() : super(name, path: 'contactInfo');
 
   static const String name = 'ContactInfo';
-}
-
-class NewMessage extends _i1.PageRouteInfo {
-  const NewMessage() : super(name, path: 'newMessage');
-
-  static const String name = 'NewMessage';
-}
-
-class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i20.ContactId contactId})
-      : super(name,
-            path: 'conversation', args: ConversationArgs(contactId: contactId));
-
-  static const String name = 'Conversation';
-}
-
-class ConversationArgs {
-  const ConversationArgs({required this.contactId});
-
-  final _i20.ContactId contactId;
 }
 
 class Introduce extends _i1.PageRouteInfo {
