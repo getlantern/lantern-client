@@ -10,13 +10,15 @@ Renders an alphabetically grouped sorted list of contacts/conversations
 */
 ScrollablePositionedList groupedContactListGenerator({
   Map<String, List<PathAndValue<Contact>>>? groupedSortedList,
-  ItemScrollController? contactListController,
+  ItemScrollController? scrollListController,
+  int initialScrollIndex = 0,
   Function? leadingCallback,
   Function? trailingCallback,
   Function? onTapCallback,
 }) {
   return ScrollablePositionedList.builder(
-    itemScrollController: contactListController,
+    itemScrollController: scrollListController,
+    initialScrollIndex: initialScrollIndex,
     itemCount: groupedSortedList!.length,
     itemBuilder: (context, index) {
       var key = groupedSortedList.keys.elementAt(index);

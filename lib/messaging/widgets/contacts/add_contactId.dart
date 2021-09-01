@@ -4,7 +4,6 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 
 class AddViaContactId extends StatefulWidget {
   @override

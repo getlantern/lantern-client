@@ -9,15 +9,26 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/iterable_extension.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 
-class NewMessage extends StatelessWidget {
+class NewMessage extends StatefulWidget {
   static const NUM_RECENT_CONTACTS = 10;
+
+  @override
+  _NewMessageState createState() => _NewMessageState();
+}
+
+class _NewMessageState extends State<NewMessage> {
+  var scrollListController = ItemScrollController();
+  Contact? _updatedContact;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    var contactListController = ItemScrollController();
 
     return BaseScreen(
       title: 'New Message'.i18n,
@@ -52,14 +63,11 @@ class NewMessage extends StatelessWidget {
                 FullScreenDialogPage(widget: AddViaQR()),
               )
                   .then((value) {
+                // we only care about this if it comes back with an updated contact
                 if (value != null) {
-                  var updatedContact = value as Contact;
-                  var scrollToIndex = 1;
-                  if (contactListController.isAttached) {
-                    contactListController.scrollTo(
-                        index: scrollToIndex,
-                        duration: const Duration(milliseconds: 300));
-                  }
+                  setState(() {
+                    _updatedContact = value as Contact;
+                  });
 
                   showSnackbar(
                       context: context,
@@ -69,7 +77,8 @@ class NewMessage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              'Contact added'.i18n,
+                              '${_updatedContact!.displayName} is in your Contact list'
+                                  .i18n,
                               overflow: TextOverflow.visible,
                               style: txSnackBarText,
                               textAlign: TextAlign.left,
@@ -82,8 +91,8 @@ class NewMessage extends StatelessWidget {
                         textColor: secondaryPink,
                         label: 'START CHAT'.toUpperCase().i18n,
                         onPressed: () async {
-                          await context
-                              .openConversation(updatedContact.contactId);
+                          await context.pushRoute(Conversation(
+                              contactId: _updatedContact!.contactId));
                         },
                       ));
                 }
@@ -113,14 +122,6 @@ class NewMessage extends StatelessWidget {
                     : Container();
               }),
             ),
-            TextButton(
-                onPressed: () {
-                  if (contactListController.isAttached) {
-                    contactListController.scrollTo(
-                        index: 1, duration: const Duration(milliseconds: 300));
-                  }
-                },
-                child: Text('scroll test')),
             Container(
               height: 150,
               child: Flexible(child: model.contacts(builder: (context,
@@ -128,7 +129,7 @@ class NewMessage extends StatelessWidget {
                 var contacts = _contacts.toList();
 
                 var recentContacts =
-                    contacts.take(NUM_RECENT_CONTACTS).toList();
+                    contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedRecentContacts = recentContacts
                   ..sort((a, b) => sanitizeContactName(a.value.displayName)
@@ -137,10 +138,21 @@ class NewMessage extends StatelessWidget {
                 var groupedSortedRecentContacts = sortedRecentContacts
                     .groupBy((el) => sanitizeContactName(el.value.displayName));
 
+                // scroll to index of the contact we just added, if there is one
+                // otherwise start from top (index = 0)
+                if (scrollListController.isAttached) {
+                  scrollListController.scrollTo(
+                      index: _updatedContact != null
+                          ? contacts.indexWhere(
+                              (element) => element.value == _updatedContact)
+                          : 0,
+                      duration: const Duration(milliseconds: 300));
+                }
+
                 return groupedSortedRecentContacts.isNotEmpty
                     ? groupedContactListGenerator(
                         groupedSortedList: groupedSortedRecentContacts,
-                        contactListController: contactListController,
+                        scrollListController: scrollListController,
                         leadingCallback: (Contact contact) => CircleAvatar(
                               backgroundColor: avatarBgColors[
                                   generateUniqueColorIndex(
