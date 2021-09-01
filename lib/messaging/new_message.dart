@@ -11,7 +11,7 @@ import 'package:lantern/utils/iterable_extension.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class NewMessage extends StatefulWidget {
-  static const NUM_RECENT_CONTACTS = 10;
+  // static const NUM_RECENT_CONTACTS = 10;
 
   @override
   _NewMessageState createState() => _NewMessageState();
@@ -128,30 +128,36 @@ class _NewMessageState extends State<NewMessage> {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
 
-                var recentContacts =
-                    contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
+                // TODO: uncomment if we need to limit num of contacts here hiding this for now
+                // var recentContacts =
+                //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
+
                 // related https://github.com/getlantern/android-lantern/issues/299
-                var sortedRecentContacts = recentContacts
+                var sortedContacts = contacts
                   ..sort((a, b) => sanitizeContactName(a.value.displayName)
                       .compareTo(sanitizeContactName(b.value.displayName)));
 
-                var groupedSortedRecentContacts = sortedRecentContacts
+                var groupedSortedContacts = sortedContacts
                     .groupBy((el) => sanitizeContactName(el.value.displayName));
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)
                 if (scrollListController.isAttached) {
+                  var scrollIndex = _updatedContact != null
+                      ? sortedContacts.indexWhere((element) =>
+                          element.value.contactId.id ==
+                          _updatedContact!.contactId.id)
+                      : 0;
                   scrollListController.scrollTo(
-                      index: _updatedContact != null
-                          ? contacts.indexWhere(
-                              (element) => element.value == _updatedContact)
-                          : 0,
+                      index: scrollIndex != -1
+                          ? scrollIndex
+                          : 0, //if recent contact can not be found in our list for some reason
                       duration: const Duration(milliseconds: 300));
                 }
 
-                return groupedSortedRecentContacts.isNotEmpty
+                return groupedSortedContacts.isNotEmpty
                     ? groupedContactListGenerator(
-                        groupedSortedList: groupedSortedRecentContacts,
+                        groupedSortedList: groupedSortedContacts,
                         scrollListController: scrollListController,
                         leadingCallback: (Contact contact) => CircleAvatar(
                               backgroundColor: avatarBgColors[
