@@ -10,6 +10,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -162,9 +163,19 @@ class _AddViaQRState extends State<AddViaQR> {
                         _onQRViewCreated(controller, model),
                   ),
                 ),
-                if (scannedContactId != null)
-                  const CustomAssetImage(
-                      path: ImagePaths.check_grey, size: 200),
+                if (scannedContactId != null && scanning)
+                  Expanded(
+                    flex: 1,
+                    child: LoadingBouncingGrid.square(
+                      borderColor: Colors.black,
+                      borderSize: 1.0,
+                      size: 220.0,
+                      backgroundColor: Colors.white,
+                      duration: const Duration(milliseconds: 1000),
+                    ),
+                  ),
+                // const CustomAssetImage(
+                //     path: ImagePaths.check_grey, size: 200),
               ],
             ),
           ),
@@ -215,7 +226,7 @@ class _AddViaQRState extends State<AddViaQR> {
               children: [
                 TextButton(
                   onPressed: () async {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                     await context.router.push(
                       FullScreenDialogPage(widget: AddViaContactId()),
                     );
