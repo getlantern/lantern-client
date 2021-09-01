@@ -18,11 +18,13 @@ class _AddViaContactIdState extends State<AddViaContactId> {
   bool waitingForOtherSide = false;
 
   void _onContactIdAdd() async {
+    // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        pastedContactId = contactIdController.value.text;
-      });
       try {
+        setState(() {
+          pastedContactId = contactIdController.value.text;
+          waitingForOtherSide = true;
+        });
         var mostRecentHelloTs =
             await model.addProvisionalContact(pastedContactId!);
         var contactNotifier = model.contactNotifier(pastedContactId!);
@@ -40,11 +42,6 @@ class _AddViaContactIdState extends State<AddViaContactId> {
         // immediately invoke listener in case the contactNotifier already has
         // an up-to-date contact.
         listener();
-
-        // hide button, show animation
-        setState(() {
-          waitingForOtherSide = true;
-        });
       } catch (e) {
         setState(() {
           pastedContactId = '';

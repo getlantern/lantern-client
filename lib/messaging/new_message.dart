@@ -63,12 +63,11 @@ class _NewMessageState extends State<NewMessage> {
                 FullScreenDialogPage(widget: AddViaQR()),
               )
                   .then((value) {
+                setState(() {
+                  _updatedContact = value as Contact;
+                });
                 // we only care about this if it comes back with an updated contact
-                if (value != null) {
-                  setState(() {
-                    _updatedContact = value as Contact;
-                  });
-
+                if (_updatedContact != null) {
                   showSnackbar(
                       context: context,
                       content: Row(
@@ -77,7 +76,8 @@ class _NewMessageState extends State<NewMessage> {
                         children: [
                           Expanded(
                             child: Text(
-                              '${_updatedContact!.displayName} is in your Contact list'
+                              // TODO: update copy here
+                              '${_updatedContact!.displayName} is a Contact'
                                   .i18n,
                               overflow: TextOverflow.visible,
                               style: txSnackBarText,
