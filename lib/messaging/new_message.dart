@@ -62,11 +62,11 @@ class _NewMessageState extends State<NewMessage> {
                   var _value = await context.router.push(
                     FullScreenDialogPage(widget: AddViaQR()),
                   );
+                  setState(() {
+                    _updatedContact = _value as Contact;
+                  });
                   // we only care about this if it comes back with an updated contact
                   if (_updatedContact != null) {
-                    setState(() {
-                      _updatedContact = _value as Contact;
-                    });
                     showSnackbar(
                         context: context,
                         content: Row(
