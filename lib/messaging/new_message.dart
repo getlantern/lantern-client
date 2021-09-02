@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/widgets/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/widgets/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
@@ -149,9 +149,8 @@ class _NewMessageState extends State<NewMessage> {
                           _updatedContact!.contactId.id)
                       : 0;
                   scrollListController.scrollTo(
-                      index: scrollIndex != -1
-                          ? scrollIndex
-                          : 0, //if recent contact can not be found in our list for some reason
+                      index: scrollIndex != -1 ? scrollIndex : 0,
+                      //if recent contact can not be found in our list for some reason
                       duration: const Duration(milliseconds: 300));
                 }
 
