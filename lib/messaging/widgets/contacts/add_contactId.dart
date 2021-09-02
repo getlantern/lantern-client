@@ -1,16 +1,24 @@
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:loading_animations/loading_animations.dart';
 
-class AddViaContactId extends StatefulWidget {
+class AddViaContactId extends StatelessWidget {
   @override
-  _AddViaContactIdState createState() => _AddViaContactIdState();
+  Widget build(BuildContext context) {
+    return AddViaContactId();
+  }
 }
 
-class _AddViaContactIdState extends State<AddViaContactId> {
+class AddViaContactIdBody extends StatefulWidget {
+  @override
+  _AddViaContactIdBodyState createState() => _AddViaContactIdBodyState();
+}
+
+class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
   String? pastedContactId;
   late MessagingModel model;
