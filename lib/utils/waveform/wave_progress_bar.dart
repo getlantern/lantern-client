@@ -15,19 +15,21 @@ class WaveProgressBar extends StatelessWidget {
   final double begin;
   final double barHeightScaling;
   final double? height;
+  final double gap;
 
   WaveProgressBar({
     required this.listOfHeights,
     required this.initialColor,
     required this.progressColor,
     required this.backgroundColor,
+    this.gap = 0.8,
     this.barHeightScaling = 1,
     this.height,
     this.alignment = Alignment.center,
     this.begin = 0,
     required this.width,
     required this.progressPercentage,
-  });
+  }) : assert(gap > 0.0 && gap < 1.0);
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +50,13 @@ class WaveProgressBar extends StatelessWidget {
       arrayOfBars.add(
         CustomPaint(
           painter: SingleBarPainter(
-            startingPosition: i * (width / listOfHeights.length),
-            singleBarWidth: width / listOfHeights.length,
-            maxSeekBarHeight: height ?? listOfHeights.reduce(math.max) + 1,
-            actualSeekBarHeight: listOfHeights[i] * barHeightScaling,
-            heightOfContainer: height ?? listOfHeights.reduce(math.max),
-            backgroundColor: backgroundColor,
-          ),
+              startingPosition: i * (width / listOfHeights.length),
+              singleBarWidth: width / listOfHeights.length,
+              maxSeekBarHeight: height ?? listOfHeights.reduce(math.max) + 1,
+              actualSeekBarHeight: listOfHeights[i] * barHeightScaling,
+              heightOfContainer: height ?? listOfHeights.reduce(math.max),
+              backgroundColor: backgroundColor,
+              gap: gap),
         ),
       );
     }
