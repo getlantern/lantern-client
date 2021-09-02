@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -18,6 +18,8 @@ class AddViaQR extends StatefulWidget {
 }
 
 class _AddViaQRState extends State<AddViaQR> {
+  bool usingId = false;
+
   final _qrKey = GlobalKey(debugLabel: 'QR');
 
   late MessagingModel model;
@@ -108,7 +110,7 @@ class _AddViaQRState extends State<AddViaQR> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    return buildBody(context);
+    return usingId ? AddViaContactIdBody() : buildBody(context);
   }
 
   Widget buildBody(BuildContext context) {
@@ -225,11 +227,10 @@ class _AddViaQRState extends State<AddViaQR> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await context.router.push(
-                      FullScreenDialogPage(widget: AddViaContactId()),
-                    );
+                  onPressed: () {
+                    setState(() {
+                      usingId = true;
+                    });
                   },
                   child: Text('Trouble scanning?'.i18n,
                       style: const TextStyle(
