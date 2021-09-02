@@ -185,10 +185,10 @@ class AudioWidget extends StatelessWidget {
               ),
               Container(
                 width: widgetWidth,
-                margin: const EdgeInsets.only(top: 30.0, right: 15.0),
                 height: height,
                 child: Stack(
                   clipBehavior: Clip.hardEdge,
+                  alignment: AlignmentDirectional.bottomCenter,
                   children: [
                     value.bars.isNotEmpty
                         ? _getWaveBar(context, value, value.bars, widgetWidth)
@@ -217,7 +217,7 @@ class AudioWidget extends StatelessWidget {
   Widget _getSliderOverlay(AudioValue value) {
     var _progress = _updateProgress(value);
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.bottomCenter,
       child: SliderTheme(
         data: SliderThemeData(
             trackHeight: 0,
@@ -228,7 +228,7 @@ class AudioWidget extends StatelessWidget {
             valueIndicatorColor: Colors.grey.shade200,
             trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
-                height: height / 2,
+                height: height,
                 isPlaying: value.playerState == PlayerState.playing ||
                     value.playerState == PlayerState.paused)),
         child: Slider(
@@ -291,7 +291,7 @@ class AudioWidget extends StatelessWidget {
       initialColor: initialColor,
       progressColor: progressColor,
       width: width,
-      height: height / 2,
+      height: height,
     );
   }
 
