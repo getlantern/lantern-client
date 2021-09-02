@@ -142,12 +142,12 @@ class _NewMessageState extends State<NewMessage> {
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)
+                var scrollIndex = _updatedContact != null
+                    ? sortedContacts.indexWhere((element) =>
+                        element.value.contactId.id ==
+                        _updatedContact!.contactId.id)
+                    : 0;
                 if (scrollListController.isAttached) {
-                  var scrollIndex = _updatedContact != null
-                      ? sortedContacts.indexWhere((element) =>
-                          element.value.contactId.id ==
-                          _updatedContact!.contactId.id)
-                      : 0;
                   scrollListController.scrollTo(
                       index: scrollIndex != -1 ? scrollIndex : 0,
                       //if recent contact can not be found in our list for some reason
