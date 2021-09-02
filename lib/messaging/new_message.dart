@@ -49,55 +49,53 @@ class _NewMessageState extends State<NewMessage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: const Icon(
-                Icons.qr_code,
-                color: Colors.black,
-              ),
-              title: Text('Scan Contact QR Code'.i18n),
-              trailing: const CustomAssetImage(
-                path: ImagePaths.keyboard_arrow_right_icon,
-                size: 24,
-              ),
-              onTap: () async => await context.router
-                  .push(
-                FullScreenDialogPage(widget: AddViaQR()),
-              )
-                  .then((value) {
-                setState(() {
-                  _updatedContact = value as Contact;
-                });
-                // we only care about this if it comes back with an updated contact
-                if (_updatedContact != null) {
-                  showSnackbar(
-                      context: context,
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              // TODO: update copy here
-                              '${_updatedContact!.displayName} is a Contact'
-                                  .i18n,
-                              overflow: TextOverflow.visible,
-                              style: txSnackBarText,
-                              textAlign: TextAlign.left,
+                leading: const Icon(
+                  Icons.qr_code,
+                  color: Colors.black,
+                ),
+                title: Text('Scan Contact QR Code'.i18n),
+                trailing: const CustomAssetImage(
+                  path: ImagePaths.keyboard_arrow_right_icon,
+                  size: 24,
+                ),
+                onTap: () async {
+                  var _value = await context.router.push(
+                    FullScreenDialogPage(widget: AddViaQR()),
+                  );
+                  // we only care about this if it comes back with an updated contact
+                  if (_updatedContact != null) {
+                    setState(() {
+                      _updatedContact = _value as Contact;
+                    });
+                    showSnackbar(
+                        context: context,
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                // TODO: update copy here
+                                '${_updatedContact!.displayName} is a Contact'
+                                    .i18n,
+                                overflow: TextOverflow.visible,
+                                style: txSnackBarText,
+                                textAlign: TextAlign.left,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      duration: const Duration(milliseconds: 4000),
-                      action: SnackBarAction(
-                        textColor: secondaryPink,
-                        label: 'START CHAT'.toUpperCase().i18n,
-                        onPressed: () async {
-                          await context.pushRoute(Conversation(
-                              contactId: _updatedContact!.contactId));
-                        },
-                      ));
-                }
-              }),
-            ),
+                          ],
+                        ),
+                        duration: const Duration(milliseconds: 4000),
+                        action: SnackBarAction(
+                          textColor: secondaryPink,
+                          label: 'START CHAT'.toUpperCase().i18n,
+                          onPressed: () async {
+                            await context.pushRoute(Conversation(
+                                contactId: _updatedContact!.contactId));
+                          },
+                        ));
+                  }
+                }),
             Divider(thickness: 1, color: grey2),
             ListTile(
               leading: const Icon(
