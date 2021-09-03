@@ -461,8 +461,8 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: Colors.red[900],
-                    color: Colors.red,
+                    pulseColor: pulsingShadow,
+                    color: pulsingBackground,
                   ),
                 ),
                 Flexible(
