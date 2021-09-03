@@ -128,7 +128,7 @@ class _AddViaQRState extends State<AddViaQR> {
                   color: Colors.white,
                 )),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.only(left: 4.0),
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => showInfoDialog(context,
