@@ -162,27 +162,19 @@ class _AddViaQRState extends State<AddViaQR> {
                   child: Container(
                     color: topColor,
                     width: 100.w,
-                    padding: const EdgeInsets.only(bottom: 20.0),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(6.0),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: QRView(
-                                key: _qrKey,
-                                onQRViewCreated: (controller) =>
-                                    _onQRViewCreated(controller, model),
-                              ),
-                            ),
+                        QRView(
+                          key: _qrKey,
+                          onQRViewCreated: (controller) =>
+                              _onQRViewCreated(controller, model),
+                          overlay: QrScannerOverlayShape(
+                            borderColor: Colors.greenAccent,
+                            borderRadius: 8,
+                            borderLength: 15,
+                            borderWidth: 5,
+                            cutOutSize: 70.w,
                           ),
                         ),
                         if (scannedContactId != null && scanning)
