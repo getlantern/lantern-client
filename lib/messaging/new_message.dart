@@ -123,65 +123,61 @@ class _NewMessageState extends State<NewMessage> {
                     : Container();
               }),
             ),
-            Container(
-              height: 150,
-              child: Flexible(child: model.contacts(builder: (context,
-                  Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                var contacts = _contacts.toList();
+            Flexible(child: model.contacts(builder: (context,
+                Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+              var contacts = _contacts.toList();
 
-                // TODO: uncomment if we need to limit num of contacts here hiding this for now
-                // var recentContacts =
-                //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
+              // TODO: uncomment if we need to limit num of contacts here hiding this for now
+              // var recentContacts =
+              //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
 
-                // related https://github.com/getlantern/android-lantern/issues/299
-                var sortedContacts = contacts
-                  ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                      .compareTo(sanitizeContactName(b.value.displayName)));
+              // related https://github.com/getlantern/android-lantern/issues/299
+              var sortedContacts = contacts
+                ..sort((a, b) => sanitizeContactName(a.value.displayName)
+                    .compareTo(sanitizeContactName(b.value.displayName)));
 
-                var groupedSortedContacts = sortedContacts
-                    .groupBy((el) => sanitizeContactName(el.value.displayName));
+              var groupedSortedContacts = sortedContacts
+                  .groupBy((el) => sanitizeContactName(el.value.displayName));
 
-                // scroll to index of the contact we just added, if there is one
-                // otherwise start from top (index = 0)
-                var scrollIndex = _updatedContact != null
-                    ? sortedContacts.indexWhere((element) =>
-                        element.value.contactId.id ==
-                        _updatedContact!.contactId.id)
-                    : 0;
-                if (scrollListController.isAttached) {
-                  scrollListController.scrollTo(
-                      index: scrollIndex != -1 ? scrollIndex : 0,
-                      //if recent contact can not be found in our list for some reason
-                      duration: const Duration(milliseconds: 300));
-                }
+              // scroll to index of the contact we just added, if there is one
+              // otherwise start from top (index = 0)
+              var scrollIndex = _updatedContact != null
+                  ? sortedContacts.indexWhere((element) =>
+                      element.value.contactId.id ==
+                      _updatedContact!.contactId.id)
+                  : 0;
+              if (scrollListController.isAttached) {
+                scrollListController.scrollTo(
+                    index: scrollIndex != -1 ? scrollIndex : 0,
+                    //if recent contact can not be found in our list for some reason
+                    duration: const Duration(milliseconds: 300));
+              }
 
-                return groupedSortedContacts.isNotEmpty
-                    ? groupedContactListGenerator(
-                        groupedSortedList: groupedSortedContacts,
-                        scrollListController: scrollListController,
-                        leadingCallback: (Contact contact) => CircleAvatar(
-                              backgroundColor: avatarBgColors[
-                                  generateUniqueColorIndex(
-                                      contact.contactId.id)],
-                              child: Text(
-                                  sanitizeContactName(contact.displayName)
-                                      .substring(0, 2)
-                                      .toUpperCase(),
-                                  style: const TextStyle(color: Colors.white)),
-                            ),
-                        onTapCallback: (Contact contact) async =>
-                            await context.pushRoute(
-                                Conversation(contactId: contact.contactId)))
-                    : Container(
-                        alignment: AlignmentDirectional.center,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 16.0),
-                        child: Text('No contacts yet.'.i18n,
-                            textAlign: TextAlign.center,
-                            style:
-                                tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
-              })),
-            )
+              return groupedSortedContacts.isNotEmpty
+                  ? groupedContactListGenerator(
+                      groupedSortedList: groupedSortedContacts,
+                      scrollListController: scrollListController,
+                      leadingCallback: (Contact contact) => CircleAvatar(
+                            backgroundColor: avatarBgColors[
+                                generateUniqueColorIndex(contact.contactId.id)],
+                            child: Text(
+                                sanitizeContactName(contact.displayName)
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(color: Colors.white)),
+                          ),
+                      onTapCallback: (Contact contact) async =>
+                          await context.pushRoute(
+                              Conversation(contactId: contact.contactId)))
+                  : Container(
+                      alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 16.0),
+                      child: Text('No contacts yet.'.i18n,
+                          textAlign: TextAlign.center,
+                          style:
+                              tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
+            })),
           ]),
     );
   }
