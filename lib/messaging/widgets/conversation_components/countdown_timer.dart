@@ -3,7 +3,9 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class CountdownTimer extends StatelessWidget {
   final StopWatchTimer stopWatchTimer;
-  const CountdownTimer({required this.stopWatchTimer, Key? key})
+  final TextStyle style;
+  const CountdownTimer(
+      {required this.stopWatchTimer, required this.style, Key? key})
       : super(key: key);
 
   @override
@@ -15,8 +17,10 @@ class CountdownTimer extends StatelessWidget {
         final value = snap.data;
         final displayTime = StopWatchTimer.getDisplayTime(value ?? 0,
             minute: true, second: true, hours: false, milliSecond: false);
-        return Text(displayTime,
-            style: const TextStyle(fontWeight: FontWeight.bold));
+        return Text(
+          displayTime,
+          style: style,
+        );
       },
     );
   }
