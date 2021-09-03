@@ -21,10 +21,11 @@ class _AddViaUsernameState extends State<AddViaUsername> {
   @override
   Widget build(BuildContext context) {
     return fullScreenDialogLayout(
-        Colors.white,
-        Colors.black,
-        context,
-        Column(
+        topColor: Colors.white,
+        iconColor: Colors.black,
+        context: context,
+        title: const Text('Add via username'),
+        child: Column(
           children: [
             Form(
               key: _formKey,

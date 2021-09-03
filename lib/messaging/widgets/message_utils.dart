@@ -199,17 +199,25 @@ void showSnackbar(
 }
 
 Widget fullScreenDialogLayout(
-    Color topColor, Color iconColor, BuildContext context, Widget content) {
+    {required Color topColor,
+    required Color iconColor,
+    required BuildContext context,
+    required Widget title,
+    required Widget child}) {
   return Flex(direction: Axis.vertical, children: [
     Container(
       color: topColor,
-      width: 100.w,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      height: 75,
+      child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
+          Container(
+            padding: const EdgeInsets.only(top: 30),
+            alignment: Alignment.center,
+            child: title,
+          ),
+          Positioned(
+            right: 0,
+            top: 30,
             child: IconButton(
               icon: Icon(
                 Icons.close_rounded,
@@ -221,7 +229,7 @@ Widget fullScreenDialogLayout(
         ],
       ),
     ),
-    Expanded(child: content)
+    Expanded(child: child)
   ]);
 }
 
