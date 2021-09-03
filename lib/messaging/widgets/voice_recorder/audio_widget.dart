@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/slider_audio/rectangle_slider_thumb_shape.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/waveform.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/round_button.dart';
 import 'package:lantern/utils/audio.dart';
-import 'package:lantern/utils/waveform/wave_progress_bar.dart';
-import 'package:lantern/utils/waveform_extension.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 enum PlayerState { stopped, playing, paused }
@@ -17,7 +17,7 @@ class AudioValue {
   Duration? realDuration;
   Duration? position;
   int? pendingPercentage;
-  var reducedAudioWave = <double>[];
+  var bars = List<int>.empty();
   PlayerState playerState = PlayerState.stopped;
 
   bool get isPlaying => playerState == PlayerState.playing;
@@ -60,8 +60,7 @@ class AudioController extends ValueNotifier<AudioValue> {
         ? Future.value(thumbnail)
         : model.thumbnail(attachment).value.future;
     thumbnailFuture.then((t) {
-      value.reducedAudioWave =
-          AudioWaveform.fromBuffer(t).bars.reducedWaveform();
+      value.bars = AudioWaveform.fromBuffer(t).bars;
       notifyListeners();
     });
   }
@@ -140,106 +139,102 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
+  static const height = 20.0;
+
   final AudioController controller;
-  final double? widgetHeight;
   final Color initialColor;
   final Color progressColor;
-  final Color backgroundColor;
-  final bool showTimeRemaining;
-  final double waveHeight;
-  final double previewBarHeight;
-  final double widgetWidth;
-  final EdgeInsets padding;
+  final CrossAxisAlignment? timeRemainingAlignment;
 
-  AudioWidget(
-      {required this.controller,
-      required this.initialColor,
-      required this.progressColor,
-      required this.backgroundColor,
-      this.padding = EdgeInsets.zero,
-      this.widgetHeight,
-      this.showTimeRemaining = true,
-      required this.waveHeight,
-      this.previewBarHeight = 40,
-      required this.widgetWidth});
+  AudioWidget({
+    required this.controller,
+    required this.initialColor,
+    required this.progressColor,
+    this.timeRemainingAlignment,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: controller,
-        builder: (BuildContext context, AudioValue value, Widget? child) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      valueListenable: controller,
+      builder: (BuildContext context, AudioValue value, Widget? child) {
+        if (timeRemainingAlignment != null) {
+          return Column(
+            crossAxisAlignment: timeRemainingAlignment!,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      Container(
-                          width: 40,
-                          height: showTimeRemaining
-                              ? 2 * widgetHeight!
-                              : previewBarHeight,
-                          margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: _getPlayIcon(controller, value)),
-                      if (showTimeRemaining && value.duration != null)
-                        _getTimeRemaining(value),
-                    ],
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: _buildWaveformRow(value),
               ),
-              Container(
-                width: widgetWidth,
-                margin: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
-                height: waveHeight,
-                child: Stack(
-                  clipBehavior: Clip.hardEdge,
-                  children: [
-                    value.reducedAudioWave.isNotEmpty
-                        ? _getWaveBar(
-                            context, value, value.reducedAudioWave, widgetWidth)
-                        : const SizedBox(),
-                    _getSliderOverlay(value, waveHeight),
-                  ],
-                ),
-              ),
+              _getTimeRemaining(value),
             ],
           );
-        });
+        } else {
+          return _buildWaveformRow(value);
+        }
+      },
+    );
+  }
+
+  Widget _buildWaveformRow(AudioValue value) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _getPlayIcon(controller, value),
+            Container(width: 12),
+            Container(
+              width: constraints.maxWidth - 32,
+              height: height,
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  value.bars.isNotEmpty
+                      ? _getWaveform(
+                          context, value, value.bars, constraints.maxWidth - 32)
+                      : const SizedBox(),
+                  _getSliderOverlay(value),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _getTimeRemaining(AudioValue value) => Container(
-        padding: const EdgeInsets.only(top: 4.0),
+        padding: const EdgeInsets.only(top: 7.0),
         child: Text(
-            (value.duration! - (value.position ?? const Duration()))
-                .toString()
-                .substring(2, 7),
-            style: TextStyle(
-                color: initialColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 10.0)),
+          (value.duration! - (value.position ?? const Duration()))
+              .toString()
+              .substring(2, 7),
+          style: TextStyle(
+            color: initialColor,
+            fontSize: 10.0,
+          ),
+        ),
       );
 
-  Widget _getSliderOverlay(AudioValue value, double thumbShapeHeight) {
+  Widget _getSliderOverlay(AudioValue value) {
     var _progress = _updateProgress(value);
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.bottomCenter,
       child: SliderTheme(
         data: SliderThemeData(
-            activeTrackColor: value.reducedAudioWave.isNotEmpty
-                ? Colors.transparent
-                : Colors.grey,
-            inactiveTrackColor: value.reducedAudioWave.isNotEmpty
-                ? Colors.transparent
-                : Colors.blue,
+            trackHeight: 0,
+            activeTrackColor:
+                value.bars.isNotEmpty ? Colors.transparent : Colors.grey,
+            inactiveTrackColor:
+                value.bars.isNotEmpty ? Colors.transparent : Colors.blue,
             valueIndicatorColor: Colors.grey.shade200,
             trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
-                height: thumbShapeHeight,
+                height: height,
                 isPlaying: value.playerState == PlayerState.playing ||
                     value.playerState == PlayerState.paused)),
         child: Slider(
@@ -248,7 +243,7 @@ class AudioWidget extends StatelessWidget {
               // can't seek while stopped
               return;
             }
-            final position = v * value.duration!.inMilliseconds;
+            final position = v * value.duration!.inMilliseconds / 100;
             controller.seek(
               Duration(
                 milliseconds: position.round(),
@@ -265,50 +260,43 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getPlayIcon(AudioController controller, AudioValue value) {
     return value.isPlaying
-        ? TextButton(
-            onPressed: value.isPlaying ? () => controller.pause() : null,
-            style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                alignment: Alignment.center),
-            child: const Icon(
+        ? RoundButton(
+            diameter: height,
+            padding: 0,
+            backgroundColor: Colors.transparent,
+            icon: Icon(
               Icons.pause,
-              color: Colors.black,
-              size: 20.0,
+              color: initialColor,
+              size: height,
             ),
+            onPressed: () {
+              if (value.isPlaying) controller.pause();
+            },
           )
-        : TextButton(
+        : RoundButton(
+            diameter: height,
+            backgroundColor: initialColor,
+            icon: Icon(
+              Icons.play_arrow,
+              color: progressColor,
+              size: 16,
+            ),
             onPressed: () async {
               await controller.play();
             },
-            style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                alignment: Alignment.center),
-            child: const Icon(
-              Icons.play_arrow,
-              color: Colors.black,
-              size: 20.0,
-            ),
           );
   }
 
-  Widget _getWaveBar(BuildContext context, AudioValue value,
-      List<double> reducedAudioWave, double width) {
+  Widget _getWaveform(
+      BuildContext context, AudioValue value, List<int> bars, double width) {
     var _progress = _updateProgress(value);
-    return Padding(
-      padding: padding,
-      child: WaveProgressBar(
-        progressPercentage: _progress,
-        alignment: Alignment.topCenter,
-        listOfHeights: reducedAudioWave,
-        initialColor: initialColor,
-        progressColor: progressColor,
-        backgroundColor: backgroundColor,
-        width: width,
-        height: widgetHeight,
-        barHeightScaling: 0.5,
-      ),
+    return Waveform(
+      progressPercentage: _progress,
+      bars: bars,
+      initialColor: initialColor,
+      progressColor: progressColor,
+      width: width,
+      height: height,
     );
   }
 
