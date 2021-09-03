@@ -4,6 +4,7 @@ import 'package:lantern/package_store.dart';
 // import 'package:loading_animations/loading_animations.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:sizer/sizer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaContactId extends StatelessWidget {
   @override
@@ -29,6 +30,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   bool waitingForOtherSide = false;
 
   void _onContactIdAdd() async {
+    context.loaderOverlay.show();
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
       try {
@@ -51,6 +53,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
             contactNotifier.removeListener(listener);
             // go back to New Message with the updatedContact info
             Navigator.pop(context, updatedContact);
+            context.loaderOverlay.hide();
           }
         };
         contactNotifier.addListener(listener);
@@ -163,7 +166,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                       Clipboard.setData(ClipboardData(
                                           text: widget.me.contactId.id));
                                     },
-                                    icon: const Icon(Icons.copy_all_outlined))
+                                    icon: const Icon(Icons.copy))
                               ],
                             ),
                           ),
@@ -197,7 +200,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                     style: TextStyle(
                                         fontSize: 10.0
                                             .sp), // TODO: we need to manually wrap this up
-                                    softWrap: true,
                                   ),
                                 ),
                               ),
@@ -208,16 +210,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                     ),
                   ]),
             ),
-            if (waitingForOtherSide)
-              Expanded(flex: 1, child: Text('waiting')
-                  // child: LoadingBouncingGrid.square(
-                  //   borderColor: primaryPink,
-                  //   borderSize: 1.0,
-                  //   size: 100.0,
-                  //   backgroundColor: primaryPink,
-                  //   duration: const Duration(milliseconds: 1000),
-                  // ),
-                  )
           ],
         ),
       ),
