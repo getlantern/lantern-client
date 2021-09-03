@@ -4,7 +4,7 @@ import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:lantern/core/router/router_extensions.dart';
+import 'package:sizer/sizer.dart';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
@@ -198,32 +198,31 @@ void showSnackbar(
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
-    BuildContext context, List<Widget> widgetList) {
-  return Container(
-    color: bgColor,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+Widget fullScreenDialogLayout(
+    Color topColor, Color iconColor, BuildContext context, Widget content) {
+  return Flex(direction: Axis.vertical, children: [
+    Container(
+      color: topColor,
+      width: 100.w,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Padding(
-            padding: EdgeInsetsDirectional.all(20),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.close_rounded,
-                  color: iconColor,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.close_rounded,
+                color: iconColor,
               ),
-            ],
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
-          ...widgetList
-        ]),
-  );
+        ],
+      ),
+    ),
+    Expanded(child: content)
+  ]);
 }
 
 int generateUniqueColorIndex(String str) {
