@@ -16,6 +16,7 @@ import 'package:lantern/messaging/widgets/conversation_components/countdown_time
 import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
+import 'package:lantern/messaging/widgets/pulsating_indicator.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
@@ -455,13 +456,13 @@ class _ConversationState extends State<Conversation>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 6.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 12,
-                    ),
+                Flexible(
+                  child: PulsatingIndicator(
+                    width: 25,
+                    height: 25,
+                    duration: const Duration(milliseconds: 700),
+                    pulseColor: Colors.red[900],
+                    color: Colors.red,
                   ),
                 ),
                 Flexible(
