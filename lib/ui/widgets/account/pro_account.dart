@@ -14,10 +14,7 @@ class ProAccount extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: Text(
-        'pro_account_management'.i18n,
-        style: tsTitleAppbar,
-      ),
+      title: 'pro_account_management'.i18n,
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         return sessionModel

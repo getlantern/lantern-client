@@ -92,10 +92,7 @@ class AccountMenu extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: Text(
-        'Account'.i18n,
-        style: tsTitleAppbar,
-      ),
+      title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return ListView(
