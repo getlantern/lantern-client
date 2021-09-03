@@ -145,6 +145,7 @@ class AudioWidget extends StatelessWidget {
   final Color progressColor;
   final bool showTimeRemaining;
   final double height;
+  final bool inbound;
   final double widgetWidth;
 
   AudioWidget(
@@ -153,6 +154,7 @@ class AudioWidget extends StatelessWidget {
       required this.progressColor,
       this.showTimeRemaining = true,
       required this.height,
+      required this.inbound,
       required this.widgetWidth});
 
   @override
@@ -258,11 +260,11 @@ class AudioWidget extends StatelessWidget {
             onPressed: value.isPlaying ? () => controller.pause() : null,
             style: TextButton.styleFrom(
                 shape: const CircleBorder(),
-                backgroundColor: Colors.white,
+                backgroundColor: !inbound ? Colors.white : Colors.black,
                 alignment: Alignment.center),
-            child: const Icon(
+            child: Icon(
               Icons.pause,
-              color: Colors.black,
+              color: !inbound ? Colors.black : inboundBgColor,
               size: 20.0,
             ),
           )
@@ -272,11 +274,11 @@ class AudioWidget extends StatelessWidget {
             },
             style: TextButton.styleFrom(
                 shape: const CircleBorder(),
-                backgroundColor: Colors.white,
+                backgroundColor: !inbound ? Colors.white : Colors.black,
                 alignment: Alignment.center),
-            child: const Icon(
+            child: Icon(
               Icons.play_arrow,
-              color: Colors.black,
+              color: !inbound ? outboundBgColor : Colors.white,
               size: 20.0,
             ),
           );

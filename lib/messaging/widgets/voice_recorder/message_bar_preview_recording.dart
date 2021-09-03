@@ -27,6 +27,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
           initialColor: Colors.black,
           progressColor: outboundMsgColor,
           showTimeRemaining: false,
+          inbound: true,
           height: kBottomNavigationBarHeight * 0.7,
           widgetWidth: MediaQuery.of(context).size.width * 0.6,
         ),

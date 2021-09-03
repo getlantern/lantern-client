@@ -28,6 +28,7 @@ class AudioAttachment extends StatelessWidget {
             progressColor: inbound ? outboundMsgColor : inboundMsgColor,
             widgetWidth: 50.w,
             height: 50,
+            inbound: inbound,
           );
         });
   }
