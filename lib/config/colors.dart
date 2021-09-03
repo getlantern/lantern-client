@@ -42,6 +42,7 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
+Color recordingColorBackground = const Color.fromRGBO(213, 0, 31, 1);
 
 Color pulsingShadow = Colors.red.shade900;
 Color pulsingBackground = Colors.red;
