@@ -29,10 +29,10 @@ class DisappearingTimerAction extends StatelessWidget {
                 contact.messagesDisappearAfterSeconds
                     .humanizeSeconds()
                     .toUpperCase(),
-                style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold))
+                style: tsDisappearingTimer)
             : Text(
                 'Off'.i18n,
-                style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold),
+                style: tsDisappearingTimerDetail,
               ),
       ]),
     );
