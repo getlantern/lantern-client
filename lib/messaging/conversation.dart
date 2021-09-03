@@ -305,8 +305,8 @@ class _ConversationState extends State<Conversation>
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: _isRecording || _finishedRecording
-                      ? Colors.grey[200]
+                  color: _isRecording
+                      ? const Color.fromRGBO(245, 245, 245, 1)
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
@@ -456,18 +456,18 @@ class _ConversationState extends State<Conversation>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 6.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 12,
-                    ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 12,
                   ),
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 6.0),
-                    child: CountdownTimer(stopWatchTimer: _stopWatchTimer),
+                    padding: const EdgeInsets.only(left: 14),
+                    child: CountdownTimer(
+                      stopWatchTimer: _stopWatchTimer,
+                      style: tsCountdownTimer,
+                    ),
                   ),
                 ),
               ],
