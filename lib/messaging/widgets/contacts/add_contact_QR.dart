@@ -6,10 +6,10 @@ import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/scale_animation_widget.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -56,7 +56,6 @@ class _AddViaQRState extends State<AddViaQR> {
           // we've already scanned the contact, don't bother processing again
           return;
         }
-        context.loaderOverlay.show();
         final contactId = scanData.code;
         setState(() {
           scannedContactId = contactId;
@@ -72,7 +71,6 @@ class _AddViaQRState extends State<AddViaQR> {
             contactNotifier.removeListener(listener);
             // go back to New Message with the updatedContact info
             Navigator.pop(context, updatedContact);
-            context.loaderOverlay.hide();
           }
         };
         contactNotifier.addListener(listener);
@@ -188,8 +186,10 @@ class _AddViaQRState extends State<AddViaQR> {
                           ),
                         ),
                         if (scannedContactId != null && scanning)
-                          const CustomAssetImage(
-                              path: ImagePaths.check_green, size: 80),
+                          ScaleAnimationWidget(
+                            const CustomAssetImage(
+                                path: ImagePaths.check_green, size: 80),
+                          ),
                       ],
                     ),
                   ),
