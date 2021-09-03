@@ -19,41 +19,29 @@ class MessageBarPreviewRecording extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: FittedBox(
-        child: AudioWidget(
-          controller: audioController,
-          initialColor: Colors.black,
-          progressColor: outboundMsgColor,
-          showTimeRemaining: false,
-          height: kBottomNavigationBarHeight * 0.7,
-          widgetWidth: MediaQuery.of(context).size.width * 0.6,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 18),
+            child: AudioWidget(
+              controller: audioController,
+              initialColor: Colors.black,
+              progressColor: outboundMsgColor,
+            ),
+          ),
         ),
-      ),
-      trailing: Flex(
-        direction: Axis.horizontal,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.black),
-            onPressed: onCancelRecording,
-          ),
-          VerticalDivider(
-            width: 4,
-            color: const Color.fromRGBO(235, 235, 235, 1),
-            indent: 1.h,
-            endIndent: 1.h,
-          ),
-          IconButton(
-            icon:
-                const Icon(Icons.send, color: Color.fromRGBO(219, 10, 91, 1.0)),
-            onPressed: onSend,
-          ),
-        ],
-      ),
+        IconButton(
+          icon: const Icon(Icons.delete, color: Colors.black),
+          onPressed: onCancelRecording,
+        ),
+        IconButton(
+          icon: const Icon(Icons.send, color: Color.fromRGBO(219, 10, 91, 1.0)),
+          onPressed: onSend,
+        ),
+      ],
     );
   }
 }

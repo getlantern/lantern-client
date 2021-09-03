@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 const barWidth = 2.0;
@@ -86,15 +88,19 @@ class _BarsPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (var i = 0; i < bars.length; i++) {
       final startingPosition = i * barPlusSpaceWidth;
-      var barHeight = ((-1 * bars[i]) > -1 ? -1 : -1 * bars[i]).toDouble();
-      canvas.drawRect(
-        Rect.fromLTWH(
-          startingPosition,
-          height,
-          barWidth,
-          barHeight,
+      var barHeight = min(-1 * bars[i], -1).toDouble();
+      canvas.drawRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            startingPosition,
+            height,
+            barWidth,
+            barHeight,
+          ),
+          topLeft: const Radius.circular(1),
+          topRight: const Radius.circular(1),
         ),
-        progressedTo >= startingPosition ? progressPaint : initialPaint,
+        progressedTo > startingPosition ? progressPaint : initialPaint,
       );
     }
   }

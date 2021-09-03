@@ -3,10 +3,11 @@ import 'dart:typed_data';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/slider_audio/rectangle_slider_thumb_shape.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/waveform.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/round_button.dart';
 import 'package:lantern/utils/audio.dart';
-import 'package:lantern/messaging/widgets/voice_recorder/Waveform.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 enum PlayerState { stopped, playing, paused }
@@ -138,80 +139,83 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
-  static const double previewBarHeight = 40;
-
   final AudioController controller;
   final Color initialColor;
   final Color progressColor;
-  final bool showTimeRemaining;
-  final double height;
-  final double widgetWidth;
+  final CrossAxisAlignment? timeRemainingAlignment;
 
-  AudioWidget(
-      {required this.controller,
-      required this.initialColor,
-      required this.progressColor,
-      this.showTimeRemaining = true,
-      required this.height,
-      required this.widgetWidth});
+  AudioWidget({
+    required this.controller,
+    required this.initialColor,
+    required this.progressColor,
+    this.timeRemainingAlignment,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: controller,
-        builder: (BuildContext context, AudioValue value, Widget? child) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      valueListenable: controller,
+      builder: (BuildContext context, AudioValue value, Widget? child) {
+        if (timeRemainingAlignment != null) {
+          return Column(
+            crossAxisAlignment: timeRemainingAlignment!,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      Container(
-                          width: 40,
-                          height:
-                              showTimeRemaining ? 2 * height : previewBarHeight,
-                          margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: _getPlayIcon(controller, value)),
-                      if (showTimeRemaining && value.duration != null)
-                        _getTimeRemaining(value),
-                    ],
-                  )
-                ],
+              Padding(
+                padding: EdgeInsets.only(left: 4),
+                child: _buildWaveformRow(value),
               ),
-              Container(
-                width: widgetWidth,
-                height: height,
-                child: Stack(
-                  clipBehavior: Clip.hardEdge,
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    value.bars.isNotEmpty
-                        ? _getWaveBar(context, value, value.bars, widgetWidth)
-                        : const SizedBox(),
-                    _getSliderOverlay(value),
-                  ],
-                ),
-              ),
+              _getTimeRemaining(value),
             ],
           );
-        });
+        } else {
+          return _buildWaveformRow(value);
+        }
+      },
+    );
+  }
+
+  Widget _buildWaveformRow(AudioValue value) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _getPlayIcon(controller, value),
+            Container(width: 12),
+            Container(
+              width: constraints.maxWidth - 32,
+              height: 20,
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  value.bars.isNotEmpty
+                      ? _getWaveform(
+                          context, value, value.bars, constraints.maxWidth - 32)
+                      : const SizedBox(),
+                  _getSliderOverlay(value),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _getTimeRemaining(AudioValue value) => Container(
-        padding: const EdgeInsets.only(top: 4.0),
+        padding: const EdgeInsets.only(top: 7.0),
         child: Text(
-            (value.duration! - (value.position ?? const Duration()))
-                .toString()
-                .substring(2, 7),
-            style: TextStyle(
-                color: initialColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 10.0)),
+          (value.duration! - (value.position ?? const Duration()))
+              .toString()
+              .substring(2, 7),
+          style: TextStyle(
+            color: initialColor,
+            fontSize: 10.0,
+          ),
+        ),
       );
 
   Widget _getSliderOverlay(AudioValue value) {
@@ -228,7 +232,7 @@ class AudioWidget extends StatelessWidget {
             valueIndicatorColor: Colors.grey.shade200,
             trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
-                height: height,
+                height: 20,
                 isPlaying: value.playerState == PlayerState.playing ||
                     value.playerState == PlayerState.paused)),
         child: Slider(
@@ -254,35 +258,34 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getPlayIcon(AudioController controller, AudioValue value) {
     return value.isPlaying
-        ? TextButton(
-            onPressed: value.isPlaying ? () => controller.pause() : null,
-            style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                alignment: Alignment.center),
-            child: const Icon(
+        ? RoundButton(
+            diameter: 20,
+            padding: 0,
+            backgroundColor: Colors.transparent,
+            icon: Icon(
               Icons.pause,
-              color: Colors.black,
-              size: 20.0,
+              color: initialColor,
+              size: 20,
             ),
+            onPressed: () {
+              if (value.isPlaying) controller.pause();
+            },
           )
-        : TextButton(
+        : RoundButton(
+            diameter: 20,
+            backgroundColor: initialColor,
+            icon: Icon(
+              Icons.play_arrow,
+              color: progressColor,
+              size: 16,
+            ),
             onPressed: () async {
               await controller.play();
             },
-            style: TextButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                alignment: Alignment.center),
-            child: const Icon(
-              Icons.play_arrow,
-              color: Colors.black,
-              size: 20.0,
-            ),
           );
   }
 
-  Widget _getWaveBar(
+  Widget _getWaveform(
       BuildContext context, AudioValue value, List<int> bars, double width) {
     var _progress = _updateProgress(value);
     return Waveform(
@@ -291,7 +294,7 @@ class AudioWidget extends StatelessWidget {
       initialColor: initialColor,
       progressColor: progressColor,
       width: width,
-      height: height,
+      height: 20,
     );
   }
 
