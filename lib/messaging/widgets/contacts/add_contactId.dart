@@ -89,10 +89,18 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
     return fullScreenDialogLayout(
-      Colors.white,
-      Colors.black,
-      context,
-      Container(
+      topColor: Colors.white,
+      iconColor: Colors.black,
+      context: context,
+      title: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Trouble Scanning?'.toUpperCase(),
+              style: const TextStyle(fontSize: 20)),
+        ],
+      ),
+      child: Container(
         color: Colors.white,
         child: Column(
           children: [
