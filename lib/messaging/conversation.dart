@@ -305,8 +305,8 @@ class _ConversationState extends State<Conversation>
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: _isRecording || _finishedRecording
-                      ? Colors.grey[200]
+                  color: _isRecording
+                      ? const Color.fromRGBO(245, 245, 245, 1)
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
