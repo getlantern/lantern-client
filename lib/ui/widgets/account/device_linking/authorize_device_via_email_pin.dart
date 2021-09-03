@@ -30,7 +30,10 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
     return sessionModel.emailAddress(
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
-        title: 'Authorize Device via Email'.i18n,
+        title: Text(
+          'Authorize Device via Email'.i18n,
+          style: tsTitleAppbar,
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(

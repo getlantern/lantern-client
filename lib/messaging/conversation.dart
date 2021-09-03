@@ -258,9 +258,39 @@ class _ConversationState extends State<Conversation>
           (context, contact, child) {
         return BaseScreen(
           // Conversation title (contact name)
-          title: contact.displayName.isEmpty
-              ? contact.contactId.id
-              : contact.displayName,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: avatarBgColors[generateUniqueColorIndex(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName)],
+                child: Text(
+                  sanitizeContactName(contact.displayName.isEmpty
+                          ? contact.contactId.id
+                          : contact.displayName)
+                      .substring(0, 2)
+                      .toUpperCase(),
+                  style: tsTitleAppbar,
+                ),
+              ),
+              SizedBox(width: 3.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName,
+                    style: tsTitleAppbar,
+                  ),
+                  DisappearingTimerAction(contact),
+                ],
+              ),
+            ],
+          ),
           centerTitle: false,
           actions: [
             Flex(
