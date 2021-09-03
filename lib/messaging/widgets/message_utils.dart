@@ -437,7 +437,6 @@ Future<void> displayConversationOptions(
                       ),
                     );
                   },
-                  //await model.setDisappearSettings(contact, value);
                 ),
               ),
               const Divider(
