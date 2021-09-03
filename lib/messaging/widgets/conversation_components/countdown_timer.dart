@@ -3,15 +3,9 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class CountdownTimer extends StatelessWidget {
   final StopWatchTimer stopWatchTimer;
-  final Color textColor;
-  final FontWeight? fontWeight;
-  final double fontSize;
+  final TextStyle style;
   const CountdownTimer(
-      {required this.stopWatchTimer,
-      required this.textColor,
-      required this.fontSize,
-      required this.fontWeight,
-      Key? key})
+      {required this.stopWatchTimer, required this.style, Key? key})
       : super(key: key);
 
   @override
@@ -25,11 +19,7 @@ class CountdownTimer extends StatelessWidget {
             minute: true, second: true, hours: false, milliSecond: false);
         return Text(
           displayTime,
-          style: TextStyle(
-            color: textColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-          ),
+          style: style,
         );
       },
     );
