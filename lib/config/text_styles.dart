@@ -1,4 +1,5 @@
 import 'package:lantern/package_store.dart';
+import 'package:sizer/sizer.dart';
 
 //
 // This file will contain text styles (font weight, size, line height, color) for text that figures in reusable components such as Alert and Info Dialogs, Messages etc
@@ -18,6 +19,12 @@ TextStyle? tsCaption(BuildContext context) =>
 
 TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
+
+TextStyle tsCountdownTimer = TextStyle(
+  fontSize: 12.sp,
+  fontWeight: FontWeight.w400,
+  color: countdownTimerColor,
+);
 
 TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);

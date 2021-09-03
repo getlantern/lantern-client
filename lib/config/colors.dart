@@ -9,6 +9,7 @@ Color primaryYellow = HexColor('#FFC107');
 Color secondaryBlue = HexColor('#00BCD4');
 Color secondaryPink = HexColor('#FF4081');
 Color secondaryYellow = HexColor('#FFE600');
+Color countdownTimerColor = Colors.red.shade900;
 Color white = HexColor('#FFFFFF');
 Color black = HexColor('#000000');
 Color grey1 = HexColor('#F9F9F9');
