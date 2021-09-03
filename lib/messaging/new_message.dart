@@ -17,10 +17,7 @@ class NewMessage extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: Text(
-        'New Message'.i18n,
-        style: tsTitleAppbar,
-      ),
+      title: 'New Message'.i18n,
       actions: [
         IconButton(
           icon: const Icon(Icons.search),

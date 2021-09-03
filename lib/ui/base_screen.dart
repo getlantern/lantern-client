@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 
 class BaseScreen extends StatelessWidget {
-  final Widget? title;
+  final dynamic title;
   final List<Widget>? actions;
   final Widget body;
   final Widget? actionButton;
@@ -24,7 +24,12 @@ class BaseScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: title,
+        title: title.runtimeType == String
+            ? Text(
+                title,
+                style: tsTitleAppbar,
+              )
+            : title,
         elevation: 1,
         backgroundColor: Colors.white,
         centerTitle: centerTitle,

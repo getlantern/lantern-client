@@ -26,10 +26,7 @@ class _IntroduceState extends State<Introduce> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-        title: Text(
-          'Introduce Contacts (${selectedContactIds.length})'.i18n,
-          style: tsTitleAppbar,
-        ),
+        title: 'Introduce Contacts (${selectedContactIds.length})'.i18n,
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList()

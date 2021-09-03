@@ -38,10 +38,7 @@ class _YourContactInfoState extends State<YourContactInfo> {
     }
 
     return BaseScreen(
-      title: Text(
-        'Your Contact Info'.i18n,
-        style: tsTitleAppbar,
-      ),
+      title: 'Your Contact Info'.i18n,
       body: model.me((BuildContext context, Contact me, Widget? child) {
         displayName.text = me.displayName;
 
