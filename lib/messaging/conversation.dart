@@ -467,7 +467,12 @@ class _ConversationState extends State<Conversation>
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, bottom: 6.0),
-                    child: CountdownTimer(stopWatchTimer: _stopWatchTimer),
+                    child: CountdownTimer(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      textColor: Colors.red.shade900,
+                      stopWatchTimer: _stopWatchTimer,
+                    ),
                   ),
                 ),
               ],
