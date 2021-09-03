@@ -263,17 +263,14 @@ class _ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundColor: avatarBgColors[generateUniqueColorIndex(
-                    contact.displayName.isEmpty
-                        ? contact.contactId.id
-                        : contact.displayName)],
+                backgroundColor: circleAvatarTitle,
                 child: Text(
                   sanitizeContactName(contact.displayName.isEmpty
                           ? contact.contactId.id
                           : contact.displayName)
                       .substring(0, 2)
                       .toUpperCase(),
-                  style: tsTitleAppbar,
+                  style: tsCircleAvatarLetter,
                 ),
               ),
               SizedBox(width: 3.w),
@@ -299,10 +296,6 @@ class _ConversationState extends State<Conversation>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CallAction(contact),
-                IconButton(
-                    key: const ValueKey('disappearingSelect'),
-                    onPressed: () {},
-                    icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
