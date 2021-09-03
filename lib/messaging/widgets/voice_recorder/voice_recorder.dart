@@ -65,33 +65,36 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         _onTapDown(details);
       },
       onPanEnd: (details) {
-        _animationController.reverse();
         _onTapEnd(details);
       },
       child: Transform.scale(
-        scale: scaleBoundary,
+        scale: widget.isRecording ? scaleBoundary : 1.0,
         alignment: Alignment.bottomRight,
         child: Container(
           width: 50,
           height: 50,
-          margin: widget.isRecording ? const EdgeInsets.only(top: 10) : null,
+          margin: widget.isRecording
+              ? const EdgeInsets.only(top: 10)
+              : EdgeInsets.zero,
           decoration: BoxDecoration(
             color: widget.isRecording ? Colors.red : Colors.transparent,
             borderRadius:
                 const BorderRadius.only(topLeft: Radius.circular(100)),
           ),
-          child: widget.isRecording
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 10, left: 10),
-                  child: Icon(
-                    Icons.mic,
-                    color: Colors.white,
-                  ),
-                )
-              : const Icon(
-                  Icons.mic,
-                  color: Colors.black,
-                ),
+          child: AnimatedSize(
+            vsync: this,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.linear,
+            child: Padding(
+              padding: widget.isRecording
+                  ? const EdgeInsets.only(top: 10, left: 10)
+                  : EdgeInsets.zero,
+              child: Icon(
+                Icons.mic,
+                color: widget.isRecording ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -103,6 +106,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   @override
   void dispose() {
+    _animationController.dispose();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
