@@ -42,6 +42,9 @@ Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
 
+Color pulsingShadow = Colors.red.shade900;
+Color pulsingBackground = Colors.red;
+
 List<Color> avatarBgColors = [
   HexColor('#003B7A'),
   HexColor('#007A02'),
