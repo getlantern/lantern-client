@@ -139,6 +139,8 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
+  static const height = 20.0;
+
   final AudioController controller;
   final Color initialColor;
   final Color progressColor;
@@ -161,7 +163,7 @@ class AudioWidget extends StatelessWidget {
             crossAxisAlignment: timeRemainingAlignment!,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 4),
+                padding: const EdgeInsets.only(left: 4),
                 child: _buildWaveformRow(value),
               ),
               _getTimeRemaining(value),
@@ -186,7 +188,7 @@ class AudioWidget extends StatelessWidget {
             Container(width: 12),
             Container(
               width: constraints.maxWidth - 32,
-              height: 20,
+              height: height,
               child: Stack(
                 clipBehavior: Clip.hardEdge,
                 alignment: AlignmentDirectional.bottomCenter,
@@ -232,7 +234,7 @@ class AudioWidget extends StatelessWidget {
             valueIndicatorColor: Colors.grey.shade200,
             trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
-                height: 20,
+                height: height,
                 isPlaying: value.playerState == PlayerState.playing ||
                     value.playerState == PlayerState.paused)),
         child: Slider(
@@ -259,20 +261,20 @@ class AudioWidget extends StatelessWidget {
   Widget _getPlayIcon(AudioController controller, AudioValue value) {
     return value.isPlaying
         ? RoundButton(
-            diameter: 20,
+            diameter: height,
             padding: 0,
             backgroundColor: Colors.transparent,
             icon: Icon(
               Icons.pause,
               color: initialColor,
-              size: 20,
+              size: height,
             ),
             onPressed: () {
               if (value.isPlaying) controller.pause();
             },
           )
         : RoundButton(
-            diameter: 20,
+            diameter: height,
             backgroundColor: initialColor,
             icon: Icon(
               Icons.play_arrow,
@@ -294,7 +296,7 @@ class AudioWidget extends StatelessWidget {
       initialColor: initialColor,
       progressColor: progressColor,
       width: width,
-      height: 20,
+      height: height,
     );
   }
 
