@@ -19,47 +19,29 @@ class MessageBarPreviewRecording extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8, bottom: 8, top: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: FittedBox(
-              child: AudioWidget(
-                controller: audioController,
-                initialColor: Colors.black,
-                progressColor: outboundMsgColor,
-                backgroundColor: inboundBgColor,
-                showTimeRemaining: false,
-                widgetHeight: 50,
-                widgetWidth: MediaQuery.of(context).size.width * 0.7,
-                waveHeight: 50,
-                previewBarHeight: 40,
-              ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 18),
+            child: AudioWidget(
+              controller: audioController,
+              initialColor: Colors.black,
+              progressColor: outboundMsgColor,
             ),
           ),
-          GestureDetector(
-            onTap: onCancelRecording,
-            child: Icon(
-              Icons.delete,
-              color: Colors.black,
-              size: 20.sp,
-            ),
-          ),
-          const VerticalDivider(color: Colors.transparent),
-          GestureDetector(
-            onTap: onSend,
-            child: Icon(
-              Icons.send,
-              color: Colors.black,
-              size: 20.sp,
-            ),
-          ),
-        ],
-      ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete, color: Colors.black),
+          onPressed: onCancelRecording,
+        ),
+        IconButton(
+          icon: const Icon(Icons.send, color: Color.fromRGBO(219, 10, 91, 1.0)),
+          onPressed: onSend,
+        ),
+      ],
     );
   }
 }
