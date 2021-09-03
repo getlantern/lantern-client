@@ -114,7 +114,7 @@ class _AddViaQRState extends State<AddViaQR>
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       } finally {
-        await qrController?.pauseCamera();
+        await qrController?.stopCamera();
       }
     });
   }
@@ -190,7 +190,7 @@ class _AddViaQRState extends State<AddViaQR>
                   child: Container(
                     color: topColor,
                     width: 100.w,
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    padding: const EdgeInsets.only(bottom: 20.0),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -248,7 +248,7 @@ class _AddViaQRState extends State<AddViaQR>
                 Flexible(
                   child: Container(
                     color: middleColor,
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.only(bottom: 20.0),
                     alignment: Alignment.center,
                     child: Container(
                       decoration: BoxDecoration(
@@ -263,6 +263,7 @@ class _AddViaQRState extends State<AddViaQR>
                       ),
                       child: QrImage(
                         data: me.contactId.id,
+                        foregroundColor: Colors.black54,
                         errorCorrectionLevel: QrErrorCorrectLevel.H,
                       ),
                     ),
@@ -276,7 +277,7 @@ class _AddViaQRState extends State<AddViaQR>
             flex: 0,
             child: Container(
               color: bottomColor,
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
