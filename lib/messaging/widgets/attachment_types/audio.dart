@@ -4,14 +4,16 @@ import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:sizer/sizer.dart';
 
 /// An attachment that shows an audio player.
 class AudioAttachment extends StatelessWidget {
   final StoredAttachment attachment;
   final bool inbound;
 
-  AudioAttachment(this.attachment, this.inbound);
+  AudioAttachment(
+    this.attachment,
+    this.inbound,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class AudioAttachment extends StatelessWidget {
                 context: context, attachment: attachment, thumbnail: thumbnail),
             initialColor: inbound ? Colors.black : Colors.white,
             progressColor: inbound ? outboundMsgColor : inboundMsgColor,
-            widgetWidth: 50.w,
-            height: 50,
+            timeRemainingAlignment:
+                inbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           );
         });
   }

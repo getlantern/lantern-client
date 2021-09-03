@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
-import 'package:lantern/messaging/widgets/voice_recorder/Waveform.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/waveform.dart';
 
 import '../enums/disappearing_test.dart';
 import '../helpers/clipboard_test.dart';
