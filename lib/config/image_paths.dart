@@ -18,7 +18,7 @@ class ImagePaths {
 
   static const email_icon = 'assets/images/email_icon.svg';
   static const clock_icon = 'assets/images/clock_icon.svg';
-  static const check_grey = 'assets/images/check_grey.svg';
+  static const check_green = 'assets/images/check_green.svg';
 
   static const alert_icon = 'assets/images/alert_icon.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';

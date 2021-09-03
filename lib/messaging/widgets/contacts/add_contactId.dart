@@ -81,91 +81,101 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    return fullScreenDialogLayout(Colors.white, Colors.black, context, [
-      Form(
-        key: _formKey,
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Wrap(
-              children: [
-                CustomTextField(
-                  controller: contactIdController,
-                  enabled: !waitingForOtherSide,
-                  label: 'user id'.i18n,
-                  helperText: 'Add contact via user id'.i18n,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(
-                    Icons.email,
-                    color: Colors.black,
-                  ),
-                  validator: (value) => value != ''
-                      ? null
-                      : 'Please enter a valid contact id'.i18n,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+    return fullScreenDialogLayout(
+      Colors.white,
+      Colors.black,
+      context,
+      Column(
+        children: [
+          Form(
+            key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Your contact id'.i18n,
-                    style: const TextStyle(
-                        color: Colors.cyan, fontWeight: FontWeight.w500)),
-                ListTile(
-                  title: Text(widget.me.contactId.id),
-                  tileColor: Colors.black12,
-                  onTap: () {
-                    showSnackbar(
-                      context: context,
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              child: Text(
-                            'ID Copied'.i18n,
-                            style: txSnackBarText,
-                            textAlign: TextAlign.left,
-                          )),
-                        ],
-                      ),
-                    );
-                    Clipboard.setData(
-                        ClipboardData(text: widget.me.contactId.id));
-                  },
-                  trailing: const Icon(Icons.copy_all_outlined),
-                ),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Wrap(
+                      children: [
+                        CustomTextField(
+                          controller: contactIdController,
+                          enabled: !waitingForOtherSide,
+                          label: 'user id'.i18n,
+                          helperText: 'Add contact via user id'.i18n,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          validator: (value) => value != ''
+                              ? null
+                              : 'Please enter a valid contact id'.i18n,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Your contact id'.i18n,
+                            style: const TextStyle(
+                                color: Colors.cyan,
+                                fontWeight: FontWeight.w500)),
+                        ListTile(
+                          title: Text(widget.me.contactId.id),
+                          tileColor: Colors.black12,
+                          onTap: () {
+                            showSnackbar(
+                              context: context,
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    'ID Copied'.i18n,
+                                    style: txSnackBarText,
+                                    textAlign: TextAlign.left,
+                                  )),
+                                ],
+                              ),
+                            );
+                            Clipboard.setData(
+                                ClipboardData(text: widget.me.contactId.id));
+                          },
+                          trailing: const Icon(Icons.copy_all_outlined),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (!waitingForOtherSide)
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Button(
+                              width: 200,
+                              text: 'Add Contact'.i18n,
+                              onPressed: () => _onContactIdAdd(),
+                            ),
+                          ]),
+                    ),
+                ]),
           ),
-          if (!waitingForOtherSide)
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Button(
-                  width: 200,
-                  text: 'Add Contact'.i18n,
-                  onPressed: () => _onContactIdAdd(),
-                ),
-              ]),
-            ),
-        ]),
+          if (waitingForOtherSide)
+            Expanded(
+              flex: 1,
+              child: LoadingBouncingGrid.square(
+                borderColor: primaryPink,
+                borderSize: 1.0,
+                size: 100.0,
+                backgroundColor: primaryPink,
+                duration: const Duration(milliseconds: 1000),
+              ),
+            )
+        ],
       ),
-      if (waitingForOtherSide)
-        Expanded(
-          flex: 1,
-          child: LoadingBouncingGrid.square(
-            borderColor: primaryPink,
-            borderSize: 1.0,
-            size: 100.0,
-            backgroundColor: primaryPink,
-            duration: const Duration(milliseconds: 1000),
-          ),
-        ),
-    ]);
+    );
   }
 }
