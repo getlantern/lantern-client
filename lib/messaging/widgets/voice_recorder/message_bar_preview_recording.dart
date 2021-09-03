@@ -19,41 +19,38 @@ class MessageBarPreviewRecording extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8, bottom: 8, top: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: FittedBox(
+        child: AudioWidget(
+          controller: audioController,
+          initialColor: Colors.black,
+          progressColor: outboundMsgColor,
+          showTimeRemaining: false,
+          height: kBottomNavigationBarHeight * 0.7,
+          widgetWidth: MediaQuery.of(context).size.width * 0.6,
+        ),
+      ),
+      trailing: Flex(
+        direction: Axis.horizontal,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: FittedBox(
-              child: AudioWidget(
-                controller: audioController,
-                initialColor: Colors.black,
-                progressColor: outboundMsgColor,
-                showTimeRemaining: false,
-                height: 50,
-                widgetWidth: MediaQuery.of(context).size.width * 0.7,
-              ),
-            ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.black),
+            onPressed: onCancelRecording,
           ),
-          GestureDetector(
-            onTap: onCancelRecording,
-            child: Icon(
-              Icons.delete,
-              color: Colors.black,
-              size: 20.sp,
-            ),
+          VerticalDivider(
+            width: 4,
+            color: const Color.fromRGBO(235, 235, 235, 1),
+            indent: 1.h,
+            endIndent: 1.h,
           ),
-          const VerticalDivider(color: Colors.transparent),
-          GestureDetector(
-            onTap: onSend,
-            child: Icon(
-              Icons.send,
-              color: Colors.black,
-              size: 20.sp,
-            ),
+          IconButton(
+            icon:
+                const Icon(Icons.send, color: Color.fromRGBO(219, 10, 91, 1.0)),
+            onPressed: onSend,
           ),
         ],
       ),
