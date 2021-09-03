@@ -77,7 +77,9 @@ class _VoiceRecorderState extends State<VoiceRecorder>
               ? const EdgeInsets.only(top: 10)
               : EdgeInsets.zero,
           decoration: BoxDecoration(
-            color: widget.isRecording ? Colors.red : Colors.transparent,
+            color: widget.isRecording
+                ? recordingColorBackground
+                : Colors.transparent,
             borderRadius:
                 const BorderRadius.only(topLeft: Radius.circular(100)),
           ),
