@@ -20,6 +20,9 @@ TextStyle? tsCaption(BuildContext context) =>
 TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
 
+TextStyle tsCircleAvatarLetter =
+    TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: white);
+
 TextStyle tsCountdownTimer = TextStyle(
   fontSize: 12.sp,
   fontWeight: FontWeight.w400,

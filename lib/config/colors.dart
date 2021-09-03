@@ -42,6 +42,7 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
+Color circleAvatarTitle = const Color.fromRGBO(122, 0, 59, 1);
 Color recordingColorBackground = const Color.fromRGBO(213, 0, 31, 1);
 
 Color pulsingShadow = Colors.red.shade900;
