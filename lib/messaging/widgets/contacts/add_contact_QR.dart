@@ -6,18 +6,17 @@ import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/utils/border_painter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
   _AddViaQRState createState() => _AddViaQRState();
 }
 
-class _AddViaQRState extends State<AddViaQR>
-    with SingleTickerProviderStateMixin {
+class _AddViaQRState extends State<AddViaQR> {
   bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
   late MessagingModel model;
@@ -25,9 +24,6 @@ class _AddViaQRState extends State<AddViaQR>
   bool scanning = false;
   String? scannedContactId;
   StreamSubscription<Barcode>? subscription;
-
-  late AnimationController animationController;
-  late Animation<double> animation;
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -48,29 +44,6 @@ class _AddViaQRState extends State<AddViaQR>
     }
   }
 
-  @override
-  void initState() {
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 2000,
-      ),
-    );
-    animation = animationController
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          animationController.reset();
-        } else if (status == AnimationStatus.dismissed) {
-          animationController.forward();
-        }
-      });
-    animationController.forward();
-    super.initState();
-  }
-
   void _onQRViewCreated(QRViewController controller, MessagingModel model) {
     qrController = controller;
     qrController?.pauseCamera();
@@ -83,6 +56,7 @@ class _AddViaQRState extends State<AddViaQR>
           // we've already scanned the contact, don't bother processing again
           return;
         }
+        context.loaderOverlay.show();
         final contactId = scanData.code;
         setState(() {
           scannedContactId = contactId;
@@ -98,6 +72,7 @@ class _AddViaQRState extends State<AddViaQR>
             contactNotifier.removeListener(listener);
             // go back to New Message with the updatedContact info
             Navigator.pop(context, updatedContact);
+            context.loaderOverlay.hide();
           }
         };
         contactNotifier.addListener(listener);
@@ -114,7 +89,7 @@ class _AddViaQRState extends State<AddViaQR>
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       } finally {
-        await qrController?.stopCamera();
+        await qrController?.pauseCamera();
       }
     });
   }
@@ -123,7 +98,6 @@ class _AddViaQRState extends State<AddViaQR>
   void dispose() {
     subscription?.cancel();
     qrController?.dispose();
-    animationController.dispose();
     if (scannedContactId != null) {
       // when exiting this screen, immediately delete any provisional contact
       model.deleteProvisionalContact(scannedContactId!);
@@ -194,28 +168,21 @@ class _AddViaQRState extends State<AddViaQR>
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        AnimatedBuilder(
-                          animation: animation,
-                          builder: (context, child) => CustomPaint(
-                            foregroundPainter:
-                                BorderPainter(animationController.value),
-                            child: Container(
-                              padding: const EdgeInsets.all(6.0),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: QRView(
-                                    key: _qrKey,
-                                    onQRViewCreated: (controller) =>
-                                        _onQRViewCreated(controller, model),
-                                  ),
-                                ),
+                        Container(
+                          padding: const EdgeInsets.all(6.0),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: QRView(
+                                key: _qrKey,
+                                onQRViewCreated: (controller) =>
+                                    _onQRViewCreated(controller, model),
                               ),
                             ),
                           ),
