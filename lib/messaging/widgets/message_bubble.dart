@@ -1,14 +1,13 @@
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/conversation.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
+import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
-
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 
 import 'message_types/content_container.dart';

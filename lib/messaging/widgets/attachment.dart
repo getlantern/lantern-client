@@ -18,7 +18,10 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   final mimeType = attachment.attachment.mimeType;
 
   if (audioMimes.contains(mimeType)) {
-    return AudioAttachment(attachment, inbound);
+    return Padding(
+      padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+      child: AudioAttachment(attachment, inbound),
+    );
   }
 
   if (imageMimes.contains(mimeType)) {

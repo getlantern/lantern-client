@@ -144,16 +144,17 @@ class ContentContainer extends StatelessWidget {
                         ]),
                   Stack(
                     fit: StackFit.passthrough,
-                    alignment: isAudio
+                    alignment: outbound
                         ? AlignmentDirectional.bottomEnd
-                        : outbound
-                            ? AlignmentDirectional.bottomEnd
-                            : AlignmentDirectional.bottomStart,
+                        : AlignmentDirectional.bottomStart,
                     children: [
                       ...attachments,
                       Flex(
                           direction: Axis.horizontal,
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: outbound
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
                           children: [
                             StatusRow(
                                 outbound, inbound, msg, message, reactionsList)
