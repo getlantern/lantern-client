@@ -21,10 +21,23 @@ class VoiceRecorder extends StatefulWidget {
 }
 
 class _VoiceRecorderState extends State<VoiceRecorder>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
+  late AnimationController _animationController;
+  var scaleBoundary;
+
   @override
   void initState() {
     super.initState();
+    scaleBoundary = widget.isRecording ? 2.0 : 1.0;
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: 1.0,
+      upperBound: 2.0,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animationController.addListener(
+      () => setState(() => scaleBoundary = _animationController.value),
+    );
     WidgetsBinding.instance!.addObserver(this);
   }
 
@@ -47,10 +60,16 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   Widget build(BuildContext context) {
     return GestureDetector(
       key: const ValueKey('btnRecord'),
-      onPanDown: _onTapDown,
-      onPanEnd: _onTapEnd,
+      onPanDown: (details) {
+        _animationController.forward(from: 1.0);
+        _onTapDown(details);
+      },
+      onPanEnd: (details) {
+        _animationController.reverse();
+        _onTapEnd(details);
+      },
       child: Transform.scale(
-        scale: widget.isRecording ? 2 : 1,
+        scale: scaleBoundary,
         alignment: Alignment.bottomRight,
         child: Container(
           width: 50,
