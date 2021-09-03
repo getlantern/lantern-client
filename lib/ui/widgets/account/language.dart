@@ -27,7 +27,10 @@ class Language extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'language'.i18n,
+      title: Text(
+        'language'.i18n,
+        style: tsTitleAppbar,
+      ),
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
         return ListView.builder(

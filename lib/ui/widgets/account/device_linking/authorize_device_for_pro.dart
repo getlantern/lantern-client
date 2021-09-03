@@ -11,7 +11,10 @@ class AuthorizeDeviceForPro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'Authorize Device for Pro'.i18n,
+      title: Text(
+        'Authorize Device for Pro'.i18n,
+        style: tsTitleAppbar,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

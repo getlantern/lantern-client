@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lantern/package_store.dart';
 
 class BaseScreen extends StatelessWidget {
-  final String title;
-  final String? logoTitle;
+  final Widget? title;
   final List<Widget>? actions;
   final Widget body;
   final Widget? actionButton;
@@ -11,13 +10,12 @@ class BaseScreen extends StatelessWidget {
   final bool? centerTitle;
 
   BaseScreen(
-      {this.title = '',
-      this.logoTitle,
+      {this.title,
       this.actions,
       required this.body,
       this.actionButton,
       this.floatingActionButtonLocation,
-      this.centerTitle,
+      this.centerTitle = true,
       Key? key})
       : super(key: key);
 
@@ -25,9 +23,10 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
+      appBar: AppBar(
         title: title,
-        logoTitle: logoTitle,
+        elevation: 1,
+        backgroundColor: Colors.white,
         centerTitle: centerTitle,
         actions: actions,
       ),

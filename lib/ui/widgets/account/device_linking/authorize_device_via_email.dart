@@ -19,7 +19,10 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'Authorize Device via Email'.i18n,
+      title: Text(
+        'Authorize Device via Email'.i18n,
+        style: tsTitleAppbar,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(

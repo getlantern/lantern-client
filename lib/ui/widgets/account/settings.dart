@@ -26,7 +26,10 @@ class Settings extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'settings'.i18n,
+      title: Text(
+        'settings'.i18n,
+        style: tsTitleAppbar,
+      ),
       body: ListView(
         padding: const EdgeInsetsDirectional.only(
           top: 2,
