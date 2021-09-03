@@ -105,7 +105,9 @@ dependencies:
 
   flutter_markdown: ^0.6.4
 
-  loading_animations: ^2.2.0
+  # loading_animations: ^2.2.0
+
+  vibration: ^1.7.3
   
 dev_dependencies:
   flutter_test:
