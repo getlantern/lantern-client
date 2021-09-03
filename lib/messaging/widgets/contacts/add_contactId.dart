@@ -30,9 +30,9 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   bool waitingForOtherSide = false;
 
   void _onContactIdAdd() async {
-    context.loaderOverlay.show();
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
+      context.loaderOverlay.show();
       try {
         if (pastedContactId != null && pastedContactId != '') {
           return;
@@ -110,9 +110,11 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                             maxLines: null,
                             enabled: !waitingForOtherSide,
                             cursorColor: Colors.black,
-                            validator: (value) => value != ''
-                                ? null
-                                : 'Please enter a valid Messenger ID'.i18n,
+                            // TODO: add check for pasting your own ID
+                            validator: (value) =>
+                                value != '' && value != widget.me.contactId.id
+                                    ? null
+                                    : 'Please enter a valid Messenger ID'.i18n,
                             decoration: InputDecoration(
                               helperText: '',
                               labelText: 'Paste a contact Messenger ID',
