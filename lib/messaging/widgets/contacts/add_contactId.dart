@@ -63,8 +63,9 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
       } catch (e) {
         setState(() {
           pastedContactId = '';
+          waitingForOtherSide = false;
         });
-        contactIdController.text = '';
+        context.loaderOverlay.hide();
         showInfoDialog(context,
             title: 'Error'.i18n,
             des: 'Something went wrong while adding this contact'.i18n,
@@ -110,7 +111,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                             maxLines: null,
                             enabled: !waitingForOtherSide,
                             cursorColor: Colors.black,
-                            // TODO: add check for pasting your own ID
                             validator: (value) =>
                                 value != '' && value != widget.me.contactId.id
                                     ? null
