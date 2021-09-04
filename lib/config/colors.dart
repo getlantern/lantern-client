@@ -20,7 +20,6 @@ Color grey5 = HexColor('#707070');
 Color indicatorRed = HexColor('#D5001F');
 Color indicatorGreen = HexColor('#00A83E');
 Color overlayBlack = HexColor('#000000CB');
-
 Color outboundBgColor = HexColor('#007A7C');
 Color outboundMsgColor = HexColor('#FFFFFF');
 Color inboundMsgColor = HexColor('#000000');
@@ -33,6 +32,7 @@ Color snippetShadowColor = const Color.fromARGB(
   0,
 );
 Color snippetBgIconColor = HexColor('#707070');
+Color selectedRadioButtonColor = const Color.fromRGBO(194, 8, 80, 1);
 
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;
