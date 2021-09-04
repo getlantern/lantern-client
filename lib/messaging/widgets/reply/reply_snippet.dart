@@ -1,14 +1,14 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
-import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_description.dart';
+import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:collection/collection.dart';
 
 class ReplySnippet extends StatelessWidget {
   final bool outbound;
@@ -44,8 +44,7 @@ class ReplySnippet extends StatelessWidget {
                 ),
               ],
               color: snippetBgColor),
-          child: Flex(
-            direction: Axis.horizontal,
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

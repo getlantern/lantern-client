@@ -27,7 +27,11 @@ class VPNTab extends StatelessWidget {
     return sessionModel
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
-        logoTitle: proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
+        title: SvgPicture.asset(
+          proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
+          height: 16,
+          fit: BoxFit.contain,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

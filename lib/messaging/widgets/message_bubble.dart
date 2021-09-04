@@ -56,8 +56,7 @@ class MessageBubble extends StatelessWidget {
       final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
 
-      return Flex(
-        direction: Axis.horizontal,
+      return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
             outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -188,8 +187,7 @@ class MessageBubble extends StatelessWidget {
         duration: const Duration(seconds: 0),
         animateMenuItems: false,
         onPressed: () {},
-        child: Flex(
-          direction: Axis.vertical,
+        child: Column(
           crossAxisAlignment:
               outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [

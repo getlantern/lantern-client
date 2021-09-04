@@ -29,8 +29,7 @@ class CustomBottomItem extends StatelessWidget {
     return Container(
       height: 68,
       color: Colors.transparent,
-      child: Flex(
-        direction: Axis.vertical,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
@@ -91,15 +90,13 @@ class CustomBottomItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: Flex(
-                  direction: Axis.vertical,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Flexible(child: icon),
                     Flexible(
-                        child: Flex(
+                        child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      direction: Axis.horizontal,
                       children: [
                         label,
                         iconWidget ?? const SizedBox(),
