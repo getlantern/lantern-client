@@ -7,7 +7,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/basic_memory_image.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatelessWidget {
@@ -81,106 +80,101 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Always render the thumbnail in order to preserve the size of the stack
-        // while the video starts playing
-        SizedBox(
-          // this box keeps the video from being too tall
-          height: 80.w,
-          child: FittedBox(
-            child: widget.image,
-          ),
-        ),
-        if (_controller != null)
-          ValueListenableBuilder(
-              valueListenable: _controller!,
-              builder: (BuildContext context, VideoPlayerValue value,
-                  Widget? child) {
-                if (!value.isInitialized) {
-                  return Container();
-                }
-                return SizedBox(
-                  // Size video to the same absolute size as the thumbnail
-                  // This will get scaled to fit into the message bubble by the
-                  // containing AttachmentBuilder.
-                  width: 80.w * value.aspectRatio,
-                  height: 80.w,
-                  child: AspectRatio(
-                    aspectRatio: _controller!.value.aspectRatio,
-                    child: Stack(
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final height = constraints.maxWidth;
+
+      return ConstrainedBox(
+        // this box keeps the video from being too tall
+        constraints: BoxConstraints(maxHeight: height),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Always render the thumbnail in order to preserve the size of the stack
+            // while the video starts playing
+            widget.image,
+            if (_controller != null)
+              ValueListenableBuilder(
+                  valueListenable: _controller!,
+                  builder: (BuildContext context, VideoPlayerValue value,
+                      Widget? child) {
+                    if (!value.isInitialized) {
+                      return Container();
+                    }
+                    return Stack(
                       alignment: Alignment.bottomCenter,
                       children: <Widget>[
                         // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                        VideoPlayer(_controller!),
+                        AspectRatio(
+                          aspectRatio: _controller!.value.aspectRatio,
+                          child: VideoPlayer(_controller!),
+                        ),
                         VideoProgressIndicator(_controller!,
                             allowScrubbing: true),
                       ],
-                    ),
-                  ),
-                );
-              }),
-        // button goes in main stack
-        SizedBox(
-          width: 96,
-          height: 96,
-          child: FittedBox(
-            child: IconButton(
-                icon: Icon(
-                    _playing
-                        ? Icons.stop_circle_outlined
-                        : Icons.play_circle_outline,
-                    color: widget.inbound ? inboundMsgColor : outboundMsgColor),
-                onPressed: () {
-                  _disposeControllerIfReachedEnd();
+                    );
+                  }),
+            // button goes in main stack
+            FittedBox(
+              child: IconButton(
+                  iconSize: height / 4,
+                  icon: Icon(
+                      _playing
+                          ? Icons.stop_circle_outlined
+                          : Icons.play_circle_outline,
+                      color:
+                          (widget.inbound ? inboundMsgColor : outboundMsgColor)
+                              .withOpacity(0.8)),
+                  onPressed: () {
+                    _disposeControllerIfReachedEnd();
 
-                  if (_controller != null) {
-                    if (_controller!.value.isPlaying) {
-                      _controller!.pause();
-                    } else {
-                      _controller!.play();
+                    if (_controller != null) {
+                      if (_controller!.value.isPlaying) {
+                        _controller!.pause();
+                      } else {
+                        _controller!.play();
+                      }
+                      return;
                     }
-                    return;
-                  }
 
-                  context.loaderOverlay.show();
-                  model
-                      .decryptVideoForPlayback(widget.attachment)
-                      .catchError((e) {
-                    context.loaderOverlay.hide();
-                  }).then((videoFilename) {
-                    context.loaderOverlay.hide();
-                    setState(() {
-                      _controller =
-                          VideoPlayerController.file(File(videoFilename))
-                            ..initialize().then((_) {
-                              setState(() {
-                                _controller?.play().then((_) {
-                                  // update UI after playing stops
-                                  setState(() {});
+                    context.loaderOverlay.show();
+                    model
+                        .decryptVideoForPlayback(widget.attachment)
+                        .catchError((e) {
+                      context.loaderOverlay.hide();
+                    }).then((videoFilename) {
+                      context.loaderOverlay.hide();
+                      setState(() {
+                        _controller =
+                            VideoPlayerController.file(File(videoFilename))
+                              ..initialize().then((_) {
+                                setState(() {
+                                  _controller?.play().then((_) {
+                                    // update UI after playing stops
+                                    setState(() {});
+                                  });
                                 });
                               });
+                        _controller?.addListener(() {
+                          if (_controller!.value.isPlaying != _playing) {
+                            setState(() {
+                              _playing = !_playing;
+                              if (!_playing &&
+                                  _controller!.value.position ==
+                                      _controller!.value.duration) {
+                                // reached end of video, mark for reset
+                                _reachedEnd = true;
+                              }
                             });
-                      _controller?.addListener(() {
-                        if (_controller!.value.isPlaying != _playing) {
-                          setState(() {
-                            _playing = !_playing;
-                            if (!_playing &&
-                                _controller!.value.position ==
-                                    _controller!.value.duration) {
-                              // reached end of video, mark for reset
-                              _reachedEnd = true;
-                            }
-                          });
-                        }
+                          }
+                        });
                       });
                     });
-                  });
-                }),
-          ),
+                  }),
+            ),
+          ],
         ),
-      ],
-    );
+      );
+    });
   }
 }
