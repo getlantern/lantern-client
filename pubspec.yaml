@@ -99,8 +99,6 @@ dependencies:
 
   extended_image: ^4.1.0
 
-  sizer: ^2.0.13
-
   file_picker: ^4.0.0
 
   flutter_webrtc: ^0.6.5
