@@ -29,6 +29,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:lantern/config/colors.dart';
 
 import 'widgets/call_action.dart';
 
@@ -272,7 +273,7 @@ class _ConversationState extends State<Conversation>
                   style: tsCircleAvatarLetter,
                 ),
               ),
-              SizedBox(width: 3.w),
+              const SizedBox(width: 6),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
