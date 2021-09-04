@@ -23,8 +23,7 @@ class DisappearingTimerAction extends StatelessWidget {
         onSelected: (int value) {
           model.setDisappearSettings(contact, value);
         },
-        child: Flex(
-            direction: Axis.vertical,
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Flexible(
