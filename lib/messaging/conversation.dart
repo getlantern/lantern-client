@@ -6,14 +6,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
-import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/conversation_components/countdown_timer.dart';
 import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/widgets/pulsating_indicator.dart';
@@ -27,9 +28,7 @@ import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:flutter/services.dart';
 
 import 'widgets/call_action.dart';
 
@@ -288,10 +287,7 @@ class _ConversationState extends State<Conversation>
               children: [
                 Card(
                   color: grey1,
-                  child: Container(
-                    width: 70.w,
-                    child: _buildConversationSticker(contact),
-                  ),
+                  child: _buildConversationSticker(contact),
                 ),
                 Flexible(
                   child: _buildMessageBubbles(contact),
@@ -349,18 +345,28 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-  Widget _buildConversationSticker(Contact contact) =>
-      model.introductionsToContact(builder: (context,
-          Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
-        final isPendingIntroduction = !contact.hasReceivedMessage &&
-            introductions
-                .toList()
-                .where(
-                    (intro) => intro.value.introduction.to == contact.contactId)
-                .isNotEmpty;
-        return ConversationSticker(
-            contact: contact, isPendingIntroduction: isPendingIntroduction);
-      });
+  Widget _buildConversationSticker(Contact contact) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            width: constraints.maxWidth * 0.7,
+            child: model.introductionsToContact(
+              builder: (context,
+                  Iterable<PathAndValue<StoredMessage>> introductions,
+                  Widget? child) {
+                final isPendingIntroduction = !contact.hasReceivedMessage &&
+                    introductions
+                        .toList()
+                        .where((intro) =>
+                            intro.value.introduction.to == contact.contactId)
+                        .isNotEmpty;
+                return ConversationSticker(
+                    contact: contact,
+                    isPendingIntroduction: isPendingIntroduction);
+              },
+            ),
+          );
+        },
+      );
 
   Widget _buildMessageBubbles(Contact contact) {
     return model.contactMessages(contact, builder: (context,
