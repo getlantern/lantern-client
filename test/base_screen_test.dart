@@ -6,7 +6,6 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sizer/sizer.dart';
 
 class MockNavigationObserver extends Mock implements NavigatorObserver {}
 
@@ -39,42 +38,37 @@ void main() {
                 return GlobalLoaderOverlay(
                   child: I18n(
                     initialLocale: const Locale('en', 'US'),
-                    child: Sizer(
-                      builder: (context, orientation, deviceType) {
-                        return MaterialApp.router(
-                          debugShowCheckedModeBanner: false,
-                          title: 'Lantern Messenger',
-                          localizationsDelegates: [
-                            GlobalMaterialLocalizations.delegate,
-                            GlobalWidgetsLocalizations.delegate,
-                            GlobalCupertinoLocalizations.delegate,
-                          ],
-                          routeInformationParser:
-                              globalRouter.defaultRouteParser(),
-                          routerDelegate: globalRouter.delegate(
-                            navigatorObservers: () => [
-                              mockObserver,
-                            ],
-                          ),
-                          builder: BotToastInit(),
-                          supportedLocales: [
-                            const Locale('ar', 'EG'),
-                            const Locale('fr', 'FR'),
-                            const Locale('en', 'US'),
-                            const Locale('fa', 'IR'),
-                            const Locale('th', 'TH'),
-                            const Locale('ms', 'MY'),
-                            const Locale('ru', 'RU'),
-                            const Locale('ur', 'IN'),
-                            const Locale('zh', 'CN'),
-                            const Locale('zh', 'HK'),
-                            const Locale('es', 'ES'),
-                            const Locale('tr', 'TR'),
-                            const Locale('vi', 'VN'),
-                            const Locale('my', 'MM'),
-                          ],
-                        );
-                      },
+                    child: MaterialApp.router(
+                      debugShowCheckedModeBanner: false,
+                      title: 'Lantern Messenger',
+                      localizationsDelegates: [
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                      ],
+                      routeInformationParser: globalRouter.defaultRouteParser(),
+                      routerDelegate: globalRouter.delegate(
+                        navigatorObservers: () => [
+                          mockObserver,
+                        ],
+                      ),
+                      builder: BotToastInit(),
+                      supportedLocales: [
+                        const Locale('ar', 'EG'),
+                        const Locale('fr', 'FR'),
+                        const Locale('en', 'US'),
+                        const Locale('fa', 'IR'),
+                        const Locale('th', 'TH'),
+                        const Locale('ms', 'MY'),
+                        const Locale('ru', 'RU'),
+                        const Locale('ur', 'IN'),
+                        const Locale('zh', 'CN'),
+                        const Locale('zh', 'HK'),
+                        const Locale('es', 'ES'),
+                        const Locale('tr', 'TR'),
+                        const Locale('vi', 'VN'),
+                        const Locale('my', 'MM'),
+                      ],
                     ),
                   ),
                 );
