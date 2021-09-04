@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lantern/utils/humanize.dart';
-import 'package:sizer/sizer.dart';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
@@ -250,7 +249,7 @@ Future<void> displayConversationOptions(
             children: [
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 14.0.sp),
+                padding: const EdgeInsets.symmetric(vertical: 14.0),
                 child: Text(
                   'Conversation Menu',
                   style: tsBottomModalTitle,
@@ -261,7 +260,7 @@ Future<void> displayConversationOptions(
                   thickness: 1,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0.sp),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: ListTile(
                   leading: const Icon(
                     Icons.timer,
@@ -292,45 +291,42 @@ Future<void> displayConversationOptions(
                             style: tsDisappearingTitleBottomModal,
                           ),
                         ),
-                        content: Container(
+                        content: SingleChildScrollView(
                           child: StatefulBuilder(
                             builder: (context, setState) {
-                              return Flex(
+                              return Column(
                                 mainAxisSize: MainAxisSize.min,
-                                direction: Axis.vertical,
                                 children: [
-                                  SizedBox(height: 2.h),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 16.0,
-                                        right: 16.0,
-                                        bottom: 16.0,
-                                        top: 8.0),
-                                    child:
-                                        contact.messagesDisappearAfterSeconds ==
-                                                0
-                                            ? Text(
-                                                'All messages will not disappear for you and your contact',
-                                                style:
-                                                    tsDisappearingContentBottomModal,
-                                              )
-                                            : Text(
-                                                'All messages will disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)} for you and your contact',
-                                                style:
-                                                    tsDisappearingContentBottomModal,
-                                              ),
+                                  const SizedBox(height: 2),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 24.0),
+                                      child:
+                                          contact.messagesDisappearAfterSeconds ==
+                                                  0
+                                              ? Text(
+                                                  'All messages will not disappear for you and your contact',
+                                                  style:
+                                                      tsDisappearingContentBottomModal,
+                                                )
+                                              : Text(
+                                                  'All messages will disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)} for you and your contact',
+                                                  style:
+                                                      tsDisappearingContentBottomModal,
+                                                ),
+                                    ),
                                   ),
-                                  Divider(
+                                  const Divider(
                                     thickness: 1,
-                                    color:
-                                        const Color.fromRGBO(235, 235, 235, 1),
-                                    height: 2.h,
-                                    indent: 3.w,
-                                    endIndent: 3.w,
+                                    color: Color.fromRGBO(235, 235, 235, 1),
+                                    height: 2,
+                                    indent: 3,
+                                    endIndent: 3,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 264,
-                                    width: 100.w,
+                                    width: MediaQuery.of(context).size.width,
                                     child: Scrollbar(
                                       interactive: true,
                                       showTrackOnHover: true,
@@ -402,12 +398,12 @@ Future<void> displayConversationOptions(
                         actions: [
                           Column(
                             children: [
-                              Divider(
+                              const Divider(
                                 thickness: 1,
-                                color: const Color.fromRGBO(235, 235, 235, 1),
-                                height: 1.h,
-                                indent: 3.w,
-                                endIndent: 3.w,
+                                color: Color.fromRGBO(235, 235, 235, 1),
+                                height: 1,
+                                indent: 3,
+                                endIndent: 3,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -444,7 +440,7 @@ Future<void> displayConversationOptions(
                   thickness: 1,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0.sp),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: ListTile(
                   leading: const Icon(
                     Icons.people,
@@ -461,7 +457,7 @@ Future<void> displayConversationOptions(
                   thickness: 1,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0.sp),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: ListTile(
                     leading: const Icon(Icons.delete, color: Colors.black),
                     title: Text('Delete ${contact.displayName}',
