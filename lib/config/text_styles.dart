@@ -15,10 +15,10 @@ TextStyle? tsCaption(BuildContext context) =>
     Theme.of(context).textTheme.caption;
 
 TextStyle tsDisappearingTimer =
-    TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold);
+    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
 
 TextStyle tsDisappearingTimerDetail =
-    TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold);
+    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
 
 // Custom styles
 

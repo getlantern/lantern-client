@@ -3,7 +3,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/humanize.dart';
-import 'package:sizer/sizer.dart';
 
 class DisappearingTimerAction extends StatelessWidget {
   final Contact contact;
@@ -19,11 +18,11 @@ class DisappearingTimerAction extends StatelessWidget {
       contact,
       (context, contact, child) =>
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Icon(
+        const Icon(
           Icons.timer,
-          size: 8.sp,
+          size: 12,
         ),
-        SizedBox(width: 0.5.w),
+        const SizedBox(width: 2),
         contact.messagesDisappearAfterSeconds > 0
             ? Text(
                 contact.messagesDisappearAfterSeconds
