@@ -29,6 +29,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:lantern/config/colors.dart';
 
 import 'widgets/call_action.dart';
 
@@ -257,21 +258,43 @@ class _ConversationState extends State<Conversation>
           (context, contact, child) {
         return BaseScreen(
           // Conversation title (contact name)
-          title: contact.displayName.isEmpty
-              ? contact.contactId.id
-              : contact.displayName,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: circleAvatarTitle,
+                child: Text(
+                  sanitizeContactName(contact.displayName.isEmpty
+                          ? contact.contactId.id
+                          : contact.displayName)
+                      .substring(0, 2)
+                      .toUpperCase(),
+                  style: tsCircleAvatarLetter,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName,
+                    style: tsTitleAppbar,
+                  ),
+                  DisappearingTimerAction(contact),
+                ],
+              ),
+            ],
+          ),
           centerTitle: false,
           actions: [
-            Flex(
-              direction: Axis.horizontal,
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CallAction(contact),
-                IconButton(
-                    key: const ValueKey('disappearingSelect'),
-                    onPressed: () {},
-                    icon: DisappearingTimerAction(contact)),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
@@ -282,8 +305,7 @@ class _ConversationState extends State<Conversation>
             )
           ],
           body: Stack(children: [
-            Flex(
-              direction: Axis.vertical,
+            Column(
               children: [
                 Card(
                   color: grey1,
@@ -456,8 +478,7 @@ class _ConversationState extends State<Conversation>
           ? const EdgeInsets.only(right: 0, left: 2.0)
           : EdgeInsets.zero,
       leading: _isRecording
-          ? Flex(
-              direction: Axis.horizontal,
+          ? Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -520,8 +541,7 @@ class _ConversationState extends State<Conversation>
               icon: const Icon(Icons.send, color: Colors.black),
               onPressed: send,
             )
-          : Flex(
-              direction: Axis.horizontal,
+          : Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
