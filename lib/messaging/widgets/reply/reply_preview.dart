@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_description.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_header.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet_text.dart';
@@ -30,8 +30,7 @@ class ReplyPreview extends StatelessWidget {
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(color: snippetBgColor),
-      child: Flex(
-        direction: Axis.horizontal,
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

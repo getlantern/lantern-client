@@ -262,8 +262,7 @@ class _ConversationState extends State<Conversation>
               : contact.displayName,
           centerTitle: false,
           actions: [
-            Flex(
-              direction: Axis.horizontal,
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -282,8 +281,7 @@ class _ConversationState extends State<Conversation>
             )
           ],
           body: Stack(children: [
-            Flex(
-              direction: Axis.vertical,
+            Column(
               children: [
                 Card(
                   color: grey1,
@@ -456,8 +454,7 @@ class _ConversationState extends State<Conversation>
           ? const EdgeInsets.only(right: 0, left: 2.0)
           : EdgeInsets.zero,
       leading: _isRecording
-          ? Flex(
-              direction: Axis.horizontal,
+          ? Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -520,8 +517,7 @@ class _ConversationState extends State<Conversation>
               icon: const Icon(Icons.send, color: Colors.black),
               onPressed: send,
             )
-          : Flex(
-              direction: Axis.horizontal,
+          : Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,

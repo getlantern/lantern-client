@@ -32,8 +32,7 @@ class ContactConnectionCard extends StatelessWidget {
     final avatarLetters = introduction.displayName != ''
         ? introduction.displayName.substring(0, 2)
         : 'UC';
-    return Flex(
-      direction: Axis.vertical,
+    return Column(
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -101,12 +100,10 @@ class ContactConnectionCard extends StatelessWidget {
             ),
           );
         }),
-        Flex(
-            direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StatusRow(outbound, inbound, msg, message, reactionsList)
-            ])
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [StatusRow(outbound, inbound, msg, message, reactionsList)],
+        )
       ],
     );
   }
