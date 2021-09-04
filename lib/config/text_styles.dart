@@ -75,7 +75,8 @@ TextStyle txConversationSticker =
     TextStyle(color: grey5, fontSize: 12, height: 19 / 12);
 
 // Dialogs
-TextStyle tsBottomModalTitle = const TextStyle(fontSize: 16, height: 26 / 16);
+TextStyle tsBottomModalTitle =
+    const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
 
 TextStyle tsBottomModalList = const TextStyle(fontSize: 16, height: 18.75 / 16);
 
@@ -87,15 +88,22 @@ TextStyle tsDisappearingTitleBottomModal =
 TextStyle tsDisappearingContentBottomModal = const TextStyle(
     color: Color.fromRGBO(112, 112, 112, 1),
     fontSize: 14.0,
-    fontWeight: FontWeight.w500);
+    height: 1.5,
+    fontWeight: FontWeight.w400);
 
 TextStyle tsAlertDialogListTile = const TextStyle(
-    fontSize: 12.0, fontWeight: FontWeight.w500, color: Colors.black);
+    fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.black);
 
 TextStyle tsAlertDialogBody = const TextStyle(fontSize: 14, height: 1.5);
 
 TextStyle tsAlertDialogButtonGrey = TextStyle(
   color: grey4,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle tsAlertDialogButtonGreySecondary = const TextStyle(
+  color: Color.fromRGBO(112, 112, 112, 1),
   fontSize: 14,
   fontWeight: FontWeight.w600,
 );
