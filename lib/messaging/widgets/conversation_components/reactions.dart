@@ -25,8 +25,7 @@ class Reactions extends StatelessWidget {
         final _buttonSize = constraints.maxWidth / 8;
         final buttonSize = Size(_buttonSize, _buttonSize);
 
-        return Flex(
-          direction: Axis.horizontal,
+        return Row(
           children: reactionOptions
               .map(
                 (e) => Flexible(
