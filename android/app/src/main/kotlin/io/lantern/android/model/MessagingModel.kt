@@ -196,7 +196,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
     }
 
     private fun stopRecordingVoiceMemo(): ByteArray? {
-        return stopRecording.get()?.let {
+        return stopRecording.getAndSet(null)?.let {
             it.run()
             val bytes = ByteArray(voiceMemoFile.length().toInt())
             FileInputStream(voiceMemoFile).use { input ->
