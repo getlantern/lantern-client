@@ -2,7 +2,6 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -15,7 +14,7 @@ import 'message_types/content_container.dart';
 import 'message_types/date_marker_bubble.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({
+  MessageBubble({
     Key? key,
     required this.message,
     required this.priorMessage,
@@ -36,6 +35,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? reactionsList;
     var model = context.watch<MessagingModel>();
 
     return model.message(context, message,
@@ -56,6 +56,7 @@ class MessageBubble extends StatelessWidget {
       final isDateMarker = determineDateSwitch(priorMessage, nextMessage);
       final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
+      reactionsList = constructReactionsList(context, reactions, msg);
 
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -67,10 +68,20 @@ class MessageBubble extends StatelessWidget {
                 //OUTBOUND: SENDED MESSAGES.
                 //INBOUND: RECEIVED MESSAGES
                 padding: EdgeInsets.only(
-                  top: isDateMarker != '' ? 8 : 0,
+                  top: isDateMarker.isNotEmpty
+                      ? 8
+                      : (nextMessage == null && priorMessage != null)
+                          ? 6
+                          : 0,
                   left: inbound ? 16 : 0,
                   right: outbound ? 16 : 0,
-                  bottom: reactions.isNotEmpty ? 16 : 2,
+                  bottom: (nextMessage != null && reactionsList != null)
+                      ? 16
+                      : (nextMessage != null && reactionsList == null)
+                          ? (nextMessage == null && priorMessage != null)
+                              ? 10
+                              : 2
+                          : 10,
                 ),
                 // padding: EdgeInsetsDirectional.only(
                 //     start: isDateMarker != ''
@@ -100,6 +111,7 @@ class MessageBubble extends StatelessWidget {
                   onTapReply,
                   context,
                   model,
+                  reactionsList,
                 )),
           ),
         ],
@@ -122,13 +134,13 @@ class MessageBubble extends StatelessWidget {
     Function(PathAndValue<StoredMessage>) onTapReply,
     BuildContext context,
     MessagingModel model,
+    Widget? reactionsList,
   ) {
     if (wasDeleted) {
       final humanizedSenderName =
           matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
       return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
-    final reactionsList = constructReactionsList(context, reactions, msg);
 
     return FocusedMenuHolder(
         menuItems: [
@@ -222,12 +234,14 @@ class MessageBubble extends StatelessWidget {
                     newestMessage,
                     reactions,
                     isAttachment),
-                Positioned(
-                  top: -10,
-                  right: inbound ? -13 : null,
-                  left: outbound ? -13 : null,
-                  child: reactionsList,
-                )
+                reactionsList != null
+                    ? Positioned(
+                        top: -10,
+                        right: inbound ? -13 : null,
+                        left: outbound ? -13 : null,
+                        child: reactionsList,
+                      )
+                    : const SizedBox(),
               ],
             )
           ],

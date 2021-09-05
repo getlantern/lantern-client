@@ -43,7 +43,7 @@ List<dynamic> _humanizeReactorIdList(
   return humanizedList;
 }
 
-Widget constructReactionsList(BuildContext context,
+Widget? constructReactionsList(BuildContext context,
     Map<String, List<dynamic>> reactions, StoredMessage msg) {
   var reactionsList = <Widget>[];
   reactions.forEach(
@@ -55,6 +55,7 @@ Widget constructReactionsList(BuildContext context,
       }
     },
   );
+  if (reactionsList.isEmpty) return null;
   return GestureDetector(
     behavior: HitTestBehavior.translucent,
     onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
