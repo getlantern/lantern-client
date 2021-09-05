@@ -2,6 +2,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -62,20 +63,28 @@ class MessageBubble extends StatelessWidget {
             outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           Flexible(
-            child: Padding(
-                padding: EdgeInsetsDirectional.only(
-                    start: isDateMarker != ''
-                        ? outbound
-                            ? 20
-                            : 4
-                        : 4,
-                    end: isDateMarker != ''
-                        ? outbound
-                            ? 4
-                            : 20
-                        : 4,
-                    top: 4,
-                    bottom: 4),
+            child: Container(
+                //OUTBOUND: SENDED MESSAGES.
+                //INBOUND: RECEIVED MESSAGES
+                padding: EdgeInsets.only(
+                  top: isDateMarker != '' ? 8 : 0,
+                  left: inbound ? 16 : 0,
+                  right: outbound ? 16 : 0,
+                  bottom: reactions.isNotEmpty ? 16 : 2,
+                ),
+                // padding: EdgeInsetsDirectional.only(
+                //     start: isDateMarker != ''
+                //         ? outbound
+                //             ? 20
+                //             : 4
+                //         : 4,
+                //     end: isDateMarker != ''
+                //         ? outbound
+                //             ? 4
+                //             : 20
+                //         : 4,
+                //     top: 4,
+                //     bottom: 4),
                 child: _buildBubbleUI(
                   outbound,
                   inbound,
@@ -119,6 +128,7 @@ class MessageBubble extends StatelessWidget {
           matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
       return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
+    final reactionsList = constructReactionsList(context, reactions, msg);
 
     return FocusedMenuHolder(
         menuItems: [
@@ -197,18 +207,29 @@ class MessageBubble extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 10),
                   // width: 100.w,
                   child: DateMarker(isDateMarker)),
-            ContentContainer(
-                outbound,
-                inbound,
-                msg,
-                message,
-                contact,
-                onTapReply,
-                startOfBlock,
-                endOfBlock,
-                newestMessage,
-                reactions,
-                isAttachment),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ContentContainer(
+                    outbound,
+                    inbound,
+                    msg,
+                    message,
+                    contact,
+                    onTapReply,
+                    startOfBlock,
+                    endOfBlock,
+                    newestMessage,
+                    reactions,
+                    isAttachment),
+                Positioned(
+                  top: -10,
+                  right: inbound ? -13 : null,
+                  left: outbound ? -13 : null,
+                  child: reactionsList,
+                )
+              ],
+            )
           ],
         ));
   }

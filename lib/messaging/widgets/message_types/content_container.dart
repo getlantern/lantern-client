@@ -2,7 +2,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/widgets/attachment.dart';
 import 'package:lantern/messaging/widgets/message_types/contact_connection_card.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/reply/reply_snippet.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
@@ -39,7 +38,6 @@ class ContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reactionsList = constructReactionsList(context, reactions, msg);
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
 
@@ -87,8 +85,7 @@ class ContentContainer extends StatelessWidget {
             ),
           ),
           child: isContactConnectionCard
-              ? ContactConnectionCard(
-                  contact, inbound, outbound, msg, message, reactionsList)
+              ? ContactConnectionCard(contact, inbound, outbound, msg, message)
               : Column(
                   crossAxisAlignment: outbound
                       ? CrossAxisAlignment.end
@@ -153,8 +150,12 @@ class ContentContainer extends StatelessWidget {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(outbound, inbound, msg, message,
-                                    reactionsList)
+                                StatusRow(
+                                  outbound,
+                                  inbound,
+                                  msg,
+                                  message,
+                                )
                               ]),
                         ],
                       )

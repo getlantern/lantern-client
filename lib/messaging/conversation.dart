@@ -402,38 +402,42 @@ class _ConversationState extends State<Conversation>
               reverse: true,
               itemCount: messageRecords.length,
               itemBuilder: (context, index) {
-                return MessageBubble(
-                  message: messageRecords.elementAt(index),
-                  priorMessage: index >= messageRecords.length - 1
-                      ? null
-                      : messageRecords.elementAt(index + 1).value,
-                  nextMessage: index == 0
-                      ? null
-                      : messageRecords.elementAt(index - 1).value,
-                  contact: contact,
-                  onEmojiTap: (showEmoji, messageSelected) => setState(() {
-                    _emojiShowing = true;
-                    _customEmojiResponse = true;
-                    _storedMessage = messageSelected;
-                  }),
-                  onReply: (_message) {
-                    setState(() {
-                      _isReplying = true;
-                      _quotedMessage = _message;
-                      showKeyboard();
-                    });
-                  },
-                  onTapReply: (_tappedMessage) {
-                    final _scrollToIndex = messageRecords.toList().indexWhere(
-                        (element) =>
-                            element.value.id == _tappedMessage.value.replyToId);
-                    if (_scrollToIndex != -1) {
-                      _scrollController.scrollTo(
-                          index: _scrollToIndex,
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.easeInOutCubic);
-                    }
-                  },
+                return Transform.translate(
+                  offset: Offset(0, index == 0 ? 10 : 0),
+                  child: MessageBubble(
+                    message: messageRecords.elementAt(index),
+                    priorMessage: index >= messageRecords.length - 1
+                        ? null
+                        : messageRecords.elementAt(index + 1).value,
+                    nextMessage: index == 0
+                        ? null
+                        : messageRecords.elementAt(index - 1).value,
+                    contact: contact,
+                    onEmojiTap: (showEmoji, messageSelected) => setState(() {
+                      _emojiShowing = true;
+                      _customEmojiResponse = true;
+                      _storedMessage = messageSelected;
+                    }),
+                    onReply: (_message) {
+                      setState(() {
+                        _isReplying = true;
+                        _quotedMessage = _message;
+                        showKeyboard();
+                      });
+                    },
+                    onTapReply: (_tappedMessage) {
+                      final _scrollToIndex = messageRecords.toList().indexWhere(
+                          (element) =>
+                              element.value.id ==
+                              _tappedMessage.value.replyToId);
+                      if (_scrollToIndex != -1) {
+                        _scrollController.scrollTo(
+                            index: _scrollToIndex,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.easeInOutCubic);
+                      }
+                    },
+                  ),
                 );
               },
             );

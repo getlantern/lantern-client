@@ -20,6 +20,9 @@ TextStyle tsDisappearingTimer =
 TextStyle tsDisappearingTimerDetail =
     const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
 
+TextStyle tsEmojiFont =
+    const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400);
+
 // Custom styles
 
 TextStyle tsTitleAppbar =

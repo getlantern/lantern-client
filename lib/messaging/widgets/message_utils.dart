@@ -43,27 +43,35 @@ List<dynamic> _humanizeReactorIdList(
   return humanizedList;
 }
 
-List<dynamic> constructReactionsList(BuildContext context,
+Widget constructReactionsList(BuildContext context,
     Map<String, List<dynamic>> reactions, StoredMessage msg) {
-  var reactionsList = [];
+  var reactionsList = <Widget>[];
   reactions.forEach(
     (key, value) {
       if (value.isNotEmpty) {
         reactionsList.add(
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            // Tap on emoji to bring modal with breakdown of interactions
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
-              child: displayEmojiCount(reactions, key),
-            ),
-          ),
+          displayEmojiCount(reactions, key),
         );
       }
     },
   );
-  return reactionsList;
+  return GestureDetector(
+    behavior: HitTestBehavior.translucent,
+    onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
+    child: Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2.5),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: reactionsList,
+      ),
+    ),
+  );
 }
 
 String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
@@ -135,24 +143,17 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
           ));
 }
 
-Container displayEmojiCount(
+Widget displayEmojiCount(
     Map<String, List<dynamic>> reactions, String emoticon) {
   // identify which Map (key-value) pair corresponds to the displayed emoticon
   final reactionKey = reactions.keys.firstWhere((key) => key == emoticon);
-  final reactorsToKey = reactions[reactionKey]!;
-  return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(999)),
-      ),
-      child: Padding(
-          padding: reactorsToKey.length > 1
-              ? const EdgeInsets.only(left: 3, top: 3, right: 6, bottom: 3)
-              : const EdgeInsets.all(3),
-          child: reactorsToKey.length > 1
-              ? Text(emoticon + reactorsToKey.length.toString(),
-                  style: const TextStyle(fontSize: 12))
-              : Text(emoticon, style: const TextStyle(fontSize: 12))));
+  return reactions[reactionKey]!.length > 1
+      ? Text(emoticon + reactions[reactionKey]!.length.toString(),
+          style: tsEmojiFont)
+      : Text(
+          emoticon,
+          style: const TextStyle(fontSize: 12),
+        );
 }
 
 String determineDateSwitch(

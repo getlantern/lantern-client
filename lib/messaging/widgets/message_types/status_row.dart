@@ -10,11 +10,13 @@ class StatusRow extends StatefulWidget {
   final bool inbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
-  final List reactionsList;
 
   const StatusRow(
-      this.outbound, this.inbound, this.msg, this.message, this.reactionsList)
-      : super();
+    this.outbound,
+    this.inbound,
+    this.msg,
+    this.message,
+  ) : super();
 
   @override
   StatusRowState createState() => StatusRowState();
@@ -42,7 +44,6 @@ class StatusRowState extends State<StatusRow> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ...widget.reactionsList,
                   Container(
                     padding: const EdgeInsets.only(right: 2.0),
                     child: Text(
