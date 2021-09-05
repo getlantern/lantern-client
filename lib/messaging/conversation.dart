@@ -304,64 +304,61 @@ class _ConversationState extends State<Conversation>
               ],
             )
           ],
-          body: Stack(children: [
-            Column(
-              children: [
-                Card(
-                  color: grey1,
-                  child: _buildConversationSticker(contact),
+          body: Column(
+            children: [
+              Card(
+                color: grey1,
+                child: _buildConversationSticker(contact),
+              ),
+              Flexible(
+                child: _buildMessageBubbles(contact),
+              ),
+              // Reply container
+              if (_isReplying)
+                ReplyPreview(
+                  quotedMessage: _quotedMessage,
+                  model: model,
+                  contact: contact,
+                  onCloseListener: () => setState(() => _isReplying = false),
                 ),
-                Flexible(
-                  child: _buildMessageBubbles(contact),
-                ),
-                // Reply container
-                if (_isReplying)
-                  ReplyPreview(
-                    quotedMessage: _quotedMessage,
-                    model: model,
-                    contact: contact,
-                    onCloseListener: () => setState(() => _isReplying = false),
-                  ),
-                Divider(height: 1.0, color: grey3),
-                Container(
-                  color: _isRecording
-                      ? const Color.fromRGBO(245, 245, 245, 1)
-                      : Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: kBottomNavigationBarHeight,
-                  child: _buildMessageBar(),
-                ),
-                MessagingEmojiPicker(
-                  showEmojis: _emojiShowing,
-                  emptySuggestions: 'No Recents'.i18n,
-                  height: size!.height * 0.25,
-                  onBackspacePressed: () {
+              Divider(height: 1.0, color: grey3),
+              Container(
+                color: _isRecording
+                    ? const Color.fromRGBO(245, 245, 245, 1)
+                    : Colors.white,
+                width: MediaQuery.of(context).size.width,
+                height: kBottomNavigationBarHeight,
+                child: _buildMessageBar(),
+              ),
+              MessagingEmojiPicker(
+                showEmojis: _emojiShowing,
+                emptySuggestions: 'No Recents'.i18n,
+                height: size!.height * 0.25,
+                onBackspacePressed: () {
+                  _newMessage
+                    ..text = _newMessage.text.characters.skipLast(1).toString()
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
+                },
+                onEmojiSelected: (category, emoji) async {
+                  if (mounted &&
+                      _customEmojiResponse &&
+                      _storedMessage != null) {
+                    dismissKeyboard();
+                    await model.react(_storedMessage!, emoji.emoji);
+                    _storedMessage = null;
+                    setState(() => _emojiShowing = false);
+                  } else {
+                    setState(() => _isSendIconVisible = true);
                     _newMessage
-                      ..text =
-                          _newMessage.text.characters.skipLast(1).toString()
+                      ..text += emoji.emoji
                       ..selection = TextSelection.fromPosition(
                           TextPosition(offset: _newMessage.text.length));
-                  },
-                  onEmojiSelected: (category, emoji) async {
-                    if (mounted &&
-                        _customEmojiResponse &&
-                        _storedMessage != null) {
-                      dismissKeyboard();
-                      await model.react(_storedMessage!, emoji.emoji);
-                      _storedMessage = null;
-                      setState(() => _emojiShowing = false);
-                    } else {
-                      setState(() => _isSendIconVisible = true);
-                      _newMessage
-                        ..text += emoji.emoji
-                        ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: _newMessage.text.length));
-                    }
-                  },
-                ),
-              ],
-            ),
-          ]),
+                  }
+                },
+              ),
+            ],
+          ),
         );
       }),
     );
@@ -400,7 +397,7 @@ class _ConversationState extends State<Conversation>
           : ScrollablePositionedList.builder(
               itemScrollController: _scrollController,
               reverse: true,
-              physics: const BouncingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemCount: messageRecords.length,
               itemBuilder: (context, index) {
                 return MessageBubble(

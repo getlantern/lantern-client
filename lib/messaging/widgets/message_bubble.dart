@@ -70,32 +70,34 @@ class MessageBubble extends StatelessWidget {
                 padding: EdgeInsets.only(
                   top: isDateMarker.isNotEmpty
                       ? 8
-                      : (nextMessage == null && priorMessage != null)
-                          ? 6
+                      : (nextMessage != null &&
+                              priorMessage != null &&
+                              reactionsList == null)
+                          ? inbound // TODO: this segment creates additional space when the contact send more than 1 message
+                              // need to validate if the next message is from the sender to avoid this
+                              ? 8
+                              : 0
                           : 0,
                   left: inbound ? 16 : 0,
                   right: outbound ? 16 : 0,
                   bottom: (nextMessage != null && reactionsList != null)
                       ? 16
-                      : (nextMessage != null && reactionsList == null)
+                      : (reactionsList == null)
                           ? (nextMessage == null && priorMessage != null)
-                              ? 10
-                              : 2
-                          : 10,
+                              ? 6
+                              : (nextMessage != null && priorMessage == null)
+                                  ? 8
+                                  : (nextMessage == null &&
+                                          priorMessage == null)
+                                      ? 8
+                                      : (nextMessage != null &&
+                                              priorMessage != null)
+                                          ? inbound
+                                              ? 8
+                                              : 2
+                                          : 0
+                          : 2,
                 ),
-                // padding: EdgeInsetsDirectional.only(
-                //     start: isDateMarker != ''
-                //         ? outbound
-                //             ? 20
-                //             : 4
-                //         : 4,
-                //     end: isDateMarker != ''
-                //         ? outbound
-                //             ? 4
-                //             : 20
-                //         : 4,
-                //     top: 4,
-                //     bottom: 4),
                 child: _buildBubbleUI(
                   outbound,
                   inbound,
