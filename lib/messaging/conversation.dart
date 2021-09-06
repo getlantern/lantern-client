@@ -263,7 +263,7 @@ class _ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundColor: circleAvatarTitle,
+                backgroundColor: avatarBgColors[3],
                 child: Text(
                   sanitizeContactName(contact.displayName.isEmpty
                           ? contact.contactId.id
@@ -488,7 +488,7 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: pulsingShadow,
+                    pulseColor: countdownTimerColor,
                     color: pulsingBackground,
                   ),
                 ),

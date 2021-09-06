@@ -295,7 +295,7 @@ Future<void> displayConversationOptions(
                         alignment: Alignment.center,
                         child: Text(
                           'Disappearing Messages'.i18n,
-                          style: tsDisappearingTitleBottomModal,
+                          style: tsAlertDialogTitle,
                         ),
                       ),
                       content: SingleChildScrollView(
@@ -425,7 +425,7 @@ Future<void> displayConversationOptions(
                                 TextButton(
                                   onPressed: () async => context.router.pop(),
                                   child: Text('Cancel'.i18n.toUpperCase(),
-                                      style: tsAlertDialogButtonGreySecondary),
+                                      style: tsAlertDialogButtonGrey),
                                 ),
                                 TextButton(
                                   onPressed: () async {

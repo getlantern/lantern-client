@@ -235,7 +235,7 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     ),
     title: isLocal
         ? Text('Delete for me', style: tsAlertDialogTitle)
-        : Text('Delete for everyone', style: tsAlertDialogTitle),
+        : Text('Delete for everyone', style: tsBottomModalTitle),
     agreeAction: () =>
         isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
     agreeText: 'Delete',
