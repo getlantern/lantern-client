@@ -219,6 +219,12 @@ msgstr "Payment Test Mode"
 msgid "Play Version"
 msgstr "Play Version"
 
+msgid "error"
+msgstr "Error"
+
+msgid "info_dialog_confirm"
+msgstr "Got it"
+
 msgid "new_message"
 msgstr "New Message"
 
@@ -242,3 +248,21 @@ msgstr "Contacts"
 
 msgid "no_contacts_yet"
 msgstr "No contacts yet"
+
+msgid "error_description_qr"
+msgstr "Something went wrong while scanning the QR code"
+
+msgid "qr_scanner"
+msgstr "QR Scanner"
+
+msgid "scan_qr"
+msgstr "Scan QR Code"
+
+msgid "scan_qr_description"
+msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+
+msgid "for_your_contact"
+msgstr "For your Contact"
+
+msgid "trouble_scanning"
+msgstr "Trouble scanning?"
