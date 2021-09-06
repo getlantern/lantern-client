@@ -225,6 +225,9 @@ msgstr "Error"
 msgid "info_dialog_confirm"
 msgstr "Got it"
 
+msgid "copied"
+msgstr "Copied!"
+
 msgid "new_message"
 msgstr "New Message"
 
@@ -243,26 +246,38 @@ msgstr "Start chat"
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
 
-msgid "Contacts"
+msgid "contacts"
 msgstr "Contacts"
 
 msgid "no_contacts_yet"
 msgstr "No contacts yet"
 
-msgid "error_description_qr"
+msgid "qr_error_description"
 msgstr "Something went wrong while scanning the QR code"
 
 msgid "qr_scanner"
 msgstr "QR Scanner"
 
-msgid "scan_qr"
+msgid "qr_info_title"
 msgstr "Scan QR Code"
 
-msgid "scan_qr_description"
+msgid "qr_info_description"
 msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
 
-msgid "for_your_contact"
+msgid "qr_for_your_contact"
 msgstr "For your Contact"
 
-msgid "trouble_scanning"
+msgid "qr_trouble_scanning"
 msgstr "Trouble scanning?"
+
+msgid "contactid_error_description"
+msgstr "Something went wrong while adding this contact"
+
+msgid "contactid_input_error"
+msgstr "Please enter a valid Messenger ID"
+
+msgid "contactid_paste_id"
+msgstr "Paste a contact Messenger ID"
+
+msgid "contactid_your_id"
+msgstr "Your Messenger ID"
