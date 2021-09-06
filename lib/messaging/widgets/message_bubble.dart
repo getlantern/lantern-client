@@ -69,11 +69,14 @@ class MessageBubble extends StatelessWidget {
                 //OUTBOUND: SENDED MESSAGES.
                 //INBOUND: RECEIVED MESSAGES
                 padding: EdgeInsets.only(
-                  top: isDateMarker.isNotEmpty ? 8 : 0,
+                  top: isDateMarker.isNotEmpty
+                      ? 8
+                      : MessagePosition.topPosition(reactionsList, nextMessage,
+                          priorMessage, inbound, outbound),
                   left: inbound ? 16 : 0,
                   right: outbound ? 16 : 0,
-                  bottom: MessagePosition.position(reactionsList, nextMessage,
-                      priorMessage, inbound, outbound),
+                  bottom: MessagePosition.bottomPosition(reactionsList,
+                      nextMessage, priorMessage, inbound, outbound),
                 ),
                 child: _buildBubbleUI(
                   outbound,

@@ -306,10 +306,6 @@ class _ConversationState extends State<Conversation>
           ],
           body: Column(
             children: [
-              Card(
-                color: grey1,
-                child: _buildConversationSticker(contact),
-              ),
               Flexible(
                 child: _buildMessageBubbles(contact),
               ),

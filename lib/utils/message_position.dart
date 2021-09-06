@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 
 class MessagePosition {
-  static double position(Widget? widget, StoredMessage? nexMessage,
+  static double topPosition(Widget? widget, StoredMessage? nexMessage,
+      StoredMessage? priorMessage, bool inbound, bool outbound) {
+    if (priorMessage == null && nexMessage != null) return 15.0;
+    return 0.0;
+  }
+
+  static double bottomPosition(Widget? widget, StoredMessage? nexMessage,
       StoredMessage? priorMessage, bool inbound, bool outbound) {
     if (widget != null) return 16.0;
     if (outbound &&
