@@ -218,3 +218,9 @@ msgstr "Payment Test Mode"
 
 msgid "Play Version"
 msgstr "Play Version"
+
+msgid "message_not_disappearing"
+msgstr "All messages will not disappear for you and your contact"
+
+msgid "message_not_disappearing_description"
+msgstr "All messages will disappear after %s for you and your contact"

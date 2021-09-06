@@ -316,12 +316,26 @@ Future<void> displayConversationOptions(
                                                     seconds[selectedPosition] ==
                                                         0)
                                             ? Text(
-                                                'All messages will not disappear for you and your contact',
+                                                'message_not_disappearing'.i18n,
                                                 style:
                                                     tsDisappearingContentBottomModal,
                                               )
                                             : Text(
-                                                'All messages will disappear after ${selectedPosition != -1 ? seconds[selectedPosition].humanizeSeconds(longForm: true) : contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)} for you and your contact',
+                                                'message_not_disappearing_description'
+                                                    .i18n
+                                                    .replaceAll(
+                                                        RegExp('%s'),
+                                                        selectedPosition != -1
+                                                            ? seconds[
+                                                                    selectedPosition]
+                                                                .humanizeSeconds(
+                                                                    longForm:
+                                                                        true)
+                                                            : contact
+                                                                .messagesDisappearAfterSeconds
+                                                                .humanizeSeconds(
+                                                                    longForm:
+                                                                        true)),
                                                 style:
                                                     tsDisappearingContentBottomModal,
                                               ),
