@@ -218,3 +218,27 @@ msgstr "Payment Test Mode"
 
 msgid "Play Version"
 msgstr "Play Version"
+
+msgid "new_message"
+msgstr "New Message"
+
+msgid "search"
+msgstr "Search"
+
+msgid "your_contact_info"
+msgstr "Your Contact Info"
+
+msgid "scan_qr_code"
+msgstr "Scan Contact QR Code"
+
+msgid "start_chat"
+msgstr "Start chat"
+
+msgid "introduce_contacts"
+msgstr "Introduce Contacts"
+
+msgid "Contacts"
+msgstr "Contacts"
+
+msgid "no_contacts_yet"
+msgstr "No contacts yet"
