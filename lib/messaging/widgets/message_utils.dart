@@ -513,9 +513,7 @@ Future<void> displayConversationOptions(
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Text(
-                                      'Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again.'
-                                          .i18n,
+                                  Text('delete_confirmation'.i18n,
                                       style: tsAlertDialogBody)
                                 ],
                               ),
