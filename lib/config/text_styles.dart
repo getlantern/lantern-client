@@ -86,7 +86,7 @@ TextStyle tsDisappearingContentBottomModal = TextStyle(
     color: grey5, fontSize: 14.0, height: 1.5, fontWeight: FontWeight.w400);
 
 TextStyle tsAlertDialogListTile = const TextStyle(
-    fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.black);
+    fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.black);
 
 TextStyle tsAlertDialogBody = const TextStyle(fontSize: 14, height: 1.5);
 
