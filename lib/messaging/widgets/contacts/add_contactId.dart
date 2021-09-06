@@ -66,8 +66,8 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
         });
         context.loaderOverlay.hide();
         showInfoDialog(context,
-            title: 'Error'.i18n,
-            des: 'Something went wrong while adding this contact'.i18n,
+            title: 'error'.i18n,
+            des: 'contactid_error_description'.i18n,
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       }
@@ -95,7 +95,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Trouble Scanning?'.toUpperCase(),
+          Text('qr_trouble_scanning'.i18n.toUpperCase(),
               style: const TextStyle(fontSize: 20)),
         ],
       ),
@@ -121,10 +121,10 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                             validator: (value) =>
                                 value != '' && value != widget.me.contactId.id
                                     ? null
-                                    : 'Please enter a valid Messenger ID'.i18n,
+                                    : 'contactid_input_error'.i18n,
                             decoration: InputDecoration(
                               helperText: '',
-                              labelText: 'Paste a contact Messenger ID',
+                              labelText: 'contactid_paste_id'.i18n,
                               suffixIcon: IconButton(
                                 onPressed: () => _onContactIdAdd(),
                                 icon: Icon(!waitingForOtherSide
@@ -153,7 +153,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Your Messenger ID'.i18n,
+                                Text('contactid_your_id'.i18n,
                                     style: const TextStyle(
                                         color: Colors.cyan, fontSize: 16)),
                                 IconButton(
@@ -166,7 +166,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                           children: [
                                             Expanded(
                                                 child: Text(
-                                              'ID Copied'.i18n,
+                                              'copied'.i18n,
                                               style: txSnackBarText,
                                               textAlign: TextAlign.left,
                                             )),
@@ -194,7 +194,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                         children: [
                                           Expanded(
                                               child: Text(
-                                            'ID Copied'.i18n,
+                                            'copied'.i18n,
                                             style: txSnackBarText,
                                             textAlign: TextAlign.left,
                                           )),
