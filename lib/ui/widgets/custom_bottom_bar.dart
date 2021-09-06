@@ -91,23 +91,26 @@ class CustomBottomBar extends StatelessWidget {
           label: '',
           tooltip: 'Account'.i18n,
         ),
-        BottomNavigationBarItem(
-          icon: CustomBottomItem(
-            currentIndex: index,
-            position: 3,
-            total: isDevelop ? 4 : 3,
-            label: Text('Developer'.i18n, style: const TextStyle(fontSize: 12)),
-            icon: SvgPicture.asset(
-              ImagePaths.devices_icon,
-              color:
-                  index == 3 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
+        if (isDevelop)
+          BottomNavigationBarItem(
+            icon: CustomBottomItem(
+              currentIndex: index,
+              position: 3,
+              total: isDevelop ? 4 : 3,
+              label:
+                  Text('Developer'.i18n, style: const TextStyle(fontSize: 12)),
+              icon: SvgPicture.asset(
+                ImagePaths.devices_icon,
+                color: index == 3
+                    ? selectedTabLabelColor
+                    : unselectedTabLabelColor,
+                fit: BoxFit.contain,
+              ),
+              onTap: () => onTap!(3),
             ),
-            onTap: () => onTap!(3),
+            label: '',
+            tooltip: 'Developer'.i18n,
           ),
-          label: '',
-          tooltip: 'Developer'.i18n,
-        ),
       ],
     );
   }
