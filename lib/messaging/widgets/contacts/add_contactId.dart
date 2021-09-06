@@ -3,7 +3,6 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/package_store.dart';
 // import 'package:loading_animations/loading_animations.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:sizer/sizer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaContactId extends StatelessWidget {
@@ -207,9 +206,9 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                   child: Text(
                                     widget.me.contactId.id,
                                     overflow: TextOverflow.visible,
-                                    style: TextStyle(
-                                        fontSize: 10.0
-                                            .sp), // TODO: we need to manually wrap this up
+                                    style: const TextStyle(
+                                        fontSize:
+                                            10.0), // TODO: we need to manually wrap this up
                                   ),
                                 ),
                               ),

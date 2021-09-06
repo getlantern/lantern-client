@@ -4,7 +4,6 @@ import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();

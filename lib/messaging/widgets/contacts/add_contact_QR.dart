@@ -9,7 +9,6 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/scale_animation_widget.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:sizer/sizer.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -158,7 +157,6 @@ class _AddViaQRState extends State<AddViaQR> {
                   children: [
                     Flexible(
                       child: Container(
-                        width: 100.w,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -171,7 +169,7 @@ class _AddViaQRState extends State<AddViaQR> {
                                 borderRadius: 8,
                                 borderLength: 15,
                                 borderWidth: 5,
-                                cutOutSize: 70.w,
+                                cutOutSize: 300,
                               ),
                             ),
                             if (scannedContactId != null && scanning)
@@ -193,7 +191,6 @@ class _AddViaQRState extends State<AddViaQR> {
                   children: [
                     Container(
                       color: middleColor,
-                      width: 100.w,
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       alignment: Alignment.center,
                       child: Text('For your Contact'.i18n,
