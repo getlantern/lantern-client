@@ -81,8 +81,8 @@ class _AddViaQRState extends State<AddViaQR> {
           scanning = false;
         });
         showInfoDialog(context,
-            title: 'Error'.i18n,
-            des: 'Something went wrong while scanning the QR code'.i18n,
+            title: 'error'.i18n,
+            des: 'error_description_qr'.i18n,
             icon: ImagePaths.alert_icon,
             buttonText: 'OK'.i18n);
       } finally {
@@ -121,7 +121,7 @@ class _AddViaQRState extends State<AddViaQR> {
           direction: Axis.horizontal,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('QR Scanner'.i18n.toUpperCase(),
+            Text('qr_scanner'.i18n.toUpperCase(),
                 style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -131,12 +131,10 @@ class _AddViaQRState extends State<AddViaQR> {
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => showInfoDialog(context,
-                    title: 'Scan QR Code'.i18n,
-                    des:
-                        "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
-                            .i18n,
+                    title: 'scan_qr'.i18n,
+                    des: 'scan_qr_description'.i18n,
                     icon: ImagePaths.qr_code,
-                    buttonText: 'Got it'.i18n.toUpperCase()),
+                    buttonText: 'info_dialog_confirm'.i18n.toUpperCase()),
                 child: const Icon(
                   Icons.info,
                   size: 14,
@@ -194,7 +192,7 @@ class _AddViaQRState extends State<AddViaQR> {
                       padding: const EdgeInsetsDirectional.fromSTEB(
                           0, 20.0, 0, 20.0),
                       alignment: Alignment.center,
-                      child: Text('For your Contact'.i18n,
+                      child: Text('for_your_contact'.i18n,
                           style: const TextStyle(
                             color: Colors.black,
                           )),
@@ -242,7 +240,7 @@ class _AddViaQRState extends State<AddViaQR> {
                           });
                           qrController?.pauseCamera();
                         },
-                        child: Text('Trouble scanning?'.i18n,
+                        child: Text('trouble_scanning'.i18n,
                             style: const TextStyle(
                               color: Colors.black,
                             )),
