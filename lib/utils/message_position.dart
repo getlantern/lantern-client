@@ -10,7 +10,9 @@ class MessagePosition {
 
   static double bottomPosition(Widget? widget, StoredMessage? nexMessage,
       StoredMessage? priorMessage, bool inbound, bool outbound) {
-    if (widget != null) return 16.0;
+    if (nexMessage != null && nexMessage.reactions.isNotEmpty) {
+      return 16.0;
+    }
     if (outbound &&
         nexMessage != null &&
         nexMessage.direction == MessageDirection.IN) return 6.0;
