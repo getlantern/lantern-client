@@ -31,16 +31,16 @@ class _NewMessageState extends State<NewMessage> {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'New Message'.i18n,
+      title: 'new_message'.i18n,
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
-          tooltip: 'Search'.i18n,
+          tooltip: 'search'.i18n,
           onPressed: () {},
         ),
         IconButton(
           icon: const Icon(Icons.qr_code),
-          tooltip: 'Your Contact Info'.i18n,
+          tooltip: 'your_contact_info'.i18n,
           onPressed: () async {
             await context.popRoute();
             await context
@@ -59,7 +59,7 @@ class _NewMessageState extends State<NewMessage> {
                 Icons.qr_code,
                 color: Colors.black,
               ),
-              title: Text('Scan Contact QR Code'.i18n),
+              title: Text('scan_qr_code'.i18n),
               trailing: const CustomAssetImage(
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
@@ -82,7 +82,7 @@ class _NewMessageState extends State<NewMessage> {
                         children: [
                           Expanded(
                             child: Text(
-                              // TODO: update copy here
+                              // TODO: look up how to use variables with internationalization
                               '${_updatedContact!.displayName} is a Contact'
                                   .i18n,
                               overflow: TextOverflow.visible,
@@ -95,7 +95,7 @@ class _NewMessageState extends State<NewMessage> {
                       duration: const Duration(milliseconds: 4000),
                       action: SnackBarAction(
                         textColor: secondaryPink,
-                        label: 'START CHAT'.toUpperCase().i18n,
+                        label: 'start_chat'.toUpperCase().i18n,
                         onPressed: () async {
                           await context.pushRoute(Conversation(
                               contactId: _updatedContact!.contactId));
@@ -110,7 +110,7 @@ class _NewMessageState extends State<NewMessage> {
                 Icons.people,
                 color: Colors.black,
               ),
-              title: Text('Introduce Contacts'.i18n),
+              title: Text('introduce_contacts'.i18n),
               trailing: const CustomAssetImage(
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
@@ -123,7 +123,7 @@ class _NewMessageState extends State<NewMessage> {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 return _contacts.toList().isNotEmpty
                     ? ListTile(
-                        title: Text('Recent contacts'.i18n.toUpperCase(),
+                        title: Text('contacts'.i18n.toUpperCase(),
                             style: tsEmptyContactState))
                     : Container();
               }),
@@ -177,7 +177,7 @@ class _NewMessageState extends State<NewMessage> {
                   : Container(
                       alignment: AlignmentDirectional.center,
                       padding: const EdgeInsetsDirectional.all(16.0),
-                      child: Text('No contacts yet.'.i18n,
+                      child: Text('no_contacts_yet.'.i18n,
                           textAlign: TextAlign.center,
                           style:
                               tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
