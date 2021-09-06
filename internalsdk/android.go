@@ -94,13 +94,9 @@ type Session interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
-
-	SetSentryExtra(key, value string) error
 }
 
-// panickingSession mimics the Session interface but its methods panic instead of returning errors
-// In practice, this is implemented by panicLoggingSession which first logs errors to Sentry before
-// panicking.
+// panickingSession wraps the Session interface but panics instead of returning errors
 type panickingSession interface {
 	common.AuthConfig
 	SetCountry(string)
@@ -127,8 +123,145 @@ type panickingSession interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+}
 
-	SetSentryExtra(key, value string)
+func panicIfNecessary(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+// panickingSessionImpl implements panickingSession
+type panickingSessionImpl struct {
+	wrapped Session
+}
+
+func (s *panickingSessionImpl) GetDeviceID() string {
+	result, err := s.wrapped.GetDeviceID()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetUserID() int64 {
+	result, err := s.wrapped.GetUserID()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetToken() string {
+	result, err := s.wrapped.GetToken()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) SetCountry(country string) {
+	panicIfNecessary(s.wrapped.SetCountry(country))
+}
+
+func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
+	panicIfNecessary(s.wrapped.UpdateAdSettings(settings))
+}
+
+func (s *panickingSessionImpl) UpdateStats(city, country, countryCode string, httpsUpgrades, adsBlocked int) {
+	panicIfNecessary(s.wrapped.UpdateStats(city, country, countryCode, httpsUpgrades, adsBlocked))
+}
+
+func (s *panickingSessionImpl) SetStaging(staging bool) {
+	panicIfNecessary(s.wrapped.SetStaging(staging))
+}
+
+func (s *panickingSessionImpl) ProxyAll() bool {
+	result, err := s.wrapped.ProxyAll()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) BandwidthUpdate(percent, remaining, allowed, ttlSeconds int) {
+	panicIfNecessary(s.wrapped.BandwidthUpdate(percent, remaining, allowed, ttlSeconds))
+}
+
+func (s *panickingSessionImpl) Locale() string {
+	result, err := s.wrapped.Locale()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetTimeZone() string {
+	result, err := s.wrapped.GetTimeZone()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) Code() string {
+	result, err := s.wrapped.Code()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetCountryCode() string {
+	result, err := s.wrapped.GetCountryCode()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetForcedCountryCode() string {
+	result, err := s.wrapped.GetForcedCountryCode()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) GetDNSServer() string {
+	result, err := s.wrapped.GetDNSServer()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) Provider() string {
+	result, err := s.wrapped.Provider()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) AppVersion() string {
+	result, err := s.wrapped.AppVersion()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) IsPlayVersion() bool {
+	result, err := s.wrapped.IsPlayVersion()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) Email() string {
+	result, err := s.wrapped.Email()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) Currency() string {
+	result, err := s.wrapped.Currency()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) DeviceOS() string {
+	result, err := s.wrapped.DeviceOS()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) IsProUser() bool {
+	result, err := s.wrapped.IsProUser()
+	panicIfNecessary(err)
+	return result
+}
+
+func (s *panickingSessionImpl) SerializedInternalHeaders() string {
+	result, err := s.wrapped.SerializedInternalHeaders()
+	panicIfNecessary(err)
+	return result
 }
 
 type userConfig struct {
@@ -180,8 +313,6 @@ type SocketProtector interface {
 // resulting in an infinite loop.
 
 func ProtectConnections(protector SocketProtector) {
-	defer sentryRecover(nil)
-
 	log.Debug("Protecting connections")
 	p := protected.New(protector.ProtectConn, protector.DNSServerIP)
 	netx.OverrideDial(p.DialContext)
@@ -198,8 +329,6 @@ func ProtectConnections(protector SocketProtector) {
 // RemoveOverrides removes the protected tlsdialer overrides
 // that allowed connections to bypass the VPN.
 func RemoveOverrides() {
-	defer sentryRecover(nil)
-
 	log.Debug("Removing overrides")
 	netx.Reset()
 }
@@ -250,8 +379,6 @@ type adSettings struct {
 }
 
 func (s *adSettings) GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error) {
-	defer sentryRecover(nil)
-
 	adProvider := s.wrapped.GetAdProvider(isPro, countryCode, daysSinceInstalled)
 	if adProvider == nil {
 		return nil, errNoAdProviderAvailable
@@ -279,9 +406,7 @@ func Start(configDir string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
 
-	defer sentryRecover(wrappedSession)
-
-	session := &panicLoggingSession{wrappedSession}
+	session := &panickingSessionImpl{wrappedSession}
 
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
@@ -301,7 +426,7 @@ func Start(configDir string,
 		log.Error(err.Error())
 		return nil, err
 	}
-	log.Debugf("Starting socks proxy at %s", socksAddr)
+	log.Debugf("Started socks proxy at %s", socksAddr)
 
 	dnsGrabberAddr, ok := dnsGrabAddr.Get(startTimeout - elapsed())
 	if !ok {
@@ -426,8 +551,6 @@ func run(configDir, locale string,
 	if err != nil {
 		log.Fatalf("Failed to start flashlight: %v", err)
 	}
-
-	configureSentryScope(session)
 
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address

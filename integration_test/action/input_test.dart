@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
-import 'package:lantern/utils/waveform/wave_progress_bar.dart';
+import 'package:lantern/messaging/widgets/voice_recorder/waveform.dart';
 
 import '../enums/disappearing_test.dart';
 import '../helpers/clipboard_test.dart';
@@ -74,7 +74,7 @@ class Input {
         print('await for the audio to be playable');
         await awaitFor(tester, duration: const Duration(seconds: 2));
         await awaitFor(tester, duration: const Duration(seconds: 2));
-        expect(find.byType(WaveProgressBar), findsOneWidget);
+        expect(find.byType(Waveform), findsOneWidget);
       }
     }
   }
@@ -170,8 +170,7 @@ class Input {
     if (checkAudioPreviewComponents) {
       expect(find.byType(Slider), findsOneWidget);
       var slider = tester.widget<Slider>(find.byType(Slider));
-      var waveform =
-          tester.widget<WaveProgressBar>(find.byType(WaveProgressBar));
+      var waveform = tester.widget<Waveform>(find.byType(Waveform));
       expect((waveform).progressPercentage, greaterThanOrEqualTo(33));
       expect((slider).value, greaterThanOrEqualTo(expectedAudioCompletion));
     }
@@ -184,7 +183,7 @@ class Input {
     await tester.pumpAndSettle();
     if (checkAudioPreviewComponents) {
       expect(find.byType(Slider), findsNothing);
-      expect(find.byType(WaveProgressBar), findsNothing);
+      expect(find.byType(Waveform), findsNothing);
     }
   }
 

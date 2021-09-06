@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 
 void main() {
   group(
@@ -19,10 +18,6 @@ void main() {
           print(
               'If the root was loaded successfully it should find [GlobalLoaderOverlay]');
           expect(globalLoaderOverlay, findsOneWidget);
-          print('Declare a variable of type [Sizer]');
-          var sizer = find.byType(Sizer);
-          print('If the root was loaded successfully it should find [Sizer]');
-          expect(sizer, findsOneWidget);
           print('Declare a variable of type [MaterialApp.router]');
           var appRouter = find.byType(MaterialApp);
           print(

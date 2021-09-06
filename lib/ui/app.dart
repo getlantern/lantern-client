@@ -11,9 +11,10 @@ import 'package:lantern/model/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 
-final globalRouter = AppRouter();
+final navigatorKey = GlobalKey<NavigatorState>();
+final globalRouter = AppRouter(navigatorKey);
+final messagingModel = MessagingModel();
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => MessagingModel()),
+        Provider(create: (context) => messagingModel),
         Provider(create: (context) => VpnModel()),
         Provider(create: (context) => Audio()),
         Provider(create: (context) => SessionModel()),
@@ -39,42 +40,38 @@ class LanternApp extends StatelessWidget {
               overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: const Locale('en', 'US'),
-                child: Sizer(
-                  builder: (context, orientation, deviceType) {
-                    return MaterialApp.router(
-                      debugShowCheckedModeBanner: false,
-                      theme: buildTheme(context),
-                      title: 'Lantern Messenger',
-                      localizationsDelegates: [
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                      ],
-                      routeInformationParser: globalRouter.defaultRouteParser(),
-                      routerDelegate: globalRouter.delegate(
-                        navigatorObservers: () => [
-                          BotToastNavigatorObserver(),
-                        ],
-                      ),
-                      builder: BotToastInit(),
-                      supportedLocales: [
-                        const Locale('ar', 'EG'),
-                        const Locale('fr', 'FR'),
-                        const Locale('en', 'US'),
-                        const Locale('fa', 'IR'),
-                        const Locale('th', 'TH'),
-                        const Locale('ms', 'MY'),
-                        const Locale('ru', 'RU'),
-                        const Locale('ur', 'IN'),
-                        const Locale('zh', 'CN'),
-                        const Locale('zh', 'HK'),
-                        const Locale('es', 'ES'),
-                        const Locale('tr', 'TR'),
-                        const Locale('vi', 'VN'),
-                        const Locale('my', 'MM'),
-                      ],
-                    );
-                  },
+                child: MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
+                  theme: buildTheme(context),
+                  title: 'Lantern Messenger',
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  routeInformationParser: globalRouter.defaultRouteParser(),
+                  routerDelegate: globalRouter.delegate(
+                    navigatorObservers: () => [
+                      BotToastNavigatorObserver(),
+                    ],
+                  ),
+                  builder: BotToastInit(),
+                  supportedLocales: [
+                    const Locale('ar', 'EG'),
+                    const Locale('fr', 'FR'),
+                    const Locale('en', 'US'),
+                    const Locale('fa', 'IR'),
+                    const Locale('th', 'TH'),
+                    const Locale('ms', 'MY'),
+                    const Locale('ru', 'RU'),
+                    const Locale('ur', 'IN'),
+                    const Locale('zh', 'CN'),
+                    const Locale('zh', 'HK'),
+                    const Locale('es', 'ES'),
+                    const Locale('tr', 'TR'),
+                    const Locale('vi', 'VN'),
+                    const Locale('my', 'MM'),
+                  ],
                 ),
               ),
             );

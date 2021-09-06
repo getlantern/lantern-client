@@ -2,8 +2,9 @@ package org.getlantern.mobilesdk;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+
+import org.getlantern.lantern.util.Json;
 
 import java.io.InputStream;
 
@@ -27,13 +28,12 @@ public class Settings implements internalsdk.Settings {
     public static Settings init(final Context context) {
 
         try {
-            Gson gson = new Gson();
             InputStream in = context.getAssets().open(configFileName);
             byte[] data = new byte[in.available()];
             in.read(data);
             in.close();
             String configJsonString = new String(data);
-            return gson.fromJson(configJsonString, Settings.class);
+            return Json.gson.fromJson(configJsonString, Settings.class);
         } catch (Exception e) {
             Logger.e(TAG, "Error trying to load settings.json", e);
         }

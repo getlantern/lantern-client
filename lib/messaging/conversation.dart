@@ -6,16 +6,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
-import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/conversation_components/countdown_timer.dart';
 import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
+import 'package:lantern/messaging/widgets/pulsating_indicator.dart';
 import 'package:lantern/messaging/widgets/reply/reply_preview.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/audio_widget.dart';
 import 'package:lantern/messaging/widgets/voice_recorder/message_bar_preview_recording.dart';
@@ -26,9 +28,10 @@ import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sizer/sizer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:flutter/services.dart';
+import 'package:lantern/config/colors.dart';
+
+import 'widgets/call_action.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId _contactId;
@@ -123,7 +126,7 @@ class _ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    if (attachments!.isNotEmpty) context.loaderOverlay.show();
+    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
         widget._contactId.id,
@@ -150,7 +153,7 @@ class _ConversationState extends State<Conversation>
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     } finally {
-      if (attachments.isNotEmpty) context.loaderOverlay.hide();
+      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
   }
 
@@ -246,9 +249,7 @@ class _ConversationState extends State<Conversation>
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
-    (context.router.currentChild!.name == router_gr.Conversation.name &&
-            context.router.routeData.router.current.name ==
-                router_gr.MessagesRouter.name)
+    (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
     return WillPopScope(
@@ -257,25 +258,43 @@ class _ConversationState extends State<Conversation>
           (context, contact, child) {
         return BaseScreen(
           // Conversation title (contact name)
-          title: contact.displayName.isEmpty
-              ? contact.contactId.id
-              : contact.displayName,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: circleAvatarTitle,
+                child: Text(
+                  sanitizeContactName(contact.displayName.isEmpty
+                          ? contact.contactId.id
+                          : contact.displayName)
+                      .substring(0, 2)
+                      .toUpperCase(),
+                  style: tsCircleAvatarLetter,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName,
+                    style: tsTitleAppbar,
+                  ),
+                  DisappearingTimerAction(contact),
+                ],
+              ),
+            ],
+          ),
           centerTitle: false,
           actions: [
-            Flex(
-              direction: Axis.horizontal,
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.call),
-                  tooltip: 'Call'.i18n,
-                  onPressed: () {},
-                ),
-                IconButton(
-                    key: const ValueKey('disappearingSelect'),
-                    onPressed: () {},
-                    icon: DisappearingTimerAction(contact)),
+                CallAction(contact),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
                   tooltip: 'Menu'.i18n,
@@ -286,15 +305,11 @@ class _ConversationState extends State<Conversation>
             )
           ],
           body: Stack(children: [
-            Flex(
-              direction: Axis.vertical,
+            Column(
               children: [
                 Card(
                   color: grey1,
-                  child: Container(
-                    width: 70.w,
-                    child: _buildConversationSticker(contact),
-                  ),
+                  child: _buildConversationSticker(contact),
                 ),
                 Flexible(
                   child: _buildMessageBubbles(contact),
@@ -309,8 +324,8 @@ class _ConversationState extends State<Conversation>
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: _isRecording || _finishedRecording
-                      ? Colors.grey[200]
+                  color: _isRecording
+                      ? const Color.fromRGBO(245, 245, 245, 1)
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
@@ -352,18 +367,28 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-  Widget _buildConversationSticker(Contact contact) =>
-      model.introductionsToContact(builder: (context,
-          Iterable<PathAndValue<StoredMessage>> introductions, Widget? child) {
-        final isPendingIntroduction = !contact.hasReceivedMessage &&
-            introductions
-                .toList()
-                .where(
-                    (intro) => intro.value.introduction.to == contact.contactId)
-                .isNotEmpty;
-        return ConversationSticker(
-            contact: contact, isPendingIntroduction: isPendingIntroduction);
-      });
+  Widget _buildConversationSticker(Contact contact) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            width: constraints.maxWidth * 0.7,
+            child: model.introductionsToContact(
+              builder: (context,
+                  Iterable<PathAndValue<StoredMessage>> introductions,
+                  Widget? child) {
+                final isPendingIntroduction = !contact.hasReceivedMessage &&
+                    introductions
+                        .toList()
+                        .where((intro) =>
+                            intro.value.introduction.to == contact.contactId)
+                        .isNotEmpty;
+                return ConversationSticker(
+                    contact: contact,
+                    isPendingIntroduction: isPendingIntroduction);
+              },
+            ),
+          );
+        },
+      );
 
   Widget _buildMessageBubbles(Contact contact) {
     return model.contactMessages(contact, builder: (context,
@@ -453,25 +478,27 @@ class _ConversationState extends State<Conversation>
           ? const EdgeInsets.only(right: 0, left: 2.0)
           : EdgeInsets.zero,
       leading: _isRecording
-          ? Flex(
-              direction: Axis.horizontal,
+          ? Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 6.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 12,
-                    ),
+                Flexible(
+                  child: PulsatingIndicator(
+                    width: 25,
+                    height: 25,
+                    duration: const Duration(milliseconds: 700),
+                    pulseColor: pulsingShadow,
+                    color: pulsingBackground,
                   ),
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 6.0),
-                    child: CountdownTimer(stopWatchTimer: _stopWatchTimer),
+                    padding: const EdgeInsets.only(left: 14),
+                    child: CountdownTimer(
+                      stopWatchTimer: _stopWatchTimer,
+                      style: tsCountdownTimer,
+                    ),
                   ),
                 ),
               ],
@@ -514,8 +541,7 @@ class _ConversationState extends State<Conversation>
               icon: const Icon(Icons.send, color: Colors.black),
               onPressed: send,
             )
-          : Flex(
-              direction: Axis.horizontal,
+          : Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,

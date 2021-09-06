@@ -9,6 +9,7 @@ Color primaryYellow = HexColor('#FFC107');
 Color secondaryBlue = HexColor('#00BCD4');
 Color secondaryPink = HexColor('#FF4081');
 Color secondaryYellow = HexColor('#FFE600');
+Color countdownTimerColor = Colors.red.shade900;
 Color white = HexColor('#FFFFFF');
 Color black = HexColor('#000000');
 Color grey1 = HexColor('#F9F9F9');
@@ -41,6 +42,11 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
+Color circleAvatarTitle = const Color.fromRGBO(122, 0, 59, 1);
+Color recordingColorBackground = const Color.fromRGBO(213, 0, 31, 1);
+
+Color pulsingShadow = Colors.red.shade900;
+Color pulsingBackground = Colors.red;
 
 List<Color> avatarBgColors = [
   HexColor('#003B7A'),

@@ -7,7 +7,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/basic_memory_image.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatelessWidget {
@@ -81,57 +80,65 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Always render the thumbnail in order to preserve the size of the stack
-        // while the video starts playing
-        SizedBox(
-          // this box keeps the video from being too tall
-          height: 80.w,
-          child: FittedBox(
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final height = constraints.maxWidth;
+
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          // Always render the thumbnail in order to preserve the size of the stack
+          // while the video starts playing
+          ConstrainedBox(
+            // this box keeps the video from being too tall
+            constraints: BoxConstraints(maxHeight: height),
             child: widget.image,
           ),
-        ),
-        if (_controller != null)
-          ValueListenableBuilder(
-              valueListenable: _controller!,
-              builder: (BuildContext context, VideoPlayerValue value,
-                  Widget? child) {
-                if (!value.isInitialized) {
-                  return Container();
-                }
-                return SizedBox(
-                  // Size video to the same absolute size as the thumbnail
-                  // This will get scaled to fit into the message bubble by the
-                  // containing AttachmentBuilder.
-                  width: 80.w * value.aspectRatio,
-                  height: 80.w,
-                  child: AspectRatio(
-                    aspectRatio: _controller!.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: <Widget>[
-                        // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                        VideoPlayer(_controller!),
-                        VideoProgressIndicator(_controller!,
+          if (_controller != null)
+            ConstrainedBox(
+              // this box keeps the video from being too tall
+              constraints: BoxConstraints(
+                maxWidth: height * _controller!.value.aspectRatio,
+              ),
+              child: ValueListenableBuilder(
+                valueListenable: _controller!,
+                builder: (BuildContext context, VideoPlayerValue value,
+                    Widget? child) {
+                  if (!value.isInitialized) {
+                    return const SizedBox();
+                  }
+                  return Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                      AspectRatio(
+                        aspectRatio: _controller!.value.aspectRatio,
+                        child: VideoPlayer(_controller!),
+                      ),
+                      ConstrainedBox(
+                        // this box keeps the video from being too tall
+                        constraints: BoxConstraints(
+                          maxWidth: height * _controller!.value.aspectRatio,
+                        ),
+                        child: VideoProgressIndicator(_controller!,
                             allowScrubbing: true),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-        // button goes in main stack
-        SizedBox(
-          width: 96,
-          height: 96,
-          child: FittedBox(
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          // button goes in main stack
+          FittedBox(
             child: IconButton(
+                iconSize: height / 4,
                 icon: Icon(
                     _playing
                         ? Icons.stop_circle_outlined
                         : Icons.play_circle_outline,
-                    color: widget.inbound ? inboundMsgColor : outboundMsgColor),
+                    color: (widget.inbound ? inboundMsgColor : outboundMsgColor)
+                        .withOpacity(0.8)),
                 onPressed: () {
                   _disposeControllerIfReachedEnd();
 
@@ -179,8 +186,8 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
                   });
                 }),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

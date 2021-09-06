@@ -42,7 +42,13 @@ class _NewMessageState extends State<NewMessage> {
         IconButton(
           icon: const Icon(Icons.qr_code),
           tooltip: 'Your Contact Info'.i18n,
-          onPressed: () async => await context.pushRoute(const ContactInfo()),
+          onPressed: () async {
+            await context.popRoute();
+            await context
+                .innerRouterOf<TabsRouter>(Home.name)!
+                .innerRouterOf<StackRouter>(MessagesRouter.name)!
+                .push(const ContactInfo());
+          },
         ),
       ],
       body: Column(

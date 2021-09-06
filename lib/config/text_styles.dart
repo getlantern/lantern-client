@@ -14,10 +14,25 @@ TextStyle? tsSubTitle(BuildContext context) =>
 TextStyle? tsCaption(BuildContext context) =>
     Theme.of(context).textTheme.caption;
 
+TextStyle tsDisappearingTimer =
+    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
+
+TextStyle tsDisappearingTimerDetail =
+    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
+
 // Custom styles
 
 TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
+
+TextStyle tsCircleAvatarLetter =
+    TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: white);
+
+TextStyle tsCountdownTimer = TextStyle(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  color: countdownTimerColor,
+);
 
 TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);

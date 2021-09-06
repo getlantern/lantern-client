@@ -21,10 +21,23 @@ class VoiceRecorder extends StatefulWidget {
 }
 
 class _VoiceRecorderState extends State<VoiceRecorder>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
+  late AnimationController _animationController;
+  var scaleBoundary;
+
   @override
   void initState() {
     super.initState();
+    scaleBoundary = widget.isRecording ? 2.0 : 1.0;
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: 1.0,
+      upperBound: 2.0,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animationController.addListener(
+      () => setState(() => scaleBoundary = _animationController.value),
+    );
     WidgetsBinding.instance!.addObserver(this);
   }
 
@@ -47,32 +60,43 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   Widget build(BuildContext context) {
     return GestureDetector(
       key: const ValueKey('btnRecord'),
-      onPanDown: _onTapDown,
-      onPanEnd: _onTapEnd,
+      onPanDown: (details) {
+        _animationController.forward(from: 1.0);
+        _onTapDown(details);
+      },
+      onPanEnd: (details) {
+        _onTapEnd(details);
+      },
       child: Transform.scale(
-        scale: widget.isRecording ? 2 : 1,
+        scale: widget.isRecording ? scaleBoundary : 1.0,
         alignment: Alignment.bottomRight,
         child: Container(
           width: 50,
           height: 50,
-          margin: widget.isRecording ? const EdgeInsets.only(top: 10) : null,
+          margin: widget.isRecording
+              ? const EdgeInsets.only(top: 10)
+              : EdgeInsets.zero,
           decoration: BoxDecoration(
-            color: widget.isRecording ? Colors.red : Colors.transparent,
+            color: widget.isRecording
+                ? recordingColorBackground
+                : Colors.transparent,
             borderRadius:
                 const BorderRadius.only(topLeft: Radius.circular(100)),
           ),
-          child: widget.isRecording
-              ? const Padding(
-                  padding: EdgeInsets.only(top: 10, left: 10),
-                  child: Icon(
-                    Icons.mic,
-                    color: Colors.white,
-                  ),
-                )
-              : const Icon(
-                  Icons.mic,
-                  color: Colors.black,
-                ),
+          child: AnimatedSize(
+            vsync: this,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.linear,
+            child: Padding(
+              padding: widget.isRecording
+                  ? const EdgeInsets.only(top: 10, left: 10)
+                  : EdgeInsets.zero,
+              child: Icon(
+                Icons.mic,
+                color: widget.isRecording ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -84,6 +108,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
 
   @override
   void dispose() {
+    _animationController.dispose();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
