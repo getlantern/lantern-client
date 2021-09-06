@@ -1,5 +1,5 @@
 
-- [ ] All strings are localized using `.18n` and are defined in `en.po`. Localization keys are either short strings or made-up keys.
+- [ ] All strings are defined using localized message keys like `'my_message_key'.i18n` and are defined in `en.po`.
 - [ ] All colors are defined using Hex, are defined in `colors.dart` and are not duplicated
 - [ ] All text styles are defined in `text_styles.dart` and are not duplicated
 - [ ] Repeated code has been factored into custom widgets
