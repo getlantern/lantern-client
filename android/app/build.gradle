@@ -393,7 +393,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-config'
 
-    implementation 'io.sentry:sentry-android:5.0.1'
+    implementation 'io.sentry:sentry-android:5.1.2'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
@@ -420,7 +420,7 @@ dependencies {
     implementation(name:'opuslib-release', ext: 'aar')
     implementation 'com.github.getlantern:secrets-android:3ac588e'
     implementation 'com.github.getlantern:db-android:4d13d81641'
-    implementation 'com.github.getlantern:messaging-android:b39fc31bf1'
+    implementation 'com.github.getlantern:messaging-android:b5b4381f93'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,14 +1,13 @@
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:lantern/messaging/conversation.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
+import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
+import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
-
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 
 import 'message_types/content_container.dart';
@@ -57,8 +56,7 @@ class MessageBubble extends StatelessWidget {
       final wasDeleted = determineDeletionStatus(msg);
       final isAttachment = msg.attachments.isNotEmpty;
 
-      return Flex(
-        direction: Axis.horizontal,
+      return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment:
             outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -189,8 +187,7 @@ class MessageBubble extends StatelessWidget {
         duration: const Duration(seconds: 0),
         animateMenuItems: false,
         onPressed: () {},
-        child: Flex(
-          direction: Axis.vertical,
+        child: Column(
           crossAxisAlignment:
               outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
@@ -219,7 +216,7 @@ class MessageBubble extends StatelessWidget {
 
 Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
     bool isLocal, PathAndValue<StoredMessage> message) async {
-  return showAlertDialog(
+  showAlertDialog(
     context: context,
     key: const ValueKey('deleteDialog'),
     barrierDismissible: true,

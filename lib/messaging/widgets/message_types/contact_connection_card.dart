@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
@@ -5,9 +6,7 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
-import 'package:sizer/sizer.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
@@ -33,77 +32,78 @@ class ContactConnectionCard extends StatelessWidget {
     final avatarLetters = introduction.displayName != ''
         ? introduction.displayName.substring(0, 2)
         : 'UC';
-    return Flex(
-      direction: Axis.vertical,
+    return Column(
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: outbound ? 60.w : 100.w,
-          padding: const EdgeInsets.only(top: 10),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor:
-                  avatarBgColors[generateUniqueColorIndex(introduction.to.id)],
-              child: Text(avatarLetters.toUpperCase(),
-                  style: const TextStyle(color: Colors.white)),
-            ),
-            title: Text(introduction.displayName,
-                style: TextStyle(
-                    color: outbound ? outboundMsgColor : inboundMsgColor)),
-            trailing: outbound
-                ? const SizedBox()
-                : FittedBox(
-                    child: Row(
-                      children: [
-                        if (msg.introduction.status ==
-                            IntroductionDetails_IntroductionStatus.ACCEPTED)
-                          Icon(Icons.check_circle,
+        LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
+            padding: const EdgeInsets.only(top: 10),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: avatarBgColors[
+                    generateUniqueColorIndex(introduction.to.id)],
+                child: Text(avatarLetters.toUpperCase(),
+                    style: const TextStyle(color: Colors.white)),
+              ),
+              title: Text(introduction.displayName,
+                  style: TextStyle(
+                      color: outbound ? outboundMsgColor : inboundMsgColor)),
+              trailing: outbound
+                  ? const SizedBox()
+                  : FittedBox(
+                      child: Row(
+                        children: [
+                          if (msg.introduction.status ==
+                              IntroductionDetails_IntroductionStatus.ACCEPTED)
+                            Icon(Icons.check_circle,
+                                color: outbound
+                                    ? outboundMsgColor
+                                    : inboundMsgColor),
+                          Icon(
+                              (msg.introduction.status ==
+                                      IntroductionDetails_IntroductionStatus
+                                          .PENDING)
+                                  ? Icons.info_outline_rounded
+                                  : Icons.keyboard_arrow_right_outlined,
+                              size: (msg.introduction.status ==
+                                      IntroductionDetails_IntroductionStatus
+                                          .PENDING)
+                                  ? 20.0
+                                  : 30.0,
                               color: outbound
                                   ? outboundMsgColor
                                   : inboundMsgColor),
-                        Icon(
-                            (msg.introduction.status ==
-                                    IntroductionDetails_IntroductionStatus
-                                        .PENDING)
-                                ? Icons.info_outline_rounded
-                                : Icons.keyboard_arrow_right_outlined,
-                            size: (msg.introduction.status ==
-                                    IntroductionDetails_IntroductionStatus
-                                        .PENDING)
-                                ? 20.0
-                                : 30.0,
-                            color:
-                                outbound ? outboundMsgColor : inboundMsgColor),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-            onTap: () async {
-              if (inbound &&
-                  msg.introduction.status ==
-                      IntroductionDetails_IntroductionStatus.PENDING) {
-                await _showOptions(
-                  context,
-                  introduction,
-                  model,
-                  contact,
-                );
-              }
-              if (msg.introduction.status ==
-                  IntroductionDetails_IntroductionStatus.ACCEPTED) {
-                await context
-                    .pushRoute(Conversation(contactId: introduction.to));
-              }
-            },
-          ),
-        ),
-        Flex(
-            direction: Axis.horizontal,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StatusRow(outbound, inbound, msg, message, reactionsList)
-            ])
+              onTap: () async {
+                if (inbound &&
+                    msg.introduction.status ==
+                        IntroductionDetails_IntroductionStatus.PENDING) {
+                  await _showOptions(
+                    context,
+                    introduction,
+                    model,
+                    contact,
+                  );
+                }
+                if (msg.introduction.status ==
+                    IntroductionDetails_IntroductionStatus.ACCEPTED) {
+                  await context
+                      .pushRoute(Conversation(contactId: introduction.to));
+                }
+              },
+            ),
+          );
+        }),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [StatusRow(outbound, inbound, msg, message, reactionsList)],
+        )
       ],
     );
   }

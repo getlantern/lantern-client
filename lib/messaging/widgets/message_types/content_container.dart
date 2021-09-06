@@ -8,7 +8,6 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
-import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContentContainer extends StatelessWidget {
@@ -48,68 +47,67 @@ class ContentContainer extends StatelessWidget {
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
     final isContactConnectionCard = msg.hasIntroduction();
 
-    return Container(
-      constraints: BoxConstraints(maxWidth: 80.w),
-      clipBehavior: Clip.hardEdge,
-      padding: EdgeInsets.only(
-          top: msg.replyToId.isNotEmpty ? 8 : 0,
-          bottom: 8,
-          left: isAttachment ? 0 : 8,
-          right: isAttachment ? 0 : 8),
-      decoration: BoxDecoration(
-        color: outbound ? outboundBgColor : inboundBgColor,
-        border: isAttachment && !isAudio
-            ? Border.all(color: grey4, width: 0.5)
-            : null,
-        borderRadius: BorderRadius.only(
-          topLeft: inbound
-              ? endOfBlock
-                  ? Radius.circular(startOfBlock ? 8 : 1)
-                  : const Radius.circular(8)
-              : const Radius.circular(8),
-          topRight: outbound
-              ? endOfBlock
-                  ? Radius.circular(startOfBlock ? 8 : 1)
-                  : const Radius.circular(8)
-              : const Radius.circular(8),
-          bottomRight: outbound
-              ? startOfBlock
-                  ? const Radius.circular(1)
-                  : const Radius.circular(8)
-              : const Radius.circular(8),
-          bottomLeft: inbound
-              ? startOfBlock
-                  ? const Radius.circular(1)
-                  : const Radius.circular(8)
-              : const Radius.circular(8),
-        ),
-      ),
-      child: isContactConnectionCard
-          ? ContactConnectionCard(
-              contact, inbound, outbound, msg, message, reactionsList)
-          : Flex(
-              direction: Axis.vertical,
-              crossAxisAlignment:
-                  outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (msg.replyToId.isNotEmpty)
-                        GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () => onTapReply(message),
-                          child: ReplySnippet(outbound, msg, contact),
-                        ),
-                    ],
-                  ),
-                  if (msg.text.isNotEmpty)
-                    Flex(
-                        direction: Axis.horizontal,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+          constraints: BoxConstraints(
+              minWidth: 1, maxWidth: constraints.maxWidth * 0.8, minHeight: 1),
+          clipBehavior: Clip.hardEdge,
+          padding: EdgeInsets.only(
+              top: msg.replyToId.isNotEmpty ? 8 : 0,
+              bottom: 8,
+              left: isAttachment ? 0 : 8,
+              right: isAttachment ? 0 : 8),
+          decoration: BoxDecoration(
+            color: outbound ? outboundBgColor : inboundBgColor,
+            border: isAttachment && !isAudio
+                ? Border.all(color: grey4, width: 0.5)
+                : null,
+            borderRadius: BorderRadius.only(
+              topLeft: inbound
+                  ? endOfBlock
+                      ? Radius.circular(startOfBlock ? 8 : 1)
+                      : const Radius.circular(8)
+                  : const Radius.circular(8),
+              topRight: outbound
+                  ? endOfBlock
+                      ? Radius.circular(startOfBlock ? 8 : 1)
+                      : const Radius.circular(8)
+                  : const Radius.circular(8),
+              bottomRight: outbound
+                  ? startOfBlock
+                      ? const Radius.circular(1)
+                      : const Radius.circular(8)
+                  : const Radius.circular(8),
+              bottomLeft: inbound
+                  ? startOfBlock
+                      ? const Radius.circular(1)
+                      : const Radius.circular(8)
+                  : const Radius.circular(8),
+            ),
+          ),
+          child: isContactConnectionCard
+              ? ContactConnectionCard(
+                  contact, inbound, outbound, msg, message, reactionsList)
+              : Column(
+                  crossAxisAlignment: outbound
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                      Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          if (msg.replyToId.isNotEmpty)
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () => onTapReply(message),
+                              child: ReplySnippet(outbound, msg, contact),
+                            ),
+                        ],
+                      ),
+                      if (msg.text.isNotEmpty)
+                        Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
                             fit: FlexFit.loose,
                             child: Container(
@@ -142,25 +140,27 @@ class ContentContainer extends StatelessWidget {
                             ),
                           ),
                         ]),
-                  Stack(
-                    fit: StackFit.passthrough,
-                    alignment: isAudio
-                        ? AlignmentDirectional.bottomEnd
-                        : outbound
+                      Stack(
+                        fit: StackFit.passthrough,
+                        alignment: outbound
                             ? AlignmentDirectional.bottomEnd
                             : AlignmentDirectional.bottomStart,
-                    children: [
-                      ...attachments,
-                      Flex(
-                          direction: Axis.horizontal,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            StatusRow(
-                                outbound, inbound, msg, message, reactionsList)
-                          ]),
-                    ],
-                  )
-                ]),
+                        children: [
+                          ...attachments,
+                          Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: outbound
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              children: [
+                                StatusRow(outbound, inbound, msg, message,
+                                    reactionsList)
+                              ]),
+                        ],
+                      )
+                    ]),
+        );
+      },
     );
   }
 }

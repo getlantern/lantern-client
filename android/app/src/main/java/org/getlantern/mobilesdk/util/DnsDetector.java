@@ -4,7 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
+
+import androidx.annotation.NonNull;
 
 import org.getlantern.mobilesdk.Logger;
 
@@ -14,6 +18,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
@@ -35,6 +41,7 @@ public class DnsDetector {
 
     private final String fakeDnsIP;
     private final ConnectivityManager connectivityManager;
+    private final Map<Network, Object> allNetworks = new ConcurrentHashMap<>();
 
     /**
      * Constructor
@@ -42,6 +49,25 @@ public class DnsDetector {
     public DnsDetector(Context context, String fakeDnsIP) {
         this.fakeDnsIP = fakeDnsIP;
         connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        connectivityManager.registerNetworkCallback(
+                new NetworkRequest.Builder()
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                        .build(),
+                new ConnectivityManager.NetworkCallback() {
+                    @Override
+                    public void onAvailable(@NonNull Network network) {
+                        Logger.debug(TAG, "Adding available network");
+                        allNetworks.put(network, "");
+                    }
+
+                    @Override
+                    public void onLost(@NonNull Network network) {
+                        Logger.debug(TAG, "Removing lost network");
+                        allNetworks.remove(network);
+                    }
+                }
+        );
     }
 
     public String getDnsServer() {
@@ -85,7 +111,7 @@ public class DnsDetector {
     }
 
     private Network findActiveNetwork() {
-        Network[] networks = connectivityManager.getAllNetworks();
+        List<Network> networks = new ArrayList(allNetworks.keySet());
         List<NetworkInfo> networkInfos = new ArrayList<>();
         for (Network network : networks) {
             networkInfos.add(connectivityManager.getNetworkInfo(network));
@@ -105,11 +131,11 @@ public class DnsDetector {
         return null;
     }
 
-    private Network availableNetworkOfType(Network[] networks, List<NetworkInfo> networkInfos, int type) {
+    private Network availableNetworkOfType(List<Network> networks, List<NetworkInfo> networkInfos, int type) {
         for (int i = 0; i < networkInfos.size(); i++) {
             NetworkInfo info = networkInfos.get(i);
-            if (info.isAvailable() && info.getType() == type) {
-                return networks[i];
+            if (info != null && info.isAvailable() && info.getType() == type) {
+                return networks.get(i);
             }
         }
         return null;

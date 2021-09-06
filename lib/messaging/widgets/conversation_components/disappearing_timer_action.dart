@@ -16,35 +16,24 @@ class DisappearingTimerAction extends StatelessWidget {
     return model.singleContact(
       context,
       contact,
-      (context, contact, child) => PopupMenuButton(
-        itemBuilder: (BuildContext context) => [5, 60, 3600, 86400]
-            .map((e) => DisappearingTimerMenuItem(contact, e))
-            .toList(),
-        onSelected: (int value) {
-          model.setDisappearSettings(contact, value);
-        },
-        child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Flexible(
-                flex: 2,
-                child: Icon(
-                  Icons.timer,
-                ),
+      (context, contact, child) =>
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        const Icon(
+          Icons.timer,
+          size: 12,
+        ),
+        const SizedBox(width: 2),
+        contact.messagesDisappearAfterSeconds > 0
+            ? Text(
+                contact.messagesDisappearAfterSeconds
+                    .humanizeSeconds()
+                    .toUpperCase(),
+                style: tsDisappearingTimer)
+            : Text(
+                'Off'.i18n,
+                style: tsDisappearingTimerDetail,
               ),
-              contact.messagesDisappearAfterSeconds > 0
-                  ? Flexible(
-                      child: Text(
-                          contact.messagesDisappearAfterSeconds
-                              .humanizeSeconds()
-                              .toUpperCase(),
-                          style: const TextStyle(
-                              fontSize: 10.0, fontWeight: FontWeight.bold)),
-                    )
-                  : const SizedBox(),
-            ]),
-      ),
+      ]),
     );
   }
 }

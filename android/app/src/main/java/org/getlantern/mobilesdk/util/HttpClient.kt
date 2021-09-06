@@ -14,8 +14,6 @@ import okhttp3.Response
 import okio.Buffer
 import org.getlantern.mobilesdk.Logger
 import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Proxy
 import java.util.concurrent.TimeUnit
 import kotlin.Throws
 

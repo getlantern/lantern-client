@@ -4,7 +4,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/lru_cache.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:sizer/sizer.dart';
 
 import 'attachment_types/audio.dart';
 import 'attachment_types/generic.dart';
@@ -18,7 +17,10 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   final mimeType = attachment.attachment.mimeType;
 
   if (audioMimes.contains(mimeType)) {
-    return AudioAttachment(attachment, inbound);
+    return Padding(
+      padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+      child: AudioAttachment(attachment, inbound),
+    );
   }
 
   if (imageMimes.contains(mimeType)) {
@@ -42,8 +44,6 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
 class AttachmentBuilder extends StatelessWidget {
   final StoredAttachment attachment;
   final bool inbound;
-  final bool
-      maximized; // set to true to make attachment use all available space in the message bubble
   final bool padAttachment;
   final IconData
       defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
@@ -53,7 +53,6 @@ class AttachmentBuilder extends StatelessWidget {
       {Key? key,
       required this.attachment,
       required this.inbound,
-      this.maximized = false,
       this.padAttachment = true,
       required this.defaultIcon,
       required this.builder});
@@ -86,14 +85,6 @@ class AttachmentBuilder extends StatelessWidget {
               return _errorIndicator();
             } else if (cachedThumbnail.value != null) {
               var result = builder(context, cachedThumbnail.value!);
-              if (maximized) {
-                result = SizedBox(
-                  width: 100.w,
-                  child: FittedBox(
-                    child: result,
-                  ),
-                );
-              }
               if (padAttachment) {
                 result = _padded(result);
               }
@@ -129,8 +120,6 @@ class AttachmentBuilder extends StatelessWidget {
 Widget _padded(Widget child) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-    child: FittedBox(
-      child: child,
-    ),
+    child: child,
   );
 }
