@@ -8,6 +8,7 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/utils/message_position.dart';
 import 'package:lantern/utils/show_alert_dialog.dart';
 
 import 'message_types/content_container.dart';
@@ -68,35 +69,11 @@ class MessageBubble extends StatelessWidget {
                 //OUTBOUND: SENDED MESSAGES.
                 //INBOUND: RECEIVED MESSAGES
                 padding: EdgeInsets.only(
-                  top: isDateMarker.isNotEmpty
-                      ? 8
-                      : (nextMessage != null &&
-                              priorMessage != null &&
-                              reactionsList == null)
-                          ? inbound // TODO: this segment creates additional space when the contact send more than 1 message
-                              // need to validate if the next message is from the sender to avoid this
-                              ? 8
-                              : 0
-                          : 0,
+                  top: isDateMarker.isNotEmpty ? 8 : 0,
                   left: inbound ? 16 : 0,
                   right: outbound ? 16 : 0,
-                  bottom: (nextMessage != null && reactionsList != null)
-                      ? 16
-                      : (reactionsList == null)
-                          ? (nextMessage == null && priorMessage != null)
-                              ? 6
-                              : (nextMessage != null && priorMessage == null)
-                                  ? 8
-                                  : (nextMessage == null &&
-                                          priorMessage == null)
-                                      ? 8
-                                      : (nextMessage != null &&
-                                              priorMessage != null)
-                                          ? inbound
-                                              ? 8
-                                              : 2
-                                          : 0
-                          : 2,
+                  bottom: MessagePosition.position(reactionsList, nextMessage,
+                      priorMessage, inbound, outbound),
                 ),
                 child: _buildBubbleUI(
                   outbound,
