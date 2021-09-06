@@ -222,6 +222,15 @@ msgstr "Play Version"
 msgid "error"
 msgstr "Error"
 
+msgid "accept"
+msgstr "Accept"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "reject"
+msgstr "Reject"
+
 msgid "info_dialog_confirm"
 msgstr "Got it"
 
@@ -281,3 +290,24 @@ msgstr "Paste a contact Messenger ID"
 
 msgid "contactid_your_id"
 msgstr "Your Messenger ID"
+
+msgid "introductions"
+msgstr "Introductions"
+
+msgid "introduced"
+msgstr "Introduced by"
+
+msgid "introductions_info"
+msgstr "Both parties must accept the introduction to message each other.  Introductions disappear after 7 days if no action is taken."
+
+msgid "introductions_reject_title"
+msgstr "Reject Introductions?"
+
+msgid "introductions_reject_content"
+msgstr "You will not be able to message this contact if you reject the introduction."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Something went wrong while rejecting this connect request."
+
+msgid "introductions_error_description_accepting"
+msgstr "Something went wrong while accepting this connect request."
