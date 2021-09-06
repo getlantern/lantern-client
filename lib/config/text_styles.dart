@@ -82,14 +82,8 @@ TextStyle tsBottomModalList = const TextStyle(fontSize: 16, height: 18.75 / 16);
 
 TextStyle tsAlertDialogTitle = const TextStyle(fontSize: 16);
 
-TextStyle tsDisappearingTitleBottomModal =
-    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16.0);
-
-TextStyle tsDisappearingContentBottomModal = const TextStyle(
-    color: Color.fromRGBO(112, 112, 112, 1),
-    fontSize: 14.0,
-    height: 1.5,
-    fontWeight: FontWeight.w400);
+TextStyle tsDisappearingContentBottomModal = TextStyle(
+    color: grey5, fontSize: 14.0, height: 1.5, fontWeight: FontWeight.w400);
 
 TextStyle tsAlertDialogListTile = const TextStyle(
     fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.black);
@@ -102,19 +96,11 @@ TextStyle tsAlertDialogButtonGrey = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-TextStyle tsAlertDialogButtonGreySecondary = const TextStyle(
-  color: Color.fromRGBO(112, 112, 112, 1),
-  fontSize: 14,
-  fontWeight: FontWeight.w600,
-);
-
 TextStyle tsAlertDialogButtonPink = TextStyle(
   color: primaryPink,
   fontSize: 14,
   fontWeight: FontWeight.w600,
 );
-
-TextStyle? tsInfoDialogTitle = const TextStyle(fontSize: 16);
 
 TextStyle? tsInfoDialogText(color) => TextStyle(
       fontSize: 14,
