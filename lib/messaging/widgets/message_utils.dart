@@ -367,8 +367,8 @@ Future<void> displayConversationOptions(
                                                       .messagesDisappearAfterSeconds !=
                                                   seconds[index],
                                           leading: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 8),
+                                            padding: const EdgeInsetsDirectional
+                                                .only(start: 8),
                                             child: Transform.scale(
                                               scale: 1.2,
                                               child: Radio(
@@ -380,8 +380,7 @@ Future<void> displayConversationOptions(
                                                             .messagesDisappearAfterSeconds !=
                                                         seconds[index],
                                                 groupValue: false,
-                                                activeColor:
-                                                    selectedRadioButtonColor,
+                                                activeColor: primaryPink,
                                                 onChanged: (value) async {
                                                   setState(() {
                                                     selectedPosition = index;
