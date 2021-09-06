@@ -109,7 +109,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsetsDirectional.all(20.0),
                       child: Wrap(
                         children: [
                           TextFormField(
@@ -143,12 +143,13 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsetsDirectional.all(20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0, 8.0, 0, 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -208,7 +209,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                     overflow: TextOverflow.visible,
                                     style: const TextStyle(
                                         fontSize:
-                                            10.0), // TODO: we need to manually wrap this up
+                                            12.0), // TODO: we need to manually wrap this up
                                   ),
                                 ),
                               ),

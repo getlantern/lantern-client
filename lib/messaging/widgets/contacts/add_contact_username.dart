@@ -33,7 +33,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsetsDirectional.all(20.0),
                       child: Wrap(
                         children: [
                           CustomTextField(
@@ -55,7 +55,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsetsDirectional.all(20.0),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

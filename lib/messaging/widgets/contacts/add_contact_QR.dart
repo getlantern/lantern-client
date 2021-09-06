@@ -127,7 +127,7 @@ class _AddViaQRState extends State<AddViaQR> {
                   color: Colors.white,
                 )),
             Padding(
-              padding: const EdgeInsets.only(left: 4.0),
+              padding: const EdgeInsetsDirectional.only(start: 4.0),
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => showInfoDialog(context,
@@ -191,7 +191,8 @@ class _AddViaQRState extends State<AddViaQR> {
                   children: [
                     Container(
                       color: middleColor,
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          0, 20.0, 0, 20.0),
                       alignment: Alignment.center,
                       child: Text('For your Contact'.i18n,
                           style: const TextStyle(
@@ -201,7 +202,7 @@ class _AddViaQRState extends State<AddViaQR> {
                     Flexible(
                       child: Container(
                         color: middleColor,
-                        padding: const EdgeInsets.only(bottom: 20.0),
+                        padding: const EdgeInsetsDirectional.only(bottom: 20.0),
                         alignment: Alignment.center,
                         child: Container(
                           decoration: BoxDecoration(
@@ -230,7 +231,7 @@ class _AddViaQRState extends State<AddViaQR> {
                 flex: 0,
                 child: Container(
                   color: bottomColor,
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 5.0, 0, 5.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
