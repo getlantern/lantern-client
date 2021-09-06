@@ -176,8 +176,7 @@ class _NewMessageState extends State<NewMessage> {
                               Conversation(contactId: contact.contactId)))
                   : Container(
                       alignment: AlignmentDirectional.center,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0, vertical: 16.0),
+                      padding: const EdgeInsetsDirectional.all(16.0),
                       child: Text('No contacts yet.'.i18n,
                           textAlign: TextAlign.center,
                           style:

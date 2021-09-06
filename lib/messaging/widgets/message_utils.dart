@@ -210,7 +210,7 @@ Widget fullScreenDialogLayout(
       child: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsetsDirectional.only(top: 30),
             alignment: Alignment.center,
             child: title,
           ),
