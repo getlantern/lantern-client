@@ -281,183 +281,187 @@ Future<void> displayConversationOptions(
                     context: bottomContext,
                     barrierDismissible: true,
                     barrierColor: Colors.black.withOpacity(0.8),
-                    builder: (context) => AlertDialog(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
+                    builder: (context) => StatefulBuilder(
+                      builder: (context, setState) => AlertDialog(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
                         ),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      scrollable: true,
-                      clipBehavior: Clip.hardEdge,
-                      title: Container(
-                        color: Colors.white,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Disappearing Messages'.i18n,
-                          style: tsAlertDialogTitle,
-                        ),
-                      ),
-                      content: SingleChildScrollView(
-                        child: StatefulBuilder(
-                          builder: (context, setState) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 2),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0, vertical: 24.0),
-                                    child:
-                                        contact.messagesDisappearAfterSeconds ==
-                                                    0 ||
-                                                (selectedPosition != -1 &&
-                                                    seconds[selectedPosition] ==
-                                                        0)
-                                            ? Text(
-                                                'message_not_disappearing'.i18n,
-                                                style:
-                                                    tsDisappearingContentBottomModal,
-                                              )
-                                            : Text(
-                                                'message_not_disappearing_description'
-                                                    .i18n
-                                                    .replaceAll(
-                                                        RegExp('%s'),
-                                                        selectedPosition != -1
-                                                            ? seconds[
-                                                                    selectedPosition]
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)
-                                                            : contact
-                                                                .messagesDisappearAfterSeconds
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)),
-                                                style:
-                                                    tsDisappearingContentBottomModal,
-                                              ),
-                                  ),
+                        contentPadding: const EdgeInsets.all(0),
+                        clipBehavior: Clip.hardEdge,
+                        content: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                color: Colors.white,
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Disappearing Messages'.i18n,
+                                      style: tsAlertDialogTitle,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 24.0),
+                                      child:
+                                          contact.messagesDisappearAfterSeconds ==
+                                                      0 ||
+                                                  (selectedPosition != -1 &&
+                                                      seconds[selectedPosition] ==
+                                                          0)
+                                              ? Text(
+                                                  'message_not_disappearing'
+                                                      .i18n,
+                                                  style:
+                                                      tsDisappearingContentBottomModal,
+                                                )
+                                              : Text(
+                                                  'message_not_disappearing_description'
+                                                      .i18n
+                                                      .replaceAll(
+                                                          RegExp('%s'),
+                                                          selectedPosition != -1
+                                                              ? seconds[
+                                                                      selectedPosition]
+                                                                  .humanizeSeconds(
+                                                                      longForm:
+                                                                          true)
+                                                              : contact
+                                                                  .messagesDisappearAfterSeconds
+                                                                  .humanizeSeconds(
+                                                                      longForm:
+                                                                          true)),
+                                                  style:
+                                                      tsDisappearingContentBottomModal,
+                                                ),
+                                    ),
+                                  ],
                                 ),
-                                const Divider(
-                                  thickness: 1,
-                                  color: Color.fromRGBO(235, 235, 235, 1),
-                                  height: 2,
-                                  indent: 3,
-                                  endIndent: 3,
-                                ),
-                                SizedBox(
-                                  height: 264,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Scrollbar(
-                                    interactive: true,
-                                    showTrackOnHover: true,
-                                    radius: const Radius.circular(50),
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount: seconds.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.only(),
-                                          horizontalTitleGap: 8,
-                                          minLeadingWidth: 20,
-                                          onTap: () async {
-                                            setState(() {
-                                              selectedPosition = index;
-                                            });
-                                          },
-                                          selectedTileColor: Colors.white,
-                                          tileColor: const Color.fromRGBO(
-                                              245, 245, 245, 1),
-                                          selected: selectedPosition != -1
-                                              ? seconds[index] !=
-                                                  seconds[selectedPosition]
-                                              : contact
-                                                      .messagesDisappearAfterSeconds !=
-                                                  seconds[index],
-                                          leading: Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .only(start: 8),
-                                            child: Transform.scale(
-                                              scale: 1.2,
-                                              child: Radio(
-                                                value: selectedPosition != -1
-                                                    ? seconds[index] !=
-                                                        seconds[
-                                                            selectedPosition]
-                                                    : contact
-                                                            .messagesDisappearAfterSeconds !=
-                                                        seconds[index],
-                                                groupValue: false,
-                                                activeColor: primaryPink,
-                                                onChanged: (value) async {
-                                                  setState(() {
-                                                    selectedPosition = index;
-                                                  });
-                                                },
-                                              ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Divider(
+                                thickness: 1,
+                                color: Color.fromRGBO(235, 235, 235, 1),
+                                height: 2,
+                                indent: 3,
+                                endIndent: 3,
+                              ),
+                              SizedBox(
+                                height: 264,
+                                width: MediaQuery.of(context).size.width,
+                                child: Scrollbar(
+                                  interactive: true,
+                                  showTrackOnHover: true,
+                                  radius: const Radius.circular(50),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: seconds.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        contentPadding: const EdgeInsets.only(),
+                                        horizontalTitleGap: 8,
+                                        minLeadingWidth: 20,
+                                        onTap: () async {
+                                          setState(() {
+                                            selectedPosition = index;
+                                          });
+                                        },
+                                        selectedTileColor: Colors.white,
+                                        tileColor: const Color.fromRGBO(
+                                            245, 245, 245, 1),
+                                        selected: selectedPosition != -1
+                                            ? seconds[index] !=
+                                                seconds[selectedPosition]
+                                            : contact
+                                                    .messagesDisappearAfterSeconds !=
+                                                seconds[index],
+                                        leading: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 8),
+                                          child: Transform.scale(
+                                            scale: 1.2,
+                                            child: Radio(
+                                              value: selectedPosition != -1
+                                                  ? seconds[index] !=
+                                                      seconds[selectedPosition]
+                                                  : contact
+                                                          .messagesDisappearAfterSeconds !=
+                                                      seconds[index],
+                                              groupValue: false,
+                                              activeColor: primaryPink,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  selectedPosition = index;
+                                                });
+                                              },
                                             ),
                                           ),
-                                          title: Transform.translate(
-                                            offset: const Offset(-4, 0),
-                                            child: Text(
-                                                seconds[index] == 0
-                                                    ? 'Off'.i18n
-                                                    : seconds[index]
-                                                        .humanizeSeconds(
-                                                            longForm: true),
-                                                style: tsAlertDialogListTile),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                        title: Transform.translate(
+                                          offset: const Offset(-4, 0),
+                                          child: Text(
+                                              seconds[index] == 0
+                                                  ? 'Off'.i18n
+                                                  : seconds[index]
+                                                      .humanizeSeconds(
+                                                          longForm: true),
+                                              style: tsAlertDialogListTile),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                              ],
-                            );
-                          },
+                              ),
+                              Container(
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    const Divider(
+                                      thickness: 1,
+                                      color: Color.fromRGBO(235, 235, 235, 1),
+                                      height: 1,
+                                      indent: 3,
+                                      endIndent: 3,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () async =>
+                                              context.router.pop(),
+                                          child: Text(
+                                              'Cancel'.i18n.toUpperCase(),
+                                              style: tsAlertDialogButtonGrey),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            if (selectedPosition != -1) {
+                                              await model.setDisappearSettings(
+                                                  contact,
+                                                  seconds[selectedPosition]);
+                                            }
+                                            await context.router.pop();
+                                            await parentContext.router.pop();
+                                          },
+                                          child: Text('Set'.i18n.toUpperCase(),
+                                              style: tsAlertDialogButtonPink),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      actions: [
-                        Column(
-                          children: [
-                            const Divider(
-                              thickness: 1,
-                              color: Color.fromRGBO(235, 235, 235, 1),
-                              height: 1,
-                              indent: 3,
-                              endIndent: 3,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () async => context.router.pop(),
-                                  child: Text('Cancel'.i18n.toUpperCase(),
-                                      style: tsAlertDialogButtonGrey),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    if (selectedPosition != -1) {
-                                      await model.setDisappearSettings(
-                                          contact, seconds[selectedPosition]);
-                                    }
-                                    await context.router.pop();
-                                    await parentContext.router.pop();
-                                  },
-                                  child: Text('Set'.i18n.toUpperCase(),
-                                      style: tsAlertDialogButtonPink),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                   );
                 },
