@@ -18,6 +18,7 @@ class MessageBubble extends StatelessWidget {
   MessageBubble({
     Key? key,
     required this.message,
+    required this.onBubbleReaction,
     required this.priorMessage,
     required this.nextMessage,
     required this.contact,
@@ -32,6 +33,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage? nextMessage;
   final Contact contact;
   final Function(StoredMessage?) onReply;
+  final BubbleReactionCallback onBubbleReaction;
   final Function(PathAndValue<StoredMessage>) onTapReply;
 
   @override
@@ -130,6 +132,7 @@ class MessageBubble extends StatelessWidget {
             title: Flexible(
               fit: FlexFit.tight,
               child: Reactions(
+                onBubbleReaction: onBubbleReaction,
                 onEmojiTap: onEmojiTap,
                 reactionOptions: reactions.keys.toList(),
                 message: message,

@@ -397,6 +397,9 @@ class _ConversationState extends State<Conversation>
               itemCount: messageRecords.length,
               itemBuilder: (context, index) {
                 return MessageBubble(
+                  onBubbleReaction: () {
+                    setState(() {});
+                  },
                   message: messageRecords.elementAt(index),
                   priorMessage: index >= messageRecords.length - 1
                       ? null

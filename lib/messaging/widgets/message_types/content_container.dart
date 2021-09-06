@@ -165,3 +165,5 @@ class ContentContainer extends StatelessWidget {
     );
   }
 }
+
+typedef BubbleReactionCallback = void Function();

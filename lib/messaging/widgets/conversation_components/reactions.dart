@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/widgets/message_types/content_container.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -9,6 +10,7 @@ class Reactions extends StatelessWidget {
   final List<String> reactionOptions;
   final MessagingModel messagingModel;
   final PathAndValue<StoredMessage> message;
+  final BubbleReactionCallback onBubbleReaction;
   final ShowEmojis onEmojiTap;
 
   Reactions(
@@ -16,6 +18,7 @@ class Reactions extends StatelessWidget {
       required this.message,
       required this.messagingModel,
       required this.onEmojiTap,
+      required this.onBubbleReaction,
       Key? key})
       : super(key: key);
 
@@ -38,6 +41,7 @@ class Reactions extends StatelessWidget {
                         return;
                       }
                       await messagingModel.react(message, e);
+                      onBubbleReaction();
                       Navigator.pop(context);
                     },
                     style: ButtonStyle(
