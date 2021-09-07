@@ -6,6 +6,7 @@ import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/clipped_rect_border.dart';
 import 'package:lantern/ui/widgets/scale_animation_widget.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -111,20 +112,20 @@ class _AddViaQRState extends State<AddViaQR> {
   }
 
   Widget renderQRscanner(BuildContext context, Contact me) {
-    var middleColor = grey3;
-    var bottomColor = Colors.white;
+    var middleColor = black;
+    var bottomColor = white;
     return fullScreenDialogLayout(
         context: context,
-        iconColor: Colors.white, // icon color
-        topColor: Colors.black,
+        iconColor: white, // icon color
+        topColor: black,
         title: Flex(
           direction: Axis.horizontal,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('qr_scanner'.i18n.toUpperCase(),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: white,
                 )),
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 4.0),
@@ -135,10 +136,10 @@ class _AddViaQRState extends State<AddViaQR> {
                     des: 'qr_info_description'.i18n,
                     icon: ImagePaths.qr_code,
                     buttonText: 'info_dialog_confirm'.i18n.toUpperCase()),
-                child: const Icon(
+                child: Icon(
                   Icons.info,
                   size: 14,
-                  color: Colors.white,
+                  color: white,
                 ),
               ),
             )
@@ -167,7 +168,8 @@ class _AddViaQRState extends State<AddViaQR> {
                                 borderRadius: 8,
                                 borderLength: 15,
                                 borderWidth: 5,
-                                cutOutSize: 300,
+                                cutOutSize:
+                                    MediaQuery.of(context).size.width * 0.6,
                               ),
                             ),
                             if (scannedContactId != null && scanning)
@@ -193,8 +195,8 @@ class _AddViaQRState extends State<AddViaQR> {
                           0, 20.0, 0, 20.0),
                       alignment: Alignment.center,
                       child: Text('qr_for_your_contact'.i18n,
-                          style: const TextStyle(
-                            color: Colors.black,
+                          style: TextStyle(
+                            color: white,
                           )),
                     ),
                     Flexible(
@@ -202,20 +204,15 @@ class _AddViaQRState extends State<AddViaQR> {
                         color: middleColor,
                         padding: const EdgeInsetsDirectional.only(bottom: 20.0),
                         alignment: Alignment.center,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                              color: grey5,
-                              width: 3,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                          ),
+                        child: CustomPaint(
+                          painter: ClippedRectBorderPainter(
+                              rectSize:
+                                  MediaQuery.of(context).size.width * 0.5),
                           child: QrImage(
+                            size: MediaQuery.of(context).size.width * 0.5,
                             data: me.contactId.id,
-                            foregroundColor: Colors.black54,
+                            padding: const EdgeInsets.all(10.0),
+                            foregroundColor: white,
                             errorCorrectionLevel: QrErrorCorrectLevel.H,
                           ),
                         ),
@@ -241,8 +238,8 @@ class _AddViaQRState extends State<AddViaQR> {
                           qrController?.pauseCamera();
                         },
                         child: Text('qr_trouble_scanning'.i18n,
-                            style: const TextStyle(
-                              color: Colors.black,
+                            style: TextStyle(
+                              color: black,
                             )),
                       ),
                     ],
