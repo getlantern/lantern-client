@@ -148,13 +148,16 @@ Widget displayEmojiCount(
     Map<String, List<dynamic>> reactions, String emoticon) {
   // identify which Map (key-value) pair corresponds to the displayed emoticon
   final reactionKey = reactions.keys.firstWhere((key) => key == emoticon);
-  return reactions[reactionKey]!.length > 1
-      ? Text(emoticon + reactions[reactionKey]!.length.toString(),
-          style: tsEmojiFont)
-      : Text(
-          emoticon,
-          style: const TextStyle(fontSize: 12),
-        );
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 1.0),
+    child: reactions[reactionKey]!.length > 1
+        ? Text(emoticon + reactions[reactionKey]!.length.toString(),
+            style: tsEmojiFont)
+        : Text(
+            emoticon,
+            style: const TextStyle(fontSize: 12),
+          ),
+  );
 }
 
 String determineDateSwitch(
