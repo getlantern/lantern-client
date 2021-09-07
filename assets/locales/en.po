@@ -219,11 +219,11 @@ msgstr "Payment Test Mode"
 msgid "Play Version"
 msgstr "Play Version"
 
-msgid "message_not_disappearing"
+msgid "message_disappearing"
 msgstr "All messages will not disappear for you and your contact"
 
-msgid "message_not_disappearing_description"
+msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and your contact"
 
-msgid "delete_confirmation"
+msgid "delete_contact_confirmation"
 msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."

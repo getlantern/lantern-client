@@ -314,13 +314,12 @@ Future<void> displayConversationOptions(
                                                       seconds[selectedPosition] ==
                                                           0)
                                               ? Text(
-                                                  'message_not_disappearing'
-                                                      .i18n,
+                                                  'message_disappearing'.i18n,
                                                   style:
                                                       tsDisappearingContentBottomModal,
                                                 )
                                               : Text(
-                                                  'message_not_disappearing_description'
+                                                  'message_disappearing_description'
                                                       .i18n
                                                       .replaceAll(
                                                           RegExp('%s'),
@@ -517,7 +516,7 @@ Future<void> displayConversationOptions(
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Text('delete_confirmation'.i18n,
+                                  Text('delete_contact_confirmation'.i18n,
                                       style: tsAlertDialogBody)
                                 ],
                               ),
