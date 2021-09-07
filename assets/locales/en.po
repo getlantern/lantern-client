@@ -227,3 +227,6 @@ msgstr "All messages will disappear after %s for you and your contact"
 
 msgid "delete_contact_confirmation"
 msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
+
+msgid "conversation_title_bottomsheet"
+msgstr "Conversation Menu"

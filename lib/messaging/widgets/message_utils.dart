@@ -4,6 +4,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/ui/widgets/custom_directionality.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:lantern/config/text_styles.dart';
@@ -254,9 +255,11 @@ Future<void> displayConversationOptions(
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 alignment: Alignment.center,
-                child: Text(
-                  'Conversation Menu',
-                  style: tsBottomModalTitle,
+                child: CustomDirectionality(
+                  child: Text(
+                    'conversation_title_bottomsheet'.i18n,
+                    style: tsBottomModalTitle,
+                  ),
                 ),
               ),
               const Divider(
