@@ -167,12 +167,13 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                     Clipboard.setData(ClipboardData(
                                         text: widget.me.contactId.id));
                                   },
-                                  // TODO: we need to manually wrap this up
                                   child: Padding(
                                     padding:
                                         const EdgeInsetsDirectional.all(10.0),
                                     child: Text(
-                                        widget.me.contactId.id.toUpperCase(),
+                                        humanizeContactId(
+                                                widget.me.contactId.id)
+                                            .toUpperCase(),
                                         overflow: TextOverflow.visible,
                                         style: const TextStyle(
                                             fontSize: 16.0, height: 26 / 16)),
