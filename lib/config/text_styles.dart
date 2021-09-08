@@ -90,13 +90,13 @@ TextStyle tsAlertDialogListTile = const TextStyle(
 
 TextStyle tsDialogBody = const TextStyle(fontSize: 14, height: 1.5);
 
-TextStyle tsAlertDialogButtonGrey = TextStyle(
-  color: grey4,
+TextStyle tsDialogButtonGrey = TextStyle(
+  color: grey5,
   fontSize: 14,
   fontWeight: FontWeight.w600,
 );
 
-TextStyle tsAlertDialogButtonPink = TextStyle(
+TextStyle tsDialogButtonPink = TextStyle(
   color: primaryPink,
   fontSize: 14,
   fontWeight: FontWeight.w600,

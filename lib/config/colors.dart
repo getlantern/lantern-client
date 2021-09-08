@@ -31,7 +31,6 @@ Color snippetShadowColor = const Color.fromARGB(
   0,
   0,
 );
-Color snippetBgIconColor = HexColor('#707070');
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;
 Color unselectedTabLabelColor = grey5;
