@@ -4,7 +4,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/ui/widgets/custom_directionality.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:lantern/config/text_styles.dart';
@@ -252,14 +251,13 @@ Future<void> displayConversationOptions(
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                alignment: Alignment.center,
-                child: CustomDirectionality(
-                  child: Text(
-                    'conversation_title_bottomsheet'.i18n,
-                    style: tsBottomModalTitle,
-                  ),
+              ListTile(
+                contentPadding:
+                    const EdgeInsetsDirectional.only(top: 14.0, bottom: 14.0),
+                title: Text(
+                  'conversation_title_bottomsheet'.i18n,
+                  style: tsBottomModalTitle,
+                  textAlign: TextAlign.center,
                 ),
               ),
               const Divider(
@@ -271,8 +269,8 @@ Future<void> displayConversationOptions(
                   Icons.timer,
                   color: Colors.black,
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                contentPadding: const EdgeInsetsDirectional.only(
+                    top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
                   child: Text('Disappearing Messages'.i18n,
@@ -291,14 +289,15 @@ Future<void> displayConversationOptions(
                             Radius.circular(8.0),
                           ),
                         ),
-                        contentPadding: const EdgeInsets.all(0),
+                        contentPadding: const EdgeInsetsDirectional.all(0),
                         clipBehavior: Clip.hardEdge,
                         content: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                padding: const EdgeInsets.only(top: 16.0),
+                                padding:
+                                    const EdgeInsetsDirectional.only(top: 16.0),
                                 color: Colors.white,
                                 alignment: Alignment.center,
                                 child: Column(
@@ -308,8 +307,11 @@ Future<void> displayConversationOptions(
                                       style: tsDialogTitle,
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 24.0),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 16.0,
+                                          end: 16.0,
+                                          top: 24.0,
+                                          bottom: 24.0),
                                       child:
                                           contact.messagesDisappearAfterSeconds ==
                                                       0 ||
@@ -366,7 +368,8 @@ Future<void> displayConversationOptions(
                                     itemCount: seconds.length,
                                     itemBuilder: (context, index) {
                                       return ListTile(
-                                        contentPadding: const EdgeInsets.only(),
+                                        contentPadding:
+                                            const EdgeInsetsDirectional.only(),
                                         horizontalTitleGap: 8,
                                         minLeadingWidth: 20,
                                         onTap: () async {
@@ -409,12 +412,13 @@ Future<void> displayConversationOptions(
                                         title: Transform.translate(
                                           offset: const Offset(-4, 0),
                                           child: Text(
-                                              seconds[index] == 0
-                                                  ? 'Off'.i18n
-                                                  : seconds[index]
-                                                      .humanizeSeconds(
-                                                          longForm: true),
-                                              style: tsAlertDialogListTile),
+                                            seconds[index] == 0
+                                                ? 'Off'.i18n
+                                                : seconds[index]
+                                                    .humanizeSeconds(
+                                                        longForm: true),
+                                            style: tsAlertDialogListTile,
+                                          ),
                                         ),
                                       );
                                     },
@@ -477,8 +481,8 @@ Future<void> displayConversationOptions(
                   Icons.people,
                   color: Colors.black,
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                contentPadding: const EdgeInsetsDirectional.only(
+                    top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text('Introduce Contacts'.i18n,
@@ -492,8 +496,8 @@ Future<void> displayConversationOptions(
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
                   leading: const Icon(Icons.delete, color: Colors.black),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                  contentPadding: const EdgeInsetsDirectional.only(
+                      top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text('Delete ${contact.displayName}',
