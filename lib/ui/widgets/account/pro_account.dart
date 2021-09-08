@@ -73,7 +73,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'No'.i18n,
-                                  style: tsAlertDialogButtonGrey,
+                                  style: tsDialogButtonGrey,
                                 ),
                               ),
                               TextButton(
@@ -90,7 +90,7 @@ class ProAccount extends StatelessWidget {
                                 },
                                 child: Text(
                                   'Yes'.i18n,
-                                  style: tsAlertDialogButtonPink,
+                                  style: tsDialogButtonPink,
                                 ),
                               ),
                             ],
@@ -101,7 +101,7 @@ class ProAccount extends StatelessWidget {
               child: !allowRemoval
                   ? null
                   : Text((isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                      style: tsAlertDialogButtonPink),
+                      style: tsDialogButtonPink),
             );
           }));
 
@@ -110,7 +110,7 @@ class ProAccount extends StatelessWidget {
               title: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               child: Text('Add Device'.i18n.toUpperCase(),
-                  style: tsAlertDialogButtonPink),
+                  style: tsDialogButtonPink),
             ));
           }
 
