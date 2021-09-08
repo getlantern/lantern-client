@@ -108,6 +108,8 @@ dependencies:
   flutter_markdown: ^0.6.4
 
   flutter_local_notifications: ^8.1.1+1
+
+  sprintf: "^6.0.0"
   
 dev_dependencies:
   flutter_test:

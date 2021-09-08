@@ -13,10 +13,14 @@ class AddViaUsername extends StatefulWidget {
 }
 
 class _AddViaUsernameState extends State<AddViaUsername> {
-  final _formKey = GlobalKey<FormState>(debugLabel: 'Add via username form');
+  final _formKey = GlobalKey<FormState>(debugLabel: 'username_form');
   Contact? contact;
 
-  TextEditingController usernameController = TextEditingController();
+  late final usernameController = CustomTextEditingController(
+    formKey: _formKey,
+    validator: (value) =>
+        value != '' ? null : 'Please enter a valid username'.i18n,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +51,6 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                               Icons.email,
                               color: Colors.black,
                             ),
-                            validator: (value) => value != ''
-                                ? null
-                                : 'Please enter a valid username'.i18n,
                           ),
                         ],
                       ),

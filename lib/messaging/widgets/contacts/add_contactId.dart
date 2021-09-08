@@ -25,7 +25,11 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
   String? pastedContactId;
   late MessagingModel model;
-  TextEditingController contactIdController = TextEditingController();
+  late final contactIdController = CustomTextEditingController(
+      formKey: _formKey,
+      validator: (value) => value != '' || value != widget.me.contactId.id
+          ? null
+          : 'contactid_input_error'.i18n);
   bool waitingForOtherSide = false;
 
   void _onContactIdAdd() async {
@@ -110,7 +114,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                       child: Wrap(
                         children: [
                           CustomTextField(
-                            enabled: !waitingForOtherSide,
                             controller: contactIdController,
                             label: 'contactid_your_id'.i18n,
                             helperText: 'contactid_paste_id'.i18n,
@@ -122,10 +125,7 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                   : Icons.check_circle),
                               color: waitingForOtherSide ? green : black,
                             ),
-                            validator: (value) =>
-                                value != '' || value != widget.me.contactId.id
-                                    ? null
-                                    : 'contactid_input_error'.i18n,
+                            enabled: !waitingForOtherSide,
                           ),
                         ],
                       ),
