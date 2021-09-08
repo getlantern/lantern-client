@@ -362,9 +362,9 @@ Future<void> displayConversationOptions(
                                 size: 2,
                                 margin: 16,
                               ),
-                              SizedBox(
-                                height: 264,
+                              Container(
                                 width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * .4,
                                 child: Scrollbar(
                                   interactive: true,
                                   showTrackOnHover: true,
