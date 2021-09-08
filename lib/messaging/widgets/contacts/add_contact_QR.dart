@@ -155,10 +155,10 @@ class _AddViaQRState extends State<AddViaQR> {
                                     buttonText: 'info_dialog_confirm'
                                         .i18n
                                         .toUpperCase()),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.info,
                                   size: 14,
-                                  color: Colors.white,
+                                  color: white,
                                 ),
                               ),
                             )

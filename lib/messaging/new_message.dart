@@ -44,9 +44,9 @@ class _NewMessageState extends State<NewMessage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 Icons.qr_code,
-                color: Colors.black,
+                color: black,
               ),
               title: Text('scan_qr_code'.i18n),
               trailing: const CustomAssetImage(
@@ -95,9 +95,9 @@ class _NewMessageState extends State<NewMessage> {
             ),
             Divider(thickness: 1, color: grey2),
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 Icons.people,
-                color: Colors.black,
+                color: black,
               ),
               title: Text('introduce_contacts'.i18n),
               trailing: const CustomAssetImage(
@@ -158,7 +158,7 @@ class _NewMessageState extends State<NewMessage> {
                                 sanitizeContactName(contact.displayName)
                                     .substring(0, 2)
                                     .toUpperCase(),
-                                style: const TextStyle(color: Colors.white)),
+                                style: TextStyle(color: white)),
                           ),
                       onTapCallback: (Contact contact) async =>
                           await context.pushRoute(

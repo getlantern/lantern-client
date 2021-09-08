@@ -184,7 +184,7 @@ void showSnackbar(
   final snackBar = SnackBar(
     content: content,
     action: action,
-    backgroundColor: Colors.black,
+    backgroundColor: black,
     duration: duration,
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -263,7 +263,7 @@ Future<void> displayConversationOptions(
                       style: TextStyle(fontSize: 18.0))),
               Divider(thickness: 1, color: grey2),
               ListTile(
-                  leading: const Icon(Icons.delete, color: Colors.black),
+                  leading: Icon(Icons.delete, color: black),
                   title: Text('Delete ${contact.displayName}'),
                   onTap: () => showDialog<void>(
                         context: bottomContext,
@@ -306,9 +306,9 @@ Future<void> displayConversationOptions(
                                   TextButton(
                                     onPressed: () async {
                                       context.loaderOverlay.show(
-                                          widget: const Center(
+                                          widget: Center(
                                         child: CircularProgressIndicator(
-                                          color: Colors.white,
+                                          color: white,
                                         ),
                                       ));
                                       try {
