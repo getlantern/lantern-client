@@ -444,7 +444,7 @@ Future<void> displayConversationOptions(
                                               context.router.pop(),
                                           child: Text(
                                               'cancel'.i18n.toUpperCase(),
-                                              style: tsAlertDialogButtonGrey),
+                                              style: tsDialogButtonGrey),
                                         ),
                                         TextButton(
                                           onPressed: () async {
@@ -457,7 +457,7 @@ Future<void> displayConversationOptions(
                                             await parentContext.router.pop();
                                           },
                                           child: Text('set'.i18n.toUpperCase(),
-                                              style: tsAlertDialogButtonPink),
+                                              style: tsDialogButtonPink),
                                         ),
                                       ],
                                     ),
@@ -536,7 +536,7 @@ Future<void> displayConversationOptions(
                                   TextButton(
                                     onPressed: () async => context.router.pop(),
                                     child: Text('cancel'.i18n.toUpperCase(),
-                                        style: tsAlertDialogButtonGrey),
+                                        style: tsDialogButtonGrey),
                                   ),
                                   const SizedBox(width: 15),
                                   TextButton(
@@ -566,7 +566,7 @@ Future<void> displayConversationOptions(
                                     },
                                     child: Text(
                                         'delete_contact'.i18n.toUpperCase(),
-                                        style: tsAlertDialogButtonPink),
+                                        style: tsDialogButtonPink),
                                   )
                                 ],
                               )

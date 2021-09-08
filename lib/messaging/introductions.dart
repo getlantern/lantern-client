@@ -188,7 +188,7 @@ class Introductions extends StatelessWidget {
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
-                                                              tsAlertDialogButtonGrey),
+                                                              tsDialogButtonGrey),
                                                     ),
                                                     TextButton(
                                                       onPressed: () async {
@@ -270,7 +270,7 @@ class Introductions extends StatelessWidget {
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
-                                                              tsAlertDialogButtonPink),
+                                                              tsDialogButtonPink),
                                                     )
                                                   ],
                                                 )))
