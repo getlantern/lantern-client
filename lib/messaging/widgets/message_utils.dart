@@ -9,7 +9,7 @@ import 'package:lantern/utils/humanize.dart';
 import 'package:lantern/config/text_styles.dart';
 
 String sanitizeContactName(String displayName) {
-  return displayName.isEmpty ? 'Unnamed Contact'.i18n : displayName.toString();
+  return displayName.isEmpty ? 'unnamed_contact'.i18n : displayName.toString();
 }
 
 Map<String, List<dynamic>> constructReactionsMap(
@@ -273,7 +273,7 @@ Future<void> displayConversationOptions(
                     top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
-                  child: Text('Disappearing Messages'.i18n,
+                  child: Text('disappearing_messages'.i18n,
                       style: tsBottomModalList),
                 ),
                 onTap: () async {
@@ -303,7 +303,7 @@ Future<void> displayConversationOptions(
                                 child: Column(
                                   children: [
                                     Text(
-                                      'Disappearing Messages'.i18n,
+                                      'disappearing_messages'.i18n,
                                       style: tsDialogTitle,
                                     ),
                                     Padding(
@@ -413,7 +413,7 @@ Future<void> displayConversationOptions(
                                           offset: const Offset(-4, 0),
                                           child: Text(
                                             seconds[index] == 0
-                                                ? 'Off'.i18n
+                                                ? 'off'.i18n
                                                 : seconds[index]
                                                     .humanizeSeconds(
                                                         longForm: true),
@@ -443,7 +443,7 @@ Future<void> displayConversationOptions(
                                           onPressed: () async =>
                                               context.router.pop(),
                                           child: Text(
-                                              'Cancel'.i18n.toUpperCase(),
+                                              'cancel'.i18n.toUpperCase(),
                                               style: tsAlertDialogButtonGrey),
                                         ),
                                         TextButton(
@@ -456,7 +456,7 @@ Future<void> displayConversationOptions(
                                             await context.router.pop();
                                             await parentContext.router.pop();
                                           },
-                                          child: Text('Set'.i18n.toUpperCase(),
+                                          child: Text('set'.i18n.toUpperCase(),
                                               style: tsAlertDialogButtonPink),
                                         ),
                                       ],
@@ -485,7 +485,7 @@ Future<void> displayConversationOptions(
                     top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: Text('Introduce Contacts'.i18n,
+                    child: Text('introduce_contacts'.i18n,
                         style: tsBottomModalList)),
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
@@ -516,7 +516,7 @@ Future<void> displayConversationOptions(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.delete),
                                 ),
-                                Text('Delete Contact'.i18n.toUpperCase(),
+                                Text('delete_contact'.i18n.toUpperCase(),
                                     style: tsDialogTitle),
                               ],
                             ),
@@ -535,7 +535,7 @@ Future<void> displayConversationOptions(
                                 children: [
                                   TextButton(
                                     onPressed: () async => context.router.pop(),
-                                    child: Text('Cancel'.i18n.toUpperCase(),
+                                    child: Text('cancel'.i18n.toUpperCase(),
                                         style: tsAlertDialogButtonGrey),
                                   ),
                                   const SizedBox(width: 15),
@@ -552,10 +552,8 @@ Future<void> displayConversationOptions(
                                             contact.contactId.id);
                                       } catch (e) {
                                         showInfoDialog(context,
-                                            title: 'Error'.i18n,
-                                            des:
-                                                'Something went wrong while deleting this contact.'
-                                                    .i18n,
+                                            title: 'error'.i18n,
+                                            des: 'error_delete_contact'.i18n,
                                             icon: ImagePaths.alert_icon,
                                             buttonText: 'OK'.i18n);
                                       } finally {
@@ -567,7 +565,7 @@ Future<void> displayConversationOptions(
                                       }
                                     },
                                     child: Text(
-                                        'Delete Contact'.i18n.toUpperCase(),
+                                        'delete_contact'.i18n.toUpperCase(),
                                         style: tsAlertDialogButtonPink),
                                   )
                                 ],

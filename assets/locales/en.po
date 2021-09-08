@@ -230,3 +230,33 @@ msgstr "Once deleted, you will need to scan their QR code or have a mutual frien
 
 msgid "conversation_title_bottomsheet"
 msgstr "Conversation Menu"
+
+msgid "off"
+msgstr "Off"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "set"
+msgstr "Set"
+
+msgid "introduce_contacts"
+msgstr "Introduce Contacts"
+
+msgid "delete_contact"
+msgstr "Delete Contact"
+
+msgid "error"
+msgstr "Error"
+
+msgid "error_delete_contact"
+msgstr "Something went wrong while deleting this contact."
+
+msgid "unnamed_contact"
+msgstr "Unnamed Contact"
+
+msgid "me"
+msgstr "Me"
+
+msgid "disappearing_messages"
+msgstr "Disappearing Messages"
