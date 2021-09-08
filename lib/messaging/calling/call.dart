@@ -40,10 +40,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
           onError: () {
             showAlertDialog(
                 context: context,
-                title: Text('Unable to complete call'.i18n,
-                    style: tsAlertDialogTitle),
-                content:
-                    Text('Please try again'.i18n, style: tsAlertDialogBody),
+                title:
+                    Text('Unable to complete call'.i18n, style: tsDialogTitle),
+                content: Text('Please try again'.i18n, style: tsDialogBody),
                 agreeText: 'Close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);

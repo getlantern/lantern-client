@@ -305,7 +305,7 @@ Future<void> displayConversationOptions(
                                   children: [
                                     Text(
                                       'Disappearing Messages'.i18n,
-                                      style: tsAlertDialogTitle,
+                                      style: tsDialogTitle,
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -513,14 +513,14 @@ Future<void> displayConversationOptions(
                                   child: Icon(Icons.delete),
                                 ),
                                 Text('Delete Contact'.i18n.toUpperCase(),
-                                    style: tsAlertDialogTitle),
+                                    style: tsDialogTitle),
                               ],
                             ),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
                                   Text('delete_contact_confirmation'.i18n,
-                                      style: tsAlertDialogBody)
+                                      style: tsDialogBody)
                                 ],
                               ),
                             ),
