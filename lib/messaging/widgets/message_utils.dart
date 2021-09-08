@@ -4,6 +4,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/ui/widgets/custom_horizontal_divider.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lantern/utils/humanize.dart';
 import 'package:lantern/config/text_styles.dart';
@@ -119,7 +120,11 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
               ),
               const Center(
                   child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
-              Divider(thickness: 1, color: grey2),
+              CustomHorizontalDivider(
+                thickness: 1,
+                color: grey2,
+                margin: 0,
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -260,10 +265,12 @@ Future<void> displayConversationOptions(
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Color.fromRGBO(235, 235, 235, 1)),
+              const CustomHorizontalDivider(
+                size: 1,
+                thickness: 1,
+                color: Color.fromRGBO(235, 235, 235, 1),
+                margin: 0,
+              ),
               ListTile(
                 leading: const Icon(
                   Icons.timer,
@@ -347,12 +354,11 @@ Future<void> displayConversationOptions(
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              const Divider(
+                              const CustomHorizontalDivider(
                                 thickness: 1,
                                 color: Color.fromRGBO(235, 235, 235, 1),
-                                height: 2,
-                                indent: 3,
-                                endIndent: 3,
+                                size: 2,
+                                margin: 3,
                               ),
                               SizedBox(
                                 height: 264,
@@ -429,12 +435,11 @@ Future<void> displayConversationOptions(
                                 color: Colors.white,
                                 child: Column(
                                   children: [
-                                    const Divider(
+                                    const CustomHorizontalDivider(
                                       thickness: 1,
                                       color: Color.fromRGBO(235, 235, 235, 1),
-                                      height: 1,
-                                      indent: 3,
-                                      endIndent: 3,
+                                      size: 1,
+                                      margin: 3,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -472,9 +477,10 @@ Future<void> displayConversationOptions(
                   );
                 },
               ),
-              const Divider(
-                  height: 1,
+              const CustomHorizontalDivider(
+                  size: 1,
                   thickness: 1,
+                  margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
                 leading: const Icon(
@@ -490,9 +496,10 @@ Future<void> displayConversationOptions(
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
-              const Divider(
-                  height: 1,
+              const CustomHorizontalDivider(
+                  size: 1,
                   thickness: 1,
+                  margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
                   leading: const Icon(Icons.delete, color: Colors.black),
