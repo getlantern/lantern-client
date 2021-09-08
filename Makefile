@@ -337,7 +337,7 @@ release-autoupdate: require-version
 		NAME=$$(basename $$URL) && \
 		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//).bz2 && \
 		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
-	done
+	done && \
 	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
