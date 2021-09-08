@@ -256,13 +256,15 @@ Future<void> displayConversationOptions(
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              ListTile(
-                contentPadding:
-                    const EdgeInsetsDirectional.only(top: 14.0, bottom: 14.0),
-                title: Text(
-                  'conversation_title_bottomsheet'.i18n,
-                  style: tsBottomModalTitle,
-                  textAlign: TextAlign.center,
+              Padding(
+                padding:
+                    const EdgeInsetsDirectional.only(top: 7.0, bottom: 10.0),
+                child: ListTile(
+                  title: Text(
+                    'conversation_title_bottomsheet'.i18n,
+                    style: tsBottomModalTitle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               const CustomHorizontalDivider(
@@ -277,7 +279,7 @@ Future<void> displayConversationOptions(
                   color: Colors.black,
                 ),
                 contentPadding: const EdgeInsetsDirectional.only(
-                    top: 5, bottom: 5, start: 16, end: 16),
+                    top: 7, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
                   child: Text('disappearing_messages'.i18n,
@@ -358,7 +360,7 @@ Future<void> displayConversationOptions(
                                 thickness: 1,
                                 color: Color.fromRGBO(235, 235, 235, 1),
                                 size: 2,
-                                margin: 3,
+                                margin: 16,
                               ),
                               SizedBox(
                                 height: 264,
@@ -439,12 +441,20 @@ Future<void> displayConversationOptions(
                                       thickness: 1,
                                       color: Color.fromRGBO(235, 235, 235, 1),
                                       size: 1,
-                                      margin: 3,
+                                      margin: 16,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         TextButton(
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsetsDirectional
+                                                        .only(
+                                                    top: 16,
+                                                    bottom: 16,
+                                                    end: 16)),
+                                          ),
                                           onPressed: () async =>
                                               context.router.pop(),
                                           child: Text(
@@ -452,6 +462,14 @@ Future<void> displayConversationOptions(
                                               style: tsDialogButtonGrey),
                                         ),
                                         TextButton(
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsetsDirectional
+                                                        .only(
+                                                    top: 16,
+                                                    bottom: 16,
+                                                    end: 24)),
+                                          ),
                                           onPressed: () async {
                                             if (selectedPosition != -1) {
                                               await model.setDisappearSettings(
