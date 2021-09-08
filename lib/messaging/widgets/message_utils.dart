@@ -206,7 +206,7 @@ Widget fullScreenDialogLayout(
   return Flex(direction: Axis.vertical, children: [
     Container(
       color: topColor,
-      height: 75,
+      height: 80,
       child: Stack(
         children: [
           Container(

@@ -111,6 +111,12 @@ TextStyle txSnackBarText = const TextStyle(
   height: 23 / 14,
 );
 
+TextStyle tsFullScreenDialogTitle = const TextStyle(
+  fontSize: 20,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
+
 // Message bubble StyleSheet
 TextStyle? tsReplySnippetHeader = const TextStyle(
   fontWeight: FontWeight.w600,
