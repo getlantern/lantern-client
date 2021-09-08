@@ -95,7 +95,7 @@ class _NewMessageState extends State<NewMessage> {
                       duration: const Duration(milliseconds: 4000),
                       action: SnackBarAction(
                         textColor: secondaryPink,
-                        label: 'start_chat'.toUpperCase().i18n,
+                        label: 'start_chat'.i18n.toUpperCase(),
                         onPressed: () async {
                           await context.pushRoute(Conversation(
                               contactId: _updatedContact!.contactId));

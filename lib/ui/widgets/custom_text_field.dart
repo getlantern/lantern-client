@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
+  late final IconButton? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
 
@@ -18,6 +19,7 @@ class CustomTextField extends StatefulWidget {
     required this.label,
     this.helperText,
     this.prefixIcon,
+    this.suffixIcon,
     this.validator,
     this.keyboardType,
     this.enabled = true,
@@ -57,13 +59,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             controller: widget.controller,
             focusNode: focusNode,
             keyboardType: widget.keyboardType,
-            validator: widget.validator == null
-                ? null
-                : (value) {
-                    var result = widget.validator!(value);
-                    setState(() {});
-                    return result;
-                  },
+            validator:
+                widget.validator == null || widget.controller.value.text.isEmpty
+                    ? null
+                    : (value) {
+                        var result = widget.validator!(value);
+                        setState(() {});
+                        return result;
+                      },
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
@@ -88,6 +91,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
               prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.controller.value.text.isEmpty
+                  ? widget.suffixIcon
+                  : !fieldKey.currentState!.hasError
+                      ? widget.suffixIcon
+                      : Icon(Icons.error, color: indicatorRed),
             ),
           ),
         ),
