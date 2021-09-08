@@ -10,7 +10,10 @@ class VPNBandwidth extends StatelessWidget {
       return bandwidth.allowed > 0
           ? Column(
               children: [
-                const CustomHorizontalDivider(margin: 0.0),
+                Container(
+                    margin: const EdgeInsetsDirectional.only(
+                        top: 4.0, bottom: 16.0),
+                    child: const CustomHorizontalDivider(margin: 0.0)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
