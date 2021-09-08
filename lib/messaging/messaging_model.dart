@@ -172,14 +172,14 @@ class MessagingModel extends Model {
 
   Future<void> acceptIntroduction(String fromId, String toId) async =>
       methodChannel.invokeMethod('acceptIntroduction', <String, dynamic>{
-        'fromId': fromId,
-        'toId': toId,
+        'unsafeFromId': fromId,
+        'unsafeToId': toId,
       });
 
   Future<void> rejectIntroduction(String fromId, String toId) async =>
       methodChannel.invokeMethod('rejectIntroduction', <String, dynamic>{
-        'fromId': fromId,
-        'toId': toId,
+        'unsafeFromId': fromId,
+        'unsafeToId': toId,
       });
 
   /*
