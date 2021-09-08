@@ -11,8 +11,13 @@ import '../../button.dart';
 class AuthorizeDeviceViaEmail extends StatelessWidget {
   AuthorizeDeviceViaEmail({Key? key}) : super(key: key);
 
-  final emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  late final emailController = CustomTextEditingController(
+    formKey: formKey,
+    validator: (value) => EmailValidator.validate(value ?? '')
+        ? null
+        : 'Please enter a valid email address'.i18n,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +45,6 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                     Icons.email,
                     color: Colors.black,
                   ),
-                  validator: (value) => EmailValidator.validate(value ?? '')
-                      ? null
-                      : 'Please enter a valid email address'.i18n,
                 ),
               ),
               const Spacer(),
