@@ -38,17 +38,6 @@ class _NewMessageState extends State<NewMessage> {
           tooltip: 'search'.i18n,
           onPressed: () {},
         ),
-        IconButton(
-          icon: const Icon(Icons.qr_code),
-          tooltip: 'your_contact_info'.i18n,
-          onPressed: () async {
-            await context.popRoute();
-            await context
-                .innerRouterOf<TabsRouter>(Home.name)!
-                .innerRouterOf<StackRouter>(MessagesRouter.name)!
-                .push(const ContactInfo());
-          },
-        ),
       ],
       body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
