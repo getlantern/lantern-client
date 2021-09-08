@@ -102,7 +102,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         Container(
           margin: const EdgeInsetsDirectional.only(start: 11),
           padding: EdgeInsets.symmetric(horizontal: hasFocus ? 2 : 0),
-          color: Colors.white,
+          color: white,
           child: !hasFocus && widget.controller.value.text.isEmpty
               ? Container()
               : Text(
