@@ -408,6 +408,13 @@ Future<void> displayConversationOptions(
                                                           .messagesDisappearAfterSeconds !=
                                                       seconds[index],
                                               groupValue: false,
+                                              fillColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                (states) => states.contains(
+                                                        MaterialState.selected)
+                                                    ? primaryPink
+                                                    : black,
+                                              ),
                                               activeColor: primaryPink,
                                               onChanged: (value) async {
                                                 setState(() {
