@@ -3,7 +3,6 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/package_store.dart';
 // import 'package:loading_animations/loading_animations.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AddViaContactId extends StatelessWidget {
   @override
@@ -31,7 +30,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   void _onContactIdAdd() async {
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
-      context.loaderOverlay.show();
       try {
         if (pastedContactId != null && pastedContactId != '') {
           return;
@@ -52,7 +50,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
             contactNotifier.removeListener(listener);
             // go back to New Message with the updatedContact info
             Navigator.pop(context, updatedContact);
-            context.loaderOverlay.hide();
           }
         };
         contactNotifier.addListener(listener);
@@ -64,7 +61,6 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
           pastedContactId = '';
           waitingForOtherSide = false;
         });
-        context.loaderOverlay.hide();
         showInfoDialog(context,
             title: 'error'.i18n,
             des: 'contactid_error_description'.i18n,

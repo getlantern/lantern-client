@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/scale_animation_widget.dart';
+import 'package:lantern/ui/widgets/clipped_rect_border.dart';
+import 'package:lantern/ui/widgets/pulse_animation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -111,144 +113,157 @@ class _AddViaQRState extends State<AddViaQR> {
   }
 
   Widget renderQRscanner(BuildContext context, Contact me) {
-    var middleColor = grey3;
-    var bottomColor = Colors.white;
     return fullScreenDialogLayout(
         context: context,
-        iconColor: Colors.white, // icon color
-        topColor: Colors.black,
-        title: Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('qr_scanner'.i18n.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                )),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 4.0),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () => showInfoDialog(context,
-                    title: 'qr_info_title'.i18n,
-                    des: 'qr_info_description'.i18n,
-                    icon: ImagePaths.qr_code,
-                    buttonText: 'info_dialog_confirm'.i18n.toUpperCase()),
-                child: const Icon(
-                  Icons.info,
-                  size: 14,
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
+        iconColor: white, // icon color
+        topColor: grey5,
+        title: Center(
+          child: Text('qr_scanner'.i18n.toUpperCase(),
+              style: tsFullScreenDialogTitle),
         ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // QR scanner for other contact
-              Expanded(
-                flex: 3,
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        child: Stack(
-                          alignment: Alignment.center,
+        child: Container(
+          color: grey5,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16.0, 0, 0),
+                  alignment: Alignment.center,
+                  child: (scannedContactId != null && scanning)
+                      ? PulseAnimation(
+                          Text('qr_info_waiting'.i18n,
+                              style: TextStyle(
+                                color: white,
+                              )),
+                        )
+                      : Flex(
+                          direction: Axis.horizontal,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            QRView(
-                              key: _qrKey,
-                              onQRViewCreated: (controller) =>
-                                  _onQRViewCreated(controller, model),
-                              overlay: QrScannerOverlayShape(
-                                borderColor: Colors.greenAccent,
-                                borderRadius: 8,
-                                borderLength: 15,
-                                borderWidth: 5,
-                                cutOutSize: 300,
+                            Text('qr_info_scan'.i18n,
+                                style: TextStyle(
+                                  color: white,
+                                )),
+                            Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.only(start: 4.0),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () => showInfoDialog(context,
+                                    title: 'qr_info_title'.i18n,
+                                    des: 'qr_info_description'.i18n,
+                                    icon: ImagePaths.qr_code,
+                                    buttonText: 'info_dialog_confirm'
+                                        .i18n
+                                        .toUpperCase()),
+                                child: const Icon(
+                                  Icons.info,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            if (scannedContactId != null && scanning)
-                              ScaleAnimationWidget(
-                                const CustomAssetImage(
-                                    path: ImagePaths.check_green, size: 80),
-                              ),
+                            )
                           ],
                         ),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              // my own QR code
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Container(
-                      color: middleColor,
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                          0, 20.0, 0, 20.0),
-                      alignment: Alignment.center,
-                      child: Text('qr_for_your_contact'.i18n,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          )),
-                    ),
-                    Flexible(
-                      child: Container(
-                        color: middleColor,
-                        padding: const EdgeInsetsDirectional.only(bottom: 20.0),
-                        alignment: Alignment.center,
+                // QR scanner for other contact
+                Expanded(
+                  flex: 2,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CustomPaint(
+                        painter: ClippedRectBorderPainter(),
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                              color: grey5,
-                              width: 3,
+                          padding: const EdgeInsetsDirectional.all(10.0),
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: QRView(
+                                key: _qrKey,
+                                onQRViewCreated: (controller) =>
+                                    _onQRViewCreated(controller, model),
+                              ),
                             ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                          ),
-                          child: QrImage(
-                            data: me.contactId.id,
-                            foregroundColor: Colors.black54,
-                            errorCorrectionLevel: QrErrorCorrectLevel.H,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      if (scannedContactId != null && scanning)
+                        const CustomAssetImage(
+                            path: ImagePaths.check_green, size: 40),
+                    ],
+                  ),
                 ),
-              ),
-              // Trouble scanning
-              Flexible(
-                flex: 0,
-                child: Container(
-                  color: bottomColor,
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 5.0, 0, 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                // my own QR code
+                Expanded(
+                  flex: 2,
+                  child: Column(
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            usingId = true;
-                          });
-                          qrController?.pauseCamera();
-                        },
-                        child: Text('qr_trouble_scanning'.i18n,
-                            style: const TextStyle(
-                              color: Colors.black,
+                      Container(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0, 16.0, 0, 16.0),
+                        alignment: Alignment.center,
+                        child: Text('qr_for_your_contact'.i18n,
+                            style: TextStyle(
+                              color: white,
                             )),
+                      ),
+                      Flexible(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: QrImage(
+                              data: me.contactId.id,
+                              backgroundColor: white,
+                              foregroundColor: black,
+                              errorCorrectionLevel: QrErrorCorrectLevel.H,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ]));
+                // Trouble scanning
+                Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        usingId = true;
+                      });
+                      qrController?.pauseCamera();
+                    },
+                    child: Container(
+                      color: black,
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          0, 15.0, 0, 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0, 16.0, 0),
+                            child: Text('qr_trouble_scanning'.i18n,
+                                style: TextStyle(
+                                    color: white, fontWeight: FontWeight.w400)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0, 16.0, 0),
+                            child:
+                                Icon(Icons.keyboard_arrow_right, color: white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
+        ));
   }
 }

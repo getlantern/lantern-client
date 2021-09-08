@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 
-class ScaleAnimationWidget extends StatefulWidget {
+class PulseAnimation extends StatefulWidget {
   final Widget child;
 
-  ScaleAnimationWidget(this.child) : super();
+  PulseAnimation(this.child) : super();
 
   @override
-  _ScaleAnimationWidgetState createState() => _ScaleAnimationWidgetState();
+  _PulseAnimationState createState() => _PulseAnimationState();
 }
 
-class _ScaleAnimationWidgetState extends State<ScaleAnimationWidget>
+class _PulseAnimationState extends State<PulseAnimation>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -22,8 +22,8 @@ class _ScaleAnimationWidgetState extends State<ScaleAnimationWidget>
       duration: const Duration(
         milliseconds: 1000,
       ),
-      lowerBound: 1,
-      upperBound: 1.4,
+      lowerBound: 0,
+      upperBound: 1,
       vsync: this,
     );
     _animation = _controller
@@ -50,9 +50,8 @@ class _ScaleAnimationWidgetState extends State<ScaleAnimationWidget>
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      child: ScaleTransition(
-        scale: _animation,
-        alignment: Alignment.center,
+      child: Opacity(
+        opacity: _animation.value,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
