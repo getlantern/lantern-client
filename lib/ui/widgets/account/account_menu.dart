@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'settings_item.dart';
 
@@ -11,7 +14,7 @@ class AccountMenu extends StatelessWidget {
       LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
-      await context.pushRoute(ProAccount());
+      await context.pushRoute(AuthorizePro());
 
   void inviteFriends() =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
@@ -22,7 +25,12 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
-  List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
+  void openDisplayName(BuildContext context, Contact me) async {
+    await context.pushRoute(DisplayName(me: me));
+  }
+
+  List<Widget> freeItems(
+      BuildContext context, SessionModel sessionModel, Contact me) {
     return [
       SettingsItem(
         icon: ImagePaths.crown_icon_monochrome,
@@ -53,10 +61,17 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
+      SettingsItem(
+        icon: ImagePaths.account_icon,
+        title: sprintf('display_name'.i18n, [me.displayName]),
+        onTap: () {
+          openDisplayName(context, me);
+        },
+      ),
     ];
   }
 
-  List<Widget> proItems(BuildContext context) => [
+  List<Widget> proItems(BuildContext context, Contact me) => [
         SettingsItem(
           icon: ImagePaths.account_icon,
           iconColor: Colors.black,
@@ -85,21 +100,34 @@ class AccountMenu extends StatelessWidget {
             openSettings(context);
           },
         ),
+        SettingsItem(
+          icon: ImagePaths.account_icon,
+          title: sprintf('display_name'.i18n, [me.displayName]),
+          onTap: () {
+            openDisplayName(context, me);
+          },
+        ),
       ];
 
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
       title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
-        return ListView(
-          padding: const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
-          children:
-              proUser ? proItems(context) : freeItems(context, sessionModel),
-        );
+        return messagingModel
+            .me((BuildContext context, Contact me, Widget? child) {
+          return ListView(
+            padding:
+                const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
+            children: proUser
+                ? proItems(context, me)
+                : freeItems(context, sessionModel, me),
+          );
+        });
       }),
     );
   }
