@@ -203,33 +203,38 @@ Widget fullScreenDialogLayout(
     required BuildContext context,
     required Widget title,
     required Widget child}) {
-  return Flex(direction: Axis.vertical, children: [
-    Container(
-      color: topColor,
-      height: 80,
-      child: Stack(
+  return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
         children: [
           Container(
-            padding: const EdgeInsetsDirectional.only(top: 30),
-            alignment: Alignment.center,
-            child: title,
-          ),
-          Positioned(
-            right: 0,
-            top: 30,
-            child: IconButton(
-              icon: Icon(
-                Icons.close_rounded,
-                color: iconColor,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
+            color: topColor,
+            height: 100,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.center,
+                  child: title,
+                ),
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: iconColor,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
             ),
           ),
+          Expanded(child: child)
         ],
-      ),
-    ),
-    Expanded(child: child)
-  ]);
+      ));
 }
 
 int generateUniqueColorIndex(String str) {

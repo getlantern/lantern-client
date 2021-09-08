@@ -3,6 +3,7 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/package_store.dart';
 // import 'package:loading_animations/loading_animations.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/ui/widgets/custom_text_field.dart';
 
 class AddViaContactId extends StatelessWidget {
   @override
@@ -108,32 +109,23 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                       padding: const EdgeInsetsDirectional.all(20.0),
                       child: Wrap(
                         children: [
-                          TextFormField(
-                            controller: contactIdController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
+                          CustomTextField(
                             enabled: !waitingForOtherSide,
-                            cursorColor: Colors.black,
+                            controller: contactIdController,
+                            label: 'contactid_your_id'.i18n,
+                            helperText: 'contactid_paste_id'.i18n,
+                            keyboardType: TextInputType.emailAddress,
+                            suffixIcon: IconButton(
+                              onPressed: () => _onContactIdAdd(),
+                              icon: Icon(!waitingForOtherSide
+                                  ? Icons.keyboard_arrow_right_outlined
+                                  : Icons.check_circle),
+                              color: waitingForOtherSide ? green : black,
+                            ),
                             validator: (value) =>
-                                value != '' && value != widget.me.contactId.id
+                                value != '' || value != widget.me.contactId.id
                                     ? null
                                     : 'contactid_input_error'.i18n,
-                            decoration: InputDecoration(
-                              helperText: '',
-                              labelText: 'contactid_paste_id'.i18n,
-                              suffixIcon: IconButton(
-                                onPressed: () => _onContactIdAdd(),
-                                icon: Icon(!waitingForOtherSide
-                                    ? Icons.arrow_right_alt_outlined
-                                    : Icons.check_circle_outline_outlined),
-                                color: waitingForOtherSide
-                                    ? Colors.cyan
-                                    : Colors.black,
-                              ),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -143,41 +135,16 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0, 8.0, 0, 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('contactid_your_id'.i18n,
-                                    style: const TextStyle(
-                                        color: Colors.cyan, fontSize: 16)),
-                                IconButton(
-                                    onPressed: () {
-                                      showSnackbar(
-                                        context: context,
-                                        content: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                                child: Text(
-                                              'copied'.i18n,
-                                              style: txSnackBarText,
-                                              textAlign: TextAlign.left,
-                                            )),
-                                          ],
-                                        ),
-                                      );
-                                      Clipboard.setData(ClipboardData(
-                                          text: widget.me.contactId.id));
-                                    },
-                                    icon: const Icon(Icons.copy))
-                              ],
-                            ),
-                          ),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('contactid_your_id'.i18n.toUpperCase(),
+                                  style: TextStyle(color: black, fontSize: 10)),
+                            ],
+                          ),
+                          Divider(thickness: 1, color: grey2),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Expanded(
                                 child: GestureDetector(
@@ -200,17 +167,46 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                     Clipboard.setData(ClipboardData(
                                         text: widget.me.contactId.id));
                                   },
-                                  child: Text(
-                                    widget.me.contactId.id,
-                                    overflow: TextOverflow.visible,
-                                    style: const TextStyle(
-                                        fontSize:
-                                            12.0), // TODO: we need to manually wrap this up
+                                  // TODO: we need to manually wrap this up
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.all(10.0),
+                                    child: Text(
+                                        widget.me.contactId.id.toUpperCase(),
+                                        overflow: TextOverflow.visible,
+                                        style: const TextStyle(
+                                            fontSize: 16.0, height: 26 / 16)),
                                   ),
                                 ),
                               ),
+                              IconButton(
+                                  onPressed: () {
+                                    showSnackbar(
+                                      context: context,
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                              child: Text(
+                                            'copied'.i18n,
+                                            style: txSnackBarText,
+                                            textAlign: TextAlign.left,
+                                          )),
+                                        ],
+                                      ),
+                                    );
+                                    Clipboard.setData(ClipboardData(
+                                        text: widget.me.contactId.id));
+                                  },
+                                  icon: CustomAssetImage(
+                                    path: ImagePaths.content_copy,
+                                    size: 20,
+                                    color: black,
+                                  ))
                             ],
                           ),
+                          Divider(thickness: 1, color: grey2),
                         ],
                       ),
                     ),

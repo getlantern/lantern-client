@@ -289,7 +289,7 @@ msgid "contactid_error_description"
 msgstr "Something went wrong while adding this contact"
 
 msgid "contactid_input_error"
-msgstr "Please enter a valid Messenger ID"
+msgstr "Please ensure the ID you are entering is not empty or your own"
 
 msgid "contactid_paste_id"
 msgstr "Paste a contact Messenger ID"

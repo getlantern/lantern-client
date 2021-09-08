@@ -127,7 +127,7 @@ class _AddViaQRState extends State<AddViaQR> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16.0, 0, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 25.0, 0, 0),
                   alignment: Alignment.center,
                   child: (scannedContactId != null && scanning)
                       ? PulseAnimation(
@@ -136,8 +136,7 @@ class _AddViaQRState extends State<AddViaQR> {
                                 color: white,
                               )),
                         )
-                      : Flex(
-                          direction: Axis.horizontal,
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('qr_info_scan'.i18n,
@@ -167,7 +166,7 @@ class _AddViaQRState extends State<AddViaQR> {
                         ),
                 ),
                 // QR scanner for other contact
-                Expanded(
+                Flexible(
                   flex: 2,
                   child: Stack(
                     alignment: Alignment.center,
@@ -177,14 +176,19 @@ class _AddViaQRState extends State<AddViaQR> {
                         child: Container(
                           padding: const EdgeInsetsDirectional.all(10.0),
                           width: MediaQuery.of(context).size.width * 0.65,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: QRView(
-                                key: _qrKey,
-                                onQRViewCreated: (controller) =>
-                                    _onQRViewCreated(controller, model),
+                          child: Opacity(
+                            opacity: (scannedContactId != null && scanning)
+                                ? 0.5
+                                : 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: QRView(
+                                  key: _qrKey,
+                                  onQRViewCreated: (controller) =>
+                                      _onQRViewCreated(controller, model),
+                                ),
                               ),
                             ),
                           ),
@@ -197,13 +201,13 @@ class _AddViaQRState extends State<AddViaQR> {
                   ),
                 ),
                 // my own QR code
-                Expanded(
+                Flexible(
                   flex: 2,
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0, 16.0, 0, 16.0),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16.0),
                         alignment: Alignment.center,
                         child: Text('qr_for_your_contact'.i18n,
                             style: TextStyle(
