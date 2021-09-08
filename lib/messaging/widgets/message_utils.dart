@@ -267,16 +267,16 @@ Future<void> displayConversationOptions(
                   ),
                 ),
               ),
-              const CustomHorizontalDivider(
+              CustomHorizontalDivider(
                 size: 1,
                 thickness: 1,
-                color: Color.fromRGBO(235, 235, 235, 1),
+                color: grey3,
                 margin: 0,
               ),
               ListTile(
-                leading: const Icon(
-                  Icons.timer,
-                  color: Colors.black,
+                leading: const CustomAssetImage(
+                  path: ImagePaths.disappearing_timer_icon,
+                  size: 24,
                 ),
                 contentPadding: const EdgeInsetsDirectional.only(
                     top: 7, bottom: 5, start: 16, end: 16),
@@ -290,7 +290,7 @@ Future<void> displayConversationOptions(
                   return showDialog(
                     context: bottomContext,
                     barrierDismissible: true,
-                    barrierColor: Colors.black.withOpacity(0.8),
+                    barrierColor: black.withOpacity(0.8),
                     builder: (context) => StatefulBuilder(
                       builder: (context, setState) => AlertDialog(
                         shape: const RoundedRectangleBorder(
@@ -307,7 +307,7 @@ Future<void> displayConversationOptions(
                               Container(
                                 padding:
                                     const EdgeInsetsDirectional.only(top: 16.0),
-                                color: Colors.white,
+                                color: white,
                                 alignment: Alignment.center,
                                 child: Column(
                                   children: [
@@ -356,9 +356,9 @@ Future<void> displayConversationOptions(
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              const CustomHorizontalDivider(
+                              CustomHorizontalDivider(
                                 thickness: 1,
-                                color: Color.fromRGBO(235, 235, 235, 1),
+                                color: grey3,
                                 size: 2,
                                 margin: 16,
                               ),
@@ -508,9 +508,9 @@ Future<void> displayConversationOptions(
                   margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
-                leading: const Icon(
-                  Icons.people,
-                  color: Colors.black,
+                leading: const CustomAssetImage(
+                  path: ImagePaths.introduce_contact_icon,
+                  size: 16,
                 ),
                 contentPadding: const EdgeInsetsDirectional.only(
                     top: 5, bottom: 5, start: 16, end: 16),
@@ -527,7 +527,10 @@ Future<void> displayConversationOptions(
                   margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
-                  leading: const Icon(Icons.delete, color: Colors.black),
+                  leading: const CustomAssetImage(
+                    path: ImagePaths.trash_icon,
+                    size: 24,
+                  ),
                   contentPadding: const EdgeInsetsDirectional.only(
                       top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
