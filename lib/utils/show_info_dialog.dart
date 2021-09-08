@@ -30,7 +30,7 @@ void showInfoDialog(BuildContext context,
               ),
               Text(
                 title,
-                style: tsAlertDialogTitle,
+                style: tsDialogTitle,
               ),
               Align(
                 alignment: Alignment.centerLeft,

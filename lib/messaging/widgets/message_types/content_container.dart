@@ -120,10 +120,10 @@ class ContentContainer extends StatelessWidget {
                                     showAlertDialog(
                                         context: context,
                                         title: Text('Open URL'.i18n,
-                                            style: tsAlertDialogTitle),
+                                            style: tsDialogTitle),
                                         content: Text(
                                             'Are you sure you want to open $href?',
-                                            style: tsAlertDialogBody),
+                                            style: tsDialogBody),
                                         dismissText: 'Cancel'.i18n,
                                         agreeText: 'Continue'.i18n,
                                         agreeAction: () async {
