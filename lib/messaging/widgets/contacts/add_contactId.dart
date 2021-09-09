@@ -117,10 +117,12 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
                               keyboardType: TextInputType.text,
                               suffixIcon: IconButton(
                                 onPressed: () => _onContactIdAdd(),
-                                icon: Icon(!waitingForOtherSide
-                                    ? Icons.keyboard_arrow_right_outlined
-                                    : Icons.check_circle),
-                                color: waitingForOtherSide ? green : black,
+                                icon: !waitingForOtherSide
+                                    ? const CustomAssetImage(
+                                        path: ImagePaths
+                                            .keyboard_arrow_right_icon)
+                                    : const CustomAssetImage(
+                                        path: ImagePaths.check_green),
                               ),
                               enabled: !waitingForOtherSide,
                               maxLines: null),
