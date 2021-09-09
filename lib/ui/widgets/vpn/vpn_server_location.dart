@@ -20,34 +20,30 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
   Widget build(BuildContext context) {
     var vpnModel = context.watch<VpnModel>();
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Server Location'.i18n + ': ',
-              style: tsTitleHeadVPNItem.copyWith(
-                color: unselectedTabLabelColor,
-              ),
-            ),
-            Container(
-              transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
-              child: InkWell(
-                onTap: _onTap,
-                child: Container(
-                  height: 48,
-                  width: 48,
-                  child: Icon(
-                    Icons.info_outline_rounded,
-                    color: unselectedTabLabelColor,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ),
-          ],
+        Text(
+          'Server Location'.i18n + ': ',
+          style: tsTitleHeadVPNItem.copyWith(
+            color: unselectedTabLabelColor,
+          ),
         ),
+        Container(
+          transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
+          child: InkWell(
+            onTap: _onTap,
+            child: Container(
+              height: 48,
+              width: 48,
+              child: Icon(
+                Icons.info_outline_rounded,
+                color: unselectedTabLabelColor,
+                size: 16,
+              ),
+            ),
+          ),
+        ),
+        const Spacer(),
         vpnModel
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
           return vpnModel.serverInfo(

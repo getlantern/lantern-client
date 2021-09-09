@@ -85,7 +85,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                                   },
                                   child: Text(
                                     'Okay'.i18n,
-                                    style: tsAlertDialogButtonPink,
+                                    style: tsDialogButtonPink,
                                   ),
                                 ),
                               ],
@@ -98,7 +98,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                     },
                     child: Text(
                       'Re-send Email'.i18n.toUpperCase(),
-                      style: tsAlertDialogButtonPink,
+                      style: tsDialogButtonPink,
                     ),
                   ),
                 ),
