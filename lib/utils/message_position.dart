@@ -40,6 +40,11 @@ class MessagePosition {
         priorMessage.direction == MessageDirection.OUT) {
       return 16.0;
     }
+    if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
     if (outbound && priorMessage == null) {
       return 16.0;
     }
@@ -64,11 +69,30 @@ class MessagePosition {
       return 16.0;
     }
     if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    if (outbound && priorMessage == null && nexMessage == null) {
+      return 16.0;
+    }
+    if (outbound &&
         nexMessage != null &&
         nexMessage.direction == MessageDirection.IN) {
       return 16.0;
     }
     if (outbound && nexMessage == null && priorMessage != null) {
+      return 16.0;
+    }
+    if (inbound &&
+        nexMessage == null &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (outbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.OUT) {
       return 16.0;
     }
     if (outbound &&
@@ -91,6 +115,14 @@ class MessagePosition {
     if (inbound &&
         priorMessage != null &&
         priorMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (inbound && nexMessage == null && priorMessage == null) {
+      return 16.0;
+    }
+    if (inbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT) {
       return 16.0;
     }
     if (outbound && priorMessage == null && nexMessage != null) {
@@ -118,7 +150,18 @@ class MessagePosition {
     }
     if (outbound &&
         priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (outbound &&
+        nexMessage == null &&
+        priorMessage != null &&
         priorMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    if (inbound && nexMessage == null) {
       return 16.0;
     }
     // if (outbound && priorMessage == null && nexMessage != null) {
