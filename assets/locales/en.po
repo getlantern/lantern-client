@@ -294,8 +294,11 @@ msgstr "Something went wrong while adding this contact"
 msgid "contactid_input_error"
 msgstr "Please ensure the ID you are entering is not empty or your own"
 
-msgid "contactid_paste_id"
-msgstr "Paste a contact Messenger ID"
+msgid "contactid_enter_manually"
+msgstr "Enter your friend's Messenger ID manually"
+
+msgid "contactid_messenger_id"
+msgstr "Messenger ID"
 
 msgid "contactid_your_id"
 msgstr "Your Messenger ID"
