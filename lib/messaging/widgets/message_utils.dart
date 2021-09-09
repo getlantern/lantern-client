@@ -257,6 +257,7 @@ int generateUniqueColorIndex(String str) {
 Future<void> displayConversationOptions(
     MessagingModel model, BuildContext parentContext, Contact contact) {
   final seconds = <int>[5, 60, 3600, 10800, 21600, 86400, 604800, 0];
+  final scrollController = ScrollController();
   return showModalBottomSheet(
       context: parentContext,
       isDismissible: true,
@@ -313,10 +314,15 @@ Future<void> displayConversationOptions(
                         ),
                         contentPadding: const EdgeInsetsDirectional.all(0),
                         clipBehavior: Clip.hardEdge,
+                        scrollable: true,
                         content: ConstrainedBox(
                           constraints: BoxConstraints(
+                              minHeight:
+                                  (MediaQuery.of(context).size.height * 0.7),
+                              minWidth: MediaQuery.of(context).size.width,
                               maxHeight:
-                                  MediaQuery.of(context).size.height * 0.9),
+                                  MediaQuery.of(context).size.height * 0.7,
+                              maxWidth: MediaQuery.of(context).size.width),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -379,12 +385,15 @@ Future<void> displayConversationOptions(
                                 size: 2,
                                 margin: 16,
                               ),
-                              Expanded(
+                              Flexible(
                                 child: Scrollbar(
+                                  controller: scrollController,
                                   interactive: true,
                                   showTrackOnHover: true,
+                                  isAlwaysShown: true,
                                   radius: const Radius.circular(50),
                                   child: ListView.builder(
+                                    controller: scrollController,
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(),
