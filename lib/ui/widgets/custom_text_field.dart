@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   late final IconButton? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
+  late final int? maxLines;
 
   CustomTextField({
     required this.controller,
@@ -23,6 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.keyboardType,
     this.enabled,
+    this.maxLines,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -67,6 +69,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               setState(() {});
               return result;
             },
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
