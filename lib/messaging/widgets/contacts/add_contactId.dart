@@ -53,7 +53,8 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
         });
         var mostRecentHelloTs = await model
             .addProvisionalContact(enteredContactId!.replaceAll('\-', ''));
-        waitForContact(model, enteredContactId!, mostRecentHelloTs);
+        waitForContact(model, enteredContactId!, mostRecentHelloTs,
+            null); //TODO: add animationController
       } catch (e) {
         setState(() {
           waitingForOtherSide = false;

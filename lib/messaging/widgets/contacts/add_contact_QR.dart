@@ -72,8 +72,8 @@ class _AddViaQRState extends AddContactState<AddViaQR>
           expiresAt = 100; //TODO: derive from model
         });
         animationController.duration = Duration(seconds: expiresAt);
-        await animationController.forward();
-        waitForContact(model, scannedContactId!, mostRecentHelloTs);
+        waitForContact(
+            model, scannedContactId!, mostRecentHelloTs, animationController);
       } catch (e) {
         setState(() {
           scanning = false;
@@ -92,8 +92,11 @@ class _AddViaQRState extends AddContactState<AddViaQR>
   @override
   void initState() {
     animationController = AnimationController(
-      vsync: this,
-    );
+        vsync: this,
+        duration: const Duration(
+            seconds:
+                300)); // initialize at 5 minutes, will update as we receive the corresponding timestamp
+    animationController.forward();
     super.initState();
   }
 
