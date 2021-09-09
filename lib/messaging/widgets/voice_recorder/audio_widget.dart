@@ -139,7 +139,7 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
-  static const height = 20.0;
+  static const height = 30.0;
 
   final AudioController controller;
   final Color initialColor;
@@ -192,7 +192,7 @@ class AudioWidget extends StatelessWidget {
             _getPlayIcon(controller, value),
             Container(width: 12),
             Container(
-              width: constraints.maxWidth - 32,
+              width: constraints.maxWidth - 42,
               height: height,
               child: Stack(
                 clipBehavior: Clip.hardEdge,
@@ -200,7 +200,7 @@ class AudioWidget extends StatelessWidget {
                 children: [
                   value.bars.isNotEmpty
                       ? _getWaveform(
-                          context, value, value.bars, constraints.maxWidth - 32)
+                          context, value, value.bars, constraints.maxWidth - 42)
                       : const SizedBox(),
                   _getSliderOverlay(value),
                 ],
