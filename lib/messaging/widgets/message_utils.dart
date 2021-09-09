@@ -389,6 +389,7 @@ Future<void> displayConversationOptions(
                                 child: Scrollbar(
                                   controller: scrollController,
                                   interactive: true,
+                                  isAlwaysShown: true,
                                   showTrackOnHover: true,
                                   isAlwaysShown: true,
                                   radius: const Radius.circular(50),
