@@ -125,6 +125,7 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
                                         path: ImagePaths.check_green),
                               ),
                               enabled: !waitingForOtherSide,
+                              minLines: 2,
                               maxLines: null),
                         ],
                       ),
