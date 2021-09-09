@@ -6,6 +6,7 @@ import 'package:lantern/core/router/tabs/message_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/messaging/conversation.dart';
 import 'package:lantern/messaging/new_message.dart';
+import 'package:lantern/messaging/video_image_detail/image_video_detail_page.dart';
 import 'package:lantern/ui/home.dart';
 import 'package:lantern/ui/widgets/full_screen_dialog.dart';
 import 'package:lantern/messaging/introduce.dart';
@@ -30,6 +31,13 @@ import 'package:lantern/messaging/introductions.dart';
         page: FullScreenDialog,
         name: 'FullScreenDialogPage',
         path: 'fullScreenDialogPage',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ImageVideoDetailPage,
+        name: 'ImageVideoDetailPage',
+        path: 'imageVideoDetailPage',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
