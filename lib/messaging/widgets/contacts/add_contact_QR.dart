@@ -11,6 +11,7 @@ import 'package:lantern/ui/widgets/pulse_animation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'add_contact.dart';
 import 'qr_scanner_border_painter.dart';
 
 class AddViaQR extends StatefulWidget {
@@ -18,7 +19,7 @@ class AddViaQR extends StatefulWidget {
   _AddViaQRState createState() => _AddViaQRState();
 }
 
-class _AddViaQRState extends State<AddViaQR> {
+class _AddViaQRState extends AddContactState<AddViaQR> {
   bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
   late MessagingModel model;
@@ -64,21 +65,7 @@ class _AddViaQRState extends State<AddViaQR> {
         });
         var mostRecentHelloTs =
             await model.addProvisionalContact(scannedContactId!);
-        var contactNotifier = model.contactNotifier(scannedContactId!);
-        late void Function() listener;
-        listener = () async {
-          var updatedContact = contactNotifier.value;
-          if (updatedContact != null &&
-              updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
-            contactNotifier.removeListener(listener);
-            // go back to New Message with the updatedContact info
-            Navigator.pop(context, updatedContact);
-          }
-        };
-        contactNotifier.addListener(listener);
-        // immediately invoke listener in case the contactNotifier already has
-        // an up-to-date contact.
-        listener();
+        waitForContact(model, scannedContactId!, mostRecentHelloTs);
       } catch (e) {
         setState(() {
           scanning = false;
