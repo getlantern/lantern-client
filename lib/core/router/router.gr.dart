@@ -7,9 +7,9 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 import 'package:lantern/messaging/conversation.dart' as _i5;
-import 'package:lantern/messaging/introduce.dart' as _i8;
-import 'package:lantern/messaging/introductions.dart' as _i9;
-import 'package:lantern/messaging/messages.dart' as _i7;
+import 'package:lantern/messaging/introduce.dart' as _i7;
+import 'package:lantern/messaging/introductions.dart' as _i8;
+import 'package:lantern/messaging/messages.dart' as _i9;
 import 'package:lantern/messaging/new_message.dart' as _i6;
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i20;
 import 'package:lantern/package_store.dart' as _i10;
@@ -73,6 +73,26 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 450,
         opaque: true,
         barrierDismissible: false),
+    Introduce.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i7.Introduce();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 450,
+        reverseDurationInMilliseconds: 450,
+        opaque: true,
+        barrierDismissible: false),
+    Introductions.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return _i8.Introductions();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 450,
+        reverseDurationInMilliseconds: 450,
+        opaque: true,
+        barrierDismissible: false),
     MessagesRouter.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
@@ -104,27 +124,7 @@ class AppRouter extends _i1.RootStackRouter {
     MessagesRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i7.Messages();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
-    Introduce.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i8.Introduce();
-        },
-        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 450,
-        reverseDurationInMilliseconds: 450,
-        opaque: true,
-        barrierDismissible: false),
-    Introductions.name: (routeData) => _i1.CustomPage<void>(
-        routeData: routeData,
-        builder: (_) {
-          return _i9.Introductions();
+          return _i9.Messages();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -264,11 +264,9 @@ class AppRouter extends _i1.RootStackRouter {
   @override
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(Home.name, path: '/', children: [
-          _i1.RouteConfig(MessagesRouter.name, path: 'messages', children: [
-            _i1.RouteConfig(MessagesRoute.name, path: ''),
-            _i1.RouteConfig(Introduce.name, path: 'introduce'),
-            _i1.RouteConfig(Introductions.name, path: 'introductions')
-          ]),
+          _i1.RouteConfig(MessagesRouter.name,
+              path: 'messages',
+              children: [_i1.RouteConfig(MessagesRoute.name, path: '')]),
           _i1.RouteConfig(VpnRouter.name,
               path: 'vpn', children: [_i1.RouteConfig(Vpn.name, path: '')]),
           _i1.RouteConfig(AccountRouter.name, path: 'account', children: [
@@ -291,7 +289,9 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(FullScreenDialogPage.name,
             path: 'fullScreenDialogPage'),
         _i1.RouteConfig(Conversation.name, path: 'conversation'),
-        _i1.RouteConfig(NewMessage.name, path: 'newMessage')
+        _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
+        _i1.RouteConfig(Introduce.name, path: 'introduce'),
+        _i1.RouteConfig(Introductions.name, path: 'introductions')
       ];
 }
 
@@ -346,6 +346,18 @@ class NewMessage extends _i1.PageRouteInfo {
   static const String name = 'NewMessage';
 }
 
+class Introduce extends _i1.PageRouteInfo {
+  const Introduce() : super(name, path: 'introduce');
+
+  static const String name = 'Introduce';
+}
+
+class Introductions extends _i1.PageRouteInfo {
+  const Introductions() : super(name, path: 'introductions');
+
+  static const String name = 'Introductions';
+}
+
 class MessagesRouter extends _i1.PageRouteInfo {
   const MessagesRouter({List<_i1.PageRouteInfo>? children})
       : super(name, path: 'messages', initialChildren: children);
@@ -378,18 +390,6 @@ class MessagesRoute extends _i1.PageRouteInfo {
   const MessagesRoute() : super(name, path: '');
 
   static const String name = 'MessagesRoute';
-}
-
-class Introduce extends _i1.PageRouteInfo {
-  const Introduce() : super(name, path: 'introduce');
-
-  static const String name = 'Introduce';
-}
-
-class Introductions extends _i1.PageRouteInfo {
-  const Introductions() : super(name, path: 'introductions');
-
-  static const String name = 'Introductions';
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {

@@ -17,7 +17,7 @@ class Introductions extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-        title: 'Introductions'.i18n,
+        title: 'introductions'.i18n,
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,9 +25,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: Text(
-                    'Both parties must accept the introduction to message each other.  Introductions disappear after 7 days if no action is taken.'
-                        .i18n,
+                child: Text('introductions_info'.i18n,
                     style: tsBaseScreenBodyText),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
@@ -57,7 +55,8 @@ class Introductions extends StatelessWidget {
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
                                       child: Text(
-                                        'Introduced by ' +
+                                        'introduced'.i18n +
+                                            ' ' +
                                             introductor.displayName
                                                 .toUpperCase(),
                                       ),
@@ -142,20 +141,20 @@ class Introductions extends StatelessWidget {
                                                           showAlertDialog(
                                                               context: context,
                                                               title: Text(
-                                                                  'Reject Introduction?'
+                                                                  'introductions_reject_title'
                                                                       .i18n,
                                                                   style:
                                                                       tsDialogTitle),
                                                               content: Text(
-                                                                  'You will not be able to message this contact if you reject the introduction.'
+                                                                  'introductions_reject_content'
                                                                       .i18n,
                                                                   style:
                                                                       tsDialogBody),
                                                               // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                               dismissText:
-                                                                  'Cancel'.i18n,
+                                                                  'cancel'.i18n,
                                                               agreeText:
-                                                                  'Reject'.i18n,
+                                                                  'reject'.i18n,
                                                               agreeAction:
                                                                   () async {
                                                                 try {
@@ -171,9 +170,9 @@ class Introductions extends StatelessWidget {
                                                                 } catch (e) {
                                                                   showInfoDialog(
                                                                       context,
-                                                                      title: 'Error'
+                                                                      title: 'error'
                                                                           .i18n,
-                                                                      des: 'Something went wrong while rejecting this connect request.'
+                                                                      des: 'introductions_error_description'
                                                                           .i18n,
                                                                       icon: ImagePaths
                                                                           .alert_icon,
@@ -184,7 +183,7 @@ class Introductions extends StatelessWidget {
                                                                 }
                                                               }),
                                                       child: Text(
-                                                          'Reject'
+                                                          'reject'
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
@@ -207,9 +206,9 @@ class Introductions extends StatelessWidget {
                                                           showInfoDialog(
                                                               context,
                                                               title:
-                                                                  'Error'.i18n,
+                                                                  'error'.i18n,
                                                               des:
-                                                                  'Something went wrong while accepting this connect request.'
+                                                                  'introductions_error_description_accepting'
                                                                       .i18n,
                                                               icon: ImagePaths
                                                                   .alert_icon,
@@ -228,7 +227,8 @@ class Introductions extends StatelessWidget {
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      'Introduction to ${value.introduction.displayName} approved approved approved approved approved!'
+                                                                      // TODO: add interpolation
+                                                                      'Introduction to ${value.introduction.displayName} approved!'
                                                                           .i18n,
                                                                       overflow:
                                                                           TextOverflow
@@ -250,9 +250,9 @@ class Introductions extends StatelessWidget {
                                                                   SnackBarAction(
                                                                 textColor:
                                                                     secondaryPink,
-                                                                label: 'START CHAT'
-                                                                    .toUpperCase()
-                                                                    .i18n,
+                                                                label: 'start_chat'
+                                                                    .i18n
+                                                                    .toUpperCase(),
                                                                 onPressed:
                                                                     () async {
                                                                   await context.pushRoute(Conversation(
@@ -266,7 +266,7 @@ class Introductions extends StatelessWidget {
                                                         }
                                                       },
                                                       child: Text(
-                                                          'Accept'
+                                                          'accept'
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
