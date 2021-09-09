@@ -6,6 +6,7 @@ import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/countdown_min_sec.dart';
 import 'package:lantern/ui/widgets/pulse_animation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -18,7 +19,8 @@ class AddViaQR extends StatefulWidget {
   _AddViaQRState createState() => _AddViaQRState();
 }
 
-class _AddViaQRState extends AddContactState<AddViaQR> {
+class _AddViaQRState extends AddContactState<AddViaQR>
+    with TickerProviderStateMixin {
   bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
   late MessagingModel model;
@@ -26,6 +28,8 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
   bool scanning = false;
   String? scannedContactId;
   StreamSubscription<Barcode>? subscription;
+  late AnimationController animationController;
+  late int expiresAt;
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -64,6 +68,11 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
         });
         var mostRecentHelloTs =
             await model.addProvisionalContact(scannedContactId!);
+        setState(() {
+          expiresAt = 100; //TODO: derive from model
+        });
+        animationController.duration = Duration(seconds: expiresAt);
+        await animationController.forward();
         waitForContact(model, scannedContactId!, mostRecentHelloTs);
       } catch (e) {
         setState(() {
@@ -81,7 +90,16 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
   }
 
   @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    animationController.dispose();
     subscription?.cancel();
     qrController?.dispose();
     if (scannedContactId != null) {
@@ -182,8 +200,19 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
                             ),
                           ),
                           if (scannedContactId != null && scanning)
-                            const CustomAssetImage(
-                                path: ImagePaths.check_green, size: 40),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CustomAssetImage(
+                                    path: ImagePaths.check_green, size: 40),
+                                Countdown(
+                                  StepTween(
+                                    begin: expiresAt,
+                                    end: 0,
+                                  ).animate(animationController),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
