@@ -71,35 +71,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
             },
             maxLines: widget.maxLines,
             decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              // we handle floating labels using our custom method below
-              labelText: widget.label,
-              helperText: widget.helperText,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: primaryBlue,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                // we handle floating labels using our custom method below
+                labelText: widget.label,
+                helperText: widget.helperText,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: primaryBlue,
+                  ),
                 ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: indicatorRed,
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: indicatorRed,
+                  ),
                 ),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 1,
-                  color: grey4,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: grey4,
+                  ),
                 ),
-              ),
-              prefixIcon: widget.prefixIcon,
-              suffixIcon: widget.controller.value.text.isEmpty
-                  ? widget.suffixIcon
-                  : !fieldKey.currentState!.hasError == true
-                      ? widget.suffixIcon
-                      : Icon(Icons.error, color: indicatorRed),
-            ),
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: !hasFocus && widget.controller.value.text.isEmpty
+                    ? widget.suffixIcon
+                    : fieldKey.currentState!.hasError == true
+                        ? CustomAssetImage(
+                            path: ImagePaths.error_icon, color: indicatorRed)
+                        : widget.suffixIcon),
           ),
         ),
         Container(
