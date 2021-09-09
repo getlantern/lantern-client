@@ -1,9 +1,9 @@
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/package_store.dart';
+import 'package:lantern/ui/widgets/custom_horizontal_divider.dart';
 import 'package:provider/provider.dart';
 
 import 'vpn_bandwidth.dart';
-import 'vpn_custom_divider.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
 import 'vpn_status.dart';
@@ -54,7 +54,14 @@ class VPNTab extends StatelessWidget {
                 child: Column(
                   children: [
                     VPNStatus(),
-                    const VPNCustomDivider(marginBottom: 0),
+                    Container(
+                      margin:
+                          const EdgeInsetsDirectional.only(top: 16, bottom: 0),
+                      child: const CustomHorizontalDivider(
+                        margin: 0.0,
+                        thickness: 1.0,
+                      ),
+                    ),
                     ServerLocationWidget(_openInfoServerLocation),
                     VPNBandwidth(),
                   ],

@@ -16,13 +16,19 @@ class ImagePaths {
   static const desktop_icon = 'assets/images/desktop_icon.svg';
   static const settings_icon = 'assets/images/settings_icon.svg';
   static const qr_code = 'assets/images/qr_code.svg';
+  static const disappearing_timer_icon =
+      'assets/images/disappearing_timer_icon.svg';
+  static const introduce_contact_icon =
+      'assets/images/introduce_contact_icon.svg';
+  static const trash_icon = 'assets/images/trash_icon.svg';
 
   static const email_icon = 'assets/images/email_icon.svg';
   static const clock_icon = 'assets/images/clock_icon.svg';
-  static const check_grey = 'assets/images/check_grey.svg';
+  static const check_green = 'assets/images/check_green.svg';
 
   static const alert_icon = 'assets/images/alert_icon.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';
+  static const content_copy = 'assets/images/content_copy.svg';
 
   static const free_logo = 'assets/images/free_logo.svg';
   static const pro_logo = 'assets/images/pro_logo.svg';

@@ -861,7 +861,7 @@ packages:
       name: qr_code_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.2"
   qr_flutter:
     dependency: "direct main"
     description:
@@ -1001,7 +1001,7 @@ packages:
     source: hosted
     version: "1.8.1"
   sprintf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sprintf
       url: "https://pub.dartlang.org"

@@ -29,7 +29,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:lantern/config/colors.dart';
+import 'package:lantern/config/text_styles.dart';
 
 import 'widgets/call_action.dart';
 
@@ -263,7 +263,7 @@ class _ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundColor: circleAvatarTitle,
+                backgroundColor: avatarBgColors[3],
                 child: Text(
                   sanitizeContactName(contact.displayName.isEmpty
                           ? contact.contactId.id
@@ -424,7 +424,7 @@ class _ConversationState extends State<Conversation>
                     final _scrollToIndex = messageRecords.toList().indexWhere(
                         (element) =>
                             element.value.id == _tappedMessage.value.replyToId);
-                    if (_scrollToIndex != -1) {
+                    if (_scrollToIndex != -1 && _scrollController.isAttached) {
                       _scrollController.scrollTo(
                           index: _scrollToIndex,
                           duration: const Duration(seconds: 1),
@@ -485,7 +485,7 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: pulsingShadow,
+                    pulseColor: countdownTimerColor,
                     color: pulsingBackground,
                   ),
                 ),

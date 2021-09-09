@@ -141,7 +141,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: Text('Accept'.i18n, style: tsAlertDialogTitle),
+                        title: Text('Accept'.i18n, style: tsDialogTitle),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -172,11 +172,11 @@ class ContactConnectionCard extends StatelessWidget {
                         showAlertDialog(
                             context: context,
                             title: Text('Reject Introduction?'.i18n,
-                                style: tsAlertDialogTitle),
+                                style: tsDialogTitle),
                             content: Text(
                                 'You will not be able to message this contact if you reject the introduction.'
                                     .i18n,
-                                style: tsAlertDialogBody),
+                                style: tsDialogBody),
                             dismissText: 'Cancel'.i18n,
                             agreeText: 'Reject'.i18n,
                             agreeAction: () async {
