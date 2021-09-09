@@ -28,10 +28,15 @@ TextStyle tsTitleAppbar =
 TextStyle tsCircleAvatarLetter =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: white);
 
-TextStyle tsCountdownTimer = TextStyle(
+TextStyle tsStopWatchTimer = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w400,
-  color: countdownTimerColor,
+  color: stopwatchColor,
+);
+
+TextStyle tsCountdownTimer = TextStyle(
+  fontSize: 48,
+  color: white,
 );
 
 TextStyle tsTitleItem =

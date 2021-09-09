@@ -12,7 +12,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
-import 'package:lantern/messaging/widgets/conversation_components/countdown_timer.dart';
+import 'package:lantern/messaging/widgets/conversation_components/stopwatch_timer.dart';
 import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -488,16 +488,16 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: countdownTimerColor,
+                    pulseColor: stopwatchColor,
                     color: pulsingBackground,
                   ),
                 ),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 14),
-                    child: CountdownTimer(
+                    child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsCountdownTimer,
+                      style: tsStopWatchTimer,
                     ),
                   ),
                 ),
