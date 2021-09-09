@@ -21,7 +21,6 @@ Color green = HexColor('#00A83E');
 Color indicatorRed = HexColor('#D5001F');
 Color indicatorGreen = HexColor('#00A83E');
 Color overlayBlack = HexColor('#000000CB');
-
 Color outboundBgColor = HexColor('#007A7C');
 Color outboundMsgColor = HexColor('#FFFFFF');
 Color inboundMsgColor = HexColor('#000000');
@@ -33,8 +32,6 @@ Color snippetShadowColor = const Color.fromARGB(
   0,
   0,
 );
-Color snippetBgIconColor = HexColor('#707070');
-
 Color unselectedTabColor = grey1;
 Color selectedTabColor = white;
 Color unselectedTabLabelColor = grey5;
@@ -43,10 +40,8 @@ Color borderColor = grey3;
 Color offSwitchColor = grey5;
 Color onSwitchColor = secondaryBlue;
 Color usedDataBarColor = primaryBlue;
-Color circleAvatarTitle = const Color.fromRGBO(122, 0, 59, 1);
-Color recordingColorBackground = const Color.fromRGBO(213, 0, 31, 1);
+Color recordingColorBackground = HexColor('#d50020');
 
-Color pulsingShadow = Colors.red.shade900;
 Color pulsingBackground = Colors.red;
 
 List<Color> avatarBgColors = [
@@ -65,8 +60,5 @@ Color getCheckboxColor(Set<MaterialState> states) {
     MaterialState.hovered,
     MaterialState.focused,
   };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.white;
-  }
-  return Colors.black;
+  return states.any(interactiveStates.contains) ? white : black;
 }
