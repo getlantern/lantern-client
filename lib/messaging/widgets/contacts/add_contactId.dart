@@ -38,7 +38,6 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
           ? 'contactid_error_description'.i18n
           : null);
   bool waitingForOtherSide = false;
-  bool formHasError = false;
 
   void _onContactIdAdd() async {
     // checking if the input field is not empty
@@ -51,7 +50,6 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
         setState(() {
           enteredContactId = contactIdController.value.text;
           waitingForOtherSide = true;
-          formHasError = false;
         });
         var mostRecentHelloTs = await model
             .addProvisionalContact(enteredContactId!.replaceAll('\-', ''));
@@ -64,7 +62,6 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
     } else {
       setState(() {
         enteredContactId = '';
-        formHasError = true;
       });
       return;
     }
@@ -126,16 +123,12 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
                                 keyboardType: TextInputType.text,
                                 suffixIcon: IconButton(
                                   onPressed: () => _onContactIdAdd(),
-                                  icon: formHasError
-                                      ? CustomAssetImage(
-                                          path: ImagePaths.error,
-                                          color: indicatorRed)
-                                      : !waitingForOtherSide
-                                          ? const CustomAssetImage(
-                                              path: ImagePaths
-                                                  .keyboard_arrow_right_icon)
-                                          : const CustomAssetImage(
-                                              path: ImagePaths.check_green),
+                                  icon: !waitingForOtherSide
+                                      ? const CustomAssetImage(
+                                          path: ImagePaths
+                                              .keyboard_arrow_right_icon)
+                                      : const CustomAssetImage(
+                                          path: ImagePaths.check_green),
                                 ),
                                 enabled: !waitingForOtherSide,
                                 minLines: 2,
