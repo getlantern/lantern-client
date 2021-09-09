@@ -1,5 +1,5 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/vpn/vpn_custom_divider.dart';
+import 'package:lantern/ui/widgets/custom_horizontal_divider.dart';
 
 class VPNBandwidth extends StatelessWidget {
   @override
@@ -10,7 +10,10 @@ class VPNBandwidth extends StatelessWidget {
       return bandwidth.allowed > 0
           ? Column(
               children: [
-                const VPNCustomDivider(marginTop: 4.0),
+                Container(
+                    margin: const EdgeInsetsDirectional.only(
+                        top: 4.0, bottom: 16.0),
+                    child: const CustomHorizontalDivider(margin: 0.0)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
