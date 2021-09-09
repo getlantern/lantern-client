@@ -382,6 +382,7 @@ Future<void> displayConversationOptions(
                               Expanded(
                                 child: Scrollbar(
                                   interactive: true,
+                                  isAlwaysShown: true,
                                   showTrackOnHover: true,
                                   radius: const Radius.circular(50),
                                   child: ListView.builder(
