@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/contacts/add_contactId.dart';
@@ -11,6 +10,8 @@ import 'package:lantern/ui/widgets/clipped_rect_border.dart';
 import 'package:lantern/ui/widgets/pulse_animation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import 'qr_scanner_border_painter.dart';
 
 class AddViaQR extends StatefulWidget {
   @override
@@ -108,14 +109,15 @@ class _AddViaQRState extends State<AddViaQR> {
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
     return model.me((BuildContext context, Contact me, Widget? child) {
-      return usingId ? AddViaContactIdBody(me) : renderQRscanner(context, me);
+      return usingId ? AddViaContactIdBody(me) : renderQRScanner(context, me);
     });
   }
 
-  Widget renderQRscanner(BuildContext context, Contact me) {
+  Widget renderQRScanner(BuildContext context, Contact me) {
     return fullScreenDialogLayout(
         context: context,
-        iconColor: white, // icon color
+        iconColor: white,
+        // icon color
         topColor: grey5,
         title: Center(
           child: Text('qr_scanner'.i18n.toUpperCase(),
@@ -127,22 +129,21 @@ class _AddViaQRState extends State<AddViaQR> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 25.0, 0, 0),
                   alignment: Alignment.center,
                   child: (scannedContactId != null && scanning)
                       ? PulseAnimation(
-                          Text('qr_info_waiting'.i18n,
-                              style: TextStyle(
-                                color: white,
-                              )),
+                          Text(
+                            'qr_info_waiting'.i18n,
+                            style: tsInfoText,
+                          ),
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('qr_info_scan'.i18n,
-                                style: TextStyle(
-                                  color: white,
-                                )),
+                            Text(
+                              'qr_info_scan'.i18n,
+                              style: tsInfoText,
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsetsDirectional.only(start: 4.0),
@@ -168,36 +169,39 @@ class _AddViaQRState extends State<AddViaQR> {
                 // QR scanner for other contact
                 Flexible(
                   flex: 2,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CustomPaint(
-                        painter: ClippedRectBorderPainter(),
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.all(10.0),
-                          width: MediaQuery.of(context).size.width * 0.65,
-                          child: Opacity(
-                            opacity: (scannedContactId != null && scanning)
-                                ? 0.5
-                                : 1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: QRView(
-                                  key: _qrKey,
-                                  onQRViewCreated: (controller) =>
-                                      _onQRViewCreated(controller, model),
+                  child: Container(
+                    margin:
+                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CustomPaint(
+                            painter: QRScannerBorderPainter(),
+                            child: Container(
+                              padding: const EdgeInsetsDirectional.all(6.0),
+                              child: Opacity(
+                                opacity: (scannedContactId != null && scanning)
+                                    ? 0.5
+                                    : 1,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: QRView(
+                                    key: _qrKey,
+                                    onQRViewCreated: (controller) =>
+                                        _onQRViewCreated(controller, model),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                          if (scannedContactId != null && scanning)
+                            const CustomAssetImage(
+                                path: ImagePaths.check_green, size: 40),
+                        ],
                       ),
-                      if (scannedContactId != null && scanning)
-                        const CustomAssetImage(
-                            path: ImagePaths.check_green, size: 40),
-                    ],
+                    ),
                   ),
                 ),
                 // my own QR code
@@ -205,22 +209,19 @@ class _AddViaQRState extends State<AddViaQR> {
                   flex: 2,
                   child: Column(
                     children: [
-                      Container(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16.0),
-                        alignment: Alignment.center,
-                        child: Text('qr_for_your_contact'.i18n,
-                            style: TextStyle(
-                              color: white,
-                            )),
+                      Text(
+                        'qr_for_your_contact'.i18n,
+                        style: tsInfoText,
                       ),
                       Flexible(
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
+                          margin: const EdgeInsetsDirectional.only(
+                              top: 16, bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: QrImage(
                               data: me.contactId.id,
+                              padding: const EdgeInsets.all(16),
                               backgroundColor: white,
                               foregroundColor: black,
                               errorCorrectionLevel: QrErrorCorrectLevel.H,
@@ -232,8 +233,13 @@ class _AddViaQRState extends State<AddViaQR> {
                   ),
                 ),
                 // Trouble scanning
-                Flexible(
-                  flex: 1,
+                Container(
+                  // the margin between the QR code and this section is 27,
+                  // which we split into 16 margin on the QR and 11 margin here
+                  // to make sure that the QR code ends up exactly the same size
+                  // as the QR scanner. If we put the full 27 margin on the QR
+                  // code, it would render a little smaller than the scanner.
+                  margin: const EdgeInsetsDirectional.only(top: 27 - 16),
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -252,9 +258,10 @@ class _AddViaQRState extends State<AddViaQR> {
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 16.0, 0, 16.0, 0),
-                            child: Text('qr_trouble_scanning'.i18n,
-                                style: TextStyle(
-                                    color: white, fontWeight: FontWeight.w400)),
+                            child: Text(
+                              'qr_trouble_scanning'.i18n,
+                              style: tsInfoButton,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
