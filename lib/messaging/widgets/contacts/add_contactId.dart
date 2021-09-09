@@ -31,10 +31,14 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
   late MessagingModel model;
   late final contactIdController = CustomTextEditingController(
       formKey: _formKey,
-      validator: (value) => value != '' || value != widget.me.contactId.id
-          ? null
-          : 'contactid_input_error'.i18n);
+      validator: (value) => value == null ||
+              value.isEmpty ||
+              value == widget.me.contactId.id ||
+              value.length != widget.me.contactId.id.length
+          ? 'contactid_error_description'.i18n
+          : null);
   bool waitingForOtherSide = false;
+  bool formHasError = false;
 
   void _onContactIdAdd() async {
     // checking if the input field is not empty
@@ -47,21 +51,22 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
         setState(() {
           enteredContactId = contactIdController.value.text;
           waitingForOtherSide = true;
+          formHasError = false;
         });
         var mostRecentHelloTs = await model
             .addProvisionalContact(enteredContactId!.replaceAll('\-', ''));
         waitForContact(model, enteredContactId!, mostRecentHelloTs);
       } catch (e) {
         setState(() {
-          enteredContactId = '';
           waitingForOtherSide = false;
         });
-        showInfoDialog(context,
-            title: 'error'.i18n,
-            des: 'contactid_error_description'.i18n,
-            icon: ImagePaths.alert_icon,
-            buttonText: 'OK'.i18n);
       }
+    } else {
+      setState(() {
+        enteredContactId = '';
+        formHasError = true;
+      });
+      return;
     }
   }
 
@@ -90,135 +95,145 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
               style: const TextStyle(fontSize: 20)),
         ],
       ),
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            if (waitingForOtherSide)
-              PulseAnimation(
-                Text(
-                  'qr_info_waiting_QR'.i18n,
-                  style: tsInfoTextBlack,
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              if (waitingForOtherSide)
+                PulseAnimation(
+                  Text(
+                    'qr_info_waiting_QR'.i18n,
+                    style: tsInfoTextBlack,
+                  ),
                 ),
-              ),
-            Form(
-              key: _formKey,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsetsDirectional.all(20.0),
-                      child: Wrap(
-                        children: [
-                          CustomTextField(
-                              controller: contactIdController,
-                              label: 'contactid_messenger_id'.i18n,
-                              helperText: 'contactid_enter_manually'.i18n,
-                              keyboardType: TextInputType.text,
-                              suffixIcon: IconButton(
-                                onPressed: () => _onContactIdAdd(),
-                                icon: !waitingForOtherSide
-                                    ? const CustomAssetImage(
-                                        path: ImagePaths
-                                            .keyboard_arrow_right_icon)
-                                    : const CustomAssetImage(
-                                        path: ImagePaths.check_green),
-                              ),
-                              enabled: !waitingForOtherSide,
-                              minLines: 2,
-                              maxLines: null),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(start: 10),
-                                child: Text(
-                                  'contactid_your_id'.i18n.toUpperCase(),
-                                  style: TextStyle(color: black, fontSize: 10),
+              Form(
+                key: _formKey,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.all(20.0),
+                        child: Wrap(
+                          children: [
+                            CustomTextField(
+                                controller: contactIdController,
+                                label: 'contactid_messenger_id'.i18n,
+                                helperText: 'contactid_enter_manually'.i18n,
+                                keyboardType: TextInputType.text,
+                                suffixIcon: IconButton(
+                                  onPressed: () => _onContactIdAdd(),
+                                  icon: formHasError
+                                      ? CustomAssetImage(
+                                          path: ImagePaths.error,
+                                          color: indicatorRed)
+                                      : !waitingForOtherSide
+                                          ? const CustomAssetImage(
+                                              path: ImagePaths
+                                                  .keyboard_arrow_right_icon)
+                                          : const CustomAssetImage(
+                                              path: ImagePaths.check_green),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Divider(thickness: 1, color: grey2),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showSnackbar(
-                                      context: context,
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                              child: Text(
-                                            'copied'.i18n,
-                                            style: txSnackBarText,
-                                            textAlign: TextAlign.left,
-                                          )),
-                                        ],
-                                      ),
-                                    );
-                                    Clipboard.setData(ClipboardData(
-                                        text: widget.me.contactId.id));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                        start: 10.0, end: 10),
-                                    child: Text(
-                                        humanizeContactId(
-                                            widget.me.contactId.id),
-                                        overflow: TextOverflow.visible,
-                                        style: const TextStyle(
-                                            fontSize: 16.0, height: 26 / 16)),
+                                enabled: !waitingForOtherSide,
+                                minLines: 2,
+                                maxLines: null),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 10),
+                                  child: Text(
+                                    'contactid_your_id'.i18n.toUpperCase(),
+                                    style:
+                                        TextStyle(color: black, fontSize: 10),
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    showSnackbar(
-                                      context: context,
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                              child: Text(
-                                            'copied'.i18n,
-                                            style: txSnackBarText,
-                                            textAlign: TextAlign.left,
-                                          )),
-                                        ],
-                                      ),
-                                    );
-                                    Clipboard.setData(ClipboardData(
-                                        text: widget.me.contactId.id));
-                                  },
-                                  icon: CustomAssetImage(
-                                    path: ImagePaths.content_copy,
-                                    size: 20,
-                                    color: black,
-                                  ))
-                            ],
-                          ),
-                          Divider(thickness: 1, color: grey2),
-                        ],
+                              ],
+                            ),
+                            Divider(thickness: 1, color: grey2),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showSnackbar(
+                                        context: context,
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                                child: Text(
+                                              'copied'.i18n,
+                                              style: txSnackBarText,
+                                              textAlign: TextAlign.left,
+                                            )),
+                                          ],
+                                        ),
+                                      );
+                                      Clipboard.setData(ClipboardData(
+                                          text: widget.me.contactId.id));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 10.0, end: 10),
+                                      child: Text(
+                                          humanizeContactId(
+                                              widget.me.contactId.id),
+                                          overflow: TextOverflow.visible,
+                                          style: const TextStyle(
+                                              fontSize: 16.0, height: 26 / 16)),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showSnackbar(
+                                        context: context,
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                                child: Text(
+                                              'copied'.i18n,
+                                              style: txSnackBarText,
+                                              textAlign: TextAlign.left,
+                                            )),
+                                          ],
+                                        ),
+                                      );
+                                      Clipboard.setData(ClipboardData(
+                                          text: widget.me.contactId.id));
+                                    },
+                                    icon: CustomAssetImage(
+                                      path: ImagePaths.content_copy,
+                                      size: 20,
+                                      color: black,
+                                    ))
+                              ],
+                            ),
+                            Divider(thickness: 1, color: grey2),
+                          ],
+                        ),
                       ),
-                    ),
-                  ]),
-            ),
-          ],
+                    ]),
+              ),
+            ],
+          ),
         ),
       ),
     );

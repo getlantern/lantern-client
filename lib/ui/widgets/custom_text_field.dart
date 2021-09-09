@@ -64,6 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             key: fieldKey,
             enabled: widget.enabled,
             controller: widget.controller,
+            autovalidateMode: AutovalidateMode.disabled,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
             validator: (value) {
@@ -78,6 +79,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 // we handle floating labels using our custom method below
                 labelText: widget.label,
                 helperText: widget.helperText,
+                helperMaxLines: 2,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
@@ -97,12 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ),
                 ),
                 prefixIcon: widget.prefixIcon,
-                suffixIcon: !hasFocus && widget.controller.value.text.isEmpty
-                    ? widget.suffixIcon
-                    : fieldKey.currentState!.hasError == true
-                        ? CustomAssetImage(
-                            path: ImagePaths.error_icon, color: indicatorRed)
-                        : widget.suffixIcon),
+                suffixIcon: widget.suffixIcon),
           ),
         ),
         Container(
@@ -114,7 +111,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : Text(
                   widget.label,
                   style: TextStyle(
-                      color: fieldKey.currentState?.hasError == true
+                      color: fieldKey.currentState?.mounted == true &&
+                              fieldKey.currentState?.hasError == true
                           ? indicatorRed
                           : primaryBlue),
                 ),
@@ -146,7 +144,6 @@ class CustomTextEditingController extends TextEditingController {
     if (validator == null) {
       return null;
     }
-
     return validator!(value);
   }
 
