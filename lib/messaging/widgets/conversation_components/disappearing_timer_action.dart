@@ -18,9 +18,9 @@ class DisappearingTimerAction extends StatelessWidget {
       contact,
       (context, contact, child) =>
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        const Icon(
-          Icons.timer,
-          size: 12,
+        const CustomAssetImage(
+          path: ImagePaths.timer_icon,
+          size: 24,
         ),
         const SizedBox(width: 2),
         contact.messagesDisappearAfterSeconds > 0
@@ -30,7 +30,7 @@ class DisappearingTimerAction extends StatelessWidget {
                     .toUpperCase(),
                 style: tsDisappearingTimer)
             : Text(
-                'Off'.i18n,
+                'off'.i18n,
                 style: tsDisappearingTimerDetail,
               ),
       ]),

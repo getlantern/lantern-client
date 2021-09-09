@@ -15,7 +15,7 @@ TextStyle? tsCaption(BuildContext context) =>
     Theme.of(context).textTheme.caption;
 
 TextStyle tsDisappearingTimer =
-    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.w700);
+    const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400);
 
 TextStyle tsDisappearingTimerDetail =
     const TextStyle(fontSize: 8.0, fontWeight: FontWeight.w700);
@@ -88,8 +88,8 @@ TextStyle tsDialogTitle = const TextStyle(fontSize: 16);
 TextStyle tsDisappearingContentBottomModal = TextStyle(
     color: grey5, fontSize: 14.0, height: 1.5, fontWeight: FontWeight.w400);
 
-TextStyle tsAlertDialogListTile = const TextStyle(
-    fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.black);
+TextStyle tsAlertDialogListTile =
+    TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: black);
 
 TextStyle tsDialogBody = const TextStyle(fontSize: 14, height: 1.5);
 
@@ -117,9 +117,9 @@ TextStyle? tsInfoDialogButton = TextStyle(
   color: primaryPink,
 );
 
-TextStyle txSnackBarText = const TextStyle(
+TextStyle txSnackBarText = TextStyle(
   fontSize: 14,
-  color: Colors.white,
+  color: white,
   height: 23 / 14,
 );
 
@@ -129,18 +129,18 @@ TextStyle tsInfoText = const TextStyle(
 
 TextStyle tsInfoButton = tsInfoText.copyWith(fontWeight: FontWeight.w400);
 
-TextStyle tsFullScreenDialogTitle = const TextStyle(
+TextStyle tsFullScreenDialogTitle = TextStyle(
   fontSize: 20,
-  color: Colors.white,
+  color: white,
   fontWeight: FontWeight.w600,
 );
 
 // Message bubble StyleSheet
-TextStyle? tsReplySnippetHeader = const TextStyle(
+TextStyle? tsReplySnippetHeader = TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 14,
   height: 23 / 14,
-  color: Colors.black,
+  color: black,
 );
 
 TextStyle? tsReplySnippetSpecialCase =

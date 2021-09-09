@@ -148,8 +148,8 @@ class _ConversationState extends State<Conversation>
       }
     } catch (e) {
       showInfoDialog(context,
-          title: 'Error'.i18n,
-          des: 'Something went wrong while sending your message.'.i18n,
+          title: 'error'.i18n,
+          des: 'conversation_error_message_send'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     } finally {
@@ -219,8 +219,8 @@ class _ConversationState extends State<Conversation>
       });
     } catch (e) {
       showInfoDialog(context,
-          title: 'Error'.i18n,
-          des: 'Something went wrong while sharing a media file.'.i18n,
+          title: 'error'.i18n,
+          des: 'conversation_error_share_media_file'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
     } finally {
@@ -273,7 +273,7 @@ class _ConversationState extends State<Conversation>
                   style: tsCircleAvatarLetter,
                 ),
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -296,8 +296,11 @@ class _ConversationState extends State<Conversation>
               children: [
                 CallAction(contact),
                 IconButton(
-                  icon: const Icon(Icons.more_vert_rounded),
-                  tooltip: 'Menu'.i18n,
+                  icon: const CustomAssetImage(
+                    path: ImagePaths.dotted_menu_icon,
+                    size: 16,
+                  ),
+                  tooltip: 'menu'.i18n,
                   onPressed: () =>
                       displayConversationOptions(model, context, contact),
                 )
@@ -328,7 +331,7 @@ class _ConversationState extends State<Conversation>
               ),
               MessagingEmojiPicker(
                 showEmojis: _emojiShowing,
-                emptySuggestions: 'No Recents'.i18n,
+                emptySuggestions: 'no_recents'.i18n,
                 height: size!.height * 0.25,
                 onBackspacePressed: () {
                   _newMessage
@@ -528,7 +531,7 @@ class _ConversationState extends State<Conversation>
                 // Send icon
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                hintText: 'Message'.i18n,
+                hintText: 'message'.i18n,
                 border: const OutlineInputBorder(),
               ),
             ),
