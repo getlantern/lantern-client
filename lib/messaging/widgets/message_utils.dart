@@ -258,7 +258,6 @@ int generateUniqueColorIndex(String str) {
 
 Future<void> displayConversationOptions(
     MessagingModel model, BuildContext parentContext, Contact contact) {
-  final seconds = <int>[5, 60, 3600, 10800, 21600, 86400, 604800, 0];
   return showModalBottomSheet(
       context: parentContext,
       isDismissible: true,
@@ -301,7 +300,19 @@ Future<void> displayConversationOptions(
                       style: tsBottomModalList),
                 ),
                 onTap: () async {
+                  final scrollController = ScrollController();
+                  final seconds = <int>[
+                    5,
+                    60,
+                    3600,
+                    10800,
+                    21600,
+                    86400,
+                    604800,
+                    0
+                  ];
                   var selectedPosition = -1;
+
                   return showDialog(
                     context: bottomContext,
                     barrierDismissible: true,
@@ -393,11 +404,13 @@ Future<void> displayConversationOptions(
                                         maxHeight: maxHeight,
                                       ),
                                       child: Scrollbar(
+                                        controller: scrollController,
                                         interactive: true,
                                         isAlwaysShown: true,
                                         showTrackOnHover: true,
                                         radius: const Radius.circular(50),
                                         child: ListView.builder(
+                                          controller: scrollController,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
                                           physics:
