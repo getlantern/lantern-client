@@ -5,6 +5,7 @@ import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
+import 'package:lantern/ui/widgets/pulse_animation.dart';
 
 import 'add_contact.dart';
 
@@ -85,7 +86,7 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('qr_trouble_scanning'.i18n.toUpperCase(),
+          Text('qr_trouble_scanning'.i18n,
               style: const TextStyle(fontSize: 20)),
         ],
       ),
@@ -93,6 +94,13 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
         color: Colors.white,
         child: Column(
           children: [
+            if (waitingForOtherSide)
+              PulseAnimation(
+                Text(
+                  'qr_info_waiting_QR'.i18n,
+                  style: tsInfoTextBlack,
+                ),
+              ),
             Form(
               key: _formKey,
               child: Column(
@@ -103,19 +111,19 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
                       child: Wrap(
                         children: [
                           CustomTextField(
-                            controller: contactIdController,
-                            label: 'contactid_messenger_id'.i18n,
-                            helperText: 'contactid_enter_manually'.i18n,
-                            keyboardType: TextInputType.text,
-                            suffixIcon: IconButton(
-                              onPressed: () => _onContactIdAdd(),
-                              icon: Icon(!waitingForOtherSide
-                                  ? Icons.keyboard_arrow_right_outlined
-                                  : Icons.check_circle),
-                              color: waitingForOtherSide ? green : black,
-                            ),
-                            enabled: !waitingForOtherSide,
-                          ),
+                              controller: contactIdController,
+                              label: 'contactid_messenger_id'.i18n,
+                              helperText: 'contactid_enter_manually'.i18n,
+                              keyboardType: TextInputType.text,
+                              suffixIcon: IconButton(
+                                onPressed: () => _onContactIdAdd(),
+                                icon: Icon(!waitingForOtherSide
+                                    ? Icons.keyboard_arrow_right_outlined
+                                    : Icons.check_circle),
+                                color: waitingForOtherSide ? green : black,
+                              ),
+                              enabled: !waitingForOtherSide,
+                              maxLines: null),
                         ],
                       ),
                     ),

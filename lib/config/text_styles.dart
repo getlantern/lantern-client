@@ -120,11 +120,14 @@ TextStyle txSnackBarText = const TextStyle(
   height: 23 / 14,
 );
 
-TextStyle tsInfoText = const TextStyle(
-  color: Colors.white,
+TextStyle tsInfoTextWhite = TextStyle(
+  color: white,
+);
+TextStyle tsInfoTextBlack = TextStyle(
+  color: black,
 );
 
-TextStyle tsInfoButton = tsInfoText.copyWith(fontWeight: FontWeight.w400);
+TextStyle tsInfoButton = tsInfoTextWhite.copyWith(fontWeight: FontWeight.w400);
 
 TextStyle tsFullScreenDialogTitle = const TextStyle(
   fontSize: 20,

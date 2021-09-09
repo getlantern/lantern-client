@@ -106,8 +106,7 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
         // icon color
         topColor: grey5,
         title: Center(
-          child: Text('qr_scanner'.i18n.toUpperCase(),
-              style: tsFullScreenDialogTitle),
+          child: Text('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
         ),
         child: Container(
           color: grey5,
@@ -119,8 +118,8 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
                   child: (scannedContactId != null && scanning)
                       ? PulseAnimation(
                           Text(
-                            'qr_info_waiting'.i18n,
-                            style: tsInfoText,
+                            'qr_info_waiting_ID'.i18n,
+                            style: tsInfoTextWhite,
                           ),
                         )
                       : Row(
@@ -128,7 +127,7 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
                           children: [
                             Text(
                               'qr_info_scan'.i18n,
-                              style: tsInfoText,
+                              style: tsInfoTextWhite,
                             ),
                             Padding(
                               padding:
@@ -197,7 +196,7 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
                     children: [
                       Text(
                         'qr_for_your_contact'.i18n,
-                        style: tsInfoText,
+                        style: tsInfoTextWhite,
                       ),
                       Flexible(
                         child: Container(
