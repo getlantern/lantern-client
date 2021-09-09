@@ -38,26 +38,26 @@ class StatusRowState extends State<StatusRow> {
         builder: (BuildContext context, int time, Widget? child) {
           var index = widget.msg.position(segments: segments);
           return Container(
-            padding: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
             child: Opacity(
               opacity: 0.9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(right: 2.0),
+                    padding: const EdgeInsetsDirectional.only(end: 2.0),
                     child: Text(
                       widget.message.value.ts.toInt().humanizeDate(),
                       style: tsMessageStatus(widget.outbound),
                     ),
                   ),
                   Container(
-                      padding: const EdgeInsets.only(right: 2.0),
+                      padding: const EdgeInsetsDirectional.only(end: 2.0),
                       child: renderStatusIcon(
                           widget.inbound, widget.outbound, widget.msg)),
                   if (msgSelfDeletes)
                     Container(
-                      padding: const EdgeInsets.only(right: 2.0),
+                      padding: const EdgeInsetsDirectional.only(end: 2.0),
                       child: CustomAssetImage(
                           path: ImagePaths.countdownPaths[index],
                           size: 12,

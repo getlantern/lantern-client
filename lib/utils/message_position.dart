@@ -26,4 +26,98 @@ class MessagePosition {
     if (nexMessage == null) return 8.0;
     return 2.0;
   }
+
+  static double topLeftBorder(Widget? widget, StoredMessage? nexMessage,
+      StoredMessage? priorMessage, bool inbound, bool outbound) {
+    if (inbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN &&
+        widget != null) {
+      return 0.0;
+    }
+    if (inbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    if (outbound && priorMessage == null) {
+      return 16.0;
+    }
+    if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    return 0.0;
+  }
+
+  static double bottomLeftBorder(Widget? widget, StoredMessage? nexMessage,
+      StoredMessage? priorMessage, bool inbound, bool outbound) {
+    if (inbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    if (outbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (outbound && nexMessage == null && priorMessage != null) {
+      return 16.0;
+    }
+
+    return 0.0;
+  }
+
+  static double topRightBorder(Widget? widget, StoredMessage? nexMessage,
+      StoredMessage? priorMessage, bool inbound, bool outbound) {
+    if (inbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (inbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (outbound && priorMessage == null && nexMessage != null) {
+      return 16.0;
+    }
+    if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    return 0.0;
+  }
+
+  static double bottomRightBorder(Widget? widget, StoredMessage? nexMessage,
+      StoredMessage? priorMessage, bool inbound, bool outbound) {
+    if (inbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+    if (inbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.OUT) {
+      return 16.0;
+    }
+    // if (outbound && priorMessage == null && nexMessage != null) {
+    //   return 16.0;
+    // }
+    // if (outbound &&
+    //     priorMessage != null &&
+    //     priorMessage.direction == MessageDirection.IN) {
+    //   return 16.0;
+    // }
+    return 0.0;
+  }
 }

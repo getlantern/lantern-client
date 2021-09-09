@@ -70,13 +70,13 @@ class MessageBubble extends StatelessWidget {
             child: Container(
                 //OUTBOUND: SENDED MESSAGES.
                 //INBOUND: RECEIVED MESSAGES
-                padding: EdgeInsets.only(
+                padding: EdgeInsetsDirectional.only(
                   top: isDateMarker.isNotEmpty
                       ? 8
                       : MessagePosition.topPosition(reactionsList, nextMessage,
                           priorMessage, inbound, outbound),
-                  left: inbound ? 16 : 0,
-                  right: outbound ? 16 : 0,
+                  start: inbound ? 16 : 0,
+                  end: outbound ? 16 : 0,
                   bottom: MessagePosition.bottomPosition(reactionsList,
                       nextMessage, priorMessage, inbound, outbound),
                 ),
@@ -130,7 +130,6 @@ class MessageBubble extends StatelessWidget {
         menuItems: [
           FocusedMenuItem(
             title: Flexible(
-              fit: FlexFit.tight,
               child: Reactions(
                 onBubbleReaction: onBubbleReaction,
                 onEmojiTap: onEmojiTap,
@@ -188,7 +187,7 @@ class MessageBubble extends StatelessWidget {
         ],
         blurBackgroundColor: Colors.blueGrey[900],
         menuOffset: 5.0,
-        bottomOffsetHeight: 50.0,
+        bottomOffsetHeight: 70.0,
         menuItemExtent: 60,
         openWithTap: false,
         duration: const Duration(seconds: 0),
@@ -201,29 +200,33 @@ class MessageBubble extends StatelessWidget {
             if (isDateMarker != '')
               Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsetsDirectional.only(bottom: 10),
                   // width: 100.w,
                   child: DateMarker(isDateMarker)),
             Stack(
               clipBehavior: Clip.none,
               children: [
-                ContentContainer(
-                    outbound,
-                    inbound,
-                    msg,
-                    message,
-                    contact,
-                    onTapReply,
-                    startOfBlock,
-                    endOfBlock,
-                    newestMessage,
-                    reactions,
-                    isAttachment),
+                Container(
+                  child: ContentContainer(
+                      priorMessage,
+                      nextMessage,
+                      outbound,
+                      inbound,
+                      msg,
+                      message,
+                      contact,
+                      onTapReply,
+                      startOfBlock,
+                      endOfBlock,
+                      newestMessage,
+                      reactions,
+                      isAttachment),
+                ),
                 reactionsList != null
-                    ? Positioned(
+                    ? PositionedDirectional(
                         top: -10,
-                        right: inbound ? -13 : null,
-                        left: outbound ? -13 : null,
+                        end: inbound ? -13 : null,
+                        start: outbound ? -13 : null,
                         child: reactionsList,
                       )
                     : const SizedBox(),
