@@ -18,9 +18,10 @@ class DisappearingTimerAction extends StatelessWidget {
       contact,
       (context, contact, child) =>
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        const CustomAssetImage(
-          path: ImagePaths.timer_icon,
-          size: 24,
+        CustomAssetImage(
+          path: ImagePaths.disappearing_timer_icon,
+          size: 12,
+          color: black,
         ),
         const SizedBox(width: 2),
         contact.messagesDisappearAfterSeconds > 0
