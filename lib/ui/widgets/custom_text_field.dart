@@ -10,7 +10,9 @@ class CustomTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
+  late final IconButton? suffixIcon;
   late final TextInputType? keyboardType;
+  late final bool? enabled;
 
   CustomTextField({
     required this.controller,
@@ -18,7 +20,9 @@ class CustomTextField extends StatefulWidget {
     required this.label,
     this.helperText,
     this.prefixIcon,
+    this.suffixIcon,
     this.keyboardType,
+    this.enabled,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -54,6 +58,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           padding: const EdgeInsetsDirectional.only(top: 7),
           child: TextFormField(
             key: fieldKey,
+            enabled: widget.enabled,
             controller: widget.controller,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
@@ -86,13 +91,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
               prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.controller.value.text.isEmpty
+                  ? widget.suffixIcon
+                  : !fieldKey.currentState!.hasError == true
+                      ? widget.suffixIcon
+                      : Icon(Icons.error, color: indicatorRed),
             ),
           ),
         ),
         Container(
           margin: const EdgeInsetsDirectional.only(start: 11),
           padding: EdgeInsets.symmetric(horizontal: hasFocus ? 2 : 0),
-          color: Colors.white,
+          color: white,
           child: !hasFocus && widget.controller.value.text.isEmpty
               ? Container()
               : Text(

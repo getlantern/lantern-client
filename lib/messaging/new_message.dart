@@ -8,20 +8,34 @@ import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/utils/iterable_extension.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class NewMessage extends StatelessWidget {
-  static const NUM_RECENT_CONTACTS = 10;
+class NewMessage extends StatefulWidget {
+  // static const NUM_RECENT_CONTACTS = 10;
+
+  @override
+  _NewMessageState createState() => _NewMessageState();
+}
+
+class _NewMessageState extends State<NewMessage> {
+  var scrollListController = ItemScrollController();
+  Contact? _updatedContact;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'New Message'.i18n,
+      title: 'new_message'.i18n,
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
-          tooltip: 'Search'.i18n,
+          tooltip: 'search'.i18n,
           onPressed: () {},
         ),
       ],
@@ -30,26 +44,62 @@ class NewMessage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 Icons.qr_code,
-                color: Colors.black,
+                color: black,
               ),
-              title: Text('Scan QR Code'.i18n),
+              title: Text('scan_qr_code'.i18n),
               trailing: const CustomAssetImage(
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
               ),
-              onTap: () async => await context.router.push(
+              onTap: () async => await context.router
+                  .push(
                 FullScreenDialogPage(widget: AddViaQR()),
-              ),
+              )
+                  .then((value) {
+                setState(() {
+                  _updatedContact = value as Contact;
+                });
+                // we only care about this if it comes back with an updated contact
+                if (_updatedContact != null) {
+                  showSnackbar(
+                      context: context,
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              // TODO: look up how to use variables with internationalization
+                              '${_updatedContact!.displayName} is a Contact'
+                                  .i18n,
+                              overflow: TextOverflow.visible,
+                              style: txSnackBarText,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                      duration: const Duration(milliseconds: 4000),
+                      action: SnackBarAction(
+                        textColor: secondaryPink,
+                        label: 'start_chat'.i18n.toUpperCase(),
+                        onPressed: () async {
+                          await context.pushRoute(Conversation(
+                              contactId: _updatedContact!.contactId));
+                        },
+                      ));
+                }
+              }),
             ),
             Divider(thickness: 1, color: grey2),
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 Icons.people,
-                color: Colors.black,
+                color: black,
               ),
-              title: Text('Introduce Contacts'.i18n),
+              title: Text('introduce_contacts'.i18n),
               trailing: const CustomAssetImage(
                 path: ImagePaths.keyboard_arrow_right_icon,
                 size: 24,
@@ -62,7 +112,7 @@ class NewMessage extends StatelessWidget {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 return _contacts.toList().isNotEmpty
                     ? ListTile(
-                        title: Text('Recent contacts'.i18n.toUpperCase(),
+                        title: Text('contacts'.i18n.toUpperCase(),
                             style: tsEmptyContactState))
                     : Container();
               }),
@@ -71,18 +121,36 @@ class NewMessage extends StatelessWidget {
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
               var contacts = _contacts.toList();
 
-              var recentContacts = contacts.take(NUM_RECENT_CONTACTS).toList();
+              // TODO: uncomment if we need to limit num of contacts here hiding this for now
+              // var recentContacts =
+              //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
+
               // related https://github.com/getlantern/android-lantern/issues/299
-              var sortedRecentContacts = recentContacts
+              var sortedContacts = contacts
                 ..sort((a, b) => sanitizeContactName(a.value.displayName)
                     .compareTo(sanitizeContactName(b.value.displayName)));
 
-              var groupedSortedRecentContacts = sortedRecentContacts
+              var groupedSortedContacts = sortedContacts
                   .groupBy((el) => sanitizeContactName(el.value.displayName));
 
-              return groupedSortedRecentContacts.isNotEmpty
+              // scroll to index of the contact we just added, if there is one
+              // otherwise start from top (index = 0)
+              var scrollIndex = _updatedContact != null
+                  ? sortedContacts.indexWhere((element) =>
+                      element.value.contactId.id ==
+                      _updatedContact!.contactId.id)
+                  : 0;
+              if (scrollListController.isAttached) {
+                scrollListController.scrollTo(
+                    index: scrollIndex != -1 ? scrollIndex : 0,
+                    //if recent contact can not be found in our list for some reason
+                    duration: const Duration(milliseconds: 300));
+              }
+
+              return groupedSortedContacts.isNotEmpty
                   ? groupedContactListGenerator(
-                      groupedSortedList: groupedSortedRecentContacts,
+                      groupedSortedList: groupedSortedContacts,
+                      scrollListController: scrollListController,
                       leadingCallback: (Contact contact) => CircleAvatar(
                             backgroundColor: avatarBgColors[
                                 generateUniqueColorIndex(contact.contactId.id)],
@@ -90,20 +158,19 @@ class NewMessage extends StatelessWidget {
                                 sanitizeContactName(contact.displayName)
                                     .substring(0, 2)
                                     .toUpperCase(),
-                                style: const TextStyle(color: Colors.white)),
+                                style: TextStyle(color: white)),
                           ),
                       onTapCallback: (Contact contact) async =>
                           await context.pushRoute(
                               Conversation(contactId: contact.contactId)))
                   : Container(
                       alignment: AlignmentDirectional.center,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0, vertical: 16.0),
-                      child: Text('No contacts yet.'.i18n,
+                      padding: const EdgeInsetsDirectional.all(16.0),
+                      child: Text('no_contacts_yet.'.i18n,
                           textAlign: TextAlign.center,
                           style:
                               tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
-            }))
+            })),
           ]),
     );
   }

@@ -193,7 +193,7 @@ void showSnackbar(
   final snackBar = SnackBar(
     content: content,
     action: action,
-    backgroundColor: Colors.black,
+    backgroundColor: black,
     duration: duration,
     margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -206,32 +206,44 @@ void showSnackbar(
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-Widget fullScreenDialogLayout(Color bgColor, Color iconColor,
-    BuildContext context, List<Widget> widgetList) {
+Widget fullScreenDialogLayout(
+    {required Color topColor,
+    required Color iconColor,
+    required BuildContext context,
+    required Widget title,
+    required Widget child}) {
   return Container(
-    color: bgColor,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      height: MediaQuery.of(context).size.height,
+      child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsetsDirectional.all(20),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.close_rounded,
-                  color: iconColor,
+          Container(
+            color: topColor,
+            height: 100,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.center,
+                  child: title,
                 ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: iconColor,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
           ),
-          ...widgetList
-        ]),
-  );
+          Expanded(child: child)
+        ],
+      ));
 }
 
 int generateUniqueColorIndex(String str) {
@@ -301,7 +313,10 @@ Future<void> displayConversationOptions(
                         ),
                         contentPadding: const EdgeInsetsDirectional.all(0),
                         clipBehavior: Clip.hardEdge,
-                        content: Container(
+                        content: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.9),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -364,77 +379,80 @@ Future<void> displayConversationOptions(
                                 size: 2,
                                 margin: 16,
                               ),
-                              Scrollbar(
-                                interactive: true,
-                                showTrackOnHover: true,
-                                radius: const Radius.circular(50),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: seconds.length,
-                                  itemBuilder: (context, index) {
-                                    return ListTile(
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.only(),
-                                      horizontalTitleGap: 8,
-                                      minLeadingWidth: 20,
-                                      onTap: () async {
-                                        setState(() {
-                                          selectedPosition = index;
-                                        });
-                                      },
-                                      selectedTileColor: Colors.white,
-                                      tileColor: const Color.fromRGBO(
-                                          245, 245, 245, 1),
-                                      selected: selectedPosition != -1
-                                          ? seconds[index] !=
-                                              seconds[selectedPosition]
-                                          : contact
-                                                  .messagesDisappearAfterSeconds !=
-                                              seconds[index],
-                                      leading: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 8),
-                                        child: Transform.scale(
-                                          scale: 1.2,
-                                          child: Radio(
-                                            value: selectedPosition != -1
-                                                ? seconds[index] !=
-                                                    seconds[selectedPosition]
-                                                : contact
-                                                        .messagesDisappearAfterSeconds !=
-                                                    seconds[index],
-                                            groupValue: false,
-                                            fillColor: MaterialStateProperty
-                                                .resolveWith<Color>(
-                                              (states) => states.contains(
-                                                      MaterialState.selected)
-                                                  ? primaryPink
-                                                  : black,
+                              Expanded(
+                                child: Scrollbar(
+                                  interactive: true,
+                                  showTrackOnHover: true,
+                                  radius: const Radius.circular(50),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: seconds.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        contentPadding:
+                                            const EdgeInsetsDirectional.only(),
+                                        horizontalTitleGap: 8,
+                                        minLeadingWidth: 20,
+                                        onTap: () async {
+                                          setState(() {
+                                            selectedPosition = index;
+                                          });
+                                        },
+                                        selectedTileColor: Colors.white,
+                                        tileColor: const Color.fromRGBO(
+                                            245, 245, 245, 1),
+                                        selected: selectedPosition != -1
+                                            ? seconds[index] !=
+                                                seconds[selectedPosition]
+                                            : contact
+                                                    .messagesDisappearAfterSeconds !=
+                                                seconds[index],
+                                        leading: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 8),
+                                          child: Transform.scale(
+                                            scale: 1.2,
+                                            child: Radio(
+                                              value: selectedPosition != -1
+                                                  ? seconds[index] !=
+                                                      seconds[selectedPosition]
+                                                  : contact
+                                                          .messagesDisappearAfterSeconds !=
+                                                      seconds[index],
+                                              groupValue: false,
+                                              fillColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                (states) => states.contains(
+                                                        MaterialState.selected)
+                                                    ? primaryPink
+                                                    : black,
+                                              ),
+                                              activeColor: primaryPink,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  selectedPosition = index;
+                                                });
+                                              },
                                             ),
-                                            activeColor: primaryPink,
-                                            onChanged: (value) async {
-                                              setState(() {
-                                                selectedPosition = index;
-                                              });
-                                            },
                                           ),
                                         ),
-                                      ),
-                                      title: Transform.translate(
-                                        offset: const Offset(-4, 0),
-                                        child: Text(
-                                          seconds[index] == 0
-                                              ? 'off'.i18n
-                                              : seconds[index].humanizeSeconds(
-                                                  longForm: true),
-                                          style: tsAlertDialogListTile,
+                                        title: Transform.translate(
+                                          offset: const Offset(-4, 0),
+                                          child: Text(
+                                            seconds[index] == 0
+                                                ? 'off'.i18n
+                                                : seconds[index]
+                                                    .humanizeSeconds(
+                                                        longForm: true),
+                                            style: tsAlertDialogListTile,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                               Container(
@@ -574,9 +592,9 @@ Future<void> displayConversationOptions(
                                   TextButton(
                                     onPressed: () async {
                                       context.loaderOverlay.show(
-                                          widget: const Center(
+                                          widget: Center(
                                         child: CircularProgressIndicator(
-                                          color: Colors.white,
+                                          color: white,
                                         ),
                                       ));
                                       try {
@@ -608,4 +626,12 @@ Future<void> displayConversationOptions(
                       )),
             ],
           ));
+}
+
+String humanizeContactId(String id) {
+  var humanizedId = id.splitMapJoin(RegExp('.{4}'),
+      onMatch: (m) => '${m[0]}', // (or no onMatch at all)
+      onNonMatch: (n) => '-');
+
+  return humanizedId.substring(1, humanizedId.length - 1);
 }

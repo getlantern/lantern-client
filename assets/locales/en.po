@@ -222,6 +222,39 @@ msgstr "Payment Test Mode"
 msgid "Play Version"
 msgstr "Play Version"
 
+msgid "error"
+msgstr "Error"
+
+msgid "accept"
+msgstr "Accept"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "reject"
+msgstr "Reject"
+
+msgid "info_dialog_confirm"
+msgstr "Got it"
+
+msgid "copied"
+msgstr "Copied!"
+
+msgid "new_message"
+msgstr "New Message"
+
+msgid "search"
+msgstr "Search"
+
+msgid "your_contact_info"
+msgstr "Your Contact Info"
+
+msgid "scan_qr_code"
+msgstr "Scan Contact QR Code"
+
+msgid "start_chat"
+msgstr "Start chat"
+
 msgid "message_disappearing"
 msgstr "All messages will not disappear for you and your contact"
 
@@ -245,6 +278,72 @@ msgstr "Set"
 
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
+
+msgid "contacts"
+msgstr "Contacts"
+
+msgid "no_contacts_yet"
+msgstr "No contacts yet"
+
+msgid "qr_error_description"
+msgstr "Something went wrong while scanning the QR code"
+
+msgid "qr_scanner"
+msgstr "QR Code"
+
+msgid "qr_info_title"
+msgstr "Scan QR Code"
+
+msgid "qr_info_description"
+msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+
+msgid "qr_info_waiting"
+msgstr "Waiting for your friend to scan your QR code..."
+
+msgid "qr_info_scan"
+msgstr "Scan each others QR codes, to add a contact."
+
+msgid "qr_for_your_contact"
+msgstr "Your QR Code"
+
+msgid "qr_trouble_scanning"
+msgstr "Trouble scanning?"
+
+msgid "contactid_error_description"
+msgstr "Something went wrong while adding this contact"
+
+msgid "contactid_input_error"
+msgstr "Please ensure the ID you are entering is not empty or your own"
+
+msgid "contactid_enter_manually"
+msgstr "Enter your friend's Messenger ID manually"
+
+msgid "contactid_messenger_id"
+msgstr "Messenger ID"
+
+msgid "contactid_your_id"
+msgstr "Your Messenger ID"
+
+msgid "introductions"
+msgstr "Introductions"
+
+msgid "introduced"
+msgstr "Introduced by"
+
+msgid "introductions_info"
+msgstr "Both parties must accept the introduction to message each other.  Introductions disappear after 7 days if no action is taken."
+
+msgid "introductions_reject_title"
+msgstr "Reject Introductions?"
+
+msgid "introductions_reject_content"
+msgstr "You will not be able to message this contact if you reject the introduction."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Something went wrong while rejecting this connect request."
+
+msgid "introductions_error_description_accepting"
+msgstr "Something went wrong while accepting this connect request."
 
 msgid "delete_contact"
 msgstr "Delete Contact"

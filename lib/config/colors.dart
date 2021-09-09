@@ -17,6 +17,7 @@ Color grey2 = HexColor('#F5F5F5');
 Color grey3 = HexColor('#EBEBEB');
 Color grey4 = HexColor('#BFBFBF');
 Color grey5 = HexColor('#707070');
+Color green = HexColor('#00A83E');
 Color indicatorRed = HexColor('#D5001F');
 Color indicatorGreen = HexColor('#00A83E');
 Color overlayBlack = HexColor('#000000CB');

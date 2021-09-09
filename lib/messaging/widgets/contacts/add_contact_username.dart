@@ -13,64 +13,73 @@ class AddViaUsername extends StatefulWidget {
 }
 
 class _AddViaUsernameState extends State<AddViaUsername> {
-  final _formKey = GlobalKey<FormState>(debugLabel: 'Contact Form');
+  final _formKey = GlobalKey<FormState>(debugLabel: 'username_form');
   Contact? contact;
 
-  TextEditingController usernameController = TextEditingController();
+  late final usernameController = CustomTextEditingController(
+    formKey: _formKey,
+    validator: (value) =>
+        value != '' ? null : 'Please enter a valid username'.i18n,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return fullScreenDialogLayout(Colors.white, Colors.black, context, [
-      Form(
-        key: _formKey,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Wrap(
-              children: [
-                CustomTextField(
-                    controller: usernameController,
-                    label: 'Username'.i18n,
-                    helperText:
-                        'Enter a username to start a message conversation'.i18n,
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const Icon(
-                      Icons.email,
-                      color: Colors.black,
+    return fullScreenDialogLayout(
+        topColor: Colors.white,
+        iconColor: Colors.black,
+        context: context,
+        title: const Text('Add via username'),
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.all(20.0),
+                      child: Wrap(
+                        children: [
+                          CustomTextField(
+                            controller: usernameController,
+                            label: 'Username'.i18n,
+                            helperText:
+                                'Enter a username to start a message conversation'
+                                    .i18n,
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: const Icon(
+                              Icons.email,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    validator: (value) {
-                      try {
-                        // get contact from username
-                      } catch (e) {
-                        return 'An error occurred while searching for this username'
-                            .i18n;
-                      }
-                    }),
-              ],
+                    Padding(
+                      padding: const EdgeInsetsDirectional.all(20.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Button(
+                              width: 200,
+                              text: 'Start Message'.i18n,
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  context.loaderOverlay.show();
+                                  try {
+                                    await context.pushRoute(Conversation(
+                                        contactId: contact!.contactId));
+                                  } finally {
+                                    context.loaderOverlay.hide();
+                                  }
+                                }
+                              },
+                            ),
+                          ]),
+                    )
+                  ]),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Button(
-                width: 200,
-                text: 'Start Message'.i18n,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    context.loaderOverlay.show();
-                    try {
-                      await context.pushRoute(
-                          Conversation(contactId: contact!.contactId));
-                    } finally {
-                      context.loaderOverlay.hide();
-                    }
-                  }
-                },
-              ),
-            ]),
-          )
-        ]),
-      )
-    ]);
+          ],
+        ));
   }
 }
