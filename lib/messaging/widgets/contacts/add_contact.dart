@@ -2,8 +2,8 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 
 abstract class AddContactState<T extends StatefulWidget> extends State<T> {
-  void waitForContact(
-      MessagingModel model, String contactId, int mostRecentHelloTs) {
+  void waitForContact(MessagingModel model, String contactId,
+      int mostRecentHelloTs, AnimationController? animationController) {
     var contactNotifier = model.contactNotifier(contactId);
     late void Function() listener;
     listener = () async {
@@ -13,6 +13,7 @@ abstract class AddContactState<T extends StatefulWidget> extends State<T> {
         contactNotifier.removeListener(listener);
         // go back to New Message with the updatedContact info
         Navigator.pop(context, updatedContact);
+        if (animationController != null) animationController.stop();
       }
     };
     contactNotifier.addListener(listener);
