@@ -313,10 +313,7 @@ msgid "qr_info_waiting_ID"
 msgstr "Waiting for your friend to enter your messenger ID..."
 
 msgid "contactid_error_description"
-msgstr "Something went wrong while adding this contact"
-
-msgid "contactid_input_error"
-msgstr "Please ensure the ID you are entering is not empty or your own"
+msgstr "Something went wrong while adding this contact."
 
 msgid "contactid_enter_manually"
 msgstr "Enter your friend's Messenger ID manually"
