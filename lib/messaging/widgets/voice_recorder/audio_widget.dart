@@ -162,15 +162,20 @@ class AudioWidget extends StatelessWidget {
           return Column(
             crossAxisAlignment: timeRemainingAlignment!,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4),
-                child: _buildWaveformRow(value),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: _buildWaveformRow(value),
+                ),
               ),
               _getTimeRemaining(value),
             ],
           );
         } else {
-          return _buildWaveformRow(value);
+          return Directionality(
+              textDirection: TextDirection.ltr,
+              child: _buildWaveformRow(value));
         }
       },
     );

@@ -143,6 +143,18 @@ class MessagePosition {
         nexMessage.direction == MessageDirection.IN) {
       return 16.0;
     }
+
+    ///
+    if (outbound &&
+        priorMessage != null &&
+        priorMessage.direction == MessageDirection.IN &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.IN) {
+      return 16.0;
+    }
+
+    ///
+
     if (inbound &&
         nexMessage != null &&
         nexMessage.direction == MessageDirection.OUT) {
