@@ -51,8 +51,13 @@ class MessagePosition {
     return 0.0;
   }
 
-  static double bottomLeftBorder(Widget? widget, StoredMessage? nexMessage,
-      StoredMessage? priorMessage, bool inbound, bool outbound) {
+  static double bottomLeftBorder(
+      Widget? widget,
+      Widget? nextWidget,
+      StoredMessage? nexMessage,
+      StoredMessage? priorMessage,
+      bool inbound,
+      bool outbound) {
     if (inbound &&
         nexMessage != null &&
         nexMessage.direction == MessageDirection.OUT) {
@@ -64,6 +69,12 @@ class MessagePosition {
       return 16.0;
     }
     if (outbound && nexMessage == null && priorMessage != null) {
+      return 16.0;
+    }
+    if (outbound &&
+        nexMessage != null &&
+        nexMessage.direction == MessageDirection.OUT &&
+        nextWidget != null) {
       return 16.0;
     }
 

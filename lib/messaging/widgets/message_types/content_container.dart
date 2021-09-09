@@ -45,6 +45,7 @@ class ContentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? reactionsList;
+    Widget? nextReaction;
     final attachments = msg.attachments.values
         .map((attachment) => attachmentWidget(attachment, inbound));
 
@@ -53,6 +54,10 @@ class ContentContainer extends StatelessWidget {
     final isContactConnectionCard = msg.hasIntroduction();
     final reactions = constructReactionsMap(msg, contact);
     reactionsList = constructReactionsList(context, reactions, msg);
+    if (nextMessage != null) {
+      nextReaction = constructReactionsList(
+          context, constructReactionsMap(nextMessage!, contact), nextMessage!);
+    }
     return Container(
       constraints: BoxConstraints(
           minWidth: 1,
@@ -71,20 +76,20 @@ class ContentContainer extends StatelessWidget {
             : null,
         //OUTBOUND: SENDED MESSAGES.
         //INBOUND: RECEIVED MESSAGES
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
+        borderRadius: BorderRadiusDirectional.only(
+          topStart: Radius.circular(
             MessagePosition.topLeftBorder(
                 reactionsList, nextMessage, priorMessage, inbound, outbound),
           ),
-          bottomLeft: Radius.circular(
-            MessagePosition.bottomLeftBorder(
-                reactionsList, nextMessage, priorMessage, inbound, outbound),
+          bottomStart: Radius.circular(
+            MessagePosition.bottomLeftBorder(reactionsList, nextReaction,
+                nextMessage, priorMessage, inbound, outbound),
           ),
-          topRight: Radius.circular(
+          topEnd: Radius.circular(
             MessagePosition.topRightBorder(
                 reactionsList, nextMessage, priorMessage, inbound, outbound),
           ),
-          bottomRight: Radius.circular(
+          bottomEnd: Radius.circular(
             MessagePosition.bottomRightBorder(
                 reactionsList, nextMessage, priorMessage, inbound, outbound),
           ),

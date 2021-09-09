@@ -50,27 +50,26 @@ Widget? constructReactionsList(BuildContext context,
     (key, value) {
       if (value.isNotEmpty) {
         reactionsList.add(
-          displayEmojiCount(reactions, key),
+          GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
+              child: displayEmojiCount(reactions, key)),
         );
       }
     },
   );
   if (reactionsList.isEmpty) return null;
-  return GestureDetector(
-    behavior: HitTestBehavior.translucent,
-    onTap: () => displayEmojiBreakdownPopup(context, msg, reactions),
-    child: Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(24)),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2.5),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: reactionsList,
-      ),
+  return Container(
+    decoration: const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2.5),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: reactionsList,
     ),
   );
 }
