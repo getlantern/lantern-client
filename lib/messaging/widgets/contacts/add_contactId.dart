@@ -1,9 +1,12 @@
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
-import 'package:lantern/package_store.dart';
+
 // import 'package:loading_animations/loading_animations.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
+
+import 'add_contact.dart';
 
 class AddViaContactId extends StatelessWidget {
   @override
@@ -21,9 +24,9 @@ class AddViaContactIdBody extends StatefulWidget {
   _AddViaContactIdBodyState createState() => _AddViaContactIdBodyState();
 }
 
-class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
+class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
-  String? pastedContactId;
+  String? enteredContactId;
   late MessagingModel model;
   late final contactIdController = CustomTextEditingController(
       formKey: _formKey,
@@ -36,34 +39,20 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
       try {
-        if (pastedContactId != null && pastedContactId != '') {
+        if (enteredContactId != null && enteredContactId != '') {
           return;
         }
 
         setState(() {
-          pastedContactId = contactIdController.value.text;
+          enteredContactId = contactIdController.value.text;
           waitingForOtherSide = true;
         });
-        var mostRecentHelloTs =
-            await model.addProvisionalContact(pastedContactId!);
-        var contactNotifier = model.contactNotifier(pastedContactId!);
-        late void Function() listener;
-        listener = () async {
-          var updatedContact = contactNotifier.value;
-          if (updatedContact != null &&
-              updatedContact.mostRecentHelloTs > mostRecentHelloTs) {
-            contactNotifier.removeListener(listener);
-            // go back to New Message with the updatedContact info
-            Navigator.pop(context, updatedContact);
-          }
-        };
-        contactNotifier.addListener(listener);
-        // immediately invoke listener in case the contactNotifier already has
-        // an up-to-date contact.
-        listener();
+        var mostRecentHelloTs = await model
+            .addProvisionalContact(enteredContactId!.replaceAll('\-', ''));
+        waitForContact(model, enteredContactId!, mostRecentHelloTs);
       } catch (e) {
         setState(() {
-          pastedContactId = '';
+          enteredContactId = '';
           waitingForOtherSide = false;
         });
         showInfoDialog(context,
@@ -78,9 +67,9 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
   @override
   void dispose() {
     contactIdController.dispose();
-    if (pastedContactId != null && pastedContactId != '') {
+    if (enteredContactId != null && enteredContactId != '') {
       // when exiting this screen, immediately delete any provisional contact
-      model.deleteProvisionalContact(pastedContactId!);
+      model.deleteProvisionalContact(enteredContactId!);
     }
     super.dispose();
   }
@@ -115,9 +104,9 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                         children: [
                           CustomTextField(
                             controller: contactIdController,
-                            label: 'contactid_your_id'.i18n,
-                            helperText: 'contactid_paste_id'.i18n,
-                            keyboardType: TextInputType.emailAddress,
+                            label: 'contactid_messenger_id'.i18n,
+                            helperText: 'contactid_enter_manually'.i18n,
+                            keyboardType: TextInputType.text,
                             suffixIcon: IconButton(
                               onPressed: () => _onContactIdAdd(),
                               icon: Icon(!waitingForOtherSide
@@ -138,8 +127,14 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('contactid_your_id'.i18n.toUpperCase(),
-                                  style: TextStyle(color: black, fontSize: 10)),
+                              Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(start: 10),
+                                child: Text(
+                                  'contactid_your_id'.i18n.toUpperCase(),
+                                  style: TextStyle(color: black, fontSize: 10),
+                                ),
+                              ),
                             ],
                           ),
                           Divider(thickness: 1, color: grey2),
@@ -168,12 +163,11 @@ class _AddViaContactIdBodyState extends State<AddViaContactIdBody> {
                                         text: widget.me.contactId.id));
                                   },
                                   child: Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.all(10.0),
+                                    padding: const EdgeInsetsDirectional.only(
+                                        start: 10.0, end: 10),
                                     child: Text(
                                         humanizeContactId(
-                                                widget.me.contactId.id)
-                                            .toUpperCase(),
+                                            widget.me.contactId.id),
                                         overflow: TextOverflow.visible,
                                         style: const TextStyle(
                                             fontSize: 16.0, height: 26 / 16)),
