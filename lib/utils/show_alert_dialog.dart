@@ -49,7 +49,7 @@ Function() showAlertDialog({
             },
             child: Text(
               dismissText.i18n.toUpperCase(),
-              style: tsAlertDialogButtonGrey,
+              style: tsDialogButtonGrey,
             ),
           ),
           // AGREE
@@ -60,7 +60,7 @@ Function() showAlertDialog({
             },
             child: Text(
               agreeText.i18n.toUpperCase(),
-              style: tsAlertDialogButtonPink,
+              style: tsDialogButtonPink,
             ),
           ),
         ],
