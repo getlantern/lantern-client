@@ -208,7 +208,7 @@ class _AddViaQRState extends AddContactState<AddViaQR> {
                             borderRadius: BorderRadius.circular(8.0),
                             child: QrImage(
                               data: me.contactId.id,
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(8),
                               backgroundColor: white,
                               foregroundColor: black,
                               errorCorrectionLevel: QrErrorCorrectLevel.H,
