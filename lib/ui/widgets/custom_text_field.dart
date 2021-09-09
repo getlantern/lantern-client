@@ -10,7 +10,7 @@ class CustomTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
-  late final IconButton? suffixIcon;
+  late final Icon? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
   late final int? minLines;
@@ -99,7 +99,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ),
                 ),
                 prefixIcon: widget.prefixIcon,
-                suffixIcon: widget.suffixIcon),
+                suffixIcon: fieldKey.currentState?.mounted == true &&
+                        fieldKey.currentState?.hasError == true
+                    ? Icon(Icons.error, color: indicatorRed)
+                    : widget.suffixIcon),
           ),
         ),
         Container(
