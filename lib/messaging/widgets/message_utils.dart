@@ -85,8 +85,8 @@ Widget? renderStatusIcon(bool inbound, bool outbound, StoredMessage msg) {
   return inbound
       ? null
       : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
-          ? Icon(
-              Icons.check_circle_outline_outlined,
+          ? CustomAssetImage(
+              path: ImagePaths.double_check_icon,
               size: 12,
               color: outbound ? outboundMsgColor : inboundMsgColor,
             )
