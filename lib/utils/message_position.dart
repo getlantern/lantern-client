@@ -144,7 +144,6 @@ class MessagePosition {
       return 16.0;
     }
 
-    ///
     if (outbound &&
         priorMessage != null &&
         priorMessage.direction == MessageDirection.IN &&
@@ -152,8 +151,6 @@ class MessagePosition {
         nexMessage.direction == MessageDirection.IN) {
       return 16.0;
     }
-
-    ///
 
     if (inbound &&
         nexMessage != null &&
@@ -176,14 +173,6 @@ class MessagePosition {
     if (inbound && nexMessage == null) {
       return 16.0;
     }
-    // if (outbound && priorMessage == null && nexMessage != null) {
-    //   return 16.0;
-    // }
-    // if (outbound &&
-    //     priorMessage != null &&
-    //     priorMessage.direction == MessageDirection.IN) {
-    //   return 16.0;
-    // }
     return 0.0;
   }
 }
