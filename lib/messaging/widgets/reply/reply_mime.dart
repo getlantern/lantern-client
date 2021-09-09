@@ -53,7 +53,7 @@ class ReplyMime extends StatelessWidget {
       case MimeTypes.EMPTY:
       default:
         return Container(
-          color: snippetBgIconColor,
+          color: grey5,
           padding: const EdgeInsets.all(8.0),
           child: const Icon(
             Icons.insert_drive_file_rounded,
@@ -87,7 +87,7 @@ class _PreviewBuilder<T> extends ValueListenableBuilder<CachedValue<T>> {
 
 Widget _getIconWrapper(IconData icon) {
   return Container(
-    color: snippetBgIconColor,
+    color: grey5,
     padding: const EdgeInsets.all(8.0),
     child: Icon(
       icon,

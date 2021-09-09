@@ -145,12 +145,12 @@ class Introductions extends StatelessWidget {
                                                                   'Reject Introduction?'
                                                                       .i18n,
                                                                   style:
-                                                                      tsAlertDialogTitle),
+                                                                      tsDialogTitle),
                                                               content: Text(
                                                                   'You will not be able to message this contact if you reject the introduction.'
                                                                       .i18n,
                                                                   style:
-                                                                      tsAlertDialogBody),
+                                                                      tsDialogBody),
                                                               // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                               dismissText:
                                                                   'Cancel'.i18n,
@@ -188,7 +188,7 @@ class Introductions extends StatelessWidget {
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
-                                                              tsAlertDialogButtonGrey),
+                                                              tsDialogButtonGrey),
                                                     ),
                                                     TextButton(
                                                       onPressed: () async {
@@ -270,7 +270,7 @@ class Introductions extends StatelessWidget {
                                                               .i18n
                                                               .toUpperCase(),
                                                           style:
-                                                              tsAlertDialogButtonPink),
+                                                              tsDialogButtonPink),
                                                     )
                                                   ],
                                                 )))

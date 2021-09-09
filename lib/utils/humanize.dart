@@ -46,9 +46,21 @@ extension Humanize on int {
               ? ' hour${(this ~/ 3600) > 1 ? 's' : ''}'
               : 'h'); // TODO: add i18n
     }
-    return (this ~/ 86400).toString() +
+    if (this < 604800) {
+      return (this ~/ 86400).toString() +
+          (longForm
+              ? ' day${(this ~/ 86400) > 1 ? 's' : ''}'
+              : 'd'); // TODO: add i18n
+    }
+    if (this < 2629800) {
+      return (this ~/ 604800).toString() +
+          (longForm
+              ? ' week${(this ~/ 604800) > 1 ? 's' : ''}'
+              : 'd'); // TODO: add i18n
+    }
+    return (this ~/ 604800).toString() +
         (longForm
-            ? ' day${(this ~/ 86400) > 1 ? 's' : ''}'
+            ? ' week${(this ~/ 604800) > 1 ? 's' : ''}'
             : 'd'); // TODO: add i18n
   }
 }

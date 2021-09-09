@@ -222,6 +222,48 @@ msgstr "Payment Test Mode"
 msgid "Play Version"
 msgstr "Play Version"
 
+msgid "message_disappearing"
+msgstr "All messages will not disappear for you and your contact"
+
+msgid "message_disappearing_description"
+msgstr "All messages will disappear after %s for you and your contact"
+
+msgid "delete_contact_confirmation"
+msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
+
+msgid "conversation_title_bottomsheet"
+msgstr "Conversation Menu"
+
+msgid "off"
+msgstr "Off"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "set"
+msgstr "Set"
+
+msgid "introduce_contacts"
+msgstr "Introduce Contacts"
+
+msgid "delete_contact"
+msgstr "Delete Contact"
+
+msgid "error"
+msgstr "Error"
+
+msgid "error_delete_contact"
+msgstr "Something went wrong while deleting this contact."
+
+msgid "unnamed_contact"
+msgstr "Unnamed Contact"
+
+msgid "me"
+msgstr "Me"
+
+msgid "disappearing_messages"
+msgstr "Disappearing Messages"
+
 msgid "change_display_name"
 msgstr "Change Display Name"
 
