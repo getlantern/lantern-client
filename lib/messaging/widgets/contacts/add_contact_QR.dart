@@ -260,7 +260,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                   path: ImagePaths.check_green, size: 40),
                               Countdown.build(
                                 controller: countdownController,
-                                durationMillis: timeoutMillis,
+                                durationSeconds: timeoutMillis ~/ 1000,
                               ),
                             ],
                           ),
@@ -405,7 +405,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                       path: ImagePaths.check_green, size: 40),
                                   Countdown.build(
                                     controller: countdownController,
-                                    durationMillis: timeoutMillis,
+                                    durationSeconds: timeoutMillis ~/ 1000,
                                     textStyle:
                                         tsCountdownTimer.copyWith(color: black),
                                   ),
