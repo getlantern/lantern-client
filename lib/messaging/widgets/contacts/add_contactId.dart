@@ -235,6 +235,7 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
                   width: 200,
                   text: 'Submit'.i18n,
                   onPressed: () => _onContactIdAdd(),
+                  disabled: waitingForOtherSide,
                 ),
               ),
             ],
