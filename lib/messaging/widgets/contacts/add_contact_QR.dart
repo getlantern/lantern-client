@@ -292,31 +292,24 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                 ),
               ),
               // my own QR code
+              Text(
+                'qr_for_your_contact'.i18n,
+                style: tsInfoDialogText(white),
+              ),
               Flexible(
                 flex: 2,
-                child: Column(
-                  children: [
-                    Text(
-                      'qr_for_your_contact'.i18n,
-                      style: tsInfoDialogText(white),
+                child: Container(
+                  margin: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: QrImage(
+                      data: widget.me.contactId.id,
+                      padding: const EdgeInsets.all(8),
+                      backgroundColor: white,
+                      foregroundColor: black,
+                      errorCorrectionLevel: QrErrorCorrectLevel.H,
                     ),
-                    Flexible(
-                      child: Container(
-                        margin: const EdgeInsetsDirectional.only(
-                            top: 16, bottom: 16),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: QrImage(
-                            data: widget.me.contactId.id,
-                            padding: const EdgeInsets.all(8),
-                            backgroundColor: white,
-                            foregroundColor: black,
-                            errorCorrectionLevel: QrErrorCorrectLevel.H,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
               // Trouble scanning
@@ -400,30 +393,24 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.all(20.0),
-                              child: Wrap(
-                                children: [
-                                  CustomTextField(
-                                      controller: contactIdController,
-                                      label: 'contactid_messenger_id'.i18n,
-                                      helperText:
-                                          'contactid_enter_manually'.i18n,
-                                      keyboardType: TextInputType.text,
-                                      enabled: provisionalContactId == null &&
-                                          !proceedWithoutProvisionals,
-                                      minLines: 2,
-                                      maxLines: null,
-                                      suffixIcon: const Icon(
-                                          Icons.keyboard_arrow_right)),
-                                ],
-                              ),
+                        if (provisionalContactId == null &&
+                            proceedWithoutProvisionals)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.all(20.0),
+                            child: Wrap(
+                              children: [
+                                CustomTextField(
+                                    controller: contactIdController,
+                                    label: 'contactid_messenger_id'.i18n,
+                                    helperText: 'contactid_enter_manually'.i18n,
+                                    keyboardType: TextInputType.text,
+                                    minLines: 2,
+                                    maxLines: null,
+                                    suffixIcon:
+                                        const Icon(Icons.keyboard_arrow_right)),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
                         if (provisionalContactId != null ||
                             proceedWithoutProvisionals)
                           Expanded(
@@ -542,19 +529,20 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                       ]),
                 ),
               ),
-              Container(
-                margin: const EdgeInsetsDirectional.only(bottom: 32),
-                child: Button(
-                  width: 200,
-                  text: 'Submit'.i18n,
-                  onPressed: () {
-                    _onContactIdAdd();
-                    FocusScope.of(context).unfocus();
-                  },
-                  disabled: provisionalContactId != null ||
-                      proceedWithoutProvisionals,
+              if (provisionalContactId == null && proceedWithoutProvisionals)
+                Container(
+                  margin: const EdgeInsetsDirectional.only(bottom: 32),
+                  child: Button(
+                    width: 200,
+                    text: 'Submit'.i18n,
+                    onPressed: () {
+                      _onContactIdAdd();
+                      FocusScope.of(context).unfocus();
+                    },
+                    disabled: provisionalContactId != null ||
+                        proceedWithoutProvisionals,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
