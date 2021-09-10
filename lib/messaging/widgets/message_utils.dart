@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/config/text_styles.dart';
@@ -256,7 +258,6 @@ int generateUniqueColorIndex(String str) {
 
 Future<void> displayConversationOptions(
     MessagingModel model, BuildContext parentContext, Contact contact) {
-  final seconds = <int>[5, 60, 3600, 10800, 21600, 86400, 604800, 0];
   return showModalBottomSheet(
       context: parentContext,
       isDismissible: true,
@@ -299,7 +300,19 @@ Future<void> displayConversationOptions(
                       style: tsBottomModalList),
                 ),
                 onTap: () async {
+                  final scrollController = ScrollController();
+                  final seconds = <int>[
+                    5,
+                    60,
+                    3600,
+                    10800,
+                    21600,
+                    86400,
+                    604800,
+                    0
+                  ];
                   var selectedPosition = -1;
+
                   return showDialog(
                     context: bottomContext,
                     barrierDismissible: true,
@@ -314,9 +327,7 @@ Future<void> displayConversationOptions(
                         contentPadding: const EdgeInsetsDirectional.all(0),
                         clipBehavior: Clip.hardEdge,
                         content: ConstrainedBox(
-                          constraints: BoxConstraints(
-                              maxHeight:
-                                  MediaQuery.of(context).size.height * 0.9),
+                          constraints: disappearingDialogConstraints(context),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -379,81 +390,106 @@ Future<void> displayConversationOptions(
                                 size: 2,
                                 margin: 16,
                               ),
-                              Expanded(
-                                child: Scrollbar(
-                                  interactive: true,
-                                  isAlwaysShown: true,
-                                  showTrackOnHover: true,
-                                  radius: const Radius.circular(50),
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemCount: seconds.length,
-                                    itemBuilder: (context, index) {
-                                      return ListTile(
-                                        contentPadding:
-                                            const EdgeInsetsDirectional.only(),
-                                        horizontalTitleGap: 8,
-                                        minLeadingWidth: 20,
-                                        onTap: () async {
-                                          setState(() {
-                                            selectedPosition = index;
-                                          });
-                                        },
-                                        selectedTileColor: Colors.white,
-                                        tileColor: const Color.fromRGBO(
-                                            245, 245, 245, 1),
-                                        selected: selectedPosition != -1
-                                            ? seconds[index] !=
-                                                seconds[selectedPosition]
-                                            : contact
-                                                    .messagesDisappearAfterSeconds !=
-                                                seconds[index],
-                                        leading: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 8),
-                                          child: Transform.scale(
-                                            scale: 1.2,
-                                            child: Radio(
-                                              value: selectedPosition != -1
+                              Flexible(
+                                child: LayoutBuilder(
+                                  builder: (BuildContext context,
+                                      BoxConstraints constraints) {
+                                    // set the height so that one of the rows
+                                    // gets cut in half, to help give the user a
+                                    // visual cue that they can scroll
+                                    final maxHeight =
+                                        constraints.maxHeight / 48 * 48 - 24;
+                                    return ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: maxHeight,
+                                      ),
+                                      child: Scrollbar(
+                                        controller: scrollController,
+                                        interactive: true,
+                                        isAlwaysShown: true,
+                                        showTrackOnHover: true,
+                                        radius: const Radius.circular(50),
+                                        child: ListView.builder(
+                                          controller: scrollController,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemCount: seconds.length,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              contentPadding:
+                                                  const EdgeInsetsDirectional
+                                                      .only(),
+                                              horizontalTitleGap: 8,
+                                              minLeadingWidth: 20,
+                                              onTap: () async {
+                                                setState(() {
+                                                  selectedPosition = index;
+                                                });
+                                              },
+                                              selectedTileColor: Colors.white,
+                                              tileColor: const Color.fromRGBO(
+                                                  245, 245, 245, 1),
+                                              selected: selectedPosition != -1
                                                   ? seconds[index] !=
                                                       seconds[selectedPosition]
                                                   : contact
                                                           .messagesDisappearAfterSeconds !=
                                                       seconds[index],
-                                              groupValue: false,
-                                              fillColor: MaterialStateProperty
-                                                  .resolveWith<Color>(
-                                                (states) => states.contains(
-                                                        MaterialState.selected)
-                                                    ? primaryPink
-                                                    : black,
+                                              leading: Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .only(start: 8),
+                                                child: Transform.scale(
+                                                  scale: 1.2,
+                                                  child: Radio(
+                                                    value: selectedPosition !=
+                                                            -1
+                                                        ? seconds[index] !=
+                                                            seconds[
+                                                                selectedPosition]
+                                                        : contact
+                                                                .messagesDisappearAfterSeconds !=
+                                                            seconds[index],
+                                                    groupValue: false,
+                                                    fillColor:
+                                                        MaterialStateProperty
+                                                            .resolveWith<Color>(
+                                                      (states) =>
+                                                          states.contains(
+                                                                  MaterialState
+                                                                      .selected)
+                                                              ? primaryPink
+                                                              : black,
+                                                    ),
+                                                    activeColor: primaryPink,
+                                                    onChanged: (value) async {
+                                                      setState(() {
+                                                        selectedPosition =
+                                                            index;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
                                               ),
-                                              activeColor: primaryPink,
-                                              onChanged: (value) async {
-                                                setState(() {
-                                                  selectedPosition = index;
-                                                });
-                                              },
-                                            ),
-                                          ),
+                                              title: Transform.translate(
+                                                offset: const Offset(-4, 0),
+                                                child: Text(
+                                                  seconds[index] == 0
+                                                      ? 'off'.i18n
+                                                      : seconds[index]
+                                                          .humanizeSeconds(
+                                                              longForm: true),
+                                                  style: tsAlertDialogListTile,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                        title: Transform.translate(
-                                          offset: const Offset(-4, 0),
-                                          child: Text(
-                                            seconds[index] == 0
-                                                ? 'off'.i18n
-                                                : seconds[index]
-                                                    .humanizeSeconds(
-                                                        longForm: true),
-                                            style: tsAlertDialogListTile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               Container(
@@ -635,4 +671,18 @@ String humanizeContactId(String id) {
       onNonMatch: (n) => '-');
 
   return humanizedId.substring(1, humanizedId.length - 1);
+}
+
+BoxConstraints disappearingDialogConstraints(BuildContext context) {
+  var size = MediaQuery.of(context).size;
+  // limit the width of the dialog on really wide screens
+  var width = math.min(size.width * 0.9, 304.0);
+
+  // note - minWidth and maxWidth have to equal to avoid layout errors on wide
+  // screens.
+  return BoxConstraints(
+    maxHeight: size.height * 0.9,
+    minWidth: width,
+    maxWidth: width,
+  );
 }
