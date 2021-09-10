@@ -130,6 +130,7 @@ TextStyle tsInfoTextWhite = TextStyle(
 );
 TextStyle tsInfoTextBlack = TextStyle(
   color: black,
+  height: 23 / 14,
 );
 
 TextStyle tsInfoButton = tsInfoTextWhite.copyWith(fontWeight: FontWeight.w400);

@@ -60,7 +60,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> addProvisionalContact(
+  Future<void> _addProvisionalContact(
       MessagingModel model, String contactId) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
@@ -72,38 +72,48 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     late void Function() listener;
     listener = () async {
       var updatedContact = contactNotifier.value;
-      if (updatedContact != null &&
-          updatedContact.mostRecentHelloTs >
-              result['mostRecentHelloTsMillis']) {
+      var stopListening = updatedContact != null &&
+          updatedContact.mostRecentHelloTs > result['mostRecentHelloTsMillis'];
+      if (stopListening) {
         contactNotifier.removeListener(listener);
-        countdownController.stop(canceled: true);
+        if (countdownController.isAnimating) {
+          countdownController.stop(canceled: true);
+        }
         // go back to New Message with the updatedContact info
         Navigator.pop(context, updatedContact);
       }
     };
-    contactNotifier.addListener(listener);
+    // ignore: invalid_use_of_protected_member
+    if (!contactNotifier.hasListeners) contactNotifier.addListener(listener);
     // immediately invoke listener in case the contactNotifier already has
     // an up-to-date contact.
     listener();
 
     final int expiresAt = result['expiresAtMillis'];
-    if (expiresAt > 0) {
-      final timeout = expiresAt - DateTime.now().millisecondsSinceEpoch;
-      setState(() {
-        provisionalContactId = contactId;
-        timeoutMillis = timeout;
-        countdownController.duration = Duration(milliseconds: timeoutMillis);
-      });
+    (expiresAt > 0)
+        ? _onCountdownTriggered(expiresAt, contactId)
+        : _onNoCountdown();
+  }
 
-      unawaited(countdownController.forward().then((value) {
-        // we ran out of time before completing handshake, go back
-        Navigator.pop(context);
-      }));
-    } else {
-      // TODO: we need to show something to the user to indicate that we're
-      // waiting on the other person to scan the QR code, but in this case
-      // there is no time limit.
-    }
+  void _onNoCountdown() {
+    // TODO: we need to show something to the user to indicate that we're
+    // waiting on the other person to scan the QR code, but in this case
+    // there is no time limit.
+  }
+
+  void _onCountdownTriggered(int expiresAt, String contactId) {
+    final timeout = expiresAt - DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      provisionalContactId = contactId;
+      timeoutMillis = timeout;
+      countdownController.duration = Duration(milliseconds: timeoutMillis);
+    });
+
+    unawaited(countdownController.forward().then((value) {
+      // we ran out of time before completing handshake, go back without adding
+      Navigator.pop(context, null);
+      countdownController.stop(canceled: true);
+    }));
   }
 
   void _onQRViewCreated(QRViewController controller, MessagingModel model) {
@@ -119,7 +129,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           return;
         }
         contactIdController.text = scanData.code;
-        await addProvisionalContact(model, scanData.code);
+        await _addProvisionalContact(model, scanData.code);
       } catch (e) {
         print(e);
         setState(() {
@@ -139,7 +149,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void _onContactIdAdd() async {
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
-      await addProvisionalContact(
+      await _addProvisionalContact(
           model, contactIdController.text.replaceAll('\-', ''));
     }
   }
@@ -156,7 +166,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     subscription?.cancel();
     qrController?.dispose();
     contactIdController.dispose();
-    countdownController.stop(canceled: true);
     countdownController.dispose();
     if (provisionalContactId != null) {
       // when exiting this screen, immediately delete any provisional contact
@@ -180,6 +189,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       title: Center(
         child: Text('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
       ),
+      onCloseCallback: () => Navigator.pop(context, null),
       child: Container(
         color: grey5,
         child: Column(
@@ -190,7 +200,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                 child: (provisionalContactId != null && scanning)
                     ? PulseAnimation(
                         Text(
-                          'qr_info_waiting_ID'.i18n,
+                          'qr_info_waiting_QR'.i18n,
                           style: tsInfoTextWhite,
                         ),
                       )
@@ -356,6 +366,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               style: const TextStyle(fontSize: 20)),
         ],
       ),
+      backButton: const Icon(Icons.arrow_back),
+      onBackCallback: () {
+        setState(() {
+          usingId = false;
+        });
+      },
+      onCloseCallback: () => Navigator.pop(context, null),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -367,9 +384,17 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
             children: [
               if (provisionalContactId != null)
                 PulseAnimation(
-                  Text(
-                    'qr_info_waiting_QR'.i18n,
-                    style: tsInfoTextBlack,
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 20.0, end: 20.0),
+                      child: Text(
+                        'qr_info_waiting_ID'.i18n,
+                        style: tsInfoTextBlack,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ),
               Expanded(

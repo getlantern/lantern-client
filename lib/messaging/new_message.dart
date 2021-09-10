@@ -75,7 +75,7 @@ class _NewMessageState extends State<NewMessage> {
                           children: [
                             Expanded(
                               child: Text(
-                                // TODO: look up how to use variables with internationalization
+                                // TODO: i18n interpolation
                                 '${_updatedContact!.displayName} is a Contact'
                                     .i18n,
                                 overflow: TextOverflow.visible,

@@ -3,7 +3,7 @@ import 'package:lantern/config/index.dart';
 
 class Countdown extends AnimatedWidget {
   final Animation<int> animation;
-  late TextStyle textStyle;
+  late final TextStyle textStyle;
 
   Countdown({required this.animation, TextStyle? textStyle})
       : super(listenable: animation) {
