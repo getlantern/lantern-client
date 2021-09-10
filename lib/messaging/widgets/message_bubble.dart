@@ -121,96 +121,87 @@ class MessageBubble extends StatelessWidget {
     }
 
     return FocusedMenuHolder(
-        menuItems: [
-          FocusedMenuItem(
-            title: Flexible(
-              fit: FlexFit.tight,
-              child: Reactions(
-                onEmojiTap: onEmojiTap,
-                reactionOptions: reactions.keys.toList(),
-                message: message,
-                messagingModel: model,
-              ),
+      menuItems: [
+        FocusedMenuItem(
+          title: Flexible(
+            fit: FlexFit.tight,
+            child: Reactions(
+              onEmojiTap: onEmojiTap,
+              reactionOptions: reactions.keys.toList(),
+              message: message,
+              messagingModel: model,
             ),
-            onPressed: () {},
           ),
+          onPressed: () {},
+        ),
+        FocusedMenuItem(
+          trailingIcon: const Icon(Icons.reply),
+          title: Text('Reply'.i18n),
+          onPressed: () {
+            onReply(msg);
+          },
+        ),
+        if (!isAttachment)
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.reply),
-            title: Text('Reply'.i18n),
+            trailingIcon: const Icon(Icons.copy),
+            title: Text('Copy Text'.i18n),
             onPressed: () {
-              onReply(msg);
+              showSnackbar(
+                context: context,
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: Text(
+                      'Text Copied'.i18n,
+                      style: txSnackBarText,
+                      textAlign: TextAlign.left,
+                    )),
+                  ],
+                ),
+              );
+              Clipboard.setData(ClipboardData(text: message.value.text));
             },
           ),
-          if (!isAttachment)
-            FocusedMenuItem(
-              trailingIcon: const Icon(Icons.copy),
-              title: Text('Copy Text'.i18n),
-              onPressed: () {
-                showSnackbar(
-                  context: context,
-                  content: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: Text(
-                        'Text Copied'.i18n,
-                        style: txSnackBarText,
-                        textAlign: TextAlign.left,
-                      )),
-                    ],
-                  ),
-                );
-                Clipboard.setData(ClipboardData(text: message.value.text));
-              },
-            ),
+        FocusedMenuItem(
+          trailingIcon: const Icon(Icons.delete),
+          title: Text('Delete for me'.i18n),
+          onPressed: () {
+            _showDeleteDialog(context, model, true, message);
+          },
+        ),
+        if (outbound)
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete),
-            title: Text('Delete for me'.i18n),
-            onPressed: () {
-              _showDeleteDialog(context, model, true, message);
+            trailingIcon: const Icon(Icons.delete_forever),
+            title: Text('Delete for everyone'.i18n),
+            onPressed: () async {
+              await _showDeleteDialog(context, model, false, message);
             },
           ),
-          if (outbound)
-            FocusedMenuItem(
-              trailingIcon: const Icon(Icons.delete_forever),
-              title: Text('Delete for everyone'.i18n),
-              onPressed: () async {
-                await _showDeleteDialog(context, model, false, message);
-              },
-            ),
+      ],
+      blurBackgroundColor: Colors.blueGrey[900],
+      menuOffset: 5.0,
+      bottomOffsetHeight: 50.0,
+      menuItemExtent: 60,
+      openWithTap: false,
+      duration: const Duration(seconds: 0),
+      animateMenuItems: false,
+      onPressed: () {},
+      child: Column(
+        crossAxisAlignment:
+            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          if (isDateMarker != '')
+            Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 10),
+                // width: 100.w,
+                child: DateMarker(isDateMarker)),
+          ContentContainer(outbound, inbound, msg, message, contact, onTapReply,
+              startOfBlock, endOfBlock, newestMessage, reactions, isAttachment),
         ],
-        blurBackgroundColor: Colors.blueGrey[900],
-        menuOffset: 5.0,
-        bottomOffsetHeight: 50.0,
-        menuItemExtent: 60,
-        openWithTap: false,
-        duration: const Duration(seconds: 0),
-        animateMenuItems: false,
-        onPressed: () {},
-        child: Column(
-          crossAxisAlignment:
-              outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            if (isDateMarker != '')
-              Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 10),
-                  // width: 100.w,
-                  child: DateMarker(isDateMarker)),
-            ContentContainer(
-                outbound,
-                inbound,
-                msg,
-                message,
-                contact,
-                onTapReply,
-                startOfBlock,
-                endOfBlock,
-                newestMessage,
-                reactions,
-                isAttachment),
-          ],
-        ));
+      ),
+    );
   }
 }
 

@@ -100,33 +100,57 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
               constraints: BoxConstraints(
                 maxWidth: height * _controller!.value.aspectRatio,
               ),
-              child: ValueListenableBuilder(
-                valueListenable: _controller!,
-                builder: (BuildContext context, VideoPlayerValue value,
-                    Widget? child) {
-                  if (!value.isInitialized) {
-                    return const SizedBox();
-                  }
-                  return Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.bottomCenter,
-                    children: <Widget>[
-                      // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                      AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
-                        child: VideoPlayer(_controller!),
-                      ),
-                      ConstrainedBox(
-                        // this box keeps the video from being too tall
-                        constraints: BoxConstraints(
-                          maxWidth: height * _controller!.value.aspectRatio,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  ValueListenableBuilder(
+                    valueListenable: _controller!,
+                    builder: (BuildContext context, VideoPlayerValue value,
+                        Widget? child) {
+                      if (!value.isInitialized) {
+                        return const SizedBox();
+                      }
+                      return Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.bottomCenter,
+                        children: <Widget>[
+                          // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                          AspectRatio(
+                            aspectRatio: _controller!.value.aspectRatio,
+                            child: VideoPlayer(_controller!),
+                          ),
+                          ConstrainedBox(
+                            // this box keeps the video from being too tall
+                            constraints: BoxConstraints(
+                              maxWidth: height * _controller!.value.aspectRatio,
+                            ),
+                            child: VideoProgressIndicator(_controller!,
+                                allowScrubbing: true),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  PositionedDirectional(
+                    bottom: 1,
+                    start: 1,
+                    end: 1,
+                    child: Container(
+                      height: height * 0.25,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            transparent,
+                            semiTransparentBlack,
+                          ],
+                          begin: Alignment.center,
+                          end: Alignment.bottomCenter,
+                          tileMode: TileMode.clamp,
                         ),
-                        child: VideoProgressIndicator(_controller!,
-                            allowScrubbing: true),
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               ),
             ),
           // button goes in main stack

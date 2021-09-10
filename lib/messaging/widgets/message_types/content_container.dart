@@ -1,5 +1,6 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/widgets/attachment.dart';
+import 'package:lantern/messaging/widgets/content_trailing.dart';
 import 'package:lantern/messaging/widgets/message_types/contact_connection_card.dart';
 import 'package:lantern/messaging/widgets/message_types/status_row.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
@@ -55,7 +56,7 @@ class ContentContainer extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           padding: EdgeInsets.only(
               top: msg.replyToId.isNotEmpty ? 8 : 0,
-              bottom: 8,
+              bottom: attachments.isNotEmpty && !isAudio ? 0 : 8,
               left: isAttachment ? 0 : 8,
               right: isAttachment ? 0 : 8),
           decoration: BoxDecoration(
@@ -86,79 +87,100 @@ class ContentContainer extends StatelessWidget {
                   : const Radius.circular(8),
             ),
           ),
-          child: isContactConnectionCard
-              ? ContactConnectionCard(
-                  contact, inbound, outbound, msg, message, reactionsList)
-              : Column(
-                  crossAxisAlignment: outbound
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (msg.replyToId.isNotEmpty)
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => onTapReply(message),
-                              child: ReplySnippet(outbound, msg, contact),
-                            ),
-                        ],
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              attachments.isNotEmpty && !isAudio
+                  ? Container(
+                      child: Column(
+                        children: [...attachments],
                       ),
-                      if (msg.text.isNotEmpty)
-                        Row(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: MarkdownBody(
-                                data: '${msg.text}',
-                                onTapLink: (String text, String? href,
-                                    String title) async {
-                                  if (href != null && await canLaunch(href)) {
-                                    showAlertDialog(
-                                        context: context,
-                                        title: Text('Open URL'.i18n,
-                                            style: tsDialogTitle),
-                                        content: Text(
-                                            'Are you sure you want to open $href?',
-                                            style: tsDialogBody),
-                                        dismissText: 'Cancel'.i18n,
-                                        agreeText: 'Continue'.i18n,
-                                        agreeAction: () async {
-                                          await launch(href);
-                                        });
-                                  }
-                                },
-                                styleSheet: MarkdownStyleSheet(
-                                  a: tsMessageBody(outbound).copyWith(
-                                      decoration: TextDecoration.underline),
-                                  p: tsMessageBody(outbound),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]),
-                      Stack(
-                        fit: StackFit.passthrough,
-                        alignment: outbound
-                            ? AlignmentDirectional.bottomEnd
-                            : AlignmentDirectional.bottomStart,
-                        children: [
-                          ...attachments,
-                          Row(
+                    )
+                  : const SizedBox(),
+              attachments.isNotEmpty && !isAudio
+                  ? const SizedBox()
+                  : isContactConnectionCard
+                      ? ContactConnectionCard(contact, inbound, outbound, msg,
+                          message, reactionsList)
+                      : Column(
+                          crossAxisAlignment: outbound
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: outbound
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.start,
                               children: [
-                                StatusRow(outbound, inbound, msg, message,
-                                    reactionsList)
+                                if (msg.replyToId.isNotEmpty)
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () => onTapReply(message),
+                                    child: ReplySnippet(outbound, msg, contact),
+                                  ),
+                              ],
+                            ),
+                            if (msg.text.isNotEmpty)
+                              Row(mainAxisSize: MainAxisSize.min, children: [
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    child: MarkdownBody(
+                                      data: '${msg.text}',
+                                      onTapLink: (String text, String? href,
+                                          String title) async {
+                                        if (href != null &&
+                                            await canLaunch(href)) {
+                                          showAlertDialog(
+                                              context: context,
+                                              title: Text('Open URL'.i18n,
+                                                  style: tsDialogTitle),
+                                              content: Text(
+                                                  'Are you sure you want to open $href?',
+                                                  style: tsDialogBody),
+                                              dismissText: 'Cancel'.i18n,
+                                              agreeText: 'Continue'.i18n,
+                                              agreeAction: () async {
+                                                await launch(href);
+                                              });
+                                        }
+                                      },
+                                      styleSheet: MarkdownStyleSheet(
+                                        a: tsMessageBody(outbound).copyWith(
+                                            decoration:
+                                                TextDecoration.underline),
+                                        p: tsMessageBody(outbound),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ]),
-                        ],
-                      )
-                    ]),
+                            ContentTrailing(
+                                outbound: outbound,
+                                inbound: inbound,
+                                attachments: attachments,
+                                msg: msg,
+                                message: message,
+                                reactionsList: reactionsList)
+                          ],
+                        ),
+              attachments.isNotEmpty && !isAudio
+                  ? PositionedDirectional(
+                      bottom: 4,
+                      end: outbound ? 1 : null,
+                      start: !outbound ? 1 : null,
+                      child: ContentTrailing(
+                          outbound: outbound,
+                          inbound: inbound,
+                          attachments: attachments,
+                          msg: msg,
+                          message: message,
+                          showOnlyStatus: true,
+                          reactionsList: reactionsList),
+                    )
+                  : const SizedBox()
+            ],
+          ),
         );
       },
     );

@@ -23,13 +23,26 @@ class ImageAttachment extends StatelessWidget {
             return ConstrainedBox(
               // this box keeps the video from being too tall
               constraints: BoxConstraints(maxHeight: constraints.maxWidth),
-              child: FittedBox(
-                child: BasicMemoryImage(
-                  thumbnail,
-                  errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) =>
-                      Icon(Icons.error_outlined,
-                          color: inbound ? inboundMsgColor : outboundMsgColor),
+              child: ShaderMask(
+                shaderCallback: (rect) {
+                  return LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [black, transparent],
+                  ).createShader(
+                      Rect.fromLTRB(0, 0, rect.width, rect.height * 1.5));
+                },
+                blendMode: BlendMode.dstIn,
+                child: FittedBox(
+                  child: BasicMemoryImage(
+                    thumbnail,
+                    filterQuality: FilterQuality.high,
+                    errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) =>
+                        Icon(Icons.error_outlined,
+                            color:
+                                inbound ? inboundMsgColor : outboundMsgColor),
+                  ),
                 ),
               ),
             );

@@ -31,11 +31,11 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     return VideoAttachment(attachment, inbound);
   }
 
-  return _padded(GenericAttachment(
+  return GenericAttachment(
       attachmentTitle: attachmentTitle,
       fileExtension: fileExtension,
       inbound: inbound,
-      icon: Icons.insert_drive_file_rounded));
+      icon: Icons.insert_drive_file_rounded);
 }
 
 /// AttachmentBuilder is a builder for attachments that handles progress
@@ -84,11 +84,7 @@ class AttachmentBuilder extends StatelessWidget {
             } else if (cachedThumbnail.error != null) {
               return _errorIndicator();
             } else if (cachedThumbnail.value != null) {
-              var result = builder(context, cachedThumbnail.value!);
-              if (padAttachment) {
-                result = _padded(result);
-              }
-              return result;
+              return builder(context, cachedThumbnail.value!);
             } else {
               return Icon(defaultIcon,
                   color: inbound ? inboundMsgColor : outboundMsgColor);
@@ -99,27 +95,16 @@ class AttachmentBuilder extends StatelessWidget {
   }
 
   Widget _progressIndicator() {
-    return _padded(
-      Transform.scale(
-        scale: 0.5,
-        child: CircularProgressIndicator(
-          color: inbound ? inboundMsgColor : outboundMsgColor,
-        ),
+    return Transform.scale(
+      scale: 0.5,
+      child: CircularProgressIndicator(
+        color: inbound ? inboundMsgColor : outboundMsgColor,
       ),
     );
   }
 
   Widget _errorIndicator() {
-    return _padded(
-      Icon(Icons.error_outlined,
-          color: inbound ? inboundMsgColor : outboundMsgColor),
-    );
+    return Icon(Icons.error_outlined,
+        color: inbound ? inboundMsgColor : outboundMsgColor);
   }
-}
-
-Widget _padded(Widget child) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-    child: child,
-  );
 }
