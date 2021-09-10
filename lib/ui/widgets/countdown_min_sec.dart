@@ -12,18 +12,18 @@ class Countdown extends AnimatedWidget {
 
   Countdown.build(
       {required AnimationController controller,
-      required int durationMillis,
+      required int durationSeconds,
       TextStyle? textStyle})
       : this(
             animation: StepTween(
-              begin: durationMillis,
+              begin: durationSeconds,
               end: 0,
             ).animate(controller),
             textStyle: textStyle);
 
   @override
   Widget build(BuildContext context) {
-    var clockTimer = Duration(milliseconds: animation.value);
+    var clockTimer = Duration(seconds: animation.value);
     var timerText = clockTimer.inSeconds >= 60
         ? '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}'
         : clockTimer.inSeconds >= 10
