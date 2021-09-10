@@ -61,7 +61,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             Button(
               width: 200,
               text: 'Link via Email'.i18n,
-              inverted: true,
+              secondary: true,
               onPressed: () async =>
                   await context.pushRoute(AuthorizeDeviceEmail()),
             ),
