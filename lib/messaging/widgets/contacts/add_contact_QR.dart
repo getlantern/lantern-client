@@ -35,6 +35,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   QRViewController? qrController;
   bool scanning = false;
   StreamSubscription<Barcode>? subscription;
+  bool proceedWithoutProvisionals = false;
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
   late final contactIdController = CustomTextEditingController(
@@ -100,6 +101,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     // TODO: we need to show something to the user to indicate that we're
     // waiting on the other person to scan the QR code, but in this case
     // there is no time limit.
+    setState(() {
+      proceedWithoutProvisionals = true;
+    });
   }
 
   void _onCountdownTriggered(int expiresAt, String contactId) {
@@ -275,6 +279,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
+                        if (proceedWithoutProvisionals && scanning)
+                          Text('fake scanning simulation',
+                              style: TextStyle(fontSize: 30))
                       ],
                     ),
                   ),
@@ -383,21 +390,35 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              if (provisionalContactId != null)
-                PulseAnimation(
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          start: 20.0, end: 20.0),
-                      child: Text(
-                        'qr_info_waiting_ID'.i18n,
-                        style: tsInfoTextBlack,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
+              (provisionalContactId != null)
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PulseAnimation(
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 20.0, end: 20.0),
+                              child: Text(
+                                'qr_info_waiting_ID'.i18n,
+                                style: tsInfoTextBlack,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Countdown.build(
+                          controller: countdownController,
+                          durationSeconds: timeoutMillis ~/ 1000,
+                          textStyle: tsCountdownTimer.copyWith(color: black),
+                        ),
+                      ],
+                    )
+                  : proceedWithoutProvisionals
+                      ? Text('fake scanning simulation',
+                          style: TextStyle(fontSize: 30))
+                      : Container(),
               Expanded(
                 child: Form(
                   key: _formKey,
@@ -423,20 +444,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                 ],
                               ),
                             ),
-                            if (provisionalContactId != null)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const CustomAssetImage(
-                                      path: ImagePaths.check_green, size: 40),
-                                  Countdown.build(
-                                    controller: countdownController,
-                                    durationSeconds: timeoutMillis ~/ 1000,
-                                    textStyle:
-                                        tsCountdownTimer.copyWith(color: black),
-                                  ),
-                                ],
-                              ),
                           ],
                         ),
                         Padding(
@@ -537,8 +544,11 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                 child: Button(
                   width: 200,
                   text: 'Submit'.i18n,
-                  onPressed: () => _onContactIdAdd(),
-                  disabled: provisionalContactId != null,
+                  onPressed: () {
+                    _onContactIdAdd();
+                    FocusScope.of(context).unfocus();
+                  },
+                  disabled: true,
                 ),
               ),
             ],
