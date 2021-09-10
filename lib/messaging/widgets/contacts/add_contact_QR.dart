@@ -83,6 +83,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         Navigator.pop(context, updatedContact);
       }
     };
+    // we are sometimes running into an issue where multiple listeners get registered
     // ignore: invalid_use_of_protected_member
     if (!contactNotifier.hasListeners) contactNotifier.addListener(listener);
     // immediately invoke listener in case the contactNotifier already has
