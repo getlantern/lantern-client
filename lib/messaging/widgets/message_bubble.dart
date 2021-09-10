@@ -23,6 +23,7 @@ class MessageBubble extends StatelessWidget {
     required this.onReply,
     required this.onTapReply,
     required this.onEmojiTap,
+    required this.contactId,
   }) : super(key: key);
 
   final PathAndValue<StoredMessage> message;
@@ -30,6 +31,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage? priorMessage;
   final StoredMessage? nextMessage;
   final Contact contact;
+  final ContactId contactId;
   final Function(StoredMessage?) onReply;
   final Function(PathAndValue<StoredMessage>) onTapReply;
 

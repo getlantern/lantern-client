@@ -56,8 +56,10 @@ class AppRouter extends _i1.RootStackRouter {
         barrierDismissible: false),
     ImageVideoDetailPage.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
-        builder: (_) {
-          return const _i5.ImageVideoDetailPage();
+        builder: (data) {
+          final args = data.argsAs<ImageVideoDetailPageArgs>();
+          return _i5.ImageVideoDetailPage(
+              key: args.key, contactId: args.contactId);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -340,10 +342,21 @@ class FullScreenDialogPageArgs {
   final _i11.Key? key;
 }
 
-class ImageVideoDetailPage extends _i1.PageRouteInfo {
-  const ImageVideoDetailPage() : super(name, path: 'imageVideoDetailPage');
+class ImageVideoDetailPage extends _i1.PageRouteInfo<ImageVideoDetailPageArgs> {
+  ImageVideoDetailPage({_i11.Key? key, required _i21.ContactId contactId})
+      : super(name,
+            path: 'imageVideoDetailPage',
+            args: ImageVideoDetailPageArgs(key: key, contactId: contactId));
 
   static const String name = 'ImageVideoDetailPage';
+}
+
+class ImageVideoDetailPageArgs {
+  const ImageVideoDetailPageArgs({this.key, required this.contactId});
+
+  final _i11.Key? key;
+
+  final _i21.ContactId contactId;
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {

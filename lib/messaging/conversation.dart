@@ -403,6 +403,7 @@ class _ConversationState extends State<Conversation>
               itemCount: messageRecords.length,
               itemBuilder: (context, index) {
                 return MessageBubble(
+                  contactId: widget._contactId,
                   message: messageRecords.elementAt(index),
                   priorMessage: index >= messageRecords.length - 1
                       ? null
