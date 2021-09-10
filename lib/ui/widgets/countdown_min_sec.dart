@@ -7,7 +7,7 @@ class Countdown extends AnimatedWidget {
 
   Countdown({required this.animation, TextStyle? textStyle})
       : super(listenable: animation) {
-    this.textStyle = textStyle ?? tsCountdownTimer;
+    this.textStyle = textStyle ?? tsCountdownTimer(black);
   }
 
   Countdown.build(
@@ -25,13 +25,10 @@ class Countdown extends AnimatedWidget {
   Widget build(BuildContext context) {
     var clockTimer = Duration(seconds: animation.value);
     var timerText = clockTimer.inSeconds >= 60
-        ? '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}'
+        ? '0${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}'
         : clockTimer.inSeconds >= 10
             ? '00:${clockTimer.inSeconds}'
             : '00:0${clockTimer.inSeconds}';
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(10.0),
-      child: Text(timerText, style: textStyle),
-    );
+    return Text(timerText, style: textStyle);
   }
 }

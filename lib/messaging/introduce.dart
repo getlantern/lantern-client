@@ -128,7 +128,9 @@ class _IntroduceState extends State<Introduce> {
                                                             child: Text(
                                                           'Introductions Sent!'
                                                               .i18n,
-                                                          style: txSnackBarText,
+                                                          style:
+                                                              tsInfoDialogText(
+                                                                  white),
                                                           textAlign:
                                                               TextAlign.left,
                                                         )),

@@ -297,11 +297,14 @@ msgstr "Scan QR Code"
 msgid "qr_info_description"
 msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
 
+msgid "qr_info_scan"
+msgstr "Scan each others QR codes, to add a contact."
+
 msgid "qr_info_waiting_QR"
 msgstr "Waiting for your friend to scan your QR code..."
 
-msgid "qr_info_scan"
-msgstr "Scan each others QR codes, to add a contact."
+msgid "scan_complete"
+msgstr "Scan complete"
 
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"

@@ -202,40 +202,32 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
             children: [
               Container(
                 alignment: Alignment.center,
-                child: (provisionalContactId != null && scanning)
-                    ? PulseAnimation(
-                        Text(
-                          'qr_info_waiting_QR'.i18n,
-                          style: tsInfoTextWhite,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'qr_info_scan'.i18n,
+                      style: tsInfoDialogSubtitle(white),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 4.0),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () => showInfoDialog(context,
+                            title: 'qr_info_title'.i18n,
+                            des: 'qr_info_description'.i18n,
+                            icon: ImagePaths.qr_code,
+                            buttonText:
+                                'info_dialog_confirm'.i18n.toUpperCase()),
+                        child: Icon(
+                          Icons.info,
+                          size: 14,
+                          color: white,
                         ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'qr_info_scan'.i18n,
-                            style: tsInfoTextWhite,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(start: 4.0),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => showInfoDialog(context,
-                                  title: 'qr_info_title'.i18n,
-                                  des: 'qr_info_description'.i18n,
-                                  icon: ImagePaths.qr_code,
-                                  buttonText:
-                                      'info_dialog_confirm'.i18n.toUpperCase()),
-                              child: Icon(
-                                Icons.info,
-                                size: 14,
-                                color: white,
-                              ),
-                            ),
-                          )
-                        ],
                       ),
+                    )
+                  ],
+                ),
               ),
               // QR scanner for other contact
               Flexible(
@@ -267,21 +259,15 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        if (provisionalContactId != null && scanning)
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const CustomAssetImage(
-                                  path: ImagePaths.check_green, size: 40),
-                              Countdown.build(
-                                controller: countdownController,
-                                durationSeconds: timeoutMillis ~/ 1000,
-                              ),
-                            ],
+                        if ((provisionalContactId != null && scanning) ||
+                            proceedWithoutProvisionals)
+                          _renderWaitingUI(
+                            proceedWithoutProvisionals:
+                                proceedWithoutProvisionals,
+                            countdownController: countdownController,
+                            timeoutMillis: timeoutMillis,
+                            fontColor: white,
                           ),
-                        if (proceedWithoutProvisionals && scanning)
-                          Text('fake scanning simulation',
-                              style: TextStyle(fontSize: 30))
                       ],
                     ),
                   ),
@@ -294,7 +280,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   children: [
                     Text(
                       'qr_for_your_contact'.i18n,
-                      style: tsInfoTextWhite,
+                      style: tsInfoDialogText(white),
                     ),
                     Flexible(
                       child: Container(
@@ -343,7 +329,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               16.0, 0, 16.0, 0),
                           child: Text(
                             'qr_trouble_scanning'.i18n,
-                            style: tsInfoButton,
+                            style: tsInfoDialogText(white),
                           ),
                         ),
                         Padding(
@@ -390,35 +376,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              (provisionalContactId != null)
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PulseAnimation(
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                  start: 20.0, end: 20.0),
-                              child: Text(
-                                'qr_info_waiting_ID'.i18n,
-                                style: tsInfoTextBlack,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Countdown.build(
-                          controller: countdownController,
-                          durationSeconds: timeoutMillis ~/ 1000,
-                          textStyle: tsCountdownTimer.copyWith(color: black),
-                        ),
-                      ],
-                    )
-                  : proceedWithoutProvisionals
-                      ? Text('fake scanning simulation',
-                          style: TextStyle(fontSize: 30))
-                      : Container(),
               Expanded(
                 child: Form(
                   key: _formKey,
@@ -440,12 +397,35 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                       keyboardType: TextInputType.text,
                                       enabled: provisionalContactId == null,
                                       minLines: 2,
-                                      maxLines: null),
+                                      maxLines: null,
+                                      suffixIcon: const Icon(
+                                          Icons.keyboard_arrow_right)),
                                 ],
                               ),
                             ),
                           ],
                         ),
+                        if (provisionalContactId != null ||
+                            proceedWithoutProvisionals)
+                          Container(
+                            margin: const EdgeInsetsDirectional.all(20.0),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: grey3,
+                                width: 1,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            child: _renderWaitingUI(
+                              proceedWithoutProvisionals:
+                                  proceedWithoutProvisionals,
+                              countdownController: countdownController,
+                              timeoutMillis: timeoutMillis,
+                              fontColor: black,
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsetsDirectional.all(20.0),
                           child: Column(
@@ -466,7 +446,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              Divider(thickness: 1, color: grey2),
+                              Divider(thickness: 1, color: grey3),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -482,7 +462,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                               Expanded(
                                                   child: Text(
                                                 'copied'.i18n,
-                                                style: txSnackBarText,
+                                                style: tsInfoDialogText(white),
                                                 textAlign: TextAlign.left,
                                               )),
                                             ],
@@ -518,7 +498,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                               Expanded(
                                                   child: Text(
                                                 'copied'.i18n,
-                                                style: txSnackBarText,
+                                                style: tsInfoDialogText(white),
                                                 textAlign: TextAlign.left,
                                               )),
                                             ],
@@ -532,7 +512,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                       ))
                                 ],
                               ),
-                              Divider(thickness: 1, color: grey2),
+                              Divider(thickness: 1, color: grey3),
                             ],
                           ),
                         ),
@@ -548,13 +528,73 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                     _onContactIdAdd();
                     FocusScope.of(context).unfocus();
                   },
-                  disabled: true,
+                  disabled: provisionalContactId != null ||
+                      proceedWithoutProvisionals,
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _renderWaitingUI extends StatelessWidget {
+  const _renderWaitingUI({
+    Key? key,
+    required this.proceedWithoutProvisionals,
+    this.countdownController,
+    this.timeoutMillis,
+    required this.fontColor,
+  }) : super(key: key);
+
+  final bool proceedWithoutProvisionals;
+  final AnimationController? countdownController;
+  final int? timeoutMillis;
+  final Color fontColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: EdgeInsetsDirectional.all(8.0),
+          child: CustomAssetImage(path: ImagePaths.check_green, size: 40),
+        ),
+        if (!proceedWithoutProvisionals)
+          Padding(
+            padding: const EdgeInsetsDirectional.all(8.0),
+            child: Text(
+              'scan_complete'.i18n,
+              style: tsInfoDialogSubtitle(fontColor),
+            ),
+          ),
+        if (!proceedWithoutProvisionals)
+          Padding(
+            padding: const EdgeInsetsDirectional.all(8.0),
+            child: Countdown.build(
+              controller: countdownController!,
+              textStyle: tsCountdownTimer(fontColor),
+              durationSeconds: timeoutMillis! ~/ 1000,
+            ),
+          ),
+        PulseAnimation(
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 20.0, top: 16.0, bottom: 16.0, end: 20.0),
+              child: Text(
+                'qr_info_waiting_QR'.i18n,
+                style: tsInfoDialogText(fontColor),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

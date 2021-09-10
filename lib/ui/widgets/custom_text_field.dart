@@ -95,7 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
-                    color: grey4,
+                    color: grey3,
                   ),
                 ),
                 prefixIcon: widget.prefixIcon,

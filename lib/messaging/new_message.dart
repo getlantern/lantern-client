@@ -77,7 +77,7 @@ class _NewMessageState extends State<NewMessage> {
                                 '${_updatedContact!.displayName} is a Contact'
                                     .i18n,
                                 overflow: TextOverflow.visible,
-                                style: txSnackBarText,
+                                style: tsInfoDialogText(white),
                                 textAlign: TextAlign.left,
                               ),
                             ),
