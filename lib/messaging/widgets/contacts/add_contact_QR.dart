@@ -40,6 +40,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   ValueNotifier<Contact?>? contactNotifier;
   void Function()? listener;
 
+  final closeOnce = once();
+
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
   late final contactIdController = CustomTextEditingController(
       formKey: _formKey,
@@ -82,10 +84,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               result['mostRecentHelloTsMillis']) {
         countdownController.stop(canceled: true);
         // go back to New Message with the updatedContact info
-        Navigator.pop(context, updatedContact);
+        closeOnce(() => Navigator.pop(context, updatedContact));
       }
     };
-    if (contactNotifier!.hasListeners) contactNotifier!.addListener(listener!);
+    contactNotifier!.addListener(listener!);
     // immediately invoke listener in case the contactNotifier already has
     // an up-to-date contact.
     listener!();
@@ -115,7 +117,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
     unawaited(countdownController.forward().then((value) {
       // we ran out of time before completing handshake, go back without adding
-      Navigator.pop(context, null);
+      closeOnce(() => Navigator.pop(context, null));
       countdownController.stop(canceled: true);
     }));
   }
@@ -196,7 +198,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       title: Center(
         child: Text('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
       ),
-      onCloseCallback: () => Navigator.pop(context, null),
+      onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
         color: grey5,
         child: Column(
