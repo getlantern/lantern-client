@@ -2,8 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:lantern/config/index.dart';
 
 class Countdown extends AnimatedWidget {
-  Countdown(this.animation) : super(listenable: animation);
   final Animation<int> animation;
+  late TextStyle textStyle;
+
+  Countdown({required this.animation, TextStyle? textStyle})
+      : super(listenable: animation) {
+    this.textStyle = textStyle ?? tsCountdownTimer;
+  }
+
+  Countdown.build(
+      {required AnimationController controller,
+      required int durationMillis,
+      TextStyle? textStyle})
+      : this(
+            animation: StepTween(
+              begin: durationMillis,
+              end: 0,
+            ).animate(controller),
+            textStyle: textStyle);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +31,7 @@ class Countdown extends AnimatedWidget {
             : '00:0${clockTimer.inSeconds}';
     return Padding(
       padding: const EdgeInsetsDirectional.all(10.0),
-      child: Text(timerText, style: tsCountdownTimer),
+      child: Text(timerText, style: textStyle),
     );
   }
 }
