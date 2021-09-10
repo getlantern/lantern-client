@@ -60,13 +60,11 @@ class _NewMessageState extends State<NewMessage> {
                   FullScreenDialogPage(widget: AddViaQR(me: me)),
                 )
                     .then((value) {
-                  setState(() {
-                    if (value != null) {
-                      _updatedContact = value as Contact;
-                    }
-                  });
                   // we only care about this if it comes back with an updated contact
-                  if (_updatedContact != null) {
+                  if (value != null) {
+                    setState(() {
+                      _updatedContact = value as Contact;
+                    });
                     showSnackbar(
                         context: context,
                         content: Row(
