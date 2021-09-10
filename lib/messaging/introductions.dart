@@ -233,8 +233,8 @@ class Introductions extends StatelessWidget {
                                                                       overflow:
                                                                           TextOverflow
                                                                               .visible,
-                                                                      style:
-                                                                          txSnackBarText,
+                                                                      style: tsInfoDialogText(
+                                                                          white),
                                                                       textAlign:
                                                                           TextAlign
                                                                               .left,
