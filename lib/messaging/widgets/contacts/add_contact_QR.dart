@@ -118,6 +118,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           // we've already scanned the contact, don't bother processing again
           return;
         }
+        contactIdController.text = scanData.code;
         await addProvisionalContact(model, scanData.code);
       } catch (e) {
         print(e);
