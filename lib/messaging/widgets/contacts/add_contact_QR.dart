@@ -9,6 +9,7 @@ import 'package:lantern/ui/widgets/button.dart';
 import 'package:lantern/ui/widgets/countdown_min_sec.dart';
 import 'package:lantern/ui/widgets/custom_text_field.dart';
 import 'package:lantern/ui/widgets/pulse_animation.dart';
+import 'package:lantern/utils/once.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -36,6 +37,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   bool scanning = false;
   StreamSubscription<Barcode>? subscription;
   bool proceedWithoutProvisionals = false;
+  ValueNotifier<Contact?>? contactNotifier;
+  void Function()? listener;
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
   late final contactIdController = CustomTextEditingController(
@@ -61,7 +64,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> _addProvisionalContact(
+  final addProvisionalContactOnce = once<Future<void>>();
+
+  Future<void> addProvisionalContact(
       MessagingModel model, String contactId) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
@@ -69,27 +74,21 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
     var result = await model.addProvisionalContact(contactId);
 
-    var contactNotifier = model.contactNotifier(contactId);
-    late void Function() listener;
+    contactNotifier = model.contactNotifier(contactId);
     listener = () async {
-      var updatedContact = contactNotifier.value;
-      var stopListening = updatedContact != null &&
-          updatedContact.mostRecentHelloTs > result['mostRecentHelloTsMillis'];
-      if (stopListening) {
-        contactNotifier.removeListener(listener);
-        if (countdownController.isAnimating) {
-          countdownController.stop(canceled: true);
-        }
+      var updatedContact = contactNotifier!.value;
+      if (updatedContact != null &&
+          updatedContact.mostRecentHelloTs >
+              result['mostRecentHelloTsMillis']) {
+        countdownController.stop(canceled: true);
         // go back to New Message with the updatedContact info
         Navigator.pop(context, updatedContact);
       }
     };
-    // we are sometimes running into an issue where multiple listeners get registered
-    // ignore: invalid_use_of_protected_member
-    if (!contactNotifier.hasListeners) contactNotifier.addListener(listener);
+    if (contactNotifier!.hasListeners) contactNotifier!.addListener(listener!);
     // immediately invoke listener in case the contactNotifier already has
     // an up-to-date contact.
-    listener();
+    listener!();
 
     final int expiresAt = result['expiresAtMillis'];
     (expiresAt > 0)
@@ -129,12 +128,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     });
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        if (provisionalContactId?.isNotEmpty == true) {
-          // we've already scanned the contact, don't bother processing again
-          return;
-        }
-        contactIdController.text = scanData.code;
-        await _addProvisionalContact(model, scanData.code);
+        await addProvisionalContactOnce(() {
+          contactIdController.text = scanData.code;
+          return addProvisionalContact(model, scanData.code);
+        });
       } catch (e) {
         print(e);
         setState(() {
@@ -154,8 +151,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void _onContactIdAdd() async {
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
-      await _addProvisionalContact(
-          model, contactIdController.text.replaceAll('\-', ''));
+      await addProvisionalContactOnce(() {
+        return addProvisionalContact(
+            model, contactIdController.text.replaceAll('\-', ''));
+      });
     }
   }
 
@@ -172,6 +171,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     qrController?.dispose();
     contactIdController.dispose();
     countdownController.dispose();
+    if (listener != null) {
+      contactNotifier?.removeListener(listener!);
+    }
     if (provisionalContactId != null) {
       // when exiting this screen, immediately delete any provisional contact
       model.deleteProvisionalContact(provisionalContactId!);
