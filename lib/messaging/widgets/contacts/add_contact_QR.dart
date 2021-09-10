@@ -269,6 +269,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             countdownController: countdownController,
                             timeoutMillis: timeoutMillis,
                             fontColor: white,
+                            infoText: 'qr_info_waiting_QR'.i18n,
                           ),
                       ],
                     ),
@@ -426,6 +427,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               countdownController: countdownController,
                               timeoutMillis: timeoutMillis,
                               fontColor: black,
+                              infoText: 'qr_info_waiting_ID'.i18n,
                             ),
                           ),
                         Padding(
@@ -543,18 +545,20 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 }
 
 class _renderWaitingUI extends StatelessWidget {
-  const _renderWaitingUI({
-    Key? key,
-    required this.proceedWithoutProvisionals,
-    this.countdownController,
-    this.timeoutMillis,
-    required this.fontColor,
-  }) : super(key: key);
+  const _renderWaitingUI(
+      {Key? key,
+      required this.proceedWithoutProvisionals,
+      this.countdownController,
+      this.timeoutMillis,
+      required this.fontColor,
+      required this.infoText})
+      : super(key: key);
 
   final bool proceedWithoutProvisionals;
   final AnimationController? countdownController;
   final int? timeoutMillis;
   final Color fontColor;
+  final String infoText;
 
   @override
   Widget build(BuildContext context) {
@@ -589,7 +593,7 @@ class _renderWaitingUI extends StatelessWidget {
               padding: const EdgeInsetsDirectional.only(
                   start: 20.0, top: 16.0, bottom: 16.0, end: 20.0),
               child: Text(
-                'qr_info_waiting_QR'.i18n,
+                infoText,
                 style: tsInfoDialogText(fontColor),
                 textAlign: TextAlign.center,
               ),
