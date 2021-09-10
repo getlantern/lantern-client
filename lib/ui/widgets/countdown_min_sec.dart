@@ -7,7 +7,7 @@ class Countdown extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    var clockTimer = Duration(seconds: animation.value);
+    var clockTimer = Duration(milliseconds: animation.value);
     var timerText = clockTimer.inSeconds >= 60
         ? '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}'
         : clockTimer.inSeconds >= 10

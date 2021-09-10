@@ -587,7 +587,9 @@ Future<void> displayConversationOptions(
                       top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: Text('Delete ${contact.displayName}',
+                    child: Text(
+                        sprintf(
+                            'delete_contact_name'.i18n, [contact.displayName]),
                         style: tsBottomModalList),
                   ),
                   onTap: () => showDialog<void>(

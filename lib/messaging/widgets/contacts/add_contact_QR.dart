@@ -19,17 +19,12 @@ class AddViaQR extends StatefulWidget {
   _AddViaQRState createState() => _AddViaQRState();
 }
 
-class _AddViaQRState extends AddContactState<AddViaQR>
-    with TickerProviderStateMixin {
+class _AddViaQRState extends AddContactState<AddViaQR> {
   bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
-  late MessagingModel model;
   QRViewController? qrController;
   bool scanning = false;
-  String? scannedContactId;
   StreamSubscription<Barcode>? subscription;
-  late AnimationController animationController;
-  late int expiresAt;
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -58,23 +53,13 @@ class _AddViaQRState extends AddContactState<AddViaQR>
     });
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        if (scannedContactId != null) {
+        if (provisionalContactId?.isNotEmpty == true) {
           // we've already scanned the contact, don't bother processing again
           return;
         }
-        final contactId = scanData.code;
-        setState(() {
-          scannedContactId = contactId;
-        });
-        var mostRecentHelloTs =
-            await model.addProvisionalContact(scannedContactId!);
-        setState(() {
-          expiresAt = 100; //TODO: derive from model
-        });
-        animationController.duration = Duration(seconds: expiresAt);
-        waitForContact(
-            model, scannedContactId!, mostRecentHelloTs, animationController);
+        await addProvisionalContact(model, scanData.code);
       } catch (e) {
+        print(e);
         setState(() {
           scanning = false;
         });
@@ -90,25 +75,9 @@ class _AddViaQRState extends AddContactState<AddViaQR>
   }
 
   @override
-  void initState() {
-    animationController = AnimationController(
-        vsync: this,
-        duration: const Duration(
-            seconds:
-                300)); // initialize at 5 minutes, will update as we receive the corresponding timestamp
-    animationController.forward();
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    animationController.dispose();
     subscription?.cancel();
     qrController?.dispose();
-    if (scannedContactId != null) {
-      // when exiting this screen, immediately delete any provisional contact
-      model.deleteProvisionalContact(scannedContactId!);
-    }
     super.dispose();
   }
 
@@ -136,7 +105,7 @@ class _AddViaQRState extends AddContactState<AddViaQR>
               children: [
                 Container(
                   alignment: Alignment.center,
-                  child: (scannedContactId != null && scanning)
+                  child: (provisionalContactId != null && scanning)
                       ? PulseAnimation(
                           Text(
                             'qr_info_waiting_ID'.i18n,
@@ -188,9 +157,10 @@ class _AddViaQRState extends AddContactState<AddViaQR>
                             child: Container(
                               padding: const EdgeInsetsDirectional.all(6.0),
                               child: Opacity(
-                                opacity: (scannedContactId != null && scanning)
-                                    ? 0.5
-                                    : 1,
+                                opacity:
+                                    (provisionalContactId != null && scanning)
+                                        ? 0.5
+                                        : 1,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: QRView(
@@ -202,7 +172,7 @@ class _AddViaQRState extends AddContactState<AddViaQR>
                               ),
                             ),
                           ),
-                          if (scannedContactId != null && scanning)
+                          if (provisionalContactId != null && scanning)
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -210,9 +180,9 @@ class _AddViaQRState extends AddContactState<AddViaQR>
                                     path: ImagePaths.check_green, size: 40),
                                 Countdown(
                                   StepTween(
-                                    begin: expiresAt,
+                                    begin: timeoutMillis,
                                     end: 0,
-                                  ).animate(animationController),
+                                  ).animate(countdownController),
                                 ),
                               ],
                             ),

@@ -59,7 +59,9 @@ class _NewMessageState extends State<NewMessage> {
               )
                   .then((value) {
                 setState(() {
-                  _updatedContact = value as Contact;
+                  if (value != null) {
+                    _updatedContact = value as Contact;
+                  }
                 });
                 // we only care about this if it comes back with an updated contact
                 if (_updatedContact != null) {

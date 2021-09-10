@@ -345,6 +345,9 @@ msgstr "Something went wrong while rejecting this connect request."
 msgid "introductions_error_description_accepting"
 msgstr "Something went wrong while accepting this connect request."
 
+msgid "delete_contact_name"
+msgstr "Delete %s"
+
 msgid "delete_contact"
 msgstr "Delete Contact"
 

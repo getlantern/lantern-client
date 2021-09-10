@@ -28,8 +28,6 @@ class AddViaContactIdBody extends StatefulWidget {
 
 class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
-  String? enteredContactId;
-  late MessagingModel model;
   late final contactIdController = CustomTextEditingController(
       formKey: _formKey,
       validator: (value) => value == null ||
@@ -44,18 +42,14 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
     // checking if the input field is not empty
     if (_formKey.currentState!.validate()) {
       try {
-        if (enteredContactId != null && enteredContactId != '') {
+        if (provisionalContactId?.isNotEmpty == true) {
           return;
         }
-
         setState(() {
-          enteredContactId = contactIdController.value.text;
           waitingForOtherSide = true;
         });
-        var mostRecentHelloTs = await model
-            .addProvisionalContact(enteredContactId!.replaceAll('\-', ''));
-        waitForContact(model, enteredContactId!, mostRecentHelloTs,
-            null); //TODO: add animationController
+        await addProvisionalContact(
+            model, provisionalContactId!.replaceAll('\-', ''));
       } catch (e) {
         setState(() {
           waitingForOtherSide = false;
@@ -63,7 +57,7 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
       }
     } else {
       setState(() {
-        enteredContactId = '';
+        provisionalContactId = null;
       });
       return;
     }
@@ -72,10 +66,6 @@ class _AddViaContactIdBodyState extends AddContactState<AddViaContactIdBody> {
   @override
   void dispose() {
     contactIdController.dispose();
-    if (enteredContactId != null && enteredContactId != '') {
-      // when exiting this screen, immediately delete any provisional contact
-      model.deleteProvisionalContact(enteredContactId!);
-    }
     super.dispose();
   }
 

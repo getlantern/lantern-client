@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lantern/config/text_styles.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/conversation_sticker.dart';
-import 'package:lantern/messaging/widgets/conversation_components/stopwatch_timer.dart';
 import 'package:lantern/messaging/widgets/conversation_components/disappearing_timer_action.dart';
+import 'package:lantern/messaging/widgets/conversation_components/stopwatch_timer.dart';
 import 'package:lantern/messaging/widgets/message_bubble.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/messaging/widgets/messaging_emoji_picker.dart';
@@ -29,7 +30,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:lantern/config/text_styles.dart';
 
 import 'widgets/call_action.dart';
 
@@ -263,7 +263,8 @@ class _ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundColor: avatarBgColors[3],
+                backgroundColor: avatarBgColors[
+                    generateUniqueColorIndex(contact.contactId.id)],
                 child: Text(
                   sanitizeContactName(contact.displayName.isEmpty
                           ? contact.contactId.id
