@@ -8,6 +8,8 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/basic_memory_image.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:video_player/video_player.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
 
 class VideoAttachment extends StatelessWidget {
   final StoredAttachment attachment;
@@ -84,133 +86,138 @@ class _VideoAttachmentState extends State<_VideoAttachment> {
         builder: (BuildContext context, BoxConstraints constraints) {
       final height = constraints.maxWidth;
 
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          // Always render the thumbnail in order to preserve the size of the stack
-          // while the video starts playing
-          ConstrainedBox(
-            // this box keeps the video from being too tall
-            constraints: BoxConstraints(maxHeight: height),
-            child: widget.image,
-          ),
-          if (_controller != null)
+      return GestureDetector(
+        onTap: () => context.router.push(const ImageVideoDetailPage()),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Always render the thumbnail in order to preserve the size of the stack
+            // while the video starts playing
             ConstrainedBox(
               // this box keeps the video from being too tall
-              constraints: BoxConstraints(
-                maxWidth: height * _controller!.value.aspectRatio,
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  ValueListenableBuilder(
-                    valueListenable: _controller!,
-                    builder: (BuildContext context, VideoPlayerValue value,
-                        Widget? child) {
-                      if (!value.isInitialized) {
-                        return const SizedBox();
-                      }
-                      return Stack(
-                        fit: StackFit.passthrough,
-                        alignment: Alignment.bottomCenter,
-                        children: <Widget>[
-                          // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                          AspectRatio(
-                            aspectRatio: _controller!.value.aspectRatio,
-                            child: VideoPlayer(_controller!),
-                          ),
-                          ConstrainedBox(
-                            // this box keeps the video from being too tall
-                            constraints: BoxConstraints(
-                              maxWidth: height * _controller!.value.aspectRatio,
+              constraints: BoxConstraints(maxHeight: height),
+              child: widget.image,
+            ),
+            if (_controller != null)
+              ConstrainedBox(
+                // this box keeps the video from being too tall
+                constraints: BoxConstraints(
+                  maxWidth: height * _controller!.value.aspectRatio,
+                ),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _controller!,
+                      builder: (BuildContext context, VideoPlayerValue value,
+                          Widget? child) {
+                        if (!value.isInitialized) {
+                          return const SizedBox();
+                        }
+                        return Stack(
+                          fit: StackFit.passthrough,
+                          alignment: Alignment.bottomCenter,
+                          children: <Widget>[
+                            // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                            AspectRatio(
+                              aspectRatio: _controller!.value.aspectRatio,
+                              child: VideoPlayer(_controller!),
                             ),
-                            child: VideoProgressIndicator(_controller!,
-                                allowScrubbing: true),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  PositionedDirectional(
-                    bottom: 1,
-                    start: 1,
-                    end: 1,
-                    child: Container(
-                      height: height * 0.25,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            transparent,
-                            semiTransparentBlack,
+                            ConstrainedBox(
+                              // this box keeps the video from being too tall
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    height * _controller!.value.aspectRatio,
+                              ),
+                              child: VideoProgressIndicator(_controller!,
+                                  allowScrubbing: true),
+                            ),
                           ],
-                          begin: Alignment.center,
-                          end: Alignment.bottomCenter,
-                          tileMode: TileMode.clamp,
+                        );
+                      },
+                    ),
+                    PositionedDirectional(
+                      bottom: 1,
+                      start: 1,
+                      end: 1,
+                      child: Container(
+                        height: height * 0.25,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              transparent,
+                              semiTransparentBlack,
+                            ],
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                            tileMode: TileMode.clamp,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          // button goes in main stack
-          FittedBox(
-            child: IconButton(
-                iconSize: height / 4,
-                icon: Icon(
-                    _playing
-                        ? Icons.stop_circle_outlined
-                        : Icons.play_circle_outline,
-                    color: (widget.inbound ? inboundMsgColor : outboundMsgColor)
-                        .withOpacity(0.8)),
-                onPressed: () {
-                  _disposeControllerIfReachedEnd();
+            // button goes in main stack
+            FittedBox(
+              child: IconButton(
+                  iconSize: height / 4,
+                  icon: Icon(
+                      _playing
+                          ? Icons.stop_circle_outlined
+                          : Icons.play_circle_outline,
+                      color:
+                          (widget.inbound ? inboundMsgColor : outboundMsgColor)
+                              .withOpacity(0.8)),
+                  onPressed: () {
+                    _disposeControllerIfReachedEnd();
 
-                  if (_controller != null) {
-                    if (_controller!.value.isPlaying) {
-                      _controller!.pause();
-                    } else {
-                      _controller!.play();
+                    if (_controller != null) {
+                      if (_controller!.value.isPlaying) {
+                        _controller!.pause();
+                      } else {
+                        _controller!.play();
+                      }
+                      return;
                     }
-                    return;
-                  }
 
-                  context.loaderOverlay.show();
-                  model
-                      .decryptVideoForPlayback(widget.attachment)
-                      .catchError((e) {
-                    context.loaderOverlay.hide();
-                  }).then((videoFilename) {
-                    context.loaderOverlay.hide();
-                    setState(() {
-                      _controller =
-                          VideoPlayerController.file(File(videoFilename))
-                            ..initialize().then((_) {
-                              setState(() {
-                                _controller?.play().then((_) {
-                                  // update UI after playing stops
-                                  setState(() {});
+                    context.loaderOverlay.show();
+                    model
+                        .decryptVideoForPlayback(widget.attachment)
+                        .catchError((e) {
+                      context.loaderOverlay.hide();
+                    }).then((videoFilename) {
+                      context.loaderOverlay.hide();
+                      setState(() {
+                        _controller =
+                            VideoPlayerController.file(File(videoFilename))
+                              ..initialize().then((_) {
+                                setState(() {
+                                  _controller?.play().then((_) {
+                                    // update UI after playing stops
+                                    setState(() {});
+                                  });
                                 });
                               });
+                        _controller?.addListener(() {
+                          if (_controller!.value.isPlaying != _playing) {
+                            setState(() {
+                              _playing = !_playing;
+                              if (!_playing &&
+                                  _controller!.value.position ==
+                                      _controller!.value.duration) {
+                                // reached end of video, mark for reset
+                                _reachedEnd = true;
+                              }
                             });
-                      _controller?.addListener(() {
-                        if (_controller!.value.isPlaying != _playing) {
-                          setState(() {
-                            _playing = !_playing;
-                            if (!_playing &&
-                                _controller!.value.position ==
-                                    _controller!.value.duration) {
-                              // reached end of video, mark for reset
-                              _reachedEnd = true;
-                            }
-                          });
-                        }
+                          }
+                        });
                       });
                     });
-                  });
-                }),
-          ),
-        ],
+                  }),
+            ),
+          ],
+        ),
       );
     });
   }
