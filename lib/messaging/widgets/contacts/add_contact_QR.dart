@@ -394,7 +394,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         if (provisionalContactId == null &&
-                            proceedWithoutProvisionals)
+                            !proceedWithoutProvisionals)
                           Padding(
                             padding: const EdgeInsetsDirectional.all(20.0),
                             child: Wrap(
@@ -529,7 +529,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                       ]),
                 ),
               ),
-              if (provisionalContactId == null && proceedWithoutProvisionals)
+              if (provisionalContactId == null && !proceedWithoutProvisionals)
                 Container(
                   margin: const EdgeInsetsDirectional.only(bottom: 32),
                   child: Button(
