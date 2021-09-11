@@ -579,7 +579,8 @@ class _renderWaitingUI extends StatelessWidget {
         ),
         if (!proceedWithoutProvisionals)
           Padding(
-            padding: const EdgeInsetsDirectional.all(8.0),
+            padding: const EdgeInsetsDirectional.only(
+                start: 8.0, end: 8.0, top: 8.0),
             child: Text(
               'scan_complete'.i18n,
               style: tsInfoDialogSubtitle(fontColor),
