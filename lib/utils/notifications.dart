@@ -24,13 +24,17 @@ class Notifications {
       priority: Priority.high,
       playSound: false,
       showWhen: false,
+      ongoing: true,
     ),
   );
 
   final _inCallChannel = const NotificationDetails(
     android: AndroidNotificationDetails(
         '10003', 'in_call', 'Notification of ongoing call',
-        importance: Importance.high, priority: Priority.high, showWhen: false),
+        importance: Importance.high,
+        priority: Priority.high,
+        showWhen: false,
+        ongoing: true),
   );
 
   Notifications() {

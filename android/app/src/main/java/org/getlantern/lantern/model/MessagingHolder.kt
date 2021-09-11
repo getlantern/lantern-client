@@ -107,6 +107,7 @@ class MessagingHolder {
                 builder.setAutoCancel(true)
                 builder.setOnlyAlertOnce(true)
                 builder.setContentIntent(openMainActivity)
+                builder.setOngoing(true)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val importance = NotificationManager.IMPORTANCE_HIGH
                     val notificationChannel = NotificationChannel(
