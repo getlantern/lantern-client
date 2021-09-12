@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:lantern/messaging/calling/signaling.dart';
+import 'package:lantern/messaging/calls/signaling.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';

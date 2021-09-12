@@ -31,7 +31,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import 'widgets/call_action.dart';
+import '../widgets/call_action.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId _contactId;

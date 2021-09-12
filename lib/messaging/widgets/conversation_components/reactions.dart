@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lantern/messaging/conversation.dart';
+import 'package:lantern/messaging/conversations/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';

@@ -6,11 +6,11 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:lantern/messaging/conversation.dart' as _i5;
+import 'package:lantern/messaging/conversations/conversation.dart' as _i5;
 import 'package:lantern/messaging/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions.dart' as _i8;
 import 'package:lantern/messaging/messages.dart' as _i9;
-import 'package:lantern/messaging/new_message.dart' as _i6;
+import 'package:lantern/messaging/conversations/new_message.dart' as _i6;
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i20;
 import 'package:lantern/package_store.dart' as _i10;
 import 'package:lantern/ui/home.dart' as _i3;

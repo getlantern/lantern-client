@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/calling/call.dart';
+import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/app.dart';

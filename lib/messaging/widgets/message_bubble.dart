@@ -1,6 +1,6 @@
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:lantern/messaging/conversation.dart';
+import 'package:lantern/messaging/conversations/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/widgets/conversation_components/reactions.dart';
 import 'package:lantern/messaging/widgets/message_types/deleted_bubble.dart';
