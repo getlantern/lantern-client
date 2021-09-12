@@ -3,6 +3,14 @@ import 'package:lantern/package_store.dart';
 
 import 'now_builder.dart';
 
+/// This widget dynamically humanizes a date value, updating the displayed
+/// humanization when necessary as time marches on. It follows the below rules:
+///
+/// 1. If date is within the last minute, return 'just now'
+/// 2. If date was less than 24 hours ago, return hour:minute
+/// 3. If date was between 24-48 hours ago, return 'yesterday'
+/// 4. Else return year/month/day, hour:minute
+///
 class HumanizedDate extends StatelessWidget {
   static final _hourMinuteFormat = DateFormat('jm');
   static final _weekdayFormat = DateFormat('EEEE');
