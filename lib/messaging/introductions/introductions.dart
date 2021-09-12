@@ -91,7 +91,7 @@ class Introductions extends StatelessWidget {
                                                           endMillis: value
                                                               .disappearAt
                                                               .toInt(),
-                                                          color: Colors.black),
+                                                          color: black),
                                                   child: CircleAvatar(
                                                     backgroundColor: avatarBgColors[
                                                         generateUniqueColorIndex(
