@@ -28,11 +28,17 @@ TextStyle tsTitleAppbar =
 TextStyle tsCircleAvatarLetter =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: white);
 
-TextStyle tsCountdownTimer = TextStyle(
+TextStyle tsStopWatchTimer = TextStyle(
   fontSize: 12,
   fontWeight: FontWeight.w400,
-  color: countdownTimerColor,
+  color: stopwatchColor,
 );
+
+TextStyle tsCountdownTimer(color) => TextStyle(
+      fontSize: 48,
+      height: 56.25 / 48,
+      color: color,
+    );
 
 TextStyle tsTitleItem =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
@@ -102,29 +108,26 @@ TextStyle tsDialogButtonPink = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-TextStyle? tsInfoDialogText(color) => TextStyle(
+TextStyle tsInfoDialogSubtitle(color) => TextStyle(
+      fontSize: 16,
+      height: 26 / 16,
+      color: color,
+      fontWeight: FontWeight.w400,
+    );
+
+// TODO: rename this since its used more widely than dialogs
+TextStyle tsInfoDialogText(color) => TextStyle(
       fontSize: 14,
       height: 23 / 14,
       color: color,
+      fontWeight: FontWeight.w400,
     );
 
-TextStyle? tsInfoDialogButton = TextStyle(
+TextStyle tsInfoDialogButton = TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 14,
   color: primaryPink,
 );
-
-TextStyle txSnackBarText = const TextStyle(
-  fontSize: 14,
-  color: Colors.white,
-  height: 23 / 14,
-);
-
-TextStyle tsInfoText = const TextStyle(
-  color: Colors.white,
-);
-
-TextStyle tsInfoButton = tsInfoText.copyWith(fontWeight: FontWeight.w400);
 
 TextStyle tsFullScreenDialogTitle = const TextStyle(
   fontSize: 20,
@@ -133,12 +136,12 @@ TextStyle tsFullScreenDialogTitle = const TextStyle(
 );
 
 // Message bubble StyleSheet
-TextStyle? tsReplySnippetHeader = const TextStyle(
+TextStyle tsReplySnippetHeader = const TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 14,
   height: 23 / 14,
   color: Colors.black,
 );
 
-TextStyle? tsReplySnippetSpecialCase =
+TextStyle tsReplySnippetSpecialCase =
     const TextStyle(fontStyle: FontStyle.italic);

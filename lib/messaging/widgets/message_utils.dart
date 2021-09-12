@@ -213,6 +213,9 @@ Widget fullScreenDialogLayout(
     required Color iconColor,
     required BuildContext context,
     required Widget title,
+    Widget? backButton,
+    Function? onBackCallback,
+    required Function onCloseCallback,
     required Widget child}) {
   return Container(
       height: MediaQuery.of(context).size.height,
@@ -224,6 +227,15 @@ Widget fullScreenDialogLayout(
             child: Stack(
               alignment: Alignment.center,
               children: [
+                if (backButton != null)
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(top: 25),
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: backButton,
+                      onPressed: () => onBackCallback!(),
+                    ),
+                  ),
                 Container(
                   padding: const EdgeInsetsDirectional.only(top: 25),
                   alignment: Alignment.center,
@@ -237,7 +249,7 @@ Widget fullScreenDialogLayout(
                       Icons.close_rounded,
                       color: iconColor,
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => onCloseCallback(),
                   ),
                 ),
               ],
@@ -587,7 +599,9 @@ Future<void> displayConversationOptions(
                       top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: Text('Delete ${contact.displayName}',
+                    child: Text(
+                        sprintf(
+                            'delete_contact_name'.i18n, [contact.displayName]),
                         style: tsBottomModalList),
                   ),
                   onTap: () => showDialog<void>(

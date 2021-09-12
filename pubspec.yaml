@@ -110,7 +110,6 @@ dependencies:
   flutter_local_notifications: ^8.1.1+1
 
   sprintf: "^6.0.0"
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -29,6 +29,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
         iconColor: Colors.black,
         context: context,
         title: const Text('Add via username'),
+        onCloseCallback: () {},
         child: Column(
           children: [
             Form(

@@ -6,8 +6,8 @@ class QRScannerBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var h = size.height;
     var w = size.width;
-    var r = 14.0;
-    var cw = size.height * 0.2;
+    var r = 8.0;
+    var cw = size.height * 0.1;
 
     var greenPaint = Paint()
       ..color = green
