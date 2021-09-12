@@ -1,11 +1,11 @@
+import 'package:lantern/common/countdown_stopwatch.dart';
+import 'package:lantern/common/humanize.dart';
+import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/common/humanize.dart';
-import 'package:lantern/messaging/conversation/stored_message_extension.dart';
 
-class StatusRow extends StatefulWidget {
+class StatusRow extends StatelessWidget {
   final bool outbound;
   final bool inbound;
   final StoredMessage msg;
@@ -17,59 +17,37 @@ class StatusRow extends StatefulWidget {
       : super();
 
   @override
-  StatusRowState createState() => StatusRowState();
-}
-
-class StatusRowState extends State<StatusRow> {
-  @override
   Widget build(BuildContext context) {
-    final begin = widget.msg.firstViewedAt.toInt();
-    final end = widget.msg.disappearAt.toInt();
-    final lifeSpan = end - begin;
-    final segments = widget.msg.segments(iterations: 12);
-    final msgSelfDeletes = !widget.msg.disappearAt.isZero;
-    // TODO: the below animation is firing for every millisecond (depending on
-    // how fast Flutter can keep up)!
-    return TweenAnimationBuilder<int>(
-        key: Key('tween_${widget.msg.id}'),
-        tween: IntTween(begin: DateTime.now().millisecondsSinceEpoch, end: end),
-        duration: Duration(milliseconds: lifeSpan),
-        curve: Curves.linear,
-        builder: (BuildContext context, int time, Widget? child) {
-          var index = widget.msg.position(segments: segments);
-          return Container(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Opacity(
-              opacity: 0.9,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  ...widget.reactionsList,
-                  Container(
-                    padding: const EdgeInsets.only(right: 2.0),
-                    child: Text(
-                      widget.message.value.ts.toInt().humanizeDate(),
-                      style: tsMessageStatus(widget.outbound),
-                    ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: renderStatusIcon(
-                          widget.inbound, widget.outbound, widget.msg)),
-                  if (msgSelfDeletes)
-                    Container(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: CustomAssetImage(
-                          path: ImagePaths.countdownPaths[index],
-                          size: 12,
-                          color: widget.outbound
-                              ? outboundMsgColor
-                              : inboundMsgColor),
-                    ),
-                ],
+    final msgSelfDeletes = !msg.disappearAt.isZero;
+    return Container(
+      padding: const EdgeInsets.only(left: 8, right: 8),
+      child: Opacity(
+        opacity: 0.9,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ...reactionsList,
+            Container(
+              padding: const EdgeInsets.only(right: 2.0),
+              child: Text(
+                message.value.ts.toInt().humanizeDate(),
+                style: tsMessageStatus(outbound),
               ),
             ),
-          );
-        });
+            Container(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: renderStatusIcon(inbound, outbound, msg)),
+            if (msgSelfDeletes)
+              Container(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: CountdownStopwatch(
+                    startMillis: msg.firstViewedAt.toInt(),
+                    endMillis: msg.disappearAt.toInt(),
+                    color: outbound ? outboundMsgColor : inboundMsgColor),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }
