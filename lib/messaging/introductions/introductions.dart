@@ -202,9 +202,12 @@ class Introductions extends StatelessWidget {
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      // TODO: add interpolation
-                                                                      'Introduction to ${value.introduction.displayName} approved!'
-                                                                          .i18n,
+                                                                      sprintf(
+                                                                          'introduction_approved'
+                                                                              .i18n,
+                                                                          [
+                                                                            value.introduction.displayName
+                                                                          ]),
                                                                       overflow:
                                                                           TextOverflow
                                                                               .visible,
