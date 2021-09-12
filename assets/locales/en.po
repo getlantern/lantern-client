@@ -387,5 +387,5 @@ msgstr "Please use only letters, numbers or spaces"
 msgid "yesterday"
 msgstr "yesterday"
 
-msgid "justnow"
+msgid "just_now"
 msgstr "just now"

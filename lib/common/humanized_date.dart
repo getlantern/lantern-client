@@ -36,7 +36,7 @@ class HumanizedDate extends StatelessWidget {
       calculate: (now) {
         var justNow = now.subtract(const Duration(minutes: 1));
         if (!localDateTime.difference(justNow).isNegative) {
-          return 'justnow'.i18n;
+          return 'just_now'.i18n;
         }
         var roughTimeString = _hourMinuteFormat.format(dateTime);
         if (localDateTime.day == now.day &&
