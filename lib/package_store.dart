@@ -12,7 +12,7 @@ export 'package:flutter/services.dart';
 export 'i18n/i18n.dart';
 export 'ui/index.dart';
 export 'ui/widgets/index.dart';
-export 'utils/index.dart';
+export 'common/show_info_dialog.dart';
 export 'package:lantern/model/session_model.dart';
 export 'package:lantern/model/vpn_model.dart';
 export 'package:lantern/lantern_navigator.dart';
