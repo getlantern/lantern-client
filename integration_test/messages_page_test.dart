@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/messages.dart';
-import 'package:lantern/ui/home.dart';
-import 'package:lantern/ui/widgets/custom_bottom_bar.dart';
+import 'package:lantern/home.dart';
+import 'package:lantern/custom_bottom_bar.dart';
 
 import 'action/navigation_action_test.dart';
 import 'enums/screens_test.dart';

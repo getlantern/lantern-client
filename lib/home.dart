@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/core/router/router_extensions.dart';
-import 'package:lantern/event/Event.dart';
-import 'package:lantern/event/EventManager.dart';
+import 'package:lantern/Event.dart';
+import 'package:lantern/EventManager.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_bottom_bar.dart';
+import 'package:lantern/custom_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);

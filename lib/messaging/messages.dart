@@ -6,7 +6,7 @@ import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:lantern/common/custom_badge.dart';
 import 'package:lantern/common/humanize.dart';
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
 

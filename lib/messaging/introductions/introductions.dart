@@ -5,7 +5,7 @@ import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_badge.dart';
+import 'package:lantern/common/custom_badge.dart';
 import 'package:lantern/common/iterable_extension.dart';
 import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:auto_route/auto_route.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lantern/config/colors.dart';
-import 'package:lantern/config/image_paths.dart';
+import 'package:lantern/common/colors.dart';
+import 'package:lantern/common/image_paths.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_bottom_item.dart';
+import 'package:lantern/custom_bottom_item.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;

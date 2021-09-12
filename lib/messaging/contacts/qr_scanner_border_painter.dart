@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lantern/config/colors.dart';
+import 'package:lantern/common/colors.dart';
 
 class QRScannerBorderPainter extends CustomPainter {
   @override

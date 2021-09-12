@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/app.dart';
+import 'package:lantern/app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 void main() {

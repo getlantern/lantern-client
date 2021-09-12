@@ -4,7 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/event/EventManager.dart';
+import 'package:lantern/EventManager.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/session_model.dart';
 import 'package:lantern/model/vpn_model.dart';

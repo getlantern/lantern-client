@@ -10,6 +10,8 @@ import 'package:lantern/package_store.dart';
 import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'mime_types.dart';
+
 class ContentContainer extends StatelessWidget {
   final bool outbound;
   final bool inbound;
