@@ -1,5 +1,5 @@
 import 'package:lantern/config/mime_types.dart';
-import 'package:lantern/messaging/widgets/reply/reply_mime.dart';
+import 'package:lantern/messaging/conversation/replies/reply_mime.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 
 extension EnumExtension on MimeTypes {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/messaging/widgets/contact_list_item.dart';
+import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/ui/app.dart';
 
 import '../enums/screens_test.dart';

@@ -8,7 +8,7 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import '../model/list_subscriber.dart';
 import '../model/protos_flutteronly/messaging.pb.dart';
 import '../package_store.dart';
-import 'calling/signaling.dart';
+import 'calls/signaling.dart';
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;

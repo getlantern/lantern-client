@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/widgets/contact_list_item.dart';
-import 'package:lantern/messaging/widgets/message_utils.dart';
+import 'package:lantern/messaging/contacts/contact_list_item.dart';
+import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:lantern/ui/widgets/custom_badge.dart';
-import 'package:lantern/utils/humanize.dart';
-import 'package:lantern/utils/introduction_extension.dart';
+import 'package:lantern/common/humanize.dart';
+import 'package:lantern/messaging/introductions/introduction_extension.dart';
 
 class Messages extends StatelessWidget {
   @override
