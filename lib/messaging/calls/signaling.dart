@@ -11,7 +11,7 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/app.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/common/notifications.dart';
 import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:pedantic/pedantic.dart';

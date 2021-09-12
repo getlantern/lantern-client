@@ -1,5 +1,5 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/config/colors.dart';
+import 'package:lantern/common/colors.dart';
 
 class CustomVerticalDivider extends StatelessWidget {
   final Color? color;

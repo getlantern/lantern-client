@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/config/transitions.dart';
-import 'package:lantern/ui/index.dart';
-import 'package:lantern/ui/widgets/account/device_linking/approve_device.dart';
-import 'package:lantern/ui/widgets/account/device_linking/authorize_device_for_pro.dart';
-import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email.dart';
-import 'package:lantern/ui/widgets/account/device_linking/authorize_device_via_email_pin.dart';
-import 'package:lantern/ui/widgets/account/language.dart';
-import 'package:lantern/ui/widgets/account/messaging/display_name.dart';
-import 'package:lantern/ui/widgets/account/pro_account.dart';
-import 'package:lantern/ui/widgets/account/settings.dart';
+import 'package:lantern/common/transitions.dart';
+import 'package:lantern/account/account.dart';
+import 'package:lantern/account/device_linking/approve_device.dart';
+import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
+import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
+import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
+import 'package:lantern/account/language.dart';
+import 'package:lantern/account/messaging/display_name.dart';
+import 'package:lantern/account/pro_account.dart';
+import 'package:lantern/account/settings.dart';
 
 const account_tab_router = CustomRoute<void>(
   page: EmptyRouterPage,

@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/config/transitions.dart';
+import 'package:lantern/common/transitions.dart';
 import 'package:lantern/messaging/messages.dart';
 
 const message_tab_router = CustomRoute<void>(

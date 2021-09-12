@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lantern/config/colors.dart';
-import 'package:lantern/config/dimens.dart';
+import 'package:lantern/common/colors.dart';
+import 'package:lantern/common/dimens.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/custom_rounded_rectangle_border.dart';
+import 'package:lantern/common/custom_rounded_rectangle_border.dart';
 
 class CustomBottomItem extends StatelessWidget {
   final int currentIndex;

@@ -1,7 +1,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/config/catcher_setup.dart';
-import 'package:lantern/ui/app.dart';
+import 'package:lantern/catcher_setup.dart';
+import 'package:lantern/app.dart';
 
 void main() {
   setUp(() {

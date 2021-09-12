@@ -2,8 +2,8 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/ui/widgets/button.dart';
-import 'package:lantern/ui/widgets/custom_text_field.dart';
+import 'package:lantern/common/button.dart';
+import 'package:lantern/common/custom_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:auto_route/auto_route.dart';
 
