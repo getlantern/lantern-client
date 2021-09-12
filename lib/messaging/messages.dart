@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/custom_badge.dart';
+import 'package:lantern/common/humanized_date.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/introductions/introduction_extension.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/custom_badge.dart';
-import 'package:lantern/common/humanize.dart';
-import 'package:lantern/messaging/introductions/introduction_extension.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -90,10 +90,10 @@ class Messages extends StatelessWidget {
                               overflow: TextOverflow.ellipsis),
                           onTap: () async => await context.pushRoute(
                               Conversation(contactId: contact.value.contactId)),
-                          trailing: Text(contact.value.mostRecentMessageTs
-                              .toInt()
-                              .humanizeDate()
-                              .toString()),
+                          trailing: HumanizedDate.fromMillis(
+                            contact.value.mostRecentMessageTs.toInt(),
+                            builder: (context, date) => Text(date),
+                          ),
                         ),
                       ],
                     );

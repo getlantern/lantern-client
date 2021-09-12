@@ -1,5 +1,5 @@
 import 'package:lantern/common/countdown_stopwatch.dart';
-import 'package:lantern/common/humanize.dart';
+import 'package:lantern/common/humanized_date.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
@@ -29,9 +29,12 @@ class StatusRow extends StatelessWidget {
             ...reactionsList,
             Container(
               padding: const EdgeInsets.only(right: 2.0),
-              child: Text(
-                message.value.ts.toInt().humanizeDate(),
-                style: tsMessageStatus(outbound),
+              child: HumanizedDate.fromMillis(
+                message.value.ts.toInt(),
+                builder: (context, date) => Text(
+                  date,
+                  style: tsMessageStatus(outbound),
+                ),
               ),
             ),
             Container(
