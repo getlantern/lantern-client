@@ -78,7 +78,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("contactId")!!
-            )
+            ).let { result ->
+                mapOf(
+                    "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
+                    "expiresAtMillis" to result.expiresAtMillis
+                )
+            }
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
                 call.argument("contactId")!!
             )

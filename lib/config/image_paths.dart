@@ -26,6 +26,7 @@ class ImagePaths {
   static const check_green = 'assets/images/check_green.svg';
 
   static const alert_icon = 'assets/images/alert_icon.svg';
+  static const error = 'assets/images/error.svg';
   static const translate_icon = 'assets/images/translate_icon.svg';
   static const content_copy = 'assets/images/content_copy.svg';
 

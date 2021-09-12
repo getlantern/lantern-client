@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-class CountdownTimer extends StatelessWidget {
+class StopwatchTimer extends StatelessWidget {
   final StopWatchTimer stopWatchTimer;
   final TextStyle style;
-  const CountdownTimer(
+  const StopwatchTimer(
       {required this.stopWatchTimer, required this.style, Key? key})
       : super(key: key);
 

@@ -297,11 +297,14 @@ msgstr "Scan QR Code"
 msgid "qr_info_description"
 msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
 
-msgid "qr_info_waiting"
-msgstr "Waiting for your friend to scan your QR code..."
-
 msgid "qr_info_scan"
 msgstr "Scan each others QR codes, to add a contact."
+
+msgid "qr_info_waiting_QR"
+msgstr "Waiting for your friend to scan your QR code..."
+
+msgid "scan_complete"
+msgstr "Scan complete"
 
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
@@ -309,11 +312,11 @@ msgstr "Your QR Code"
 msgid "qr_trouble_scanning"
 msgstr "Trouble scanning?"
 
-msgid "contactid_error_description"
-msgstr "Something went wrong while adding this contact"
+msgid "qr_info_waiting_ID"
+msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "contactid_input_error"
-msgstr "Please ensure the ID you are entering is not empty or your own"
+msgid "contactid_error_description"
+msgstr "Something went wrong while adding this contact."
 
 msgid "contactid_enter_manually"
 msgstr "Enter your friend's Messenger ID manually"
@@ -344,6 +347,9 @@ msgstr "Something went wrong while rejecting this connect request."
 
 msgid "introductions_error_description_accepting"
 msgstr "Something went wrong while accepting this connect request."
+
+msgid "delete_contact_name"
+msgstr "Delete %s"
 
 msgid "delete_contact"
 msgstr "Delete Contact"

@@ -10,9 +10,11 @@ class CustomTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
-  late final IconButton? suffixIcon;
+  late final Icon? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
+  late final int? minLines;
+  late final int? maxLines;
 
   CustomTextField({
     required this.controller,
@@ -23,6 +25,8 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.keyboardType,
     this.enabled,
+    this.minLines,
+    this.maxLines,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -60,6 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             key: fieldKey,
             enabled: widget.enabled,
             controller: widget.controller,
+            autovalidateMode: AutovalidateMode.disabled,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
             validator: (value) {
@@ -67,36 +72,37 @@ class _CustomTextFieldState extends State<CustomTextField> {
               setState(() {});
               return result;
             },
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              // we handle floating labels using our custom method below
-              labelText: widget.label,
-              helperText: widget.helperText,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: primaryBlue,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                // we handle floating labels using our custom method below
+                labelText: widget.label,
+                helperText: widget.helperText,
+                helperMaxLines: 2,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: primaryBlue,
+                  ),
                 ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: indicatorRed,
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: indicatorRed,
+                  ),
                 ),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 1,
-                  color: grey4,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: grey3,
+                  ),
                 ),
-              ),
-              prefixIcon: widget.prefixIcon,
-              suffixIcon: widget.controller.value.text.isEmpty
-                  ? widget.suffixIcon
-                  : !fieldKey.currentState!.hasError == true
-                      ? widget.suffixIcon
-                      : Icon(Icons.error, color: indicatorRed),
-            ),
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: fieldKey.currentState?.mounted == true &&
+                        fieldKey.currentState?.hasError == true
+                    ? Icon(Icons.error, color: indicatorRed)
+                    : widget.suffixIcon),
           ),
         ),
         Container(
@@ -108,7 +114,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : Text(
                   widget.label,
                   style: TextStyle(
-                      color: fieldKey.currentState?.hasError == true
+                      color: fieldKey.currentState?.mounted == true &&
+                              fieldKey.currentState?.hasError == true
                           ? indicatorRed
                           : primaryBlue),
                 ),
@@ -140,7 +147,6 @@ class CustomTextEditingController extends TextEditingController {
     if (validator == null) {
       return null;
     }
-
     return validator!(value);
   }
 
