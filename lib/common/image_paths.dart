@@ -47,21 +47,6 @@ class ImagePaths {
   static const hangup_icon = 'assets/images/hangup_icon.svg';
   static const cancel_icon = 'assets/images/cancel_icon.svg';
 
-  static const _countdownPaths = [
-    'assets/images/disappear/timer_12.svg',
-    'assets/images/disappear/timer_11.svg',
-    'assets/images/disappear/timer_10.svg',
-    'assets/images/disappear/timer_9.svg',
-    'assets/images/disappear/timer_8.svg',
-    'assets/images/disappear/timer_7.svg',
-    'assets/images/disappear/timer_6.svg',
-    'assets/images/disappear/timer_5.svg',
-    'assets/images/disappear/timer_4.svg',
-    'assets/images/disappear/timer_3.svg',
-    'assets/images/disappear/timer_2.svg',
-    'assets/images/disappear/timer_1.svg',
-    'assets/images/disappear/timer_0.svg'
-  ];
-
-  static List<String> get countdownPaths => _countdownPaths;
+  static String countdownPath(int index) =>
+      'assets/images/countdown_stopwatch/timer_$index.svg';
 }

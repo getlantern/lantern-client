@@ -1,15 +1,15 @@
-import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/contacts/contact_list_item.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/countdown_stopwatch.dart';
 import 'package:lantern/common/custom_badge.dart';
 import 'package:lantern/common/iterable_extension.dart';
 import 'package:lantern/common/show_alert_dialog.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/messaging/conversation/stored_message_extension.dart';
+import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/contacts/contact_list_item.dart';
+import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/package_store.dart';
 
 class Introductions extends StatelessWidget {
   @override
@@ -83,40 +83,15 @@ class Introductions extends StatelessWidget {
                                                   top: 25,
                                                   // Render the countdown timer for the introduction's expiry
                                                   // the backend is taking care of assigning a different duration to these messages
-                                                  customBadge: TweenAnimationBuilder<
-                                                          int>(
-                                                      key: Key(
-                                                          'tween_${value.id}'),
-                                                      tween: IntTween(
-                                                          begin: DateTime.now()
-                                                              .millisecondsSinceEpoch,
-                                                          end: value.disappearAt
-                                                              .toInt()),
-                                                      duration: Duration(
-                                                          milliseconds: value
-                                                                  .disappearAt
-                                                                  .toInt() -
-                                                              value
-                                                                  .firstViewedAt // we start counting from when the message containing the introduction is seen
-                                                                  .toInt()),
-                                                      curve: Curves.linear,
-                                                      builder:
-                                                          (BuildContext context,
-                                                              int time,
-                                                              Widget? child) {
-                                                        var index = value.position(
-                                                            segments:
-                                                                value.segments(
-                                                                    iterations:
-                                                                        12));
-                                                        return CustomAssetImage(
-                                                            path: ImagePaths
-                                                                    .countdownPaths[
-                                                                index],
-                                                            size: 12,
-                                                            color:
-                                                                Colors.black);
-                                                      }),
+                                                  customBadge:
+                                                      CountdownStopwatch(
+                                                          startMillis: value
+                                                              .disappearAt
+                                                              .toInt(),
+                                                          endMillis: value
+                                                              .disappearAt
+                                                              .toInt(),
+                                                          color: Colors.black),
                                                   child: CircleAvatar(
                                                     backgroundColor: avatarBgColors[
                                                         generateUniqueColorIndex(
