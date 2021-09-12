@@ -32,6 +32,7 @@ class NowBuilder<T> extends StatefulWidget {
 class _NowState<T> extends State<NowBuilder<T>> with _NowCallback {
   static final _callbacks = <_NowCallback>{};
 
+  /// Use a single global Timer for reduced CPU overhead.
   static final _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
     final now = DateTime.now();
     _callbacks.forEach((callback) => callback.onTime(now));
@@ -46,7 +47,7 @@ class _NowState<T> extends State<NowBuilder<T>> with _NowCallback {
     // The below seems to be needed to keep the compiler from optimizing out the
     // static timer. If you remove the below reference to _timer.isActive, the
     // timer will not run.
-    _timer.isActive;
+    _timer.isActive; // DO NOT REMOVE!!!
     _callbacks.add(this);
   }
 
