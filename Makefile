@@ -53,8 +53,7 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS_NOSTRIP := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
-LDFLAGS := $(LDFLAGS_NOSTRIP) -s
+LDFLAGS := -s -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
 
 BINARIES_PATH ?= ../lantern-binaries
 BRANCH ?= master
@@ -354,7 +353,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(call build-tags) && \
 	echo "Running gomobile with `which gomobile` ..." && \
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS_NOSTRIP) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
+	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
