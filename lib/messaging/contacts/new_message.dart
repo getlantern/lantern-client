@@ -169,7 +169,7 @@ class _NewMessageState extends State<NewMessage> {
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),
-                        child: Text('no_contacts_yet.'.i18n,
+                        child: Text('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
                                 tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
