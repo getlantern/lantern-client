@@ -15,6 +15,8 @@ extension Localization on String {
   String get i18n =>
       localize(this, translations, locale: locale.replaceAll('_', '-'));
 
+  String fill(List<Object> params) => localizeFill(this, params);
+
   String displayLanguage(BuildContext context, String languageCode) {
     if (languageCode == 'ar_EG') {
       return 'العربية';

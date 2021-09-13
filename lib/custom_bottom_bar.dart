@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lantern/common/colors.dart';
 import 'package:lantern/common/image_paths.dart';
-import 'package:lantern/package_store.dart';
 import 'package:lantern/custom_bottom_item.dart';
+import 'package:lantern/package_store.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -35,7 +35,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: Text('Messages'.i18n, style: const TextStyle(fontSize: 12)),
+            label: Text('messages'.i18n, style: const TextStyle(fontSize: 12)),
             icon: SvgPicture.asset(
               ImagePaths.messages_icon,
               color:
@@ -45,7 +45,7 @@ class CustomBottomBar extends StatelessWidget {
             onTap: () => onTap!(0),
           ),
           label: '',
-          tooltip: 'Messages'.i18n,
+          tooltip: 'messages'.i18n,
         ),
         BottomNavigationBarItem(
           icon: CustomBottomItem(
@@ -65,7 +65,7 @@ class CustomBottomBar extends StatelessWidget {
                 maxRadius: activeIconSize - 4,
                 backgroundColor: (value.toLowerCase() ==
                             'Disconnecting'.i18n.toLowerCase() ||
-                        value == 'Connected'.i18n.toLowerCase())
+                        value == 'connected'.i18n.toLowerCase())
                     ? indicatorGreen
                     : indicatorRed,
               ),

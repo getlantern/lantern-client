@@ -1,14 +1,14 @@
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/conversation/reactions.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/conversation/reactions.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 
 import 'content_container.dart';
 import 'date_marker_bubble.dart';
@@ -136,7 +136,7 @@ class MessageBubble extends StatelessWidget {
           ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.reply),
-            title: Text('Reply'.i18n),
+            title: Text('reply'.i18n),
             onPressed: () {
               onReply(msg);
             },
@@ -144,7 +144,7 @@ class MessageBubble extends StatelessWidget {
           if (!isAttachment)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.copy),
-              title: Text('Copy Text'.i18n),
+              title: Text('copy_text'.i18n),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -153,7 +153,7 @@ class MessageBubble extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                        'Text Copied'.i18n,
+                        'text_copied'.i18n,
                         style: tsInfoDialogText(white),
                         textAlign: TextAlign.left,
                       )),
@@ -165,7 +165,7 @@ class MessageBubble extends StatelessWidget {
             ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.delete),
-            title: Text('Delete for me'.i18n),
+            title: Text('delete_for_me'.i18n),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
@@ -173,7 +173,7 @@ class MessageBubble extends StatelessWidget {
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
-              title: Text('Delete for everyone'.i18n),
+              title: Text('delete_for_everyone'.i18n),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },

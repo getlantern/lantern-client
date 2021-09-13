@@ -41,7 +41,7 @@ class CopiedTextWidgetState extends State<CopiedTextWidget> {
                   color: Colors.green,
                 )
               : const Icon(Icons.copy),
-          title: Text('Copy Text'.i18n),
+          title: Text('copy_text'.i18n),
         ));
   }
 }

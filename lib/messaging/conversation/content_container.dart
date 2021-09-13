@@ -1,13 +1,13 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_types.dart';
@@ -121,13 +121,14 @@ class ContentContainer extends StatelessWidget {
                                   if (href != null && await canLaunch(href)) {
                                     showAlertDialog(
                                         context: context,
-                                        title: Text('Open URL'.i18n,
+                                        title: Text('open_url'.i18n,
                                             style: tsDialogTitle),
                                         content: Text(
-                                            'Are you sure you want to open $href?',
+                                            'are_you_sure_you_want_to_open'
+                                                .fill([href]),
                                             style: tsDialogBody),
-                                        dismissText: 'Cancel'.i18n,
-                                        agreeText: 'Continue'.i18n,
+                                        dismissText: 'cancel'.i18n,
+                                        agreeText: 'continue'.i18n,
                                         agreeAction: () async {
                                           await launch(href);
                                         });

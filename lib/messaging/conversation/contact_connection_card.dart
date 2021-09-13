@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
@@ -130,9 +130,7 @@ class ContactConnectionCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 24.0),
                   child: Center(
-                    child: Text(
-                        'Both parties must accept the introduction to message each other.  Introductions disappear after 7 days if no action is taken.'
-                            .i18n),
+                    child: Text('introductions_info'.i18n),
                   ),
                 ),
                 Divider(thickness: 1, color: grey2),
@@ -143,7 +141,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: Text('Accept'.i18n, style: tsDialogTitle),
+                        title: Text('accept'.i18n, style: tsDialogTitle),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -151,10 +149,9 @@ class ContactConnectionCard extends StatelessWidget {
                                 contact.contactId.id, introduction.to.id);
                           } catch (e) {
                             showInfoDialog(context,
-                                title: 'Error'.i18n,
-                                des:
-                                    'Something went wrong while accepting this connect request.'
-                                        .i18n,
+                                title: 'error'.i18n,
+                                des: 'introductions_error_description_accepting'
+                                    .i18n,
                                 icon: ImagePaths.alert_icon,
                                 buttonText: 'OK'.i18n);
                           } finally {
@@ -169,18 +166,16 @@ class ContactConnectionCard extends StatelessWidget {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      title: Text('Reject'.i18n),
+                      title: Text('reject'.i18n),
                       onTap: () async {
                         showAlertDialog(
                             context: context,
-                            title: Text('Reject Introduction?'.i18n,
+                            title: Text('introductions_reject_title'.i18n,
                                 style: tsDialogTitle),
-                            content: Text(
-                                'You will not be able to message this contact if you reject the introduction.'
-                                    .i18n,
+                            content: Text('introductions_reject_content'.i18n,
                                 style: tsDialogBody),
-                            dismissText: 'Cancel'.i18n,
-                            agreeText: 'Reject'.i18n,
+                            dismissText: 'cancel'.i18n,
+                            agreeText: 'reject'.i18n,
                             agreeAction: () async {
                               try {
                                 // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -188,9 +183,9 @@ class ContactConnectionCard extends StatelessWidget {
                                     contact.contactId.id, introduction.to.id);
                               } catch (e) {
                                 showInfoDialog(context,
-                                    title: 'Error'.i18n,
+                                    title: 'error'.i18n,
                                     des:
-                                        'Something went wrong while rejecting this connect request.'
+                                        'introductions_error_description_rejecting'
                                             .i18n,
                                     icon: ImagePaths.alert_icon,
                                     buttonText: 'OK'.i18n);
