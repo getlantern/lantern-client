@@ -64,8 +64,6 @@ class _ConversationState extends State<Conversation>
   final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
   final _scrollController = ItemScrollController();
-  StreamSubscription<bool>? keyboardStream;
-  bool _keyboardState = true;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -87,24 +85,12 @@ class _ConversationState extends State<Conversation>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    var keyboardVisibilityController = KeyboardVisibilityController();
-    _keyboardState = !keyboardVisibilityController.isVisible;
-    keyboardStream =
-        keyboardVisibilityController.onChange.listen((bool visible) {
-      if (mounted) {
-        setState(
-          () => _keyboardState = !visible,
-        );
-      }
-    });
     BackButtonInterceptor.add(_interceptBackButton);
-    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    keyboardStream?.cancel();
     _newMessage.dispose();
     _stopWatchTimer.dispose();
     _focusNode.dispose();
@@ -252,112 +238,108 @@ class _ConversationState extends State<Conversation>
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
-    return WillPopScope(
-      onWillPop: () => Future<bool>.value(_keyboardState),
-      child: model.singleContactById(context, widget._contactId,
-          (context, contact, child) {
-        return BaseScreen(
-          // Conversation title (contact name)
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+    return model.singleContactById(context, widget._contactId,
+        (context, contact, child) {
+      return BaseScreen(
+        // Conversation title (contact name)
+        title: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            renderContactAvatar(displayName: contact.displayName),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    contact.displayName.isEmpty
+                        ? contact.contactId.id
+                        : contact.displayName,
+                    style: tsTitleAppbar,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  DisappearingTimerAction(contact),
+                ],
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              renderContactAvatar(displayName: contact.displayName),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      contact.displayName.isEmpty
-                          ? contact.contactId.id
-                          : contact.displayName,
-                      style: tsTitleAppbar,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    DisappearingTimerAction(contact),
-                  ],
+              CallAction(contact),
+              IconButton(
+                icon: const Icon(Icons.more_vert_rounded),
+                tooltip: 'menu'.i18n,
+                onPressed: () =>
+                    displayConversationOptions(model, context, contact),
+              )
+            ],
+          ),
+        ],
+        body: Stack(children: [
+          Column(
+            children: [
+              Card(
+                color: grey1,
+                child: _buildConversationSticker(contact),
+              ),
+              Flexible(
+                child: _buildMessageBubbles(contact),
+              ),
+              // Reply container
+              if (_isReplying)
+                ReplyPreview(
+                  quotedMessage: _quotedMessage,
+                  model: model,
+                  contact: contact,
+                  onCloseListener: () => setState(() => _isReplying = false),
                 ),
+              Divider(height: 1.0, color: grey3),
+              Container(
+                color: _isRecording
+                    ? const Color.fromRGBO(245, 245, 245, 1)
+                    : Colors.white,
+                width: MediaQuery.of(context).size.width,
+                height: kBottomNavigationBarHeight,
+                child: _buildMessageBar(),
+              ),
+              MessagingEmojiPicker(
+                showEmojis: _emojiShowing,
+                emptySuggestions: 'no_recents'.i18n,
+                height: size!.height * 0.25,
+                onBackspacePressed: () {
+                  _newMessage
+                    ..text = _newMessage.text.characters.skipLast(1).toString()
+                    ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: _newMessage.text.length));
+                },
+                onEmojiSelected: (category, emoji) async {
+                  if (mounted &&
+                      _customEmojiResponse &&
+                      _storedMessage != null) {
+                    dismissKeyboard();
+                    await model.react(_storedMessage!, emoji.emoji);
+                    _storedMessage = null;
+                    setState(() => _emojiShowing = false);
+                  } else {
+                    setState(() => _isSendIconVisible = true);
+                    _newMessage
+                      ..text += emoji.emoji
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: _newMessage.text.length));
+                  }
+                },
               ),
             ],
           ),
-          centerTitle: false,
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CallAction(contact),
-                IconButton(
-                  icon: const Icon(Icons.more_vert_rounded),
-                  tooltip: 'menu'.i18n,
-                  onPressed: () =>
-                      displayConversationOptions(model, context, contact),
-                )
-              ],
-            ),
-          ],
-          body: Stack(children: [
-            Column(
-              children: [
-                Card(
-                  color: grey1,
-                  child: _buildConversationSticker(contact),
-                ),
-                Flexible(
-                  child: _buildMessageBubbles(contact),
-                ),
-                // Reply container
-                if (_isReplying)
-                  ReplyPreview(
-                    quotedMessage: _quotedMessage,
-                    model: model,
-                    contact: contact,
-                    onCloseListener: () => setState(() => _isReplying = false),
-                  ),
-                Divider(height: 1.0, color: grey3),
-                Container(
-                  color: _isRecording
-                      ? const Color.fromRGBO(245, 245, 245, 1)
-                      : Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  height: kBottomNavigationBarHeight,
-                  child: _buildMessageBar(),
-                ),
-                MessagingEmojiPicker(
-                  showEmojis: _emojiShowing,
-                  emptySuggestions: 'no_recents'.i18n,
-                  height: size!.height * 0.25,
-                  onBackspacePressed: () {
-                    _newMessage
-                      ..text =
-                          _newMessage.text.characters.skipLast(1).toString()
-                      ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: _newMessage.text.length));
-                  },
-                  onEmojiSelected: (category, emoji) async {
-                    if (mounted &&
-                        _customEmojiResponse &&
-                        _storedMessage != null) {
-                      dismissKeyboard();
-                      await model.react(_storedMessage!, emoji.emoji);
-                      _storedMessage = null;
-                      setState(() => _emojiShowing = false);
-                    } else {
-                      setState(() => _isSendIconVisible = true);
-                      _newMessage
-                        ..text += emoji.emoji
-                        ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: _newMessage.text.length));
-                    }
-                  },
-                ),
-              ],
-            ),
-          ]),
-        );
-      }),
-    );
+        ]),
+      );
+    });
   }
 
   Widget _buildConversationSticker(Contact contact) => LayoutBuilder(
