@@ -664,6 +664,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 }
                 return
             }
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
