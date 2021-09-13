@@ -147,10 +147,7 @@ class _ConversationState extends State<Conversation>
             curve: Curves.easeInOutCubic);
       }
     } catch (e, s) {
-      showErrorDialog(context,
-          e: e,
-          s: s,
-          des: 'Something went wrong while sending your message.'.i18n);
+      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
     } finally {
       if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
@@ -217,10 +214,7 @@ class _ConversationState extends State<Conversation>
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
     } catch (e, s) {
-      showErrorDialog(context,
-          e: e,
-          s: s,
-          des: 'Something went wrong while sharing a media file.'.i18n);
+      showErrorDialog(context, e: e, s: s, des: 'share_media_error'.i18n);
     } finally {
       context.loaderOverlay.hide();
     }
@@ -296,7 +290,7 @@ class _ConversationState extends State<Conversation>
                 CallAction(contact),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
-                  tooltip: 'Menu'.i18n,
+                  tooltip: 'menu'.i18n,
                   onPressed: () =>
                       displayConversationOptions(model, context, contact),
                 )
@@ -332,7 +326,7 @@ class _ConversationState extends State<Conversation>
                 ),
                 MessagingEmojiPicker(
                   showEmojis: _emojiShowing,
-                  emptySuggestions: 'No Recents'.i18n,
+                  emptySuggestions: 'no_recents'.i18n,
                   height: size!.height * 0.25,
                   onBackspacePressed: () {
                     _newMessage
@@ -530,7 +524,7 @@ class _ConversationState extends State<Conversation>
                 // Send icon
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                hintText: 'Message'.i18n,
+                hintText: 'message'.i18n,
                 border: const OutlineInputBorder(),
               ),
             ),

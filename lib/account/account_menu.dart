@@ -3,7 +3,6 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:sprintf/sprintf.dart';
 
 import 'settings_item.dart';
 
@@ -63,7 +62,7 @@ class AccountMenu extends StatelessWidget {
       ),
       SettingsItem(
         icon: ImagePaths.account_icon,
-        title: sprintf('display_name'.i18n, [me.displayName]),
+        title: 'display_name'.i18n.fill([me.displayName]),
         onTap: () {
           openDisplayName(context, me);
         },
@@ -102,7 +101,7 @@ class AccountMenu extends StatelessWidget {
         ),
         SettingsItem(
           icon: ImagePaths.account_icon,
-          title: sprintf('display_name'.i18n, [me.displayName]),
+          title: 'display_name'.i18n.fill([me.displayName]),
           onTap: () {
             openDisplayName(context, me);
           },

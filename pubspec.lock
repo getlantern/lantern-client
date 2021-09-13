@@ -562,7 +562,7 @@ packages:
       name: i18n_extension
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.1"
+    version: "4.1.2"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1001,7 +1001,7 @@ packages:
     source: hosted
     version: "1.8.1"
   sprintf:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sprintf
       url: "https://pub.dartlang.org"
