@@ -65,7 +65,7 @@ class Notifications {
     return _flutterLocalNotificationsPlugin
         .show(
             _notificationId++,
-            sprintf('incoming_call_from'.i18n, [contact.displayName]),
+            'incoming_call_from'.i18n.fill([contact.displayName]),
             'touch_here_to_open_call'.i18n,
             _ringingChannel,
             payload: payload.toJson())
@@ -75,7 +75,7 @@ class Notifications {
   Future<int> showInCallNotification(Contact contact) {
     final id = _notificationId++;
     return _flutterLocalNotificationsPlugin
-        .show(id, sprintf('in_call_with'.i18n, contact.displayName),
+        .show(id, 'in_call_with'.i18n.fill([contact.displayName]),
             'touch_here_to_open_call'.i18n, _inCallChannel)
         .then((value) => id);
   }

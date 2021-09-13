@@ -124,9 +124,8 @@ class ContentContainer extends StatelessWidget {
                                         title: Text('open_url'.i18n,
                                             style: tsDialogTitle),
                                         content: Text(
-                                            sprintf(
-                                                'are_you_sure_you_want_to_open',
-                                                [href]),
+                                            'are_you_sure_you_want_to_open'
+                                                .fill([href]),
                                             style: tsDialogBody),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,

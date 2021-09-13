@@ -13,7 +13,6 @@ export 'package:lantern/model/protos_shared/vpn.pb.dart';
 export 'package:lantern/model/session_model.dart';
 export 'package:lantern/model/vpn_model.dart';
 export 'package:provider/provider.dart';
-export 'package:sprintf/sprintf.dart';
 
 export 'common/base_screen.dart';
 export 'common/colors.dart';
