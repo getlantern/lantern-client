@@ -233,7 +233,7 @@ class Signaling extends ValueNotifier<SignalingState>
               // force dismissal through actual dismiss action to make sure we stop ringtone, etc
               barrierDismissible: false,
               title: Text('incoming_call'.i18n),
-              content: Text(sprintf('call_from'.i18n, [contact.displayName])),
+              content: Text('call_from'.i18n.fill([contact.displayName])),
               dismissText: 'dismiss'.i18n,
               dismissAction: () async {
                 await FlutterRingtonePlayer.stop();

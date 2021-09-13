@@ -62,7 +62,7 @@ class AccountMenu extends StatelessWidget {
       ),
       SettingsItem(
         icon: ImagePaths.account_icon,
-        title: sprintf('display_name'.i18n, [me.displayName]),
+        title: 'display_name'.i18n.fill([me.displayName]),
         onTap: () {
           openDisplayName(context, me);
         },
@@ -101,7 +101,7 @@ class AccountMenu extends StatelessWidget {
         ),
         SettingsItem(
           icon: ImagePaths.account_icon,
-          title: sprintf('display_name'.i18n, [me.displayName]),
+          title: 'display_name'.i18n.fill([me.displayName]),
           onTap: () {
             openDisplayName(context, me);
           },
