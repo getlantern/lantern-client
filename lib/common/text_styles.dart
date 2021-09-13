@@ -26,7 +26,7 @@ TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
 
 TextStyle tsCircleAvatarLetter =
-    TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: white);
+    TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: white);
 
 TextStyle tsStopWatchTimer = TextStyle(
   fontSize: 12,

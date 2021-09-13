@@ -92,21 +92,10 @@ class Introductions extends StatelessWidget {
                                                               .disappearAt
                                                               .toInt(),
                                                           color: black),
-                                                  child: CircleAvatar(
-                                                    backgroundColor: avatarBgColors[
-                                                        generateUniqueColorIndex(
-                                                            value.introduction
-                                                                .displayName)],
-                                                    child: Text(
-                                                        sanitizeContactName(value
-                                                                .introduction
-                                                                .displayName)
-                                                            .substring(0, 2)
-                                                            .toUpperCase(),
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                  ),
+                                                  child: renderContactAvatar(
+                                                      displayName: value
+                                                          .introduction
+                                                          .displayName),
                                                 ),
                                                 trailing: FittedBox(
                                                     child: Row(

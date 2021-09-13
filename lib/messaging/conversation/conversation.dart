@@ -262,18 +262,7 @@ class _ConversationState extends State<Conversation>
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundColor: avatarBgColors[
-                    generateUniqueColorIndex(contact.contactId.id)],
-                child: Text(
-                  sanitizeContactName(contact.displayName.isEmpty
-                          ? contact.contactId.id
-                          : contact.displayName)
-                      .substring(0, 2)
-                      .toUpperCase(),
-                  style: tsCircleAvatarLetter,
-                ),
-              ),
+              renderContactAvatar(displayName: contact.displayName),
               const SizedBox(width: 6),
               Expanded(
                 child: Column(

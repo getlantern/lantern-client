@@ -103,14 +103,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     scale: 3,
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: grey5,
-                          child: Text(
-                              sanitizeContactName(widget.contact.displayName)
-                                  .substring(0, 2)
-                                  .toUpperCase(),
-                              style: const TextStyle(color: Colors.white)),
-                        ),
+                        renderContactAvatar(
+                            displayName: widget.contact.displayName,
+                            customColor: grey5),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: Text(
