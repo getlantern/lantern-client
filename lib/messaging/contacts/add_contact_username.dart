@@ -1,11 +1,11 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/button.dart';
+import 'package:lantern/common/custom_text_field.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/button.dart';
-import 'package:lantern/common/custom_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:auto_route/auto_route.dart';
 
 class AddViaUsername extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
   late final usernameController = CustomTextEditingController(
     formKey: _formKey,
     validator: (value) =>
-        value != '' ? null : 'Please enter a valid username'.i18n,
+        value != '' ? null : 'please_enter_a_valid_username'.i18n,
   );
 
   @override
@@ -28,7 +28,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
         topColor: Colors.white,
         iconColor: Colors.black,
         context: context,
-        title: const Text('Add via username'),
+        title: Text('add_via_username'.i18n),
         onCloseCallback: () {},
         child: Column(
           children: [
@@ -43,10 +43,9 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                         children: [
                           CustomTextField(
                             controller: usernameController,
-                            label: 'Username'.i18n,
+                            label: 'username'.i18n,
                             helperText:
-                                'Enter a username to start a message conversation'
-                                    .i18n,
+                                'enter_a_username_to_start_a_conversation'.i18n,
                             keyboardType: TextInputType.emailAddress,
                             prefixIcon: const Icon(
                               Icons.email,
@@ -63,7 +62,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                           children: [
                             Button(
                               width: 200,
-                              text: 'Start Message'.i18n,
+                              text: 'start_message'.i18n,
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   context.loaderOverlay.show();

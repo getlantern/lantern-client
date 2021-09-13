@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/common/button.dart';
+import 'package:lantern/common/iterable_extension.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/button.dart';
-import 'package:lantern/common/iterable_extension.dart';
 
 class Introduce extends StatefulWidget {
   @override
@@ -26,7 +26,9 @@ class _IntroduceState extends State<Introduce> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-        title: 'Introduce Contacts (${selectedContactIds.length})'.i18n,
+        title: 'introduce_contacts_with_count'
+            .i18n
+            .fill([selectedContactIds.length]),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList()
@@ -43,9 +45,7 @@ class _IntroduceState extends State<Introduce> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child: Text(
-                        'Select two or more contacts to introduce.  They will be sent introductions to start messaging each other. '
-                            .i18n,
+                    child: Text('introduce_contacts_select'.i18n,
                         style: tsEmptyContactState),
                   ),
                 Expanded(
@@ -54,9 +54,7 @@ class _IntroduceState extends State<Introduce> {
                             alignment: AlignmentDirectional.center,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24.0, vertical: 16.0),
-                            child: Text(
-                                'Once you have two or more contacts you will be able to create introductions.'
-                                    .i18n,
+                            child: Text('need_two_contacts_to_introduce'.i18n,
                                 textAlign: TextAlign.center,
                                 style: tsBaseScreenBodyText),
                           )
@@ -111,7 +109,7 @@ class _IntroduceState extends State<Introduce> {
                                             children: [
                                               Button(
                                                 width: 200,
-                                                text: 'Send Introductions'
+                                                text: 'send_introductions'
                                                     .i18n
                                                     .toUpperCase(),
                                                 onPressed: () async {
@@ -126,7 +124,7 @@ class _IntroduceState extends State<Introduce> {
                                                       children: [
                                                         Expanded(
                                                             child: Text(
-                                                          'Introductions Sent!'
+                                                          'introductions_sent'
                                                               .i18n,
                                                           style:
                                                               tsInfoDialogText(

@@ -27,7 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  i18n_extension: ^4.0.0
+  i18n_extension: ^4.1.2
 
   provider: ^5.0.0
 
@@ -109,7 +109,6 @@ dependencies:
 
   flutter_local_notifications: ^8.1.1+1
 
-  sprintf: "^6.0.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -137,7 +136,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/disappear/
+    - assets/images/countdown_stopwatch/
     - assets/locales/
 
   # An image asset can refer to one or more resolution-specific "variants", see

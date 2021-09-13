@@ -11,18 +11,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/common/text_styles.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
-import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
+import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/conversation/audio/voice_recorder.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
 import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
-import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
 import 'package:lantern/messaging/conversation/replies/reply_preview.dart';
-import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
-import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
-import 'package:lantern/messaging/conversation/audio/voice_recorder.dart';
+import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -148,7 +148,7 @@ class _ConversationState extends State<Conversation>
       }
     } catch (e) {
       showInfoDialog(context,
-          title: 'Error'.i18n,
+          title: 'error'.i18n,
           des: 'Something went wrong while sending your message.'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
@@ -219,7 +219,7 @@ class _ConversationState extends State<Conversation>
       });
     } catch (e) {
       showInfoDialog(context,
-          title: 'Error'.i18n,
+          title: 'error'.i18n,
           des: 'Something went wrong while sharing a media file.'.i18n,
           icon: ImagePaths.alert_icon,
           buttonText: 'OK'.i18n);
@@ -301,7 +301,7 @@ class _ConversationState extends State<Conversation>
                 CallAction(contact),
                 IconButton(
                   icon: const Icon(Icons.more_vert_rounded),
-                  tooltip: 'Menu'.i18n,
+                  tooltip: 'menu'.i18n,
                   onPressed: () =>
                       displayConversationOptions(model, context, contact),
                 )
@@ -337,7 +337,7 @@ class _ConversationState extends State<Conversation>
                 ),
                 MessagingEmojiPicker(
                   showEmojis: _emojiShowing,
-                  emptySuggestions: 'No Recents'.i18n,
+                  emptySuggestions: 'no_recents'.i18n,
                   height: size!.height * 0.25,
                   onBackspacePressed: () {
                     _newMessage
@@ -535,7 +535,7 @@ class _ConversationState extends State<Conversation>
                 // Send icon
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                hintText: 'Message'.i18n,
+                hintText: 'message'.i18n,
                 border: const OutlineInputBorder(),
               ),
             ),
