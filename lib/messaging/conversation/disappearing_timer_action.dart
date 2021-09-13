@@ -30,7 +30,7 @@ class DisappearingTimerAction extends StatelessWidget {
                     .toUpperCase(),
                 style: tsDisappearingTimer)
             : Text(
-                'Off'.i18n,
+                'off'.i18n,
                 style: tsDisappearingTimerDetail,
               ),
       ]),
@@ -47,7 +47,7 @@ class DisappearingTimerMenuItem extends PopupMenuItem<int> {
                   ? Icons.check_box_outlined
                   : Icons.check_box_outline_blank),
               title: Text(value == 0
-                  ? 'Never'.i18n
+                  ? 'never'.i18n
                   : value.humanizeSeconds(longForm: true)),
             ));
 }
