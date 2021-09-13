@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/common/transitions.dart';
+import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/account/account.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';

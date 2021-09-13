@@ -1,4 +1,4 @@
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 /*

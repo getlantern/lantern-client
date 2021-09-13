@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/common/transitions.dart';
+import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/account/developer_settings.dart';
 
 const developer_tab_router = CustomRoute<void>(
