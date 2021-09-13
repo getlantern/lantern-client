@@ -11,18 +11,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lantern/common/text_styles.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
-import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
+import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
+import 'package:lantern/messaging/conversation/audio/voice_recorder.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
 import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
-import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
 import 'package:lantern/messaging/conversation/replies/reply_preview.dart';
-import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
-import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
-import 'package:lantern/messaging/conversation/audio/voice_recorder.dart';
+import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
@@ -146,12 +146,11 @@ class _ConversationState extends State<Conversation>
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOutCubic);
       }
-    } catch (e) {
-      showInfoDialog(context,
-          title: 'Error'.i18n,
-          des: 'Something went wrong while sending your message.'.i18n,
-          icon: ImagePaths.alert_icon,
-          buttonText: 'OK'.i18n);
+    } catch (e, s) {
+      showErrorDialog(context,
+          e: e,
+          s: s,
+          des: 'Something went wrong while sending your message.'.i18n);
     } finally {
       if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
@@ -217,12 +216,11 @@ class _ConversationState extends State<Conversation>
             await model.filePickerLoadAttachment(el.path.toString(), metadata);
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
-    } catch (e) {
-      showInfoDialog(context,
-          title: 'Error'.i18n,
-          des: 'Something went wrong while sharing a media file.'.i18n,
-          icon: ImagePaths.alert_icon,
-          buttonText: 'OK'.i18n);
+    } catch (e, s) {
+      showErrorDialog(context,
+          e: e,
+          s: s,
+          des: 'Something went wrong while sharing a media file.'.i18n);
     } finally {
       context.loaderOverlay.hide();
     }

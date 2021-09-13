@@ -2,13 +2,13 @@ import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/common/custom_horizontal_divider.dart';
+import 'package:lantern/common/humanize.dart';
 import 'package:lantern/common/text_styles.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/custom_horizontal_divider.dart';
-import 'package:lantern/common/humanize.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -651,12 +651,11 @@ Future<void> displayConversationOptions(
                                       try {
                                         await model.deleteDirectContact(
                                             contact.contactId.id);
-                                      } catch (e) {
-                                        showInfoDialog(context,
-                                            title: 'error'.i18n,
-                                            des: 'error_delete_contact'.i18n,
-                                            icon: ImagePaths.alert_icon,
-                                            buttonText: 'OK'.i18n);
+                                      } catch (e, s) {
+                                        showErrorDialog(context,
+                                            e: e,
+                                            s: s,
+                                            des: 'error_delete_contact'.i18n);
                                       } finally {
                                         context.loaderOverlay.hide();
                                         // In order to be capable to return to the root screen, we need to pop the bottom sheet

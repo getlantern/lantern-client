@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 
 class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
@@ -149,14 +149,13 @@ class ContactConnectionCard extends StatelessWidget {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                             await model.acceptIntroduction(
                                 contact.contactId.id, introduction.to.id);
-                          } catch (e) {
-                            showInfoDialog(context,
-                                title: 'Error'.i18n,
+                          } catch (e, s) {
+                            showErrorDialog(context,
+                                e: e,
+                                s: s,
                                 des:
                                     'Something went wrong while accepting this connect request.'
-                                        .i18n,
-                                icon: ImagePaths.alert_icon,
-                                buttonText: 'OK'.i18n);
+                                        .i18n);
                           } finally {
                             await context.router.pop();
                             await context.pushRoute(
@@ -186,14 +185,13 @@ class ContactConnectionCard extends StatelessWidget {
                                 // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                                 await model.rejectIntroduction(
                                     contact.contactId.id, introduction.to.id);
-                              } catch (e) {
-                                showInfoDialog(context,
-                                    title: 'Error'.i18n,
+                              } catch (e, s) {
+                                showErrorDialog(context,
+                                    e: e,
+                                    s: s,
                                     des:
                                         'Something went wrong while rejecting this connect request.'
-                                            .i18n,
-                                    icon: ImagePaths.alert_icon,
-                                    buttonText: 'OK'.i18n);
+                                            .i18n);
                               } finally {
                                 await context.router.pop();
                               }
