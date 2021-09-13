@@ -10,7 +10,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:sprintf/sprintf.dart';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty ? 'unnamed_contact'.i18n : displayName.toString();
@@ -372,22 +371,19 @@ Future<void> displayConversationOptions(
                                                       tsDisappearingContentBottomModal,
                                                 )
                                               : Text(
-                                                  sprintf(
-                                                      'message_disappearing_description'
-                                                          .i18n,
-                                                      [
-                                                        selectedPosition != -1
-                                                            ? seconds[
-                                                                    selectedPosition]
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)
-                                                            : contact
-                                                                .messagesDisappearAfterSeconds
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)
-                                                      ]),
+                                                  'message_disappearing_description'
+                                                      .i18n
+                                                      .fill([
+                                                    selectedPosition != -1
+                                                        ? seconds[
+                                                                selectedPosition]
+                                                            .humanizeSeconds(
+                                                                longForm: true)
+                                                        : contact
+                                                            .messagesDisappearAfterSeconds
+                                                            .humanizeSeconds(
+                                                                longForm: true)
+                                                  ]),
                                                   style:
                                                       tsDisappearingContentBottomModal,
                                                 ),
@@ -600,8 +596,7 @@ Future<void> displayConversationOptions(
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text(
-                        sprintf(
-                            'delete_contact_name'.i18n, [contact.displayName]),
+                        'delete_contact_name'.i18n.fill([contact.displayName]),
                         style: tsBottomModalList),
                   ),
                   onTap: () => showDialog<void>(

@@ -32,7 +32,7 @@ class CallAction extends StatelessWidget {
               children: [
                 ListTile(
                   leading: const CustomAssetImage(path: ImagePaths.phone_icon),
-                  title: Text('Call'.i18n),
+                  title: Text('call'.i18n),
                   onTap: () async {
                     Navigator.pop(context);
                     await context.pushRoute(
@@ -43,7 +43,7 @@ class CallAction extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const CustomAssetImage(path: ImagePaths.cancel_icon),
-                  title: Text('Cancel'.i18n),
+                  title: Text('cancel'.i18n),
                   onTap: () => Navigator.pop(context),
                 ),
               ],

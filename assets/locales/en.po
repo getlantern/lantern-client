@@ -273,11 +273,44 @@ msgstr "Off"
 msgid "cancel"
 msgstr "Cancel"
 
+msgid "continue"
+msgstr "Continue"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "Are you sure you want to open %s?"
+
 msgid "set"
 msgstr "Set"
 
+msgid "menu"
+msgstr "Menu"
+
+msgid "send_error"
+msgstr "Something went wrong while sending your message"
+
+msgid "share_media_error"
+msgstr "Something went wrong while sharing a media file"
+
+msgid "no_recents"
+msgstr "No Recents"
+
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
+
+msgid "introduce_contacts_with_count"
+msgstr "Introduce Contacts (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "Once you have two or more contacts you will be able to create introductions."
+
+msgid "introduce_contacts_select"
+msgstr "Select two or more contacts to introduce. They will be sent introductions to start messaging each other."
+
+msgid "send_introductions"
+msgstr "Send Introductions"
+
+msgid "introductions_sent"
+msgstr "Introductions Sent!"
 
 msgid "contacts"
 msgstr "Contacts"
@@ -300,7 +333,7 @@ msgstr "To start a message with your friend, scan each other's QR code.  This pr
 msgid "qr_info_scan"
 msgstr "Scan each others QR codes, to add a contact."
 
-msgid "qr_info_waiting_QR"
+msgid "qr_info_waiting_qr"
 msgstr "Waiting for your friend to scan your QR code..."
 
 msgid "scan_complete"
@@ -312,19 +345,19 @@ msgstr "Your QR Code"
 msgid "qr_trouble_scanning"
 msgstr "Trouble scanning?"
 
-msgid "qr_info_waiting_ID"
+msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "contactid_error_description"
+msgid "contact_id_error_description"
 msgstr "Something went wrong while adding this contact."
 
-msgid "contactid_enter_manually"
+msgid "contact_id_enter_manually"
 msgstr "Enter your friend's Messenger ID manually"
 
-msgid "contactid_messenger_id"
+msgid "contact_id_messenger_id"
 msgstr "Messenger ID"
 
-msgid "contactid_your_id"
+msgid "contact_id_your_id"
 msgstr "Your Messenger ID"
 
 msgid "introductions"
@@ -334,10 +367,10 @@ msgid "introduced"
 msgstr "Introduced by"
 
 msgid "introductions_info"
-msgstr "Both parties must accept the introduction to message each other.  Introductions disappear after 7 days if no action is taken."
+msgstr "Both parties must accept the introduction to message each other. Introductions disappear after 7 days if no action is taken."
 
 msgid "introductions_reject_title"
-msgstr "Reject Introductions?"
+msgstr "Reject Introductions"
 
 msgid "introductions_reject_content"
 msgstr "You will not be able to message this contact if you reject the introduction."
@@ -347,6 +380,9 @@ msgstr "Something went wrong while rejecting this connect request."
 
 msgid "introductions_error_description_accepting"
 msgstr "Something went wrong while accepting this connect request."
+
+msgid "introduction_approved"
+msgstr "Introduction to %s approved!"
 
 msgid "delete_contact_name"
 msgstr "Delete %s"
@@ -380,3 +416,96 @@ msgstr "Other users will see this name when they add you as a contact"
 
 msgid "display_name_invalid"
 msgstr "Please use only letters, numbers or spaces"
+
+msgid "yesterday"
+msgstr "yesterday"
+
+msgid "just_now"
+msgstr "just now"
+
+msgid "error_fetching_message_preview"
+msgstr "Error fetching Message Preview"
+
+msgid "message_was_deleted"
+msgstr "Message was deleted"
+
+msgid "close"
+msgstr "Close"
+
+msgid "call"
+msgstr "Call"
+
+msgid "incoming_call"
+msgstr "Incoming Call"
+
+msgid "call_from"
+msgstr "From %s"
+
+msgid "incoming_call_from"
+msgstr "Incoming call from %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Touch here to open call"
+
+msgid "in_call_with"
+msgstr "In call with %s"
+
+msgid "unable_to_complete_call"
+msgstr "Unable to complete call"
+
+msgid "please_try_again"
+msgstr "Please try again"
+
+msgid "dismiss"
+msgstr "Dismiss"
+
+msgid "copy_text"
+msgstr "Copy Text"
+
+msgid "message"
+msgstr "Message"
+
+msgid "messages"
+msgstr "Messages"
+
+msgid "search"
+msgstr "Search"
+
+msgid "introductions"
+msgstr "Introductions"
+
+msgid "add_via_username"
+msgstr "Add via username"
+
+msgid "username"
+msgstr "Username"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "Enter a username to start a message conversation"
+
+msgid "start_message"
+msgstr "Start Message"
+
+msgid "please_enter_a_valid_username"
+msgstr "Please enter a valid username"
+
+msgid "open_url"
+msgstr "Open URL"
+
+msgid "never"
+msgstr "Never"
+
+msgid "text_copied"
+msgstr "Text Copied"
+
+msgid "delete_for_me"
+msgstr "Delete for me"
+
+msgid "delete_for_everyone"
+msgstr "Delete for everyone"
+
+msgid "reply"
+msgstr "Reply"
+
+msgid "attachment"
+msgstr "attachment"

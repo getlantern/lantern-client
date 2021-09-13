@@ -49,7 +49,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               value.isEmpty ||
               value == widget.me.contactId.id ||
               value.length != widget.me.contactId.id.length
-          ? 'contactid_error_description'.i18n
+          ? 'contact_id_error_description'.i18n
           : null);
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
@@ -207,7 +207,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                     ((provisionalContactId != null && scanning))
                         ? PulseAnimation(
                             Text(
-                              'qr_info_waiting_QR'.i18n,
+                              'qr_info_waiting_qr'.i18n,
                               style: tsInfoDialogText(white),
                               textAlign: TextAlign.center,
                             ),
@@ -396,8 +396,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               children: [
                                 CustomTextField(
                                     controller: contactIdController,
-                                    label: 'contactid_messenger_id'.i18n,
-                                    helperText: 'contactid_enter_manually'.i18n,
+                                    label: 'contact_id_messenger_id'.i18n,
+                                    helperText:
+                                        'contact_id_enter_manually'.i18n,
                                     keyboardType: TextInputType.text,
                                     minLines: 2,
                                     maxLines: null,
@@ -427,7 +428,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                 countdownController: countdownController,
                                 timeoutMillis: timeoutMillis,
                                 fontColor: black,
-                                infoText: 'qr_info_waiting_ID'.i18n,
+                                infoText: 'qr_info_waiting_id'.i18n,
                               ),
                             ),
                           ),
@@ -444,7 +445,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                     padding: const EdgeInsetsDirectional.only(
                                         start: 10),
                                     child: Text(
-                                      'contactid_your_id'.i18n.toUpperCase(),
+                                      'contact_id_your_id'.i18n.toUpperCase(),
                                       style:
                                           TextStyle(color: black, fontSize: 10),
                                     ),
