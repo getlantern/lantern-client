@@ -339,7 +339,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 0, 16.0, 0),
                           child: Text(
-                            'qr_trouble_scanning'.i18n,
+                            'qr_add_via_id'.i18n,
                             style: tsInfoDialogText(white),
                           ),
                         ),

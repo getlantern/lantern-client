@@ -282,23 +282,6 @@ Future<void> displayConversationOptions(
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(top: 7.0, bottom: 10.0),
-                child: ListTile(
-                  title: Text(
-                    'conversation_title_bottomsheet'.i18n,
-                    style: tsBottomModalTitle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              CustomHorizontalDivider(
-                size: 1,
-                thickness: 1,
-                color: grey3,
-                margin: 0,
-              ),
               ListTile(
                 leading: const CustomAssetImage(
                   path: ImagePaths.disappearing_timer_icon,

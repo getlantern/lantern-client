@@ -309,8 +309,8 @@ msgstr "Scan complete"
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
-msgid "qr_trouble_scanning"
-msgstr "Trouble scanning?"
+msgid "qr_add_via_id"
+msgstr "Add via Messenger ID"
 
 msgid "qr_info_waiting_ID"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
