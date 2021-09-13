@@ -119,6 +119,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
                             style: TextStyle(color: white),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Padding(

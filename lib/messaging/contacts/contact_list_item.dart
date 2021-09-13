@@ -40,7 +40,7 @@ class ContactListItem extends StatelessWidget {
       )),
       child: ListTile(
         leading: leading,
-        title: Text(title.toString()),
+        title: Text(title.toString(), overflow: TextOverflow.ellipsis),
         subtitle: subtitle,
         trailing: trailing,
         onTap: onTap,

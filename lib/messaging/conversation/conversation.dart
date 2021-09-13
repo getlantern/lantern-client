@@ -275,17 +275,20 @@ class _ConversationState extends State<Conversation>
                 ),
               ),
               const SizedBox(width: 6),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    contact.displayName.isEmpty
-                        ? contact.contactId.id
-                        : contact.displayName,
-                    style: tsTitleAppbar,
-                  ),
-                  DisappearingTimerAction(contact),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      contact.displayName.isEmpty
+                          ? contact.contactId.id
+                          : contact.displayName,
+                      style: tsTitleAppbar,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    DisappearingTimerAction(contact),
+                  ],
+                ),
               ),
             ],
           ),
@@ -303,7 +306,7 @@ class _ConversationState extends State<Conversation>
                       displayConversationOptions(model, context, contact),
                 )
               ],
-            )
+            ),
           ],
           body: Stack(children: [
             Column(
