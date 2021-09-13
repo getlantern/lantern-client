@@ -6,8 +6,8 @@ import 'package:lantern/messaging/conversation/replies/reply_snippet_description
 import 'package:lantern/messaging/conversation/replies/reply_snippet_header.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_text.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
+import 'package:lantern/common/model.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 
 class ReplySnippet extends StatelessWidget {

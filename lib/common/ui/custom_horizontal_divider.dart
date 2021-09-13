@@ -1,5 +1,5 @@
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/colors.dart';
+import 'package:lantern/common/ui/colors.dart';
 
 class CustomHorizontalDivider extends StatelessWidget {
   final Color? color;

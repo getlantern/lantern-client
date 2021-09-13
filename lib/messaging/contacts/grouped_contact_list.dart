@@ -1,5 +1,5 @@
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/common/model.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'contact_list_item.dart';

@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/custom_asset_image.dart';
+import 'package:lantern/common/ui/custom_asset_image.dart';
 
 class CallAction extends StatelessWidget {
   final Contact contact;

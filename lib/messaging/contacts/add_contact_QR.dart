@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:lantern/common/button.dart';
-import 'package:lantern/common/countdown_min_sec.dart';
-import 'package:lantern/common/custom_text_field.dart';
+import 'package:lantern/common/ui/button.dart';
+import 'package:lantern/common/ui/countdown_min_sec.dart';
+import 'package:lantern/common/ui/custom_text_field.dart';
 import 'package:lantern/common/once.dart';
-import 'package:lantern/common/pulse_animation.dart';
+import 'package:lantern/common/ui/pulse_animation.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

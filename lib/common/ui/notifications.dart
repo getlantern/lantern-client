@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lantern/app.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 final notifications = Notifications();

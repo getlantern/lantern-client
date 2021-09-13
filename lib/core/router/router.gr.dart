@@ -13,7 +13,7 @@ import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
 import 'package:lantern/messaging/messages.dart' as _i9;
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart' as _i22;
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i22;
 import 'package:lantern/account/account.dart' as _i11;
 import 'package:lantern/account/developer_settings.dart' as _i20;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i18;
@@ -27,7 +27,7 @@ import 'package:lantern/account/language.dart' as _i14;
 import 'package:lantern/account/messaging/display_name.dart' as _i19;
 import 'package:lantern/account/pro_account.dart' as _i12;
 import 'package:lantern/account/settings.dart' as _i13;
-import 'package:lantern/common/full_screen_dialog.dart' as _i4;
+import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/vpn/vpn.dart' as _i10;
 
 class AppRouter extends _i1.RootStackRouter {

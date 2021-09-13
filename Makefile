@@ -6,10 +6,13 @@
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/model/protos_shared/* lib/model/protos_flutteronly/*
+protos: lib/messaging/protos_flutteronly/messaging.pb.dart lib/vpn/protos_shared/vpn.pb.dart
 
-lib/model/protos_shared/* lib/model/protos_flutteronly/*: protos_shared/*.proto protos_flutteronly/*.proto
-	@protoc --dart_out=./lib/model --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/*.proto protos_flutteronly/*.proto
+lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
+	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
+
+lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
+	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
