@@ -29,9 +29,6 @@ class ContactConnectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<MessagingModel>();
     final introduction = msg.introduction;
-    final avatarLetters = introduction.displayName != ''
-        ? introduction.displayName.substring(0, 2)
-        : 'UC';
     return Column(
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -43,12 +40,7 @@ class ContactConnectionCard extends StatelessWidget {
             width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: avatarBgColors[
-                    generateUniqueColorIndex(introduction.to.id)],
-                child: Text(avatarLetters.toUpperCase(),
-                    style: const TextStyle(color: Colors.white)),
-              ),
+              leading: renderContactAvatar(displayName: contact.displayName),
               title: Text(introduction.displayName,
                   style: TextStyle(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),

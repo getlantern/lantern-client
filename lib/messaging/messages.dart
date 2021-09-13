@@ -74,16 +74,8 @@ class Messages extends StatelessWidget {
                         ContactListItem(
                           contact: contact.value,
                           index: index,
-                          leading: CircleAvatar(
-                            backgroundColor: avatarBgColors[
-                                generateUniqueColorIndex(
-                                    contact.value.contactId.id)],
-                            child: Text(
-                                sanitizeContactName(contact.value.displayName)
-                                    .substring(0, 2)
-                                    .toUpperCase(),
-                                style: const TextStyle(color: Colors.white)),
-                          ),
+                          leading: renderContactAvatar(
+                              displayName: contact.value.displayName),
                           title: sanitizeContactName(contact.value.displayName),
                           subtitle: Text(
                               "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",

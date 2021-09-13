@@ -67,18 +67,8 @@ class _IntroduceState extends State<Introduce> {
                                   child: groupedContactListGenerator(
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
-                                          CircleAvatar(
-                                            backgroundColor: avatarBgColors[
-                                                generateUniqueColorIndex(
-                                                    contact.contactId.id)],
-                                            child: Text(
-                                                sanitizeContactName(
-                                                        contact.displayName)
-                                                    .substring(0, 2)
-                                                    .toUpperCase(),
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                          ),
+                                          renderContactAvatar(
+                                              displayName: contact.displayName),
                                       trailingCallback: (int index,
                                               Contact contact) =>
                                           Checkbox(

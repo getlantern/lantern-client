@@ -10,6 +10,9 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:crypto/crypto.dart';
+import 'package:convert/convert.dart';
+import 'dart:convert';
 
 String sanitizeContactName(String displayName) {
   return displayName.isEmpty
@@ -263,14 +266,6 @@ Widget fullScreenDialogLayout(
           Expanded(child: child)
         ],
       ));
-}
-
-int generateUniqueColorIndex(String str) {
-  var index = 0;
-  for (var i = 0; i < str.length; i++) {
-    index += str.codeUnitAt(i);
-  }
-  return index % avatarBgColors.length;
 }
 
 Future<void> displayConversationOptions(
@@ -684,4 +679,20 @@ BoxConstraints disappearingDialogConstraints(BuildContext context) {
     minWidth: width,
     maxWidth: width,
   );
+}
+
+CircleAvatar renderContactAvatar(
+    {required String displayName, Color? customColor}) {
+  return CircleAvatar(
+    backgroundColor:
+        customColor ?? avatarBgColors[generateUniqueColorIndex(displayName)],
+    child: Text(sanitizeContactName(displayName).substring(0, 2).toUpperCase(),
+        style: tsCircleAvatarLetter),
+  );
+}
+
+int generateUniqueColorIndex(String str) {
+  var sha1Bytes = sha1.convert(utf8.encode(str)).bytes;
+  var sha1Sum = sha1Bytes.reduce((value, element) => value + element);
+  return sha1Sum % avatarBgColors.length;
 }
