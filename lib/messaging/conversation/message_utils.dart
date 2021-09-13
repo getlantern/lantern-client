@@ -13,7 +13,13 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sprintf/sprintf.dart';
 
 String sanitizeContactName(String displayName) {
-  return displayName.isEmpty ? 'unnamed_contact'.i18n : displayName.toString();
+  return displayName.isEmpty
+      ? 'unnamed_contact'.i18n
+      : manuallyHandleOverflow(displayName);
+}
+
+String manuallyHandleOverflow(String name) {
+  return name.length > 25 ? '${name.substring(0, 25)}...' : name;
 }
 
 Map<String, List<dynamic>> constructReactionsMap(
@@ -583,9 +589,10 @@ Future<void> displayConversationOptions(
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text(
-                        sprintf(
-                            'delete_contact_name'.i18n, [contact.displayName]),
-                        style: tsBottomModalList),
+                      sprintf('delete_contact_name'.i18n,
+                          [manuallyHandleOverflow(contact.displayName)]),
+                      style: tsBottomModalList,
+                    ),
                   ),
                   onTap: () => showDialog<void>(
                         context: bottomContext,
