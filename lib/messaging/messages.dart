@@ -75,6 +75,7 @@ class Messages extends StatelessWidget {
                           contact: contact.value,
                           index: index,
                           leading: renderContactAvatar(
+                              id: contact.value.contactId.id,
                               displayName: contact.value.displayName),
                           title: sanitizeContactName(contact.value.displayName),
                           subtitle: Text(

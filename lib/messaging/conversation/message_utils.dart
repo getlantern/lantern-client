@@ -11,7 +11,6 @@ import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:crypto/crypto.dart';
-import 'package:convert/convert.dart';
 import 'dart:convert';
 
 String sanitizeContactName(String displayName) {
@@ -682,17 +681,21 @@ BoxConstraints disappearingDialogConstraints(BuildContext context) {
 }
 
 CircleAvatar renderContactAvatar(
-    {required String displayName, Color? customColor}) {
+    {String? id, String? displayName, Color? customColor}) {
   return CircleAvatar(
-    backgroundColor:
-        customColor ?? avatarBgColors[generateUniqueColorIndex(displayName)],
-    child: Text(sanitizeContactName(displayName).substring(0, 2).toUpperCase(),
+    backgroundColor: customColor ??
+        avatarBgColors[generateUniqueColorIndex(id!, displayName!)],
+    child: Text(
+        sanitizeContactName(displayName ?? '').substring(0, 2).toUpperCase(),
         style: tsCircleAvatarLetter),
   );
 }
 
-int generateUniqueColorIndex(String str) {
-  var sha1Bytes = sha1.convert(utf8.encode(str)).bytes;
+int generateUniqueColorIndex(String id, String displayName) {
+  // get sha1 hash of id + displayName
+  var sha1Bytes = sha1.convert(utf8.encode(id + displayName)).bytes;
+  // calculate sum of bytes
   var sha1Sum = sha1Bytes.reduce((value, element) => value + element);
+  // get remainder of division with avatarBagColors array
   return sha1Sum % avatarBgColors.length;
 }

@@ -93,6 +93,8 @@ class Introductions extends StatelessWidget {
                                                               .toInt(),
                                                           color: black),
                                                   child: renderContactAvatar(
+                                                      id: value
+                                                          .introduction.to.id,
                                                       displayName: value
                                                           .introduction
                                                           .displayName),

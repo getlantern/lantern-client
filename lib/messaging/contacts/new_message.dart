@@ -155,6 +155,7 @@ class _NewMessageState extends State<NewMessage> {
                         scrollListController: scrollListController,
                         leadingCallback: (Contact contact) =>
                             renderContactAvatar(
+                                id: contact.contactId.id,
                                 displayName: contact.displayName),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(

@@ -40,7 +40,8 @@ class ContactConnectionCard extends StatelessWidget {
             width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
-              leading: renderContactAvatar(displayName: contact.displayName),
+              leading: renderContactAvatar(
+                  id: contact.contactId.id, displayName: contact.displayName),
               title: Text(introduction.displayName,
                   style: TextStyle(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),
