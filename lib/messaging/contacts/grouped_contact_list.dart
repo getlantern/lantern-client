@@ -19,6 +19,7 @@ ScrollablePositionedList groupedContactListGenerator({
   return ScrollablePositionedList.builder(
     itemScrollController: scrollListController,
     initialScrollIndex: initialScrollIndex,
+    physics: const BouncingScrollPhysics(),
     itemCount: groupedSortedList!.length,
     itemBuilder: (context, index) {
       var key = groupedSortedList.keys.elementAt(index);

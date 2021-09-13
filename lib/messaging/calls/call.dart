@@ -104,6 +104,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     child: Column(
                       children: [
                         renderContactAvatar(
+                            id: widget.contact.contactId.id,
                             displayName: widget.contact.displayName,
                             customColor: grey5),
                         Padding(
