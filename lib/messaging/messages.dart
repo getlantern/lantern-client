@@ -15,11 +15,11 @@ class Messages extends StatelessWidget {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-        title: 'Messages'.i18n,
+        title: 'messages'.i18n,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            tooltip: 'Search'.i18n,
+            tooltip: 'search'.i18n,
             onPressed: () {},
           ),
         ],
@@ -42,7 +42,7 @@ class Messages extends StatelessWidget {
                                   color: Colors.black,
                                 ),
                               ),
-                              title: Text('Introductions'.i18n,
+                              title: Text('introductions'.i18n,
                                   style: tsBaseScreenBodyText),
                               trailing: const CustomAssetImage(
                                 path: ImagePaths.keyboard_arrow_right_icon,

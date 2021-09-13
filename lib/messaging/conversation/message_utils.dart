@@ -371,22 +371,19 @@ Future<void> displayConversationOptions(
                                                       tsDisappearingContentBottomModal,
                                                 )
                                               : Text(
-                                                  sprintf(
-                                                      'message_disappearing_description'
-                                                          .i18n,
-                                                      [
-                                                        selectedPosition != -1
-                                                            ? seconds[
-                                                                    selectedPosition]
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)
-                                                            : contact
-                                                                .messagesDisappearAfterSeconds
-                                                                .humanizeSeconds(
-                                                                    longForm:
-                                                                        true)
-                                                      ]),
+                                                  'message_disappearing_description'
+                                                      .i18n
+                                                      .fill([
+                                                    selectedPosition != -1
+                                                        ? seconds[
+                                                                selectedPosition]
+                                                            .humanizeSeconds(
+                                                                longForm: true)
+                                                        : contact
+                                                            .messagesDisappearAfterSeconds
+                                                            .humanizeSeconds(
+                                                                longForm: true)
+                                                  ]),
                                                   style:
                                                       tsDisappearingContentBottomModal,
                                                 ),
@@ -599,8 +596,7 @@ Future<void> displayConversationOptions(
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text(
-                        sprintf(
-                            'delete_contact_name'.i18n, [contact.displayName]),
+                        'delete_contact_name'.i18n.fill([contact.displayName]),
                         style: tsBottomModalList),
                   ),
                   onTap: () => showDialog<void>(

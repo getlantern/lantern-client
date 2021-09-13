@@ -202,12 +202,13 @@ class Introductions extends StatelessWidget {
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      sprintf(
-                                                                          'introduction_approved'
-                                                                              .i18n,
-                                                                          [
-                                                                            value.introduction.displayName
-                                                                          ]),
+                                                                      'introduction_approved'
+                                                                          .i18n
+                                                                          .fill([
+                                                                        value
+                                                                            .introduction
+                                                                            .displayName
+                                                                      ]),
                                                                       overflow:
                                                                           TextOverflow
                                                                               .visible,
