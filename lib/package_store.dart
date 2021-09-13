@@ -18,6 +18,7 @@ export 'common/base_screen.dart';
 export 'common/custom_asset_image.dart';
 export 'common/custom_divider.dart';
 export 'common/show_info_dialog.dart';
+export 'common/show_error_dialog.dart';
 export 'package:lantern/model/session_model.dart';
 export 'package:lantern/model/vpn_model.dart';
 export 'package:lantern/lantern_navigator.dart';

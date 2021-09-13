@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
 import 'package:lantern/common/button.dart';
 import 'package:lantern/common/countdown_min_sec.dart';
 import 'package:lantern/common/custom_text_field.dart';
-import 'package:lantern/common/pulse_animation.dart';
 import 'package:lantern/common/once.dart';
+import 'package:lantern/common/pulse_animation.dart';
+import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/package_store.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -134,16 +134,11 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           contactIdController.text = scanData.code;
           return addProvisionalContact(model, scanData.code);
         });
-      } catch (e) {
-        print(e);
+      } catch (e, s) {
         setState(() {
           scanning = false;
         });
-        showInfoDialog(context,
-            title: 'error'.i18n,
-            des: 'qr_error_description'.i18n,
-            icon: ImagePaths.alert_icon,
-            buttonText: 'OK'.i18n);
+        showErrorDialog(context, e: e, s: s, des: 'qr_error_description'.i18n);
       } finally {
         await qrController?.pauseCamera();
       }
