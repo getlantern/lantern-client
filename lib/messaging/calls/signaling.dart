@@ -7,13 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:lantern/app.dart';
+import 'package:lantern/common/notifications.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/app.dart';
-import 'package:lantern/common/notifications.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:pedantic/pedantic.dart';
 
 enum CallState {
@@ -232,9 +232,9 @@ class Signaling extends ValueNotifier<SignalingState>
               autoDismissAfter: const Duration(seconds: 30),
               // force dismissal through actual dismiss action to make sure we stop ringtone, etc
               barrierDismissible: false,
-              title: Text('Incoming Call'.i18n),
-              content: Text('From '.i18n + contact.displayName),
-              dismissText: 'Dismiss'.i18n,
+              title: Text('incoming_call'.i18n),
+              content: Text(sprintf('call_from'.i18n, [contact.displayName])),
+              dismissText: 'dismiss'.i18n,
               dismissAction: () async {
                 await FlutterRingtonePlayer.stop();
                 _sendBye(peerId, sessionId);

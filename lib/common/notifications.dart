@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/app.dart';
 
 final notifications = Notifications();
 
@@ -65,8 +65,8 @@ class Notifications {
     return _flutterLocalNotificationsPlugin
         .show(
             _notificationId++,
-            'Incoming call from ${contact.displayName}'.i18n,
-            'Touch here to open app'.i18n,
+            sprintf('incoming_call_from'.i18n, [contact.displayName]),
+            'touch_here_to_open_call'.i18n,
             _ringingChannel,
             payload: payload.toJson())
         .then((value) => id);
@@ -75,8 +75,8 @@ class Notifications {
   Future<int> showInCallNotification(Contact contact) {
     final id = _notificationId++;
     return _flutterLocalNotificationsPlugin
-        .show(id, 'In call with ${contact.displayName}'.i18n,
-            'Touch here to open call'.i18n, _inCallChannel)
+        .show(id, sprintf('in_call_with'.i18n, contact.displayName),
+            'touch_here_to_open_call'.i18n, _inCallChannel)
         .then((value) => id);
   }
 }
