@@ -1,13 +1,21 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: protos
+.PHONY: codegen protos routes
+
+codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
 protos: lib/model/protos_shared/* lib/model/protos_flutteronly/*
 
 lib/model/protos_shared/* lib/model/protos_flutteronly/*: protos_shared/*.proto protos_flutteronly/*.proto
 	@protoc --dart_out=./lib/model --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/*.proto protos_flutteronly/*.proto
+
+# Compiles autorouter routes
+routes: lib/core/router/router.gr.dart
+
+lib/core/router/router.gr.dart: lib/core/router/router.dart
+	@flutter packages pub run build_runner build --delete-conflicting-outputs
 
 GO_VERSION := 1.16
 
