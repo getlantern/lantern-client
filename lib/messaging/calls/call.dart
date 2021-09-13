@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
+import 'package:lantern/common/notifications.dart';
+import 'package:lantern/common/round_button.dart';
+import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/messaging/calls/signaling.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/round_button.dart';
-import 'package:lantern/common/notifications.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 
 class Call extends StatefulWidget {
   final Contact contact;
@@ -41,9 +41,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
             showAlertDialog(
                 context: context,
                 title:
-                    Text('Unable to complete call'.i18n, style: tsDialogTitle),
-                content: Text('Please try again'.i18n, style: tsDialogBody),
-                agreeText: 'Close'.i18n,
+                    Text('unable_to_complete_call'.i18n, style: tsDialogTitle),
+                content: Text('please_try_again'.i18n, style: tsDialogBody),
+                agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);
                 });
@@ -126,7 +126,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: Text(
                             signaling.value.callState == CallState.Connected
-                                ? 'Connected'.i18n
+                                ? 'connected'.i18n
                                 : 'Connecting...'.i18n,
                             style: TextStyle(color: white, fontSize: 4),
                           ),

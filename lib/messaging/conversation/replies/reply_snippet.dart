@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/conversation/replies/reply_mime.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_description.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_header.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_text.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/model/model.dart';
 import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
@@ -65,11 +65,11 @@ class ReplySnippet extends StatelessWidget {
                           descriptiveText: quotedMessage
                                   ?.value.attachments[0]!.attachment.mimeType
                                   .split('/')[0] ??
-                              'Error fetching Message Preview'.i18n,
+                              'error_fetching_message_preview'.i18n,
                         ),
                       if (!isNotNullOrDeleted)
                         ReplySnippetDescription(
-                          descriptiveText: 'Message was deleted'.i18n,
+                          descriptiveText: 'message_was_deleted'.i18n,
                         )
                     ],
                   ),
