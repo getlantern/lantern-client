@@ -646,12 +646,11 @@ Future<void> displayConversationOptions(
                                       try {
                                         await model.deleteDirectContact(
                                             contact.contactId.id);
-                                      } catch (e) {
-                                        showInfoDialog(context,
-                                            title: 'error'.i18n,
-                                            des: 'error_delete_contact'.i18n,
-                                            icon: ImagePaths.alert_icon,
-                                            buttonText: 'OK'.i18n);
+                                      } catch (e, s) {
+                                        showErrorDialog(context,
+                                            e: e,
+                                            s: s,
+                                            des: 'error_delete_contact'.i18n);
                                       } finally {
                                         context.loaderOverlay.hide();
                                         // In order to be capable to return to the root screen, we need to pop the bottom sheet

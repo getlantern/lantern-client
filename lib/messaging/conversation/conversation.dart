@@ -146,12 +146,8 @@ class _ConversationState extends State<Conversation>
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOutCubic);
       }
-    } catch (e) {
-      showInfoDialog(context,
-          title: 'error'.i18n,
-          des: 'Something went wrong while sending your message.'.i18n,
-          icon: ImagePaths.alert_icon,
-          buttonText: 'OK'.i18n);
+    } catch (e, s) {
+      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
     } finally {
       if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }
@@ -217,12 +213,8 @@ class _ConversationState extends State<Conversation>
             await model.filePickerLoadAttachment(el.path.toString(), metadata);
         await _send(_newMessage.value.text, attachments: [attachment]);
       });
-    } catch (e) {
-      showInfoDialog(context,
-          title: 'error'.i18n,
-          des: 'Something went wrong while sharing a media file.'.i18n,
-          icon: ImagePaths.alert_icon,
-          buttonText: 'OK'.i18n);
+    } catch (e, s) {
+      showErrorDialog(context, e: e, s: s, des: 'share_media_error'.i18n);
     } finally {
       context.loaderOverlay.hide();
     }

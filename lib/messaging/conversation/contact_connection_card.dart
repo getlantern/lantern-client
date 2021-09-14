@@ -147,13 +147,12 @@ class ContactConnectionCard extends StatelessWidget {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                             await model.acceptIntroduction(
                                 contact.contactId.id, introduction.to.id);
-                          } catch (e) {
-                            showInfoDialog(context,
-                                title: 'error'.i18n,
+                          } catch (e, s) {
+                            showErrorDialog(context,
+                                e: e,
+                                s: s,
                                 des: 'introductions_error_description_accepting'
-                                    .i18n,
-                                icon: ImagePaths.alert_icon,
-                                buttonText: 'OK'.i18n);
+                                    .i18n);
                           } finally {
                             await context.router.pop();
                             await context.pushRoute(
@@ -181,14 +180,13 @@ class ContactConnectionCard extends StatelessWidget {
                                 // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                                 await model.rejectIntroduction(
                                     contact.contactId.id, introduction.to.id);
-                              } catch (e) {
-                                showInfoDialog(context,
-                                    title: 'error'.i18n,
+                              } catch (e, s) {
+                                showErrorDialog(context,
+                                    e: e,
+                                    s: s,
                                     des:
                                         'introductions_error_description_rejecting'
-                                            .i18n,
-                                    icon: ImagePaths.alert_icon,
-                                    buttonText: 'OK'.i18n);
+                                            .i18n);
                               } finally {
                                 await context.router.pop();
                               }

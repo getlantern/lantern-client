@@ -134,16 +134,11 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           contactIdController.text = scanData.code;
           return addProvisionalContact(model, scanData.code);
         });
-      } catch (e) {
-        print(e);
+      } catch (e, s) {
         setState(() {
           scanning = false;
         });
-        showInfoDialog(context,
-            title: 'error'.i18n,
-            des: 'qr_error_description'.i18n,
-            icon: ImagePaths.alert_icon,
-            buttonText: 'OK'.i18n);
+        showErrorDialog(context, e: e, s: s, des: 'qr_error_description'.i18n);
       } finally {
         await qrController?.pauseCamera();
       }

@@ -20,6 +20,7 @@ export 'common/custom_asset_image.dart';
 export 'common/custom_divider.dart';
 export 'common/dimens.dart';
 export 'common/image_paths.dart';
+export 'common/show_error_dialog.dart';
 export 'common/show_info_dialog.dart';
 export 'common/text_styles.dart';
 export 'i18n/i18n.dart';
