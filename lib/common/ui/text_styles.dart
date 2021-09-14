@@ -24,66 +24,6 @@ TextStyle tsTitleAppbar =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
 
 // Custom styles
-TextStyle tsTitleAppbarResponsive(
-        {required String title, required GlobalKey titleKey}) =>
-    TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: getResponsiveFontSize(
-            title: title,
-            titleKey: titleKey,
-            minFontSize: 16.0,
-            maxFontSize: 20.0),
-        color: black);
-
-TextStyle txCallTitle({required String title, required GlobalKey titleKey}) =>
-    TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: getResponsiveFontSize(
-            title: title,
-            titleKey: titleKey,
-            minFontSize: 18.0,
-            maxFontSize: 22.0),
-        color: white);
-
-double getResponsiveFontSize({
-  required String title,
-  required GlobalKey titleKey,
-  required double minFontSize,
-  required double maxFontSize,
-}) {
-  const textPadding = EdgeInsetsDirectional.only(start: 50.0, end: 50.0);
-  final textStyle = TextStyle(fontSize: maxFontSize);
-  var textPainter = TextPainter(
-      text: TextSpan(text: title, style: textStyle),
-      maxLines: 1,
-      textDirection: TextDirection.ltr) // TODO: test this for RTL
-    ..layout(minWidth: 0, maxWidth: double.infinity);
-  final inputWidth = textPainter.size.width - textPadding.horizontal;
-
-  textPainter = TextPainter(
-    textDirection: TextDirection.ltr,
-    text: TextSpan(
-      text: title,
-      style: textStyle,
-    ),
-  );
-  textPainter.layout();
-
-  var textWidth = textPainter.width;
-  var fontSize = textStyle.fontSize;
-
-  while (textWidth > inputWidth && fontSize! > minFontSize) {
-    --fontSize;
-    textPainter.text = TextSpan(
-      text: title,
-      style: textStyle.copyWith(fontSize: fontSize),
-    );
-    textPainter.layout();
-    textWidth = textPainter.width;
-  }
-  return fontSize!;
-}
-
 TextStyle tsCircleAvatarLetter =
     TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: white);
 
@@ -145,18 +85,6 @@ TextStyle tsBottomModalTitle =
 
 TextStyle tsBottomModalList = const TextStyle(fontSize: 16, height: 18.75 / 16);
 
-TextStyle tsBottomModalListResponsive(
-        {required String title,
-        required GlobalKey titleKey,
-        required double minFontSize,
-        required double maxFontSize}) =>
-    TextStyle(
-        fontSize: getResponsiveFontSize(
-            title: title,
-            titleKey: titleKey,
-            minFontSize: minFontSize,
-            maxFontSize: maxFontSize));
-
 TextStyle tsDialogTitle = const TextStyle(fontSize: 16);
 
 TextStyle tsDisappearingContentBottomModal = TextStyle(
@@ -216,3 +144,58 @@ TextStyle tsReplySnippetHeader = const TextStyle(
 
 TextStyle tsReplySnippetSpecialCase =
     const TextStyle(fontStyle: FontStyle.italic);
+
+// Responsive styles
+TextStyle tsResponsive(
+        {required String title,
+        required GlobalKey titleKey,
+        required double minFontSize,
+        required double maxFontSize,
+        Color? color}) =>
+    TextStyle(
+        color: color ?? black,
+        fontSize: getResponsiveFontSize(
+            title: title,
+            titleKey: titleKey,
+            minFontSize: minFontSize,
+            maxFontSize: maxFontSize));
+
+double getResponsiveFontSize({
+  required String title,
+  required GlobalKey titleKey,
+  required double minFontSize,
+  required double maxFontSize,
+}) {
+  const textPadding =
+      EdgeInsetsDirectional.all(20.0); // TODO: play around with this
+  final textStyle = TextStyle(fontSize: maxFontSize);
+  var textPainter = TextPainter(
+      text: TextSpan(text: title, style: textStyle),
+      maxLines: 1,
+      textDirection: TextDirection.ltr) // TODO: test this for RTL
+    ..layout(minWidth: 0, maxWidth: double.infinity);
+  final inputWidth = textPainter.size.width - textPadding.horizontal;
+
+  textPainter = TextPainter(
+    textDirection: TextDirection.ltr,
+    text: TextSpan(
+      text: title,
+      style: textStyle,
+    ),
+  );
+  textPainter.layout();
+
+  var textWidth = textPainter.width;
+  var fontSize = textStyle.fontSize;
+
+  while (textWidth > inputWidth && fontSize! > minFontSize) {
+    --fontSize;
+    textPainter.text = TextSpan(
+      text: title,
+      style: textStyle.copyWith(fontSize: fontSize),
+    );
+    textPainter.layout();
+    textWidth = textPainter.width;
+  }
+  return fontSize!;
+}

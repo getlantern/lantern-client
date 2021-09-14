@@ -53,13 +53,13 @@ class Introductions extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 2,
                                             style:
-                                                tsBottomModalListResponsive(
+                                                tsResponsive(
                                                     title: 'introduced'.i18n +
                                                         ' ' +
                                                         introductor.displayName
                                                             .toUpperCase(),
                                                     minFontSize: 12.0,
-                                                    maxFontSize: 15.0,
+                                                    maxFontSize: 14.0,
                                                     titleKey: GlobalKey())),
                                       ),
                                     ),
