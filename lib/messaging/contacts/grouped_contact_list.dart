@@ -20,7 +20,6 @@ ScrollablePositionedList groupedContactListGenerator({
     itemBuilder: (context, index) {
       var key = groupedSortedList.keys.elementAt(index);
       var itemsPerKey = groupedSortedList.values.elementAt(index);
-      // print('\x1B[33m$key\x1B[0m');
       return ListBody(
         children: [
           Row(
