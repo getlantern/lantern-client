@@ -382,8 +382,7 @@ Future<void> displayConversationOptions(
                                           controller: scrollController,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          physics:
-                                              const BouncingScrollPhysics(),
+                                          physics: defaultScrollPhysics,
                                           itemCount: seconds.length,
                                           itemBuilder: (context, index) {
                                             return ListTile(
@@ -648,3 +647,5 @@ BoxConstraints disappearingDialogConstraints(BuildContext context) {
     maxWidth: width,
   );
 }
+
+ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();
