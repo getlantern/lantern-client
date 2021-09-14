@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lantern/EventManager.dart';
+import 'package:lantern/event_manager.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/session_model.dart';
 import 'package:lantern/common/ui/audio.dart';
