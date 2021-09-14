@@ -98,7 +98,11 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 Run unit tests with `make test`.
 
-Run integration tests with `make integration-test`.
+Run integration tests with `make integration-test`. This will run all files in `integration_test` that end
+in `_test.dart`.
+
+To run a specific integration test, run `TEST=name make integration-test` where name is the name of the
+integration test file without the `.dart` suffix. For example `TEST=conversation_page_test make integration-test`.
 
 BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!! When you run the integration tests, you'll need to
 select a device. If you select a device that already has Lantern installed, that Lantern will be
