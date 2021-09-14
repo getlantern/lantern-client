@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
+import 'package:lantern/messaging/contacts/contacts_extension.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introduce extends StatefulWidget {
@@ -24,11 +25,7 @@ class _IntroduceState extends State<Introduce> {
             .fill([selectedContactIds.length]),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts.toList()
-            ..sort((a, b) => sanitizeContactName(
-                    a.value.displayName.toLowerCase())
-                .compareTo(
-                    sanitizeContactName(b.value.displayName.toLowerCase())));
+          var sortedContacts = _contacts.toList().sortContactsAlphabetically();
 
           var groupedSortedContacts = sortedContacts.groupBy((el) =>
               sanitizeContactName(el.value.displayName[0].toLowerCase()));
