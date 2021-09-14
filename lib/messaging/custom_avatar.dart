@@ -20,8 +20,7 @@ class CustomAvatar extends StatelessWidget {
     var hue = max(0.0, hash / maxHash * 360);
 
     return CircleAvatar(
-      backgroundColor:
-          customColor ?? HSLColor.fromAHSL(1, hue, 1, 0.3).toColor(),
+      backgroundColor: customColor ?? getAvatarColor(hue: hue),
       child: Text(
           sanitizeContactName(displayName ?? '').getInitials().toUpperCase(),
           style: tsCircleAvatarLetter),
