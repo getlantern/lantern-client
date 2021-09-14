@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 /// Shows the supplied widget as a full screen dialog
 class FullScreenDialog extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 void showInfoDialog(BuildContext context,
     {String title = '',

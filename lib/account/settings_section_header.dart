@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/account/account.dart';
 
 class SettingsSectionHeader extends StatelessWidget {
   late final String label;

@@ -1,6 +1,4 @@
-import 'dart:math' as math;
-
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 //// An arrow that indicates that clicking on the containing control will continue to a new
 //// screen. It is sensitive to the current language's directionality.
@@ -12,7 +10,7 @@ class ContinueArrow extends StatelessWidget {
     return Transform(
       alignment: Alignment.center,
       transform: Matrix4.rotationY(
-          Directionality.of(context) == TextDirection.rtl ? math.pi : 0),
+          Directionality.of(context) == TextDirection.rtl ? pi : 0),
       child: const CustomAssetImage(
         path: ImagePaths.keyboard_arrow_right_icon,
         size: 24,

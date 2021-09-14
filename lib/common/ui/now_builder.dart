@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 /// callback that receives the current time
 abstract class _NowCallback {

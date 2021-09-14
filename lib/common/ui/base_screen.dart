@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 class BaseScreen extends StatelessWidget {
   final dynamic title;

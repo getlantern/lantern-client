@@ -1,6 +1,6 @@
 import 'package:i18n_extension/i18n_extension.dart';
 import 'package:i18n_extension/io/import.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 extension Localization on String {
   static String locale = 'en';

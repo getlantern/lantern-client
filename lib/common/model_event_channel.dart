@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
+
+import 'common.dart';
 
 class ModelEventChannel extends EventChannel {
   var uuid = const Uuid();

@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/account/account.dart';
 
 import 'settings_item.dart';
 

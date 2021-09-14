@@ -1,10 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-
-import 'model.dart';
-import 'model_event_channel.dart';
+import 'common.dart';
 
 /// A ValueNotifier that updates a single value based on subscribing to a path
 /// in the database.

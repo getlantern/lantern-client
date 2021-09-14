@@ -1,6 +1,4 @@
-import 'package:lantern/common/model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pbenum.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 // Filters for items from an Iterable<Introductions> of "Pending" status
 extension IntroductionExtension on Iterable<PathAndValue<StoredMessage>> {

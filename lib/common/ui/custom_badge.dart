@@ -1,5 +1,5 @@
 import 'package:badges/badges.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 class CustomBadge extends StatelessWidget {
   final int count;

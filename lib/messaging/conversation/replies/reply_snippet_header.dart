@@ -1,6 +1,4 @@
-import 'package:lantern/messaging/protos_flutteronly/messaging.pbserver.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class ReplySnippetHeader extends StatelessWidget {
   const ReplySnippetHeader({

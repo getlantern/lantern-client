@@ -1,6 +1,4 @@
-import 'dart:ui';
-import 'package:flutter/widgets.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class VoiceRecorder extends StatefulWidget {
   VoiceRecorder({

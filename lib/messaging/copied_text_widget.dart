@@ -1,7 +1,4 @@
-import 'package:flutter/services.dart';
-import 'package:lantern/common/model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'messaging.dart';
 
 class CopiedTextWidget extends StatefulWidget {
   final PathAndValue<StoredMessage> _message;

@@ -1,6 +1,5 @@
-import 'package:lantern/package_store.dart';
-
 import 'messages.dart';
+import 'messaging.dart';
 
 class MessagesTab extends StatefulWidget {
   MessagesTab();

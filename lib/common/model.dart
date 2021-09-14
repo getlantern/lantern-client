@@ -2,13 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lantern/common/single_value_subscriber.dart';
-
-import 'list_subscriber.dart';
-import 'model_event_channel.dart';
+import 'common.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;

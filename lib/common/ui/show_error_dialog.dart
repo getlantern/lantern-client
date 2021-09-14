@@ -1,8 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 /// logs the given exception+stacktrace and shows a standard error dialog.
 void showErrorDialog(

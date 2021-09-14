@@ -1,11 +1,7 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-
-import 'model.dart';
-import 'model_event_channel.dart';
+import 'common.dart';
 
 /// A ValueNotifier that maintains a list of values based on updates from the
 /// the database. It relies on nested ListChildValueNotifiers to handle updates

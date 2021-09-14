@@ -1,5 +1,4 @@
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/ui/custom_horizontal_divider.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 class VPNBandwidth extends StatelessWidget {
   @override

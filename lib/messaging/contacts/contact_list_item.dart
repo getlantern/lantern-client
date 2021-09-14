@@ -1,5 +1,4 @@
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 /*
 * Generic widget that renders a row with a Contact avatar, a Contact name and a trailing widget. 

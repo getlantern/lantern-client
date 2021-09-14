@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 //// A round button
 class RoundButton extends StatelessWidget {

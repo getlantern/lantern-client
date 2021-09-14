@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 class CustomAssetImage extends StatelessWidget {
   final String path;

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/account/account.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'settings_section_header.dart';
