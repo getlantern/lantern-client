@@ -556,9 +556,12 @@ Future<void> displayConversationOptions(
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: Text(
-                        'delete_contact_name'.i18n.fill(
-                            [manuallyHandleOverflow(contact.displayName)]),
-                        style: tsBottomModalList),
+                        'delete_contact_name'.i18n.fill([contact.displayName]),
+                        style: tsBottomModalListResponsive(
+                            title: contact.displayName,
+                            minFontSize: 15.0,
+                            maxFontSize: 16.0,
+                            titleKey: GlobalKey())),
                   ),
                   onTap: () => showDialog<void>(
                         context: bottomContext,

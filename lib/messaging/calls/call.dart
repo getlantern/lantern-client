@@ -108,8 +108,12 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            style: TextStyle(color: white),
-                            overflow: TextOverflow.ellipsis,
+                            style: txCallTitle(
+                                title: widget.contact.displayName.isNotEmpty
+                                    ? sanitizeContactName(
+                                        widget.contact.displayName)
+                                    : widget.contact.contactId.id,
+                                titleKey: GlobalKey()),
                           ),
                         ),
                         Padding(

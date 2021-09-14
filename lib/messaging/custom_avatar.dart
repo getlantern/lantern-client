@@ -31,9 +31,9 @@ class CustomAvatar extends StatelessWidget {
 extension StringExtensions on String {
   String getInitials() {
     // example
-    // 'kalli retzepi' => ['kalli', 'retzepi'] => we pick K and R (first characters of first and last substring)
+    // 'lionel messi' => ['lionel', 'messi'] => we pick L and M (first characters of first and last substring)
     // 'mies van der rohe' => ['mies', 'van', 'der', 'rohe'] => we pick M and R
-    // 'kalliretzepi' => ['k', 'a', 'l', ....] => we pick K and A (first and second)
+    // 'lionelmessi' => ['l', 'i', 'o', ....] => we pick L and I (first and second)
     var parts = this.split(' ');
     return parts.isNotEmpty
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
