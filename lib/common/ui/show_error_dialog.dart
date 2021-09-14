@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lantern/package_store.dart';
@@ -9,7 +11,7 @@ void showErrorDialog(
   required StackTrace s,
   required String des,
 }) {
-  print('$e\n$s');
+  developer.log(des, error: e, stackTrace: s);
   showInfoDialog(context,
       title: 'Error'.i18n,
       des: des,
