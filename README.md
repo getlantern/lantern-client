@@ -158,7 +158,7 @@ If you wanna visualize the current percentage of code coverage you need to do th
 
 This test is to ensure the correct functionality of the Flutter application. In case that you need to test the functionality of the Flutter application, you need to do the following steps.
 
-1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --target integration_test/my_file_test.dart --flavor prod`
+1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --flavor prod --target integration_test/my_file_test.dart`
 2. This will start doing a simulated build of the project and run the tests.
 
 If you modify the code and you want to test the changes, you need to do the following steps.

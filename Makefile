@@ -24,7 +24,7 @@ test:
 	@flutter test
 
 integration-test:
-	@flutter drive --driver test_driver/integration_driver.dart --target `ls integration_test/*test.dart` --flavor prod
+	@flutter drive --driver test_driver/integration_driver.dart --flavor prod --target `ls integration_test/*test.dart`
 
 GO_VERSION := 1.16
 
