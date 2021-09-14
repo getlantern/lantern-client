@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:lantern/messaging/conversation/mime_types.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/lru_cache.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/common/lru_cache.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 
 import 'audio.dart';

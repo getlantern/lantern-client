@@ -3,7 +3,7 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-import '../common/settings_section_header.dart';
+import 'settings_section_header.dart';
 import 'settings_item.dart';
 
 class ProAccount extends StatelessWidget {

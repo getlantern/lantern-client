@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:pedantic/pedantic.dart';
 
 import '../package_store.dart';
-import 'model.dart';
+import '../common/model.dart';
 
 class SessionModel extends Model {
   SessionModel() : super('session');

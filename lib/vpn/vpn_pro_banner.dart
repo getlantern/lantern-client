@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/continue_arrow.dart';
+import 'package:lantern/common/ui/continue_arrow.dart';
 
 class ProBanner extends StatefulWidget {
   @override

@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lantern/common/colors.dart';
+import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/messaging/conversation/replies/enum_extension.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/lru_cache.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/common/basic_memory_image.dart';
+import 'package:lantern/common/lru_cache.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/common/ui/basic_memory_image.dart';
 
 enum MimeTypes { VIDEO, AUDIO, IMAGE, OTHERS, EMPTY }
 

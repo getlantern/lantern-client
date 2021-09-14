@@ -2,12 +2,12 @@ import 'dart:math' as math;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/common/custom_horizontal_divider.dart';
-import 'package:lantern/common/humanize.dart';
-import 'package:lantern/common/text_styles.dart';
+import 'package:lantern/common/ui/custom_horizontal_divider.dart';
+import 'package:lantern/common/ui/humanize.dart';
+import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 

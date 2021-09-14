@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/custom_pin_field.dart';
+import 'package:lantern/common/ui/custom_pin_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class ApproveDevice extends StatelessWidget {
