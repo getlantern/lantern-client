@@ -116,6 +116,7 @@ class ContactConnectionCard extends StatelessWidget {
                         title: title,
                         minFontSize: 16.0,
                         maxFontSize: 20.0,
+                        fontWeight: FontWeight.w600,
                         titleKey: GlobalKey()),
                   ),
                 ),
