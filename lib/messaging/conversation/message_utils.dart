@@ -683,17 +683,17 @@ BoxConstraints disappearingDialogConstraints(BuildContext context) {
 CircleAvatar renderContactAvatar(
     {String? id, String? displayName, Color? customColor}) {
   return CircleAvatar(
-    backgroundColor: customColor ??
-        avatarBgColors[generateUniqueColorIndex(id!, displayName!)],
+    backgroundColor:
+        customColor ?? avatarBgColors[generateUniqueColorIndex(id!)],
     child: Text(
         sanitizeContactName(displayName ?? '').substring(0, 2).toUpperCase(),
         style: tsCircleAvatarLetter),
   );
 }
 
-int generateUniqueColorIndex(String id, String displayName) {
+int generateUniqueColorIndex(String id) {
   // get sha1 hash of id + displayName
-  var sha1Bytes = sha1.convert(utf8.encode(id + displayName)).bytes;
+  var sha1Bytes = sha1.convert(utf8.encode(id)).bytes;
   // calculate sum of bytes
   var sha1Sum = sha1Bytes.reduce((value, element) => value + element);
   // get remainder of division with avatarBagColors array
