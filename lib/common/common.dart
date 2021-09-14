@@ -27,8 +27,8 @@ export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 
 export 'package:lantern/core/router/router.gr.dart';
-export 'package:lantern/Event.dart';
-export 'package:lantern/EventManager.dart';
+export 'package:lantern/event_extension.dart';
+export 'package:lantern/event_manager.dart';
 export 'package:lantern/i18n/i18n.dart';
 export 'package:lantern/lantern_navigator.dart';
 export 'package:lantern/vpn/protos_shared/vpn.pb.dart';
