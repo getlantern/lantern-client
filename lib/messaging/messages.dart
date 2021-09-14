@@ -89,7 +89,7 @@ class Messages extends StatelessWidget {
                                     ContactListItem(
                                       contact: contact.value,
                                       index: index,
-                                      leading: renderContactAvatar(
+                                      leading: CustomAvatar(
                                           id: contact.value.contactId.id,
                                           displayName:
                                               contact.value.displayName),

@@ -59,7 +59,7 @@ class _IntroduceState extends State<Introduce> {
                                   child: groupedContactListGenerator(
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
-                                          renderContactAvatar(
+                                          CustomAvatar(
                                               id: contact.contactId.id,
                                               displayName: contact.displayName),
                                       trailingCallback: (int index,

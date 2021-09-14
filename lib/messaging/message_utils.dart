@@ -648,14 +648,3 @@ BoxConstraints disappearingDialogConstraints(BuildContext context) {
     maxWidth: width,
   );
 }
-
-CircleAvatar renderContactAvatar(
-    {String? id, String? displayName, Color? customColor}) {
-  return CircleAvatar(
-    backgroundColor:
-        customColor ?? avatarBgColors[id!.hashCode % avatarBgColors.length],
-    child: Text(
-        sanitizeContactName(displayName ?? '').substring(0, 2).toUpperCase(),
-        style: tsCircleAvatarLetter),
-  );
-}
