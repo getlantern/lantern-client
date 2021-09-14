@@ -4,10 +4,10 @@ import 'dart:typed_data';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/conversation/audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/package_store.dart';
-import 'package:lantern/common/round_button.dart';
-import 'package:lantern/common/audio.dart';
+import 'package:lantern/common/ui/round_button.dart';
+import 'package:lantern/common/ui/audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 enum PlayerState { stopped, playing, paused }

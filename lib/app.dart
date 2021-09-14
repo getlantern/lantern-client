@@ -4,11 +4,11 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/EventManager.dart';
-import 'package:lantern/common/audio.dart';
+import 'package:lantern/common/ui/audio.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/session_model.dart';
-import 'package:lantern/model/vpn_model.dart';
+import 'package:lantern/account/session_model.dart';
+import 'package:lantern/vpn/vpn_model.dart';
 import 'package:lantern/package_store.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 

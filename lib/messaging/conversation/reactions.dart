@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
+import 'package:lantern/common/model.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pbserver.dart';
 import 'package:lantern/package_store.dart';
 
 class Reactions extends StatelessWidget {

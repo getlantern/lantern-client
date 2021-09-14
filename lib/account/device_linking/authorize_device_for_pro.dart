@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/package_store.dart';
 
-import '../../common/button.dart';
+import '../../common/ui/button.dart';
 
 class AuthorizeDeviceForPro extends StatelessWidget {
   AuthorizeDeviceForPro({Key? key}) : super(key: key);
