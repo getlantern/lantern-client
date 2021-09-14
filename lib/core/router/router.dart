@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/common/transitions.dart';
+import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/tabs/account_tab_router.dart';
 import 'package:lantern/core/router/tabs/developer_tab_router.dart';
 import 'package:lantern/core/router/tabs/message_tab_router.dart';
@@ -7,7 +7,7 @@ import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
 import 'package:lantern/home.dart';
-import 'package:lantern/common/full_screen_dialog.dart';
+import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 

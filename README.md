@@ -96,6 +96,17 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 ## Unit Tests
 
+Run unit tests with `make test`.
+
+Run integration tests with `make integration-test`.
+
+BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!! When you run the integration tests, you'll need to
+select a device. If you select a device that already has Lantern installed, that Lantern will be
+replaced with a new build for the integration test. Consider using an emulator to avoid wiping your
+data.
+
+### Using VSCode
+
 To run the unit test you need to input the following setup.
 - Create a folder on the root of your project named: ```.vscode```
 - Inside .vscode create a file named: ```launch.json```

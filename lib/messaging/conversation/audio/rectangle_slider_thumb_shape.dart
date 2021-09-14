@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   @override

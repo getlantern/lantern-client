@@ -1,12 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/basic_memory_image.dart';
-import 'package:loader_overlay/loader_overlay.dart';
+import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatelessWidget {

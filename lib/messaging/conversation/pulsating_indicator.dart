@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class PulsatingIndicator extends StatefulWidget {
   final Duration duration;

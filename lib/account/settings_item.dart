@@ -1,6 +1,6 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/account/account.dart';
 
-import '../common/continue_arrow.dart';
+import '../common/ui/continue_arrow.dart';
 
 class SettingsItem extends StatelessWidget {
   late final String? icon;
