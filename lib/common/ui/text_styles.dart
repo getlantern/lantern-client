@@ -151,9 +151,11 @@ TextStyle tsResponsive(
         required GlobalKey titleKey,
         required double minFontSize,
         required double maxFontSize,
+        FontWeight? fontWeight,
         Color? color}) =>
     TextStyle(
         color: color ?? black,
+        fontWeight: fontWeight ?? FontWeight.w400,
         fontSize: getResponsiveFontSize(
             title: title,
             titleKey: titleKey,
