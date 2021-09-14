@@ -62,3 +62,7 @@ Color getCheckboxColor(Set<MaterialState> states) {
   };
   return states.any(interactiveStates.contains) ? white : black;
 }
+
+// not using inverted right now but can be useful for eventually building color inversion
+Color getAvatarColor({required double hue, bool inverted = false}) =>
+    HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
