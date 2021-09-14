@@ -1,9 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/ui/basic_memory_image.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class ImageAttachment extends StatelessWidget {
   final StoredAttachment attachment;

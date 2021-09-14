@@ -1,12 +1,6 @@
-import 'package:flutter/widgets.dart';
-import 'package:lantern/common/ui/notifications.dart';
-import 'package:lantern/common/ui/round_button.dart';
-import 'package:lantern/common/ui/show_alert_dialog.dart';
-import 'package:lantern/messaging/calls/signaling.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
+
+import 'signaling.dart';
 
 class Call extends StatefulWidget {
   final Contact contact;

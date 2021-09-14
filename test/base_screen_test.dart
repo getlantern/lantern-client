@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/home.dart';
 import 'package:loader_overlay/loader_overlay.dart';

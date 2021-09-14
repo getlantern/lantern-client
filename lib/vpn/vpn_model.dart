@@ -1,9 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:lantern/common/model.dart';
-import 'package:lantern/vpn/protos_shared/vpn.pb.dart';
-
-import '../package_store.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 class VpnModel extends Model {
   VpnModel() : super('vpn');

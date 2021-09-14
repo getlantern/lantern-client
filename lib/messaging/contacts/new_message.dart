@@ -1,14 +1,6 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/common/model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/iterable_extension.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class NewMessage extends StatefulWidget {
   // static const NUM_RECENT_CONTACTS = 10;

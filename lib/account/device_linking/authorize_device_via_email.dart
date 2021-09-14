@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/ui/custom_text_field.dart';
+import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../common/ui/button.dart';

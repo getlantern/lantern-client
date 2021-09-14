@@ -6,8 +6,7 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
-import 'package:flutter/widgets.dart' as _i21;
-import 'package:lantern/account/account.dart' as _i12;
+import 'package:lantern/account/account_tab.dart' as _i12;
 import 'package:lantern/account/developer_settings.dart' as _i20;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i19;
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
@@ -27,8 +26,9 @@ import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
 import 'package:lantern/messaging/messages.dart' as _i9;
+import 'package:lantern/messaging/messaging.dart' as _i21;
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i22;
-import 'package:lantern/vpn/vpn.dart' as _i11;
+import 'package:lantern/vpn/vpn_tab.dart' as _i11;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter([_i2.GlobalKey<_i2.NavigatorState>? navigatorKey])

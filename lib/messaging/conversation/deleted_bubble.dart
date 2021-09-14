@@ -1,5 +1,4 @@
-import 'package:lantern/package_store.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class DeletedBubble extends StatelessWidget {
   final String deletedBubbleContent;

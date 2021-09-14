@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 /// An attachment that shows an audio player.
 class AudioAttachment extends StatelessWidget {

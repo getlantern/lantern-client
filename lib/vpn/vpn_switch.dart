@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 class VPNSwitch extends StatelessWidget {
   @override

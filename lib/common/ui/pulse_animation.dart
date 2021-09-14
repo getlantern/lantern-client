@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
+import 'package:lantern/common/common.dart';
 
 class PulseAnimation extends StatefulWidget {
   final Widget child;

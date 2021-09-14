@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 //// This a custom TextField that renders a label in its outline, aligned with
 //// the prefix icon. We don't use the default behavior of OutlineInputBorder

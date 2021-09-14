@@ -1,4 +1,4 @@
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class ReplySnippetText extends StatelessWidget {
   const ReplySnippetText({

@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/ui/humanize.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class ConversationSticker extends StatelessWidget {
   final Contact contact;
   final bool isPendingIntroduction;
+
   const ConversationSticker({
     Key? key,
     required this.contact,

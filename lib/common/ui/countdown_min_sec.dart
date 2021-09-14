@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 class Countdown extends AnimatedWidget {
   final Animation<int> animation;

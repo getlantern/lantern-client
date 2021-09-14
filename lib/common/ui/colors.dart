@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:lantern/common/common.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 Color primaryBlue = HexColor('#007A7C');

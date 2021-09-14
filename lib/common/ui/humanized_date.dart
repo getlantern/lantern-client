@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:lantern/package_store.dart';
-
-import 'now_builder.dart';
+import 'package:lantern/common/common.dart';
 
 /// This widget dynamically humanizes a date value, updating the displayed
 /// humanization when necessary as time marches on. It follows the below rules:

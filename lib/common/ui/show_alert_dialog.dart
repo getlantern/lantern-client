@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 Function() showAlertDialog({
   required BuildContext context,

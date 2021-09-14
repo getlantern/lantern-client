@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/account/account.dart';
 import 'package:lantern/common/ui/button.dart';
 import 'package:lantern/common/ui/custom_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';

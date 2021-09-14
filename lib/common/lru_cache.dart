@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+import 'common.dart';
 
 typedef LoadFunc<K, V> = Future<V> Function(K key);
 

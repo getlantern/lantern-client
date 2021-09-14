@@ -1,14 +1,5 @@
-import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-import 'package:lantern/common/lru_cache.dart';
-import 'package:lantern/common/model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-
-import '../common/list_subscriber.dart';
-import 'protos_flutteronly/messaging.pb.dart';
-import '../package_store.dart';
 import 'calls/signaling.dart';
+import 'messaging.dart';
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;

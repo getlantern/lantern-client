@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/conversation/mime_types.dart';
 import 'package:lantern/messaging/conversation/replies/reply_mime.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 extension AttachmentExtension on Attachment {
   MimeTypes fromString() {

@@ -8,7 +8,7 @@ import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/Event.dart';
 import 'package:lantern/EventManager.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {

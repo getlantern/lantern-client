@@ -1,6 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:lantern/package_store.dart';
+import 'package:lantern/common/common.dart';
 
 class BasicMemoryImage extends Image {
   BasicMemoryImage(
