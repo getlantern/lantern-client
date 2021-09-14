@@ -25,7 +25,7 @@ class _IntroduceState extends State<Introduce> {
             .fill([selectedContactIds.length]),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts.toList().sortContactsAlphabetically();
+          var sortedContacts = _contacts.toList().sortedAlphabetically();
 
           var groupedSortedContacts = sortedContacts.groupBy((el) =>
               sanitizeContactName(el.value.displayName[0].toLowerCase()));
