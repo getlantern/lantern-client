@@ -1,7 +1,6 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/messaging/contacts/contacts_extension.dart';
 
 class NewMessage extends StatefulWidget {
   @override
@@ -115,7 +114,7 @@ class _NewMessageState extends State<NewMessage> {
                 var contacts = _contacts.toList();
 
                 // related https://github.com/getlantern/android-lantern/issues/299
-                var sortedContacts = contacts.sortContactsAlphabetically();
+                var sortedContacts = contacts.sortedAlphabetically();
 
                 var groupedSortedContacts = sortedContacts.groupBy((el) =>
                     sanitizeContactName(el.value.displayName[0].toLowerCase()));
