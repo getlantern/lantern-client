@@ -56,6 +56,7 @@ export 'ui/custom_divider.dart';
 export 'ui/custom_horizontal_divider.dart';
 export 'ui/custom_pin_field.dart';
 export 'ui/custom_rounded_rectangle_border.dart';
+export 'ui/custom_text.dart';
 export 'ui/custom_text_field.dart';
 export 'ui/custom_vertical_divider.dart';
 export 'ui/dimens.dart';
