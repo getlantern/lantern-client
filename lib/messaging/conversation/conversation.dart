@@ -227,11 +227,14 @@ class _ConversationState extends State<Conversation>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    contact.displayName.isEmpty
-                        ? contact.contactId.id
-                        : contact.displayName,
-                    style: tsTitleAppbar,
-                    overflow: TextOverflow.ellipsis,
+                    contact.displayName.isNotEmpty
+                        ? contact.displayName
+                        : contact.contactId.id,
+                    style: tsTitleAppbarResponsive(
+                        title: contact.displayName.isNotEmpty
+                            ? contact.displayName
+                            : contact.contactId.id,
+                        titleKey: GlobalKey()),
                   ),
                   DisappearingTimerAction(contact),
                 ],

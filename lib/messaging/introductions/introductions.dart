@@ -44,11 +44,23 @@ class Introductions extends StatelessWidget {
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
-                                      child: Text(
-                                        'introduced'.i18n +
-                                            ' ' +
-                                            introductor.displayName
-                                                .toUpperCase(),
+                                      child: Expanded(
+                                        child: Text(
+                                            'introduced'.i18n +
+                                                ' ' +
+                                                introductor.displayName
+                                                    .toUpperCase(),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style:
+                                                tsBottomModalListResponsive(
+                                                    title: 'introduced'.i18n +
+                                                        ' ' +
+                                                        introductor.displayName
+                                                            .toUpperCase(),
+                                                    minFontSize: 12.0,
+                                                    maxFontSize: 15.0,
+                                                    titleKey: GlobalKey())),
                                       ),
                                     ),
                                   ],
