@@ -213,6 +213,9 @@ class _ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget._contactId,
         (context, contact, child) {
+      final title = contact.displayName.isNotEmpty
+          ? contact.displayName
+          : contact.contactId.id;
       return BaseScreen(
         // Conversation title (contact name)
         title: Row(
@@ -227,13 +230,9 @@ class _ConversationState extends State<Conversation>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    contact.displayName.isNotEmpty
-                        ? contact.displayName
-                        : contact.contactId.id,
+                    title,
                     style: tsResponsive(
-                        title: contact.displayName.isNotEmpty
-                            ? contact.displayName
-                            : contact.contactId.id,
+                        title: title,
                         minFontSize: 16.0,
                         maxFontSize: 20.0,
                         titleKey: GlobalKey()),
