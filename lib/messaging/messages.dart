@@ -81,8 +81,8 @@ class Messages extends StatelessWidget {
                             });
                             return ListView.builder(
                               itemCount: contacts.length,
+                              physics: const BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
-                                // false will style this as a Message preview
                                 var contact = contacts[index];
                                 return Column(
                                   children: [

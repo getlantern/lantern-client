@@ -333,6 +333,9 @@ msgstr "To start a message with your friend, scan each other's QR code.  This pr
 msgid "qr_info_scan"
 msgstr "Scan each others QR codes, to add a contact."
 
+msgid "qr_success_snackbar"
+msgstr "%s is a Contact"
+
 msgid "qr_info_waiting_qr"
 msgstr "Waiting for your friend to scan your QR code..."
 

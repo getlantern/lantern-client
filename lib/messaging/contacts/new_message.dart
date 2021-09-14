@@ -65,9 +65,9 @@ class _NewMessageState extends State<NewMessage> {
                           children: [
                             Expanded(
                               child: Text(
-                                // TODO: i18n interpolation
-                                '${_updatedContact!.displayName} is a Contact'
-                                    .i18n,
+                                'qr_success_snackbar'
+                                    .i18n
+                                    .fill([_updatedContact!.displayName]),
                                 overflow: TextOverflow.visible,
                                 style: tsInfoDialogText(white),
                                 textAlign: TextAlign.left,
@@ -115,17 +115,15 @@ class _NewMessageState extends State<NewMessage> {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
 
-                // TODO: uncomment if we need to limit num of contacts here hiding this for now
-                // var recentContacts =
-                //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
-
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedContacts = contacts
-                  ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                      .compareTo(sanitizeContactName(b.value.displayName)));
+                  ..sort((a, b) =>
+                      sanitizeContactName(a.value.displayName.toLowerCase())
+                          .compareTo(sanitizeContactName(
+                              b.value.displayName.toLowerCase())));
 
-                var groupedSortedContacts = sortedContacts
-                    .groupBy((el) => sanitizeContactName(el.value.displayName));
+                var groupedSortedContacts = sortedContacts.groupBy((el) =>
+                    sanitizeContactName(el.value.displayName[0].toLowerCase()));
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)

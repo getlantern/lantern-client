@@ -25,11 +25,13 @@ class _IntroduceState extends State<Introduce> {
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList()
-            ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                .compareTo(sanitizeContactName(b.value.displayName)));
+            ..sort((a, b) => sanitizeContactName(
+                    a.value.displayName.toLowerCase())
+                .compareTo(
+                    sanitizeContactName(b.value.displayName.toLowerCase())));
 
-          var groupedSortedContacts = sortedContacts
-              .groupBy((el) => sanitizeContactName(el.value.displayName));
+          var groupedSortedContacts = sortedContacts.groupBy((el) =>
+              sanitizeContactName(el.value.displayName[0].toLowerCase()));
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

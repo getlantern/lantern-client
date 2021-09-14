@@ -350,8 +350,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('qr_trouble_scanning'.i18n,
-              style: const TextStyle(fontSize: 20)),
+          Text('qr_add_via_id'.i18n, style: const TextStyle(fontSize: 20)),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
