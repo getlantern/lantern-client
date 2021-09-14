@@ -285,6 +285,12 @@ msgstr "Set"
 msgid "menu"
 msgstr "Menu"
 
+msgid "send_error"
+msgstr "Something went wrong while sending your message"
+
+msgid "share_media_error"
+msgstr "Something went wrong while sharing a media file"
+
 msgid "no_recents"
 msgstr "No Recents"
 
