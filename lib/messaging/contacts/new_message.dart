@@ -138,10 +138,9 @@ class _NewMessageState extends State<NewMessage> {
                     ? groupedContactListGenerator(
                         groupedSortedList: groupedSortedContacts,
                         scrollListController: scrollListController,
-                        leadingCallback: (Contact contact) =>
-                            renderContactAvatar(
-                                id: contact.contactId.id,
-                                displayName: contact.displayName),
+                        leadingCallback: (Contact contact) => CustomAvatar(
+                            id: contact.contactId.id,
+                            displayName: contact.displayName),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
                                 Conversation(contactId: contact.contactId)))

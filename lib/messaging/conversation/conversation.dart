@@ -219,7 +219,7 @@ class _ConversationState extends State<Conversation>
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            renderContactAvatar(
+            CustomAvatar(
                 id: contact.contactId.id, displayName: contact.displayName),
             const SizedBox(width: 6),
             Expanded(
