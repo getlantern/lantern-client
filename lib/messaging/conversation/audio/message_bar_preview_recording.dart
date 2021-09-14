@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 import 'audio_widget.dart';
 

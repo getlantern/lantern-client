@@ -1,7 +1,4 @@
-import 'dart:ui';
-
-import 'package:lantern/package_store.dart';
-import 'package:lantern/common/continue_arrow.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
   @override

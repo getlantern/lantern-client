@@ -15,7 +15,6 @@ import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
@@ -108,8 +107,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
             "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("recipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(unsafeFromId= call.argument<String>("unsafeFromId")!!, unsafeToId = call.argument<String>("unsafeToId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(unsafeFromId= call.argument<String>("fromId")!!, unsafeToId = call.argument<String>("toId")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(unsafeFromId = call.argument<String>("unsafeFromId")!!, unsafeToId = call.argument<String>("unsafeToId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(unsafeFromId = call.argument<String>("fromId")!!, unsafeToId = call.argument<String>("toId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {

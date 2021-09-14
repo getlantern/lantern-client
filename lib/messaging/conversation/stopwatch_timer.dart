@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class StopwatchTimer extends StatelessWidget {
   final StopWatchTimer stopWatchTimer;

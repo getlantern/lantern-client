@@ -1,6 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 const barWidth = 2.0;
 const barPlusSpaceWidth = 2 * barWidth;

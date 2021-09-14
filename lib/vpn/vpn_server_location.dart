@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:lantern/package_store.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 class ServerLocationWidget extends StatefulWidget {
   final ValueChanged<BuildContext> openInfoServerLocation;

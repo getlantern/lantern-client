@@ -1,13 +1,9 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/common/show_alert_dialog.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_types.dart';

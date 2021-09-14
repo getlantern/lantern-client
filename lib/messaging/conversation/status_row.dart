@@ -1,9 +1,4 @@
-import 'package:lantern/common/countdown_stopwatch.dart';
-import 'package:lantern/common/humanized_date.dart';
-import 'package:lantern/messaging/conversation/message_utils.dart';
-import 'package:lantern/model/model.dart';
-import 'package:lantern/model/protos_flutteronly/messaging.pbserver.dart';
-import 'package:lantern/package_store.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class StatusRow extends StatelessWidget {
   final bool outbound;
