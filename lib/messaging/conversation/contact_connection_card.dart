@@ -112,8 +112,11 @@ class ContactConnectionCard extends StatelessWidget {
                 Center(
                   child: Text(
                     title,
-                    style: tsTitleAppbarResponsive(
-                        title: title, titleKey: GlobalKey()),
+                    style: tsResponsive(
+                        title: title,
+                        minFontSize: 16.0,
+                        maxFontSize: 20.0,
+                        titleKey: GlobalKey()),
                   ),
                 ),
                 Padding(

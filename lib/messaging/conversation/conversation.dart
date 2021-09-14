@@ -230,10 +230,12 @@ class _ConversationState extends State<Conversation>
                     contact.displayName.isNotEmpty
                         ? contact.displayName
                         : contact.contactId.id,
-                    style: tsTitleAppbarResponsive(
+                    style: tsResponsive(
                         title: contact.displayName.isNotEmpty
                             ? contact.displayName
                             : contact.contactId.id,
+                        minFontSize: 16.0,
+                        maxFontSize: 20.0,
                         titleKey: GlobalKey()),
                   ),
                   DisappearingTimerAction(contact),
