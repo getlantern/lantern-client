@@ -20,8 +20,12 @@ TextStyle tsDisappearingTimer =
 TextStyle tsDisappearingTimerDetail =
     const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
 
-TextStyle tsTitleAppbar = TextStyle(
-    fontWeight: FontWeight.w500, fontSize: 20, height: 23 / 20, color: black);
+CustomTextStyle tsTitleAppbar = CustomTextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+    minFontSize: 14,
+    fontHeight: 23,
+    color: black);
 
 // Custom styles
 TextStyle tsCircleAvatarLetter =
@@ -39,8 +43,8 @@ TextStyle tsCountdownTimer(color) => TextStyle(
       color: color,
     );
 
-TextStyle tsTitleItem =
-    const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, height: 26 / 16);
+CustomTextStyle tsTitleItem =
+    CustomTextStyle(fontWeight: FontWeight.w500, fontSize: 16, fontHeight: 26);
 
 TextStyle tsSettingsItem =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: 16);

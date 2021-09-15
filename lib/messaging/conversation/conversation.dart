@@ -232,7 +232,6 @@ class _ConversationState extends State<Conversation>
                   CustomText(
                     title,
                     style: tsTitleAppbar,
-                    minFontSize: 14,
                   ),
                   DisappearingTimerAction(contact),
                 ],
