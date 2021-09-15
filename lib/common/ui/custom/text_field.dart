@@ -111,9 +111,11 @@ class _CTextFieldState extends State<CTextField> {
           color: white,
           child: !hasFocus && widget.controller.value.text.isEmpty
               ? Container()
-              : Text(
+              : CText(
                   widget.label,
-                  style: TextStyle(
+                  style: CTextStyle(
+                      fontSize: 12,
+                      lineHeight: 12,
                       color: fieldKey.currentState?.mounted == true &&
                               fieldKey.currentState?.hasError == true
                           ? indicatorRed

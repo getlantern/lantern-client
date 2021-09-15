@@ -38,10 +38,11 @@ class CBadge extends StatelessWidget {
       badgeColor: (customBadge != null) ? Colors.white : primaryPink,
       badgeContent: (customBadge != null)
           ? customBadge
-          : Text(
+          : CText(
               count.toString(),
-              style: GoogleFonts.roboto().copyWith(
+              style: CTextStyle(
                 fontSize: fontSize,
+                lineHeight: fontSize,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),

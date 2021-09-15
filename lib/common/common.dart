@@ -59,7 +59,6 @@ export 'ui/crounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/dimens.dart';
-export 'ui/dropdown.dart';
 export 'ui/full_screen_dialog.dart';
 export 'ui/humanize.dart';
 export 'ui/humanized_date.dart';

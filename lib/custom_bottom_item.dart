@@ -8,7 +8,7 @@ class CustomBottomItem extends StatelessWidget {
   final int currentIndex;
   final int position;
   final int total;
-  final Text label;
+  final CText label;
   final Widget? iconWidget;
   final Widget icon;
   final VoidCallback onTap;

@@ -9,21 +9,21 @@ class VPNStatus extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          CText(
             'VPN Status'.i18n + ': ',
-            style: tsTitleHeadVPNItem.copyWith(
+            style: tsTitleHeadVPNItem.copiedWith(
               color: unselectedTabLabelColor,
             ),
           ),
           (vpnStatus == 'connecting' || vpnStatus == 'disconnecting')
               ? Row(
                   children: [
-                    Text(
+                    CText(
                       (vpnStatus == 'connecting')
                           ? 'Connecting'.i18n
                           : 'Disconnecting'.i18n,
                       style: tsSubTitle(context)
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                          .copiedWith(fontWeight: FontWeight.bold),
                     ),
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 12),
@@ -37,7 +37,7 @@ class VPNStatus extends StatelessWidget {
                     ),
                   ],
                 )
-              : Text(
+              : CText(
                   (vpnStatus == 'connected')
                       ? 'connected'.i18n
                       : 'disconnected'.i18n,

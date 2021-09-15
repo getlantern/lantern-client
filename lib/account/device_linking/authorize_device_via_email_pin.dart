@@ -42,7 +42,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 Container(
                   margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: CText(
                     'Enter or paste linking code'.i18n.toUpperCase(),
                     style: tsPinLabel,
                   ),
@@ -83,9 +83,9 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text(
+                                  child: CText(
                                     'Okay'.i18n,
-                                    style: tsDialogButtonPink,
+                                    style: tsButtonPink,
                                   ),
                                 ),
                               ],
@@ -96,9 +96,9 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                         context.loaderOverlay.hide();
                       });
                     },
-                    child: Text(
+                    child: CText(
                       'Re-send Email'.i18n.toUpperCase(),
-                      style: tsDialogButtonPink,
+                      style: tsButtonPink,
                     ),
                   ),
                 ),

@@ -16,9 +16,9 @@ class SettingsSectionHeader extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsetsDirectional.only(start: 8),
-            child: Text(
+            child: CText(
               label.toUpperCase() + ':',
-              style: const TextStyle(fontSize: 10),
+              style: CTextStyle(fontSize: 10, lineHeight: 16),
             ),
           ),
           CVerticalDivider(

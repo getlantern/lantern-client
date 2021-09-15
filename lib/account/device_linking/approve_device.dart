@@ -22,7 +22,7 @@ class ApproveDevice extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: Text(
+          child: CText(
             text,
             style: tsExplanation,
           ),
@@ -50,7 +50,7 @@ class ApproveDevice extends StatelessWidget {
                 Container(
                   margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: CText(
                     'Enter or paste device linking PIN'.i18n.toUpperCase(),
                     style: tsPinLabel,
                   ),

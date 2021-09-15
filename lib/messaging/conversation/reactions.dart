@@ -68,11 +68,12 @@ class Reactions extends StatelessWidget {
                         },
                       ),
                     ),
-                    child: Text(
+                    child: CText(
                       e,
                       softWrap: true,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 12, color: Colors.black),
+                      style: CTextStyle(
+                          fontSize: 12, lineHeight: 12, color: Colors.black),
                     ),
                   ),
                 ),

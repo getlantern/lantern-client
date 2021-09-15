@@ -19,14 +19,15 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(),
-            Text(
+            CText(
               'Authorize with Device Linking Pin'.i18n,
               style: tsTitleItem,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
-              child: Text(
+              child: CText(
                 'Requires physical access to a Lantern Pro Device'.i18n,
+                style: tsSubTitleItem,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -46,14 +47,15 @@ class AuthorizeDeviceForPro extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Text(
+            CText(
               'Authorize Device via Email'.i18n,
               style: tsTitleItem,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
-              child: Text(
+              child: CText(
                 'Requires access to the email you used to buy Lantern Pro'.i18n,
+                style: tsSubTitleItem,
                 textAlign: TextAlign.center,
               ),
             ),

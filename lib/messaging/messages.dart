@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
+
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -54,7 +55,7 @@ class Messages extends StatelessWidget {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          title: Text('introductions'.i18n,
+                                          title: CText('introductions'.i18n,
                                               style: tsBaseScreenBodyText),
                                           trailing: const CAssetImage(
                                             path: ImagePaths
@@ -95,9 +96,9 @@ class Messages extends StatelessWidget {
                                               contact.value.displayName),
                                       title: sanitizeContactName(
                                           contact.value.displayName),
-                                      subtitle: Text(
+                                      subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
-                                          overflow: TextOverflow.ellipsis),
+                                          style: tsSubTitleItem),
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
@@ -105,7 +106,8 @@ class Messages extends StatelessWidget {
                                       trailing: HumanizedDate.fromMillis(
                                         contact.value.mostRecentMessageTs
                                             .toInt(),
-                                        builder: (context, date) => Text(date),
+                                        builder: (context, date) =>
+                                            CText(date, style: tsSubTitleItem),
                                       ),
                                     ),
                                   ],

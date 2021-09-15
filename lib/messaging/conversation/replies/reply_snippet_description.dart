@@ -10,7 +10,7 @@ class ReplySnippetDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return CText(
       descriptiveText,
       style: tsReplySnippetSpecialCase,
       overflow: TextOverflow.ellipsis,
