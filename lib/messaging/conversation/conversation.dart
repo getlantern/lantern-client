@@ -231,7 +231,7 @@ class _ConversationState extends State<Conversation>
                 children: [
                   CustomText(
                     title,
-                    style: const TextStyle(fontSize: 20),
+                    style: tsTitleAppbar,
                     minFontSize: 14,
                   ),
                   DisappearingTimerAction(contact),

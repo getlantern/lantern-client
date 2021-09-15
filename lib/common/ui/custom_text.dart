@@ -27,8 +27,13 @@ class CustomText extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       final fontSize = _fontSizeFor(context, constraints.maxWidth);
+      // scale height to keep line height the same even though font size changed
+      final height = style!.height == null
+          ? null
+          : style!.height! * style!.fontSize! / fontSize;
       return Text(text,
-          style: style!.copyWith(fontSize: fontSize), overflow: overflow);
+          style: style!.copyWith(fontSize: fontSize, height: height),
+          overflow: overflow);
     });
   }
 
