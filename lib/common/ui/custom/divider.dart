@@ -1,12 +1,12 @@
 import 'package:lantern/common/common.dart';
 
-class CustomHorizontalDivider extends StatelessWidget {
+class CDivider extends StatelessWidget {
   final Color? color;
   final double thickness;
   final double margin;
   final double size;
 
-  const CustomHorizontalDivider({
+  const CDivider({
     Key? key,
     this.margin = 16,
     this.thickness = 0.0,

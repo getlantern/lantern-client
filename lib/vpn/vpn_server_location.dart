@@ -20,9 +20,9 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
+        CText(
           'Server Location'.i18n + ': ',
-          style: tsTitleHeadVPNItem.copyWith(
+          style: tsTitleHeadVPNItem.copiedWith(
             color: unselectedTabLabelColor,
           ),
         ),
@@ -54,14 +54,14 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
                       child:
                           Flag(serverInfo.countryCode, height: 24, width: 36)),
                   const SizedBox(width: 12),
-                  Text(
+                  CText(
                     serverInfo.city,
                     style: tsTitleTrailVPNItem,
                   )
                 ],
               );
             } else {
-              return Text(
+              return CText(
                 'n/a'.i18n,
                 style: tsTitleTrailVPNItem,
               );

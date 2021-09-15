@@ -21,14 +21,14 @@ void showInfoDialog(BuildContext context,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomAssetImage(
+              CAssetImage(
                 path: icon,
                 size: 24,
               ),
               const SizedBox(
                 height: 8,
               ),
-              Text(
+              CText(
                 title,
                 style: tsDialogTitle,
               ),
@@ -39,7 +39,7 @@ void showInfoDialog(BuildContext context,
                     top: 16,
                     bottom: 24,
                   ),
-                  child: Text(
+                  child: CText(
                     des,
                     style: tsInfoDialogText(unselectedTabLabelColor),
                   ),
@@ -53,7 +53,7 @@ void showInfoDialog(BuildContext context,
                   },
                   child: Ink(
                     padding: const EdgeInsets.all(8),
-                    child: Text(
+                    child: CText(
                       buttonText,
                       style: tsInfoDialogButton,
                     ),

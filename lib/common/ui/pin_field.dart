@@ -2,13 +2,13 @@ import 'package:lantern/common/common.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 //// A field for entering PIN codes
-class CustomPinField extends StatelessWidget {
+class PinField extends StatelessWidget {
   late final int length;
   late final TextEditingController controller;
   late final TextInputType keyboardType;
   late final void Function(String text)? onDone;
 
-  CustomPinField({
+  PinField({
     required this.length,
     required this.controller,
     this.keyboardType = TextInputType.number,
@@ -27,15 +27,15 @@ class CustomPinField extends StatelessWidget {
               builder: (context) {
                 return AlertDialog(
                   content:
-                      Text('Paste from clipboard?'.i18n, style: tsDialogBody),
+                      CText('Paste from clipboard?'.i18n, style: tsDialogBody),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: CText(
                         'No'.i18n,
-                        style: tsDialogButtonGrey,
+                        style: tsButtonGrey,
                       ),
                     ),
                     TextButton(
@@ -43,9 +43,9 @@ class CustomPinField extends StatelessWidget {
                         controller.text = valueFromClipboard.text!;
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: CText(
                         'Yes'.i18n,
-                        style: tsDialogButtonPink,
+                        style: tsButtonPink,
                       ),
                     ),
                   ],
