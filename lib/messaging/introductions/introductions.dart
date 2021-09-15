@@ -45,22 +45,15 @@ class Introductions extends StatelessWidget {
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
                                       child: Expanded(
-                                        child: Text(
-                                            'introduced'.i18n +
-                                                ' ' +
-                                                introductor.displayName
-                                                    .toUpperCase(),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style:
-                                                tsResponsive(
-                                                    title: 'introduced'.i18n +
-                                                        ' ' +
-                                                        introductor.displayName
-                                                            .toUpperCase(),
-                                                    minFontSize: 12.0,
-                                                    maxFontSize: 14.0,
-                                                    titleKey: GlobalKey())),
+                                        child: CustomText(
+                                          'introduced'.i18n +
+                                              ' ' +
+                                              introductor.displayName
+                                                  .toUpperCase(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              fontSize: 10, height: 16 / 10),
+                                        ),
                                       ),
                                     ),
                                   ],
