@@ -5,13 +5,15 @@ class MessagingEmojiPicker extends StatelessWidget {
   final bool showEmojis;
   final String emptySuggestions;
   final double height;
+  final double width;
   final Function(Category, Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
   const MessagingEmojiPicker({
     required this.showEmojis,
     required this.emptySuggestions,
-    this.height = 200,
+    required this.height,
+    required this.width,
     this.onBackspacePressed,
     required this.onEmojiSelected,
     Key? key,
@@ -22,19 +24,21 @@ class MessagingEmojiPicker extends StatelessWidget {
         offstage: !showEmojis,
         child: SizedBox(
           height: height,
-          width: MediaQuery.of(context).size.width,
-          child: _showEmojiKeyBoard(context: context),
+          width: width,
+          child: _showEmojiKeyBoard(context: context, width: width),
         ),
       );
 
-  Widget _showEmojiKeyBoard({required BuildContext context}) => EmojiPicker(
+  Widget _showEmojiKeyBoard(
+          {required BuildContext context, required double width}) =>
+      EmojiPicker(
         key: key,
         onBackspacePressed: onBackspacePressed,
         onEmojiSelected: onEmojiSelected,
         config: Config(
           initCategory: Category.SMILEYS,
-          columns: 10,
-          emojiSizeMax: 16.0,
+          columns: width ~/ 40.0,
+          emojiSizeMax: width * 0.05,
           iconColor: Theme.of(context).primaryIconTheme.color ?? Colors.grey,
           iconColorSelected:
               Theme.of(context).accentIconTheme.color ?? Colors.blue,

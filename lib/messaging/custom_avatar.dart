@@ -34,9 +34,11 @@ extension StringExtensions on String {
     // 'lionel messi' => ['lionel', 'messi'] => we pick L and M (first characters of first and last substring)
     // 'mies van der rohe' => ['mies', 'van', 'der', 'rohe'] => we pick M and R
     // 'lionelmessi' => ['l', 'i', 'o', ....] => we pick L and I (first and second)
-    var parts = split(' ');
-    return parts.isNotEmpty
+    // 'l' => ['l'] => we only display one letter (L)
+    var parts = this.split(' ');
+    return parts.length > 1
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
-        : parts.first.substring(0, 2);
+        // display name is a single string
+        : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);
   }
 }
