@@ -26,7 +26,6 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
-  Size? size;
   late final ShowEmojis onEmojiTap;
   bool _customEmojiResponse = false;
   bool _hasPermission = false;
@@ -206,7 +205,6 @@ class _ConversationState extends State<Conversation>
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
@@ -285,7 +283,8 @@ class _ConversationState extends State<Conversation>
               MessagingEmojiPicker(
                 showEmojis: _emojiShowing,
                 emptySuggestions: 'no_recents'.i18n,
-                height: size!.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width,
                 onBackspacePressed: () {
                   _newMessage
                     ..text = _newMessage.text.characters.skipLast(1).toString()
@@ -391,7 +390,7 @@ class _ConversationState extends State<Conversation>
 
   Widget _buildMessageBar() {
     return Container(
-      width: size!.width,
+      width: MediaQuery.of(context).size.width,
       height: 55,
       margin: _isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
