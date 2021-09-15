@@ -35,7 +35,7 @@ class SettingsItem extends StatelessWidget {
                 if (icon != null)
                   Padding(
                     padding: const EdgeInsetsDirectional.only(end: 16),
-                    child: CustomAssetImage(
+                    child: CAssetImage(
                       path: icon!,
                       size: 24,
                       color: iconColor,
@@ -67,7 +67,7 @@ class SettingsItem extends StatelessWidget {
                               },
                               child: const Padding(
                                 padding: EdgeInsets.all(16),
-                                child: CustomAssetImage(
+                                child: CAssetImage(
                                   path: ImagePaths.info_icon,
                                   size: 16,
                                 ),
@@ -93,7 +93,7 @@ class SettingsItem extends StatelessWidget {
           ),
         ),
       ),
-      CustomDivider(height: 1),
+      CVerticalDivider(height: 1),
     ]);
   }
 }

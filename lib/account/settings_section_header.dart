@@ -21,7 +21,7 @@ class SettingsSectionHeader extends StatelessWidget {
               style: const TextStyle(fontSize: 10),
             ),
           ),
-          CustomDivider(
+          CVerticalDivider(
             height: 1,
             padding: const EdgeInsetsDirectional.only(top: 8),
           ),

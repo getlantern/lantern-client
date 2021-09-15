@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:lantern/common/common.dart';
 
-class CustomBadge extends StatelessWidget {
+class CBadge extends StatelessWidget {
   final int count;
   final Widget? child;
   final double fontSize;
@@ -10,7 +10,7 @@ class CustomBadge extends StatelessWidget {
   final double? top;
   final Widget? customBadge;
 
-  CustomBadge(
+  CBadge(
       {this.count = 0,
       this.child,
       this.fontSize = 10.0,

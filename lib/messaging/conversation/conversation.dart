@@ -229,7 +229,7 @@ class _ConversationState extends State<Conversation>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomText(
+                  CText(
                     title,
                     style: tsTitleAppbar,
                   ),

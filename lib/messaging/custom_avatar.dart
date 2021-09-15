@@ -34,7 +34,7 @@ extension StringExtensions on String {
     // 'lionel messi' => ['lionel', 'messi'] => we pick L and M (first characters of first and last substring)
     // 'mies van der rohe' => ['mies', 'van', 'der', 'rohe'] => we pick M and R
     // 'lionelmessi' => ['l', 'i', 'o', ....] => we pick L and I (first and second)
-    var parts = this.split(' ');
+    var parts = split(' ');
     return parts.isNotEmpty
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
         : parts.first.substring(0, 2);

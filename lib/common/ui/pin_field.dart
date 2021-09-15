@@ -2,13 +2,13 @@ import 'package:lantern/common/common.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 //// A field for entering PIN codes
-class CustomPinField extends StatelessWidget {
+class PinField extends StatelessWidget {
   late final int length;
   late final TextEditingController controller;
   late final TextInputType keyboardType;
   late final void Function(String text)? onDone;
 
-  CustomPinField({
+  PinField({
     required this.length,
     required this.controller,
     this.keyboardType = TextInputType.number,

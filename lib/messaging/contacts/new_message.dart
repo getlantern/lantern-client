@@ -41,7 +41,7 @@ class _NewMessageState extends State<NewMessage> {
                   color: black,
                 ),
                 title: Text('scan_qr_code'.i18n),
-                trailing: const CustomAssetImage(
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),
@@ -92,7 +92,7 @@ class _NewMessageState extends State<NewMessage> {
                   color: black,
                 ),
                 title: Text('introduce_contacts'.i18n),
-                trailing: const CustomAssetImage(
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),

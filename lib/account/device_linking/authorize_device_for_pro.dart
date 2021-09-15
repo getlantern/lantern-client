@@ -40,7 +40,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             ),
             const Spacer(),
             Flexible(
-              child: CustomDivider(
+              child: CVerticalDivider(
                 label: 'OR'.i18n,
                 labelStyle: tsTitleItem,
               ),

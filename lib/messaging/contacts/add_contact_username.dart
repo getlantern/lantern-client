@@ -34,7 +34,7 @@ class _AddViaUsernameState extends State<AddViaUsername> {
                       padding: const EdgeInsetsDirectional.all(20.0),
                       child: Wrap(
                         children: [
-                          CustomTextField(
+                          CTextField(
                             controller: usernameController,
                             label: 'username'.i18n,
                             helperText:

@@ -12,17 +12,17 @@ import 'package:lantern/common/common.dart';
 ///
 /// See also:
 ///
-///  * [CustomRoundedRectangleBorder], which is similar to this class, but with less options to controll the appearance of each side/corner.
+///  * [CRoundedRectangleBorder], which is similar to this class, but with less options to controll the appearance of each side/corner.
 ///  * [BorderSide], which is used to describe each side of the box.
 ///  * [Border], which, when used with [BoxDecoration], can also
 ///    describe a rounded rectangle.
-class CustomRoundedRectangleBorder extends ShapeBorder {
+class CRoundedRectangleBorder extends ShapeBorder {
   /// Creates a custom rounded rectangle border.
   /// Custom meaning that every single side/corner is controlled individually
   /// which grants the possibility to leave out borders, give each border a different color...
   ///
   /// The arguments must not be null.
-  const CustomRoundedRectangleBorder({
+  const CRoundedRectangleBorder({
     this.startSide,
     this.endSide,
     this.topSide,
@@ -105,7 +105,7 @@ class CustomRoundedRectangleBorder extends ShapeBorder {
 
   @override
   ShapeBorder scale(double t) {
-    return CustomRoundedRectangleBorder(
+    return CRoundedRectangleBorder(
       topSide: topSide?.scale(t),
       startSide: startSide?.scale(t),
       bottomSide: bottomSide?.scale(t),
@@ -120,8 +120,8 @@ class CustomRoundedRectangleBorder extends ShapeBorder {
 
   @override
   ShapeBorder lerpFrom(ShapeBorder? a, double t) {
-    if (a is CustomRoundedRectangleBorder) {
-      return CustomRoundedRectangleBorder(
+    if (a is CRoundedRectangleBorder) {
+      return CRoundedRectangleBorder(
         topSide:
             topSide == null ? null : BorderSide.lerp(a.topSide!, topSide!, t),
         startSide: startSide == null
@@ -154,8 +154,8 @@ class CustomRoundedRectangleBorder extends ShapeBorder {
 
   @override
   ShapeBorder lerpTo(ShapeBorder? b, double t) {
-    if (b is CustomRoundedRectangleBorder) {
-      return CustomRoundedRectangleBorder(
+    if (b is CRoundedRectangleBorder) {
+      return CRoundedRectangleBorder(
         topSide:
             topSide == null ? null : BorderSide.lerp(topSide!, b.topSide!, t),
         startSide: startSide == null

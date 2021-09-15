@@ -103,13 +103,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                             customColor: grey5),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
-                          child: CustomText(
+                          child: CText(
                             widget.contact.displayName.isNotEmpty
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
                             // TODO: move the below style into text_styles.dart
-                            style: CustomTextStyle(
+                            style: CTextStyle(
                                 fontSize: 22,
                                 minFontSize: 18,
                                 fontHeight: 26,
@@ -133,7 +133,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         RoundButton(
-                          icon: CustomAssetImage(
+                          icon: CAssetImage(
                               path: ImagePaths.speaker_icon,
                               color: signalingState.speakerphoneOn
                                   ? grey5
@@ -145,7 +145,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           },
                         ),
                         RoundButton(
-                          icon: CustomAssetImage(
+                          icon: CAssetImage(
                               path: ImagePaths.mute_icon,
                               color: signalingState.muted ? grey5 : white),
                           backgroundColor: signalingState.muted ? white : grey5,
@@ -154,8 +154,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           },
                         ),
                         RoundButton(
-                          icon: const CustomAssetImage(
-                              path: ImagePaths.hangup_icon),
+                          icon: const CAssetImage(path: ImagePaths.hangup_icon),
                           backgroundColor: indicatorRed,
                           onPressed: () async {
                             signaling.bye(await session);

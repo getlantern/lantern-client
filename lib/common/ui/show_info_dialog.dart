@@ -21,7 +21,7 @@ void showInfoDialog(BuildContext context,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomAssetImage(
+              CAssetImage(
                 path: icon,
                 size: 24,
               ),

@@ -1,11 +1,11 @@
 import 'package:lantern/common/common.dart';
 
-class CustomAssetImage extends StatelessWidget {
+class CAssetImage extends StatelessWidget {
   final String path;
   final double? size;
   final Color? color;
 
-  const CustomAssetImage({required this.path, this.size, this.color, Key? key})
+  const CAssetImage({required this.path, this.size, this.color, Key? key})
       : super(key: key);
 
   @override
