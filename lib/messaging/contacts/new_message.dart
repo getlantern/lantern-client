@@ -40,8 +40,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: Text('scan_qr_code'.i18n),
-                trailing: const CustomAssetImage(
+                title: CText('scan_qr_code'.i18n, style: tsSettingsItem),
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),
@@ -62,7 +62,7 @@ class _NewMessageState extends State<NewMessage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Expanded(
-                              child: Text(
+                              child: CText(
                                 'qr_success_snackbar'
                                     .i18n
                                     .fill([_updatedContact!.displayName]),
@@ -91,8 +91,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: Text('introduce_contacts'.i18n),
-                trailing: const CustomAssetImage(
+                title: CText('introduce_contacts'.i18n, style: tsSettingsItem),
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),
@@ -104,7 +104,7 @@ class _NewMessageState extends State<NewMessage> {
                     Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                   return _contacts.toList().isNotEmpty
                       ? ListTile(
-                          title: Text('contacts'.i18n.toUpperCase(),
+                          title: CText('contacts'.i18n.toUpperCase(),
                               style: tsEmptyContactState))
                       : Container();
                 }),
@@ -146,7 +146,7 @@ class _NewMessageState extends State<NewMessage> {
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),
-                        child: Text('no_contacts_yet'.i18n,
+                        child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
                                 tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors

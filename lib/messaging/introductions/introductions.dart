@@ -15,7 +15,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: Text('introductions_info'.i18n,
+                child: CText('introductions_info'.i18n,
                     style: tsBaseScreenBodyText),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
@@ -45,22 +45,16 @@ class Introductions extends StatelessWidget {
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
                                       child: Expanded(
-                                        child: Text(
-                                            'introduced'.i18n +
-                                                ' ' +
-                                                introductor.displayName
-                                                    .toUpperCase(),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style:
-                                                tsResponsive(
-                                                    title: 'introduced'.i18n +
-                                                        ' ' +
-                                                        introductor.displayName
-                                                            .toUpperCase(),
-                                                    minFontSize: 12.0,
-                                                    maxFontSize: 14.0,
-                                                    titleKey: GlobalKey())),
+                                        child: CText(
+                                          'introduced'.i18n +
+                                              ' ' +
+                                              introductor.displayName
+                                                  .toUpperCase(),
+                                          overflow: TextOverflow.ellipsis,
+                                          // TODO: move this style into text_styles.dart
+                                          style: CTextStyle(
+                                              fontSize: 10, lineHeight: 16),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -80,7 +74,7 @@ class Introductions extends StatelessWidget {
                                                 index: index,
                                                 title: sanitizeContactName(value
                                                     .introduction.displayName),
-                                                leading: CustomBadge(
+                                                leading: CBadge(
                                                   showBadge: true,
                                                   top: 25,
                                                   // Render the countdown timer for the introduction's expiry
@@ -108,12 +102,12 @@ class Introductions extends StatelessWidget {
                                                       onPressed: () =>
                                                           showAlertDialog(
                                                               context: context,
-                                                              title: Text(
+                                                              title: CText(
                                                                   'introductions_reject_title'
                                                                       .i18n,
                                                                   style:
                                                                       tsDialogTitle),
-                                                              content: Text(
+                                                              content: CText(
                                                                   'introductions_reject_content'
                                                                       .i18n,
                                                                   style:
@@ -150,12 +144,11 @@ class Introductions extends StatelessWidget {
                                                                   // TODO: pop router if we just went through all the requests
                                                                 }
                                                               }),
-                                                      child: Text(
+                                                      child: CText(
                                                           'reject'
                                                               .i18n
                                                               .toUpperCase(),
-                                                          style:
-                                                              tsDialogButtonGrey),
+                                                          style: tsButtonGrey),
                                                     ),
                                                     TextButton(
                                                       onPressed: () async {
@@ -194,7 +187,8 @@ class Introductions extends StatelessWidget {
                                                                         .end,
                                                                 children: [
                                                                   Expanded(
-                                                                    child: Text(
+                                                                    child:
+                                                                        CText(
                                                                       'introduction_approved'
                                                                           .i18n
                                                                           .fill([
@@ -237,12 +231,11 @@ class Introductions extends StatelessWidget {
                                                           // TODO: pop router if we just went through all the requests
                                                         }
                                                       },
-                                                      child: Text(
+                                                      child: CText(
                                                           'accept'
                                                               .i18n
                                                               .toUpperCase(),
-                                                          style:
-                                                              tsDialogButtonPink),
+                                                          style: tsButtonPink),
                                                     )
                                                   ],
                                                 )))

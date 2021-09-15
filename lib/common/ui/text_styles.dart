@@ -5,199 +5,150 @@ import 'package:lantern/common/common.dart';
 //
 
 // Global styles
-TextStyle? tsSubHead(BuildContext context) =>
-    Theme.of(context).textTheme.subtitle1;
+CTextStyle tsSubHead(BuildContext context) => tsTitleHeadVPNItem;
 
-TextStyle? tsSubTitle(BuildContext context) =>
-    Theme.of(context).textTheme.subtitle2;
+CTextStyle tsSubTitle(BuildContext context) => tsSubTitleItem;
 
-TextStyle? tsCaption(BuildContext context) =>
-    Theme.of(context).textTheme.caption;
+CTextStyle tsCaption(BuildContext context) => tsExplanation;
 
-TextStyle tsDisappearingTimer =
-    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
+CTextStyle tsDisappearingTimer =
+    CTextStyle(fontSize: 10, lineHeight: 16, fontWeight: FontWeight.bold);
 
-TextStyle tsDisappearingTimerDetail =
-    const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
-
-TextStyle tsTitleAppbar =
-    TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: black);
+CTextStyle tsTitleAppbar = CTextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+    minFontSize: 14,
+    lineHeight: 23,
+    color: black);
 
 // Custom styles
-TextStyle tsCircleAvatarLetter =
-    TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: white);
+CTextStyle tsCircleAvatarLetter =
+    CTextStyle(fontSize: 14, lineHeight: 23, color: white);
 
-TextStyle tsStopWatchTimer = TextStyle(
-  fontSize: 12,
-  fontWeight: FontWeight.w400,
+CTextStyle tsStopWatchTimer = CTextStyle(
+  fontSize: 10,
+  lineHeight: 16,
   color: stopwatchColor,
 );
 
-TextStyle tsCountdownTimer(color) => TextStyle(
+CTextStyle tsCountdownTimer(color) => CTextStyle(
       fontSize: 48,
-      height: 56.25 / 48,
+      lineHeight: 56.25,
       color: color,
     );
 
-TextStyle tsTitleItem =
-    const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
+CTextStyle tsTitleItem =
+    CTextStyle(fontWeight: FontWeight.w500, fontSize: 16, lineHeight: 26);
 
-TextStyle tsSettingsItem =
-    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16);
+CTextStyle tsSubTitleItem = tsTitleItem.copiedWith(
+    fontWeight: FontWeight.w400, fontSize: 12, lineHeight: 19);
 
-TextStyle tsSelectedTitleItem = tsTitleItem.copyWith(color: primaryPink);
+CTextStyle tsSettingsItem = CTextStyle(fontSize: 16, lineHeight: 21);
 
-TextStyle tsTitleHeadVPNItem =
-    const TextStyle(fontWeight: FontWeight.w400, fontSize: 14);
+CTextStyle tsSelectedTitleItem = tsTitleItem.copiedWith(color: primaryPink);
 
-TextStyle tsTitleTrailVPNItem =
-    const TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
+CTextStyle tsTitleHeadVPNItem = CTextStyle(
+  fontSize: 14,
+  lineHeight: 23,
+);
 
-TextStyle tsPinLabel = const TextStyle(fontSize: 10);
+CTextStyle tsTitleTrailVPNItem =
+    tsTitleHeadVPNItem.copiedWith(fontWeight: FontWeight.w600);
 
-TextStyle tsExplanation = const TextStyle(height: 1.6);
+CTextStyle tsPinLabel = CTextStyle(fontSize: 10, lineHeight: 16);
 
-TextStyle tsMessageBody(outbound) => TextStyle(
+CTextStyle tsExplanation = CTextStyle(fontSize: 14, lineHeight: 23);
+
+CTextStyle tsMessageBody(outbound) => CTextStyle(
     color: outbound ? outboundMsgColor : inboundMsgColor,
     fontSize: 16,
-    height: 24 / 16);
+    lineHeight: 24);
 
-TextStyle tsMessageStatus(outbound) => TextStyle(
+CTextStyle tsMessageStatus(outbound) => CTextStyle(
       color: outbound ? outboundMsgColor : inboundMsgColor,
       fontSize: 10,
+      lineHeight: 16,
     );
 
-TextStyle tsEmptyContactState = const TextStyle(
-  color: Colors.black,
+CTextStyle tsEmptyContactState = CTextStyle(
+  color: black,
   fontSize: 16,
-  height: 26 / 16,
+  lineHeight: 26,
 );
 
-TextStyle tsBaseScreenBodyText =
-    const TextStyle(color: Colors.black, fontSize: 16, height: 23 / 16);
+CTextStyle tsBaseScreenBodyText =
+    CTextStyle(color: black, fontSize: 16, lineHeight: 23);
 
-TextStyle txConversationSticker =
-    TextStyle(color: grey5, fontSize: 12, height: 19 / 12);
+CTextStyle txConversationSticker =
+    CTextStyle(color: grey5, fontSize: 12, lineHeight: 19);
 
 // Dialogs
-TextStyle tsBottomModalTitle =
-    const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+CTextStyle tsBottomModalTitle = CTextStyle(fontSize: 14, lineHeight: 23);
 
-TextStyle tsBottomModalList = const TextStyle(fontSize: 16, height: 18.75 / 16);
+CTextStyle tsBottomModalList = CTextStyle(fontSize: 16, lineHeight: 18.75);
 
-TextStyle tsDialogTitle = const TextStyle(fontSize: 16);
+CTextStyle tsDialogTitle = CTextStyle(fontSize: 16, lineHeight: 26);
 
-TextStyle tsDisappearingContentBottomModal = TextStyle(
-    color: grey5, fontSize: 14.0, height: 1.5, fontWeight: FontWeight.w400);
+CTextStyle tsDisappearingContentBottomModal = CTextStyle(
+    color: grey5, fontSize: 14.0, lineHeight: 21, fontWeight: FontWeight.w400);
 
-TextStyle tsAlertDialogListTile = const TextStyle(
-    fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.black);
+CTextStyle tsAlertDialogListTile = CTextStyle(
+    fontSize: 14.0, lineHeight: 23, fontWeight: FontWeight.w400, color: black);
 
-TextStyle tsDialogBody = const TextStyle(fontSize: 14, height: 1.5);
+CTextStyle tsDialogBody = CTextStyle(fontSize: 14, lineHeight: 21);
 
-TextStyle tsDialogButtonGrey = TextStyle(
+CTextStyle tsButtonGrey = CTextStyle(
   color: grey5,
   fontSize: 14,
-  fontWeight: FontWeight.w600,
+  lineHeight: 14,
+  fontWeight: FontWeight.w500,
 );
 
-TextStyle tsDialogButtonPink = TextStyle(
-  color: primaryPink,
-  fontSize: 14,
-  fontWeight: FontWeight.w600,
-);
+CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: primaryPink);
 
-TextStyle tsInfoDialogSubtitle(color) => TextStyle(
+CTextStyle tsInfoDialogSubtitle(color) => CTextStyle(
       fontSize: 16,
-      height: 26 / 16,
+      lineHeight: 26,
       color: color,
       fontWeight: FontWeight.w400,
     );
 
 // TODO: rename this since its used more widely than dialogs
-TextStyle tsInfoDialogText(color) => TextStyle(
+CTextStyle tsInfoDialogText(color) => CTextStyle(
       fontSize: 14,
-      height: 23 / 14,
+      lineHeight: 23,
       color: color,
       fontWeight: FontWeight.w400,
     );
 
-TextStyle tsInfoDialogButton = TextStyle(
+CTextStyle tsInfoDialogButton = tsButtonPink;
+
+CTextStyle tsFullScreenDialogTitle = CTextStyle(
+  fontSize: 20,
+  lineHeight: 24,
+  color: white,
   fontWeight: FontWeight.w600,
-  fontSize: 14,
-  color: primaryPink,
 );
 
-TextStyle tsFullScreenDialogTitle = const TextStyle(
-  fontSize: 20,
-  color: Colors.white,
-  fontWeight: FontWeight.w600,
-);
+CTextStyle tsFullScreenDialogTitleBlack =
+    tsFullScreenDialogTitle.copiedWith(color: black);
 
 // Message bubble StyleSheet
-TextStyle tsReplySnippetHeader = const TextStyle(
-  fontWeight: FontWeight.w600,
+CTextStyle tsReplySnippetHeader = CTextStyle(
+  fontWeight: FontWeight.w500,
   fontSize: 14,
-  height: 23 / 14,
-  color: Colors.black,
+  lineHeight: 23,
+  color: black,
 );
 
-TextStyle tsReplySnippetSpecialCase =
-    const TextStyle(fontStyle: FontStyle.italic);
+CTextStyle tsReplySnippet = CTextStyle(
+  fontSize: 16,
+  lineHeight: 26,
+  color: black,
+);
 
-// Responsive styles
-TextStyle tsResponsive(
-        {required String title,
-        required GlobalKey titleKey,
-        required double minFontSize,
-        required double maxFontSize,
-        FontWeight? fontWeight,
-        Color? color}) =>
-    TextStyle(
-        color: color ?? black,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        fontSize: getResponsiveFontSize(
-            title: title,
-            titleKey: titleKey,
-            minFontSize: minFontSize,
-            maxFontSize: maxFontSize));
+CTextStyle tsReplySnippetSpecialCase =
+    tsReplySnippet.copiedWith(fontStyle: FontStyle.italic);
 
-double getResponsiveFontSize({
-  required String title,
-  required GlobalKey titleKey,
-  required double minFontSize,
-  required double maxFontSize,
-}) {
-  const textPadding =
-      EdgeInsetsDirectional.all(20.0); // TODO: play around with this
-  final textStyle = TextStyle(fontSize: maxFontSize);
-  var textPainter = TextPainter(
-      text: TextSpan(text: title, style: textStyle),
-      maxLines: 1,
-      textDirection: TextDirection.ltr) // TODO: test this for RTL
-    ..layout(minWidth: 0, maxWidth: double.infinity);
-  final inputWidth = textPainter.size.width - textPadding.horizontal;
-
-  textPainter = TextPainter(
-    textDirection: TextDirection.ltr,
-    text: TextSpan(
-      text: title,
-      style: textStyle,
-    ),
-  );
-  textPainter.layout();
-
-  var textWidth = textPainter.width;
-  var fontSize = textStyle.fontSize;
-
-  while (textWidth > inputWidth && fontSize! > minFontSize) {
-    --fontSize;
-    textPainter.text = TextSpan(
-      text: title,
-      style: textStyle.copyWith(fontSize: fontSize),
-    );
-    textPainter.layout();
-    textWidth = textPainter.width;
-  }
-  return fontSize!;
-}
+CTextStyle tsBottomBarLabel =
+    CTextStyle(fontSize: 12, lineHeight: 12, fontWeight: FontWeight.w400);

@@ -201,13 +201,14 @@ class AudioWidget extends StatelessWidget {
 
   Widget _getTimeRemaining(AudioValue value) => Container(
         padding: const EdgeInsets.only(top: 7.0),
-        child: Text(
+        child: CText(
           (value.duration! - (value.position ?? const Duration()))
               .toString()
               .substring(2, 7),
-          style: TextStyle(
+          style: CTextStyle(
             color: initialColor,
             fontSize: 10.0,
+            lineHeight: 16,
           ),
         ),
       );

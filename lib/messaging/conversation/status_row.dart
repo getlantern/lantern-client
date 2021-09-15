@@ -26,7 +26,7 @@ class StatusRow extends StatelessWidget {
               padding: const EdgeInsets.only(right: 2.0),
               child: HumanizedDate.fromMillis(
                 message.value.ts.toInt(),
-                builder: (context, date) => Text(
+                builder: (context, date) => CText(
                   date,
                   style: tsMessageStatus(outbound),
                 ),

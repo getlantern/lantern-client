@@ -47,9 +47,9 @@ Function() showAlertDialog({
               if (dismissAction != null) dismissAction();
               close();
             },
-            child: Text(
+            child: CText(
               dismissText.i18n.toUpperCase(),
-              style: tsDialogButtonGrey,
+              style: tsButtonGrey,
             ),
           ),
           // AGREE
@@ -58,9 +58,9 @@ Function() showAlertDialog({
               if (agreeAction != null) agreeAction();
               close();
             },
-            child: Text(
+            child: CText(
               agreeText.i18n.toUpperCase(),
-              style: tsDialogButtonPink,
+              style: tsButtonPink,
             ),
           ),
         ],

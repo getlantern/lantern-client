@@ -129,7 +129,7 @@ class MessageBubble extends StatelessWidget {
           ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.reply),
-            title: Text('reply'.i18n),
+            title: CText('reply'.i18n, style: tsTitleHeadVPNItem),
             onPressed: () {
               onReply(msg);
             },
@@ -137,7 +137,7 @@ class MessageBubble extends StatelessWidget {
           if (!isAttachment)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.copy),
-              title: Text('copy_text'.i18n),
+              title: CText('copy_text'.i18n, style: tsTitleHeadVPNItem),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -145,7 +145,7 @@ class MessageBubble extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                          child: Text(
+                          child: CText(
                         'text_copied'.i18n,
                         style: tsInfoDialogText(white),
                         textAlign: TextAlign.left,
@@ -158,7 +158,7 @@ class MessageBubble extends StatelessWidget {
             ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.delete),
-            title: Text('delete_for_me'.i18n),
+            title: CText('delete_for_me'.i18n, style: tsTitleHeadVPNItem),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
@@ -166,7 +166,8 @@ class MessageBubble extends StatelessWidget {
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
-              title: Text('delete_for_everyone'.i18n),
+              title:
+                  CText('delete_for_everyone'.i18n, style: tsTitleHeadVPNItem),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },
@@ -217,18 +218,18 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
       child: ListBody(
         children: <Widget>[
           isLocal
-              ? Text(
+              ? CText(
                   'This will delete the message for you only. Everyone else will still be able to see it.'
                       .i18n,
                   style: tsDialogBody)
-              : Text('This will delete the message for everyone.'.i18n,
+              : CText('This will delete the message for everyone.'.i18n,
                   style: tsDialogBody),
         ],
       ),
     ),
     title: isLocal
-        ? Text('Delete for me', style: tsDialogTitle)
-        : Text('Delete for everyone', style: tsBottomModalTitle),
+        ? CText('Delete for me', style: tsBottomModalTitle)
+        : CText('Delete for everyone', style: tsBottomModalTitle),
     agreeAction: () =>
         isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
     agreeText: 'Delete',

@@ -37,7 +37,7 @@ class _IntroduceState extends State<Introduce> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child: Text('introduce_contacts_select'.i18n,
+                    child: CText('introduce_contacts_select'.i18n,
                         style: tsEmptyContactState),
                   ),
                 Expanded(
@@ -46,7 +46,7 @@ class _IntroduceState extends State<Introduce> {
                             alignment: AlignmentDirectional.center,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24.0, vertical: 16.0),
-                            child: Text('need_two_contacts_to_introduce'.i18n,
+                            child: CText('need_two_contacts_to_introduce'.i18n,
                                 textAlign: TextAlign.center,
                                 style: tsBaseScreenBodyText),
                           )
@@ -106,7 +106,7 @@ class _IntroduceState extends State<Introduce> {
                                                               .center,
                                                       children: [
                                                         Expanded(
-                                                            child: Text(
+                                                            child: CText(
                                                           'introductions_sent'
                                                               .i18n,
                                                           style:
