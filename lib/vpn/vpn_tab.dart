@@ -54,7 +54,7 @@ class VPNTab extends StatelessWidget {
                     Container(
                       margin:
                           const EdgeInsetsDirectional.only(top: 16, bottom: 0),
-                      child: const CustomHorizontalDivider(
+                      child: const CDivider(
                         margin: 0.0,
                         thickness: 1.0,
                       ),

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+
 import 'messaging.dart';
 
 Map<String, List<dynamic>> constructReactionsMap(
@@ -106,9 +107,10 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
               const Padding(
                 padding: EdgeInsets.all(12),
               ),
-              const Center(
-                  child: Text('Reactions', style: TextStyle(fontSize: 18.0))),
-              CustomHorizontalDivider(
+              Center(
+                  child: CText('Reactions',
+                      style: CTextStyle(fontSize: 18.0, lineHeight: 25))),
+              CDivider(
                 thickness: 1,
                 color: grey2,
                 margin: 0,
@@ -119,8 +121,10 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
                   for (var reaction in reactions.entries)
                     if (reaction.value.isNotEmpty)
                       ListTile(
-                        leading: Text(reaction.key),
-                        title: Text(reaction.value.join(', ')),
+                        leading:
+                            CText(reaction.key, style: tsAlertDialogListTile),
+                        title: CText(reaction.value.join(', '),
+                            style: tsAlertDialogListTile),
                       ),
                 ],
               ),
@@ -146,9 +150,10 @@ Container displayEmojiCount(
               ? const EdgeInsets.only(left: 3, top: 3, right: 6, bottom: 3)
               : const EdgeInsets.all(3),
           child: reactorsToKey.length > 1
-              ? Text(emoticon + reactorsToKey.length.toString(),
-                  style: const TextStyle(fontSize: 12))
-              : Text(emoticon, style: const TextStyle(fontSize: 12))));
+              ? CText(emoticon + reactorsToKey.length.toString(),
+                  style: CTextStyle(fontSize: 12, lineHeight: 16))
+              : CText(emoticon,
+                  style: CTextStyle(fontSize: 12, lineHeight: 16))));
 }
 
 String determineDateSwitch(
@@ -260,7 +265,7 @@ Future<void> displayConversationOptions(
             alignment: WrapAlignment.center,
             children: [
               ListTile(
-                leading: const CustomAssetImage(
+                leading: const CAssetImage(
                   path: ImagePaths.disappearing_timer_icon,
                   size: 24,
                 ),
@@ -268,7 +273,7 @@ Future<void> displayConversationOptions(
                     top: 7, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
-                  child: Text('disappearing_messages'.i18n,
+                  child: CText('disappearing_messages'.i18n,
                       style: tsBottomModalList),
                 ),
                 onTap: () async {
@@ -310,7 +315,7 @@ Future<void> displayConversationOptions(
                                 alignment: Alignment.center,
                                 child: Column(
                                   children: [
-                                    Text(
+                                    CText(
                                       'disappearing_messages'.i18n,
                                       style: tsDialogTitle,
                                     ),
@@ -326,12 +331,12 @@ Future<void> displayConversationOptions(
                                                   (selectedPosition != -1 &&
                                                       seconds[selectedPosition] ==
                                                           0)
-                                              ? Text(
+                                              ? CText(
                                                   'message_disappearing'.i18n,
                                                   style:
                                                       tsDisappearingContentBottomModal,
                                                 )
-                                              : Text(
+                                              : CText(
                                                   'message_disappearing_description'
                                                       .i18n
                                                       .fill([
@@ -353,7 +358,7 @@ Future<void> displayConversationOptions(
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              CustomHorizontalDivider(
+                              CDivider(
                                 thickness: 1,
                                 color: grey3,
                                 size: 2,
@@ -443,7 +448,7 @@ Future<void> displayConversationOptions(
                                               ),
                                               title: Transform.translate(
                                                 offset: const Offset(-4, 0),
-                                                child: Text(
+                                                child: CText(
                                                   seconds[index] == 0
                                                       ? 'off'.i18n
                                                       : seconds[index]
@@ -464,7 +469,7 @@ Future<void> displayConversationOptions(
                                 color: Colors.white,
                                 child: Column(
                                   children: [
-                                    const CustomHorizontalDivider(
+                                    const CDivider(
                                       thickness: 1,
                                       color: Color.fromRGBO(235, 235, 235, 1),
                                       size: 1,
@@ -484,9 +489,9 @@ Future<void> displayConversationOptions(
                                           ),
                                           onPressed: () async =>
                                               context.router.pop(),
-                                          child: Text(
+                                          child: CText(
                                               'cancel'.i18n.toUpperCase(),
-                                              style: tsDialogButtonGrey),
+                                              style: tsButtonGrey),
                                         ),
                                         TextButton(
                                           style: ButtonStyle(
@@ -506,8 +511,8 @@ Future<void> displayConversationOptions(
                                             await context.router.pop();
                                             await parentContext.router.pop();
                                           },
-                                          child: Text('set'.i18n.toUpperCase(),
-                                              style: tsDialogButtonPink),
+                                          child: CText('set'.i18n.toUpperCase(),
+                                              style: tsButtonPink),
                                         ),
                                       ],
                                     ),
@@ -522,13 +527,13 @@ Future<void> displayConversationOptions(
                   );
                 },
               ),
-              const CustomHorizontalDivider(
+              const CDivider(
                   size: 1,
                   thickness: 1,
                   margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
-                leading: const CustomAssetImage(
+                leading: const CAssetImage(
                   path: ImagePaths.introduce_contact_icon,
                   size: 16,
                 ),
@@ -536,18 +541,18 @@ Future<void> displayConversationOptions(
                     top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: Text('introduce_contacts'.i18n,
+                    child: CText('introduce_contacts'.i18n,
                         style: tsBottomModalList)),
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
-              const CustomHorizontalDivider(
+              const CDivider(
                   size: 1,
                   thickness: 1,
                   margin: 0,
                   color: Color.fromRGBO(235, 235, 235, 1)),
               ListTile(
-                  leading: const CustomAssetImage(
+                  leading: const CAssetImage(
                     path: ImagePaths.trash_icon,
                     size: 24,
                   ),
@@ -555,7 +560,7 @@ Future<void> displayConversationOptions(
                       top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: Text(
+                    child: CText(
                         'delete_contact_name'.i18n.fill([contact.displayName]),
                         style: tsBottomModalList),
                   ),
@@ -572,14 +577,14 @@ Future<void> displayConversationOptions(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.delete),
                                 ),
-                                Text('delete_contact'.i18n.toUpperCase(),
+                                CText('delete_contact'.i18n.toUpperCase(),
                                     style: tsDialogTitle),
                               ],
                             ),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Text('delete_contact_confirmation'.i18n,
+                                  CText('delete_contact_confirmation'.i18n,
                                       style: tsDialogBody)
                                 ],
                               ),
@@ -591,8 +596,8 @@ Future<void> displayConversationOptions(
                                 children: [
                                   TextButton(
                                     onPressed: () async => context.router.pop(),
-                                    child: Text('cancel'.i18n.toUpperCase(),
-                                        style: tsDialogButtonGrey),
+                                    child: CText('cancel'.i18n.toUpperCase(),
+                                        style: tsButtonGrey),
                                   ),
                                   const SizedBox(width: 15),
                                   TextButton(
@@ -619,9 +624,9 @@ Future<void> displayConversationOptions(
                                         parentContext.router.popUntilRoot();
                                       }
                                     },
-                                    child: Text(
+                                    child: CText(
                                         'delete_contact'.i18n.toUpperCase(),
-                                        style: tsDialogButtonPink),
+                                        style: tsButtonPink),
                                   )
                                 ],
                               )

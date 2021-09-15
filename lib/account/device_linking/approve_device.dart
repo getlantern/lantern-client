@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/account/account.dart';
-import 'package:lantern/common/ui/custom_pin_field.dart';
+import 'package:lantern/common/ui/pin_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class ApproveDevice extends StatelessWidget {
@@ -15,14 +15,14 @@ class ApproveDevice extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsetsDirectional.only(end: 16),
-          child: CustomAssetImage(
+          child: CAssetImage(
             path: icon,
             size: 24,
             color: Colors.black,
           ),
         ),
         Flexible(
-          child: Text(
+          child: CText(
             text,
             style: tsExplanation,
           ),
@@ -50,12 +50,12 @@ class ApproveDevice extends StatelessWidget {
                 Container(
                   margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: CText(
                     'Enter or paste device linking PIN'.i18n.toUpperCase(),
                     style: tsPinLabel,
                   ),
                 ),
-                CustomPinField(
+                PinField(
                   length: 6,
                   controller: pinCodeController,
                   onDone: (code) {
@@ -70,7 +70,7 @@ class ApproveDevice extends StatelessWidget {
                     });
                   },
                 ),
-                CustomDivider(
+                CVerticalDivider(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 Container(

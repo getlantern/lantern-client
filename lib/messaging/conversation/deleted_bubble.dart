@@ -17,7 +17,7 @@ class DeletedBubble extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(50)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Text(deletedBubbleContent),
+          child: CText(deletedBubbleContent, style: tsReplySnippetSpecialCase),
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'package:lantern/messaging/messaging.dart';
 
 class StopwatchTimer extends StatelessWidget {
   final StopWatchTimer stopWatchTimer;
-  final TextStyle style;
+  final CTextStyle style;
   const StopwatchTimer(
       {required this.stopWatchTimer, required this.style, Key? key})
       : super(key: key);
@@ -16,7 +16,7 @@ class StopwatchTimer extends StatelessWidget {
         final value = snap.data;
         final displayTime = StopWatchTimer.getDisplayTime(value ?? 0,
             minute: true, second: true, hours: false, milliSecond: false);
-        return Text(
+        return CText(
           displayTime,
           style: style,
         );

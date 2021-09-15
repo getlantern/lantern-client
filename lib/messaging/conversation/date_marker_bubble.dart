@@ -15,8 +15,7 @@ class DateMarker extends StatelessWidget {
         color: Colors.black,
         borderRadius: BorderRadius.all(Radius.circular(100)),
       ),
-      child: Text(isDateMarker!.i18n.toUpperCase(),
-          style: const TextStyle(fontSize: 10, color: Colors.white)),
+      child: CText(isDateMarker!.i18n.toUpperCase(), style: tsPinLabel),
     );
   }
 }

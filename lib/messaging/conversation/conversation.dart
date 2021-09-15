@@ -227,13 +227,9 @@ class _ConversationState extends State<Conversation>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  CText(
                     title,
-                    style: tsResponsive(
-                        title: title,
-                        minFontSize: 16.0,
-                        maxFontSize: 20.0,
-                        titleKey: GlobalKey()),
+                    style: tsTitleAppbar,
                   ),
                   DisappearingTimerAction(contact),
                 ],
