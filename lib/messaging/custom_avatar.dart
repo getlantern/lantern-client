@@ -21,7 +21,7 @@ class CustomAvatar extends StatelessWidget {
 
     return CircleAvatar(
       backgroundColor: customColor ?? getAvatarColor(hue: hue),
-      child: Text(
+      child: CText(
           sanitizeContactName(displayName ?? '').getInitials().toUpperCase(),
           style: tsCircleAvatarLetter),
     );
@@ -37,7 +37,6 @@ extension StringExtensions on String {
     // 'l' => ['l'] => we only display one letter (L)
     var parts = this.split(' ');
     return parts.length > 1
-        // display name contained spaces and was broken up
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
         // display name is a single string
         : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);

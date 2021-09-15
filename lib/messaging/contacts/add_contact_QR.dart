@@ -1,8 +1,8 @@
+import 'package:lantern/messaging/messaging.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'qr_scanner_border_painter.dart';
 
-import 'package:lantern/messaging/messaging.dart';
+import 'qr_scanner_border_painter.dart';
 
 class AddViaQR extends StatefulWidget {
   final Contact me;
@@ -179,7 +179,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // icon color
       topColor: grey5,
       title: Center(
-        child: Text('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
+        child: CText('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
       ),
       onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
@@ -194,7 +194,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   children: [
                     ((provisionalContactId != null && scanning))
                         ? PulseAnimation(
-                            Text(
+                            CText(
                               'qr_info_waiting_qr'.i18n,
                               style: tsInfoDialogText(white),
                               textAlign: TextAlign.center,
@@ -202,7 +202,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                           )
                         : Row(
                             children: [
-                              Text(
+                              CText(
                                 'qr_info_scan'.i18n,
                                 style: tsInfoDialogSubtitle(white),
                               ),
@@ -275,7 +275,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                 ),
               ),
               // my own QR code
-              Text(
+              CText(
                 'qr_for_your_contact'.i18n,
                 style: tsInfoDialogText(white),
               ),
@@ -321,7 +321,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 0, 16.0, 0),
-                          child: Text(
+                          child: CText(
                             'qr_add_via_id'.i18n,
                             style: tsInfoDialogText(white),
                           ),
@@ -350,7 +350,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('qr_add_via_id'.i18n, style: const TextStyle(fontSize: 20)),
+          CText('qr_add_via_id'.i18n, style: tsFullScreenDialogTitleBlack),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
@@ -381,7 +381,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             padding: const EdgeInsetsDirectional.all(20.0),
                             child: Wrap(
                               children: [
-                                CustomTextField(
+                                CTextField(
                                     controller: contactIdController,
                                     label: 'contact_id_messenger_id'.i18n,
                                     helperText:
@@ -431,10 +431,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                   Padding(
                                     padding: const EdgeInsetsDirectional.only(
                                         start: 10),
-                                    child: Text(
+                                    child: CText(
                                       'contact_id_your_id'.i18n.toUpperCase(),
-                                      style:
-                                          TextStyle(color: black, fontSize: 10),
+                                      style: tsPinLabel,
                                     ),
                                   ),
                                 ],
@@ -453,7 +452,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Expanded(
-                                                  child: Text(
+                                                  child: CText(
                                                 'copied'.i18n,
                                                 style: tsInfoDialogText(white),
                                                 textAlign: TextAlign.left,
@@ -468,13 +467,11 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                         padding:
                                             const EdgeInsetsDirectional.only(
                                                 start: 10.0, end: 10),
-                                        child: Text(
+                                        child: CText(
                                             humanizeContactId(
                                                 widget.me.contactId.id),
                                             overflow: TextOverflow.visible,
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                height: 26 / 16)),
+                                            style: tsEmptyContactState),
                                       ),
                                     ),
                                   ),
@@ -489,7 +486,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Expanded(
-                                                  child: Text(
+                                                  child: CText(
                                                 'copied'.i18n,
                                                 style: tsInfoDialogText(white),
                                                 textAlign: TextAlign.left,
@@ -498,7 +495,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                           ),
                                         );
                                       },
-                                      icon: CustomAssetImage(
+                                      icon: CAssetImage(
                                         path: ImagePaths.content_copy,
                                         size: 20,
                                         color: black,
@@ -558,13 +555,13 @@ class _renderWaitingUI extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsetsDirectional.only(top: 16.0),
-          child: CustomAssetImage(path: ImagePaths.check_green, size: 40),
+          child: CAssetImage(path: ImagePaths.check_green, size: 40),
         ),
         if (!proceedWithoutProvisionals)
           Padding(
             padding: const EdgeInsetsDirectional.only(
                 start: 8.0, end: 8.0, top: 8.0),
-            child: Text(
+            child: CText(
               'scan_complete'.i18n,
               style: tsInfoDialogSubtitle(fontColor),
             ),
@@ -585,7 +582,7 @@ class _renderWaitingUI extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsetsDirectional.only(
                     start: 20.0, top: 16.0, bottom: 16.0, end: 20.0),
-                child: Text(
+                child: CText(
                   infoText,
                   style: tsInfoDialogText(fontColor),
                   textAlign: TextAlign.center,

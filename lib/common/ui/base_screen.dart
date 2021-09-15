@@ -24,7 +24,7 @@ class BaseScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: title.runtimeType == String
-            ? Text(
+            ? CText(
                 title,
                 style: tsTitleAppbar,
               )

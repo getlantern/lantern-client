@@ -28,8 +28,8 @@ class ConversationSticker extends StatelessWidget {
     );
   }
 
-  Text _partiallyAddedText() {
-    return Text(
+  CText _partiallyAddedText() {
+    return CText(
         'Waiting for ${contact.displayName}. They will receive your messages once they accept the introduction.'
             .i18n,
         style: txConversationSticker);
@@ -39,13 +39,13 @@ class ConversationSticker extends StatelessWidget {
     return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
   }
 
-  Text _fullyAddedText() {
+  CText _fullyAddedText() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? Text(
+        ? CText(
             'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
             style: txConversationSticker,
             overflow: TextOverflow.ellipsis)
-        : Text('New messages do not disappear',
+        : CText('New messages do not disappear',
             style: txConversationSticker, overflow: TextOverflow.ellipsis);
   }
 

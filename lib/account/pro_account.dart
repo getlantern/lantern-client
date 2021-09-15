@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/account/account.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-import 'settings_section_header.dart';
 import 'settings_item.dart';
+import 'settings_section_header.dart';
 
 class ProAccount extends StatelessWidget {
   ProAccount({Key? key}) : super(key: key);
@@ -42,9 +42,7 @@ class ProAccount extends StatelessWidget {
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
                 },
-                child: Text('Renew'.i18n.toUpperCase(),
-                    style: TextStyle(
-                        color: primaryPink, fontWeight: FontWeight.w500)),
+                child: CText('Renew'.i18n.toUpperCase(), style: tsButtonPink),
               );
             }),
             SettingsSectionHeader(
@@ -65,15 +63,16 @@ class ProAccount extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            content: Text('confirm_remove_device'.i18n),
+                            content: CText('confirm_remove_device'.i18n,
+                                style: tsDialogBody),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text(
+                                child: CText(
                                   'No'.i18n,
-                                  style: tsDialogButtonGrey,
+                                  style: tsButtonGrey,
                                 ),
                               ),
                               TextButton(
@@ -88,9 +87,9 @@ class ProAccount extends StatelessWidget {
                                     context.loaderOverlay.hide();
                                   });
                                 },
-                                child: Text(
+                                child: CText(
                                   'Yes'.i18n,
-                                  style: tsDialogButtonPink,
+                                  style: tsButtonPink,
                                 ),
                               ),
                             ],
@@ -100,8 +99,9 @@ class ProAccount extends StatelessWidget {
                     },
               child: !allowRemoval
                   ? null
-                  : Text((isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                      style: tsDialogButtonPink),
+                  : CText(
+                      (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
+                      style: tsButtonPink),
             );
           }));
 
@@ -109,8 +109,8 @@ class ProAccount extends StatelessWidget {
             items.add(SettingsItem(
               title: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
-              child: Text('Add Device'.i18n.toUpperCase(),
-                  style: tsDialogButtonPink),
+              child:
+                  CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink),
             ));
           }
 
