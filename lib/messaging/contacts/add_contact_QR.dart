@@ -381,7 +381,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             padding: const EdgeInsetsDirectional.all(20.0),
                             child: Wrap(
                               children: [
-                                CustomTextField(
+                                CTextField(
                                     controller: contactIdController,
                                     label: 'contact_id_messenger_id'.i18n,
                                     helperText:
@@ -498,7 +498,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                           ),
                                         );
                                       },
-                                      icon: CustomAssetImage(
+                                      icon: CAssetImage(
                                         path: ImagePaths.content_copy,
                                         size: 20,
                                         color: black,
@@ -558,7 +558,7 @@ class _renderWaitingUI extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsetsDirectional.only(top: 16.0),
-          child: CustomAssetImage(path: ImagePaths.check_green, size: 40),
+          child: CAssetImage(path: ImagePaths.check_green, size: 40),
         ),
         if (!proceedWithoutProvisionals)
           Padding(

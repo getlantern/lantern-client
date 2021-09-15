@@ -44,7 +44,7 @@ class Messages extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
                                         child: ListTile(
-                                          leading: CustomBadge(
+                                          leading: CBadge(
                                             count: introductions
                                                 .getPending()
                                                 .length,
@@ -56,7 +56,7 @@ class Messages extends StatelessWidget {
                                           ),
                                           title: Text('introductions'.i18n,
                                               style: tsBaseScreenBodyText),
-                                          trailing: const CustomAssetImage(
+                                          trailing: const CAssetImage(
                                             path: ImagePaths
                                                 .keyboard_arrow_right_icon,
                                             size: 24,

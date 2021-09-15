@@ -45,14 +45,14 @@ class Introductions extends StatelessWidget {
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
                                       child: Expanded(
-                                        child: CustomText(
+                                        child: CText(
                                           'introduced'.i18n +
                                               ' ' +
                                               introductor.displayName
                                                   .toUpperCase(),
                                           overflow: TextOverflow.ellipsis,
                                           // TODO: move this style into text_styles.dart
-                                          style: CustomTextStyle(
+                                          style: CTextStyle(
                                               fontSize: 10, fontHeight: 16),
                                         ),
                                       ),
@@ -74,7 +74,7 @@ class Introductions extends StatelessWidget {
                                                 index: index,
                                                 title: sanitizeContactName(value
                                                     .introduction.displayName),
-                                                leading: CustomBadge(
+                                                leading: CBadge(
                                                   showBadge: true,
                                                   top: 25,
                                                   // Render the countdown timer for the introduction's expiry

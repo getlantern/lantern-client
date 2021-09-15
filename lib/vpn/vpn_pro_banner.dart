@@ -28,7 +28,7 @@ class _ProBannerState extends State<ProBanner> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomAssetImage(
+            const CAssetImage(
               path: ImagePaths.crown_icon,
               size: 32,
             ),

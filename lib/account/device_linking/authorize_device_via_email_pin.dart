@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lantern/account/account.dart';
-import 'package:lantern/common/ui/custom_pin_field.dart';
+import 'package:lantern/common/ui/pin_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:styled_text/styled_text.dart';
 
@@ -47,7 +47,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                     style: tsPinLabel,
                   ),
                 ),
-                CustomPinField(
+                PinField(
                   length: 6,
                   controller: pinCodeController,
                   onDone: (code) {
@@ -61,7 +61,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                     });
                   },
                 ),
-                CustomDivider(
+                CVerticalDivider(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 emailSentMessage(emailAddress),

@@ -110,7 +110,7 @@ class ContactConnectionCard extends StatelessWidget {
                   padding: EdgeInsets.all(12),
                 ),
                 Center(
-                  child: CustomText(title, style: tsTitleItem),
+                  child: CText(title, style: tsTitleItem),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(

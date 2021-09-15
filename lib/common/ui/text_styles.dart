@@ -20,7 +20,7 @@ TextStyle tsDisappearingTimer =
 TextStyle tsDisappearingTimerDetail =
     const TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold);
 
-CustomTextStyle tsTitleAppbar = CustomTextStyle(
+CTextStyle tsTitleAppbar = CTextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 20,
     minFontSize: 14,
@@ -43,8 +43,8 @@ TextStyle tsCountdownTimer(color) => TextStyle(
       color: color,
     );
 
-CustomTextStyle tsTitleItem =
-    CustomTextStyle(fontWeight: FontWeight.w500, fontSize: 16, fontHeight: 26);
+CTextStyle tsTitleItem =
+    CTextStyle(fontWeight: FontWeight.w500, fontSize: 16, fontHeight: 26);
 
 TextStyle tsSettingsItem =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: 16);

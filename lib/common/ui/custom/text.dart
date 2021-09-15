@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:lantern/common/common.dart';
 
-class CustomText extends StatelessWidget {
+class CText extends StatelessWidget {
   final String text;
-  final CustomTextStyle? style;
+  final CTextStyle? style;
   final TextOverflow overflow;
 
   /// A replacement for Text that includes the ability to auto-scale single-line
@@ -12,7 +12,7 @@ class CustomText extends StatelessWidget {
   ///
   /// To auto-scale text, make sure to supply a style that includes a
   /// minFontSize in addition to a fontSize.
-  CustomText(this.text, {this.style, this.overflow = TextOverflow.ellipsis});
+  CText(this.text, {this.style, this.overflow = TextOverflow.ellipsis});
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +64,10 @@ class CustomText extends StatelessWidget {
 ///
 /// Instead of height, this takes a more useful fontHeight, which sets the
 /// height to fontHeight / fontSize.
-class CustomTextStyle extends TextStyle {
+class CTextStyle extends TextStyle {
   final double? minFontSize;
 
-  CustomTextStyle(
+  CTextStyle(
       {bool inherit = true,
       Color? color,
       Color? backgroundColor,

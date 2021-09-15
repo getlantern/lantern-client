@@ -25,7 +25,7 @@ class CallAction extends StatelessWidget {
             builder: (context) => Wrap(
               children: [
                 ListTile(
-                  leading: const CustomAssetImage(path: ImagePaths.phone_icon),
+                  leading: const CAssetImage(path: ImagePaths.phone_icon),
                   title: Text('call'.i18n),
                   onTap: () async {
                     Navigator.pop(context);
@@ -36,7 +36,7 @@ class CallAction extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const CustomAssetImage(path: ImagePaths.cancel_icon),
+                  leading: const CAssetImage(path: ImagePaths.cancel_icon),
                   title: Text('cancel'.i18n),
                   onTap: () => Navigator.pop(context),
                 ),
@@ -44,7 +44,7 @@ class CallAction extends StatelessWidget {
             ),
           );
         },
-        icon: const CustomAssetImage(path: ImagePaths.phone_icon),
+        icon: const CAssetImage(path: ImagePaths.phone_icon),
       ),
     );
   }

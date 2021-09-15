@@ -61,7 +61,7 @@ class Button extends StatelessWidget {
                 ),
                 if (iconPath != null) const SizedBox(width: 5),
                 if (iconPath != null)
-                  CustomAssetImage(
+                  CAssetImage(
                     path: iconPath!,
                     color: Colors.white,
                   )

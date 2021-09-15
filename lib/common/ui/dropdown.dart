@@ -27,7 +27,7 @@ class DropDown<T extends DropDownItem> extends StatelessWidget {
           child: DropdownButton(
             itemHeight: 56,
             value: selected ?? items.first,
-            icon: const CustomAssetImage(
+            icon: const CAssetImage(
               path: ImagePaths.dropdown_icon,
             ),
             iconSize: 24,
@@ -45,7 +45,7 @@ class DropDown<T extends DropDownItem> extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: value.iconPath == null
                       ? null
-                      : CustomAssetImage(
+                      : CAssetImage(
                           path: value.iconPath!,
                         ),
                   minLeadingWidth: 0,
