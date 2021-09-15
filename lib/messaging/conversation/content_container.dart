@@ -117,9 +117,9 @@ class ContentContainer extends StatelessWidget {
                                   if (href != null && await canLaunch(href)) {
                                     showAlertDialog(
                                         context: context,
-                                        title: Text('open_url'.i18n,
+                                        title: CText('open_url'.i18n,
                                             style: tsDialogTitle),
-                                        content: Text(
+                                        content: CText(
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
                                             style: tsDialogBody),
@@ -131,7 +131,7 @@ class ContentContainer extends StatelessWidget {
                                   }
                                 },
                                 styleSheet: MarkdownStyleSheet(
-                                  a: tsMessageBody(outbound).copyWith(
+                                  a: tsMessageBody(outbound).copiedWith(
                                       decoration: TextDecoration.underline),
                                   p: tsMessageBody(outbound),
                                 ),

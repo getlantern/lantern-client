@@ -43,23 +43,26 @@ class GenericAttachment extends StatelessWidget {
           children: [
             SizedBox(
               width: 150.0,
-              child: Text(
+              child: CText(
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
-                style: TextStyle(
+                // TODO: move this into text_styles.dart
+                style: CTextStyle(
                   color: inbound ? inboundMsgColor : outboundMsgColor,
                   fontSize: 12,
+                  lineHeight: 16,
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ),
             const Divider(height: 2.0),
-            Text(fileType.toUpperCase(),
-                style: TextStyle(
+            CText(fileType.toUpperCase(),
+                style: CTextStyle(
                   color: inbound ? inboundMsgColor : outboundMsgColor,
                   fontSize: 12,
+                  lineHeight: 16,
                   fontWeight: FontWeight.w500,
                 ))
           ],

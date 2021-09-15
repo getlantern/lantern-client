@@ -16,14 +16,14 @@ class VPNBandwidth extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    CText(
                       'Daily Data Usage'.i18n + ': ',
-                      style: tsTitleHeadVPNItem.copyWith(
+                      style: tsTitleHeadVPNItem.copiedWith(
                         color: unselectedTabLabelColor,
                       ),
                     ),
                     Expanded(
-                      child: Text(
+                      child: CText(
                         '${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB',
                         textAlign: TextAlign.end,
                         style: tsTitleTrailVPNItem,

@@ -66,7 +66,7 @@ class Settings extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: sessionModel.language(
-                (BuildContext context, String lang, Widget? child) => Text(
+                (BuildContext context, String lang, Widget? child) => CText(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
                   style: tsSelectedTitleItem,

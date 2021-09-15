@@ -2,7 +2,7 @@ import 'package:lantern/common/common.dart';
 
 class CVerticalDivider extends StatelessWidget {
   late final String? label;
-  late final TextStyle? labelStyle;
+  late final CTextStyle? labelStyle;
   late final EdgeInsetsGeometry? padding;
   late final double height;
 
@@ -28,10 +28,11 @@ class CVerticalDivider extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 color: Colors.white,
-                child: Text(
+                child: CText(
                   label!,
                   style: labelStyle ??
-                      const TextStyle(color: Colors.black, fontSize: 12),
+                      CTextStyle(
+                          color: Colors.black, fontSize: 12, lineHeight: 12),
                 ),
               ),
             ),

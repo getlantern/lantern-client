@@ -50,7 +50,7 @@ class SettingsItem extends StatelessWidget {
                           Flexible(
                             child: Tooltip(
                               message: title!,
-                              child: Text(
+                              child: CText(
                                 title!,
                                 overflow: TextOverflow.ellipsis,
                                 style: tsSettingsItem,

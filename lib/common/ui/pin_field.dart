@@ -27,15 +27,15 @@ class PinField extends StatelessWidget {
               builder: (context) {
                 return AlertDialog(
                   content:
-                      Text('Paste from clipboard?'.i18n, style: tsDialogBody),
+                      CText('Paste from clipboard?'.i18n, style: tsDialogBody),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: CText(
                         'No'.i18n,
-                        style: tsDialogButtonGrey,
+                        style: tsButtonGrey,
                       ),
                     ),
                     TextButton(
@@ -43,9 +43,9 @@ class PinField extends StatelessWidget {
                         controller.text = valueFromClipboard.text!;
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: CText(
                         'Yes'.i18n,
-                        style: tsDialogButtonPink,
+                        style: tsButtonPink,
                       ),
                     ),
                   ],

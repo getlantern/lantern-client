@@ -21,13 +21,15 @@ class DeveloperSettingsTab extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.all(8),
-            child: const Text(
-                'These settings are for development use only. Changing any setting will automatically stop and restart the application'),
+            child: CText(
+                'These settings are for development use only. Changing any setting will automatically stop and restart the application',
+                style: tsSettingsItem),
           ),
           Container(
             margin: const EdgeInsets.all(8),
-            child: const Text(
-                'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.'),
+            child: CText(
+                'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.',
+                style: tsSettingsItem),
           ),
           SettingsItem(
             title: 'Payment Test Mode'.i18n,
@@ -72,7 +74,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 icon: const Icon(Icons.arrow_downward),
                 iconSize: 24,
                 elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
+                style: tsSettingsItem.copiedWith(color: Colors.deepPurple),
                 underline: Container(
                   height: 2,
                   color: Colors.deepPurpleAccent,
@@ -85,7 +87,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: CText(value, style: tsAlertDialogListTile),
                   );
                 }).toList(),
               );

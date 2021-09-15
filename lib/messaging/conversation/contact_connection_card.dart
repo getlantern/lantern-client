@@ -35,9 +35,8 @@ class ContactConnectionCard extends StatelessWidget {
             child: ListTile(
               leading: CustomAvatar(
                   id: contact.contactId.id, displayName: contact.displayName),
-              title: Text(introduction.displayName,
-                  style: TextStyle(
-                      color: outbound ? outboundMsgColor : inboundMsgColor)),
+              title: CText(introduction.displayName,
+                  style: tsMessageBody(outbound)),
               trailing: outbound
                   ? const SizedBox()
                   : FittedBox(
@@ -116,7 +115,8 @@ class ContactConnectionCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 24.0),
                   child: Center(
-                    child: Text('introductions_info'.i18n),
+                    child:
+                        CText('introductions_info'.i18n, style: tsExplanation),
                   ),
                 ),
                 Divider(thickness: 1, color: grey2),
@@ -127,7 +127,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: Text('accept'.i18n, style: tsDialogTitle),
+                        title: CText('accept'.i18n, style: tsDialogTitle),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -151,13 +151,13 @@ class ContactConnectionCard extends StatelessWidget {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      title: Text('reject'.i18n),
+                      title: CText('reject'.i18n, style: tsDialogTitle),
                       onTap: () async {
                         showAlertDialog(
                             context: context,
-                            title: Text('introductions_reject_title'.i18n,
+                            title: CText('introductions_reject_title'.i18n,
                                 style: tsDialogTitle),
-                            content: Text('introductions_reject_content'.i18n,
+                            content: CText('introductions_reject_content'.i18n,
                                 style: tsDialogBody),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,

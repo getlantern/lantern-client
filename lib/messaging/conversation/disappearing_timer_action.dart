@@ -19,31 +19,14 @@ class DisappearingTimerAction extends StatelessWidget {
           size: 12,
         ),
         const SizedBox(width: 2),
-        contact.messagesDisappearAfterSeconds > 0
-            ? Text(
-                contact.messagesDisappearAfterSeconds
+        CText(
+            contact.messagesDisappearAfterSeconds == 0
+                ? 'off'.i18n
+                : contact.messagesDisappearAfterSeconds
                     .humanizeSeconds()
                     .toUpperCase(),
-                style: tsDisappearingTimer)
-            : Text(
-                'off'.i18n,
-                style: tsDisappearingTimerDetail,
-              ),
+            style: tsDisappearingTimer)
       ]),
     );
   }
-}
-
-class DisappearingTimerMenuItem extends PopupMenuItem<int> {
-  DisappearingTimerMenuItem(Contact contact, int value)
-      : super(
-            value: value,
-            child: ListTile(
-              leading: Icon(contact.messagesDisappearAfterSeconds == value
-                  ? Icons.check_box_outlined
-                  : Icons.check_box_outline_blank),
-              title: Text(value == 0
-                  ? 'never'.i18n
-                  : value.humanizeSeconds(longForm: true)),
-            ));
 }
