@@ -51,8 +51,9 @@ class Introductions extends StatelessWidget {
                                               introductor.displayName
                                                   .toUpperCase(),
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              fontSize: 10, height: 16 / 10),
+                                          // TODO: move this style into text_styles.dart
+                                          style: CustomTextStyle(
+                                              fontSize: 10, fontHeight: 16),
                                         ),
                                       ),
                                     ),

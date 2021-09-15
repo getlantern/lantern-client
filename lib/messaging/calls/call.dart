@@ -104,12 +104,17 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: CustomText(
-                              widget.contact.displayName.isNotEmpty
-                                  ? sanitizeContactName(
-                                      widget.contact.displayName)
-                                  : widget.contact.contactId.id,
-                              style: TextStyle(fontSize: 22, color: white),
-                              minFontSize: 18),
+                            widget.contact.displayName.isNotEmpty
+                                ? sanitizeContactName(
+                                    widget.contact.displayName)
+                                : widget.contact.contactId.id,
+                            // TODO: move the below style into text_styles.dart
+                            style: CustomTextStyle(
+                                fontSize: 22,
+                                minFontSize: 18,
+                                fontHeight: 26,
+                                color: white),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
