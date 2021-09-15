@@ -110,15 +110,7 @@ class ContactConnectionCard extends StatelessWidget {
                   padding: EdgeInsets.all(12),
                 ),
                 Center(
-                  child: Text(
-                    title,
-                    style: tsResponsive(
-                        title: title,
-                        minFontSize: 16.0,
-                        maxFontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                        titleKey: GlobalKey()),
-                  ),
+                  child: CustomText(title, style: tsTitleItem),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(

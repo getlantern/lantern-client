@@ -103,21 +103,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                             customColor: grey5),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
-                          child: Text(
-                            widget.contact.displayName.isNotEmpty
-                                ? sanitizeContactName(
-                                    widget.contact.displayName)
-                                : widget.contact.contactId.id,
-                            style: tsResponsive(
-                                title: widget.contact.displayName.isNotEmpty
-                                    ? sanitizeContactName(
-                                        widget.contact.displayName)
-                                    : widget.contact.contactId.id,
-                                minFontSize: 18.0,
-                                maxFontSize: 22.0,
-                                color: white,
-                                titleKey: GlobalKey()),
-                          ),
+                          child: CustomText(
+                              widget.contact.displayName.isNotEmpty
+                                  ? sanitizeContactName(
+                                      widget.contact.displayName)
+                                  : widget.contact.contactId.id,
+                              style: TextStyle(fontSize: 22, color: white),
+                              minFontSize: 18),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),

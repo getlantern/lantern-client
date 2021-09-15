@@ -40,7 +40,7 @@ TextStyle tsCountdownTimer(color) => TextStyle(
     );
 
 TextStyle tsTitleItem =
-    const TextStyle(fontWeight: FontWeight.w500, fontSize: 16);
+    const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, height: 26 / 16);
 
 TextStyle tsSettingsItem =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: 16);
@@ -144,60 +144,3 @@ TextStyle tsReplySnippetHeader = const TextStyle(
 
 TextStyle tsReplySnippetSpecialCase =
     const TextStyle(fontStyle: FontStyle.italic);
-
-// Responsive styles
-TextStyle tsResponsive(
-        {required String title,
-        required GlobalKey titleKey,
-        required double minFontSize,
-        required double maxFontSize,
-        FontWeight? fontWeight,
-        Color? color}) =>
-    TextStyle(
-        color: color ?? black,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        fontSize: getResponsiveFontSize(
-            title: title,
-            titleKey: titleKey,
-            minFontSize: minFontSize,
-            maxFontSize: maxFontSize));
-
-double getResponsiveFontSize({
-  required String title,
-  required GlobalKey titleKey,
-  required double minFontSize,
-  required double maxFontSize,
-}) {
-  const textPadding =
-      EdgeInsetsDirectional.all(20.0); // TODO: play around with this
-  final textStyle = TextStyle(fontSize: maxFontSize);
-  var textPainter = TextPainter(
-      text: TextSpan(text: title, style: textStyle),
-      maxLines: 1,
-      textDirection: TextDirection.ltr) // TODO: test this for RTL
-    ..layout(minWidth: 0, maxWidth: double.infinity);
-  final inputWidth = textPainter.size.width - textPadding.horizontal;
-
-  textPainter = TextPainter(
-    textDirection: TextDirection.ltr,
-    text: TextSpan(
-      text: title,
-      style: textStyle,
-    ),
-  );
-  textPainter.layout();
-
-  var textWidth = textPainter.width;
-  var fontSize = textStyle.fontSize;
-
-  while (textWidth > inputWidth && fontSize! > minFontSize) {
-    --fontSize;
-    textPainter.text = TextSpan(
-      text: title,
-      style: textStyle.copyWith(fontSize: fontSize),
-    );
-    textPainter.layout();
-    textWidth = textPainter.width;
-  }
-  return fontSize!;
-}
