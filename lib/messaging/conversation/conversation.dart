@@ -314,7 +314,7 @@ class _ConversationState extends State<Conversation>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CText(
+                    TextOneLine(
                       title,
                       style: tsTitleAppbar,
                     ),

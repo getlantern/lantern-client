@@ -28,25 +28,25 @@ class ConversationSticker extends StatelessWidget {
     );
   }
 
-  CText _partiallyAddedText() {
-    return CText(
-        'Waiting for ${contact.displayName}. They will receive your messages once they accept the introduction.'
-            .i18n,
-        style: txConversationSticker);
+  CTextWrap _partiallyAddedText() {
+    return CTextWrap('banner_intro_waiting'.i18n.fill([contact.displayName]),
+        style: txConversationSticker, textAlign: TextAlign.center);
   }
 
   Icon _partiallyAddedIcon() {
     return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
   }
 
-  CText _fullyAddedText() {
+  CTextWrap _fullyAddedText() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? CText(
-            'Messages disappear after ${contact.messagesDisappearAfterSeconds.humanizeSeconds(longForm: true)}',
-            style: txConversationSticker,
-            overflow: TextOverflow.ellipsis)
-        : CText('New messages do not disappear',
-            style: txConversationSticker, overflow: TextOverflow.ellipsis);
+        ? CTextWrap(
+            'banner_messages_disappear'.i18n.fill([
+              contact.messagesDisappearAfterSeconds
+                  .humanizeSeconds(longForm: true)
+            ]),
+            style: txConversationSticker)
+        : CTextWrap('banner_messages_persist'.i18n,
+            style: txConversationSticker);
   }
 
   Icon _fullyAddedIcon() {
