@@ -47,15 +47,13 @@ class _ConversationState extends State<Conversation>
   final keyboardVisibilityController = KeyboardVisibilityController();
   StreamSubscription<bool>? keyboardSubscription;
   final focusNode = FocusNode();
-  var nativeKeyboardShown = false;
-  var emojiKeyboardRequested = false;
-  var emojiKeyboardShown = false;
-  static var mostRecentKeyboardHeight = 0.0;
+  var keyboardMode = KeyboardMode.none;
+
+  // default the below to reasonable value, it will get updated when the
+  // keyboard displays
+  static var highestKeyboardHeight = 150.0;
 
   void showNativeKeyboard() {
-    setState(() {
-      nativeKeyboardShown = true;
-    });
     focusNode.requestFocus();
   }
 
@@ -64,20 +62,23 @@ class _ConversationState extends State<Conversation>
   }
 
   void showEmojiKeyboard() {
-    if (mostRecentKeyboardHeight == 0 || nativeKeyboardShown) {
-      emojiKeyboardRequested = true;
+    // always show native keyboard first so we know the height of the native
+    // keyboard and can make the emoji keyboard the same height
+    setState(() {
+      keyboardMode = KeyboardMode.emoji;
+    });
+    dismissNativeKeyboard();
+  }
 
-      if (!nativeKeyboardShown) {
-        // We haven't shown the keyboard yet so don't know how high to make the
-        // emoji keyboard. Display the native keyboard first and then the emoji
-        // keyboard.
-        showNativeKeyboard();
-      } else {
-        dismissNativeKeyboard();
-      }
-    } else {
+  void updateKeyboardHeight() {
+    var currentKeyboardHeight = max(
+        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
+                WidgetsBinding.instance!.window.devicePixelRatio)
+            .bottom,
+        MediaQuery.of(context).viewInsets.bottom);
+    if (currentKeyboardHeight > highestKeyboardHeight) {
       setState(() {
-        emojiKeyboardShown = true;
+        highestKeyboardHeight = currentKeyboardHeight;
       });
     }
   }
@@ -85,23 +86,15 @@ class _ConversationState extends State<Conversation>
   void subscribeToKeyboardChanges() {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-      // run after some small delay to make sure insets show up correctly
-      if (visible && emojiKeyboardRequested) {
-        dismissNativeKeyboard();
-      } else {
-        if (emojiKeyboardRequested) {
-          // native keyboard was shown but we want the emoji keyboard, show it
-          setState(() {
-            emojiKeyboardShown = true;
-            nativeKeyboardShown = false;
-            emojiKeyboardRequested = false;
-          });
-        } else {
-          setState(() {
-            nativeKeyboardShown = visible;
-            emojiKeyboardShown = false;
-          });
-        }
+      updateKeyboardHeight();
+      if (visible) {
+        setState(() {
+          keyboardMode = KeyboardMode.native;
+        });
+      } else if (keyboardMode == KeyboardMode.native) {
+        setState(() {
+          keyboardMode = KeyboardMode.none;
+        });
       }
     });
   }
@@ -109,8 +102,7 @@ class _ConversationState extends State<Conversation>
   void dismissAllKeyboards() {
     dismissNativeKeyboard();
     setState(() {
-      nativeKeyboardShown = false;
-      emojiKeyboardShown = false;
+      keyboardMode = KeyboardMode.none;
     });
   }
 
@@ -122,10 +114,9 @@ class _ConversationState extends State<Conversation>
   }
 
   bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (emojiKeyboardShown) {
+    if (keyboardMode == KeyboardMode.emoji) {
       setState(() {
-        emojiKeyboardShown = false;
-        emojiKeyboardRequested = false;
+        keyboardMode = KeyboardMode.none;
       });
       return true;
     } else {
@@ -284,15 +275,10 @@ class _ConversationState extends State<Conversation>
     model = context.watch<MessagingModel>();
 
     // update keyboard height values
-    var currentKeyboardHeight = max(
-        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
-                WidgetsBinding.instance!.window.devicePixelRatio)
-            .bottom,
-        MediaQuery.of(context).viewInsets.bottom);
-    // save updated keyboard height
-    if (currentKeyboardHeight > 0) {
-      mostRecentKeyboardHeight = currentKeyboardHeight;
-    }
+    updateKeyboardHeight();
+
+    final bottomPadding =
+        keyboardMode == KeyboardMode.native ? highestKeyboardHeight : 0.0;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
@@ -345,10 +331,7 @@ class _ConversationState extends State<Conversation>
           ),
         ],
         body: Padding(
-          padding: EdgeInsetsDirectional.only(
-              bottom: nativeKeyboardShown && !emojiKeyboardShown
-                  ? mostRecentKeyboardHeight
-                  : 0),
+          padding: EdgeInsetsDirectional.only(bottom: bottomPadding),
           child: Stack(children: [
             Column(
               children: [
@@ -379,9 +362,9 @@ class _ConversationState extends State<Conversation>
                   child: _buildMessageBar(),
                 ),
                 Offstage(
-                  offstage: !emojiKeyboardShown,
+                  offstage: keyboardMode != KeyboardMode.emoji,
                   child: MessagingEmojiPicker(
-                    height: mostRecentKeyboardHeight,
+                    height: highestKeyboardHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
                       _newMessage
@@ -556,19 +539,17 @@ class _ConversationState extends State<Conversation>
           : IconButton(
               onPressed: () {
                 {
-                  setState(() {
-                    if (!emojiKeyboardShown || nativeKeyboardShown) {
-                      showEmojiKeyboard();
-                    } else {
-                      showNativeKeyboard();
-                    }
-                  });
+                  if (keyboardMode == KeyboardMode.emoji) {
+                    showNativeKeyboard();
+                  } else {
+                    showEmojiKeyboard();
+                  }
                 }
               },
               icon: Icon(
-                  (!emojiKeyboardShown || nativeKeyboardShown)
-                      ? Icons.sentiment_very_satisfied
-                      : Icons.keyboard_alt_outlined,
+                  keyboardMode == KeyboardMode.emoji
+                      ? Icons.keyboard_alt_outlined
+                      : Icons.sentiment_very_satisfied,
                   color: grey5),
             ),
       title: Stack(
@@ -654,3 +635,9 @@ class _ConversationState extends State<Conversation>
 
 typedef ShowEmojis = void Function(
     bool showEmoji, PathAndValue<StoredMessage>? messageStored);
+
+enum KeyboardMode {
+  none,
+  native,
+  emoji,
+}
