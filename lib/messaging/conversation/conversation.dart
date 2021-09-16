@@ -97,8 +97,7 @@ class _ConversationState extends State<Conversation>
 
   Widget dismissKeyboardsOnTap(Widget child) {
     return GestureDetector(
-      // onTap: dismissAllKeyboards,
-      onTap: () {},
+      onTap: dismissAllKeyboards,
       child: child,
     );
   }
