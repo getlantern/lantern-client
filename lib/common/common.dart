@@ -63,6 +63,7 @@ export 'ui/full_screen_dialog.dart';
 export 'ui/humanize.dart';
 export 'ui/humanized_date.dart';
 export 'ui/image_paths.dart';
+export 'ui/keyboard_helper.dart';
 export '../messaging/notifications.dart';
 export 'ui/now_builder.dart';
 export 'ui/pulse_animation.dart';

@@ -40,10 +40,13 @@ class _ConversationState extends State<Conversation>
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
   var messageCount = 0;
-  bool _emojiShowing = false;
   final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
   final _scrollController = ItemScrollController();
+
+  late void Function() onKeyboardChange;
+  bool _requestEmojiKeyboard = false;
+  bool _displayEmojiKeyboard = false;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -66,6 +69,21 @@ class _ConversationState extends State<Conversation>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(_interceptBackButton);
+    onKeyboardChange = () {
+      if (KeyboardHelper.instance.value.visible) {
+        if (_requestEmojiKeyboard) {
+          // we got focus and want the emoji keyboard, show it
+          setState(() {
+            _displayEmojiKeyboard = true;
+            _requestEmojiKeyboard = false;
+          });
+          dismissKeyboard();
+        } else {
+          dismissEmojiKeyboard();
+        }
+      }
+    };
+    KeyboardHelper.instance.addListener(onKeyboardChange);
   }
 
   @override
@@ -75,13 +93,17 @@ class _ConversationState extends State<Conversation>
     _stopWatchTimer.dispose();
     _focusNode.dispose();
     _audioPreviewController?.stop();
+    KeyboardHelper.instance.removeListener(onKeyboardChange);
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
   }
 
   bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (_emojiShowing) {
-      setState(() => _emojiShowing = false);
+    if (_displayEmojiKeyboard) {
+      setState(() {
+        _displayEmojiKeyboard = false;
+        _requestEmojiKeyboard = false;
+      });
       return true;
     } else {
       return false;
@@ -154,7 +176,42 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  void showKeyboard() => _focusNode.requestFocus();
+  void showKeyboard() {
+    _focusNode.requestFocus();
+  }
+
+  void dismissKeyboard() {
+    _focusNode.unfocus();
+  }
+
+  void showEmojiKeyboard() {
+    if (KeyboardHelper.instance.value.mostRecentHeight > 0) {
+      // We've shown the keyboard at least once and know how high it is, show
+      // emoji keyboard immediately
+      if (KeyboardHelper.instance.value.visible) {
+        // note - in case the keyboard was already open when we came here, we
+        // have to "show" it first in order to be able to dismiss it
+        showKeyboard();
+        dismissKeyboard();
+      }
+      setState(() {
+        _displayEmojiKeyboard = true;
+      });
+      return;
+    }
+
+    // We haven't shown the keyboard yet so don't know how high to make the
+    // emoji keyboard. Display the native keyboard first and then the emoji
+    // keyboard.
+    _requestEmojiKeyboard = true;
+    showKeyboard();
+  }
+
+  void dismissEmojiKeyboard() {
+    setState(() {
+      _displayEmojiKeyboard = false;
+    });
+  }
 
   Future<void> _selectFilesToShare() async {
     try {
@@ -186,16 +243,11 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  void dismissKeyboard() {
-    _focusNode.unfocus();
-  }
-
   Future<void> _handleSubmit(TextEditingController _newMessage) async {
     if (mounted) {
       setState(() {
         _isSendIconVisible = false;
         _isReplying = false;
-        _emojiShowing = false;
       });
     }
     await _send(_newMessage.value.text,
@@ -280,34 +332,34 @@ class _ConversationState extends State<Conversation>
                 height: kBottomNavigationBarHeight,
                 child: _buildMessageBar(),
               ),
-              MessagingEmojiPicker(
-                showEmojis: _emojiShowing,
-                emptySuggestions: 'no_recents'.i18n,
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: MediaQuery.of(context).size.width,
-                onBackspacePressed: () {
-                  _newMessage
-                    ..text = _newMessage.text.characters.skipLast(1).toString()
-                    ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: _newMessage.text.length));
-                },
-                onEmojiSelected: (category, emoji) async {
-                  if (mounted &&
-                      _customEmojiResponse &&
-                      _storedMessage != null) {
-                    dismissKeyboard();
-                    await model.react(_storedMessage!, emoji.emoji);
-                    _storedMessage = null;
-                    setState(() => _emojiShowing = false);
-                  } else {
-                    setState(() => _isSendIconVisible = true);
+              if (_displayEmojiKeyboard)
+                MessagingEmojiPicker(
+                  height: KeyboardHelper.instance.value.mostRecentHeight,
+                  emptySuggestions: 'no_recents'.i18n,
+                  onBackspacePressed: () {
                     _newMessage
-                      ..text += emoji.emoji
+                      ..text =
+                          _newMessage.text.characters.skipLast(1).toString()
                       ..selection = TextSelection.fromPosition(
                           TextPosition(offset: _newMessage.text.length));
-                  }
-                },
-              ),
+                  },
+                  onEmojiSelected: (category, emoji) async {
+                    if (mounted &&
+                        _customEmojiResponse &&
+                        _storedMessage != null) {
+                      dismissKeyboard();
+                      await model.react(_storedMessage!, emoji.emoji);
+                      _storedMessage = null;
+                      dismissEmojiKeyboard();
+                    } else {
+                      setState(() => _isSendIconVisible = true);
+                      _newMessage
+                        ..text += emoji.emoji
+                        ..selection = TextSelection.fromPosition(
+                            TextPosition(offset: _newMessage.text.length));
+                    }
+                  },
+                ),
             ],
           ),
         ]),
@@ -360,9 +412,11 @@ class _ConversationState extends State<Conversation>
                       : messageRecords.elementAt(index - 1).value,
                   contact: contact,
                   onEmojiTap: (showEmoji, messageSelected) => setState(() {
-                    _emojiShowing = true;
-                    _customEmojiResponse = true;
-                    _storedMessage = messageSelected;
+                    setState(() {
+                      _customEmojiResponse = true;
+                      _storedMessage = messageSelected;
+                    });
+                    showEmojiKeyboard();
                   }),
                   onReply: (_message) {
                     setState(() {
@@ -454,12 +508,17 @@ class _ConversationState extends State<Conversation>
           : IconButton(
               onPressed: () {
                 {
-                  setState(() => _emojiShowing = !_emojiShowing);
-                  dismissKeyboard();
+                  setState(() {
+                    if (_displayEmojiKeyboard) {
+                      dismissEmojiKeyboard();
+                    } else {
+                      showEmojiKeyboard();
+                    }
+                  });
                 }
               },
               icon: Icon(Icons.sentiment_very_satisfied,
-                  color: !_emojiShowing
+                  color: !_displayEmojiKeyboard
                       ? Theme.of(context).primaryIconTheme.color
                       : Theme.of(context).primaryColorDark),
             ),
@@ -469,7 +528,6 @@ class _ConversationState extends State<Conversation>
               autofocus: false,
               textInputAction: TextInputAction.send,
               controller: _newMessage,
-              onTap: () => setState(() => _emojiShowing = false),
               onChanged: (value) =>
                   setState(() => _isSendIconVisible = value.isNotEmpty),
               focusNode: _focusNode,
@@ -528,7 +586,7 @@ class _ConversationState extends State<Conversation>
         _finishedRecording = false;
         _isSendIconVisible = false;
         _isReplying = false;
-        _emojiShowing = false;
+        _displayEmojiKeyboard = false;
       });
     }
   }
