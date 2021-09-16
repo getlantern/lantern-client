@@ -86,31 +86,20 @@ class _ConversationState extends State<Conversation>
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
       // run after some small delay to make sure insets show up correctly
-      Future.delayed(const Duration(milliseconds: 5), () {
-        if (visible) {
-          mostRecentKeyboardHeight = max(
-              EdgeInsets.fromWindowPadding(
-                      WidgetsBinding.instance!.window.viewInsets,
-                      WidgetsBinding.instance!.window.devicePixelRatio)
-                  .bottom,
-              MediaQuery.of(context).viewInsets.bottom);
-        }
-
-        if (visible && emojiKeyboardRequested) {
-          // native keyboard was shown but we want the emoji keyboard, show it
-          setState(() {
-            emojiKeyboardShown = true;
-            nativeKeyboardShown = false;
-            emojiKeyboardRequested = false;
-          });
-          dismissNativeKeyboard();
-        } else {
-          // call setState to pick up latest keyboard height from KeyboardHelper
-          setState(() {
-            nativeKeyboardShown = visible;
-          });
-        }
-      });
+      if (visible && emojiKeyboardRequested) {
+        // native keyboard was shown but we want the emoji keyboard, show it
+        setState(() {
+          emojiKeyboardShown = true;
+          nativeKeyboardShown = false;
+          emojiKeyboardRequested = false;
+        });
+        dismissNativeKeyboard();
+      } else {
+        // call setState to pick up latest keyboard height from KeyboardHelper
+        setState(() {
+          nativeKeyboardShown = visible;
+        });
+      }
     });
   }
 
@@ -290,6 +279,18 @@ class _ConversationState extends State<Conversation>
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
+
+    // update keyboard height values
+    var currentKeyboardHeight = max(
+        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
+                WidgetsBinding.instance!.window.devicePixelRatio)
+            .bottom,
+        MediaQuery.of(context).viewInsets.bottom);
+    // save updated keyboard height
+    if (currentKeyboardHeight > 0) {
+      mostRecentKeyboardHeight = currentKeyboardHeight;
+    }
+
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
@@ -561,10 +562,11 @@ class _ConversationState extends State<Conversation>
                   });
                 }
               },
-              icon: Icon(Icons.sentiment_very_satisfied,
-                  color: !emojiKeyboardShown
-                      ? Theme.of(context).primaryIconTheme.color
-                      : Theme.of(context).primaryColorDark),
+              icon: Icon(
+                  (!emojiKeyboardShown || nativeKeyboardShown)
+                      ? Icons.sentiment_very_satisfied
+                      : Icons.keyboard_alt_outlined,
+                  color: Theme.of(context).primaryColorDark),
             ),
       title: Stack(
         alignment: Alignment.center,
