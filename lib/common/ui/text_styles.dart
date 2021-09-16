@@ -1,29 +1,54 @@
 import 'package:lantern/common/common.dart';
 
-//
-// This file will contain text styles (font weight, size, line height, color) for text that figures in reusable components such as Alert and Info Dialogs, Messages etc
-//
+/*
+******************
+BASE STYLES
+******************
+*/
 
-// Global styles
-CTextStyle tsSubHead(BuildContext context) => tsTitleHeadVPNItem;
+CTextStyle tsAppbarTitle = CTextStyle(
+    fontSize: 20,
+    minFontSize: 14,
+    lineHeight: 23,
+    fontWeight: FontWeight.w500,
+    color: black);
 
-CTextStyle tsSubTitle(BuildContext context) => tsSubTitleItem;
+CTextStyle tsTitle = CTextStyle(
+    fontSize: 16, lineHeight: 26, fontWeight: FontWeight.w500, color: black);
 
-CTextStyle tsCaption(BuildContext context) => tsExplanation;
+CTextStyle tsTitlePink = tsTitle.copiedWith(color: primaryPink);
+
+CTextStyle tsBody10 = CTextStyle(color: black, fontSize: 10, lineHeight: 16);
+
+CTextStyle tsBody13 = CTextStyle(color: black, fontSize: 13, lineHeight: 19);
+
+CTextStyle tsBody13Bold = tsBody13.copiedWith(fontWeight: FontWeight.w500);
+
+CTextStyle tsBody14 = CTextStyle(color: black, fontSize: 14, lineHeight: 23);
+
+CTextStyle tsBody14Bold = tsBody14.copiedWith(fontWeight: FontWeight.w500);
+
+CTextStyle tsBody16 = CTextStyle(color: black, fontSize: 16, lineHeight: 23);
+
+CTextStyle tsBody16Bold = tsBody16.copiedWith(fontWeight: FontWeight.w500);
+
+CTextStyle tsBottomBar =
+    CTextStyle(fontSize: 12, lineHeight: 12, fontWeight: FontWeight.w400);
+
+/*
+******************
+MESSAGING STYLES
+******************
+*/
+
+CTextStyle tsCircleAvatarLetter =
+    CTextStyle(fontSize: 14, lineHeight: 23, color: white);
 
 CTextStyle tsDisappearingTimer =
     CTextStyle(fontSize: 10, lineHeight: 16, fontWeight: FontWeight.bold);
 
-CTextStyle tsTitleAppbar = CTextStyle(
-    fontWeight: FontWeight.w500,
-    fontSize: 20,
-    minFontSize: 14,
-    lineHeight: 23,
-    color: black);
-
-// Custom styles
-CTextStyle tsCircleAvatarLetter =
-    CTextStyle(fontSize: 14, lineHeight: 23, color: white);
+CTextStyle tsDisappearingContentBottomModal = CTextStyle(
+    color: grey5, fontSize: 14.0, lineHeight: 21, fontWeight: FontWeight.w400);
 
 CTextStyle tsStopWatchTimer = CTextStyle(
   fontSize: 10,
@@ -36,28 +61,6 @@ CTextStyle tsCountdownTimer(color) => CTextStyle(
       lineHeight: 56.25,
       color: color,
     );
-
-CTextStyle tsTitleItem =
-    CTextStyle(fontWeight: FontWeight.w500, fontSize: 16, lineHeight: 26);
-
-CTextStyle tsSubTitleItem = tsTitleItem.copiedWith(
-    fontWeight: FontWeight.w400, fontSize: 13, lineHeight: 19);
-
-CTextStyle tsSettingsItem = CTextStyle(fontSize: 16, lineHeight: 21);
-
-CTextStyle tsSelectedTitleItem = tsTitleItem.copiedWith(color: primaryPink);
-
-CTextStyle tsTitleHeadVPNItem = CTextStyle(
-  fontSize: 14,
-  lineHeight: 23,
-);
-
-CTextStyle tsTitleTrailVPNItem =
-    tsTitleHeadVPNItem.copiedWith(fontWeight: FontWeight.w600);
-
-CTextStyle tsPinLabel = CTextStyle(fontSize: 10, lineHeight: 16);
-
-CTextStyle tsExplanation = CTextStyle(fontSize: 14, lineHeight: 23);
 
 CTextStyle tsMessageBody(outbound) => CTextStyle(
     color: outbound ? outboundMsgColor : inboundMsgColor,
@@ -76,66 +79,9 @@ CTextStyle tsEmptyContactState = CTextStyle(
   lineHeight: 26,
 );
 
-CTextStyle tsBaseScreenBodyText =
-    CTextStyle(color: black, fontSize: 16, lineHeight: 23);
-
 CTextStyle txConversationSticker =
     CTextStyle(color: grey5, fontSize: 12, lineHeight: 19);
 
-// Dialogs
-CTextStyle tsBottomModalTitle = CTextStyle(fontSize: 14, lineHeight: 23);
-
-CTextStyle tsBottomModalList = CTextStyle(fontSize: 16, lineHeight: 18.75);
-
-CTextStyle tsDialogTitle = CTextStyle(fontSize: 16, lineHeight: 26);
-
-CTextStyle tsDisappearingContentBottomModal = CTextStyle(
-    color: grey5, fontSize: 14.0, lineHeight: 21, fontWeight: FontWeight.w400);
-
-CTextStyle tsAlertDialogListTile = CTextStyle(
-    fontSize: 14.0, lineHeight: 23, fontWeight: FontWeight.w400, color: black);
-
-CTextStyle tsDialogBody = CTextStyle(fontSize: 14, lineHeight: 21);
-
-CTextStyle tsButtonGrey = CTextStyle(
-  color: grey5,
-  fontSize: 14,
-  lineHeight: 14,
-  fontWeight: FontWeight.w500,
-);
-
-CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: primaryPink);
-
-CTextStyle tsButtonWhite = tsButtonGrey.copiedWith(color: white);
-
-CTextStyle tsInfoDialogSubtitle(color) => CTextStyle(
-      fontSize: 16,
-      lineHeight: 26,
-      color: color,
-      fontWeight: FontWeight.w400,
-    );
-
-// TODO: rename this since its used more widely than dialogs
-CTextStyle tsInfoDialogText(color) => CTextStyle(
-      fontSize: 14,
-      lineHeight: 23,
-      color: color,
-      fontWeight: FontWeight.w400,
-    );
-
-CTextStyle tsInfoDialogButton = tsButtonPink;
-
-CTextStyle tsFullScreenDialogTitle = CTextStyle(
-  fontSize: 20,
-  lineHeight: 24,
-  color: white,
-  fontWeight: FontWeight.w600,
-);
-
-CTextStyle tsFullScreenDialogTitleBlack =
-    tsFullScreenDialogTitle.copiedWith(color: black);
-
-// Message bubble StyleSheet
 CTextStyle tsReplySnippetHeader = CTextStyle(
   fontWeight: FontWeight.w500,
   fontSize: 14,
@@ -152,9 +98,6 @@ CTextStyle tsReplySnippet = CTextStyle(
 CTextStyle tsReplySnippetSpecialCase =
     tsReplySnippet.copiedWith(fontStyle: FontStyle.italic);
 
-CTextStyle tsBottomBarLabel =
-    CTextStyle(fontSize: 12, lineHeight: 12, fontWeight: FontWeight.w400);
-
 CTextStyle tsIntroductionsListHeader = CTextStyle(fontSize: 10, lineHeight: 16);
 
 CTextStyle tsCallTitle =
@@ -162,3 +105,61 @@ CTextStyle tsCallTitle =
 
 CTextStyle tsCallSubtitle =
     CTextStyle(color: white, fontSize: 14, lineHeight: 18);
+
+/*
+******************
+DIALOGS AND MODALS
+******************
+*/
+
+CTextStyle tsBottomModalListItem = CTextStyle(fontSize: 16, lineHeight: 18.75);
+
+CTextStyle tsDialogTitle = CTextStyle(fontSize: 16, lineHeight: 26);
+
+CTextStyle tsAlertDialogListTile = CTextStyle(
+    fontSize: 14.0, lineHeight: 23, fontWeight: FontWeight.w400, color: black);
+
+CTextStyle tsDialogBody = CTextStyle(fontSize: 14, lineHeight: 21);
+
+CTextStyle tsInfoDialogSubtitle(color) => CTextStyle(
+      fontSize: 16,
+      lineHeight: 26,
+      color: color,
+      fontWeight: FontWeight.w400,
+    );
+
+CTextStyle tsInfoDialogText(color) => CTextStyle(
+      fontSize: 14,
+      lineHeight: 23,
+      color: color,
+      fontWeight: FontWeight.w400,
+    );
+
+CTextStyle tsFullScreenDialogTitle = CTextStyle(
+  fontSize: 20,
+  lineHeight: 24,
+  color: white,
+  fontWeight: FontWeight.w600,
+);
+
+CTextStyle tsFullScreenDialogTitleBlack =
+    tsFullScreenDialogTitle.copiedWith(color: black);
+
+/*
+******************
+BUTTONS
+******************
+*/
+
+CTextStyle tsButtonGrey = CTextStyle(
+  color: grey5,
+  fontSize: 14,
+  lineHeight: 14,
+  fontWeight: FontWeight.w500,
+);
+
+CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: primaryPink);
+
+CTextStyle tsButtonWhite = tsButtonGrey.copiedWith(color: white);
+
+CTextStyle tsInfoDialogButton = tsButtonPink;

@@ -30,7 +30,7 @@ class ContactConnectionCard extends StatelessWidget {
         LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return Container(
-            width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
+            width: constraints.maxWidth,
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
               leading: CustomAvatar(
@@ -113,14 +113,13 @@ class ContactConnectionCard extends StatelessWidget {
                   child: Center(
                     child: TextOneLine(
                         'Accept Introduction to ${introduction.displayName}',
-                        style: tsTitleItem),
+                        style: tsTitle),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
                       start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
-                  child: CTextWrap('introductions_info'.i18n,
-                      style: tsExplanation),
+                  child: CTextWrap('introductions_info'.i18n, style: tsBody14),
                 ),
                 Divider(thickness: 1, color: grey2),
                 Column(

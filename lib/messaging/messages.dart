@@ -56,7 +56,7 @@ class Messages extends StatelessWidget {
                                             ),
                                           ),
                                           title: CText('introductions'.i18n,
-                                              style: tsBaseScreenBodyText),
+                                              style: tsBody16),
                                           trailing: const CAssetImage(
                                             path: ImagePaths
                                                 .keyboard_arrow_right_icon,
@@ -98,7 +98,7 @@ class Messages extends StatelessWidget {
                                           contact.value.displayName),
                                       subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
-                                          style: tsSubTitleItem),
+                                          style: tsBody13),
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
@@ -107,7 +107,7 @@ class Messages extends StatelessWidget {
                                         contact.value.mostRecentMessageTs
                                             .toInt(),
                                         builder: (context, date) =>
-                                            CText(date, style: tsSubTitleItem),
+                                            CText(date, style: tsBody13),
                                       ),
                                     ),
                                   ],

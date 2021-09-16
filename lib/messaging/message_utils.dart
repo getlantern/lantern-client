@@ -274,7 +274,7 @@ Future<void> displayConversationOptions(
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
                   child: CText('disappearing_messages'.i18n,
-                      style: tsBottomModalList),
+                      style: tsBottomModalListItem),
                 ),
                 onTap: () async {
                   final scrollController = ScrollController();
@@ -542,7 +542,7 @@ Future<void> displayConversationOptions(
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
                     child: CText('introduce_contacts'.i18n,
-                        style: tsBottomModalList)),
+                        style: tsBottomModalListItem)),
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
@@ -562,7 +562,7 @@ Future<void> displayConversationOptions(
                     offset: const Offset(-14, 0),
                     child: TextOneLine(
                         'delete_contact_name'.i18n.fill([contact.displayName]),
-                        style: tsBottomModalList),
+                        style: tsBottomModalListItem),
                   ),
                   onTap: () => showDialog<void>(
                         context: bottomContext,

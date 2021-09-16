@@ -40,7 +40,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: CText('scan_qr_code'.i18n, style: tsSettingsItem),
+                title: CText('scan_qr_code'.i18n, style: tsBody16),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -91,7 +91,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: CText('introduce_contacts'.i18n, style: tsSettingsItem),
+                title: CText('introduce_contacts'.i18n, style: tsBody16),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,

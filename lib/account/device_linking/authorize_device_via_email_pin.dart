@@ -19,7 +19,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
         text: 'recovery_email_sent'
             .i18n
             .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
-        style: tsExplanation,
+        style: tsBody14,
         styles: {
           'highlight':
               TextStyle(color: primaryBlue, fontWeight: FontWeight.bold),
@@ -44,7 +44,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                   alignment: Alignment.center,
                   child: CText(
                     'Enter or paste linking code'.i18n.toUpperCase(),
-                    style: tsPinLabel,
+                    style: tsBody10,
                   ),
                 ),
                 PinField(
