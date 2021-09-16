@@ -52,7 +52,6 @@ class _ConversationState extends State<Conversation>
   void showNativeKeyboard() {
     setState(() {
       nativeKeyboardShown = true;
-      emojiKeyboardShown = false;
     });
     focusNode.requestFocus();
   }
@@ -96,9 +95,6 @@ class _ConversationState extends State<Conversation>
         // call setState to pick up latest keyboard height from KeyboardHelper
         setState(() {
           nativeKeyboardShown = KeyboardHelper.instance.value.visible;
-          if (nativeKeyboardShown) {
-            emojiKeyboardShown = false;
-          }
         });
       }
     };
@@ -333,7 +329,7 @@ class _ConversationState extends State<Conversation>
         ],
         body: Padding(
           padding: EdgeInsetsDirectional.only(
-              bottom: nativeKeyboardShown
+              bottom: nativeKeyboardShown && !emojiKeyboardShown
                   ? KeyboardHelper.instance.value.mostRecentHeight
                   : 0),
           child: Stack(children: [
@@ -365,8 +361,9 @@ class _ConversationState extends State<Conversation>
                   height: kBottomNavigationBarHeight,
                   child: _buildMessageBar(),
                 ),
-                if (emojiKeyboardShown)
-                  MessagingEmojiPicker(
+                Offstage(
+                  offstage: !emojiKeyboardShown,
+                  child: MessagingEmojiPicker(
                     height: KeyboardHelper.instance.value.mostRecentHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
@@ -392,6 +389,7 @@ class _ConversationState extends State<Conversation>
                       }
                     },
                   ),
+                ),
               ],
             ),
           ]),
@@ -542,10 +540,10 @@ class _ConversationState extends State<Conversation>
               onPressed: () {
                 {
                   setState(() {
-                    if (emojiKeyboardShown) {
-                      showNativeKeyboard();
-                    } else {
+                    if (!emojiKeyboardShown || nativeKeyboardShown) {
                       showEmojiKeyboard();
+                    } else {
+                      showNativeKeyboard();
                     }
                   });
                 }
