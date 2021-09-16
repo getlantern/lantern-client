@@ -104,7 +104,7 @@ CTextStyle tsButtonGrey = CTextStyle(
   fontWeight: FontWeight.w500,
 );
 
-CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: primaryPink);
+CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: white);
 
 CTextStyle tsButtonWhite = tsButtonGrey.copiedWith(color: white);
 
