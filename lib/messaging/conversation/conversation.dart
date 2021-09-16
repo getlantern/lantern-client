@@ -569,7 +569,7 @@ class _ConversationState extends State<Conversation>
                   (!emojiKeyboardShown || nativeKeyboardShown)
                       ? Icons.sentiment_very_satisfied
                       : Icons.keyboard_alt_outlined,
-                  color: Theme.of(context).primaryColorDark),
+                  color: grey5),
             ),
       title: Stack(
         alignment: Alignment.center,
