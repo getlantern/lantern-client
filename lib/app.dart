@@ -41,7 +41,13 @@ class LanternApp extends StatelessWidget {
                 initialLocale: const Locale('en', 'US'),
                 child: MaterialApp.router(
                   debugShowCheckedModeBanner: false,
-                  theme: buildTheme(context),
+                  theme: ThemeData(
+                    brightness: Brightness.light,
+                    primarySwatch: Colors.grey,
+                    appBarTheme: const AppBarTheme(
+                        systemOverlayStyle: SystemUiOverlayStyle.light),
+                    accentColor: Colors.black,
+                  ),
                   title: 'app_name'.i18n,
                   localizationsDelegates: [
                     GlobalMaterialLocalizations.delegate,
@@ -75,70 +81,6 @@ class LanternApp extends StatelessWidget {
               ),
             );
           }),
-    );
-  }
-
-  ThemeData buildTheme(BuildContext context) {
-    return ThemeData(
-      brightness: Brightness.light,
-      primarySwatch: Colors.grey,
-      appBarTheme:
-          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
-      accentColor: Colors.black,
-      textTheme: Theme.of(context).textTheme.copyWith(
-            headline1: Theme.of(context)
-                .textTheme
-                .headline1
-                ?.copyWith(color: Colors.black),
-            headline2: Theme.of(context)
-                .textTheme
-                .headline2
-                ?.copyWith(color: Colors.black),
-            headline3: Theme.of(context)
-                .textTheme
-                .headline3
-                ?.copyWith(color: Colors.black),
-            headline4: Theme.of(context)
-                .textTheme
-                .headline4
-                ?.copyWith(color: Colors.black),
-            headline5: Theme.of(context)
-                .textTheme
-                .headline5
-                ?.copyWith(color: Colors.black),
-            headline6: Theme.of(context)
-                .textTheme
-                .headline6
-                ?.copyWith(color: Colors.black),
-            subtitle1: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: Colors.black),
-            subtitle2: Theme.of(context)
-                .textTheme
-                .subtitle2
-                ?.copyWith(color: Colors.black),
-            bodyText1: Theme.of(context)
-                .textTheme
-                .bodyText1
-                ?.copyWith(color: Colors.black),
-            bodyText2: Theme.of(context)
-                .textTheme
-                .bodyText2
-                ?.copyWith(color: Colors.black),
-            button: Theme.of(context)
-                .textTheme
-                .button
-                ?.copyWith(color: Colors.black),
-            caption: Theme.of(context)
-                .textTheme
-                .caption
-                ?.copyWith(color: Colors.black),
-            overline: Theme.of(context)
-                .textTheme
-                .overline
-                ?.copyWith(color: Colors.black),
-          ),
     );
   }
 }
