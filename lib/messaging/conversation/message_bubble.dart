@@ -148,7 +148,7 @@ class MessageBubble extends StatelessWidget {
                           child: CText(
                         'text_copied'.i18n,
                         style: tsInfoDialogText(white),
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.start,
                       )),
                     ],
                   ),

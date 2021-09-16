@@ -113,7 +113,7 @@ class _IntroduceState extends State<Introduce> {
                                                               tsInfoDialogText(
                                                                   white),
                                                           textAlign:
-                                                              TextAlign.left,
+                                                              TextAlign.start,
                                                         )),
                                                       ],
                                                     ),

@@ -367,7 +367,7 @@ msgid "introductions"
 msgstr "Introductions"
 
 msgid "introduced"
-msgstr "Introduced by"
+msgstr "Introduced by %s"
 
 msgid "introductions_info"
 msgstr "Both parties must accept the introduction to message each other. Introductions disappear after 7 days if no action is taken."

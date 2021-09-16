@@ -154,3 +154,11 @@ CTextStyle tsReplySnippetSpecialCase =
 
 CTextStyle tsBottomBarLabel =
     CTextStyle(fontSize: 12, lineHeight: 12, fontWeight: FontWeight.w400);
+
+CTextStyle tsIntroductionsListHeader = CTextStyle(fontSize: 10, lineHeight: 16);
+
+CTextStyle tsCallTitle =
+    CTextStyle(fontSize: 22, minFontSize: 18, lineHeight: 26, color: white);
+
+CTextStyle tsCallSubtitle =
+    CTextStyle(color: white, fontSize: 14, lineHeight: 18);

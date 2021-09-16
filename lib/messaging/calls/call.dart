@@ -109,22 +109,16 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            // TODO: move the below style into text_styles.dart
-                            style: CTextStyle(
-                                fontSize: 22,
-                                minFontSize: 18,
-                                lineHeight: 26,
-                                color: white),
+                            style: tsCallTitle,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: CText(
                             signaling.value.callState == CallState.Connected
-                                ? 'connected'.i18n
+                                ? 'Connected'.i18n
                                 : 'Connecting...'.i18n,
-                            style: CTextStyle(
-                                color: white, fontSize: 4, lineHeight: 4),
+                            style: tsCallSubtitle,
                           ),
                         ),
                       ],
