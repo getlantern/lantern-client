@@ -3,13 +3,13 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/core/router/router_extensions.dart';
-import 'package:lantern/Event.dart';
-import 'package:lantern/EventManager.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/common/common.dart';
 import 'package:lantern/custom_bottom_bar.dart';
+import 'package:lantern/event_extension.dart';
+import 'package:lantern/event_manager.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -48,7 +48,8 @@ class _HomePageState extends State<HomePage> {
             margin:
                 const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),
             // simple way to show indefinitely
-            content: Text(message),
+            content:
+                CText(message, style: CTextStyle(fontSize: 14, lineHeight: 21)),
             action: SnackBarAction(
               textColor: secondaryPink,
               label: buttonText.toUpperCase(),

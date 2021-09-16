@@ -61,7 +61,9 @@ class Notifications {
     return _flutterLocalNotificationsPlugin
         .show(
             _notificationId++,
-            'incoming_call_from'.i18n.fill([contact.displayName]),
+            'incoming_call_from'.i18n.fill([
+              contact.displayName
+            ]), //TODO: since the model limits characters to 100, should we leave as is?
             'touch_here_to_open_call'.i18n,
             _ringingChannel,
             payload: payload.toJson())
@@ -71,8 +73,13 @@ class Notifications {
   Future<int> showInCallNotification(Contact contact) {
     final id = _notificationId++;
     return _flutterLocalNotificationsPlugin
-        .show(id, 'in_call_with'.i18n.fill([contact.displayName]),
-            'touch_here_to_open_call'.i18n, _inCallChannel)
+        .show(
+            id,
+            'in_call_with'.i18n.fill([
+              contact.displayName
+            ]), //TODO: since the model limits characters to 100, should we leave as is?
+            'touch_here_to_open_call'.i18n,
+            _inCallChannel)
         .then((value) => id);
   }
 }

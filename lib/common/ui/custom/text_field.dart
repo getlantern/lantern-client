@@ -4,7 +4,7 @@ import 'package:lantern/common/common.dart';
 //// the prefix icon. We don't use the default behavior of OutlineInputBorder
 //// because it aligns the label to the right of the prefix icon, in
 //// contravention of the Material design specification.
-class CustomTextField extends StatefulWidget {
+class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
   late final String label;
@@ -16,7 +16,7 @@ class CustomTextField extends StatefulWidget {
   late final int? minLines;
   late final int? maxLines;
 
-  CustomTextField({
+  CTextField({
     required this.controller,
     this.initialValue,
     required this.label,
@@ -34,12 +34,12 @@ class CustomTextField extends StatefulWidget {
   }
 
   @override
-  _CustomTextFieldState createState() {
-    return _CustomTextFieldState();
+  _CTextFieldState createState() {
+    return _CTextFieldState();
   }
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _CTextFieldState extends State<CTextField> {
   var hasFocus = false;
 
   final fieldKey = GlobalKey<FormFieldState>();
@@ -111,9 +111,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
           color: white,
           child: !hasFocus && widget.controller.value.text.isEmpty
               ? Container()
-              : Text(
+              : CText(
                   widget.label,
-                  style: TextStyle(
+                  style: CTextStyle(
+                      fontSize: 12,
+                      lineHeight: 12,
                       color: fieldKey.currentState?.mounted == true &&
                               fieldKey.currentState?.hasError == true
                           ? indicatorRed

@@ -7,5 +7,7 @@ export 'humanize.dart';
 export 'messaging_model.dart';
 export 'message_utils.dart';
 export 'notifications.dart';
+export 'custom_avatar.dart';
+export 'package:lantern/messaging/contacts/contacts_extension.dart';
 
 final messagingModel = MessagingModel();

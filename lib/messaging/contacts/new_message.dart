@@ -3,8 +3,6 @@ import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class NewMessage extends StatefulWidget {
-  // static const NUM_RECENT_CONTACTS = 10;
-
   @override
   _NewMessageState createState() => _NewMessageState();
 }
@@ -42,8 +40,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: Text('scan_qr_code'.i18n),
-                trailing: const CustomAssetImage(
+                title: CText('scan_qr_code'.i18n, style: tsSettingsItem),
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),
@@ -64,13 +62,13 @@ class _NewMessageState extends State<NewMessage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Expanded(
-                              child: Text(
-                                // TODO: i18n interpolation
-                                '${_updatedContact!.displayName} is a Contact'
-                                    .i18n,
+                              child: CText(
+                                'qr_success_snackbar'
+                                    .i18n
+                                    .fill([_updatedContact!.displayName]),
                                 overflow: TextOverflow.visible,
                                 style: tsInfoDialogText(white),
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.start,
                               ),
                             ),
                           ],
@@ -93,8 +91,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: Text('introduce_contacts'.i18n),
-                trailing: const CustomAssetImage(
+                title: CText('introduce_contacts'.i18n, style: tsSettingsItem),
+                trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
                 ),
@@ -106,7 +104,7 @@ class _NewMessageState extends State<NewMessage> {
                     Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                   return _contacts.toList().isNotEmpty
                       ? ListTile(
-                          title: Text('contacts'.i18n.toUpperCase(),
+                          title: CText('contacts'.i18n.toUpperCase(),
                               style: tsEmptyContactState))
                       : Container();
                 }),
@@ -115,17 +113,11 @@ class _NewMessageState extends State<NewMessage> {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
 
-                // TODO: uncomment if we need to limit num of contacts here hiding this for now
-                // var recentContacts =
-                //     contacts.take(NewMessage.NUM_RECENT_CONTACTS).toList();
-
                 // related https://github.com/getlantern/android-lantern/issues/299
-                var sortedContacts = contacts
-                  ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                      .compareTo(sanitizeContactName(b.value.displayName)));
+                var sortedContacts = contacts.sortedAlphabetically();
 
-                var groupedSortedContacts = sortedContacts
-                    .groupBy((el) => sanitizeContactName(el.value.displayName));
+                var groupedSortedContacts = sortedContacts.groupBy((el) =>
+                    sanitizeContactName(el.value.displayName[0].toLowerCase()));
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)
@@ -145,23 +137,16 @@ class _NewMessageState extends State<NewMessage> {
                     ? groupedContactListGenerator(
                         groupedSortedList: groupedSortedContacts,
                         scrollListController: scrollListController,
-                        leadingCallback: (Contact contact) => CircleAvatar(
-                              backgroundColor: avatarBgColors[
-                                  generateUniqueColorIndex(
-                                      contact.contactId.id)],
-                              child: Text(
-                                  sanitizeContactName(contact.displayName)
-                                      .substring(0, 2)
-                                      .toUpperCase(),
-                                  style: TextStyle(color: white)),
-                            ),
+                        leadingCallback: (Contact contact) => CustomAvatar(
+                            id: contact.contactId.id,
+                            displayName: contact.displayName),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
                                 Conversation(contactId: contact.contactId)))
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),
-                        child: Text('no_contacts_yet'.i18n,
+                        child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
                                 tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors

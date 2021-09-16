@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+
 import 'contact_list_item.dart';
 
 /*
@@ -15,6 +16,7 @@ ScrollablePositionedList groupedContactListGenerator({
   return ScrollablePositionedList.builder(
     itemScrollController: scrollListController,
     initialScrollIndex: initialScrollIndex,
+    physics: defaultScrollPhysics,
     itemCount: groupedSortedList!.length,
     itemBuilder: (context, index) {
       var key = groupedSortedList.keys.elementAt(index);
@@ -26,7 +28,7 @@ ScrollablePositionedList groupedContactListGenerator({
               Padding(
                 padding:
                     const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: Text(key[0].toUpperCase()),
+                child: CText(key[0].toUpperCase(), style: tsPinLabel),
               ),
             ],
           ),
