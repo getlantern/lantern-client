@@ -45,7 +45,7 @@ class PinField extends StatelessWidget {
                       },
                       child: CText(
                         'Yes'.i18n,
-                        style: tsButtonPink,
+                        style: tsButtonPinkSecondary,
                       ),
                     ),
                   ],

@@ -223,7 +223,7 @@ class Introductions extends StatelessWidget {
                                                                   .i18n
                                                                   .toUpperCase(),
                                                               style:
-                                                                  tsButtonPink),
+                                                                  tsButtonPinkSecondary),
                                                         )
                                                       ],
                                                     )))

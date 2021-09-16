@@ -106,6 +106,8 @@ CTextStyle tsButtonGrey = CTextStyle(
 
 CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: white);
 
+CTextStyle tsButtonPinkSecondary = tsButtonGrey.copiedWith(color: primaryPink);
+
 CTextStyle tsButtonWhite = tsButtonGrey.copiedWith(color: white);
 
 CTextStyle tsInfoDialogSubtitle(color) => CTextStyle(

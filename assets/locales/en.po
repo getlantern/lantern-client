@@ -408,6 +408,15 @@ msgstr "Me"
 msgid "disappearing_messages"
 msgstr "Disappearing Messages"
 
+msgid "banner_intro_waiting"
+msgstr "Waiting for %s. They will receive your messages once they accept the introduction."
+
+msgid "banner_messages_persist"
+msgstr "New messages do not disappear."
+
+msgid "banner_messages_disappear"
+msgstr "Messages disappear after %s."
+
 msgid "change_display_name"
 msgstr "Change Display Name"
 

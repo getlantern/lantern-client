@@ -512,7 +512,7 @@ Future<void> displayConversationOptions(
                                             await parentContext.router.pop();
                                           },
                                           child: CText('set'.i18n.toUpperCase(),
-                                              style: tsButtonPink),
+                                              style: tsButtonPinkSecondary),
                                         ),
                                       ],
                                     ),
@@ -584,7 +584,7 @@ Future<void> displayConversationOptions(
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  CText('delete_contact_confirmation'.i18n,
+                                  CTextWrap('delete_contact_confirmation'.i18n,
                                       style: tsDialogBody)
                                 ],
                               ),
@@ -626,7 +626,7 @@ Future<void> displayConversationOptions(
                                     },
                                     child: CText(
                                         'delete_contact'.i18n.toUpperCase(),
-                                        style: tsButtonPink),
+                                        style: tsButtonPinkSecondary),
                                   )
                                 ],
                               )
