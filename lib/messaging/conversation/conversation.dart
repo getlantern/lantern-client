@@ -48,15 +48,12 @@ class _ConversationState extends State<Conversation>
   StreamSubscription<bool>? keyboardSubscription;
   final focusNode = FocusNode();
   var keyboardMode = KeyboardMode.none;
-  var nativeKeyboardShown = false;
-  static var mostRecentKeyboardHeight = 0.0;
 
-  void showNativeKeyboard(bool changeMode) {
-    if (changeMode) {
-      setState(() {
-        keyboardMode = KeyboardMode.native;
-      });
-    }
+  // default the below to reasonable value, it will get updated when the
+  // keyboard displays
+  static var highestKeyboardHeight = 249.0;
+
+  void showNativeKeyboard() {
     focusNode.requestFocus();
   }
 
@@ -70,21 +67,35 @@ class _ConversationState extends State<Conversation>
     setState(() {
       keyboardMode = KeyboardMode.emoji;
     });
+    dismissNativeKeyboard();
+  }
+
+  void updateKeyboardHeight() {
+    var currentKeyboardHeight = max(
+        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
+                WidgetsBinding.instance!.window.devicePixelRatio)
+            .bottom,
+        MediaQuery.of(context).viewInsets.bottom);
+    if (currentKeyboardHeight > highestKeyboardHeight) {
+      setState(() {
+        highestKeyboardHeight = currentKeyboardHeight;
+      });
+    }
   }
 
   void subscribeToKeyboardChanges() {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-      setState(() {
-        nativeKeyboardShown = visible;
-        if (visible &&
-            (keyboardMode == KeyboardMode.none ||
-                mostRecentKeyboardHeight > 0)) {
+      updateKeyboardHeight();
+      if (visible) {
+        setState(() {
           keyboardMode = KeyboardMode.native;
-        } else if (!visible && keyboardMode == KeyboardMode.native) {
+        });
+      } else if (keyboardMode == KeyboardMode.native) {
+        setState(() {
           keyboardMode = KeyboardMode.none;
-        }
-      });
+        });
+      }
     });
   }
 
@@ -264,30 +275,10 @@ class _ConversationState extends State<Conversation>
     model = context.watch<MessagingModel>();
 
     // update keyboard height values
-    var currentKeyboardHeight = max(
-        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
-                WidgetsBinding.instance!.window.devicePixelRatio)
-            .bottom,
-        MediaQuery.of(context).viewInsets.bottom);
-    // save updated keyboard height
-    if (currentKeyboardHeight > 0) {
-      mostRecentKeyboardHeight = currentKeyboardHeight;
-    }
-
-    if (keyboardMode == KeyboardMode.emoji) {
-      if (mostRecentKeyboardHeight == 0) {
-        // we don't yet know the height of the keyboard and don't know what
-        // height to use for the emoji picker. Show the keyboard so that we get
-        // a chance to calculate the height.
-        showNativeKeyboard(false);
-      } else {
-        // in case we showed the native keyboard to get the height, dismiss it
-        dismissNativeKeyboard();
-      }
-    }
+    updateKeyboardHeight();
 
     final bottomPadding =
-        keyboardMode == KeyboardMode.native ? mostRecentKeyboardHeight : 0.0;
+        keyboardMode == KeyboardMode.native ? highestKeyboardHeight : 0.0;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
@@ -373,7 +364,7 @@ class _ConversationState extends State<Conversation>
                 Offstage(
                   offstage: keyboardMode != KeyboardMode.emoji,
                   child: MessagingEmojiPicker(
-                    height: mostRecentKeyboardHeight,
+                    height: highestKeyboardHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
                       _newMessage
@@ -462,7 +453,7 @@ class _ConversationState extends State<Conversation>
                     setState(() {
                       _isReplying = true;
                       _quotedMessage = _message;
-                      showNativeKeyboard(true);
+                      showNativeKeyboard();
                     });
                   },
                   onTapReply: (_tappedMessage) {
@@ -549,7 +540,7 @@ class _ConversationState extends State<Conversation>
               onPressed: () {
                 {
                   if (keyboardMode == KeyboardMode.emoji) {
-                    showNativeKeyboard(true);
+                    showNativeKeyboard();
                   } else {
                     showEmojiKeyboard();
                   }
