@@ -320,7 +320,7 @@ class _ConversationState extends State<Conversation>
                   children: [
                     TextOneLine(
                       title,
-                      style: tsTitleAppbar,
+                      style: tsAppbarTitle,
                     ),
                     DisappearingTimerAction(contact),
                   ],

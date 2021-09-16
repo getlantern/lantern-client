@@ -35,7 +35,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: CText('messages'.i18n, style: tsBottomBarLabel),
+            label: CText('messages'.i18n, style: tsBottomBar),
             icon: SvgPicture.asset(
               ImagePaths.messages_icon,
               color:
@@ -52,7 +52,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 1,
             total: isDevelop ? 4 : 3,
-            label: CText('VPN', style: tsBottomBarLabel),
+            label: CText('VPN', style: tsBottomBar),
             icon: SvgPicture.asset(
               ImagePaths.key_icon,
               color:
@@ -79,7 +79,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 2,
             total: isDevelop ? 4 : 3,
-            label: CText('Account'.i18n, style: tsBottomBarLabel),
+            label: CText('Account'.i18n, style: tsBottomBar),
             onTap: () => onTap!(2),
             icon: SvgPicture.asset(
               ImagePaths.account_icon,
@@ -97,7 +97,7 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('Developer'.i18n, style: tsBottomBarLabel),
+              label: CText('Developer'.i18n, style: tsBottomBar),
               icon: SvgPicture.asset(
                 ImagePaths.devices_icon,
                 color: index == 3

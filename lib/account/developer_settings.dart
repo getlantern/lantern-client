@@ -23,14 +23,14 @@ class DeveloperSettingsTab extends StatelessWidget {
             margin: const EdgeInsets.all(8),
             child: CTextWrap(
               'These settings are for development use only. Changing any setting will automatically stop and restart the application',
-              style: tsSettingsItem,
+              style: tsBody16,
             ),
           ),
           Container(
             margin: const EdgeInsets.all(8),
             child: CTextWrap(
                 'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.',
-                style: tsSettingsItem),
+                style: tsBody16),
           ),
           SettingsItem(
             title: 'Payment Test Mode'.i18n,

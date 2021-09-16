@@ -21,13 +21,13 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             const Spacer(),
             CText(
               'Authorize with Device Linking Pin'.i18n,
-              style: tsTitleItem,
+              style: tsTitle,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: CText(
                 'Requires physical access to a Lantern Pro Device'.i18n,
-                style: tsSubTitleItem,
+                style: tsBody13,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -43,20 +43,20 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             Flexible(
               child: CVerticalDivider(
                 label: 'OR'.i18n,
-                labelStyle: tsTitleItem,
+                labelStyle: tsTitle,
                 height: 26,
               ),
             ),
             const Spacer(),
             CText(
               'Authorize Device via Email'.i18n,
-              style: tsTitleItem,
+              style: tsTitle,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
               child: CText(
                 'Requires access to the email you used to buy Lantern Pro'.i18n,
-                style: tsSubTitleItem,
+                style: tsBody13,
                 textAlign: TextAlign.center,
               ),
             ),

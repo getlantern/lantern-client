@@ -15,8 +15,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n,
-                    style: tsBaseScreenBodyText),
+                child: CTextWrap('introductions_info'.i18n, style: tsBody14),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,

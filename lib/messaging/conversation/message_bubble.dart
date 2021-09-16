@@ -129,7 +129,7 @@ class MessageBubble extends StatelessWidget {
           ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.reply),
-            title: CText('reply'.i18n, style: tsTitleHeadVPNItem),
+            title: CText('reply'.i18n, style: tsBody14),
             onPressed: () {
               onReply(msg);
             },
@@ -137,7 +137,7 @@ class MessageBubble extends StatelessWidget {
           if (!isAttachment)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.copy),
-              title: CText('copy_text'.i18n, style: tsTitleHeadVPNItem),
+              title: CText('copy_text'.i18n, style: tsBody14),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -158,7 +158,7 @@ class MessageBubble extends StatelessWidget {
             ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.delete),
-            title: CText('delete_for_me'.i18n, style: tsTitleHeadVPNItem),
+            title: CText('delete_for_me'.i18n, style: tsBody14),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
@@ -166,8 +166,7 @@ class MessageBubble extends StatelessWidget {
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
-              title:
-                  CText('delete_for_everyone'.i18n, style: tsTitleHeadVPNItem),
+              title: CText('delete_for_everyone'.i18n, style: tsBody14),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },

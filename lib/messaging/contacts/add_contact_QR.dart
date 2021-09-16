@@ -433,7 +433,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                         start: 10),
                                     child: CText(
                                       'contact_id_your_id'.i18n.toUpperCase(),
-                                      style: tsPinLabel,
+                                      style: tsBody10,
                                     ),
                                   ),
                                 ],
