@@ -44,10 +44,13 @@ class _ConversationState extends State<Conversation>
   final _scrollController = ItemScrollController();
 
   // ********************** Keyboard Handling ***************************/
+  final keyboardVisibilityController = KeyboardVisibilityController();
+  StreamSubscription<bool>? keyboardSubscription;
   final focusNode = FocusNode();
-  bool nativeKeyboardShown = false;
-  bool emojiKeyboardRequested = false;
-  bool emojiKeyboardShown = false;
+  var nativeKeyboardShown = false;
+  var emojiKeyboardRequested = false;
+  var emojiKeyboardShown = false;
+  static var mostRecentKeyboardHeight = 0.0;
 
   void showNativeKeyboard() {
     setState(() {
@@ -61,7 +64,7 @@ class _ConversationState extends State<Conversation>
   }
 
   void showEmojiKeyboard() {
-    if (KeyboardHelper.instance.value.mostRecentHeight > 0) {
+    if (mostRecentKeyboardHeight > 0) {
       // We've shown the native keyboard before and know the height, show emoji
       // keyboard immediately.
       setState(() {
@@ -79,11 +82,19 @@ class _ConversationState extends State<Conversation>
     showNativeKeyboard();
   }
 
-  late void Function() onKeyboardChange;
+  void subscribeToKeyboardChanges() {
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (visible) {
+        mostRecentKeyboardHeight = max(
+            EdgeInsets.fromWindowPadding(
+                    WidgetsBinding.instance!.window.viewInsets,
+                    WidgetsBinding.instance!.window.devicePixelRatio)
+                .bottom,
+            MediaQuery.of(context).viewInsets.bottom);
+      }
 
-  void initOnKeyboardChange() {
-    onKeyboardChange = () {
-      if (KeyboardHelper.instance.value.visible && emojiKeyboardRequested) {
+      if (visible && emojiKeyboardRequested) {
         // native keyboard was shown but we want the emoji keyboard, show it
         setState(() {
           emojiKeyboardShown = true;
@@ -94,10 +105,10 @@ class _ConversationState extends State<Conversation>
       } else {
         // call setState to pick up latest keyboard height from KeyboardHelper
         setState(() {
-          nativeKeyboardShown = KeyboardHelper.instance.value.visible;
+          nativeKeyboardShown = visible;
         });
       }
-    };
+    });
   }
 
   void dismissAllKeyboards() {
@@ -150,8 +161,7 @@ class _ConversationState extends State<Conversation>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(_interceptBackButton);
-    initOnKeyboardChange();
-    KeyboardHelper.instance.addListener(onKeyboardChange);
+    subscribeToKeyboardChanges();
   }
 
   @override
@@ -161,7 +171,7 @@ class _ConversationState extends State<Conversation>
     _stopWatchTimer.dispose();
     focusNode.dispose();
     _audioPreviewController?.stop();
-    KeyboardHelper.instance.removeListener(onKeyboardChange);
+    keyboardSubscription?.cancel();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
   }
@@ -330,7 +340,7 @@ class _ConversationState extends State<Conversation>
         body: Padding(
           padding: EdgeInsetsDirectional.only(
               bottom: nativeKeyboardShown && !emojiKeyboardShown
-                  ? KeyboardHelper.instance.value.mostRecentHeight
+                  ? mostRecentKeyboardHeight
                   : 0),
           child: Stack(children: [
             Column(
@@ -364,7 +374,7 @@ class _ConversationState extends State<Conversation>
                 Offstage(
                   offstage: !emojiKeyboardShown,
                   child: MessagingEmojiPicker(
-                    height: KeyboardHelper.instance.value.mostRecentHeight,
+                    height: mostRecentKeyboardHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
                       _newMessage
