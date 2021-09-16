@@ -51,7 +51,7 @@ class _ConversationState extends State<Conversation>
 
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
-  static var highestKeyboardHeight = 249.0;
+  static var highestKeyboardHeight = 150;
 
   void showNativeKeyboard() {
     focusNode.requestFocus();
