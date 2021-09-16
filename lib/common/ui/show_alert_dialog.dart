@@ -60,7 +60,7 @@ Function() showAlertDialog({
             },
             child: CText(
               agreeText.i18n.toUpperCase(),
-              style: tsButtonPinkSecondary,
+              style: tsButtonPink,
             ),
           ),
         ],

@@ -44,6 +44,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
               child: CVerticalDivider(
                 label: 'OR'.i18n,
                 labelStyle: tsTitleItem,
+                height: 26,
               ),
             ),
             const Spacer(),
