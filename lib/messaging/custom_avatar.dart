@@ -23,7 +23,7 @@ class CustomAvatar extends StatelessWidget {
       backgroundColor: customColor ?? getAvatarColor(hue: hue),
       child: CText(
           sanitizeContactName(displayName ?? '').getInitials().toUpperCase(),
-          style: tsCircleAvatarLetter),
+          style: tsBody13White),
     );
   }
 }

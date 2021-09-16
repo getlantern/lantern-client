@@ -36,7 +36,8 @@ class ContactConnectionCard extends StatelessWidget {
               leading: CustomAvatar(
                   id: contact.contactId.id, displayName: contact.displayName),
               title: CText(introduction.displayName,
-                  style: tsMessageBody(outbound)),
+                  style: tsBody16.copiedWith(
+                      color: outbound ? outboundMsgColor : inboundMsgColor)),
               trailing: outbound
                   ? const SizedBox()
                   : FittedBox(
@@ -129,7 +130,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: CText('accept'.i18n, style: tsDialogTitle),
+                        title: CText('accept'.i18n, style: tsBody16),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -153,15 +154,15 @@ class ContactConnectionCard extends StatelessWidget {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      title: CText('reject'.i18n, style: tsDialogTitle),
+                      title: CText('reject'.i18n, style: tsBody16),
                       onTap: () async {
                         showAlertDialog(
                             context: context,
                             title: CText('introductions_reject_title'.i18n,
-                                style: tsDialogTitle),
+                                style: tsBody16),
                             content: CTextWrap(
                                 'introductions_reject_content'.i18n,
-                                style: tsDialogBody),
+                                style: tsBody14),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,
                             agreeAction: () async {

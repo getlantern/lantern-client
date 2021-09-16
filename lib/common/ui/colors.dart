@@ -44,16 +44,6 @@ Color recordingColorBackground = HexColor('#d50020');
 
 Color pulsingBackground = Colors.red;
 
-List<Color> avatarBgColors = [
-  HexColor('#003B7A'),
-  HexColor('#007A02'),
-  HexColor('#0A5ADB'),
-  HexColor('#7A003B'),
-  HexColor('#7A0078'),
-  HexColor('#8B4910'),
-  HexColor('#957000')
-];
-
 Color getCheckboxColor(Set<MaterialState> states) {
   const interactiveStates = <MaterialState>{
     MaterialState.pressed,
@@ -64,5 +54,15 @@ Color getCheckboxColor(Set<MaterialState> states) {
 }
 
 // not using inverted right now but can be useful for eventually building color inversion
+List<Color> avatarBgColors = [
+  HexColor('#003B7A'),
+  HexColor('#007A02'),
+  HexColor('#0A5ADB'),
+  HexColor('#7A003B'),
+  HexColor('#7A0078'),
+  HexColor('#8B4910'),
+  HexColor('#957000')
+];
+
 Color getAvatarColor({required double hue, bool inverted = false}) =>
     HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
