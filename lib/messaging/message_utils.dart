@@ -560,7 +560,7 @@ Future<void> displayConversationOptions(
                       top: 5, bottom: 5, start: 16, end: 16),
                   title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: CText(
+                    child: TextOneLine(
                         'delete_contact_name'.i18n.fill([contact.displayName]),
                         style: tsBottomModalList),
                   ),

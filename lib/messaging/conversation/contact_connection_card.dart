@@ -95,7 +95,6 @@ class ContactConnectionCard extends StatelessWidget {
 
   Future<dynamic> _showOptions(BuildContext context,
       IntroductionDetails introduction, MessagingModel model, Contact contact) {
-    final title = 'Accept Introduction to ${introduction.displayName}';
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -108,16 +107,20 @@ class ContactConnectionCard extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(12),
                 ),
-                Center(
-                  child: CText(title, style: tsTitleItem),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 24.0, top: 0.0, end: 24.0, bottom: 4.0),
+                  child: Center(
+                    child: TextOneLine(
+                        'Accept Introduction to ${introduction.displayName}',
+                        style: tsTitleItem),
+                  ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 24.0),
-                  child: Center(
-                    child:
-                        CText('introductions_info'.i18n, style: tsExplanation),
-                  ),
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
+                  child: CTextWrap('introductions_info'.i18n,
+                      style: tsExplanation),
                 ),
                 Divider(thickness: 1, color: grey2),
                 Column(

@@ -455,7 +455,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                                   child: CText(
                                                 'copied'.i18n,
                                                 style: tsInfoDialogText(white),
-                                                textAlign: TextAlign.left,
+                                                textAlign: TextAlign.start,
                                               )),
                                             ],
                                           ),
@@ -489,7 +489,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                                   child: CText(
                                                 'copied'.i18n,
                                                 style: tsInfoDialogText(white),
-                                                textAlign: TextAlign.left,
+                                                textAlign: TextAlign.start,
                                               )),
                                             ],
                                           ),

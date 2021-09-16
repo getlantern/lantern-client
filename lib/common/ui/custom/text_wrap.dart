@@ -11,7 +11,7 @@ class CTextWrap extends StatelessWidget {
   Widget build(BuildContext context) {
     return CText(text,
         style: style,
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.start,
         overflow: TextOverflow.visible);
   }
 }
