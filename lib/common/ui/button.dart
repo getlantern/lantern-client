@@ -50,7 +50,7 @@ class Button extends StatelessWidget {
               children: [
                 CText(
                   text.toUpperCase(),
-                  style: disabled ? tsButtonGrey : tsButtonPink,
+                  style: disabled ? tsButtonGrey : tsButtonWhite,
                   textAlign: TextAlign.center,
                 ),
                 if (iconPath != null) const SizedBox(width: 5),

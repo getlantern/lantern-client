@@ -218,18 +218,18 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
       child: ListBody(
         children: <Widget>[
           isLocal
-              ? CText(
+              ? CTextWrap(
                   'This will delete the message for you only. Everyone else will still be able to see it.'
                       .i18n,
                   style: tsDialogBody)
-              : CText('This will delete the message for everyone.'.i18n,
+              : CTextWrap('This will delete the message for everyone.'.i18n,
                   style: tsDialogBody),
         ],
       ),
     ),
     title: isLocal
-        ? CText('Delete for me', style: tsBottomModalTitle)
-        : CText('Delete for everyone', style: tsBottomModalTitle),
+        ? CText('Delete for me', style: tsDialogTitle)
+        : CText('Delete for everyone', style: tsDialogTitle),
     agreeAction: () =>
         isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
     agreeText: 'Delete',

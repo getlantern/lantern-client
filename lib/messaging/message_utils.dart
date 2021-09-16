@@ -331,12 +331,12 @@ Future<void> displayConversationOptions(
                                                   (selectedPosition != -1 &&
                                                       seconds[selectedPosition] ==
                                                           0)
-                                              ? CText(
+                                              ? CTextWrap(
                                                   'message_disappearing'.i18n,
                                                   style:
                                                       tsDisappearingContentBottomModal,
                                                 )
-                                              : CText(
+                                              : CTextWrap(
                                                   'message_disappearing_description'
                                                       .i18n
                                                       .fill([

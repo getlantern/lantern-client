@@ -119,7 +119,7 @@ class ContentContainer extends StatelessWidget {
                                         context: context,
                                         title: CText('open_url'.i18n,
                                             style: tsDialogTitle),
-                                        content: CText(
+                                        content: CTextWrap(
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
                                             style: tsDialogBody),

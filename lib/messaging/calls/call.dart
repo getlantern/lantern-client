@@ -36,7 +36,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                 context: context,
                 title:
                     CText('unable_to_complete_call'.i18n, style: tsDialogTitle),
-                content: CText('please_try_again'.i18n, style: tsDialogBody),
+                content:
+                    CTextWrap('please_try_again'.i18n, style: tsDialogBody),
                 agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);

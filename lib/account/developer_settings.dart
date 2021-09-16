@@ -21,13 +21,14 @@ class DeveloperSettingsTab extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.all(8),
-            child: CText(
-                'These settings are for development use only. Changing any setting will automatically stop and restart the application',
-                style: tsSettingsItem),
+            child: CTextWrap(
+              'These settings are for development use only. Changing any setting will automatically stop and restart the application',
+              style: tsSettingsItem,
+            ),
           ),
           Container(
             margin: const EdgeInsets.all(8),
-            child: CText(
+            child: CTextWrap(
                 'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.',
                 style: tsSettingsItem),
           ),
@@ -74,7 +75,6 @@ class DeveloperSettingsTab extends StatelessWidget {
                 icon: const Icon(Icons.arrow_downward),
                 iconSize: 24,
                 elevation: 16,
-                style: tsSettingsItem.copiedWith(color: Colors.deepPurple),
                 underline: Container(
                   height: 2,
                   color: Colors.deepPurpleAccent,

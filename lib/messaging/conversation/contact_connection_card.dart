@@ -157,7 +157,8 @@ class ContactConnectionCard extends StatelessWidget {
                             context: context,
                             title: CText('introductions_reject_title'.i18n,
                                 style: tsDialogTitle),
-                            content: CText('introductions_reject_content'.i18n,
+                            content: CTextWrap(
+                                'introductions_reject_content'.i18n,
                                 style: tsDialogBody),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,
