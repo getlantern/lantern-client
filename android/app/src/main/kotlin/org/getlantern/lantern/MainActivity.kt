@@ -124,6 +124,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         val intent = Intent(this, LanternService_::class.java)
         bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
+
+        // Use a stable layout so that our Flutter view gets consistent bottom insets
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         Logger.debug(TAG, "bindService finished at ${System.currentTimeMillis() - start}")
     }
 

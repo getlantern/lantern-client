@@ -85,29 +85,32 @@ class _ConversationState extends State<Conversation>
   void subscribeToKeyboardChanges() {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-      if (visible) {
-        mostRecentKeyboardHeight = max(
-            EdgeInsets.fromWindowPadding(
-                    WidgetsBinding.instance!.window.viewInsets,
-                    WidgetsBinding.instance!.window.devicePixelRatio)
-                .bottom,
-            MediaQuery.of(context).viewInsets.bottom);
-      }
+      // run after some small delay to make sure insets show up correctly
+      Future.delayed(const Duration(milliseconds: 5), () {
+        if (visible) {
+          mostRecentKeyboardHeight = max(
+              EdgeInsets.fromWindowPadding(
+                      WidgetsBinding.instance!.window.viewInsets,
+                      WidgetsBinding.instance!.window.devicePixelRatio)
+                  .bottom,
+              MediaQuery.of(context).viewInsets.bottom);
+        }
 
-      if (visible && emojiKeyboardRequested) {
-        // native keyboard was shown but we want the emoji keyboard, show it
-        setState(() {
-          emojiKeyboardShown = true;
-          nativeKeyboardShown = false;
-          emojiKeyboardRequested = false;
-        });
-        dismissNativeKeyboard();
-      } else {
-        // call setState to pick up latest keyboard height from KeyboardHelper
-        setState(() {
-          nativeKeyboardShown = visible;
-        });
-      }
+        if (visible && emojiKeyboardRequested) {
+          // native keyboard was shown but we want the emoji keyboard, show it
+          setState(() {
+            emojiKeyboardShown = true;
+            nativeKeyboardShown = false;
+            emojiKeyboardRequested = false;
+          });
+          dismissNativeKeyboard();
+        } else {
+          // call setState to pick up latest keyboard height from KeyboardHelper
+          setState(() {
+            nativeKeyboardShown = visible;
+          });
+        }
+      });
     });
   }
 
