@@ -8,7 +8,7 @@ BASE STYLES
 
 CTextStyle tsAppbarTitle = CTextStyle(
     fontSize: 20,
-    minFontSize: 14,
+    minFontSize: 16,
     lineHeight: 23,
     fontWeight: FontWeight.w500,
     color: black);
@@ -58,7 +58,7 @@ CTextStyle txConversationSticker =
     CTextStyle(color: grey5, fontSize: 12, lineHeight: 19);
 
 CTextStyle tsCallTitle =
-    CTextStyle(fontSize: 22, minFontSize: 18, lineHeight: 26, color: white);
+    CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39, color: white);
 
 CTextStyle tsCallSubtitle = tsBody14.copiedWith(color: white);
 

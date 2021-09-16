@@ -89,7 +89,7 @@ class _CTextFieldState extends State<CTextField> {
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
-                    color: indicatorRed,
+                    color: red,
                   ),
                 ),
                 border: OutlineInputBorder(
@@ -101,7 +101,7 @@ class _CTextFieldState extends State<CTextField> {
                 prefixIcon: widget.prefixIcon,
                 suffixIcon: fieldKey.currentState?.mounted == true &&
                         fieldKey.currentState?.hasError == true
-                    ? Icon(Icons.error, color: indicatorRed)
+                    ? Icon(Icons.error, color: red)
                     : widget.suffixIcon),
           ),
         ),
@@ -118,7 +118,7 @@ class _CTextFieldState extends State<CTextField> {
                       lineHeight: 12,
                       color: fieldKey.currentState?.mounted == true &&
                               fieldKey.currentState?.hasError == true
-                          ? indicatorRed
+                          ? red
                           : primaryBlue),
                 ),
         ),

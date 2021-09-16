@@ -318,7 +318,7 @@ class _ConversationState extends State<Conversation>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextOneLine(
+                    CText(
                       title,
                       style: tsAppbarTitle,
                     ),
@@ -538,8 +538,8 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: stopwatchColor,
-                    color: pulsingBackground,
+                    pulseColor: red,
+                    color: red,
                   ),
                 ),
                 Flexible(
@@ -547,7 +547,7 @@ class _ConversationState extends State<Conversation>
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsBody10.copiedWith(color: stopwatchColor),
+                      style: tsBody10.copiedWith(color: red),
                     ),
                   ),
                 ),

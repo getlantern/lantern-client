@@ -28,7 +28,7 @@ class CustomBottomItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 68,
-      color: Colors.transparent,
+      color: transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

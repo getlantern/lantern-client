@@ -93,7 +93,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Transform.scale(
-                    scale: 3,
+                    scale: 2,
                     child: Column(
                       children: [
                         CustomAvatar(
@@ -149,7 +149,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ),
                         RoundButton(
                           icon: const CAssetImage(path: ImagePaths.hangup_icon),
-                          backgroundColor: indicatorRed,
+                          backgroundColor: red,
                           onPressed: () async {
                             signaling.bye(await session);
                           },
