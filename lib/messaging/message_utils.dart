@@ -512,7 +512,7 @@ Future<void> displayConversationOptions(
                                             await parentContext.router.pop();
                                           },
                                           child: CText('set'.i18n.toUpperCase(),
-                                              style: tsButtonPinkSecondary),
+                                              style: tsButtonPink),
                                         ),
                                       ],
                                     ),
@@ -626,7 +626,7 @@ Future<void> displayConversationOptions(
                                     },
                                     child: CText(
                                         'delete_contact'.i18n.toUpperCase(),
-                                        style: tsButtonPinkSecondary),
+                                        style: tsButtonPink),
                                   )
                                 ],
                               )

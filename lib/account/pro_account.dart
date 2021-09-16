@@ -42,8 +42,7 @@ class ProAccount extends StatelessWidget {
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
                 },
-                child: CText('Renew'.i18n.toUpperCase(),
-                    style: tsButtonPinkSecondary),
+                child: CText('Renew'.i18n.toUpperCase(), style: tsButtonPink),
               );
             }),
             SettingsSectionHeader(
