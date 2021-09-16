@@ -220,10 +220,9 @@ class AudioWidget extends StatelessWidget {
       child: SliderTheme(
         data: SliderThemeData(
             trackHeight: 0,
-            activeTrackColor:
-                value.bars.isNotEmpty ? Colors.transparent : Colors.grey,
+            activeTrackColor: value.bars.isNotEmpty ? transparent : Colors.grey,
             inactiveTrackColor:
-                value.bars.isNotEmpty ? Colors.transparent : Colors.blue,
+                value.bars.isNotEmpty ? transparent : Colors.blue,
             valueIndicatorColor: Colors.grey.shade200,
             trackShape: CustomTrackShape(),
             thumbShape: RectangleSliderThumbShapes(
@@ -256,7 +255,7 @@ class AudioWidget extends StatelessWidget {
         ? RoundButton(
             diameter: height,
             padding: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: transparent,
             icon: Icon(
               Icons.pause,
               color: initialColor,
