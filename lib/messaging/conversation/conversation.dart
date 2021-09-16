@@ -64,22 +64,22 @@ class _ConversationState extends State<Conversation>
   }
 
   void showEmojiKeyboard() {
-    if (mostRecentKeyboardHeight > 0) {
-      // We've shown the native keyboard before and know the height, show emoji
-      // keyboard immediately.
+    if (mostRecentKeyboardHeight == 0 || nativeKeyboardShown) {
+      emojiKeyboardRequested = true;
+
+      if (!nativeKeyboardShown) {
+        // We haven't shown the keyboard yet so don't know how high to make the
+        // emoji keyboard. Display the native keyboard first and then the emoji
+        // keyboard.
+        showNativeKeyboard();
+      } else {
+        dismissNativeKeyboard();
+      }
+    } else {
       setState(() {
-        nativeKeyboardShown = false;
         emojiKeyboardShown = true;
       });
-      dismissNativeKeyboard();
-      return;
     }
-
-    // We haven't shown the keyboard yet so don't know how high to make the
-    // emoji keyboard. Display the native keyboard first and then the emoji
-    // keyboard.
-    emojiKeyboardRequested = true;
-    showNativeKeyboard();
   }
 
   void subscribeToKeyboardChanges() {
@@ -87,18 +87,21 @@ class _ConversationState extends State<Conversation>
         keyboardVisibilityController.onChange.listen((bool visible) {
       // run after some small delay to make sure insets show up correctly
       if (visible && emojiKeyboardRequested) {
-        // native keyboard was shown but we want the emoji keyboard, show it
-        setState(() {
-          emojiKeyboardShown = true;
-          nativeKeyboardShown = false;
-          emojiKeyboardRequested = false;
-        });
         dismissNativeKeyboard();
       } else {
-        // call setState to pick up latest keyboard height from KeyboardHelper
-        setState(() {
-          nativeKeyboardShown = visible;
-        });
+        if (emojiKeyboardRequested) {
+          // native keyboard was shown but we want the emoji keyboard, show it
+          setState(() {
+            emojiKeyboardShown = true;
+            nativeKeyboardShown = false;
+            emojiKeyboardRequested = false;
+          });
+        } else {
+          setState(() {
+            nativeKeyboardShown = visible;
+            emojiKeyboardShown = false;
+          });
+        }
       }
     });
   }
