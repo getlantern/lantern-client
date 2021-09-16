@@ -105,7 +105,7 @@ class _NewMessageState extends State<NewMessage> {
                   return _contacts.toList().isNotEmpty
                       ? ListTile(
                           title: CText('contacts'.i18n.toUpperCase(),
-                              style: tsEmptyContactState))
+                              style: tsBody16))
                       : Container();
                 }),
               ),
@@ -149,7 +149,7 @@ class _NewMessageState extends State<NewMessage> {
                         child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
-                                tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
+                                tsBody16)); // rendering this instead of SizedBox() to avoid null dimension errors
               })),
             ],
           );

@@ -26,8 +26,7 @@ class PinField extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content:
-                      CText('Paste from clipboard?'.i18n, style: tsDialogBody),
+                  content: CText('Paste from clipboard?'.i18n, style: tsBody14),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {

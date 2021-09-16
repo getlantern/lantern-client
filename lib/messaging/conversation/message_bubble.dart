@@ -220,15 +220,15 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
               ? CTextWrap(
                   'This will delete the message for you only. Everyone else will still be able to see it.'
                       .i18n,
-                  style: tsDialogBody)
+                  style: tsBody14)
               : CTextWrap('This will delete the message for everyone.'.i18n,
-                  style: tsDialogBody),
+                  style: tsBody14),
         ],
       ),
     ),
     title: isLocal
-        ? CText('Delete for me', style: tsDialogTitle)
-        : CText('Delete for everyone', style: tsDialogTitle),
+        ? CText('Delete for me', style: tsBody16)
+        : CText('Delete for everyone', style: tsBody16),
     agreeAction: () =>
         isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
     agreeText: 'Delete',

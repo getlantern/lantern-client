@@ -204,7 +204,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             children: [
                               CText(
                                 'qr_info_scan'.i18n,
-                                style: tsInfoDialogSubtitle(white),
+                                style: tsInfoDialogText(white),
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
@@ -471,7 +471,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                             humanizeContactId(
                                                 widget.me.contactId.id),
                                             overflow: TextOverflow.visible,
-                                            style: tsEmptyContactState),
+                                            style: tsBody16),
                                       ),
                                     ),
                                   ),
@@ -563,7 +563,7 @@ class _renderWaitingUI extends StatelessWidget {
                 start: 8.0, end: 8.0, top: 8.0),
             child: CText(
               'scan_complete'.i18n,
-              style: tsInfoDialogSubtitle(fontColor),
+              style: tsInfoDialogText(fontColor),
             ),
           ),
         if (!proceedWithoutProvisionals)

@@ -547,7 +547,7 @@ class _ConversationState extends State<Conversation>
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsStopWatchTimer,
+                      style: tsBody10.copiedWith(color: stopwatchColor),
                     ),
                   ),
                 ),

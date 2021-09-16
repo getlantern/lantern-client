@@ -47,7 +47,7 @@ class Introductions extends StatelessWidget {
                                           'introduced'.i18n.fill([
                                             introductor.displayName
                                           ]).toUpperCase(),
-                                          style: tsIntroductionsListHeader),
+                                          style: tsBody10),
                                     ),
                                     Divider(height: 1.0, color: grey3),
                                     ...introductionsPerIntroductor.map(
@@ -98,12 +98,12 @@ class Introductions extends StatelessWidget {
                                                                       'introductions_reject_title'
                                                                           .i18n,
                                                                       style:
-                                                                          tsDialogTitle),
+                                                                          tsBody16),
                                                                   content: CTextWrap(
                                                                       'introductions_reject_content'
                                                                           .i18n,
                                                                       style:
-                                                                          tsDialogBody),
+                                                                          tsBody14),
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'
