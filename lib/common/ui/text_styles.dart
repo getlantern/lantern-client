@@ -41,7 +41,7 @@ CTextStyle tsTitleItem =
     CTextStyle(fontWeight: FontWeight.w500, fontSize: 16, lineHeight: 26);
 
 CTextStyle tsSubTitleItem = tsTitleItem.copiedWith(
-    fontWeight: FontWeight.w400, fontSize: 12, lineHeight: 19);
+    fontWeight: FontWeight.w400, fontSize: 13, lineHeight: 19);
 
 CTextStyle tsSettingsItem = CTextStyle(fontSize: 16, lineHeight: 21);
 
@@ -105,6 +105,8 @@ CTextStyle tsButtonGrey = CTextStyle(
 );
 
 CTextStyle tsButtonPink = tsButtonGrey.copiedWith(color: primaryPink);
+
+CTextStyle tsButtonWhite = tsButtonGrey.copiedWith(color: white);
 
 CTextStyle tsInfoDialogSubtitle(color) => CTextStyle(
       fontSize: 16,

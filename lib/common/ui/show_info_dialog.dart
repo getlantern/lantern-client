@@ -39,7 +39,7 @@ void showInfoDialog(BuildContext context,
                     top: 16,
                     bottom: 24,
                   ),
-                  child: CText(
+                  child: CTextWrap(
                     des,
                     style: tsInfoDialogText(unselectedTabLabelColor),
                   ),

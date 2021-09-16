@@ -256,10 +256,10 @@ msgid "start_chat"
 msgstr "Start chat"
 
 msgid "message_disappearing"
-msgstr "All messages will not disappear for you and your contact"
+msgstr "All messages will not disappear for you and your contact."
 
 msgid "message_disappearing_description"
-msgstr "All messages will disappear after %s for you and your contact"
+msgstr "All messages will disappear after %s for you and your contact."
 
 msgid "delete_contact_confirmation"
 msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."

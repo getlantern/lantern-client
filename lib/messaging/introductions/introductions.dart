@@ -15,7 +15,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: CText('introductions_info'.i18n,
+                child: CTextWrap('introductions_info'.i18n,
                     style: tsBaseScreenBodyText),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
@@ -107,7 +107,7 @@ class Introductions extends StatelessWidget {
                                                                       .i18n,
                                                                   style:
                                                                       tsDialogTitle),
-                                                              content: CText(
+                                                              content: CTextWrap(
                                                                   'introductions_reject_content'
                                                                       .i18n,
                                                                   style:
@@ -188,7 +188,7 @@ class Introductions extends StatelessWidget {
                                                                 children: [
                                                                   Expanded(
                                                                     child:
-                                                                        CText(
+                                                                        CTextWrap(
                                                                       'introduction_approved'
                                                                           .i18n
                                                                           .fill([
@@ -196,14 +196,8 @@ class Introductions extends StatelessWidget {
                                                                             .introduction
                                                                             .displayName
                                                                       ]),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .visible,
                                                                       style: tsInfoDialogText(
                                                                           white),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
                                                                     ),
                                                                   ),
                                                                 ],
