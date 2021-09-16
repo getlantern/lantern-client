@@ -466,7 +466,7 @@ packages:
       name: flutter_webrtc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.5"
+    version: "0.6.7"
   fluttertoast:
     dependency: "direct main"
     description:
