@@ -19,7 +19,7 @@ class ReplySnippetHeader extends StatelessWidget {
           Icons.reply,
           size: 12,
         ),
-        Text(
+        CText(
           'Replying to ${matchIdToDisplayName(msg.replyToSenderId, contact)}',
           overflow: TextOverflow.ellipsis,
           style: tsReplySnippetHeader,

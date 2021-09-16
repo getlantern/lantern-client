@@ -26,7 +26,6 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
-  Size? size;
   late final ShowEmojis onEmojiTap;
   bool _customEmojiResponse = false;
   bool _hasPermission = false;
@@ -41,12 +40,91 @@ class _ConversationState extends State<Conversation>
   AudioController? _audioPreviewController;
   StoredMessage? _quotedMessage;
   var messageCount = 0;
-  bool _emojiShowing = false;
-  final _focusNode = FocusNode();
   PathAndValue<StoredMessage>? _storedMessage;
   final _scrollController = ItemScrollController();
-  StreamSubscription<bool>? keyboardStream;
-  bool _keyboardState = true;
+
+  // ********************** Keyboard Handling ***************************/
+  final keyboardVisibilityController = KeyboardVisibilityController();
+  StreamSubscription<bool>? keyboardSubscription;
+  final focusNode = FocusNode();
+  var keyboardMode = KeyboardMode.none;
+
+  // default the below to reasonable value, it will get updated when the
+  // keyboard displays
+  static var highestKeyboardHeight = 150;
+
+  void showNativeKeyboard() {
+    focusNode.requestFocus();
+  }
+
+  void dismissNativeKeyboard() {
+    focusNode.unfocus();
+  }
+
+  void showEmojiKeyboard() {
+    // always show native keyboard first so we know the height of the native
+    // keyboard and can make the emoji keyboard the same height
+    setState(() {
+      keyboardMode = KeyboardMode.emoji;
+    });
+    dismissNativeKeyboard();
+  }
+
+  void updateKeyboardHeight() {
+    var currentKeyboardHeight = max(
+        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
+                WidgetsBinding.instance!.window.devicePixelRatio)
+            .bottom,
+        MediaQuery.of(context).viewInsets.bottom);
+    if (currentKeyboardHeight > highestKeyboardHeight) {
+      setState(() {
+        highestKeyboardHeight = currentKeyboardHeight;
+      });
+    }
+  }
+
+  void subscribeToKeyboardChanges() {
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      updateKeyboardHeight();
+      if (visible) {
+        setState(() {
+          keyboardMode = KeyboardMode.native;
+        });
+      } else if (keyboardMode == KeyboardMode.native) {
+        setState(() {
+          keyboardMode = KeyboardMode.none;
+        });
+      }
+    });
+  }
+
+  void dismissAllKeyboards() {
+    dismissNativeKeyboard();
+    setState(() {
+      keyboardMode = KeyboardMode.none;
+    });
+  }
+
+  Widget dismissKeyboardsOnTap(Widget child) {
+    return GestureDetector(
+      onTap: dismissAllKeyboards,
+      child: child,
+    );
+  }
+
+  bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (keyboardMode == KeyboardMode.emoji) {
+      setState(() {
+        keyboardMode = KeyboardMode.none;
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // ******************* End Keyboard Handling **************************
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -68,39 +146,20 @@ class _ConversationState extends State<Conversation>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    var keyboardVisibilityController = KeyboardVisibilityController();
-    _keyboardState = !keyboardVisibilityController.isVisible;
-    keyboardStream =
-        keyboardVisibilityController.onChange.listen((bool visible) {
-      if (mounted) {
-        setState(
-          () => _keyboardState = !visible,
-        );
-      }
-    });
     BackButtonInterceptor.add(_interceptBackButton);
-    WidgetsBinding.instance!.addObserver(this);
+    subscribeToKeyboardChanges();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    keyboardStream?.cancel();
     _newMessage.dispose();
     _stopWatchTimer.dispose();
-    _focusNode.dispose();
+    focusNode.dispose();
     _audioPreviewController?.stop();
+    keyboardSubscription?.cancel();
     BackButtonInterceptor.remove(_interceptBackButton);
     super.dispose();
-  }
-
-  bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (_emojiShowing) {
-      setState(() => _emojiShowing = false);
-      return true;
-    } else {
-      return false;
-    }
   }
 
   Future<void> _send(String text,
@@ -169,8 +228,6 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  void showKeyboard() => _focusNode.requestFocus();
-
   Future<void> _selectFilesToShare() async {
     try {
       var result = await FilePicker.platform
@@ -201,16 +258,11 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  void dismissKeyboard() {
-    _focusNode.unfocus();
-  }
-
   Future<void> _handleSubmit(TextEditingController _newMessage) async {
     if (mounted) {
       setState(() {
         _isSendIconVisible = false;
         _isReplying = false;
-        _emojiShowing = false;
       });
     }
     await _send(_newMessage.value.text,
@@ -220,73 +272,77 @@ class _ConversationState extends State<Conversation>
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
     model = context.watch<MessagingModel>();
+
+    // update keyboard height values
+    updateKeyboardHeight();
+
+    final bottomPadding =
+        keyboardMode == KeyboardMode.native ? highestKeyboardHeight : 0.0;
+
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
         : unawaited(model.clearCurrentConversationContact());
-    return WillPopScope(
-      onWillPop: () => Future<bool>.value(_keyboardState),
-      child: model.singleContactById(context, widget._contactId,
-          (context, contact, child) {
-        return BaseScreen(
-          // Conversation title (contact name)
-          title: Row(
+    return model.singleContactById(context, widget._contactId,
+        (context, contact, child) {
+      final title = contact.displayName.isNotEmpty
+          ? contact.displayName
+          : contact.contactId.id;
+      return BaseScreen(
+        resizeToAvoidBottomInset: false,
+        centerTitle: false,
+        // Conversation title (contact name)
+        title: dismissKeyboardsOnTap(
+          Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundColor: avatarBgColors[
-                    generateUniqueColorIndex(contact.contactId.id)],
-                child: Text(
-                  sanitizeContactName(contact.displayName.isEmpty
-                          ? contact.contactId.id
-                          : contact.displayName)
-                      .substring(0, 2)
-                      .toUpperCase(),
-                  style: tsCircleAvatarLetter,
-                ),
-              ),
+              CustomAvatar(
+                  id: contact.contactId.id, displayName: contact.displayName),
               const SizedBox(width: 6),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    contact.displayName.isEmpty
-                        ? contact.contactId.id
-                        : contact.displayName,
-                    style: tsTitleAppbar,
-                  ),
-                  DisappearingTimerAction(contact),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextOneLine(
+                      title,
+                      style: tsTitleAppbar,
+                    ),
+                    DisappearingTimerAction(contact),
+                  ],
+                ),
               ),
             ],
           ),
-          centerTitle: false,
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CallAction(contact),
-                IconButton(
-                  icon: const Icon(Icons.more_vert_rounded),
-                  tooltip: 'menu'.i18n,
-                  onPressed: () =>
-                      displayConversationOptions(model, context, contact),
-                )
-              ],
-            )
-          ],
-          body: Stack(children: [
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CallAction(contact),
+              IconButton(
+                icon: const Icon(Icons.more_vert_rounded),
+                tooltip: 'menu'.i18n,
+                onPressed: () =>
+                    displayConversationOptions(model, context, contact),
+              )
+            ],
+          ),
+        ],
+        body: Padding(
+          padding: EdgeInsetsDirectional.only(bottom: bottomPadding),
+          child: Stack(children: [
             Column(
               children: [
-                Card(
-                  color: grey1,
-                  child: _buildConversationSticker(contact),
+                dismissKeyboardsOnTap(
+                  Card(
+                    color: grey1,
+                    child: _buildConversationSticker(contact),
+                  ),
                 ),
                 Flexible(
-                  child: _buildMessageBubbles(contact),
+                  child: dismissKeyboardsOnTap(_buildMessageBubbles(contact)),
                 ),
                 // Reply container
                 if (_isReplying)
@@ -305,40 +361,41 @@ class _ConversationState extends State<Conversation>
                   height: kBottomNavigationBarHeight,
                   child: _buildMessageBar(),
                 ),
-                MessagingEmojiPicker(
-                  showEmojis: _emojiShowing,
-                  emptySuggestions: 'no_recents'.i18n,
-                  height: size!.height * 0.25,
-                  onBackspacePressed: () {
-                    _newMessage
-                      ..text =
-                          _newMessage.text.characters.skipLast(1).toString()
-                      ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: _newMessage.text.length));
-                  },
-                  onEmojiSelected: (category, emoji) async {
-                    if (mounted &&
-                        _customEmojiResponse &&
-                        _storedMessage != null) {
-                      dismissKeyboard();
-                      await model.react(_storedMessage!, emoji.emoji);
-                      _storedMessage = null;
-                      setState(() => _emojiShowing = false);
-                    } else {
-                      setState(() => _isSendIconVisible = true);
+                Offstage(
+                  offstage: keyboardMode != KeyboardMode.emoji,
+                  child: MessagingEmojiPicker(
+                    height: highestKeyboardHeight,
+                    emptySuggestions: 'no_recents'.i18n,
+                    onBackspacePressed: () {
                       _newMessage
-                        ..text += emoji.emoji
+                        ..text =
+                            _newMessage.text.characters.skipLast(1).toString()
                         ..selection = TextSelection.fromPosition(
                             TextPosition(offset: _newMessage.text.length));
-                    }
-                  },
+                    },
+                    onEmojiSelected: (category, emoji) async {
+                      if (mounted &&
+                          _customEmojiResponse &&
+                          _storedMessage != null) {
+                        await model.react(_storedMessage!, emoji.emoji);
+                        _storedMessage = null;
+                        dismissAllKeyboards();
+                      } else {
+                        setState(() => _isSendIconVisible = true);
+                        _newMessage
+                          ..text += emoji.emoji
+                          ..selection = TextSelection.fromPosition(
+                              TextPosition(offset: _newMessage.text.length));
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
           ]),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   Widget _buildConversationSticker(Contact contact) => LayoutBuilder(
@@ -386,15 +443,17 @@ class _ConversationState extends State<Conversation>
                       : messageRecords.elementAt(index - 1).value,
                   contact: contact,
                   onEmojiTap: (showEmoji, messageSelected) => setState(() {
-                    _emojiShowing = true;
-                    _customEmojiResponse = true;
-                    _storedMessage = messageSelected;
+                    setState(() {
+                      _customEmojiResponse = true;
+                      _storedMessage = messageSelected;
+                    });
+                    showEmojiKeyboard();
                   }),
                   onReply: (_message) {
                     setState(() {
                       _isReplying = true;
                       _quotedMessage = _message;
-                      showKeyboard();
+                      showNativeKeyboard();
                     });
                   },
                   onTapReply: (_tappedMessage) {
@@ -416,7 +475,7 @@ class _ConversationState extends State<Conversation>
 
   Widget _buildMessageBar() {
     return Container(
-      width: size!.width,
+      width: MediaQuery.of(context).size.width,
       height: 55,
       margin: _isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
@@ -480,35 +539,50 @@ class _ConversationState extends State<Conversation>
           : IconButton(
               onPressed: () {
                 {
-                  setState(() => _emojiShowing = !_emojiShowing);
-                  dismissKeyboard();
+                  if (keyboardMode == KeyboardMode.emoji) {
+                    showNativeKeyboard();
+                  } else {
+                    showEmojiKeyboard();
+                  }
                 }
               },
-              icon: Icon(Icons.sentiment_very_satisfied,
-                  color: !_emojiShowing
-                      ? Theme.of(context).primaryIconTheme.color
-                      : Theme.of(context).primaryColorDark),
+              icon: Icon(
+                  keyboardMode == KeyboardMode.emoji
+                      ? Icons.keyboard_alt_outlined
+                      : Icons.sentiment_very_satisfied,
+                  color: Theme.of(context).primaryColorDark),
             ),
-      title: _isRecording
-          ? const SizedBox()
-          : TextFormField(
-              autofocus: false,
-              textInputAction: TextInputAction.send,
-              controller: _newMessage,
-              onTap: () => setState(() => _emojiShowing = false),
-              onChanged: (value) =>
-                  setState(() => _isSendIconVisible = value.isNotEmpty),
-              focusNode: _focusNode,
-              onFieldSubmitted: (value) async =>
-                  value.isEmpty ? null : await _handleSubmit(_newMessage),
-              decoration: InputDecoration(
-                // Send icon
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                hintText: 'message'.i18n,
-                border: const OutlineInputBorder(),
+      title: Stack(
+        alignment: Alignment.center,
+        children: [
+          TextFormField(
+            autofocus: false,
+            textInputAction: TextInputAction.send,
+            controller: _newMessage,
+            onChanged: (value) =>
+                setState(() => _isSendIconVisible = value.isNotEmpty),
+            focusNode: focusNode,
+            onFieldSubmitted: (value) async =>
+                value.isEmpty ? null : await _handleSubmit(_newMessage),
+            decoration: InputDecoration(
+              // Send icon
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              hintText: 'message'.i18n,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          // hide TextFormField while recording by painting over it. this allows
+          // the form field to retain focus to keep the keyboard open and keep
+          // the layout from changing while we're recording.
+          if (_isRecording)
+            SizedBox(
+              child: Container(
+                decoration: BoxDecoration(color: grey2),
               ),
             ),
+        ],
+      ),
       trailing: _isSendIconVisible && !_isRecording
           ? IconButton(
               key: const ValueKey('send_message'),
@@ -554,7 +628,6 @@ class _ConversationState extends State<Conversation>
         _finishedRecording = false;
         _isSendIconVisible = false;
         _isReplying = false;
-        _emojiShowing = false;
       });
     }
   }
@@ -562,3 +635,9 @@ class _ConversationState extends State<Conversation>
 
 typedef ShowEmojis = void Function(
     bool showEmoji, PathAndValue<StoredMessage>? messageStored);
+
+enum KeyboardMode {
+  none,
+  native,
+  emoji,
+}

@@ -2,9 +2,9 @@ import 'package:lantern/common/common.dart';
 
 class Countdown extends AnimatedWidget {
   final Animation<int> animation;
-  late final TextStyle textStyle;
+  late final CTextStyle textStyle;
 
-  Countdown({required this.animation, TextStyle? textStyle})
+  Countdown({required this.animation, CTextStyle? textStyle})
       : super(listenable: animation) {
     this.textStyle = textStyle ?? tsCountdownTimer(black);
   }
@@ -12,7 +12,7 @@ class Countdown extends AnimatedWidget {
   Countdown.build(
       {required AnimationController controller,
       required int durationSeconds,
-      TextStyle? textStyle})
+      CTextStyle? textStyle})
       : this(
             animation: StepTween(
               begin: durationSeconds,
@@ -28,6 +28,6 @@ class Countdown extends AnimatedWidget {
         : clockTimer.inSeconds >= 10
             ? '00:${clockTimer.inSeconds}'
             : '00:0${clockTimer.inSeconds}';
-    return Text(timerText, style: textStyle);
+    return CText(timerText, style: textStyle);
   }
 }

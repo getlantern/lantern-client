@@ -26,7 +26,7 @@ class CountdownStopwatch extends StatelessWidget {
       calculate: (now) => max(0.0,
               12.0 * (endMillis - now.millisecondsSinceEpoch) / durationMillis)
           .round(),
-      builder: (context, value) => CustomAssetImage(
+      builder: (context, value) => CAssetImage(
           path: ImagePaths.countdownPath(value), color: color, size: size),
     );
   }

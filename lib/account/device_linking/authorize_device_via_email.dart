@@ -35,7 +35,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsetsDirectional.only(top: 32),
-                child: CustomTextField(
+                child: CTextField(
                   controller: emailController,
                   label: 'Email'.i18n,
                   helperText:

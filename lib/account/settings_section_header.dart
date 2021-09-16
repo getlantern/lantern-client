@@ -16,12 +16,12 @@ class SettingsSectionHeader extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsetsDirectional.only(start: 8),
-            child: Text(
+            child: CText(
               label.toUpperCase() + ':',
-              style: const TextStyle(fontSize: 10),
+              style: CTextStyle(fontSize: 10, lineHeight: 16),
             ),
           ),
-          CustomDivider(
+          CVerticalDivider(
             height: 1,
             padding: const EdgeInsetsDirectional.only(top: 8),
           ),

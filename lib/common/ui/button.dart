@@ -48,20 +48,19 @@ class Button extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                CText(
                   text.toUpperCase(),
-                  style: TextStyle(
-                      color: disabled
-                          ? grey5
-                          : secondary
-                              ? primaryPink
-                              : white,
-                      fontSize: 14),
+                  // style: disabled ? tsButtonGrey : tsButtonWhite,
+                  style: disabled
+                      ? tsButtonGrey
+                      : secondary
+                          ? tsButtonPink
+                          : tsButtonWhite,
                   textAlign: TextAlign.center,
                 ),
                 if (iconPath != null) const SizedBox(width: 5),
                 if (iconPath != null)
-                  CustomAssetImage(
+                  CAssetImage(
                     path: iconPath!,
                     color: Colors.white,
                   )

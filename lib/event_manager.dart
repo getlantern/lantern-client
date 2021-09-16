@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import 'Event.dart';
+import 'event_extension.dart';
 
 class EventManager extends EventChannel {
   var nextSubscriberID = 0;

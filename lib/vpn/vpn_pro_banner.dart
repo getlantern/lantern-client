@@ -28,7 +28,7 @@ class _ProBannerState extends State<ProBanner> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomAssetImage(
+            const CAssetImage(
               path: ImagePaths.crown_icon,
               size: 32,
             ),
@@ -38,16 +38,16 @@ class _ProBannerState extends State<ProBanner> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    CText(
                       'Go Pro Title'.i18n,
-                      style: tsSubHead(context)?.copyWith(
+                      style: tsSubHead(context).copiedWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(
                       height: 4,
                     ),
-                    Text(
+                    CText(
                       'Go Pro Description'.i18n,
                       style: tsCaption(context),
                     ),

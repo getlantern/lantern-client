@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
+
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -44,7 +45,7 @@ class Messages extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
                                         child: ListTile(
-                                          leading: CustomBadge(
+                                          leading: CBadge(
                                             count: introductions
                                                 .getPending()
                                                 .length,
@@ -54,9 +55,9 @@ class Messages extends StatelessWidget {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          title: Text('introductions'.i18n,
+                                          title: CText('introductions'.i18n,
                                               style: tsBaseScreenBodyText),
-                                          trailing: const CustomAssetImage(
+                                          trailing: const CAssetImage(
                                             path: ImagePaths
                                                 .keyboard_arrow_right_icon,
                                             size: 24,
@@ -81,31 +82,23 @@ class Messages extends StatelessWidget {
                             });
                             return ListView.builder(
                               itemCount: contacts.length,
+                              physics: defaultScrollPhysics,
                               itemBuilder: (context, index) {
-                                // false will style this as a Message preview
                                 var contact = contacts[index];
                                 return Column(
                                   children: [
                                     ContactListItem(
                                       contact: contact.value,
                                       index: index,
-                                      leading: CircleAvatar(
-                                        backgroundColor: avatarBgColors[
-                                            generateUniqueColorIndex(
-                                                contact.value.contactId.id)],
-                                        child: Text(
-                                            sanitizeContactName(
-                                                    contact.value.displayName)
-                                                .substring(0, 2)
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                                color: Colors.white)),
-                                      ),
+                                      leading: CustomAvatar(
+                                          id: contact.value.contactId.id,
+                                          displayName:
+                                              contact.value.displayName),
                                       title: sanitizeContactName(
                                           contact.value.displayName),
-                                      subtitle: Text(
+                                      subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
-                                          overflow: TextOverflow.ellipsis),
+                                          style: tsSubTitleItem),
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
@@ -113,7 +106,8 @@ class Messages extends StatelessWidget {
                                       trailing: HumanizedDate.fromMillis(
                                         contact.value.mostRecentMessageTs
                                             .toInt(),
-                                        builder: (context, date) => Text(date),
+                                        builder: (context, date) =>
+                                            CText(date, style: tsSubTitleItem),
                                       ),
                                     ),
                                   ],

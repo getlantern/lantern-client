@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/ui/custom_rounded_rectangle_border.dart';
+import 'package:lantern/common/ui/crounded_rectangle_border.dart';
 
 class CustomBottomItem extends StatelessWidget {
   final int currentIndex;
   final int position;
   final int total;
-  final Text label;
+  final CText label;
   final Widget? iconWidget;
   final Widget icon;
   final VoidCallback onTap;
@@ -51,7 +51,7 @@ class CustomBottomItem extends StatelessWidget {
                   color: position == currentIndex
                       ? selectedTabColor
                       : unselectedTabColor,
-                  shape: CustomRoundedRectangleBorder(
+                  shape: CRoundedRectangleBorder(
                     topSide: position == currentIndex
                         ? null
                         : BorderSide(

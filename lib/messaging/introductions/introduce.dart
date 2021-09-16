@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
+import 'package:lantern/messaging/contacts/contacts_extension.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introduce extends StatefulWidget {
@@ -24,12 +25,10 @@ class _IntroduceState extends State<Introduce> {
             .fill([selectedContactIds.length]),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts.toList()
-            ..sort((a, b) => sanitizeContactName(a.value.displayName)
-                .compareTo(sanitizeContactName(b.value.displayName)));
+          var sortedContacts = _contacts.toList().sortedAlphabetically();
 
-          var groupedSortedContacts = sortedContacts
-              .groupBy((el) => sanitizeContactName(el.value.displayName));
+          var groupedSortedContacts = sortedContacts.groupBy((el) =>
+              sanitizeContactName(el.value.displayName[0].toLowerCase()));
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +37,7 @@ class _IntroduceState extends State<Introduce> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child: Text('introduce_contacts_select'.i18n,
+                    child: CTextWrap('introduce_contacts_select'.i18n,
                         style: tsEmptyContactState),
                   ),
                 Expanded(
@@ -47,8 +46,8 @@ class _IntroduceState extends State<Introduce> {
                             alignment: AlignmentDirectional.center,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24.0, vertical: 16.0),
-                            child: Text('need_two_contacts_to_introduce'.i18n,
-                                textAlign: TextAlign.center,
+                            child: CTextWrap(
+                                'need_two_contacts_to_introduce'.i18n,
                                 style: tsBaseScreenBodyText),
                           )
                         : Column(
@@ -60,18 +59,9 @@ class _IntroduceState extends State<Introduce> {
                                   child: groupedContactListGenerator(
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
-                                          CircleAvatar(
-                                            backgroundColor: avatarBgColors[
-                                                generateUniqueColorIndex(
-                                                    contact.contactId.id)],
-                                            child: Text(
-                                                sanitizeContactName(
-                                                        contact.displayName)
-                                                    .substring(0, 2)
-                                                    .toUpperCase(),
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                          ),
+                                          CustomAvatar(
+                                              id: contact.contactId.id,
+                                              displayName: contact.displayName),
                                       trailingCallback: (int index,
                                               Contact contact) =>
                                           Checkbox(
@@ -116,14 +106,14 @@ class _IntroduceState extends State<Introduce> {
                                                               .center,
                                                       children: [
                                                         Expanded(
-                                                            child: Text(
+                                                            child: CText(
                                                           'introductions_sent'
                                                               .i18n,
                                                           style:
                                                               tsInfoDialogText(
                                                                   white),
                                                           textAlign:
-                                                              TextAlign.left,
+                                                              TextAlign.start,
                                                         )),
                                                       ],
                                                     ),

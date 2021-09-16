@@ -256,10 +256,10 @@ msgid "start_chat"
 msgstr "Start chat"
 
 msgid "message_disappearing"
-msgstr "All messages will not disappear for you and your contact"
+msgstr "All messages will not disappear for you and your contact."
 
 msgid "message_disappearing_description"
-msgstr "All messages will disappear after %s for you and your contact"
+msgstr "All messages will disappear after %s for you and your contact."
 
 msgid "delete_contact_confirmation"
 msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
@@ -333,6 +333,9 @@ msgstr "To start a message with your friend, scan each other's QR code.  This pr
 msgid "qr_info_scan"
 msgstr "Scan each others QR codes, to add a contact."
 
+msgid "qr_success_snackbar"
+msgstr "%s is a Contact"
+
 msgid "qr_info_waiting_qr"
 msgstr "Waiting for your friend to scan your QR code..."
 
@@ -342,8 +345,8 @@ msgstr "Scan complete"
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
-msgid "qr_trouble_scanning"
-msgstr "Trouble scanning?"
+msgid "qr_add_via_id"
+msgstr "Add via Messenger ID"
 
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
@@ -364,7 +367,7 @@ msgid "introductions"
 msgstr "Introductions"
 
 msgid "introduced"
-msgstr "Introduced by"
+msgstr "Introduced by %s"
 
 msgid "introductions_info"
 msgstr "Both parties must accept the introduction to message each other. Introductions disappear after 7 days if no action is taken."
@@ -404,6 +407,15 @@ msgstr "Me"
 
 msgid "disappearing_messages"
 msgstr "Disappearing Messages"
+
+msgid "banner_intro_waiting"
+msgstr "Waiting for %s. They will receive your messages once they accept the introduction."
+
+msgid "banner_messages_persist"
+msgstr "New messages do not disappear."
+
+msgid "banner_messages_disappear"
+msgstr "Messages disappear after %s."
 
 msgid "change_display_name"
 msgstr "Change Display Name"

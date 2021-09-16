@@ -22,9 +22,6 @@ class ContactConnectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<MessagingModel>();
     final introduction = msg.introduction;
-    final avatarLetters = introduction.displayName != ''
-        ? introduction.displayName.substring(0, 2)
-        : 'UC';
     return Column(
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -36,15 +33,10 @@ class ContactConnectionCard extends StatelessWidget {
             width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: avatarBgColors[
-                    generateUniqueColorIndex(introduction.to.id)],
-                child: Text(avatarLetters.toUpperCase(),
-                    style: const TextStyle(color: Colors.white)),
-              ),
-              title: Text(introduction.displayName,
-                  style: TextStyle(
-                      color: outbound ? outboundMsgColor : inboundMsgColor)),
+              leading: CustomAvatar(
+                  id: contact.contactId.id, displayName: contact.displayName),
+              title: CText(introduction.displayName,
+                  style: tsMessageBody(outbound)),
               trailing: outbound
                   ? const SizedBox()
                   : FittedBox(
@@ -115,16 +107,20 @@ class ContactConnectionCard extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(12),
                 ),
-                Center(
-                    child: Text(
-                        'Accept Introduction to ${introduction.displayName}',
-                        style: tsTitleItem)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 24.0),
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 24.0, top: 0.0, end: 24.0, bottom: 4.0),
                   child: Center(
-                    child: Text('introductions_info'.i18n),
+                    child: TextOneLine(
+                        'Accept Introduction to ${introduction.displayName}',
+                        style: tsTitleItem),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
+                  child: CTextWrap('introductions_info'.i18n,
+                      style: tsExplanation),
                 ),
                 Divider(thickness: 1, color: grey2),
                 Column(
@@ -134,7 +130,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: Text('accept'.i18n, style: tsDialogTitle),
+                        title: CText('accept'.i18n, style: tsDialogTitle),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -158,13 +154,14 @@ class ContactConnectionCard extends StatelessWidget {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      title: Text('reject'.i18n),
+                      title: CText('reject'.i18n, style: tsDialogTitle),
                       onTap: () async {
                         showAlertDialog(
                             context: context,
-                            title: Text('introductions_reject_title'.i18n,
+                            title: CText('introductions_reject_title'.i18n,
                                 style: tsDialogTitle),
-                            content: Text('introductions_reject_content'.i18n,
+                            content: CTextWrap(
+                                'introductions_reject_content'.i18n,
                                 style: tsDialogBody),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,

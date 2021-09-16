@@ -35,8 +35,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
             showAlertDialog(
                 context: context,
                 title:
-                    Text('unable_to_complete_call'.i18n, style: tsDialogTitle),
-                content: Text('please_try_again'.i18n, style: tsDialogBody),
+                    CText('unable_to_complete_call'.i18n, style: tsDialogTitle),
+                content:
+                    CTextWrap('please_try_again'.i18n, style: tsDialogBody),
                 agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);
@@ -97,31 +98,27 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     scale: 3,
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: grey5,
-                          child: Text(
-                              sanitizeContactName(widget.contact.displayName)
-                                  .substring(0, 2)
-                                  .toUpperCase(),
-                              style: const TextStyle(color: Colors.white)),
-                        ),
+                        CustomAvatar(
+                            id: widget.contact.contactId.id,
+                            displayName: widget.contact.displayName,
+                            customColor: grey5),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
-                          child: Text(
+                          child: CText(
                             widget.contact.displayName.isNotEmpty
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            style: TextStyle(color: white),
+                            style: tsCallTitle,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
-                          child: Text(
+                          child: CText(
                             signaling.value.callState == CallState.Connected
-                                ? 'connected'.i18n
+                                ? 'Connected'.i18n
                                 : 'Connecting...'.i18n,
-                            style: TextStyle(color: white, fontSize: 4),
+                            style: tsCallSubtitle,
                           ),
                         ),
                       ],
@@ -132,7 +129,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         RoundButton(
-                          icon: CustomAssetImage(
+                          icon: CAssetImage(
                               path: ImagePaths.speaker_icon,
                               color: signalingState.speakerphoneOn
                                   ? grey5
@@ -144,7 +141,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           },
                         ),
                         RoundButton(
-                          icon: CustomAssetImage(
+                          icon: CAssetImage(
                               path: ImagePaths.mute_icon,
                               color: signalingState.muted ? grey5 : white),
                           backgroundColor: signalingState.muted ? white : grey5,
@@ -153,8 +150,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           },
                         ),
                         RoundButton(
-                          icon: const CustomAssetImage(
-                              path: ImagePaths.hangup_icon),
+                          icon: const CAssetImage(path: ImagePaths.hangup_icon),
                           backgroundColor: indicatorRed,
                           onPressed: () async {
                             signaling.bye(await session);

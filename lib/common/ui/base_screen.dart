@@ -7,6 +7,7 @@ class BaseScreen extends StatelessWidget {
   final Widget? actionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool? centerTitle;
+  final bool resizeToAvoidBottomInset;
 
   BaseScreen(
       {this.title,
@@ -15,6 +16,7 @@ class BaseScreen extends StatelessWidget {
       this.actionButton,
       this.floatingActionButtonLocation,
       this.centerTitle = true,
+      this.resizeToAvoidBottomInset = true,
       Key? key})
       : super(key: key);
 
@@ -22,9 +24,10 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: AppBar(
         title: title.runtimeType == String
-            ? Text(
+            ? CText(
                 title,
                 style: tsTitleAppbar,
               )
