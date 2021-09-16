@@ -98,7 +98,11 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 Run unit tests with `make test`.
 
-Run integration tests with `make integration-test`.
+Run integration tests with `make integration-test`. This will run all files in `integration_test` that end
+in `_test.dart`.
+
+To run a specific integration test, run `TEST=name make integration-test` where name is the name of the
+integration test file without the `.dart` suffix. For example `TEST=conversation_page_test make integration-test`.
 
 BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!! When you run the integration tests, you'll need to
 select a device. If you select a device that already has Lantern installed, that Lantern will be
@@ -158,7 +162,7 @@ If you wanna visualize the current percentage of code coverage you need to do th
 
 This test is to ensure the correct functionality of the Flutter application. In case that you need to test the functionality of the Flutter application, you need to do the following steps.
 
-1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --target integration_test/my_file_test.dart --flavor prod`
+1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --flavor prod --target integration_test/my_file_test.dart`
 2. This will start doing a simulated build of the project and run the tests.
 
 If you modify the code and you want to test the changes, you need to do the following steps.
