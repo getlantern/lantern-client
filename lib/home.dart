@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             content:
                 CText(message, style: CTextStyle(fontSize: 14, lineHeight: 21)),
             action: SnackBarAction(
-              textColor: secondaryPink,
+              textColor: pink3,
               label: buttonText.toUpperCase(),
               onPressed: () {
                 mainMethodChannel.invokeMethod('showLastSurvey');

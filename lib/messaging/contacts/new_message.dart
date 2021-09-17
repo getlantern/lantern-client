@@ -75,7 +75,7 @@ class _NewMessageState extends State<NewMessage> {
                         ),
                         duration: const Duration(milliseconds: 4000),
                         action: SnackBarAction(
-                          textColor: secondaryPink,
+                          textColor: pink3,
                           label: 'start_chat'.i18n.toUpperCase(),
                           onPressed: () async {
                             await context.pushRoute(Conversation(

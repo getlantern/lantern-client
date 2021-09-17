@@ -431,10 +431,10 @@ Future<void> displayConversationOptions(
                                                           states.contains(
                                                                   MaterialState
                                                                       .selected)
-                                                              ? primaryPink
+                                                              ? pink4
                                                               : black,
                                                     ),
-                                                    activeColor: primaryPink,
+                                                    activeColor: pink4,
                                                     onChanged: (value) async {
                                                       setState(() {
                                                         selectedPosition =

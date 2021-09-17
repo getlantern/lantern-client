@@ -521,8 +521,8 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: red,
-                    color: red,
+                    pulseColor: indicatorRed,
+                    color: indicatorRed,
                   ),
                 ),
                 Flexible(
@@ -530,7 +530,7 @@ class _ConversationState extends State<Conversation>
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsOverline.copiedWith(color: red),
+                      style: tsOverline.copiedWith(color: indicatorRed),
                     ),
                   ),
                 ),

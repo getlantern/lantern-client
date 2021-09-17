@@ -48,7 +48,7 @@ class Settings extends StatelessWidget {
                 padding: 2,
                 toggleSize: 18.0,
                 value: proxyAll,
-                activeColor: green,
+                activeColor: indicatorGreen,
                 inactiveColor: offSwitchColor,
                 onToggle: (bool newValue) {
                   sessionModel.setProxyAll(newValue);
@@ -69,7 +69,7 @@ class Settings extends StatelessWidget {
                 (BuildContext context, String lang, Widget? child) => CText(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang).toUpperCase())!,
-                  style: tsSubtitle2.copiedWith(color: primaryPink),
+                  style: tsSubtitle2.copiedWith(color: pink4),
                 ),
               ),
             ),

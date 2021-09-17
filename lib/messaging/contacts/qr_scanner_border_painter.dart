@@ -9,7 +9,7 @@ class QRScannerBorderPainter extends CustomPainter {
     var cw = size.height * 0.1;
 
     var greenPaint = Paint()
-      ..color = green
+      ..color = indicatorGreen
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -20,7 +20,7 @@ class QRScannerBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    // draw a green rectangle with rounded corners
+    // draw a indicatorGreen rectangle with rounded corners
     canvas.drawRRect(
         RRect.fromLTRBR(0, 0, w, h, Radius.circular(r)), greenPaint);
 

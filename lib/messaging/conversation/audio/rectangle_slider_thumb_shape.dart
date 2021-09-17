@@ -54,7 +54,7 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
     final canvas = context.canvas;
 
     final paintBorder = Paint()
-      ..color = primaryYellow
+      ..color = yellow4
       ..strokeWidth = isPlaying ? 2 : 0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;

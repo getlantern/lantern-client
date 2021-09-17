@@ -66,8 +66,8 @@ class CustomBottomBar extends StatelessWidget {
                 backgroundColor: (value.toLowerCase() ==
                             'Disconnecting'.i18n.toLowerCase() ||
                         value == 'connected'.i18n.toLowerCase())
-                    ? green
-                    : red,
+                    ? indicatorGreen
+                    : indicatorRed,
               ),
             ),
           ),

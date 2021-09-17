@@ -21,8 +21,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
             .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
         style: tsBody,
         styles: {
-          'highlight':
-              TextStyle(color: primaryBlue, fontWeight: FontWeight.bold),
+          'highlight': TextStyle(color: blue4, fontWeight: FontWeight.bold),
         },
       );
     }
