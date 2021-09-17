@@ -383,6 +383,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               children: [
                                 CTextField(
                                     controller: contactIdController,
+                                    autovalidateMode: AutovalidateMode.disabled,
                                     label: 'contact_id_messenger_id'.i18n,
                                     helperText:
                                         'contact_id_enter_manually'.i18n,
@@ -471,7 +472,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                             humanizeContactId(
                                                 widget.me.contactId.id),
                                             overflow: TextOverflow.visible,
-                                            style: tsBody16),
+                                            style: tsBody3),
                                       ),
                                     ),
                                   ),

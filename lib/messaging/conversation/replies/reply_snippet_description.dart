@@ -12,7 +12,7 @@ class ReplySnippetDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return CText(
       descriptiveText,
-      style: tsBody16.copiedWith(fontStyle: FontStyle.italic),
+      style: tsBody3.copiedWith(fontStyle: FontStyle.italic),
       overflow: TextOverflow.ellipsis,
     );
   }

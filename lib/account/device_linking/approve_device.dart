@@ -22,9 +22,9 @@ class ApproveDevice extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: CText(
+          child: CTextWrap(
             text,
-            style: tsBody14,
+            style: tsBody,
           ),
         ),
       ],

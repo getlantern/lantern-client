@@ -10,6 +10,6 @@ class ReplySnippetText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CText(text, style: tsBody16);
+    return CText(text, style: tsBody3);
   }
 }

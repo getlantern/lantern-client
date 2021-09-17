@@ -15,7 +15,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n, style: tsBody14),
+                child: CTextWrap('introductions_info'.i18n, style: tsBody),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
@@ -98,12 +98,12 @@ class Introductions extends StatelessWidget {
                                                                       'introductions_reject_title'
                                                                           .i18n,
                                                                       style:
-                                                                          tsBody16),
+                                                                          tsBody3),
                                                                   content: CTextWrap(
                                                                       'introductions_reject_content'
                                                                           .i18n,
                                                                       style:
-                                                                          tsBody14),
+                                                                          tsBody),
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'

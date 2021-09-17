@@ -129,7 +129,7 @@ class MessageBubble extends StatelessWidget {
           ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.reply),
-            title: CText('reply'.i18n, style: tsBody14),
+            title: CText('reply'.i18n, style: tsBody),
             onPressed: () {
               onReply(msg);
             },
@@ -137,7 +137,7 @@ class MessageBubble extends StatelessWidget {
           if (!isAttachment)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.copy),
-              title: CText('copy_text'.i18n, style: tsBody14),
+              title: CText('copy_text'.i18n, style: tsBody),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -158,7 +158,7 @@ class MessageBubble extends StatelessWidget {
             ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.delete),
-            title: CText('delete_for_me'.i18n, style: tsBody14),
+            title: CText('delete_for_me'.i18n, style: tsBody),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
@@ -166,7 +166,7 @@ class MessageBubble extends StatelessWidget {
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
-              title: CText('delete_for_everyone'.i18n, style: tsBody14),
+              title: CText('delete_for_everyone'.i18n, style: tsBody),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },
@@ -220,15 +220,15 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
               ? CTextWrap(
                   'This will delete the message for you only. Everyone else will still be able to see it.'
                       .i18n,
-                  style: tsBody14)
+                  style: tsBody)
               : CTextWrap('This will delete the message for everyone.'.i18n,
-                  style: tsBody14),
+                  style: tsBody),
         ],
       ),
     ),
     title: isLocal
-        ? CText('Delete for me', style: tsBody16)
-        : CText('Delete for everyone', style: tsBody16),
+        ? CText('Delete for me', style: tsBody3)
+        : CText('Delete for everyone', style: tsBody3),
     agreeAction: () =>
         isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
     agreeText: 'Delete',

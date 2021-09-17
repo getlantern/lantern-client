@@ -118,11 +118,11 @@ class ContentContainer extends StatelessWidget {
                                     showAlertDialog(
                                         context: context,
                                         title: CText('open_url'.i18n,
-                                            style: tsBody16),
+                                            style: tsBody3),
                                         content: CTextWrap(
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
-                                            style: tsBody14),
+                                            style: tsBody),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,
                                         agreeAction: () async {
@@ -131,12 +131,12 @@ class ContentContainer extends StatelessWidget {
                                   }
                                 },
                                 styleSheet: MarkdownStyleSheet(
-                                  a: tsBody16.copiedWith(
+                                  a: tsBody3.copiedWith(
                                       color: outbound
                                           ? outboundMsgColor
                                           : inboundMsgColor,
                                       decoration: TextDecoration.underline),
-                                  p: tsBody16.copiedWith(
+                                  p: tsBody3.copiedWith(
                                       color: outbound
                                           ? outboundMsgColor
                                           : inboundMsgColor),

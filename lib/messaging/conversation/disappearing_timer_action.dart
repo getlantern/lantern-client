@@ -25,7 +25,7 @@ class DisappearingTimerAction extends StatelessWidget {
                 : contact.messagesDisappearAfterSeconds
                     .humanizeSeconds()
                     .toUpperCase(),
-            style: tsBody10Bold)
+            style: tsOverline)
       ]),
     );
   }

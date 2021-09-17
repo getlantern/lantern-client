@@ -121,9 +121,8 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
                   for (var reaction in reactions.entries)
                     if (reaction.value.isNotEmpty)
                       ListTile(
-                        leading: CText(reaction.key, style: tsBody14),
-                        title:
-                            CText(reaction.value.join(', '), style: tsBody14),
+                        leading: CText(reaction.key, style: tsBody),
+                        title: CText(reaction.value.join(', '), style: tsBody),
                       ),
                 ],
               ),
@@ -316,7 +315,7 @@ Future<void> displayConversationOptions(
                                   children: [
                                     CText(
                                       'disappearing_messages'.i18n,
-                                      style: tsBody16,
+                                      style: tsBody3,
                                     ),
                                     Padding(
                                       padding: const EdgeInsetsDirectional.only(
@@ -332,7 +331,7 @@ Future<void> displayConversationOptions(
                                                           0)
                                               ? CTextWrap(
                                                   'message_disappearing'.i18n,
-                                                  style: tsBody14Grey,
+                                                  style: tsBodyGrey,
                                                 )
                                               : CTextWrap(
                                                   'message_disappearing_description'
@@ -348,7 +347,7 @@ Future<void> displayConversationOptions(
                                                             .humanizeSeconds(
                                                                 longForm: true)
                                                   ]),
-                                                  style: tsBody14Grey,
+                                                  style: tsBodyGrey,
                                                 ),
                                     ),
                                   ],
@@ -451,7 +450,7 @@ Future<void> displayConversationOptions(
                                                       : seconds[index]
                                                           .humanizeSeconds(
                                                               longForm: true),
-                                                  style: tsBody14,
+                                                  style: tsBody,
                                                 ),
                                               ),
                                             );
@@ -575,14 +574,14 @@ Future<void> displayConversationOptions(
                                   child: Icon(Icons.delete),
                                 ),
                                 CText('delete_contact'.i18n.toUpperCase(),
-                                    style: tsBody16),
+                                    style: tsBody3),
                               ],
                             ),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
                                   CTextWrap('delete_contact_confirmation'.i18n,
-                                      style: tsBody14)
+                                      style: tsBody)
                                 ],
                               ),
                             ),
