@@ -179,7 +179,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // icon color
       topColor: grey5,
       title: Center(
-        child: CText('qr_scanner'.i18n, style: tsFullScreenDialogTitle),
+        child: CText('qr_scanner'.i18n,
+            style: tsHeading2.copiedWith(
+                fontWeight: FontWeight.w500, color: white)),
       ),
       onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
@@ -196,7 +198,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         ? PulseAnimation(
                             CText(
                               'qr_info_waiting_qr'.i18n,
-                              style: tsInfoDialogText(white),
+                              style: tsBodyColor(white),
                               textAlign: TextAlign.center,
                             ),
                           )
@@ -204,7 +206,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                             children: [
                               CText(
                                 'qr_info_scan'.i18n,
-                                style: tsInfoDialogText(white),
+                                style: tsBodyColor(white),
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
@@ -277,7 +279,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               // my own QR code
               CText(
                 'qr_for_your_contact'.i18n,
-                style: tsInfoDialogText(white),
+                style: tsBodyColor(white),
               ),
               Flexible(
                 flex: 2,
@@ -323,7 +325,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                               16.0, 0, 16.0, 0),
                           child: CText(
                             'qr_add_via_id'.i18n,
-                            style: tsInfoDialogText(white),
+                            style: tsBodyColor(white),
                           ),
                         ),
                         Padding(
@@ -350,7 +352,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CText('qr_add_via_id'.i18n, style: tsFullScreenDialogTitleBlack),
+          CText('qr_add_via_id'.i18n,
+              style: tsHeading2.copiedWith(
+                  fontWeight: FontWeight.w500, color: white)),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
@@ -434,7 +438,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                         start: 10),
                                     child: CText(
                                       'contact_id_your_id'.i18n.toUpperCase(),
-                                      style: tsBody10,
+                                      style: tsOverline,
                                     ),
                                   ),
                                 ],
@@ -455,7 +459,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                               Expanded(
                                                   child: CText(
                                                 'copied'.i18n,
-                                                style: tsInfoDialogText(white),
+                                                style: tsBodyColor(white),
                                                 textAlign: TextAlign.start,
                                               )),
                                             ],
@@ -489,7 +493,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                               Expanded(
                                                   child: CText(
                                                 'copied'.i18n,
-                                                style: tsInfoDialogText(white),
+                                                style: tsBodyColor(white),
                                                 textAlign: TextAlign.start,
                                               )),
                                             ],
@@ -564,7 +568,7 @@ class _renderWaitingUI extends StatelessWidget {
                 start: 8.0, end: 8.0, top: 8.0),
             child: CText(
               'scan_complete'.i18n,
-              style: tsInfoDialogText(fontColor),
+              style: tsBodyColor(fontColor),
             ),
           ),
         if (!proceedWithoutProvisionals)
@@ -572,7 +576,7 @@ class _renderWaitingUI extends StatelessWidget {
             padding: const EdgeInsetsDirectional.all(8.0),
             child: Countdown.build(
               controller: countdownController!,
-              textStyle: tsCountdownTimer(fontColor),
+              textStyle: tsDisplay(fontColor),
               durationSeconds: timeoutMillis! ~/ 1000,
             ),
           ),
@@ -585,7 +589,7 @@ class _renderWaitingUI extends StatelessWidget {
                     start: 20.0, top: 16.0, bottom: 16.0, end: 20.0),
                 child: CText(
                   infoText,
-                  style: tsInfoDialogText(fontColor),
+                  style: tsBodyColor(fontColor),
                   textAlign: TextAlign.center,
                 ),
               ),

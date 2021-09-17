@@ -306,7 +306,7 @@ class _ConversationState extends State<Conversation>
                   children: [
                     CText(
                       title,
-                      style: tsAppbarTitle,
+                      style: tsHeading2.copiedWith(fontWeight: FontWeight.w500),
                     ),
                     DisappearingTimerAction(contact),
                   ],
@@ -530,7 +530,7 @@ class _ConversationState extends State<Conversation>
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsBody10.copiedWith(color: red),
+                      style: tsOverline.copiedWith(color: red),
                     ),
                   ),
                 ),

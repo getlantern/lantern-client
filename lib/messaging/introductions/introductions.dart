@@ -47,7 +47,7 @@ class Introductions extends StatelessWidget {
                                           'introduced'.i18n.fill([
                                             introductor.displayName
                                           ]).toUpperCase(),
-                                          style: tsBody10),
+                                          style: tsOverline),
                                     ),
                                     Divider(height: 1.0, color: grey3),
                                     ...introductionsPerIntroductor.map(
@@ -190,7 +190,7 @@ class Introductions extends StatelessWidget {
                                                                             value.introduction.displayName
                                                                           ]),
                                                                           style:
-                                                                              tsInfoDialogText(white),
+                                                                              tsBodyColor(white),
                                                                         ),
                                                                       ),
                                                                     ],

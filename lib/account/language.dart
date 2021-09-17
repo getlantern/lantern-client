@@ -40,7 +40,9 @@ class Language extends StatelessWidget {
               title: CText(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: lang == currentLang ? tsBodyPink : tsBody),
+                  style: lang == currentLang
+                      ? tsBody.copiedWith(color: primaryPink)
+                      : tsBody),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {

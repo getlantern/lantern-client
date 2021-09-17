@@ -271,8 +271,8 @@ Future<void> displayConversationOptions(
                     top: 7, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
-                  child: CText('disappearing_messages'.i18n,
-                      style: tsBottomModalListItem),
+                  child:
+                      CText('disappearing_messages'.i18n, style: tsTextField),
                 ),
                 onTap: () async {
                   final scrollController = ScrollController();
@@ -331,7 +331,8 @@ Future<void> displayConversationOptions(
                                                           0)
                                               ? CTextWrap(
                                                   'message_disappearing'.i18n,
-                                                  style: tsBodyGrey,
+                                                  style: tsBody.copiedWith(
+                                                      color: grey5),
                                                 )
                                               : CTextWrap(
                                                   'message_disappearing_description'
@@ -347,7 +348,8 @@ Future<void> displayConversationOptions(
                                                             .humanizeSeconds(
                                                                 longForm: true)
                                                   ]),
-                                                  style: tsBodyGrey,
+                                                  style: tsBody.copiedWith(
+                                                      color: grey5),
                                                 ),
                                     ),
                                   ],
@@ -537,8 +539,8 @@ Future<void> displayConversationOptions(
                     top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: CText('introduce_contacts'.i18n,
-                        style: tsBottomModalListItem)),
+                    child:
+                        CText('introduce_contacts'.i18n, style: tsTextField)),
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
@@ -558,7 +560,7 @@ Future<void> displayConversationOptions(
                     offset: const Offset(-14, 0),
                     child: TextOneLine(
                         'delete_contact_name'.i18n.fill([contact.displayName]),
-                        style: tsBottomModalListItem),
+                        style: tsTextField),
                   ),
                   onTap: () => showDialog<void>(
                         context: bottomContext,

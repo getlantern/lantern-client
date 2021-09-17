@@ -52,7 +52,7 @@ class ApproveDevice extends StatelessWidget {
                   alignment: Alignment.center,
                   child: CText(
                     'Enter or paste device linking PIN'.i18n.toUpperCase(),
-                    style: tsBody10,
+                    style: tsOverline,
                   ),
                 ),
                 PinField(

@@ -29,7 +29,7 @@ class BaseScreen extends StatelessWidget {
         title: title.runtimeType == String
             ? CText(
                 title,
-                style: tsAppbarTitle,
+                style: tsHeading2.copiedWith(fontWeight: FontWeight.w500),
               )
             : title,
         elevation: 1,
