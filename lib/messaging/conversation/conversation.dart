@@ -27,7 +27,7 @@ class _ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
   late final ShowEmojis onEmojiTap;
-  bool _customEmojiResponse = false;
+  bool _reactingWithEmoji = false;
   bool _hasPermission = false;
 
   final TextEditingController _newMessage = TextEditingController();
@@ -51,7 +51,8 @@ class _ConversationState extends State<Conversation>
 
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
-  static var highestKeyboardHeight = 150.0;
+  double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
+  static var highestKeyboardHeight = 0.0;
 
   void showNativeKeyboard() {
     focusNode.requestFocus();
@@ -61,11 +62,11 @@ class _ConversationState extends State<Conversation>
     focusNode.unfocus();
   }
 
-  void showEmojiKeyboard() {
+  void showEmojiKeyboard(bool reaction) {
     // always show native keyboard first so we know the height of the native
     // keyboard and can make the emoji keyboard the same height
     setState(() {
-      keyboardMode = KeyboardMode.emoji;
+      keyboardMode = reaction ? KeyboardMode.emojiReaction : KeyboardMode.emoji;
     });
     dismissNativeKeyboard();
   }
@@ -88,9 +89,13 @@ class _ConversationState extends State<Conversation>
         keyboardVisibilityController.onChange.listen((bool visible) {
       updateKeyboardHeight();
       if (visible) {
-        setState(() {
-          keyboardMode = KeyboardMode.native;
-        });
+        if (keyboardMode == KeyboardMode.emojiReaction) {
+          dismissNativeKeyboard();
+        } else {
+          setState(() {
+            keyboardMode = KeyboardMode.native;
+          });
+        }
       } else if (keyboardMode == KeyboardMode.native) {
         setState(() {
           keyboardMode = KeyboardMode.none;
@@ -277,8 +282,9 @@ class _ConversationState extends State<Conversation>
     // update keyboard height values
     updateKeyboardHeight();
 
-    final bottomPadding =
-        keyboardMode == KeyboardMode.native ? highestKeyboardHeight : 0.0;
+    final keyboardHeight = highestKeyboardHeight > 0
+        ? highestKeyboardHeight
+        : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
@@ -331,7 +337,9 @@ class _ConversationState extends State<Conversation>
           ),
         ],
         body: Padding(
-          padding: EdgeInsetsDirectional.only(bottom: bottomPadding),
+          padding: EdgeInsetsDirectional.only(
+              bottom:
+                  keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0),
           child: Stack(children: [
             Column(
               children: [
@@ -362,9 +370,10 @@ class _ConversationState extends State<Conversation>
                   child: _buildMessageBar(),
                 ),
                 Offstage(
-                  offstage: keyboardMode != KeyboardMode.emoji,
+                  offstage: keyboardMode != KeyboardMode.emoji &&
+                      keyboardMode != KeyboardMode.emojiReaction,
                   child: MessagingEmojiPicker(
-                    height: highestKeyboardHeight,
+                    height: keyboardHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
                       _newMessage
@@ -375,9 +384,10 @@ class _ConversationState extends State<Conversation>
                     },
                     onEmojiSelected: (category, emoji) async {
                       if (mounted &&
-                          _customEmojiResponse &&
+                          _reactingWithEmoji &&
                           _storedMessage != null) {
                         await model.react(_storedMessage!, emoji.emoji);
+                        _reactingWithEmoji = false;
                         _storedMessage = null;
                         dismissAllKeyboards();
                       } else {
@@ -444,10 +454,10 @@ class _ConversationState extends State<Conversation>
                   contact: contact,
                   onEmojiTap: (showEmoji, messageSelected) => setState(() {
                     setState(() {
-                      _customEmojiResponse = true;
+                      _reactingWithEmoji = true;
                       _storedMessage = messageSelected;
                     });
-                    showEmojiKeyboard();
+                    showEmojiKeyboard(true);
                   }),
                   onReply: (_message) {
                     setState(() {
@@ -539,15 +549,18 @@ class _ConversationState extends State<Conversation>
           : IconButton(
               onPressed: () {
                 {
-                  if (keyboardMode == KeyboardMode.emoji) {
+                  if (keyboardMode == KeyboardMode.emoji ||
+                      keyboardMode == KeyboardMode.emojiReaction) {
+                    keyboardMode = KeyboardMode.native;
                     showNativeKeyboard();
                   } else {
-                    showEmojiKeyboard();
+                    showEmojiKeyboard(false);
                   }
                 }
               },
               icon: Icon(
-                  keyboardMode == KeyboardMode.emoji
+                  keyboardMode == KeyboardMode.emoji ||
+                          keyboardMode == KeyboardMode.emojiReaction
                       ? Icons.keyboard_alt_outlined
                       : Icons.sentiment_very_satisfied,
                   color: Theme.of(context).primaryColorDark),
@@ -636,8 +649,4 @@ class _ConversationState extends State<Conversation>
 typedef ShowEmojis = void Function(
     bool showEmoji, PathAndValue<StoredMessage>? messageStored);
 
-enum KeyboardMode {
-  none,
-  native,
-  emoji,
-}
+enum KeyboardMode { none, native, emoji, emojiReaction }
