@@ -51,7 +51,7 @@ class _ConversationState extends State<Conversation>
 
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
-  static final defaultKeyboardHeight = 249.0;
+  double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
   static var highestKeyboardHeight = 0.0;
 
   void showNativeKeyboard() {
