@@ -27,17 +27,13 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
           ),
         ),
         Container(
-          transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
+          transform: Matrix4.translationValues(0.0, 2.0, 0.0),
           child: InkWell(
             onTap: _onTap,
-            child: Container(
-              height: 48,
-              width: 48,
-              child: Icon(
-                Icons.info_outline_rounded,
-                color: unselectedTabLabelColor,
-                size: 16,
-              ),
+            child: Icon(
+              Icons.info_outline_rounded,
+              color: unselectedTabLabelColor,
+              size: 16,
             ),
           ),
         ),
