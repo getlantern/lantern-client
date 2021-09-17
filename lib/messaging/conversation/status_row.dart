@@ -28,7 +28,7 @@ class StatusRow extends StatelessWidget {
                 message.value.ts.toInt(),
                 builder: (context, date) => CText(
                   date,
-                  style: tsBody10.copiedWith(
+                  style: tsOverline.copiedWith(
                       color: outbound ? outboundMsgColor : inboundMsgColor),
                 ),
               ),

@@ -44,7 +44,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                   alignment: Alignment.center,
                   child: CText(
                     'Enter or paste linking code'.i18n.toUpperCase(),
-                    style: tsBody10,
+                    style: tsOverline,
                   ),
                 ),
                 PinField(

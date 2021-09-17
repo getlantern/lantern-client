@@ -67,7 +67,7 @@ class _NewMessageState extends State<NewMessage> {
                                     .i18n
                                     .fill([_updatedContact!.displayName]),
                                 overflow: TextOverflow.visible,
-                                style: tsInfoDialogText(white),
+                                style: tsBodyColor(white),
                                 textAlign: TextAlign.start,
                               ),
                             ),

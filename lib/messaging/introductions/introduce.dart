@@ -109,9 +109,8 @@ class _IntroduceState extends State<Introduce> {
                                                             child: CText(
                                                           'introductions_sent'
                                                               .i18n,
-                                                          style:
-                                                              tsInfoDialogText(
-                                                                  white),
+                                                          style: tsBodyColor(
+                                                              white),
                                                           textAlign:
                                                               TextAlign.start,
                                                         )),

@@ -107,7 +107,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            style: tsHeading1White,
+                            style: tsHeading1.copiedWith(color: white),
                           ),
                         ),
                         Padding(
@@ -116,7 +116,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                             signaling.value.callState == CallState.Connected
                                 ? 'Connected'.i18n
                                 : 'Connecting...'.i18n,
-                            style: tsCallSubtitle,
+                            style: tsBody.copiedWith(color: white),
                           ),
                         ),
                       ],

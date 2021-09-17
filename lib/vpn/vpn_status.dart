@@ -22,7 +22,7 @@ class VPNStatus extends StatelessWidget {
                       (vpnStatus == 'connecting')
                           ? 'Connecting'.i18n
                           : 'Disconnecting'.i18n,
-                      style: tsBody2Bold,
+                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                     ),
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 12),
@@ -40,7 +40,7 @@ class VPNStatus extends StatelessWidget {
                   (vpnStatus == 'connected')
                       ? 'connected'.i18n
                       : 'disconnected'.i18n,
-                  style: tsBody2Bold,
+                  style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                 ),
         ],
       );

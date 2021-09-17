@@ -30,7 +30,7 @@ class ConversationSticker extends StatelessWidget {
 
   CTextWrap _partiallyAddedText() {
     return CTextWrap('banner_intro_waiting'.i18n.fill([contact.displayName]),
-        style: txConversationSticker, textAlign: TextAlign.center);
+        style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
   }
 
   Icon _partiallyAddedIcon() {
@@ -44,9 +44,9 @@ class ConversationSticker extends StatelessWidget {
               contact.messagesDisappearAfterSeconds
                   .humanizeSeconds(longForm: true)
             ]),
-            style: txConversationSticker)
+            style: tsBody2.copiedWith(color: grey5))
         : CTextWrap('banner_messages_persist'.i18n,
-            style: txConversationSticker);
+            style: tsBody2.copiedWith(color: grey5));
   }
 
   Icon _fullyAddedIcon() {
