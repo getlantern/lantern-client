@@ -149,7 +149,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ),
                         RoundButton(
                           icon: const CAssetImage(path: ImagePaths.hangup_icon),
-                          backgroundColor: red,
+                          backgroundColor: indicatorRed,
                           onPressed: () async {
                             signaling.bye(await session);
                           },

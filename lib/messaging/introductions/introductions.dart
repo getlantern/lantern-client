@@ -201,7 +201,7 @@ class Introductions extends StatelessWidget {
                                                                   action:
                                                                       SnackBarAction(
                                                                     textColor:
-                                                                        secondaryPink,
+                                                                        pink3,
                                                                     label: 'start_chat'
                                                                         .i18n
                                                                         .toUpperCase(),

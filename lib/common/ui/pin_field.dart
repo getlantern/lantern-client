@@ -65,7 +65,7 @@ class PinField extends StatelessWidget {
         },
         autofocus: true,
         highlight: true,
-        highlightColor: primaryBlue,
+        highlightColor: blue4,
         defaultBorderColor: grey4,
         hasTextBorderColor: grey4,
         onTextChanged: (text) {},

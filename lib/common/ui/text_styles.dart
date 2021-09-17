@@ -59,6 +59,6 @@ BUTTON VARIATIONS
 
 CTextStyle tsButtonGrey = tsButton.copiedWith(color: grey5);
 
-CTextStyle tsButtonPink = tsButton.copiedWith(color: primaryPink);
+CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
