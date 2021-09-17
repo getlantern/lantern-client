@@ -64,7 +64,7 @@ class ProAccount extends StatelessWidget {
                         builder: (context) {
                           return AlertDialog(
                             content: CText('confirm_remove_device'.i18n,
-                                style: tsBody14),
+                                style: tsBody),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {

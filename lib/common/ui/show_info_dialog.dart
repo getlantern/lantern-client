@@ -30,7 +30,7 @@ void showInfoDialog(BuildContext context,
               ),
               CText(
                 title,
-                style: tsBody16,
+                style: tsBody3,
               ),
               Align(
                 alignment: Alignment.centerLeft,

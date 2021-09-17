@@ -36,7 +36,7 @@ class ContactConnectionCard extends StatelessWidget {
               leading: CustomAvatar(
                   id: contact.contactId.id, displayName: contact.displayName),
               title: CText(introduction.displayName,
-                  style: tsBody16.copiedWith(
+                  style: tsBody3.copiedWith(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),
               trailing: outbound
                   ? const SizedBox()
@@ -114,13 +114,14 @@ class ContactConnectionCard extends StatelessWidget {
                   child: Center(
                     child: TextOneLine(
                         'Accept Introduction to ${introduction.displayName}',
-                        style: tsTitle),
+                        style: tsSubtitle1.copiedWith(
+                            fontWeight: FontWeight.w500)),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
                       start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
-                  child: CTextWrap('introductions_info'.i18n, style: tsBody14),
+                  child: CTextWrap('introductions_info'.i18n, style: tsBody),
                 ),
                 Divider(thickness: 1, color: grey2),
                 Column(
@@ -130,7 +131,7 @@ class ContactConnectionCard extends StatelessWidget {
                         dense: true,
                         leading:
                             const Icon(Icons.check_circle, color: Colors.black),
-                        title: CText('accept'.i18n, style: tsBody16),
+                        title: CText('accept'.i18n, style: tsBody3),
                         onTap: () async {
                           try {
                             // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -154,15 +155,15 @@ class ContactConnectionCard extends StatelessWidget {
                         Icons.close,
                         color: Colors.black,
                       ),
-                      title: CText('reject'.i18n, style: tsBody16),
+                      title: CText('reject'.i18n, style: tsBody3),
                       onTap: () async {
                         showAlertDialog(
                             context: context,
                             title: CText('introductions_reject_title'.i18n,
-                                style: tsBody16),
+                                style: tsBody3),
                             content: CTextWrap(
                                 'introductions_reject_content'.i18n,
-                                style: tsBody14),
+                                style: tsBody),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,
                             agreeAction: () async {

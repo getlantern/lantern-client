@@ -68,8 +68,8 @@ class Settings extends StatelessWidget {
               child: sessionModel.language(
                 (BuildContext context, String lang, Widget? child) => CText(
                   toBeginningOfSentenceCase(
-                      lang.displayLanguage(context, lang))!,
-                  style: tsTitlePink,
+                      lang.displayLanguage(context, lang).toUpperCase())!,
+                  style: tsSubtitle2.copiedWith(color: primaryPink),
                 ),
               ),
             ),

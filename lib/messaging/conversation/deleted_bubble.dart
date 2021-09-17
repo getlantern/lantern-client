@@ -18,7 +18,7 @@ class DeletedBubble extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: CText(deletedBubbleContent,
-              style: tsBody16.copiedWith(fontStyle: FontStyle.italic)),
+              style: tsBody3.copiedWith(fontStyle: FontStyle.italic)),
         ),
       ),
     );

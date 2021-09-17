@@ -40,7 +40,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: CText('scan_qr_code'.i18n, style: tsBody16),
+                title: CText('scan_qr_code'.i18n, style: tsBody3),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -91,7 +91,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: CText('introduce_contacts'.i18n, style: tsBody16),
+                title: CText('introduce_contacts'.i18n, style: tsBody3),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -105,7 +105,7 @@ class _NewMessageState extends State<NewMessage> {
                   return _contacts.toList().isNotEmpty
                       ? ListTile(
                           title: CText('contacts'.i18n.toUpperCase(),
-                              style: tsBody16))
+                              style: tsBody3))
                       : Container();
                 }),
               ),
@@ -149,7 +149,7 @@ class _NewMessageState extends State<NewMessage> {
                         child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
-                                tsBody16)); // rendering this instead of SizedBox() to avoid null dimension errors
+                                tsBody3)); // rendering this instead of SizedBox() to avoid null dimension errors
               })),
             ],
           );

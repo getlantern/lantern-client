@@ -39,7 +39,7 @@ class ContactListItem extends StatelessWidget {
       )),
       child: ListTile(
         leading: leading,
-        title: TextOneLine(title.toString(), style: tsBody16),
+        title: TextOneLine(title.toString(), style: tsBody3),
         subtitle: subtitle,
         trailing: trailing,
         onTap: onTap,

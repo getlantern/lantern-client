@@ -34,8 +34,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
           onError: () {
             showAlertDialog(
                 context: context,
-                title: CText('unable_to_complete_call'.i18n, style: tsBody16),
-                content: CTextWrap('please_try_again'.i18n, style: tsBody14),
+                title: CText('unable_to_complete_call'.i18n, style: tsBody3),
+                content: CTextWrap('please_try_again'.i18n, style: tsBody),
                 agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);
@@ -107,7 +107,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            style: tsCallTitle,
+                            style: tsHeading1White,
                           ),
                         ),
                         Padding(

@@ -38,7 +38,7 @@ class _IntroduceState extends State<Introduce> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
                     child: CTextWrap('introduce_contacts_select'.i18n,
-                        style: tsBody16),
+                        style: tsBody3),
                   ),
                 Expanded(
                     child: (sortedContacts.length <= 1)
@@ -48,7 +48,7 @@ class _IntroduceState extends State<Introduce> {
                                 horizontal: 24.0, vertical: 16.0),
                             child: CTextWrap(
                                 'need_two_contacts_to_introduce'.i18n,
-                                style: tsBody14),
+                                style: tsBody),
                           )
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.start,

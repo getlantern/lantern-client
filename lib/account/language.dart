@@ -35,10 +35,12 @@ class Language extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             var lang = languages[index];
             return RadioListTile<String>(
+              activeColor: primaryPink,
+              selected: true,
               title: CText(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: lang == currentLang ? tsTitlePink : tsTitle),
+                  style: lang == currentLang ? tsBodyPink : tsBody),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {

@@ -40,14 +40,14 @@ class _ProBannerState extends State<ProBanner> {
                   children: [
                     CText(
                       'Go Pro Title'.i18n,
-                      style: tsBody14Bold,
+                      style: tsSubtitle2,
                     ),
                     const SizedBox(
                       height: 4,
                     ),
-                    CText(
+                    CTextWrap(
                       'Go Pro Description'.i18n,
-                      style: tsBody13,
+                      style: tsBody2,
                     ),
                   ],
                 ),
