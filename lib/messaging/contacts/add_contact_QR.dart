@@ -354,7 +354,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         children: [
           CText('qr_add_via_id'.i18n,
               style: tsHeading2.copiedWith(
-                  fontWeight: FontWeight.w500, color: white)),
+                  fontWeight: FontWeight.w500, color: black)),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
