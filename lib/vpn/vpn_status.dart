@@ -11,7 +11,7 @@ class VPNStatus extends StatelessWidget {
         children: [
           CText(
             'VPN Status'.i18n + ': ',
-            style: tsBody.copiedWith(
+            style: tsBody1.copiedWith(
               color: unselectedTabLabelColor,
             ),
           ),

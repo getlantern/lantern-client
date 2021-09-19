@@ -30,7 +30,7 @@ void showInfoDialog(BuildContext context,
               ),
               CText(
                 title,
-                style: tsBody3,
+                style: tsSubtitle1,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -41,7 +41,7 @@ void showInfoDialog(BuildContext context,
                   ),
                   child: CTextWrap(
                     des,
-                    style: tsBodyColor(unselectedTabLabelColor),
+                    style: tsBody1Color(unselectedTabLabelColor),
                   ),
                 ),
               ),

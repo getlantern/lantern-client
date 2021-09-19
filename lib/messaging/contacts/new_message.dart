@@ -40,7 +40,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: CText('scan_qr_code'.i18n, style: tsBody3),
+                title: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -67,7 +67,7 @@ class _NewMessageState extends State<NewMessage> {
                                     .i18n
                                     .fill([_updatedContact!.displayName]),
                                 overflow: TextOverflow.visible,
-                                style: tsBodyColor(white),
+                                style: tsBody1Color(white),
                                 textAlign: TextAlign.start,
                               ),
                             ),
@@ -91,7 +91,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: CText('introduce_contacts'.i18n, style: tsBody3),
+                title:
+                    CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -99,16 +100,6 @@ class _NewMessageState extends State<NewMessage> {
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),
               Divider(thickness: 1, color: grey2),
-              Container(
-                child: model.contacts(builder: (context,
-                    Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                  return _contacts.toList().isNotEmpty
-                      ? ListTile(
-                          title: CText('contacts'.i18n.toUpperCase(),
-                              style: tsBody3))
-                      : Container();
-                }),
-              ),
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
@@ -149,7 +140,7 @@ class _NewMessageState extends State<NewMessage> {
                         child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
-                                tsBody3)); // rendering this instead of SizedBox() to avoid null dimension errors
+                                tsSubtitle1Short)); // rendering this instead of SizedBox() to avoid null dimension errors
               })),
             ],
           );

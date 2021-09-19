@@ -129,7 +129,7 @@ class MessageBubble extends StatelessWidget {
           ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.reply),
-            title: CText('reply'.i18n, style: tsBody),
+            title: CText('reply'.i18n, style: tsBody1),
             onPressed: () {
               onReply(msg);
             },
@@ -137,7 +137,7 @@ class MessageBubble extends StatelessWidget {
           if (!isAttachment)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.copy),
-              title: CText('copy_text'.i18n, style: tsBody),
+              title: CText('copy_text'.i18n, style: tsBody1),
               onPressed: () {
                 showSnackbar(
                   context: context,
@@ -147,7 +147,7 @@ class MessageBubble extends StatelessWidget {
                       Expanded(
                           child: CText(
                         'text_copied'.i18n,
-                        style: tsBodyColor(white),
+                        style: tsBody1Color(white),
                         textAlign: TextAlign.start,
                       )),
                     ],
@@ -158,7 +158,7 @@ class MessageBubble extends StatelessWidget {
             ),
           FocusedMenuItem(
             trailingIcon: const Icon(Icons.delete),
-            title: CText('delete_for_me'.i18n, style: tsBody),
+            title: CText('delete_for_me'.i18n, style: tsBody1),
             onPressed: () {
               _showDeleteDialog(context, model, true, message);
             },
@@ -166,7 +166,7 @@ class MessageBubble extends StatelessWidget {
           if (outbound)
             FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
-              title: CText('delete_for_everyone'.i18n, style: tsBody),
+              title: CText('delete_for_everyone'.i18n, style: tsBody1),
               onPressed: () async {
                 await _showDeleteDialog(context, model, false, message);
               },
@@ -220,9 +220,9 @@ Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
               ? CTextWrap(
                   'This will delete the message for you only. Everyone else will still be able to see it.'
                       .i18n,
-                  style: tsBody)
+                  style: tsBody1)
               : CTextWrap('This will delete the message for everyone.'.i18n,
-                  style: tsBody),
+                  style: tsBody1),
         ],
       ),
     ),

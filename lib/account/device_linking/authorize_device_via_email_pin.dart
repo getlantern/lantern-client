@@ -19,7 +19,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
         text: 'recovery_email_sent'
             .i18n
             .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
-        style: tsBody,
+        style: tsBody1,
         styles: {
           'highlight': TextStyle(color: blue4, fontWeight: FontWeight.bold),
         },

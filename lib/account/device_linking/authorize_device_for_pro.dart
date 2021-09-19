@@ -21,7 +21,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             const Spacer(),
             CText(
               'Authorize with Device Linking Pin'.i18n,
-              style: tsBody3,
+              style: tsSubtitle1,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
@@ -50,7 +50,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
             const Spacer(),
             CText(
               'Authorize Device via Email'.i18n,
-              style: tsBody3,
+              style: tsSubtitle1Short,
             ),
             Container(
               margin: const EdgeInsetsDirectional.only(top: 8),
