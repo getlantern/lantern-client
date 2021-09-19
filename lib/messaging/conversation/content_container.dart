@@ -122,7 +122,7 @@ class ContentContainer extends StatelessWidget {
                                         content: CTextWrap(
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
-                                            style: tsBody),
+                                            style: tsBody1),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,
                                         agreeAction: () async {

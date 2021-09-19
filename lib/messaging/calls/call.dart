@@ -35,7 +35,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
             showAlertDialog(
                 context: context,
                 title: CText('unable_to_complete_call'.i18n, style: tsBody3),
-                content: CTextWrap('please_try_again'.i18n, style: tsBody),
+                content: CTextWrap('please_try_again'.i18n, style: tsBody1),
                 agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);
@@ -116,7 +116,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                             signaling.value.callState == CallState.Connected
                                 ? 'Connected'.i18n
                                 : 'Connecting...'.i18n,
-                            style: tsBody.copiedWith(color: white),
+                            style: tsBody1.copiedWith(color: white),
                           ),
                         ),
                       ],

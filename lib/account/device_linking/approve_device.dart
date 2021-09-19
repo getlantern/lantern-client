@@ -24,7 +24,7 @@ class ApproveDevice extends StatelessWidget {
         Flexible(
           child: CTextWrap(
             text,
-            style: tsBody,
+            style: tsBody1,
           ),
         ),
       ],

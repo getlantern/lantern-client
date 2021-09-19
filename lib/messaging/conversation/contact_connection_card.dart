@@ -121,7 +121,7 @@ class ContactConnectionCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
                       start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
-                  child: CTextWrap('introductions_info'.i18n, style: tsBody),
+                  child: CTextWrap('introductions_info'.i18n, style: tsBody1),
                 ),
                 Divider(thickness: 1, color: grey2),
                 Column(
@@ -163,7 +163,7 @@ class ContactConnectionCard extends StatelessWidget {
                                 style: tsBody3),
                             content: CTextWrap(
                                 'introductions_reject_content'.i18n,
-                                style: tsBody),
+                                style: tsBody1),
                             dismissText: 'cancel'.i18n,
                             agreeText: 'reject'.i18n,
                             agreeAction: () async {

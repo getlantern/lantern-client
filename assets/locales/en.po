@@ -312,9 +312,6 @@ msgstr "Send Introductions"
 msgid "introductions_sent"
 msgstr "Introductions Sent!"
 
-msgid "contacts"
-msgstr "Contacts"
-
 msgid "no_contacts_yet"
 msgstr "No contacts yet"
 

@@ -41,8 +41,8 @@ class Language extends StatelessWidget {
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
                   style: lang == currentLang
-                      ? tsBody.copiedWith(color: pink4)
-                      : tsBody),
+                      ? tsBody1.copiedWith(color: pink4)
+                      : tsBody1),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {

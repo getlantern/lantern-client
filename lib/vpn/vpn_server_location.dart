@@ -22,7 +22,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
       children: [
         CText(
           'Server Location'.i18n + ': ',
-          style: tsBody.copiedWith(
+          style: tsBody1.copiedWith(
             color: unselectedTabLabelColor,
           ),
         ),

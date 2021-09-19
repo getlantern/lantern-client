@@ -87,7 +87,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: CText(value, style: tsBody),
+                    child: CText(value, style: tsBody1),
                   );
                 }).toList(),
               );

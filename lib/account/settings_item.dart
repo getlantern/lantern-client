@@ -50,27 +50,27 @@ class SettingsItem extends StatelessWidget {
                           Flexible(
                             child: Tooltip(
                               message: title!,
-                              child: CText(
-                                title!,
-                                overflow: TextOverflow.ellipsis,
-                                style: tsBody3,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(bottom: 1),
+                                child: CText(
+                                  title!,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: tsSubtitle1Short,
+                                ),
                               ),
                             ),
                           ),
                         if (openInfoDialog != null)
-                          Container(
-                            transform:
-                                Matrix4.translationValues(-8.0, 0.0, 0.0),
-                            child: InkWell(
-                              onTap: () {
-                                openInfoDialog!(context);
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(16),
-                                child: CAssetImage(
-                                  path: ImagePaths.info_icon,
-                                  size: 16,
-                                ),
+                          InkWell(
+                            onTap: () {
+                              openInfoDialog!(context);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: CAssetImage(
+                                path: ImagePaths.info_icon,
+                                size: 16,
                               ),
                             ),
                           ),

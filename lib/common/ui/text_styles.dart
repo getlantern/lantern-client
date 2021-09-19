@@ -16,29 +16,25 @@ CTextStyle tsDisplay(color) => CTextStyle(
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
-CTextStyle tsHeading2 = CTextStyle(
-    fontSize: 20,
-    minFontSize: 16,
-    lineHeight: 32,
-    fontWeight: FontWeight.w400,
-    color: black);
+CTextStyle tsHeading2 =
+    CTextStyle(fontSize: 20, minFontSize: 16, lineHeight: 32);
 
-CTextStyle tsSubtitle1 = CTextStyle(
-    fontSize: 16, lineHeight: 26, fontWeight: FontWeight.w400, color: black);
+CTextStyle tsSubtitle1 = CTextStyle(fontSize: 16, lineHeight: 26);
 
-CTextStyle tsSubtitle2 = CTextStyle(
-    fontSize: 14, lineHeight: 23, fontWeight: FontWeight.w500, color: black);
+CTextStyle tsSubtitle1Short = tsSubtitle1.copiedWith(lineHeight: 21);
 
-CTextStyle tsBody = CTextStyle(color: black, fontSize: 14, lineHeight: 23);
+CTextStyle tsSubtitle2 =
+    CTextStyle(fontSize: 14, lineHeight: 23, fontWeight: FontWeight.w500);
 
-CTextStyle tsBodyColor(color) => tsBody.copiedWith(color: color);
+CTextStyle tsBody1 = CTextStyle(fontSize: 14, lineHeight: 23);
 
-CTextStyle tsBody2 = CTextStyle(color: black, fontSize: 12, lineHeight: 19);
+CTextStyle tsBody1Color(color) => tsBody1.copiedWith(color: color);
 
-CTextStyle tsBody3 = CTextStyle(color: black, fontSize: 16, lineHeight: 23);
+CTextStyle tsBody2 = CTextStyle(fontSize: 12, lineHeight: 19);
 
-CTextStyle tsTextField =
-    CTextStyle(fontSize: 16, lineHeight: 18.75, fontWeight: FontWeight.w400);
+CTextStyle tsBody3 = CTextStyle(fontSize: 16, lineHeight: 23);
+
+CTextStyle tsTextField = CTextStyle(fontSize: 16, lineHeight: 18.75);
 
 CTextStyle tsFloatingLabel =
     CTextStyle(fontSize: 12, lineHeight: 12, fontWeight: FontWeight.w400);
@@ -49,7 +45,7 @@ CTextStyle tsButton = CTextStyle(
   fontWeight: FontWeight.w500,
 );
 
-CTextStyle tsOverline = CTextStyle(color: black, fontSize: 10, lineHeight: 16);
+CTextStyle tsOverline = CTextStyle(fontSize: 10, lineHeight: 16);
 
 /*
 ******************

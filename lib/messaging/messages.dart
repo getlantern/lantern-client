@@ -56,7 +56,7 @@ class Messages extends StatelessWidget {
                                             ),
                                           ),
                                           title: CText('introductions'.i18n,
-                                              style: tsBody3),
+                                              style: tsSubtitle1Short),
                                           trailing: const CAssetImage(
                                             path: ImagePaths
                                                 .keyboard_arrow_right_icon,
