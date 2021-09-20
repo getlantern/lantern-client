@@ -12,7 +12,7 @@ class ContinueArrow extends StatelessWidget {
       transform: Matrix4.rotationY(
           Directionality.of(context) == TextDirection.rtl ? pi : 0),
       child: const CAssetImage(
-        path: ImagePaths.keyboard_arrow_right_icon,
+        path: ImagePaths.keyboard_arrow_right,
         size: 24,
       ),
     );

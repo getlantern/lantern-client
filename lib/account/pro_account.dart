@@ -26,7 +26,7 @@ class ProAccount extends StatelessWidget {
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {
               return SettingsItem(
-                icon: ImagePaths.email_icon,
+                icon: ImagePaths.email,
                 iconColor: Colors.black,
                 title: emailAddress,
               );
@@ -37,7 +37,7 @@ class ProAccount extends StatelessWidget {
             sessionModel.expiryDate(
                 (BuildContext context, String expirationDate, Widget? child) {
               return SettingsItem(
-                icon: ImagePaths.clock_icon,
+                icon: ImagePaths.clock,
                 title: expirationDate,
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);

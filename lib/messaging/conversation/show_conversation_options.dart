@@ -21,8 +21,7 @@ Future showConversationOptions(
             children: [
               BottomModalItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.disappearing_timer_icon,
-                  size: 20,
+                  path: ImagePaths.timer,
                 ),
                 label: 'disappearing_messages'.i18n,
                 onTap: () async {
@@ -278,8 +277,7 @@ Future showConversationOptions(
               ),
               BottomModalItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.introduce_contact_icon,
-                  size: 20,
+                  path: ImagePaths.people,
                 ),
                 label: 'introduce_contacts'.i18n,
                 onTap: () async =>
@@ -287,8 +285,7 @@ Future showConversationOptions(
               ),
               BottomModalItem(
                   leading: const CAssetImage(
-                    path: ImagePaths.trash_icon,
-                    size: 20,
+                    path: ImagePaths.trash,
                   ),
                   label: 'delete_contact_name'.i18n.fill([contact.displayName]),
                   onTap: () => showDialog<void>(

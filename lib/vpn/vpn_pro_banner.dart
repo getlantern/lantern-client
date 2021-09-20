@@ -29,7 +29,7 @@ class _ProBannerState extends State<ProBanner> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const CAssetImage(
-              path: ImagePaths.crown_icon,
+              path: ImagePaths.crown,
               size: 32,
             ),
             Expanded(

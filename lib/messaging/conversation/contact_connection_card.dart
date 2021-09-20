@@ -104,8 +104,7 @@ class ContactConnectionCard extends StatelessWidget {
         subtitle: 'introductions_info'.i18n,
         children: [
           BottomModalItem(
-              leading:
-                  const Icon(Icons.check_circle, color: Colors.black, size: 20),
+              leading: const CAssetImage(path: ImagePaths.check_circle),
               label: 'accept'.i18n,
               onTap: () async {
                 try {
@@ -124,7 +123,7 @@ class ContactConnectionCard extends StatelessWidget {
                 }
               }),
           BottomModalItem(
-              leading: const Icon(Icons.close, color: Colors.black, size: 20),
+              leading: const CAssetImage(path: ImagePaths.cancel),
               label: 'reject'.i18n,
               onTap: () => showAlertDialog(
                   context: context,

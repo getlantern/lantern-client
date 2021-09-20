@@ -130,7 +130,7 @@ class Introductions extends StatelessWidget {
                                                                           des: 'introductions_error_description'
                                                                               .i18n,
                                                                           icon: ImagePaths
-                                                                              .alert_icon,
+                                                                              .alert,
                                                                           buttonText:
                                                                               'OK'.i18n);
                                                                     } finally {
@@ -164,8 +164,9 @@ class Introductions extends StatelessWidget {
                                                                   des:
                                                                       'introductions_error_description_accepting'
                                                                           .i18n,
-                                                                  icon: ImagePaths
-                                                                      .alert_icon,
+                                                                  icon:
+                                                                      ImagePaths
+                                                                          .alert,
                                                                   buttonText:
                                                                       'OK'.i18n);
                                                             } finally {

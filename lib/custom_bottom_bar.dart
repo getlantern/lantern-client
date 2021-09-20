@@ -37,7 +37,7 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: CText('messages'.i18n, style: tsFloatingLabel),
             icon: SvgPicture.asset(
-              ImagePaths.messages_icon,
+              ImagePaths.messages,
               color:
                   index == 0 ? selectedTabLabelColor : unselectedTabLabelColor,
               fit: BoxFit.contain,
@@ -54,7 +54,7 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: CText('VPN', style: tsFloatingLabel),
             icon: SvgPicture.asset(
-              ImagePaths.key_icon,
+              ImagePaths.key,
               color:
                   index == 1 ? selectedTabLabelColor : unselectedTabLabelColor,
               fit: BoxFit.contain,
@@ -82,7 +82,7 @@ class CustomBottomBar extends StatelessWidget {
             label: CText('Account'.i18n, style: tsFloatingLabel),
             onTap: () => onTap!(2),
             icon: SvgPicture.asset(
-              ImagePaths.account_icon,
+              ImagePaths.account,
               color:
                   index == 2 ? selectedTabLabelColor : unselectedTabLabelColor,
               fit: BoxFit.contain,
@@ -99,7 +99,7 @@ class CustomBottomBar extends StatelessWidget {
               total: isDevelop ? 4 : 3,
               label: CText('Developer'.i18n, style: tsFloatingLabel),
               icon: SvgPicture.asset(
-                ImagePaths.devices_icon,
+                ImagePaths.devices,
                 color: index == 3
                     ? selectedTabLabelColor
                     : unselectedTabLabelColor,

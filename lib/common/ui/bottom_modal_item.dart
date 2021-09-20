@@ -19,14 +19,49 @@ class BottomModalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(children: [
-        ListTile(
-          leading: leading,
-          title: TextOneLine(label, style: tsBody3),
-          trailing: trailing,
-          onTap: onTap,
-          visualDensity: VisualDensity.compact,
-          contentPadding: const EdgeInsetsDirectional.only(
-              top: 5, bottom: 5, start: 16, end: 16),
+        SizedBox(
+          height: 72,
+          child: InkWell(
+            onTap: onTap ?? () {},
+            child: Ink(
+              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 16.0),
+                    child: leading,
+                  ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.only(bottom: 1),
+                              child: TextOneLine(
+                                label,
+                                style: tsSubtitle1Short,
+                              ),
+                            ),
+                          ),
+                          if (trailing != null)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: trailing!,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (trailing != null) trailing!,
+                ],
+              ),
+            ),
+          ),
         ),
         const CDivider(
             size: 1,

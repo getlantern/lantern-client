@@ -68,7 +68,7 @@ class SettingsItem extends StatelessWidget {
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               child: CAssetImage(
-                                path: ImagePaths.info_icon,
+                                path: ImagePaths.info,
                                 size: 16,
                               ),
                             ),
