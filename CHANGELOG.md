@@ -1,4 +1,18 @@
 
+<a name="6.8.10"></a>
+## [6.8.10](https://github.com/getlantern/android-lantern/compare/6.8.9...6.8.10)
+
+> 2021-09-20
+
+### Reverts
+
+* Updated README to reflect that we want the latest version of Flutter
+
+### Pull Requests
+
+* Merge pull request [#395](https://github.com/getlantern/android-lantern/issues/395) from getlantern/ox/nospecial
+
+
 <a name="6.8.9"></a>
 ## [6.8.9](https://github.com/getlantern/android-lantern/compare/6.8.8...6.8.9)
 
