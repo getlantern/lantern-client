@@ -62,12 +62,7 @@ class AccountMenu extends StatelessWidget {
       ),
       SettingsItem(
         icon: ImagePaths.account_icon,
-        title: 'display_name'.i18n.fill([
-          // TODO: modify SettingsItem to accept TextOneLine widget instead of string
-          me.displayName.length > 25
-              ? '${me.displayName.substring(0, 25)}...'
-              : me.displayName
-        ]),
+        title: 'display_name'.i18n.fill([me.displayName]),
         onTap: () {
           openDisplayName(context, me);
         },

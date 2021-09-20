@@ -48,7 +48,7 @@ class DisplayName extends StatelessWidget {
                 margin: const EdgeInsetsDirectional.only(bottom: 32),
                 child: Button(
                   width: 200,
-                  text: 'Submit'.i18n,
+                  text: 'save'.i18n,
                   onPressed: () async {
                     context.loaderOverlay.show();
                     try {

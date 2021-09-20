@@ -53,9 +53,8 @@ class SettingsItem extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     const EdgeInsetsDirectional.only(bottom: 1),
-                                child: CText(
+                                child: TextOneLine(
                                   title!,
-                                  overflow: TextOverflow.ellipsis,
                                   style: tsSubtitle1Short,
                                 ),
                               ),

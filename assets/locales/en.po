@@ -159,6 +159,9 @@ msgstr "Email"
 msgid "Submit"
 msgstr "Submit"
 
+msgid "save"
+msgstr "Save"
+
 msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
 
