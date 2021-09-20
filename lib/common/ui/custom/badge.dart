@@ -35,7 +35,7 @@ class CBadge extends StatelessWidget {
       animationType: BadgeAnimationType.fade,
       elevation: 0,
       // no drop-shadow
-      badgeColor: (customBadge != null) ? Colors.white : primaryPink,
+      badgeColor: (customBadge != null) ? Colors.white : pink4,
       badgeContent: (customBadge != null)
           ? customBadge
           : CText(

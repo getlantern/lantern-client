@@ -22,7 +22,7 @@ class ReplySnippetHeader extends StatelessWidget {
         CText(
           'Replying to ${matchIdToDisplayName(msg.replyToSenderId, contact)}',
           overflow: TextOverflow.ellipsis,
-          style: tsReplySnippetHeader,
+          style: tsSubtitle2,
         ),
       ],
     );

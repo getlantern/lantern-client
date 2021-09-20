@@ -310,10 +310,21 @@ class _ConversationState extends State<Conversation>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextOneLine(
-                      title,
-                      style: tsTitleAppbar,
-                    ),
+                    // Nit picking: if the contact displayName contains spaces, use TextOneLine. If not, use CText. Example:
+                    // "aspdofijaposidjfposijdf" => use CText to lower font size and gracefully add ellipsis
+                    // "Ben aspdofijaposidjfposijdf" => CText would render this as "Ben ...", which is problematic if user has many Bens in their contact list.
+                    // Instead, we use TextOneLine (which does not handle font size, but does return a more readable result) => "Ben aspdofij...."
+                    title.contains(' ')
+                        ? TextOneLine(
+                            title,
+                            style: tsHeading2.copiedWith(
+                                fontWeight: FontWeight.w500),
+                          )
+                        : CText(
+                            title,
+                            style: tsHeading2.copiedWith(
+                                fontWeight: FontWeight.w500),
+                          ),
                     DisappearingTimerAction(contact),
                   ],
                 ),
@@ -531,8 +542,8 @@ class _ConversationState extends State<Conversation>
                     width: 25,
                     height: 25,
                     duration: const Duration(milliseconds: 700),
-                    pulseColor: stopwatchColor,
-                    color: pulsingBackground,
+                    pulseColor: indicatorRed,
+                    color: indicatorRed,
                   ),
                 ),
                 Flexible(
@@ -540,7 +551,7 @@ class _ConversationState extends State<Conversation>
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
                       stopWatchTimer: _stopWatchTimer,
-                      style: tsStopWatchTimer,
+                      style: tsOverline.copiedWith(color: indicatorRed),
                     ),
                   ),
                 ),
@@ -563,7 +574,7 @@ class _ConversationState extends State<Conversation>
                           keyboardMode == KeyboardMode.emojiReaction
                       ? Icons.keyboard_alt_outlined
                       : Icons.sentiment_very_satisfied,
-                  color: Theme.of(context).primaryColorDark),
+                  color: grey5),
             ),
       title: Stack(
         alignment: Alignment.center,

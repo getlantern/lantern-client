@@ -104,7 +104,7 @@ class CTextStyle extends TextStyle {
       String? package})
       : super(
           inherit: inherit,
-          color: color,
+          color: color ?? black,
           backgroundColor: backgroundColor,
           fontSize: fontSize,
           fontWeight: fontWeight,

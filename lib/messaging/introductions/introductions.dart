@@ -15,8 +15,7 @@ class Introductions extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n,
-                    style: tsBaseScreenBodyText),
+                child: CTextWrap('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
@@ -48,7 +47,7 @@ class Introductions extends StatelessWidget {
                                           'introduced'.i18n.fill([
                                             introductor.displayName
                                           ]).toUpperCase(),
-                                          style: tsIntroductionsListHeader),
+                                          style: tsOverline),
                                     ),
                                     Divider(height: 1.0, color: grey3),
                                     ...introductionsPerIntroductor.map(
@@ -99,12 +98,12 @@ class Introductions extends StatelessWidget {
                                                                       'introductions_reject_title'
                                                                           .i18n,
                                                                       style:
-                                                                          tsDialogTitle),
+                                                                          tsBody3),
                                                                   content: CTextWrap(
                                                                       'introductions_reject_content'
                                                                           .i18n,
                                                                       style:
-                                                                          tsDialogBody),
+                                                                          tsBody3),
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'
@@ -191,7 +190,7 @@ class Introductions extends StatelessWidget {
                                                                             value.introduction.displayName
                                                                           ]),
                                                                           style:
-                                                                              tsInfoDialogText(white),
+                                                                              tsBody1Color(white),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -202,7 +201,7 @@ class Introductions extends StatelessWidget {
                                                                   action:
                                                                       SnackBarAction(
                                                                     textColor:
-                                                                        secondaryPink,
+                                                                        pink3,
                                                                     label: 'start_chat'
                                                                         .i18n
                                                                         .toUpperCase(),

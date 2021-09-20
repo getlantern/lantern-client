@@ -121,10 +121,8 @@ Future<void> displayEmojiBreakdownPopup(BuildContext context, StoredMessage msg,
                   for (var reaction in reactions.entries)
                     if (reaction.value.isNotEmpty)
                       ListTile(
-                        leading:
-                            CText(reaction.key, style: tsAlertDialogListTile),
-                        title: CText(reaction.value.join(', '),
-                            style: tsAlertDialogListTile),
+                        leading: CText(reaction.key, style: tsBody1),
+                        title: CText(reaction.value.join(', '), style: tsBody1),
                       ),
                 ],
               ),
@@ -273,8 +271,8 @@ Future<void> displayConversationOptions(
                     top: 7, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                   offset: const Offset(-14, 0),
-                  child: CText('disappearing_messages'.i18n,
-                      style: tsBottomModalList),
+                  child:
+                      CText('disappearing_messages'.i18n, style: tsTextField),
                 ),
                 onTap: () async {
                   final scrollController = ScrollController();
@@ -317,7 +315,7 @@ Future<void> displayConversationOptions(
                                   children: [
                                     CText(
                                       'disappearing_messages'.i18n,
-                                      style: tsDialogTitle,
+                                      style: tsBody3,
                                     ),
                                     Padding(
                                       padding: const EdgeInsetsDirectional.only(
@@ -333,8 +331,8 @@ Future<void> displayConversationOptions(
                                                           0)
                                               ? CTextWrap(
                                                   'message_disappearing'.i18n,
-                                                  style:
-                                                      tsDisappearingContentBottomModal,
+                                                  style: tsBody1.copiedWith(
+                                                      color: grey5),
                                                 )
                                               : CTextWrap(
                                                   'message_disappearing_description'
@@ -350,8 +348,8 @@ Future<void> displayConversationOptions(
                                                             .humanizeSeconds(
                                                                 longForm: true)
                                                   ]),
-                                                  style:
-                                                      tsDisappearingContentBottomModal,
+                                                  style: tsBody1.copiedWith(
+                                                      color: grey5),
                                                 ),
                                     ),
                                   ],
@@ -433,10 +431,10 @@ Future<void> displayConversationOptions(
                                                           states.contains(
                                                                   MaterialState
                                                                       .selected)
-                                                              ? primaryPink
+                                                              ? pink4
                                                               : black,
                                                     ),
-                                                    activeColor: primaryPink,
+                                                    activeColor: pink4,
                                                     onChanged: (value) async {
                                                       setState(() {
                                                         selectedPosition =
@@ -454,7 +452,7 @@ Future<void> displayConversationOptions(
                                                       : seconds[index]
                                                           .humanizeSeconds(
                                                               longForm: true),
-                                                  style: tsAlertDialogListTile,
+                                                  style: tsBody1,
                                                 ),
                                               ),
                                             );
@@ -541,8 +539,8 @@ Future<void> displayConversationOptions(
                     top: 5, bottom: 5, start: 16, end: 16),
                 title: Transform.translate(
                     offset: const Offset(-14, 0),
-                    child: CText('introduce_contacts'.i18n,
-                        style: tsBottomModalList)),
+                    child:
+                        CText('introduce_contacts'.i18n, style: tsTextField)),
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
@@ -562,7 +560,7 @@ Future<void> displayConversationOptions(
                     offset: const Offset(-14, 0),
                     child: TextOneLine(
                         'delete_contact_name'.i18n.fill([contact.displayName]),
-                        style: tsBottomModalList),
+                        style: tsTextField),
                   ),
                   onTap: () => showDialog<void>(
                         context: bottomContext,
@@ -578,14 +576,14 @@ Future<void> displayConversationOptions(
                                   child: Icon(Icons.delete),
                                 ),
                                 CText('delete_contact'.i18n.toUpperCase(),
-                                    style: tsDialogTitle),
+                                    style: tsBody3),
                               ],
                             ),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
                                   CTextWrap('delete_contact_confirmation'.i18n,
-                                      style: tsDialogBody)
+                                      style: tsBody1)
                                 ],
                               ),
                             ),

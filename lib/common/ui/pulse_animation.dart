@@ -48,7 +48,7 @@ class _PulseAnimationState extends State<PulseAnimation>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: transparent,
       child: Opacity(
         opacity: _animation.value,
         child: Row(
