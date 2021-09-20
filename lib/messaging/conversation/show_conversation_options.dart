@@ -282,11 +282,7 @@ Future showConversationOptions(
                   );
                 },
               ),
-              const CDivider(
-                  size: 1,
-                  thickness: 1,
-                  margin: 0,
-                  color: Color.fromRGBO(235, 235, 235, 1)),
+              const CBottomModalDivider(),
               ListTile(
                 leading: const CAssetImage(
                   path: ImagePaths.introduce_contact_icon,
@@ -301,11 +297,7 @@ Future showConversationOptions(
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
-              const CDivider(
-                  size: 1,
-                  thickness: 1,
-                  margin: 0,
-                  color: Color.fromRGBO(235, 235, 235, 1)),
+              const CBottomModalDivider(),
               ListTile(
                   leading: const CAssetImage(
                     path: ImagePaths.trash_icon,
