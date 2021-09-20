@@ -10,12 +10,13 @@ class DateMarker extends StatelessWidget {
     return Container(
       width: 130,
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsetsDirectional.all(10.0),
       decoration: const BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.all(Radius.circular(100)),
       ),
-      child: CText(isDateMarker!.i18n.toUpperCase(), style: tsOverline),
+      child: CText(isDateMarker!.i18n.toUpperCase(),
+          style: tsOverline.copiedWith(color: white)),
     );
   }
 }

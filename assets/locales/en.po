@@ -441,6 +441,9 @@ msgstr "Message was deleted"
 msgid "close"
 msgstr "Close"
 
+msgid "call_contact"
+msgstr "Call %s ?"
+
 msgid "call"
 msgstr "Call"
 
