@@ -104,7 +104,7 @@ class ContactConnectionCard extends StatelessWidget {
         subtitle: 'introductions_info'.i18n,
         children: [
           BottomModalItem(
-              leading: const CAssetImage(path: ImagePaths.check_circle),
+              leading: const CAssetImage(path: ImagePaths.check_black),
               label: 'accept'.i18n,
               onTap: () async {
                 try {
