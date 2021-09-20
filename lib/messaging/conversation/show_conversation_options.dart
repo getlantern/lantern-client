@@ -7,6 +7,7 @@ Future showConversationOptions(
     {required MessagingModel model,
     required BuildContext parentContext,
     required Contact contact}) {
+  // Note: we are using showModalBottomSheet directly here because of the complicated double context handling re:disappearing messages
   return showModalBottomSheet(
       context: parentContext,
       isDismissible: true,
@@ -21,7 +22,7 @@ Future showConversationOptions(
             children: [
               BottomModalItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.timer,
+                  path: ImagePaths.clock,
                 ),
                 label: 'disappearing_messages'.i18n,
                 onTap: () async {
@@ -285,7 +286,7 @@ Future showConversationOptions(
               ),
               BottomModalItem(
                   leading: const CAssetImage(
-                    path: ImagePaths.trash,
+                    path: ImagePaths.delete,
                   ),
                   label: 'delete_contact_name'.i18n.fill([contact.displayName]),
                   onTap: () => showDialog<void>(
