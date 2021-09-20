@@ -1,9 +1,12 @@
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
 import 'package:lantern/messaging/conversation/reactions.dart';
+import 'package:lantern/messaging/conversation/reactions_utils.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/common/common.dart';
+import 'package:intl/intl.dart';
 
-import 'content_container.dart';
+import 'message_bubble_content.dart';
 import 'date_marker_bubble.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -45,8 +48,8 @@ class MessageBubble extends StatelessWidget {
 
       // constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
       final reactions = constructReactionsMap(msg, contact);
-      final isDateMarker = determineDateSwitch(priorMessage, nextMessage);
-      final wasDeleted = determineDeletionStatus(msg);
+      final isDateMarker = _determineDateSwitch(priorMessage, nextMessage);
+      final wasDeleted = msg.remotelyDeletedAt != 0;
       final isAttachment = msg.attachments.isNotEmpty;
 
       return Row(
@@ -109,7 +112,9 @@ class MessageBubble extends StatelessWidget {
   ) {
     if (wasDeleted) {
       final humanizedSenderName =
-          matchIdToDisplayName(msg.remotelyDeletedBy.id, contact);
+          msg.remotelyDeletedBy.id == contact.contactId.id
+              ? contact.displayName
+              : 'me'.i18n;
       return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
 
@@ -157,20 +162,48 @@ class MessageBubble extends StatelessWidget {
               },
             ),
           FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete),
-            title: CText('delete_for_me'.i18n, style: tsBody1),
-            onPressed: () {
-              _showDeleteDialog(context, model, true, message);
-            },
-          ),
+              trailingIcon: const Icon(Icons.delete),
+              title: CText('delete_for_me'.i18n, style: tsBody1),
+              onPressed: () => showAlertDialog(
+                    context: context,
+                    key: const ValueKey('deleteDialog'),
+                    barrierDismissible: true,
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          CTextWrap(
+                              'This will delete the message for you only. Everyone else will still be able to see it.'
+                                  .i18n,
+                              style: tsBody1)
+                        ],
+                      ),
+                    ),
+                    title: CText('Delete for me', style: tsBody3),
+                    agreeAction: () => model.deleteLocally(message),
+                    agreeText: 'Delete',
+                  )),
           if (outbound)
             FocusedMenuItem(
-              trailingIcon: const Icon(Icons.delete_forever),
-              title: CText('delete_for_everyone'.i18n, style: tsBody1),
-              onPressed: () async {
-                await _showDeleteDialog(context, model, false, message);
-              },
-            ),
+                trailingIcon: const Icon(Icons.delete_forever),
+                title: CText('delete_for_everyone'.i18n, style: tsBody1),
+                onPressed: () => showAlertDialog(
+                      context: context,
+                      key: const ValueKey('deleteDialog'),
+                      barrierDismissible: true,
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            CTextWrap(
+                                'This will delete the message for everyone.'
+                                    .i18n,
+                                style: tsBody1)
+                          ],
+                        ),
+                      ),
+                      title: CText('Delete for everyone', style: tsBody3),
+                      agreeAction: () => model.deleteGlobally(message),
+                      agreeText: 'Delete',
+                    )),
         ],
         blurBackgroundColor: Colors.blueGrey[900],
         menuOffset: 5.0,
@@ -184,13 +217,12 @@ class MessageBubble extends StatelessWidget {
           crossAxisAlignment:
               outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            if (isDateMarker != '')
+            if (isDateMarker!.isNotEmpty)
               Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 10),
-                  // width: 100.w,
+                  padding: const EdgeInsetsDirectional.only(bottom: 10),
                   child: DateMarker(isDateMarker)),
-            ContentContainer(
+            MessageBubbleContent(
                 outbound,
                 inbound,
                 msg,
@@ -205,32 +237,21 @@ class MessageBubble extends StatelessWidget {
           ],
         ));
   }
-}
 
-Future<void> _showDeleteDialog(BuildContext context, MessagingModel model,
-    bool isLocal, PathAndValue<StoredMessage> message) async {
-  showAlertDialog(
-    context: context,
-    key: const ValueKey('deleteDialog'),
-    barrierDismissible: true,
-    content: SingleChildScrollView(
-      child: ListBody(
-        children: <Widget>[
-          isLocal
-              ? CTextWrap(
-                  'This will delete the message for you only. Everyone else will still be able to see it.'
-                      .i18n,
-                  style: tsBody1)
-              : CTextWrap('This will delete the message for everyone.'.i18n,
-                  style: tsBody1),
-        ],
-      ),
-    ),
-    title: isLocal
-        ? CText('Delete for me', style: tsBody3)
-        : CText('Delete for everyone', style: tsBody3),
-    agreeAction: () =>
-        isLocal ? model.deleteLocally(message) : model.deleteGlobally(message),
-    agreeText: 'Delete',
-  );
+  String _determineDateSwitch(
+      StoredMessage? priorMessage, StoredMessage? nextMessage) {
+    if (priorMessage == null || nextMessage == null) return '';
+
+    var currentDateTime =
+        DateTime.fromMillisecondsSinceEpoch(priorMessage.ts.toInt());
+    var nextMessageDateTime =
+        DateTime.fromMillisecondsSinceEpoch(nextMessage.ts.toInt());
+
+    if (nextMessageDateTime.difference(currentDateTime).inDays >= 1) {
+      currentDateTime = nextMessageDateTime;
+      return DateFormat.yMMMMd('en_US').format(currentDateTime);
+    }
+
+    return '';
+  }
 }

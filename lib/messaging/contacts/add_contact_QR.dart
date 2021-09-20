@@ -173,7 +173,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   }
 
   Widget renderQRScanner(BuildContext context) {
-    return fullScreenDialogLayout(
+    return showFullscreenDialog(
       context: context,
       iconColor: white,
       // icon color
@@ -344,7 +344,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   }
 
   Widget renderIdForm(BuildContext context) {
-    return fullScreenDialogLayout(
+    return showFullscreenDialog(
       topColor: Colors.white,
       iconColor: Colors.black,
       context: context,

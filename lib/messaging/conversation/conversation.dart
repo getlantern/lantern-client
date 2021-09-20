@@ -13,6 +13,7 @@ import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'call_action.dart';
+import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId _contactId;
@@ -341,8 +342,8 @@ class _ConversationState extends State<Conversation>
               IconButton(
                 icon: const Icon(Icons.more_vert_rounded),
                 tooltip: 'menu'.i18n,
-                onPressed: () =>
-                    displayConversationOptions(model, context, contact),
+                onPressed: () => showConversationOptions(
+                    model: model, context: context, contact: contact),
               )
             ],
           ),

@@ -70,7 +70,7 @@ class ContactConnectionCard extends StatelessWidget {
                 if (inbound &&
                     msg.introduction.status ==
                         IntroductionDetails_IntroductionStatus.PENDING) {
-                  await _showOptions(
+                  _showOptions(
                     context,
                     introduction,
                     model,
@@ -94,102 +94,66 @@ class ContactConnectionCard extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _showOptions(BuildContext context,
-      IntroductionDetails introduction, MessagingModel model, Contact contact) {
-    return showModalBottomSheet(
+  void _showOptions(BuildContext context, IntroductionDetails introduction,
+      MessagingModel model, Contact contact) {
+    return showBottomModal(
         context: context,
-        isDismissible: true,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0))),
-        builder: (context) => Wrap(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      start: 24.0, top: 0.0, end: 24.0, bottom: 4.0),
-                  child: Center(
-                    child: TextOneLine(
-                        'Accept Introduction to ${introduction.displayName}',
-                        style: tsSubtitle1.copiedWith(
-                            fontWeight: FontWeight.w500)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                      start: 24.0, top: 4.0, end: 24.0, bottom: 4.0),
-                  child: CTextWrap('introductions_info'.i18n, style: tsBody1),
-                ),
-                Divider(thickness: 1, color: grey2),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ListTile(
-                        dense: true,
-                        leading:
-                            const Icon(Icons.check_circle, color: Colors.black),
-                        title: CText('accept'.i18n, style: tsBody3),
-                        onTap: () async {
-                          try {
-                            // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                            await model.acceptIntroduction(
-                                contact.contactId.id, introduction.to.id);
-                          } catch (e, s) {
-                            showErrorDialog(context,
-                                e: e,
-                                s: s,
-                                des: 'introductions_error_description_accepting'
-                                    .i18n);
-                          } finally {
-                            await context.router.pop();
-                            await context.pushRoute(
-                                Conversation(contactId: introduction.to));
-                          }
-                        }),
-                    Divider(thickness: 1, color: grey2),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.close,
-                        color: Colors.black,
-                      ),
-                      title: CText('reject'.i18n, style: tsBody3),
-                      onTap: () async {
-                        showAlertDialog(
-                            context: context,
-                            title: CText('introductions_reject_title'.i18n,
-                                style: tsBody3),
-                            content: CTextWrap(
-                                'introductions_reject_content'.i18n,
-                                style: tsBody1),
-                            dismissText: 'cancel'.i18n,
-                            agreeText: 'reject'.i18n,
-                            agreeAction: () async {
-                              try {
-                                // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                await model.rejectIntroduction(
-                                    contact.contactId.id, introduction.to.id);
-                              } catch (e, s) {
-                                showErrorDialog(context,
-                                    e: e,
-                                    s: s,
-                                    des:
-                                        'introductions_error_description_rejecting'
-                                            .i18n);
-                              } finally {
-                                await context.router.pop();
-                              }
-                            });
-                      },
-                    ),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                ),
-              ],
-            ));
+        title: 'Accept Introduction to ${introduction.displayName}',
+        subtitle: 'introductions_info'.i18n,
+        children: [
+          ListTile(
+              dense: true,
+              leading: const Icon(Icons.check_circle, color: Colors.black),
+              title: CText('accept'.i18n, style: tsBody3),
+              onTap: () async {
+                try {
+                  // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                  await model.acceptIntroduction(
+                      contact.contactId.id, introduction.to.id);
+                } catch (e, s) {
+                  showErrorDialog(context,
+                      e: e,
+                      s: s,
+                      des: 'introductions_error_description_accepting'.i18n);
+                } finally {
+                  await context.router.pop();
+                  await context
+                      .pushRoute(Conversation(contactId: introduction.to));
+                }
+              }),
+          const CBottomModalDivider(),
+          ListTile(
+            leading: const Icon(
+              Icons.close,
+              color: Colors.black,
+            ),
+            title: CText('reject'.i18n, style: tsBody3),
+            onTap: () async {
+              showAlertDialog(
+                  context: context,
+                  title:
+                      CText('introductions_reject_title'.i18n, style: tsBody3),
+                  content: CTextWrap('introductions_reject_content'.i18n,
+                      style: tsBody1),
+                  dismissText: 'cancel'.i18n,
+                  agreeText: 'reject'.i18n,
+                  agreeAction: () async {
+                    try {
+                      // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                      await model.rejectIntroduction(
+                          contact.contactId.id, introduction.to.id);
+                    } catch (e, s) {
+                      showErrorDialog(context,
+                          e: e,
+                          s: s,
+                          des:
+                              'introductions_error_description_rejecting'.i18n);
+                    } finally {
+                      await context.router.pop();
+                    }
+                  });
+            },
+          ),
+        ]);
   }
 }

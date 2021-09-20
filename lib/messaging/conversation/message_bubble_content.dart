@@ -7,8 +7,9 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_types.dart';
+import 'reactions_utils.dart';
 
-class ContentContainer extends StatelessWidget {
+class MessageBubbleContent extends StatelessWidget {
   final bool outbound;
   final bool inbound;
   final StoredMessage msg;
@@ -21,7 +22,7 @@ class ContentContainer extends StatelessWidget {
   final Map<String, List<dynamic>> reactions;
   final bool isAttachment;
 
-  const ContentContainer(
+  const MessageBubbleContent(
     this.outbound,
     this.inbound,
     this.msg,
