@@ -343,7 +343,7 @@ class _ConversationState extends State<Conversation>
                 icon: const Icon(Icons.more_vert_rounded),
                 tooltip: 'menu'.i18n,
                 onPressed: () => showConversationOptions(
-                    model: model, context: context, contact: contact),
+                    model: model, parentContext: context, contact: contact),
               )
             ],
           ),
