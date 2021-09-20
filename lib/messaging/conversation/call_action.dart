@@ -1,4 +1,3 @@
-import 'package:lantern/common/ui/show_bottom_modal.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -17,11 +16,8 @@ class CallAction extends StatelessWidget {
       (context, contact, child) => IconButton(
         onPressed: () => showBottomModal(
             context: context,
-            title: 'call_contact'.i18n.fill([
-              contact.displayName.length > 25
-                  ? '${contact.displayName.substring(0, 25)}...'
-                  : contact.displayName
-            ]),
+            title: TextOneLine('call_contact'.i18n.fill([contact.displayName]),
+                style: tsSubtitle1),
             children: [
               ListTile(
                 leading: const CAssetImage(path: ImagePaths.phone_icon),

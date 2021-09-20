@@ -1,13 +1,13 @@
 import 'package:lantern/common/common.dart';
 
-class CListItem extends StatelessWidget {
+class ListItem extends StatelessWidget {
   final BuildContext context;
   final String title;
   final Widget? leading;
   final Widget? trailing;
-  void Function()? onTap;
+  final void Function()? onTap;
 
-  CListItem(
+  ListItem(
       {required this.context,
       required this.title,
       this.leading,
