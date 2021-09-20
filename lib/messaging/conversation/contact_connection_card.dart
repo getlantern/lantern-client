@@ -103,10 +103,10 @@ class ContactConnectionCard extends StatelessWidget {
             style: tsSubtitle1),
         subtitle: 'introductions_info'.i18n,
         children: [
-          ListTile(
-              dense: true,
-              leading: const Icon(Icons.check_circle, color: Colors.black),
-              title: CText('accept'.i18n, style: tsBody3),
+          BottomModalItem(
+              leading:
+                  const Icon(Icons.check_circle, color: Colors.black, size: 20),
+              label: 'accept'.i18n,
               onTap: () async {
                 try {
                   // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -123,15 +123,10 @@ class ContactConnectionCard extends StatelessWidget {
                       .pushRoute(Conversation(contactId: introduction.to));
                 }
               }),
-          const BottomModalDivider(),
-          ListTile(
-            leading: const Icon(
-              Icons.close,
-              color: Colors.black,
-            ),
-            title: CText('reject'.i18n, style: tsBody3),
-            onTap: () async {
-              showAlertDialog(
+          BottomModalItem(
+              leading: const Icon(Icons.close, color: Colors.black, size: 20),
+              label: 'reject'.i18n,
+              onTap: () => showAlertDialog(
                   context: context,
                   title:
                       CText('introductions_reject_title'.i18n, style: tsBody3),
@@ -153,9 +148,7 @@ class ContactConnectionCard extends StatelessWidget {
                     } finally {
                       await context.router.pop();
                     }
-                  });
-            },
-          ),
+                  })),
         ]);
   }
 }

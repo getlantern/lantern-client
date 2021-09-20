@@ -60,9 +60,9 @@ List<dynamic> constructReactionsList(BuildContext context,
                 children: [
                   for (var reaction in reactions.entries)
                     if (reaction.value.isNotEmpty)
-                      ListTile(
+                      BottomModalItem(
                         leading: CText(reaction.key, style: tsBody1),
-                        title: CText(reaction.value.join(', '), style: tsBody1),
+                        label: reaction.value.join(', '),
                       ),
                 ],
               ),

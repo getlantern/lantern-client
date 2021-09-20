@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
 
 import 'messaging.dart';

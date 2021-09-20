@@ -19,18 +19,12 @@ Future showConversationOptions(
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              ListTile(
+              BottomModalItem(
                 leading: const CAssetImage(
                   path: ImagePaths.disappearing_timer_icon,
-                  size: 24,
+                  size: 20,
                 ),
-                contentPadding: const EdgeInsetsDirectional.only(
-                    top: 7, bottom: 5, start: 16, end: 16),
-                title: Transform.translate(
-                  offset: const Offset(-14, 0),
-                  child:
-                      CText('disappearing_messages'.i18n, style: tsTextField),
-                ),
+                label: 'disappearing_messages'.i18n,
                 onTap: () async {
                   final scrollController = ScrollController();
                   final seconds = <int>[
@@ -282,35 +276,21 @@ Future showConversationOptions(
                   );
                 },
               ),
-              const BottomModalDivider(),
-              ListTile(
+              BottomModalItem(
                 leading: const CAssetImage(
                   path: ImagePaths.introduce_contact_icon,
-                  size: 16,
+                  size: 20,
                 ),
-                contentPadding: const EdgeInsetsDirectional.only(
-                    top: 5, bottom: 5, start: 16, end: 16),
-                title: Transform.translate(
-                    offset: const Offset(-14, 0),
-                    child:
-                        CText('introduce_contacts'.i18n, style: tsTextField)),
+                label: 'introduce_contacts'.i18n,
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
-              const BottomModalDivider(),
-              ListTile(
+              BottomModalItem(
                   leading: const CAssetImage(
                     path: ImagePaths.trash_icon,
-                    size: 24,
+                    size: 20,
                   ),
-                  contentPadding: const EdgeInsetsDirectional.only(
-                      top: 5, bottom: 5, start: 16, end: 16),
-                  title: Transform.translate(
-                    offset: const Offset(-14, 0),
-                    child: TextOneLine(
-                        'delete_contact_name'.i18n.fill([contact.displayName]),
-                        style: tsTextField),
-                  ),
+                  label: 'delete_contact_name'.i18n.fill([contact.displayName]),
                   onTap: () => showDialog<void>(
                         context: bottomContext,
                         barrierDismissible: true,

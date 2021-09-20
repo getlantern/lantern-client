@@ -1,7 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 
-import 'contact_list_item.dart';
-
 /*
 Renders an alphabetically grouped sorted list of contacts/conversations
 */
