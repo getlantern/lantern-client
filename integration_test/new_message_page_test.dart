@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/messages.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
-import 'package:lantern/messaging/contacts/contact_list_item.dart';
+import 'package:lantern/common/common.dart' as Common;
 
 import 'action/navigation_action_test.dart';
 import 'enums/screens_test.dart';
@@ -53,7 +53,8 @@ void main() {
       await tester.drag(find.byType(ListView), const Offset(0.0, -300.0));
       print('Flush the widget tree');
       await tester.pumpAndSettle();
-      var contactElement = find.widgetWithText(ContactListItem, 'Note to self');
+      var contactElement =
+          find.widgetWithText(Common.ContactListItem, 'Note to self');
       expect(contactElement, findsOneWidget);
     });
 

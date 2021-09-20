@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/common/common.dart';
 
 class CallAction extends StatelessWidget {
   final Contact contact;
@@ -19,9 +20,9 @@ class CallAction extends StatelessWidget {
             title: TextOneLine('call_contact'.i18n.fill([contact.displayName]),
                 style: tsSubtitle1),
             children: [
-              ListTile(
+              BottomModalItem(
                 leading: const CAssetImage(path: ImagePaths.phone_icon),
-                title: CText('call'.i18n, style: tsBody3),
+                label: 'call'.i18n,
                 onTap: () async {
                   Navigator.pop(context);
                   await context.pushRoute(
@@ -30,9 +31,9 @@ class CallAction extends StatelessWidget {
                   );
                 },
               ),
-              ListTile(
+              BottomModalItem(
                 leading: const CAssetImage(path: ImagePaths.cancel_icon),
-                title: CText('cancel'.i18n, style: tsBody3),
+                label: 'cancel'.i18n,
                 onTap: () => Navigator.pop(context),
               ),
             ]),

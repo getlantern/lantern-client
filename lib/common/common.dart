@@ -68,8 +68,9 @@ export 'ui/humanized_date.dart';
 export 'ui/now_builder.dart';
 export 'ui/pulse_animation.dart';
 export 'ui/round_button.dart';
-export 'ui/bottom_modal_divider.dart';
 export 'ui/list_item.dart';
+export 'ui/contact_list_item.dart';
+export 'ui/bottom_modal_item.dart';
 
 // UI functions
 export 'ui/show_alert_dialog.dart';

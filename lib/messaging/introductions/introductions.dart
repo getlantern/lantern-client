@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introductions extends StatelessWidget {
