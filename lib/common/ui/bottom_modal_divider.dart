@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
-class CBottomModalDivider extends StatelessWidget {
-  const CBottomModalDivider({
+class BottomModalDivider extends StatelessWidget {
+  const BottomModalDivider({
     Key? key,
   }) : super(key: key);
 

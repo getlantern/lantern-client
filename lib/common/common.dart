@@ -68,6 +68,8 @@ export 'ui/humanized_date.dart';
 export 'ui/now_builder.dart';
 export 'ui/pulse_animation.dart';
 export 'ui/round_button.dart';
+export 'ui/bottom_modal_divider.dart';
+export 'ui/list_item.dart';
 
 // UI functions
 export 'ui/show_alert_dialog.dart';
@@ -76,6 +78,7 @@ export 'ui/show_info_dialog.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_fullscreen_dialog.dart';
 export 'ui/show_snackbar.dart';
+export 'ui/show_bottom_modal.dart';
 
 // custom UI elements
 export 'ui/custom/asset_image.dart';
@@ -85,5 +88,3 @@ export 'ui/custom/divider.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_wrap.dart';
 export 'ui/custom/text_field.dart';
-export 'ui/custom/bottom_modal_divider.dart';
-export 'ui/custom/list_tile.dart';

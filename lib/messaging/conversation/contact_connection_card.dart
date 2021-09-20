@@ -98,7 +98,9 @@ class ContactConnectionCard extends StatelessWidget {
       MessagingModel model, Contact contact) {
     return showBottomModal(
         context: context,
-        title: 'Accept Introduction to ${introduction.displayName}',
+        title: TextOneLine(
+            'introductions_title'.fill([introduction.displayName]),
+            style: tsSubtitle1),
         subtitle: 'introductions_info'.i18n,
         children: [
           ListTile(
@@ -121,7 +123,7 @@ class ContactConnectionCard extends StatelessWidget {
                       .pushRoute(Conversation(contactId: introduction.to));
                 }
               }),
-          const CBottomModalDivider(),
+          const BottomModalDivider(),
           ListTile(
             leading: const Icon(
               Icons.close,

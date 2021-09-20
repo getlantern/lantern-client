@@ -56,7 +56,7 @@ List<dynamic> constructReactionsList(BuildContext context,
               behavior: HitTestBehavior.translucent,
               onTap: () => showBottomModal(
                 context: context,
-                title: 'Reactions'.i18n,
+                title: TextOneLine('Reactions'.i18n, style: tsSubtitle1),
                 children: [
                   for (var reaction in reactions.entries)
                     if (reaction.value.isNotEmpty)

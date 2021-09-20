@@ -282,7 +282,7 @@ Future showConversationOptions(
                   );
                 },
               ),
-              const CBottomModalDivider(),
+              const BottomModalDivider(),
               ListTile(
                 leading: const CAssetImage(
                   path: ImagePaths.introduce_contact_icon,
@@ -297,7 +297,7 @@ Future showConversationOptions(
                 onTap: () async =>
                     await bottomContext.pushRoute(const Introduce()),
               ),
-              const CBottomModalDivider(),
+              const BottomModalDivider(),
               ListTile(
                   leading: const CAssetImage(
                     path: ImagePaths.trash_icon,
