@@ -27,7 +27,7 @@ extension Humanize on int {
       return (this ~/ 604800).toString() +
           (longForm
               ? ' week${(this ~/ 604800) > 1 ? 's' : ''}'
-              : 'd'); // TODO: add i18n
+              : 'w'); // TODO: add i18n
     }
     return (this ~/ 604800).toString() +
         (longForm
