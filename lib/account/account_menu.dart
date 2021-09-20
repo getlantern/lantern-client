@@ -32,36 +32,36 @@ class AccountMenu extends StatelessWidget {
       BuildContext context, SessionModel sessionModel, Contact me) {
     return [
       SettingsItem(
-        icon: ImagePaths.crown_icon_monochrome,
+        icon: ImagePaths.crown_monochrome,
         title: 'upgrade_to_lantern_pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
       SettingsItem(
-        icon: ImagePaths.devices_icon,
+        icon: ImagePaths.devices,
         title: 'authorize_device_for_pro'.i18n,
         onTap: () {
           authorizeDeviceForPro(context);
         },
       ),
       SettingsItem(
-        icon: ImagePaths.star_icon,
+        icon: ImagePaths.star,
         title: 'invite_friends'.i18n,
         onTap: inviteFriends,
       ),
       SettingsItem(
-        icon: ImagePaths.desktop_icon,
+        icon: ImagePaths.desktop,
         title: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
       SettingsItem(
-        icon: ImagePaths.settings_icon,
+        icon: ImagePaths.settings,
         title: 'settings'.i18n,
         onTap: () {
           openSettings(context);
         },
       ),
       SettingsItem(
-        icon: ImagePaths.account_icon,
+        icon: ImagePaths.account,
         title: 'display_name'.i18n.fill([me.displayName]),
         onTap: () {
           openDisplayName(context, me);
@@ -72,35 +72,35 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context, Contact me) => [
         SettingsItem(
-          icon: ImagePaths.account_icon,
+          icon: ImagePaths.account,
           iconColor: Colors.black,
           title: 'pro_account_management'.i18n,
           onTap: () async => await context.pushRoute(ProAccount()),
         ),
         SettingsItem(
-          icon: ImagePaths.devices_icon,
+          icon: ImagePaths.devices,
           title: 'add_device'.i18n,
           onTap: () async => await context.pushRoute(ApproveDevice()),
         ),
         SettingsItem(
-          icon: ImagePaths.star_icon,
+          icon: ImagePaths.star,
           title: 'invite_friends'.i18n,
           onTap: inviteFriends,
         ),
         SettingsItem(
-          icon: ImagePaths.desktop_icon,
+          icon: ImagePaths.desktop,
           title: 'desktop_version'.i18n,
           onTap: openDesktopVersion,
         ),
         SettingsItem(
-          icon: ImagePaths.settings_icon,
+          icon: ImagePaths.settings,
           title: 'settings'.i18n,
           onTap: () {
             openSettings(context);
           },
         ),
         SettingsItem(
-          icon: ImagePaths.account_icon,
+          icon: ImagePaths.account,
           title: 'display_name'.i18n.fill([me.displayName]),
           onTap: () {
             openDisplayName(context, me);

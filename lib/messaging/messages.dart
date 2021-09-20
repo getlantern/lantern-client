@@ -57,8 +57,8 @@ class Messages extends StatelessWidget {
                                           title: CText('introductions'.i18n,
                                               style: tsSubtitle1Short),
                                           trailing: const CAssetImage(
-                                            path: ImagePaths
-                                                .keyboard_arrow_right_icon,
+                                            path:
+                                                ImagePaths.keyboard_arrow_right,
                                             size: 24,
                                           ),
                                           onTap: () async => await context

@@ -21,7 +21,7 @@ class CallAction extends StatelessWidget {
                 style: tsSubtitle1),
             children: [
               BottomModalItem(
-                leading: const CAssetImage(path: ImagePaths.phone_icon),
+                leading: const CAssetImage(path: ImagePaths.phone),
                 label: 'call'.i18n,
                 onTap: () async {
                   Navigator.pop(context);
@@ -32,12 +32,12 @@ class CallAction extends StatelessWidget {
                 },
               ),
               BottomModalItem(
-                leading: const CAssetImage(path: ImagePaths.cancel_icon),
+                leading: const CAssetImage(path: ImagePaths.cancel),
                 label: 'cancel'.i18n,
                 onTap: () => Navigator.pop(context),
               ),
             ]),
-        icon: const CAssetImage(path: ImagePaths.phone_icon),
+        icon: const CAssetImage(path: ImagePaths.phone),
       ),
     );
   }
