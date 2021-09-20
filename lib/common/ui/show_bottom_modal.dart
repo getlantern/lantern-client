@@ -13,8 +13,7 @@ void showBottomModal({
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
-      builder: (bottomContext) =>
-          Wrap(alignment: WrapAlignment.center, children: [
+      builder: (context) => Wrap(alignment: WrapAlignment.center, children: [
             if (title!.isNotEmpty)
               Column(
                 children: [
