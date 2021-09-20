@@ -38,9 +38,9 @@ class Button extends StatelessWidget {
                 ? grey3
                 : secondary
                     ? white
-                    : primaryPink,
+                    : pink4,
             padding: const EdgeInsets.symmetric(vertical: 15),
-            side: BorderSide(width: 2, color: disabled ? grey5 : primaryPink),
+            side: BorderSide(width: 2, color: disabled ? grey5 : pink4),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 23),

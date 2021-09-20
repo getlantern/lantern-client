@@ -26,7 +26,7 @@ class CallAction extends StatelessWidget {
               children: [
                 ListTile(
                   leading: const CAssetImage(path: ImagePaths.phone_icon),
-                  title: CText('call'.i18n, style: tsSettingsItem),
+                  title: CText('call'.i18n, style: tsBody3),
                   onTap: () async {
                     Navigator.pop(context);
                     await context.pushRoute(
@@ -37,7 +37,7 @@ class CallAction extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const CAssetImage(path: ImagePaths.cancel_icon),
-                  title: CText('cancel'.i18n, style: tsSettingsItem),
+                  title: CText('cancel'.i18n, style: tsBody3),
                   onTap: () => Navigator.pop(context),
                 ),
               ],

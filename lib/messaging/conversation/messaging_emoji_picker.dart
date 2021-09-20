@@ -1,10 +1,11 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as _EmojiPicker;
 import 'package:flutter/material.dart';
+import 'package:lantern/common/common.dart';
 
 class MessagingEmojiPicker extends StatelessWidget {
   final double height;
   final String emptySuggestions;
-  final Function(Category, Emoji) onEmojiSelected;
+  final Function(_EmojiPicker.Category, _EmojiPicker.Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
   const MessagingEmojiPicker({
@@ -21,22 +22,20 @@ class MessagingEmojiPicker extends StatelessWidget {
       height: height,
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        return EmojiPicker(
+        return _EmojiPicker.EmojiPicker(
           key: key,
           onBackspacePressed: onBackspacePressed,
           onEmojiSelected: onEmojiSelected,
-          config: Config(
-            initCategory: Category.SMILEYS,
+          config: _EmojiPicker.Config(
+            initCategory: _EmojiPicker.Category.SMILEYS,
             columns: constraints.maxWidth ~/ 40.0,
-            iconColor: Theme.of(context).primaryIconTheme.color ?? Colors.grey,
-            iconColorSelected:
-                Theme.of(context).accentIconTheme.color ?? Colors.blue,
-            noRecentsStyle: Theme.of(context).textTheme.bodyText1 ??
-                const TextStyle(fontSize: 15, color: Colors.black26),
-            progressIndicatorColor: Theme.of(context).indicatorColor,
+            iconColor: grey5,
+            iconColorSelected: black,
+            noRecentsStyle: TextStyle(fontSize: 15, color: black),
+            progressIndicatorColor: black,
             noRecentsText: emptySuggestions,
-            bgColor: Theme.of(context).backgroundColor,
-            indicatorColor: Theme.of(context).indicatorColor,
+            bgColor: white,
+            indicatorColor: grey5,
           ),
         );
       }),

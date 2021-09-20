@@ -40,7 +40,7 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.qr_code,
                   color: black,
                 ),
-                title: CText('scan_qr_code'.i18n, style: tsSettingsItem),
+                title: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -67,7 +67,7 @@ class _NewMessageState extends State<NewMessage> {
                                     .i18n
                                     .fill([_updatedContact!.displayName]),
                                 overflow: TextOverflow.visible,
-                                style: tsInfoDialogText(white),
+                                style: tsBody1Color(white),
                                 textAlign: TextAlign.start,
                               ),
                             ),
@@ -75,7 +75,7 @@ class _NewMessageState extends State<NewMessage> {
                         ),
                         duration: const Duration(milliseconds: 4000),
                         action: SnackBarAction(
-                          textColor: secondaryPink,
+                          textColor: pink3,
                           label: 'start_chat'.i18n.toUpperCase(),
                           onPressed: () async {
                             await context.pushRoute(Conversation(
@@ -91,7 +91,8 @@ class _NewMessageState extends State<NewMessage> {
                   Icons.people,
                   color: black,
                 ),
-                title: CText('introduce_contacts'.i18n, style: tsSettingsItem),
+                title:
+                    CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right_icon,
                   size: 24,
@@ -99,16 +100,6 @@ class _NewMessageState extends State<NewMessage> {
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),
               Divider(thickness: 1, color: grey2),
-              Container(
-                child: model.contacts(builder: (context,
-                    Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                  return _contacts.toList().isNotEmpty
-                      ? ListTile(
-                          title: CText('contacts'.i18n.toUpperCase(),
-                              style: tsEmptyContactState))
-                      : Container();
-                }),
-              ),
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
@@ -149,7 +140,7 @@ class _NewMessageState extends State<NewMessage> {
                         child: CText('no_contacts_yet'.i18n,
                             textAlign: TextAlign.center,
                             style:
-                                tsEmptyContactState)); // rendering this instead of SizedBox() to avoid null dimension errors
+                                tsSubtitle1Short)); // rendering this instead of SizedBox() to avoid null dimension errors
               })),
             ],
           );

@@ -34,10 +34,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
           onError: () {
             showAlertDialog(
                 context: context,
-                title:
-                    CText('unable_to_complete_call'.i18n, style: tsDialogTitle),
-                content:
-                    CTextWrap('please_try_again'.i18n, style: tsDialogBody),
+                title: CText('unable_to_complete_call'.i18n, style: tsBody3),
+                content: CTextWrap('please_try_again'.i18n, style: tsBody1),
                 agreeText: 'close'.i18n,
                 agreeAction: () async {
                   signaling.bye(await session);
@@ -95,7 +93,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Transform.scale(
-                    scale: 3,
+                    scale: 2,
                     child: Column(
                       children: [
                         CustomAvatar(
@@ -109,7 +107,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 ? sanitizeContactName(
                                     widget.contact.displayName)
                                 : widget.contact.contactId.id,
-                            style: tsCallTitle,
+                            style: tsHeading1.copiedWith(color: white),
                           ),
                         ),
                         Padding(
@@ -118,7 +116,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                             signaling.value.callState == CallState.Connected
                                 ? 'Connected'.i18n
                                 : 'Connecting...'.i18n,
-                            style: tsCallSubtitle,
+                            style: tsBody1.copiedWith(color: white),
                           ),
                         ),
                       ],

@@ -12,7 +12,7 @@ class ReplySnippetDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return CText(
       descriptiveText,
-      style: tsReplySnippetSpecialCase,
+      style: tsBody3.copiedWith(fontStyle: FontStyle.italic),
       overflow: TextOverflow.ellipsis,
     );
   }

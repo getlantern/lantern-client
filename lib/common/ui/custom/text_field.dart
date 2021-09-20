@@ -15,6 +15,7 @@ class CTextField extends StatefulWidget {
   late final bool? enabled;
   late final int? minLines;
   late final int? maxLines;
+  late final AutovalidateMode? autovalidateMode;
 
   CTextField({
     required this.controller,
@@ -27,6 +28,7 @@ class CTextField extends StatefulWidget {
     this.enabled,
     this.minLines,
     this.maxLines,
+    this.autovalidateMode,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -64,7 +66,7 @@ class _CTextFieldState extends State<CTextField> {
             key: fieldKey,
             enabled: widget.enabled,
             controller: widget.controller,
-            autovalidateMode: AutovalidateMode.disabled,
+            autovalidateMode: widget.autovalidateMode,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
             validator: (value) {
@@ -83,7 +85,7 @@ class _CTextFieldState extends State<CTextField> {
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
-                    color: primaryBlue,
+                    color: blue4,
                   ),
                 ),
                 errorBorder: OutlineInputBorder(
@@ -119,7 +121,7 @@ class _CTextFieldState extends State<CTextField> {
                       color: fieldKey.currentState?.mounted == true &&
                               fieldKey.currentState?.hasError == true
                           ? indicatorRed
-                          : primaryBlue),
+                          : blue4),
                 ),
         ),
       ],

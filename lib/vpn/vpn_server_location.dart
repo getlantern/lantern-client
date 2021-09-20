@@ -22,22 +22,18 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
       children: [
         CText(
           'Server Location'.i18n + ': ',
-          style: tsTitleHeadVPNItem.copiedWith(
+          style: tsBody1.copiedWith(
             color: unselectedTabLabelColor,
           ),
         ),
         Container(
-          transform: Matrix4.translationValues(-16.0, 0.0, 0.0),
+          transform: Matrix4.translationValues(0.0, 2.0, 0.0),
           child: InkWell(
             onTap: _onTap,
-            child: Container(
-              height: 48,
-              width: 48,
-              child: Icon(
-                Icons.info_outline_rounded,
-                color: unselectedTabLabelColor,
-                size: 16,
-              ),
+            child: Icon(
+              Icons.info_outline_rounded,
+              color: unselectedTabLabelColor,
+              size: 16,
             ),
           ),
         ),
@@ -56,14 +52,14 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
                   const SizedBox(width: 12),
                   CText(
                     serverInfo.city,
-                    style: tsTitleTrailVPNItem,
+                    style: tsSubtitle2,
                   )
                 ],
               );
             } else {
               return CText(
-                'n/a'.i18n,
-                style: tsTitleTrailVPNItem,
+                'n/a'.i18n.toUpperCase(),
+                style: tsSubtitle2,
               );
             }
           });
