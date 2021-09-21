@@ -37,8 +37,7 @@ class _NewMessageState extends State<NewMessage> {
             children: [
               CListTile(
                 leading: Padding(
-                  padding:
-                      const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
+                  padding: const EdgeInsetsDirectional.only(start: 16.0),
                   child: Icon(
                     Icons.qr_code,
                     color: black,
@@ -47,7 +46,7 @@ class _NewMessageState extends State<NewMessage> {
                 content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right,
-                  size: 24,
+                  size: iconSize,
                 ),
                 onTap: () async => await context.router
                     .push(
@@ -92,8 +91,7 @@ class _NewMessageState extends State<NewMessage> {
               Divider(thickness: 1, color: grey2),
               CListTile(
                 leading: Padding(
-                  padding:
-                      const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
+                  padding: const EdgeInsetsDirectional.only(start: 16.0),
                   child: Icon(
                     Icons.people,
                     color: black,
@@ -103,7 +101,7 @@ class _NewMessageState extends State<NewMessage> {
                     CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
                   path: ImagePaths.keyboard_arrow_right,
-                  size: 24,
+                  size: iconSize,
                 ),
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),

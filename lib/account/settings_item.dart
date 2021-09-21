@@ -25,14 +25,10 @@ class SettingsItem extends StatelessWidget {
     return Column(children: [
       CListTile(
         leading: icon != null
-            ? Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(start: 10.0, end: 16.0),
-                child: CAssetImage(
-                  path: icon!,
-                  size: 24,
-                  color: iconColor,
-                ),
+            ? CAssetImage(
+                path: icon!,
+                size: iconSize,
+                color: iconColor,
               )
             : const SizedBox(),
         content: Row(
@@ -56,7 +52,7 @@ class SettingsItem extends StatelessWidget {
                   openInfoDialog!(context);
                 },
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsetsDirectional.only(start: 16, end: 16),
                   child: CAssetImage(
                     path: ImagePaths.info,
                     size: 16,
