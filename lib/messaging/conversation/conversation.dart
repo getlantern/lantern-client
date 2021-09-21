@@ -349,14 +349,8 @@ class ConversationState extends State<Conversation>
           child: Stack(children: [
             Column(
               children: [
-                dismissKeyboardsOnTap(
-                  Card(
-                    color: grey1,
-                    child: buildConversationSticker(contact),
-                  ),
-                ),
                 Flexible(
-                  child: dismissKeyboardsOnTap(buildMessageBubbles(contact)),
+                  child: dismissKeyboardsOnTap(buildList(contact)),
                 ),
                 // Reply container
                 if (isReplying)
@@ -416,28 +410,31 @@ class ConversationState extends State<Conversation>
 
   Widget buildConversationSticker(Contact contact) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            width: constraints.maxWidth * 0.7,
-            child: model.introductionsToContact(
-              builder: (context,
-                  Iterable<PathAndValue<StoredMessage>> introductions,
-                  Widget? child) {
-                final isPendingIntroduction = !contact.hasReceivedMessage &&
-                    introductions
-                        .toList()
-                        .where((intro) =>
-                            intro.value.introduction.to == contact.contactId)
-                        .isNotEmpty;
-                return ConversationSticker(
-                    contact: contact,
-                    isPendingIntroduction: isPendingIntroduction);
-              },
+          return Card(
+            color: grey1,
+            child: Container(
+              width: constraints.maxWidth * 0.7,
+              child: model.introductionsToContact(
+                builder: (context,
+                    Iterable<PathAndValue<StoredMessage>> introductions,
+                    Widget? child) {
+                  final isPendingIntroduction = !contact.hasReceivedMessage &&
+                      introductions
+                          .toList()
+                          .where((intro) =>
+                              intro.value.introduction.to == contact.contactId)
+                          .isNotEmpty;
+                  return ConversationSticker(
+                      contact: contact,
+                      isPendingIntroduction: isPendingIntroduction);
+                },
+              ),
             ),
           );
         },
       );
 
-  Widget buildMessageBubbles(Contact contact) {
+  Widget buildList(Contact contact) {
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
@@ -448,8 +445,13 @@ class ConversationState extends State<Conversation>
       return ScrollablePositionedList.builder(
         itemScrollController: scrollController,
         reverse: true,
-        itemCount: messageRecords.length,
+        itemCount: messageRecords.length + 1,
         itemBuilder: (context, index) {
+          if (index == messageRecords.length) {
+            // show sticker as first item
+            return buildConversationSticker(contact);
+          }
+
           return model.message(context, messageRecords.elementAt(index),
               (BuildContext context, StoredMessage message, Widget? child) {
             return MessageBubble(
@@ -580,8 +582,12 @@ class ConversationState extends State<Conversation>
             autofocus: false,
             textInputAction: TextInputAction.send,
             controller: newMessage,
-            onChanged: (value) =>
-                setState(() => isSendIconVisible = value.isNotEmpty),
+            onChanged: (value) {
+              final newIsSendIconVisible = value.isNotEmpty;
+              if (newIsSendIconVisible != isSendIconVisible) {
+                setState(() => isSendIconVisible = newIsSendIconVisible);
+              }
+            },
             focusNode: focusNode,
             onFieldSubmitted: (value) async =>
                 value.isEmpty ? null : await handleSubmit(newMessage),
