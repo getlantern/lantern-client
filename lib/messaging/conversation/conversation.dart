@@ -16,33 +16,33 @@ import 'call_action.dart';
 import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
-  final ContactId _contactId;
+  final ContactId contactId;
 
-  Conversation(this._contactId) : super();
+  Conversation(this.contactId) : super();
 
   @override
-  _ConversationState createState() => _ConversationState();
+  ConversationState createState() => ConversationState();
 }
 
-class _ConversationState extends State<Conversation>
+class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
   late final ShowEmojis onEmojiTap;
-  bool _reactingWithEmoji = false;
-  bool _hasPermission = false;
+  bool reactingWithEmoji = false;
+  bool hasPermission = false;
 
-  final TextEditingController _newMessage = TextEditingController();
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  bool _isRecording = false;
-  bool _finishedRecording = false;
-  bool _isSendIconVisible = false;
-  bool _isReplying = false;
-  Uint8List? _recording;
-  AudioController? _audioPreviewController;
-  StoredMessage? _quotedMessage;
+  final TextEditingController newMessage = TextEditingController();
+  final StopWatchTimer stopWatchTimer = StopWatchTimer();
+  bool isRecording = false;
+  bool finishedRecording = false;
+  bool isSendIconVisible = false;
+  bool isReplying = false;
+  Uint8List? recording;
+  AudioController? audioPreviewController;
+  StoredMessage? quotedMessage;
   var messageCount = 0;
-  PathAndValue<StoredMessage>? _storedMessage;
-  final _scrollController = ItemScrollController();
+  PathAndValue<StoredMessage>? storedMessage;
+  final scrollController = ItemScrollController();
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -119,7 +119,7 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-  bool _interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
+  bool interceptBackButton(bool stopDefaultButtonEvent, RouteInfo info) {
     if (keyboardMode == KeyboardMode.emoji) {
       setState(() {
         keyboardMode = KeyboardMode.none;
@@ -143,7 +143,7 @@ class _ConversationState extends State<Conversation>
         break;
       case AppLifecycleState.resumed:
       default:
-        model.setCurrentConversationContact(widget._contactId.id);
+        model.setCurrentConversationContact(widget.contactId.id);
         break;
     }
   }
@@ -152,42 +152,42 @@ class _ConversationState extends State<Conversation>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    BackButtonInterceptor.add(_interceptBackButton);
+    BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
-    _newMessage.dispose();
-    _stopWatchTimer.dispose();
+    newMessage.dispose();
+    stopWatchTimer.dispose();
     focusNode.dispose();
-    _audioPreviewController?.stop();
+    audioPreviewController?.stop();
     keyboardSubscription?.cancel();
-    BackButtonInterceptor.remove(_interceptBackButton);
+    BackButtonInterceptor.remove(interceptBackButton);
     super.dispose();
   }
 
-  Future<void> _send(String text,
+  Future<void> sendMessage(String text,
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
     if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
     try {
       await model.sendToDirectContact(
-        widget._contactId.id,
+        widget.contactId.id,
         text: text,
         attachments: attachments,
         replyToId: replyToId,
         replyToSenderId: replyToSenderId,
       );
-      _newMessage.clear();
+      newMessage.clear();
       setState(() {
-        _recording = null;
-        _audioPreviewController = null;
+        recording = null;
+        audioPreviewController = null;
       });
       if (messageCount > 0) {
-        await _scrollController.scrollTo(
+        await scrollController.scrollTo(
             index: 00,
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOutCubic);
@@ -199,34 +199,34 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> _startRecording() async {
-    if (_isRecording) {
+  Future<void> startRecording() async {
+    if (isRecording) {
       return;
     }
-    _hasPermission = await model.startRecordingVoiceMemo();
-    if (_hasPermission) {
-      _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    hasPermission = await model.startRecordingVoiceMemo();
+    if (hasPermission) {
+      stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+      stopWatchTimer.onExecute.add(StopWatchExecute.start);
       setState(() {
-        _isRecording = true;
+        isRecording = true;
       });
     }
   }
 
-  Future<void> _finishRecording() async {
-    if (!_isRecording) {
+  Future<void> finishRecording() async {
+    if (!isRecording) {
       return;
     }
 
     context.loaderOverlay.show();
     try {
-      _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-      _recording = await model.stopRecordingVoiceMemo();
-      var attachment = StoredAttachment.fromBuffer(_recording!);
+      stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      recording = await model.stopRecordingVoiceMemo();
+      var attachment = StoredAttachment.fromBuffer(recording!);
       setState(() {
-        _isRecording = false;
-        _finishedRecording = true;
-        _audioPreviewController =
+        isRecording = false;
+        finishedRecording = true;
+        audioPreviewController =
             AudioController(context: context, attachment: attachment);
       });
     } finally {
@@ -234,7 +234,7 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> _selectFilesToShare() async {
+  Future<void> selectFilesToShare() async {
     try {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: true);
@@ -255,7 +255,7 @@ class _ConversationState extends State<Conversation>
         };
         final attachment =
             await model.filePickerLoadAttachment(el.path.toString(), metadata);
-        await _send(_newMessage.value.text, attachments: [attachment]);
+        await sendMessage(newMessage.value.text, attachments: [attachment]);
       });
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'share_media_error'.i18n);
@@ -264,16 +264,15 @@ class _ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> _handleSubmit(TextEditingController _newMessage) async {
+  Future<void> handleSubmit(TextEditingController newMessage) async {
     if (mounted) {
       setState(() {
-        _isSendIconVisible = false;
-        _isReplying = false;
+        isSendIconVisible = false;
+        isReplying = false;
       });
     }
-    await _send(_newMessage.value.text,
-        replyToSenderId: _quotedMessage?.senderId,
-        replyToId: _quotedMessage?.id);
+    await sendMessage(newMessage.value.text,
+        replyToSenderId: quotedMessage?.senderId, replyToId: quotedMessage?.id);
   }
 
   @override
@@ -288,9 +287,9 @@ class _ConversationState extends State<Conversation>
         : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
-        ? unawaited(model.setCurrentConversationContact(widget._contactId.id))
+        ? unawaited(model.setCurrentConversationContact(widget.contactId.id))
         : unawaited(model.clearCurrentConversationContact());
-    return model.singleContactById(context, widget._contactId,
+    return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
       final title = contact.displayName.isNotEmpty
           ? contact.displayName
@@ -353,28 +352,28 @@ class _ConversationState extends State<Conversation>
                 dismissKeyboardsOnTap(
                   Card(
                     color: grey1,
-                    child: _buildConversationSticker(contact),
+                    child: buildConversationSticker(contact),
                   ),
                 ),
                 Flexible(
-                  child: dismissKeyboardsOnTap(_buildMessageBubbles(contact)),
+                  child: dismissKeyboardsOnTap(buildMessageBubbles(contact)),
                 ),
                 // Reply container
-                if (_isReplying)
+                if (isReplying)
                   ReplyPreview(
-                    quotedMessage: _quotedMessage,
+                    quotedMessage: quotedMessage,
                     model: model,
                     contact: contact,
-                    onCloseListener: () => setState(() => _isReplying = false),
+                    onCloseListener: () => setState(() => isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: _isRecording
+                  color: isRecording
                       ? const Color.fromRGBO(245, 245, 245, 1)
                       : Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: kBottomNavigationBarHeight,
-                  child: _buildMessageBar(),
+                  child: buildMessageBar(),
                 ),
                 Offstage(
                   offstage: keyboardMode != KeyboardMode.emoji &&
@@ -383,26 +382,26 @@ class _ConversationState extends State<Conversation>
                     height: keyboardHeight,
                     emptySuggestions: 'no_recents'.i18n,
                     onBackspacePressed: () {
-                      _newMessage
+                      newMessage
                         ..text =
-                            _newMessage.text.characters.skipLast(1).toString()
+                            newMessage.text.characters.skipLast(1).toString()
                         ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: _newMessage.text.length));
+                            TextPosition(offset: newMessage.text.length));
                     },
                     onEmojiSelected: (category, emoji) async {
                       if (mounted &&
-                          _reactingWithEmoji &&
-                          _storedMessage != null) {
-                        await model.react(_storedMessage!, emoji.emoji);
-                        _reactingWithEmoji = false;
-                        _storedMessage = null;
+                          reactingWithEmoji &&
+                          storedMessage != null) {
+                        await model.react(storedMessage!, emoji.emoji);
+                        reactingWithEmoji = false;
+                        storedMessage = null;
                         dismissAllKeyboards();
                       } else {
-                        setState(() => _isSendIconVisible = true);
-                        _newMessage
+                        setState(() => isSendIconVisible = true);
+                        newMessage
                           ..text += emoji.emoji
                           ..selection = TextSelection.fromPosition(
-                              TextPosition(offset: _newMessage.text.length));
+                              TextPosition(offset: newMessage.text.length));
                       }
                     },
                   ),
@@ -415,7 +414,7 @@ class _ConversationState extends State<Conversation>
     });
   }
 
-  Widget _buildConversationSticker(Contact contact) => LayoutBuilder(
+  Widget buildConversationSticker(Contact contact) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Container(
             width: constraints.maxWidth * 0.7,
@@ -438,82 +437,84 @@ class _ConversationState extends State<Conversation>
         },
       );
 
-  Widget _buildMessageBubbles(Contact contact) {
+  Widget buildMessageBubbles(Contact contact) {
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       messageCount = messageRecords.length;
-      return messageRecords.isEmpty
-          ? Container()
-          : ScrollablePositionedList.builder(
-              itemScrollController: _scrollController,
-              reverse: true,
-              itemCount: messageRecords.length,
-              itemBuilder: (context, index) {
-                return MessageBubble(
-                  message: messageRecords.elementAt(index),
-                  priorMessage: index >= messageRecords.length - 1
-                      ? null
-                      : messageRecords.elementAt(index + 1).value,
-                  nextMessage: index == 0
-                      ? null
-                      : messageRecords.elementAt(index - 1).value,
-                  contact: contact,
-                  onEmojiTap: (showEmoji, messageSelected) => setState(() {
-                    setState(() {
-                      _reactingWithEmoji = true;
-                      _storedMessage = messageSelected;
-                    });
-                    showEmojiKeyboard(true);
-                  }),
-                  onReply: (_message) {
-                    setState(() {
-                      _isReplying = true;
-                      _quotedMessage = _message;
-                      showNativeKeyboard();
-                    });
-                  },
-                  onTapReply: (_tappedMessage) {
-                    final _scrollToIndex = messageRecords.toList().indexWhere(
-                        (element) =>
-                            element.value.id == _tappedMessage.value.replyToId);
-                    if (_scrollToIndex != -1 && _scrollController.isAttached) {
-                      _scrollController.scrollTo(
-                          index: _scrollToIndex,
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.easeInOutCubic);
-                    }
-                  },
-                );
+      if (messageRecords.isEmpty) {
+        return Container();
+      }
+      return ScrollablePositionedList.builder(
+        itemScrollController: scrollController,
+        reverse: true,
+        itemCount: messageRecords.length,
+        itemBuilder: (context, index) {
+          return model.message(context, messageRecords.elementAt(index),
+              (BuildContext context, StoredMessage message, Widget? child) {
+            return MessageBubble(
+              message: messageRecords.elementAt(index),
+              priorMessage: index >= messageRecords.length - 1
+                  ? null
+                  : messageRecords.elementAt(index + 1).value,
+              nextMessage:
+                  index == 0 ? null : messageRecords.elementAt(index - 1).value,
+              contact: contact,
+              onEmojiTap: (showEmoji, messageSelected) => setState(() {
+                setState(() {
+                  reactingWithEmoji = true;
+                  storedMessage = messageSelected;
+                });
+                showEmojiKeyboard(true);
+              }),
+              onReply: () {
+                setState(() {
+                  isReplying = true;
+                  quotedMessage = message;
+                  showNativeKeyboard();
+                });
+              },
+              onTapReply: () {
+                final scrollToIndex = messageRecords.toList().indexWhere(
+                    (element) => element.value.id == message.replyToId);
+                if (scrollToIndex != -1 && scrollController.isAttached) {
+                  scrollController.scrollTo(
+                      index: scrollToIndex,
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeInOutCubic);
+                }
               },
             );
+          });
+        },
+      );
     });
   }
 
-  Widget _buildMessageBar() {
+  Widget buildMessageBar() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 55,
-      margin: _isRecording
+      margin: isRecording
           ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
           : EdgeInsets.zero,
       child: IndexedStack(
-        index: _finishedRecording ? 1 : 0,
+        index: finishedRecording ? 1 : 0,
         children: [
-          _buildMessageBarRecording(context),
-          _audioPreviewController == null
+          buildMessageBarRecording(context),
+          audioPreviewController == null
               ? const SizedBox()
               : MessageBarPreviewRecording(
                   model: model,
-                  audioController: _audioPreviewController!,
+                  audioController: audioPreviewController!,
                   onCancelRecording: () async => setState(() {
-                    _isRecording = false;
-                    _finishedRecording = false;
-                    _recording = null;
-                    _audioPreviewController = null;
+                    isRecording = false;
+                    finishedRecording = false;
+                    recording = null;
+                    audioPreviewController = null;
                   }),
                   onSend: () {
-                    _audioPreviewController!.audio.stop();
+                    audioPreviewController!.audio.stop();
                     send();
                   },
                 ),
@@ -522,12 +523,12 @@ class _ConversationState extends State<Conversation>
     );
   }
 
-  Widget _buildMessageBarRecording(BuildContext context) {
+  Widget buildMessageBarRecording(BuildContext context) {
     return ListTile(
-      contentPadding: _isRecording
+      contentPadding: isRecording
           ? const EdgeInsets.only(right: 0, left: 2.0)
           : EdgeInsets.zero,
-      leading: _isRecording
+      leading: isRecording
           ? Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -546,7 +547,7 @@ class _ConversationState extends State<Conversation>
                   child: Padding(
                     padding: const EdgeInsets.only(left: 14),
                     child: StopwatchTimer(
-                      stopWatchTimer: _stopWatchTimer,
+                      stopWatchTimer: stopWatchTimer,
                       style: tsOverline.copiedWith(color: indicatorRed),
                     ),
                   ),
@@ -578,12 +579,12 @@ class _ConversationState extends State<Conversation>
           TextFormField(
             autofocus: false,
             textInputAction: TextInputAction.send,
-            controller: _newMessage,
+            controller: newMessage,
             onChanged: (value) =>
-                setState(() => _isSendIconVisible = value.isNotEmpty),
+                setState(() => isSendIconVisible = value.isNotEmpty),
             focusNode: focusNode,
             onFieldSubmitted: (value) async =>
-                value.isEmpty ? null : await _handleSubmit(_newMessage),
+                value.isEmpty ? null : await handleSubmit(newMessage),
             decoration: InputDecoration(
               // Send icon
               enabledBorder: InputBorder.none,
@@ -595,7 +596,7 @@ class _ConversationState extends State<Conversation>
           // hide TextFormField while recording by painting over it. this allows
           // the form field to retain focus to keep the keyboard open and keep
           // the layout from changing while we're recording.
-          if (_isRecording)
+          if (isRecording)
             SizedBox(
               child: Container(
                 decoration: BoxDecoration(color: grey2),
@@ -603,7 +604,7 @@ class _ConversationState extends State<Conversation>
             ),
         ],
       ),
-      trailing: _isSendIconVisible && !_isRecording
+      trailing: isSendIconVisible && !isRecording
           ? IconButton(
               key: const ValueKey('send_message'),
               icon: const Icon(Icons.send, color: Colors.black),
@@ -614,18 +615,18 @@ class _ConversationState extends State<Conversation>
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _isRecording
+                isRecording
                     ? const SizedBox()
                     : IconButton(
-                        onPressed: () async => await _selectFilesToShare(),
+                        onPressed: () async => await selectFilesToShare(),
                         icon: const Icon(Icons.add_circle_rounded),
                       ),
                 VoiceRecorder(
-                  isRecording: _isRecording,
-                  onRecording: () async => await _startRecording(),
+                  isRecording: isRecording,
+                  onRecording: () async => await startRecording(),
                   onStopRecording: () async =>
-                      _hasPermission ? await _finishRecording() : null,
-                  onTapUpListener: () async => await _finishRecording(),
+                      hasPermission ? await finishRecording() : null,
+                  onTapUpListener: () async => await finishRecording(),
                 ),
               ],
             ),
@@ -633,21 +634,21 @@ class _ConversationState extends State<Conversation>
   }
 
   void send() async {
-    if (_newMessage.value.text.trim().isEmpty && _recording == null) {
+    if (newMessage.value.text.trim().isEmpty && recording == null) {
       return;
     }
-    await _send(_newMessage.value.text,
+    await sendMessage(newMessage.value.text,
         attachments:
-            _recording != null && _recording!.isNotEmpty ? [_recording!] : [],
-        replyToSenderId: _quotedMessage?.senderId,
-        replyToId: _quotedMessage?.id);
+            recording != null && recording!.isNotEmpty ? [recording!] : [],
+        replyToSenderId: quotedMessage?.senderId,
+        replyToId: quotedMessage?.id);
     if (mounted) {
       setState(() {
-        _quotedMessage = null;
-        _isRecording = false;
-        _finishedRecording = false;
-        _isSendIconVisible = false;
-        _isReplying = false;
+        quotedMessage = null;
+        isRecording = false;
+        finishedRecording = false;
+        isSendIconVisible = false;
+        isReplying = false;
       });
     }
   }

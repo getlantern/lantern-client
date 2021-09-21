@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/messaging/conversation/message_bubble_content.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
