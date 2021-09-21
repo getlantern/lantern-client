@@ -42,7 +42,7 @@ class ContactListItem extends StatelessWidget {
               content: Wrap(
                 direction: Axis.vertical,
                 children: [
-                  TextOneLine(title.toString(), style: tsSubtitle1Short),
+                  CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
                   subtitle ?? const SizedBox(),
                 ],
               ),

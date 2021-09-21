@@ -25,7 +25,6 @@ export 'package:pedantic/pedantic.dart';
 export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
-export 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 
 export 'package:lantern/core/router/router.gr.dart';
 export 'package:lantern/event_extension.dart';

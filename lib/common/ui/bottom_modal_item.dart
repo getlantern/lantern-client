@@ -29,8 +29,9 @@ class BottomModalItem extends StatelessWidget {
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(bottom: 1),
-                    child: TextOneLine(
+                    child: CText(
                       label,
+                      maxLines: 1,
                       style: tsSubtitle1Short,
                     ),
                   ),

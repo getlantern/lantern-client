@@ -109,8 +109,6 @@ dependencies:
 
   flutter_local_notifications: ^8.1.1+1
 
-  assorted_layout_widgets: ^5.1.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -20,6 +20,7 @@ class SettingsItem extends StatelessWidget {
       this.openInfoDialog,
       this.onTap,
       this.child});
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -39,8 +40,9 @@ class SettingsItem extends StatelessWidget {
                   message: title!,
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(bottom: 1),
-                    child: TextOneLine(
+                    child: CText(
                       title!,
+                      maxLines: 1,
                       style: tsSubtitle1Short,
                     ),
                   ),

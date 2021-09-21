@@ -42,10 +42,11 @@ class Introductions extends StatelessWidget {
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
-                                      child: TextOneLine(
+                                      child: CText(
                                           'introduced'.i18n.fill([
                                             introductor.displayName
                                           ]).toUpperCase(),
+                                          maxLines: 1,
                                           style: tsOverline),
                                     ),
                                     Divider(height: 1.0, color: grey3),
