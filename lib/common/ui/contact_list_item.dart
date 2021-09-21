@@ -27,23 +27,33 @@ class ContactListItem extends StatelessWidget {
   final void Function()? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    var topBorderWidth = index.isEven ? 0.5 : 0.0;
-    var bottomBorderWidth = index.isOdd ? 0.0 : 0.5;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-          border: Border(
-        top: BorderSide(width: topBorderWidth, color: Colors.black12),
-        bottom: BorderSide(width: bottomBorderWidth, color: Colors.black12),
-      )),
-      child: ListTile(
-        leading: leading,
-        title: TextOneLine(title.toString(), style: tsSubtitle1Short),
-        subtitle: subtitle,
-        trailing: trailing,
-        onTap: onTap,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Wrap(
+        children: [
+          const CDivider(
+              size: 1,
+              thickness: 0.5,
+              margin: 0,
+              color: Color.fromRGBO(235, 235, 235, 1)),
+          CListTile(
+              leading: Padding(
+                padding:
+                    const EdgeInsetsDirectional.only(start: 10.0, end: 16.0),
+                child: leading,
+              ),
+              content: Wrap(
+                direction: Axis.vertical,
+                children: [
+                  TextOneLine(title.toString(), style: tsSubtitle1Short),
+                  subtitle ?? const SizedBox(),
+                ],
+              ),
+              trailing: trailing ?? const SizedBox(),
+              onTap: onTap),
+          const CDivider(
+              size: 1,
+              thickness: 0.5,
+              margin: 0,
+              color: Color.fromRGBO(235, 235, 235, 1)),
+        ],
+      );
 }
