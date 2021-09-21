@@ -21,7 +21,7 @@ class BottomModalItem extends StatelessWidget {
   Widget build(BuildContext context) => Wrap(children: [
         CListTile(
             leading: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+              padding: const EdgeInsetsDirectional.only(start: 16.0),
               child: leading,
             ),
             content: Row(

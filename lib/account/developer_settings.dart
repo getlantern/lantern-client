@@ -12,12 +12,7 @@ class DeveloperSettingsTab extends StatelessWidget {
     return BaseScreen(
       title: 'Developer Settings'.i18n,
       body: ListView(
-        padding: const EdgeInsetsDirectional.only(
-          top: 2,
-          bottom: 8,
-          start: 20,
-          end: 20,
-        ),
+        padding: const EdgeInsetsDirectional.all(8),
         children: [
           Container(
             margin: const EdgeInsets.all(8),
@@ -73,7 +68,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               return DropdownButton<String>(
                 value: value,
                 icon: const Icon(Icons.arrow_downward),
-                iconSize: 24,
+                iconSize: iconSize,
                 elevation: 16,
                 underline: Container(
                   height: 2,
