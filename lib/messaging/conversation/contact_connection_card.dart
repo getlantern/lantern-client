@@ -7,7 +7,6 @@ class ContactConnectionCard extends StatelessWidget {
   final bool outbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
-  final List<dynamic> reactionsList;
 
   ContactConnectionCard(
     this.contact,
@@ -15,7 +14,6 @@ class ContactConnectionCard extends StatelessWidget {
     this.outbound,
     this.msg,
     this.message,
-    this.reactionsList,
   ) : super();
 
   @override
@@ -88,7 +86,7 @@ class ContactConnectionCard extends StatelessWidget {
         }),
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: [StatusRow(outbound, inbound, msg, message, reactionsList)],
+          children: [StatusRow(outbound, inbound, msg, message)],
         )
       ],
     );

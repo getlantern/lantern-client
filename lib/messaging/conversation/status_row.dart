@@ -5,10 +5,8 @@ class StatusRow extends StatelessWidget {
   final bool inbound;
   final StoredMessage msg;
   final PathAndValue<StoredMessage> message;
-  final List reactionsList;
 
-  const StatusRow(
-      this.outbound, this.inbound, this.msg, this.message, this.reactionsList)
+  const StatusRow(this.outbound, this.inbound, this.msg, this.message)
       : super();
 
   @override
@@ -21,7 +19,6 @@ class StatusRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            ...reactionsList,
             Container(
               padding: const EdgeInsets.only(right: 2.0),
               child: HumanizedDate.fromMillis(

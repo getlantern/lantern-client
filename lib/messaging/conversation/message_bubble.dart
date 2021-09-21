@@ -27,14 +27,14 @@ class MessageBubble extends StatelessWidget {
   final void Function() onTapReply;
 
   late final StoredMessage msg;
-  late final bool outbound;
-  late final bool inbound;
-  late final bool startOfBlock;
-  late final bool endOfBlock;
-  late final bool middleOfBlock;
-  late final bool newestMessage;
+  late final bool isOutbound;
+  late final bool isInbound;
+  late final bool isStartOfBlock;
+  late final bool isEndOfBlock;
+  late final bool isNewestMessage;
   late final bool wasDeleted;
   late final bool isAttachment;
+  late final bool hasReactions;
   late final String dateMarker;
   late final MessagingModel model;
   late final Map<String, List<dynamic>> reactions;
@@ -50,16 +50,16 @@ class MessageBubble extends StatelessWidget {
     required this.onEmojiTap,
   }) : super(key: key) {
     msg = message.value;
-    outbound = msg.direction == MessageDirection.OUT;
-    inbound = !outbound;
-    startOfBlock = priorMessage == null ||
+    isOutbound = msg.direction == MessageDirection.OUT;
+    isInbound = !isOutbound;
+    isStartOfBlock = priorMessage == null ||
         priorMessage.direction != message.value.direction;
-    endOfBlock =
+    isEndOfBlock =
         nextMessage == null || nextMessage.direction != message.value.direction;
-    middleOfBlock = !startOfBlock && !endOfBlock;
-    newestMessage = nextMessage == null;
+    isNewestMessage = nextMessage == null;
     wasDeleted = msg.remotelyDeletedAt != 0;
     isAttachment = msg.attachments.isNotEmpty;
+    hasReactions = msg.reactions.isNotEmpty;
     dateMarker = _determineDateSwitch(priorMessage, nextMessage);
     reactions = constructReactionsMap();
   }
@@ -75,24 +75,24 @@ class MessageBubble extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment:
-          outbound ? MainAxisAlignment.end : MainAxisAlignment.start,
+          isOutbound ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Flexible(
           child: Padding(
             padding: EdgeInsetsDirectional.only(
                 start: dateMarker != ''
-                    ? outbound
+                    ? isOutbound
                         ? 20
                         : 4
                     : 4,
                 end: dateMarker != ''
-                    ? outbound
+                    ? isOutbound
                         ? 4
                         : 20
                     : 4,
-                top: startOfBlock ? 8 : 2,
-                bottom: newestMessage ? 4 : 0),
-            child: bubble(context),
+                top: isStartOfBlock || hasReactions ? 8 : 2,
+                bottom: isNewestMessage ? 4 : 0),
+            child: overlayReactions(context, bubble(context)),
           ),
         ),
       ],
@@ -100,7 +100,6 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget bubble(BuildContext context) {
-    Widget bubble;
     if (wasDeleted) {
       final humanizedSenderName =
           msg.remotelyDeletedBy.id == contact.contactId.id
@@ -173,7 +172,7 @@ class MessageBubble extends StatelessWidget {
                   agreeAction: () => model.deleteLocally(message),
                   agreeText: 'Delete',
                 )),
-        if (outbound)
+        if (isOutbound)
           FocusedMenuItem(
               trailingIcon: const Icon(Icons.delete_forever),
               title: CText('delete_for_everyone'.i18n, style: tsBody1),
@@ -205,7 +204,7 @@ class MessageBubble extends StatelessWidget {
       onPressed: () {},
       child: Column(
         crossAxisAlignment:
-            outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           if (dateMarker.isNotEmpty)
             Container(
@@ -218,10 +217,37 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context) {
+  Widget overlayReactions(BuildContext context, Widget child) {
+    if (!hasReactions) {
+      return child;
+    }
+
     final reactionsList = constructReactionsList(context, reactions, msg);
+    final reactionsWidget = SizedBox(
+      width: 50,
+      height: 20,
+      child: Container(
+        decoration: BoxDecoration(color: pink4),
+        child: Text("hello"),
+      ),
+    );
+
+    return Stack(
+      alignment: isOutbound ? Alignment.topLeft : Alignment.topRight,
+      children: [
+        Padding(
+          padding: EdgeInsetsDirectional.only(
+              top: 12, start: isOutbound ? 22 : 0, end: isInbound ? 22 : 0),
+          child: child,
+        ),
+        reactionsWidget,
+      ],
+    );
+  }
+
+  Widget content(BuildContext context) {
     final attachments = msg.attachments.values
-        .map((attachment) => attachmentWidget(attachment, inbound));
+        .map((attachment) => attachmentWidget(attachment, isInbound));
 
     final isAudio = msg.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
@@ -241,25 +267,26 @@ class MessageBubble extends StatelessWidget {
               left: isAttachment ? 0 : 8,
               right: isAttachment ? 0 : 8),
           decoration: BoxDecoration(
-            color: outbound ? outboundBgColor : inboundBgColor,
+            color: isOutbound ? outboundBgColor : inboundBgColor,
             border: isAttachment && !isAudio
                 ? Border.all(color: grey4, width: 0.5)
                 : null,
             borderRadius: BorderRadius.only(
-              topLeft: inbound && !startOfBlock ? squared : rounded,
-              topRight: outbound && !startOfBlock ? squared : rounded,
-              bottomLeft:
-                  inbound && (newestMessage || !endOfBlock) ? squared : rounded,
-              bottomRight: outbound && (newestMessage || !endOfBlock)
+              topLeft: isInbound && !isStartOfBlock ? squared : rounded,
+              topRight: isOutbound && !isStartOfBlock ? squared : rounded,
+              bottomLeft: isInbound && (isNewestMessage || !isEndOfBlock)
+                  ? squared
+                  : rounded,
+              bottomRight: isOutbound && (isNewestMessage || !isEndOfBlock)
                   ? squared
                   : rounded,
             ),
           ),
           child: isContactConnectionCard
               ? ContactConnectionCard(
-                  contact, inbound, outbound, msg, message, reactionsList)
+                  contact, isInbound, isOutbound, msg, message)
               : Column(
-                  crossAxisAlignment: outbound
+                  crossAxisAlignment: isOutbound
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -271,7 +298,7 @@ class MessageBubble extends StatelessWidget {
                             GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () => onTapReply(),
-                              child: ReplySnippet(outbound, msg, contact),
+                              child: ReplySnippet(isOutbound, msg, contact),
                             ),
                         ],
                       ),
@@ -303,12 +330,12 @@ class MessageBubble extends StatelessWidget {
                                 },
                                 styleSheet: MarkdownStyleSheet(
                                   a: tsBody3.copiedWith(
-                                      color: outbound
+                                      color: isOutbound
                                           ? outboundMsgColor
                                           : inboundMsgColor,
                                       decoration: TextDecoration.underline),
                                   p: tsBody3.copiedWith(
-                                      color: outbound
+                                      color: isOutbound
                                           ? outboundMsgColor
                                           : inboundMsgColor),
                                 ),
@@ -318,19 +345,18 @@ class MessageBubble extends StatelessWidget {
                         ]),
                       Stack(
                         fit: StackFit.passthrough,
-                        alignment: outbound
+                        alignment: isOutbound
                             ? AlignmentDirectional.bottomEnd
                             : AlignmentDirectional.bottomStart,
                         children: [
                           ...attachments,
                           Row(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: outbound
+                              mainAxisAlignment: isOutbound
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(outbound, inbound, msg, message,
-                                    reactionsList)
+                                StatusRow(isOutbound, isInbound, msg, message)
                               ]),
                         ],
                       )
