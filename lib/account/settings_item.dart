@@ -28,7 +28,6 @@ class SettingsItem extends StatelessWidget {
         leading: icon != null
             ? CAssetImage(
                 path: icon!,
-                size: iconSize,
                 color: iconColor,
               )
             : const SizedBox(),

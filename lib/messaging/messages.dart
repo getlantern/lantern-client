@@ -97,7 +97,8 @@ class Messages extends StatelessWidget {
                                           contact.value.displayName),
                                       subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
-                                          style: tsBody2),
+                                          style:
+                                              tsBody2.copiedWith(color: grey5)),
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
@@ -105,8 +106,9 @@ class Messages extends StatelessWidget {
                                       trailing: HumanizedDate.fromMillis(
                                         contact.value.mostRecentMessageTs
                                             .toInt(),
-                                        builder: (context, date) =>
-                                            CText(date, style: tsBody2),
+                                        builder: (context, date) => CText(date,
+                                            style: tsBody2.copiedWith(
+                                                color: grey5)),
                                       ),
                                     ),
                                   ],
