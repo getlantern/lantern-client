@@ -17,14 +17,18 @@ class CListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
-              height: 72,
+              height: tileHeight,
               child: InkWell(
                 onTap: onTap ?? () {},
                 child: Ink(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      leading ?? const SizedBox(),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 4.0, end: 16.0),
+                        child: leading ?? const SizedBox(),
+                      ),
                       Flexible(
                         fit: FlexFit.tight,
                         child: Container(
@@ -32,8 +36,7 @@ class CListTile extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 16.0, end: 16.0),
+                        padding: const EdgeInsetsDirectional.only(end: 8.0),
                         child: trailing,
                       ),
                     ],

@@ -40,36 +40,32 @@ class Messages extends StatelessWidget {
                                         introductions,
                                     Widget? child) =>
                                 (introductions.getPending().isNotEmpty)
-                                    ? Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: CListTile(
-                                          leading: Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .only(start: 16.0, end: 24.0),
-                                            child: CBadge(
-                                              count: introductions
-                                                  .getPending()
-                                                  .length,
-                                              showBadge: true,
-                                              child: const Icon(
-                                                Icons.people,
-                                                color: Colors.black,
-                                              ),
+                                    ? CListTile(
+                                        leading: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 16.0),
+                                          child: CBadge(
+                                            count: introductions
+                                                .getPending()
+                                                .length,
+                                            showBadge: true,
+                                            child: const Icon(
+                                              Icons.people,
+                                              color: Colors.black,
                                             ),
                                           ),
-                                          content: CText('introductions'.i18n,
-                                              style: tsSubtitle1Short),
-                                          trailing: const CAssetImage(
-                                            path:
-                                                ImagePaths.keyboard_arrow_right,
-                                            size: 24,
-                                          ),
-                                          onTap: () async => await context
-                                              .pushRoute(const Introductions()),
                                         ),
+                                        content: CText('introductions'.i18n,
+                                            style: tsSubtitle1Short),
+                                        trailing: const CAssetImage(
+                                          path: ImagePaths.keyboard_arrow_right,
+                                          size: iconSize,
+                                        ),
+                                        onTap: () async => await context
+                                            .pushRoute(const Introductions()),
                                       )
-                                    : Container()),
+                                    : const SizedBox()),
                         Expanded(
                           child: model.contactsByActivity(builder: (context,
                               Iterable<PathAndValue<Contact>> _contacts,

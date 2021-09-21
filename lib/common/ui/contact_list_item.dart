@@ -32,12 +32,11 @@ class ContactListItem extends StatelessWidget {
           const CDivider(
               size: 1,
               thickness: 0.5,
-              margin: 0,
+              margin: 16,
               color: Color.fromRGBO(235, 235, 235, 1)),
           CListTile(
               leading: Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(start: 10.0, end: 16.0),
+                padding: const EdgeInsetsDirectional.only(start: 16.0),
                 child: leading,
               ),
               content: Wrap(
@@ -47,12 +46,15 @@ class ContactListItem extends StatelessWidget {
                   subtitle ?? const SizedBox(),
                 ],
               ),
-              trailing: trailing ?? const SizedBox(),
+              trailing: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8.0),
+                child: trailing ?? const SizedBox(),
+              ),
               onTap: onTap),
           const CDivider(
               size: 1,
               thickness: 0.5,
-              margin: 0,
+              margin: 16,
               color: Color.fromRGBO(235, 235, 235, 1)),
         ],
       );
