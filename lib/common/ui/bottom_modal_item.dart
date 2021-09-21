@@ -40,10 +40,6 @@ class BottomModalItem extends StatelessWidget {
             ),
             trailing: trailing ?? const SizedBox(),
             onTap: onTap),
-        const CDivider(
-            size: 1,
-            thickness: 1,
-            margin: 0,
-            color: Color.fromRGBO(235, 235, 235, 1)),
+        CDivider(height: 1, thickness: 1, margin: 0, color: grey3),
       ]);
 }

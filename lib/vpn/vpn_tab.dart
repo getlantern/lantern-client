@@ -54,7 +54,7 @@ class VPNTab extends StatelessWidget {
                       child: const CDivider(
                         margin: 0.0,
                         thickness: 1.0,
-                        size: 32.0,
+                        height: 32.0,
                       ),
                     ),
                     ServerLocationWidget(_openInfoServerLocation),

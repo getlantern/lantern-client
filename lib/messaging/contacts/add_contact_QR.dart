@@ -180,8 +180,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       topColor: grey5,
       title: Center(
         child: CText('qr_scanner'.i18n,
-            style: tsHeading2.copiedWith(
-                fontWeight: FontWeight.w500, color: white)),
+            style: tsHeading3.copiedWith(color: white)),
       ),
       onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
@@ -352,9 +351,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CText('qr_add_via_id'.i18n,
-              style: tsHeading2.copiedWith(
-                  fontWeight: FontWeight.w500, color: black)),
+          CText('qr_add_via_id'.i18n, style: tsHeading3),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
