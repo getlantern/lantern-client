@@ -13,6 +13,6 @@ void showErrorDialog(
   showInfoDialog(context,
       title: 'Error'.i18n,
       des: des,
-      icon: ImagePaths.alert_icon,
+      icon: ImagePaths.alert,
       buttonText: 'OK'.i18n);
 }

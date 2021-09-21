@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/crounded_rectangle_border.dart';
 

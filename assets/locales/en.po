@@ -159,6 +159,9 @@ msgstr "Email"
 msgid "Submit"
 msgstr "Submit"
 
+msgid "save"
+msgstr "Save"
+
 msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
 
@@ -366,6 +369,9 @@ msgstr "Introductions"
 msgid "introduced"
 msgstr "Introduced by %s"
 
+msgid "introductions_title"
+msgstr "Accept Introduction to %s"
+
 msgid "introductions_info"
 msgstr "Both parties must accept the introduction to message each other. Introductions disappear after 7 days if no action is taken."
 
@@ -440,6 +446,9 @@ msgstr "Message was deleted"
 
 msgid "close"
 msgstr "Close"
+
+msgid "call_contact"
+msgstr "Call %s ?"
 
 msgid "call"
 msgstr "Call"

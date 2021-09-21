@@ -2,24 +2,31 @@ import 'dart:ui';
 import 'package:lantern/common/common.dart';
 
 class CText extends StatelessWidget {
-  final String text;
+  late final String text;
   final CTextStyle style;
   final TextAlign? textAlign;
   final TextOverflow overflow;
   final int? maxLines;
   final bool? softWrap;
 
-  /// A replacement for Text that includes the ability to auto-scale single-line
-  /// text and place ellipses smartly.
+  /// A replacement for Text that includes the ability to auto-scale text
+  /// text and smartly place ellipses for single-line text (workaround for
+  /// Flutter bug https://github.com/flutter/flutter/issues/18761).
   ///
   /// To auto-scale text, make sure to supply a style that includes a
   /// minFontSize in addition to a fontSize.
-  CText(this.text,
+  ///
+  /// To get smart ellipses, make sure to specify maxLines = 1.
+  CText(String text,
       {required this.style,
       this.textAlign,
       this.overflow = TextOverflow.ellipsis,
       this.maxLines,
-      this.softWrap});
+      this.softWrap}) {
+    // Workaround for https://github.com/flutter/flutter/issues/18761
+    this.text =
+        maxLines == 1 ? Characters(text).toList().join('\u{200B}') : text;
+  }
 
   @override
   Widget build(BuildContext context) {

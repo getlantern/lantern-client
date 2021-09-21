@@ -98,6 +98,7 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 Run unit tests with `make test`.
 
+## Integration tests
 Run integration tests with `make integration-test`. This will run all files in `integration_test` that end
 in `_test.dart`.
 

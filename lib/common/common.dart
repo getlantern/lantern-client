@@ -25,7 +25,6 @@ export 'package:pedantic/pedantic.dart';
 export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
-export 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 
 export 'package:lantern/core/router/router.gr.dart';
 export 'package:lantern/event_extension.dart';
@@ -35,6 +34,7 @@ export 'package:lantern/lantern_navigator.dart';
 export 'package:lantern/vpn/protos_shared/vpn.pb.dart';
 export 'package:lantern/vpn/vpn_model.dart';
 
+export '../messaging/notifications.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
 export 'lru_cache.dart';
@@ -43,34 +43,48 @@ export 'model_event_channel.dart';
 export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
+
+// Constants
+export 'ui/text_styles.dart';
+export 'ui/transitions.dart';
+export 'ui/image_paths.dart';
+export 'ui/colors.dart';
+export 'ui/dimens.dart';
+
+// UI elements
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
 export 'ui/basic_memory_image.dart';
 export 'ui/button.dart';
-export 'ui/colors.dart';
 export 'ui/continue_arrow.dart';
 export 'ui/countdown_min_sec.dart';
 export 'ui/countdown_stopwatch.dart';
+export 'ui/pin_field.dart';
+export 'ui/crounded_rectangle_border.dart';
+export 'ui/full_screen_dialog.dart';
+export 'ui/humanize.dart';
+export 'ui/humanized_date.dart';
+export 'ui/now_builder.dart';
+export 'ui/pulse_animation.dart';
+export 'ui/round_button.dart';
+export 'ui/contact_list_item.dart';
+export 'ui/bottom_modal_item.dart';
+
+// UI functions
+export 'ui/show_alert_dialog.dart';
+export 'ui/show_error_dialog.dart';
+export 'ui/show_info_dialog.dart';
+export 'ui/show_bottom_modal.dart';
+export 'ui/show_fullscreen_dialog.dart';
+export 'ui/show_snackbar.dart';
+export 'ui/show_bottom_modal.dart';
+
+// custom UI elements
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
 export 'ui/custom/vertical_divider.dart';
 export 'ui/custom/divider.dart';
-export 'ui/pin_field.dart';
-export 'ui/crounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_wrap.dart';
 export 'ui/custom/text_field.dart';
-export 'ui/dimens.dart';
-export 'ui/full_screen_dialog.dart';
-export 'ui/humanize.dart';
-export 'ui/humanized_date.dart';
-export 'ui/image_paths.dart';
-export '../messaging/notifications.dart';
-export 'ui/now_builder.dart';
-export 'ui/pulse_animation.dart';
-export 'ui/round_button.dart';
-export 'ui/show_alert_dialog.dart';
-export 'ui/show_error_dialog.dart';
-export 'ui/show_info_dialog.dart';
-export 'ui/text_styles.dart';
-export 'ui/transitions.dart';
+export 'ui/custom/list_tile.dart';

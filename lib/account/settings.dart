@@ -12,7 +12,7 @@ class Settings extends StatelessWidget {
     showInfoDialog(context,
         title: 'proxy_all'.i18n,
         des: 'description_proxy_all_dialog'.i18n,
-        icon: ImagePaths.key_icon,
+        icon: ImagePaths.key,
         buttonText: 'OK'.i18n);
   }
 
@@ -36,7 +36,7 @@ class Settings extends StatelessWidget {
         ),
         children: [
           SettingsItem(
-            icon: ImagePaths.key_icon,
+            icon: ImagePaths.key,
             title: 'proxy_all'.i18n,
             openInfoDialog: openInfoProxyAll,
             child: sessionModel.proxyAll(
@@ -57,7 +57,7 @@ class Settings extends StatelessWidget {
             ),
           ),
           SettingsItem(
-            icon: ImagePaths.translate_icon,
+            icon: ImagePaths.translate,
             title: 'language'.i18n,
             showArrow: true,
             onTap: () {
@@ -75,7 +75,7 @@ class Settings extends StatelessWidget {
             ),
           ),
           SettingsItem(
-            icon: ImagePaths.alert_icon,
+            icon: ImagePaths.alert,
             title: 'report_issue'.i18n,
             showArrow: true,
             onTap: reportIssue,

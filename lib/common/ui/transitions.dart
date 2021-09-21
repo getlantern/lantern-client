@@ -6,3 +6,5 @@ const defaultTransitionMillis = 450;
 
 const defaultTransitionDuration =
     Duration(milliseconds: defaultTransitionMillis);
+
+ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();

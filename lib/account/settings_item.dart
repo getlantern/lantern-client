@@ -1,4 +1,5 @@
 import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 
 import '../common/ui/continue_arrow.dart';
 
@@ -23,75 +24,53 @@ class SettingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SizedBox(
-        height: 72,
-        child: InkWell(
-          onTap: onTap ?? () {},
-          child: Ink(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (icon != null)
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 16),
-                    child: CAssetImage(
-                      path: icon!,
-                      size: 24,
-                      color: iconColor,
-                    ),
-                  ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        if (title != null)
-                          Flexible(
-                            child: Tooltip(
-                              message: title!,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(bottom: 1),
-                                child: CText(
-                                  title!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: tsSubtitle1Short,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (openInfoDialog != null)
-                          InkWell(
-                            onTap: () {
-                              openInfoDialog!(context);
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              child: CAssetImage(
-                                path: ImagePaths.info_icon,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                      ],
+      CListTile(
+        leading: icon != null
+            ? CAssetImage(
+                path: icon!,
+                color: iconColor,
+              )
+            : const SizedBox(),
+        content: Row(
+          children: [
+            if (title != null)
+              Flexible(
+                child: Tooltip(
+                  message: title!,
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.only(bottom: 1),
+                    child: CText(
+                      title!,
+                      maxLines: 1,
+                      style: tsSubtitle1Short,
                     ),
                   ),
                 ),
-                Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (child != null) child!,
-                      if (showArrow) const ContinueArrow(),
-                    ],
+              ),
+            if (openInfoDialog != null)
+              InkWell(
+                onTap: () {
+                  openInfoDialog!(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 16, end: 16),
+                  child: CAssetImage(
+                    path: ImagePaths.info,
+                    size: 16,
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+          ],
         ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            child ?? const SizedBox(),
+            if (showArrow) const ContinueArrow(),
+          ],
+        ),
+        onTap: onTap,
       ),
       CVerticalDivider(height: 1),
     ]);
