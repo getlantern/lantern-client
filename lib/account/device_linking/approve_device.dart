@@ -17,7 +17,6 @@ class ApproveDevice extends StatelessWidget {
           margin: const EdgeInsetsDirectional.only(end: 16),
           child: CAssetImage(
             path: icon,
-            size: iconSize,
             color: Colors.black,
           ),
         ),

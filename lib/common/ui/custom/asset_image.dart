@@ -12,8 +12,8 @@ class CAssetImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SvgPicture.asset(
       path,
-      height: size,
-      width: size,
+      height: size ?? iconSize,
+      width: size ?? iconSize,
       color: color,
       fit: BoxFit.contain,
     );
