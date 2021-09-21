@@ -13,7 +13,6 @@ class ContinueArrow extends StatelessWidget {
           Directionality.of(context) == TextDirection.rtl ? pi : 0),
       child: const CAssetImage(
         path: ImagePaths.keyboard_arrow_right,
-        size: iconSize,
       ),
     );
   }
