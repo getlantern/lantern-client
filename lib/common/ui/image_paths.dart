@@ -21,6 +21,7 @@ class ImagePaths {
   static const translate = 'assets/images/translate.svg';
 
   // Messaging
+  static const add = 'assets/images/add.svg';
   static const people = 'assets/images/people.svg';
   static const clock = 'assets/images/clock.svg';
   static const phone = 'assets/images/phone.svg';
