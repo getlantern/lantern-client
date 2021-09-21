@@ -4,13 +4,13 @@ class CDivider extends StatelessWidget {
   final Color? color;
   final double thickness;
   final double margin;
-  final double size;
+  final double height;
 
   const CDivider({
     Key? key,
     this.margin = 16,
     this.thickness = 0.0,
-    this.size = 16.0,
+    this.height = 16.0,
     this.color,
   }) : super(key: key);
 
@@ -20,5 +20,5 @@ class CDivider extends StatelessWidget {
       thickness: thickness,
       indent: margin,
       endIndent: margin,
-      height: size);
+      height: height);
 }

@@ -16,8 +16,11 @@ CTextStyle tsDisplay(color) => CTextStyle(
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
-CTextStyle tsHeading2 =
-    CTextStyle(fontSize: 20, minFontSize: 16, lineHeight: 32);
+CTextStyle tsHeading3 = CTextStyle(
+    fontSize: 20,
+    minFontSize: 16,
+    lineHeight: 23.44,
+    fontWeight: FontWeight.w500);
 
 CTextStyle tsSubtitle1 = CTextStyle(fontSize: 16, lineHeight: 26);
 

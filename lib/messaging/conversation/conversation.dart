@@ -304,18 +304,20 @@ class _ConversationState extends State<Conversation>
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomAvatar(
-                  id: contact.contactId.id, displayName: contact.displayName),
-              const SizedBox(width: 6),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: 16),
+                child: CustomAvatar(
+                    id: contact.contactId.id, displayName: contact.displayName),
+              ),
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CText(
                       title,
                       maxLines: 1,
-                      style: tsHeading2.copiedWith(
-                          fontWeight: FontWeight.w500, lineHeight: 23.44),
+                      style: tsHeading3,
                     ),
                     DisappearingTimerAction(contact),
                   ],
@@ -332,6 +334,8 @@ class _ConversationState extends State<Conversation>
               CallAction(contact),
               IconButton(
                 icon: const Icon(Icons.more_vert_rounded),
+                padding:
+                    const EdgeInsetsDirectional.only(top: 8, bottom: 8, end: 8),
                 tooltip: 'menu'.i18n,
                 onPressed: () => showConversationOptions(
                     model: model, parentContext: context, contact: contact),

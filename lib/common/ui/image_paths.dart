@@ -6,6 +6,7 @@ class ImagePaths {
   static const crown = 'assets/images/crown.svg';
   static const crown_monochrome = 'assets/images/crown_monochrome.svg';
   static const info = 'assets/images/info.svg';
+  static const arrow_back = 'assets/images/arrow_back.svg';
   static const keyboard_arrow_right = 'assets/images/keyboard_arrow_right.svg';
   static const location_on = 'assets/images/location_on.svg';
   static const free_logo = 'assets/images/free_logo.svg';

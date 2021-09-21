@@ -110,7 +110,7 @@ Future showConversationOptions(
                               CDivider(
                                 thickness: 1,
                                 color: grey3,
-                                size: 2,
+                                height: 2,
                                 margin: 16,
                               ),
                               Flexible(
@@ -218,10 +218,10 @@ Future showConversationOptions(
                                 color: Colors.white,
                                 child: Column(
                                   children: [
-                                    const CDivider(
+                                    CDivider(
                                       thickness: 1,
-                                      color: Color.fromRGBO(235, 235, 235, 1),
-                                      size: 1,
+                                      color: grey3,
+                                      height: 1,
                                       margin: 16,
                                     ),
                                     Row(
