@@ -15,9 +15,6 @@ class ImagePaths {
   static const desktop = 'assets/images/desktop.svg';
   static const settings = 'assets/images/settings.svg';
   static const qr_code = 'assets/images/qr_code.svg';
-  static const foreign = 'assets/images/foreign.svg';
-  static const dropdown = 'assets/images/dropdown.svg';
-  static const open_in_new = 'assets/images/open_in_new.svg';
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
