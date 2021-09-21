@@ -23,9 +23,7 @@ class CText extends StatelessWidget {
       this.overflow = TextOverflow.ellipsis,
       this.maxLines,
       this.softWrap}) {
-    // This trick is a workaround for an outstanding Flutter issue that causes
-    // one-line text place ellipses too early
-    // https://github.com/flutter/flutter/issues/18761
+    // Workaround for https://github.com/flutter/flutter/issues/18761
     this.text =
         maxLines == 1 ? Characters(text).toList().join('\u{200B}') : text;
   }
