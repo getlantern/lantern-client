@@ -98,9 +98,8 @@ class ContactConnectionCard extends StatelessWidget {
       MessagingModel model, Contact contact) {
     return showBottomModal(
         context: context,
-        title: TextOneLine(
-            'introductions_title'.fill([introduction.displayName]),
-            style: tsSubtitle1),
+        title: CText('introductions_title'.fill([introduction.displayName]),
+            maxLines: 1, style: tsSubtitle1),
         subtitle: 'introductions_info'.i18n,
         children: [
           BottomModalItem(
