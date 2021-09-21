@@ -43,18 +43,22 @@ class Messages extends StatelessWidget {
                                     ? Container(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
-                                        child: ListTile(
-                                          leading: CBadge(
-                                            count: introductions
-                                                .getPending()
-                                                .length,
-                                            showBadge: true,
-                                            child: const Icon(
-                                              Icons.people,
-                                              color: Colors.black,
+                                        child: CListTile(
+                                          leading: Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .only(start: 16.0, end: 24.0),
+                                            child: CBadge(
+                                              count: introductions
+                                                  .getPending()
+                                                  .length,
+                                              showBadge: true,
+                                              child: const Icon(
+                                                Icons.people,
+                                                color: Colors.black,
+                                              ),
                                             ),
                                           ),
-                                          title: CText('introductions'.i18n,
+                                          content: CText('introductions'.i18n,
                                               style: tsSubtitle1Short),
                                           trailing: const CAssetImage(
                                             path:

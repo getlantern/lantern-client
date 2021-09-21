@@ -19,50 +19,26 @@ class BottomModalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(children: [
-        SizedBox(
-          height: 72,
-          child: InkWell(
-            onTap: onTap ?? () {},
-            child: Ink(
+        CListTile(
+            leading: Padding(
               padding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 16.0),
-                    child: leading,
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(bottom: 1),
-                              child: TextOneLine(
-                                label,
-                                style: tsSubtitle1Short,
-                              ),
-                            ),
-                          ),
-                          if (trailing != null)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: trailing!,
-                            ),
-                        ],
-                      ),
+              child: leading,
+            ),
+            content: Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.only(bottom: 1),
+                    child: TextOneLine(
+                      label,
+                      style: tsSubtitle1Short,
                     ),
                   ),
-                  if (trailing != null) trailing!,
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ),
+            trailing: trailing ?? const SizedBox(),
+            onTap: onTap),
         const CDivider(
             size: 1,
             thickness: 1,
