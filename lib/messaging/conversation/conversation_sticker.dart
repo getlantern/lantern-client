@@ -20,10 +20,18 @@ class ConversationSticker extends StatelessWidget {
         child:
             !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
       ),
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child:
-            !isPendingIntroduction ? _fullyAddedText() : _partiallyAddedText(),
+      title: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: !isPendingIntroduction
+                  ? _fullyAddedText()
+                  : _partiallyAddedText()),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(contact.source.name),
+          ),
+        ],
       ),
     );
   }
