@@ -2,46 +2,6 @@ import 'package:lantern/common/common.dart';
 
 import '../messaging.dart';
 
-Map<String, List<dynamic>> constructReactionsMap(
-    StoredMessage msg, Contact contact) {
-  // hardcode the list of available emoticons in a way that is convenient to parse
-  var reactions = {'👍': [], '👎': [], '😄': [], '❤': [], '😢': [], '•••': []};
-  // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
-  // create a Map from Iterable<String> and Iterable<Reaction>
-  var reactor_emoticon_map = {};
-  Map.fromIterables(msg.reactions.keys, msg.reactions.values)
-      // reactorID <---> emoticon to reactor_emoticon_map
-      .forEach((reactorId, reaction) =>
-          reactor_emoticon_map[reactorId] = reaction.emoticon);
-
-  // swap key-value pairs to create emoticon <--> List<reactorId>
-  reactor_emoticon_map.forEach((reactorId, reaction) {
-    reactions[reaction] = [...?reactions[reaction], reactorId];
-  });
-
-  // humanize reactorIdList
-  reactions.forEach((reaction, reactorIdList) =>
-      reactions[reaction] = _humanizeReactorIdList(reactorIdList, contact));
-
-  return reactions;
-}
-
-List<dynamic> _humanizeReactorIdList(
-    List<dynamic> reactorIdList, Contact contact) {
-  var humanizedList = [];
-  if (reactorIdList.isEmpty) return humanizedList;
-
-  reactorIdList.forEach((reactorId) =>
-      humanizedList.add(_matchIdToDisplayName(reactorId, contact)));
-  return humanizedList;
-}
-
-String _matchIdToDisplayName(String contactIdToMatch, Contact contact) {
-  return contactIdToMatch == contact.contactId.id
-      ? contact.displayName
-      : 'me'.i18n;
-}
-
 List<dynamic> constructReactionsList(BuildContext context,
     Map<String, List<dynamic>> reactions, StoredMessage msg) {
   var reactionsList = [];

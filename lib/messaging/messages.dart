@@ -8,8 +8,7 @@ class Messages extends StatelessWidget {
     var model = context.watch<MessagingModel>();
     return model.me((BuildContext context, Contact me, Widget? child) {
       return BaseScreen(
-          title:
-              'adsfasdfasdfdasfsdafdsafdasfdsafdasfsdafasdfasdfdasfsdafsdaf', // 'messages'.i18n,
+          title: 'messages'.i18n,
           actions: [
             IconButton(
               icon: const Icon(Icons.search),
