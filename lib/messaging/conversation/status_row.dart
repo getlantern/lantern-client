@@ -35,7 +35,40 @@ class StatusRow extends StatelessWidget {
             ),
             Container(
                 padding: const EdgeInsets.only(right: 2.0),
-                child: renderStatusIcon(inbound, outbound, msg)),
+                child: inbound
+                    ? null
+                    : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
+                        ? Icon(
+                            Icons.check_circle_outline_outlined,
+                            size: 12,
+                            color:
+                                outbound ? outboundMsgColor : inboundMsgColor,
+                          )
+                        : msg.status == StoredMessage_DeliveryStatus.SENDING
+                            ? SizedBox(
+                                width: 8,
+                                height: 8,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 0.5,
+                                  color: outbound
+                                      ? outboundMsgColor
+                                      : inboundMsgColor,
+                                ),
+                              )
+                            : msg.status ==
+                                        StoredMessage_DeliveryStatus
+                                            .COMPLETELY_FAILED ||
+                                    msg.status ==
+                                        StoredMessage_DeliveryStatus
+                                            .PARTIALLY_FAILED
+                                ? Icon(
+                                    Icons.error_outline,
+                                    size: 12,
+                                    color: outbound
+                                        ? outboundMsgColor
+                                        : inboundMsgColor,
+                                  )
+                                : null),
             if (msgSelfDeletes)
               Container(
                 padding: const EdgeInsets.only(right: 2.0),

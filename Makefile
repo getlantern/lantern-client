@@ -23,7 +23,7 @@ lib/core/router/router.gr.dart: lib/core/router/router.dart lib/core/router/tabs
 test:
 	@flutter test
 
-TEST ?= *test_driver
+TEST ?= *_test
 
 integration-test:
 	@flutter drive --driver test_driver/integration_driver.dart --flavor prod --target `ls integration_test/$(TEST).dart`

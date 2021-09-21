@@ -128,7 +128,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                       children: [
                         RoundButton(
                           icon: CAssetImage(
-                              path: ImagePaths.speaker_icon,
+                              path: ImagePaths.speaker,
                               color: signalingState.speakerphoneOn
                                   ? grey5
                                   : white),
@@ -140,7 +140,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ),
                         RoundButton(
                           icon: CAssetImage(
-                              path: ImagePaths.mute_icon,
+                              path: ImagePaths.mute,
                               color: signalingState.muted ? grey5 : white),
                           backgroundColor: signalingState.muted ? white : grey5,
                           onPressed: () {
@@ -148,7 +148,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           },
                         ),
                         RoundButton(
-                          icon: const CAssetImage(path: ImagePaths.hangup_icon),
+                          icon: const CAssetImage(path: ImagePaths.hangup),
                           backgroundColor: indicatorRed,
                           onPressed: () async {
                             signaling.bye(await session);

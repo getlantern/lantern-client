@@ -20,11 +20,17 @@ class ReplySnippetHeader extends StatelessWidget {
           size: 12,
         ),
         CText(
-          'Replying to ${matchIdToDisplayName(msg.replyToSenderId, contact)}',
+          'Replying to ${_matchIdToDisplayName(msg.replyToSenderId, contact)}',
           overflow: TextOverflow.ellipsis,
           style: tsSubtitle2,
         ),
       ],
     );
+  }
+
+  String _matchIdToDisplayName(String contactIdToMatch, Contact contact) {
+    return contactIdToMatch == contact.contactId.id
+        ? contact.displayName
+        : 'me'.i18n;
   }
 }

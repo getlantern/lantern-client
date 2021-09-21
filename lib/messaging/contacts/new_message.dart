@@ -35,15 +35,17 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                leading: Icon(
-                  Icons.qr_code,
-                  color: black,
+              CListTile(
+                leading: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16.0),
+                  child: Icon(
+                    Icons.qr_code,
+                    color: black,
+                  ),
                 ),
-                title: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right_icon,
-                  size: 24,
+                  path: ImagePaths.keyboard_arrow_right,
                 ),
                 onTap: () async => await context.router
                     .push(
@@ -86,16 +88,18 @@ class _NewMessageState extends State<NewMessage> {
                 }),
               ),
               Divider(thickness: 1, color: grey2),
-              ListTile(
-                leading: Icon(
-                  Icons.people,
-                  color: black,
+              CListTile(
+                leading: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16.0),
+                  child: Icon(
+                    Icons.people,
+                    color: black,
+                  ),
                 ),
-                title:
+                content:
                     CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right_icon,
-                  size: 24,
+                  path: ImagePaths.keyboard_arrow_right,
                 ),
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),

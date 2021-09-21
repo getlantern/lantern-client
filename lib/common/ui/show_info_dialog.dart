@@ -23,7 +23,6 @@ void showInfoDialog(BuildContext context,
             children: [
               CAssetImage(
                 path: icon,
-                size: 24,
               ),
               const SizedBox(
                 height: 8,

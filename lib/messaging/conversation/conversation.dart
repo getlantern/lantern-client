@@ -13,6 +13,7 @@ import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'call_action.dart';
+import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId _contactId;
@@ -310,21 +311,11 @@ class _ConversationState extends State<Conversation>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nit picking: if the contact displayName contains spaces, use TextOneLine. If not, use CText. Example:
-                    // "aspdofijaposidjfposijdf" => use CText to lower font size and gracefully add ellipsis
-                    // "Ben aspdofijaposidjfposijdf" => CText would render this as "Ben ...", which is problematic if user has many Bens in their contact list.
-                    // Instead, we use TextOneLine (which does not handle font size, but does return a more readable result) => "Ben aspdofij...."
-                    title.contains(' ')
-                        ? TextOneLine(
-                            title,
-                            style: tsHeading2.copiedWith(
-                                fontWeight: FontWeight.w500),
-                          )
-                        : CText(
-                            title,
-                            style: tsHeading2.copiedWith(
-                                fontWeight: FontWeight.w500),
-                          ),
+                    CText(
+                      title,
+                      maxLines: 1,
+                      style: tsHeading2.copiedWith(fontWeight: FontWeight.w500),
+                    ),
                     DisappearingTimerAction(contact),
                   ],
                 ),
@@ -341,8 +332,8 @@ class _ConversationState extends State<Conversation>
               IconButton(
                 icon: const Icon(Icons.more_vert_rounded),
                 tooltip: 'menu'.i18n,
-                onPressed: () =>
-                    displayConversationOptions(model, context, contact),
+                onPressed: () => showConversationOptions(
+                    model: model, parentContext: context, contact: contact),
               )
             ],
           ),

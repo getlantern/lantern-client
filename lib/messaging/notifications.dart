@@ -30,8 +30,7 @@ class Notifications {
   );
 
   Notifications() {
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+    const initializationSettingsAndroid = AndroidInitializationSettings('app');
     final initializationSettings =
         const InitializationSettings(android: initializationSettingsAndroid);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,

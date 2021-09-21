@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/contacts/contact_list_item.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introductions extends StatelessWidget {
@@ -43,10 +42,11 @@ class Introductions extends StatelessWidget {
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               16.0, 16.0, 0, 4.0),
-                                      child: TextOneLine(
+                                      child: CText(
                                           'introduced'.i18n.fill([
                                             introductor.displayName
                                           ]).toUpperCase(),
+                                          maxLines: 1,
                                           style: tsOverline),
                                     ),
                                     Divider(height: 1.0, color: grey3),
@@ -131,7 +131,7 @@ class Introductions extends StatelessWidget {
                                                                           des: 'introductions_error_description'
                                                                               .i18n,
                                                                           icon: ImagePaths
-                                                                              .alert_icon,
+                                                                              .alert,
                                                                           buttonText:
                                                                               'OK'.i18n);
                                                                     } finally {
@@ -165,8 +165,9 @@ class Introductions extends StatelessWidget {
                                                                   des:
                                                                       'introductions_error_description_accepting'
                                                                           .i18n,
-                                                                  icon: ImagePaths
-                                                                      .alert_icon,
+                                                                  icon:
+                                                                      ImagePaths
+                                                                          .alert,
                                                                   buttonText:
                                                                       'OK'.i18n);
                                                             } finally {
