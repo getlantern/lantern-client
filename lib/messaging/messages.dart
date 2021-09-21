@@ -122,9 +122,10 @@ class Messages extends StatelessWidget {
           actionButton: me.displayName.isEmpty
               ? null
               : FloatingActionButton(
+                  backgroundColor: pink4,
                   onPressed: () async =>
                       await context.pushRoute(const NewMessage()),
-                  child: const Icon(Icons.add),
+                  child: CAssetImage(path: ImagePaths.add, color: white),
                 ));
     });
   }
