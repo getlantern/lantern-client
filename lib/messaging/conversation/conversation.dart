@@ -314,7 +314,8 @@ class _ConversationState extends State<Conversation>
                     CText(
                       title,
                       maxLines: 1,
-                      style: tsHeading2.copiedWith(fontWeight: FontWeight.w500),
+                      style: tsHeading2.copiedWith(
+                          fontWeight: FontWeight.w500, lineHeight: 23.44),
                     ),
                     DisappearingTimerAction(contact),
                   ],
