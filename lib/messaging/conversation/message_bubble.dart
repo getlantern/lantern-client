@@ -187,6 +187,7 @@ class MessageBubble extends StatelessWidget {
                   )),
       ],
       blurBackgroundColor: black,
+      menuWidth: maxBubbleWidth(context),
       menuOffset: 5.0,
       paddingTop: 16,
       paddingBottom: 16,
@@ -281,9 +282,7 @@ class MessageBubble extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         return Container(
           constraints: BoxConstraints(
-              minWidth: 1,
-              maxWidth: MediaQuery.of(context).size.width * 0.8,
-              minHeight: 1),
+              minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
           clipBehavior: Clip.hardEdge,
           padding: EdgeInsetsDirectional.only(
               top: msg.replyToId.isNotEmpty ? 8 : 0,
@@ -402,6 +401,9 @@ class MessageBubble extends StatelessWidget {
 
     return '';
   }
+
+  double maxBubbleWidth(BuildContext context) =>
+      MediaQuery.of(context).size.width * 0.8;
 
   Map<String, int> countReactions() {
     final result = <String, int>{};
