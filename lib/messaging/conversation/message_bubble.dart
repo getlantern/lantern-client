@@ -2,7 +2,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -17,13 +16,12 @@ class MessageBubble extends StatelessWidget {
   static final rounded = const Radius.circular(16);
   static final squared = Radius.zero;
 
-  final PathAndValue<StoredMessage> message;
-  final ShowEmojis onEmojiTap;
+  final StoredMessage message;
+  final void Function() onEmojiTap;
   final Contact contact;
   final void Function() onReply;
   final void Function() onTapReply;
 
-  late final StoredMessage msg;
   late final bool isOutbound;
   late final bool isInbound;
   late final bool isStartOfBlock;
@@ -48,17 +46,16 @@ class MessageBubble extends StatelessWidget {
     required this.onTapReply,
     required this.onEmojiTap,
   }) : super(key: key) {
-    msg = message.value;
-    isOutbound = msg.direction == MessageDirection.OUT;
+    isOutbound = message.direction == MessageDirection.OUT;
     isInbound = !isOutbound;
-    isStartOfBlock = priorMessage == null ||
-        priorMessage.direction != message.value.direction;
+    isStartOfBlock =
+        priorMessage == null || priorMessage.direction != message.direction;
     isEndOfBlock =
-        nextMessage == null || nextMessage.direction != message.value.direction;
+        nextMessage == null || nextMessage.direction != message.direction;
     isNewestMessage = nextMessage == null;
-    wasDeleted = msg.remotelyDeletedAt != 0;
-    isAttachment = msg.attachments.isNotEmpty;
-    hasReactions = msg.reactions.isNotEmpty;
+    wasDeleted = message.remotelyDeletedAt != 0;
+    isAttachment = message.attachments.isNotEmpty;
+    hasReactions = message.reactions.isNotEmpty;
     dateMarker = determineDateSwitch(priorMessage, nextMessage);
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
@@ -68,7 +65,7 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
 
-    if (msg.firstViewedAt == 0) {
+    if (message.firstViewedAt == 0) {
       model.markViewed(message);
     }
 
@@ -94,108 +91,113 @@ class MessageBubble extends StatelessWidget {
   Widget bubble(BuildContext context) {
     if (wasDeleted) {
       final humanizedSenderName =
-          msg.remotelyDeletedBy.id == contact.contactId.id
+          message.remotelyDeletedBy.id == contact.contactId.id
               ? contact.displayName
               : 'me'.i18n;
       return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
     }
 
     return FocusedMenuHolder(
-      menuItems: [
-        FocusedMenuItem(
-          title: Flexible(
-            fit: FlexFit.tight,
-            child: Reactions(
-              onEmojiTap: onEmojiTap,
-              reactionOptions: constructReactionsMap().keys.toList(),
-              message: message,
-              messagingModel: model,
-            ),
-          ),
-          onPressed: () {},
-        ),
-        FocusedMenuItem(
-          trailingIcon: const Icon(Icons.reply),
-          title: CText('reply'.i18n, style: tsBody1),
-          onPressed: () {
-            onReply();
-          },
-        ),
-        if (!isAttachment)
-          FocusedMenuItem(
-            trailingIcon: const Icon(Icons.copy),
-            title: CText('copy_text'.i18n, style: tsBody1),
-            onPressed: () {
-              showSnackbar(
-                context: context,
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: CText(
-                      'text_copied'.i18n,
-                      style: tsBody1Color(white),
-                      textAlign: TextAlign.start,
-                    )),
-                  ],
-                ),
-              );
-              Clipboard.setData(ClipboardData(text: message.value.text));
-            },
-          ),
-        FocusedMenuItem(
-            trailingIcon: const Icon(Icons.delete),
-            title: CText('delete_for_me'.i18n, style: tsBody1),
-            onPressed: () => showAlertDialog(
-                  context: context,
-                  key: const ValueKey('deleteDialog'),
-                  barrierDismissible: true,
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        CTextWrap(
-                            'This will delete the message for you only. Everyone else will still be able to see it.'
-                                .i18n,
-                            style: tsBody1)
-                      ],
-                    ),
-                  ),
-                  title: CText('Delete for me', style: tsBody3),
-                  agreeAction: () => model.deleteLocally(message),
-                  agreeText: 'Delete',
-                )),
-        if (isOutbound)
-          FocusedMenuItem(
-              trailingIcon: const Icon(Icons.delete_forever),
-              title: CText('delete_for_everyone'.i18n, style: tsBody1),
-              onPressed: () => showAlertDialog(
-                    context: context,
-                    key: const ValueKey('deleteDialog'),
-                    barrierDismissible: true,
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: <Widget>[
-                          CTextWrap(
-                              'This will delete the message for everyone.'.i18n,
-                              style: tsBody1)
-                        ],
-                      ),
-                    ),
-                    title: CText('Delete for everyone', style: tsBody3),
-                    agreeAction: () => model.deleteGlobally(message),
-                    agreeText: 'Delete',
-                  )),
-      ],
-      blurBackgroundColor: black,
+      blurBackgroundColor: black.withOpacity(0.5),
       menuWidth: maxBubbleWidth(context),
       menuOffset: 5.0,
       paddingTop: 16,
       paddingBottom: 16,
-      menuItemExtent: 60,
-      openWithTap: false,
       duration: const Duration(seconds: 0),
-      animateMenuItems: false,
+      menuBoxDecoration: BoxDecoration(
+          color: white,
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          boxShadow: [
+            const BoxShadow(
+                color: Colors.black38, blurRadius: 10, spreadRadius: 1)
+          ]),
       onPressed: () {},
+      // menuItems: [
+      //   FocusedMenuItem(
+      //     title: Flexible(
+      //       fit: FlexFit.tight,
+      //       child: Reactions(
+      //         onEmojiTap: onEmojiTap,
+      //         reactionOptions: constructReactionsMap().keys.toList(),
+      //         message: message,
+      //         messagingModel: model,
+      //       ),
+      //     ),
+      //     onPressed: () {},
+      //   ),
+      //   FocusedMenuItem(
+      //     trailingIcon: const Icon(Icons.reply),
+      //     title: CText('reply'.i18n, style: tsBody1),
+      //     onPressed: () {
+      //       onReply();
+      //     },
+      //   ),
+      //   if (!isAttachment)
+      //     FocusedMenuItem(
+      //       trailingIcon: const Icon(Icons.copy),
+      //       title: CText('copy_text'.i18n, style: tsBody1),
+      //       onPressed: () {
+      //         showSnackbar(
+      //           context: context,
+      //           content: Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               Expanded(
+      //                   child: CText(
+      //                     'text_copied'.i18n,
+      //                     style: tsBody1Color(white),
+      //                     textAlign: TextAlign.start,
+      //                   )),
+      //             ],
+      //           ),
+      //         );
+      //         Clipboard.setData(ClipboardData(text: msg.text));
+      //       },
+      //     ),
+      //   FocusedMenuItem(
+      //       trailingIcon: const Icon(Icons.delete),
+      //       title: CText('delete_for_me'.i18n, style: tsBody1),
+      //       onPressed: () => showAlertDialog(
+      //         context: context,
+      //         key: const ValueKey('deleteDialog'),
+      //         barrierDismissible: true,
+      //         content: SingleChildScrollView(
+      //           child: ListBody(
+      //             children: <Widget>[
+      //               CTextWrap(
+      //                   'This will delete the message for you only. Everyone else will still be able to see it.'
+      //                       .i18n,
+      //                   style: tsBody1)
+      //             ],
+      //           ),
+      //         ),
+      //         title: CText('Delete for me', style: tsBody3),
+      //         agreeAction: () => model.deleteLocally(message),
+      //         agreeText: 'Delete',
+      //       )),
+      //   if (isOutbound)
+      //     FocusedMenuItem(
+      //         trailingIcon: const Icon(Icons.delete_forever),
+      //         title: CText('delete_for_everyone'.i18n, style: tsBody1),
+      //         onPressed: () => showAlertDialog(
+      //           context: context,
+      //           key: const ValueKey('deleteDialog'),
+      //           barrierDismissible: true,
+      //           content: SingleChildScrollView(
+      //             child: ListBody(
+      //               children: <Widget>[
+      //                 CTextWrap(
+      //                     'This will delete the message for everyone.'.i18n,
+      //                     style: tsBody1)
+      //               ],
+      //             ),
+      //           ),
+      //           title: CText('Delete for everyone', style: tsBody3),
+      //           agreeAction: () => model.deleteGlobally(message),
+      //           agreeText: 'Delete',
+      //         )),
+      // ],
+      menu: messageMenu(context),
       child: Column(
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -271,12 +273,12 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget content(BuildContext context) {
-    final attachments = msg.attachments.values
+    final attachments = message.attachments.values
         .map((attachment) => attachmentWidget(attachment, isInbound));
 
-    final isAudio = msg.attachments.values.any(
+    final isAudio = message.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
-    final isContactConnectionCard = msg.hasIntroduction();
+    final isContactConnectionCard = message.hasIntroduction();
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -285,7 +287,7 @@ class MessageBubble extends StatelessWidget {
               minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
           clipBehavior: Clip.hardEdge,
           padding: EdgeInsetsDirectional.only(
-              top: msg.replyToId.isNotEmpty ? 8 : 0,
+              top: message.replyToId.isNotEmpty ? 8 : 0,
               bottom: 8,
               start: isAttachment ? 0 : 8,
               end: isAttachment ? 0 : 8),
@@ -306,8 +308,7 @@ class MessageBubble extends StatelessWidget {
             ),
           ),
           child: isContactConnectionCard
-              ? ContactConnectionCard(
-                  contact, isInbound, isOutbound, msg, message)
+              ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : Column(
                   crossAxisAlignment: isOutbound
                       ? CrossAxisAlignment.end
@@ -317,15 +318,15 @@ class MessageBubble extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (msg.replyToId.isNotEmpty)
+                          if (message.replyToId.isNotEmpty)
                             GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () => onTapReply(),
-                              child: ReplySnippet(isOutbound, msg, contact),
+                              child: ReplySnippet(isOutbound, message, contact),
                             ),
                         ],
                       ),
-                      if (msg.text.isNotEmpty)
+                      if (message.text.isNotEmpty)
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
                             fit: FlexFit.loose,
@@ -333,7 +334,7 @@ class MessageBubble extends StatelessWidget {
                               padding: const EdgeInsetsDirectional.only(
                                   start: 8, end: 8, top: 8, bottom: 4),
                               child: MarkdownBody(
-                                data: '${msg.text}',
+                                data: '${message.text}',
                                 onTapLink: (String text, String? href,
                                     String title) async {
                                   if (href != null && await canLaunch(href)) {
@@ -375,13 +376,36 @@ class MessageBubble extends StatelessWidget {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(isOutbound, isInbound, msg, message),
+                                StatusRow(isOutbound, isInbound, message),
                               ]),
                         ],
                       )
                     ]),
         );
       },
+    );
+  }
+
+  SizedBox messageMenu(BuildContext context) {
+    return SizedBox(
+      height: 311,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Reactions(
+              message: message,
+              model: model,
+              onEmojiTap: onEmojiTap,
+            ),
+            CDivider(height: 32, thickness: 1, margin: 0, color: grey3),
+            Text('hi'),
+          ],
+        ),
+      ),
     );
   }
 
@@ -407,56 +431,9 @@ class MessageBubble extends StatelessWidget {
 
   Map<String, int> countReactions() {
     final result = <String, int>{};
-    msg.reactions.values.forEach((reaction) {
+    message.reactions.values.forEach((reaction) {
       result[reaction.emoticon] = (result[reaction.emoticon] ?? 0) + 1;
     });
     return result;
-  }
-
-  /// constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
-  Map<String, List<dynamic>> constructReactionsMap() {
-    // hardcode the list of available emoticons in a way that is convenient to parse
-    var reactions = {
-      '👍': [],
-      '👎': [],
-      '😄': [],
-      '❤': [],
-      '😢': [],
-      '•••': []
-    };
-    // https://api.dart.dev/stable/2.12.4/dart-core/Map/Map.fromIterables.html
-    // create a Map from Iterable<String> and Iterable<Reaction>
-    var reactor_emoticon_map = {};
-    Map.fromIterables(msg.reactions.keys, msg.reactions.values)
-        // reactorID <---> emoticon to reactor_emoticon_map
-        .forEach((reactorId, reaction) =>
-            reactor_emoticon_map[reactorId] = reaction.emoticon);
-
-    // swap key-value pairs to create emoticon <--> List<reactorId>
-    reactor_emoticon_map.forEach((reactorId, reaction) {
-      reactions[reaction] = [...?reactions[reaction], reactorId];
-    });
-
-    // humanize reactorIdList
-    reactions.forEach((reaction, reactorIdList) =>
-        reactions[reaction] = humanizeReactorIdList(reactorIdList, contact));
-
-    return reactions;
-  }
-
-  List<dynamic> humanizeReactorIdList(
-      List<dynamic> reactorIdList, Contact contact) {
-    var humanizedList = [];
-    if (reactorIdList.isEmpty) return humanizedList;
-
-    reactorIdList.forEach((reactorId) =>
-        humanizedList.add(matchIdToDisplayName(reactorId, contact)));
-    return humanizedList;
-  }
-
-  String matchIdToDisplayName(String contactIdToMatch, Contact contact) {
-    return contactIdToMatch == contact.contactId.id
-        ? contact.displayName
-        : 'me'.i18n;
   }
 }

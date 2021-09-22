@@ -64,26 +64,26 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> react(PathAndValue<StoredMessage> message, String reaction) {
+  Future<void> react(StoredMessage message, String reaction) {
     return methodChannel.invokeMethod('react', <String, dynamic>{
-      'msg': message.value.writeToBuffer(),
+      'msg': message.writeToBuffer(),
       'reaction': reaction
     });
   }
 
-  Future<void> markViewed(PathAndValue<StoredMessage> message) {
+  Future<void> markViewed(StoredMessage message) {
     return methodChannel.invokeMethod(
-        'markViewed', <String, dynamic>{'msg': message.value.writeToBuffer()});
+        'markViewed', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
-  Future<void> deleteLocally(PathAndValue<StoredMessage> message) {
-    return methodChannel.invokeMethod('deleteLocally',
-        <String, dynamic>{'msg': message.value.writeToBuffer()});
+  Future<void> deleteLocally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteLocally', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
-  Future<void> deleteGlobally(PathAndValue<StoredMessage> message) {
-    return methodChannel.invokeMethod('deleteGlobally',
-        <String, dynamic>{'msg': message.value.writeToBuffer()});
+  Future<void> deleteGlobally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteGlobally', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
   Future<void> setDisappearSettings(Contact contact, int seconds) {
