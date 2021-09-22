@@ -61,3 +61,12 @@ CTextStyle tsButtonGrey = tsButton.copiedWith(color: grey5);
 CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
+
+/*
+*********
+EMOTICONS
+*********
+*/
+
+CTextStyle tsEmoji =
+    CTextStyle(fontSize: 14, lineHeight: 14, fontWeight: FontWeight.w500);
