@@ -188,7 +188,7 @@ class ConversationState extends State<Conversation>
       });
       if (messageCount > 0) {
         await scrollController.scrollTo(
-            index: 00,
+            index: 0,
             duration: const Duration(seconds: 1),
             curve: Curves.easeInOutCubic);
       }

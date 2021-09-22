@@ -59,7 +59,7 @@ class MessageBubble extends StatelessWidget {
     wasDeleted = msg.remotelyDeletedAt != 0;
     isAttachment = msg.attachments.isNotEmpty;
     hasReactions = msg.reactions.isNotEmpty;
-    dateMarker = _determineDateSwitch(priorMessage, nextMessage);
+    dateMarker = determineDateSwitch(priorMessage, nextMessage);
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
@@ -186,13 +186,14 @@ class MessageBubble extends StatelessWidget {
                     agreeText: 'Delete',
                   )),
       ],
-      blurBackgroundColor: Colors.blueGrey[900],
+      blurBackgroundColor: black,
       menuOffset: 5.0,
-      bottomOffsetHeight: 50.0,
+      paddingTop: 16,
+      paddingBottom: 16,
       menuItemExtent: 60,
       openWithTap: false,
       duration: const Duration(seconds: 0),
-      animateMenuItems: false,
+      animateMenuItems: true,
       onPressed: () {},
       child: Column(
         crossAxisAlignment:
@@ -385,7 +386,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  String _determineDateSwitch(
+  String determineDateSwitch(
       StoredMessage? priorMessage, StoredMessage? nextMessage) {
     if (priorMessage == null || nextMessage == null) return '';
 
