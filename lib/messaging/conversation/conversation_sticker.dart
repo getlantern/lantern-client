@@ -12,14 +12,16 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: localize the source names
-    var source = 'Unknown';
+    var source = 'banner_source_unknown'.i18n;
     switch (contact.source) {
       case ContactSource.APP1:
-        source = 'QR Code';
+        source = 'banner_source_qr'.i18n;
         break;
       case ContactSource.APP2:
-        source = 'Messenger ID';
+        source = 'banner_source_id'.i18n;
+        break;
+      case ContactSource.APP3:
+        source = 'banner_source_intro'.i18n;
         break;
     }
     return ListTile(
@@ -39,7 +41,8 @@ class ConversationSticker extends StatelessWidget {
                   : _partiallyAddedText()),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(source),
+            //TODO: style this per designs
+            child: CText(source, style: tsBody2.copiedWith(color: grey5)),
           ),
         ],
       ),
