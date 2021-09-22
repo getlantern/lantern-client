@@ -20,7 +20,7 @@ class ConversationSticker extends StatelessWidget {
       case ContactSource.APP2:
         source = 'banner_source_id'.i18n;
         break;
-      case ContactSource.APP3:
+      case ContactSource.INTRODUCTION:
         source = 'banner_source_intro'.i18n;
         break;
     }
