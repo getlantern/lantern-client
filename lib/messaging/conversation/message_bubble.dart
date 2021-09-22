@@ -188,12 +188,11 @@ class MessageBubble extends StatelessWidget {
       ],
       blurBackgroundColor: black,
       menuOffset: 5.0,
-      paddingTop: 16,
       paddingBottom: 16,
       menuItemExtent: 60,
       openWithTap: false,
       duration: const Duration(seconds: 0),
-      animateMenuItems: true,
+      animateMenuItems: false,
       onPressed: () {},
       child: Column(
         crossAxisAlignment:
