@@ -77,7 +77,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("unsafeDisplayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("unsafeContactId")!!,
-                call.argument("source")!!,
+                when (call.argument<Any>("source")) {
+                    "qr" -> Model.ContactSource.APP1
+                    "id" -> Model.ContactSource.APP2
+                    else -> Model.ContactSource.UNKNOWN
+                },
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
