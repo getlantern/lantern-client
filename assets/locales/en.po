@@ -420,6 +420,18 @@ msgstr "New messages do not disappear."
 msgid "banner_messages_disappear"
 msgstr "Messages disappear after %s."
 
+msgid "banner_source_unknown"
+msgstr "Unknown"
+
+msgid "banner_source_qr"
+msgstr "QR Code"
+
+msgid "banner_source_id"
+msgstr "Messenger ID"
+
+msgid "banner_source_intro"
+msgstr "Introduction"
+
 msgid "change_display_name"
 msgstr "Change Display Name"
 
