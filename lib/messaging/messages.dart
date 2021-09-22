@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
 
+import 'custom_search_delegate.dart';
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -13,7 +14,19 @@ class Messages extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.search),
               tooltip: 'search'.i18n,
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  var results = await model.searchContacts('pin');
+                  print('results $results');
+                } catch (e) {
+                  print('results ${e.toString()}');
+                }
+
+                // await showSearch(
+                //   context: context,
+                //   delegate: CustomSearchDelegate(),
+                // );
+              },
             ),
           ],
           body:
