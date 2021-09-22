@@ -12,44 +12,42 @@ class StatusRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final msgSelfDeletes = !msg.disappearAt.isZero;
+    final color = outbound ? outboundMsgColor : inboundMsgColor;
     return Container(
       padding: const EdgeInsets.only(left: 8, right: 8),
-      child: Opacity(
-        opacity: 0.9,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(right: 2.0),
-              child: HumanizedDate.fromMillis(
-                message.value.ts.toInt(),
-                builder: (context, date) => CText(
-                  date,
-                  style: tsOverline.copiedWith(
-                      color: outbound ? outboundMsgColor : inboundMsgColor),
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 2.0),
+            child: HumanizedDate.fromMillis(
+              message.value.ts.toInt(),
+              builder: (context, date) => CText(
+                date,
+                style: tsOverlineShort.copiedWith(color: color),
               ),
             ),
-            Container(
-                padding: const EdgeInsets.only(right: 2.0),
-                child: inbound
-                    ? null
-                    : msg.status == StoredMessage_DeliveryStatus.COMPLETELY_SENT
-                        ? Icon(
-                            Icons.check_circle_outline_outlined,
-                            size: 12,
-                            color:
-                                outbound ? outboundMsgColor : inboundMsgColor,
+          ),
+          Container(
+            padding: const EdgeInsets.only(right: 2.0),
+            child: inbound
+                ? null
+                : Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 4),
+                    child: msg.status ==
+                            StoredMessage_DeliveryStatus.COMPLETELY_SENT
+                        ? CAssetImage(
+                            path: ImagePaths.done_all,
+                            size: 10,
+                            color: color,
                           )
                         : msg.status == StoredMessage_DeliveryStatus.SENDING
                             ? SizedBox(
-                                width: 8,
-                                height: 8,
+                                width: 10,
+                                height: 10,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 0.5,
-                                  color: outbound
-                                      ? outboundMsgColor
-                                      : inboundMsgColor,
+                                  color: color,
                                 ),
                               )
                             : msg.status ==
@@ -58,24 +56,23 @@ class StatusRow extends StatelessWidget {
                                     msg.status ==
                                         StoredMessage_DeliveryStatus
                                             .PARTIALLY_FAILED
-                                ? Icon(
-                                    Icons.error_outline,
-                                    size: 12,
-                                    color: outbound
-                                        ? outboundMsgColor
-                                        : inboundMsgColor,
+                                ? CAssetImage(
+                                    path: ImagePaths.error_outline,
+                                    size: 10,
+                                    color: color,
                                   )
                                 : null),
-            if (msgSelfDeletes)
-              Container(
-                padding: const EdgeInsets.only(right: 2.0),
-                child: CountdownStopwatch(
-                    startMillis: msg.firstViewedAt.toInt(),
-                    endMillis: msg.disappearAt.toInt(),
-                    color: outbound ? outboundMsgColor : inboundMsgColor),
+          ),
+          if (msgSelfDeletes)
+            Container(
+              padding: const EdgeInsetsDirectional.only(start: 4.0),
+              child: CountdownStopwatch(
+                startMillis: msg.firstViewedAt.toInt(),
+                endMillis: msg.disappearAt.toInt(),
+                color: color,
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

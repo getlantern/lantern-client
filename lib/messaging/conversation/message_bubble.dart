@@ -75,18 +75,10 @@ class MessageBubble extends StatelessWidget {
         Flexible(
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-                start: dateMarker != ''
-                    ? isOutbound
-                        ? 20
-                        : 4
-                    : 4,
-                end: dateMarker != ''
-                    ? isOutbound
-                        ? 4
-                        : 20
-                    : 4,
+                start: isInbound ? 16 : 0,
+                end: isOutbound ? 16 : 0,
                 top: isStartOfBlock || hasReactions ? 8 : 2,
-                bottom: isNewestMessage ? 4 : 0),
+                bottom: isNewestMessage ? 8 : 0),
             child: overlayReactions(context, bubble(context)),
           ),
         ),
