@@ -27,7 +27,6 @@ class Conversation extends StatefulWidget {
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   late MessagingModel model;
-  late final ShowEmojis onEmojiTap;
   bool reactingWithEmoji = false;
   bool hasPermission = false;
 
@@ -386,7 +385,7 @@ class ConversationState extends State<Conversation>
                       if (mounted &&
                           reactingWithEmoji &&
                           storedMessage != null) {
-                        await model.react(storedMessage!, emoji.emoji);
+                        await model.react(storedMessage!.value, emoji.emoji);
                         reactingWithEmoji = false;
                         storedMessage = null;
                         dismissAllKeyboards();
@@ -452,23 +451,24 @@ class ConversationState extends State<Conversation>
             return buildConversationSticker(contact);
           }
 
+          final messageAndPath = messageRecords.elementAt(index);
           return model.message(context, messageRecords.elementAt(index),
               (BuildContext context, StoredMessage message, Widget? child) {
             return MessageBubble(
-              message: messageRecords.elementAt(index),
+              message: message,
               priorMessage: index >= messageRecords.length - 1
                   ? null
                   : messageRecords.elementAt(index + 1).value,
               nextMessage:
                   index == 0 ? null : messageRecords.elementAt(index - 1).value,
               contact: contact,
-              onEmojiTap: (showEmoji, messageSelected) => setState(() {
+              onEmojiTap: () {
                 setState(() {
                   reactingWithEmoji = true;
-                  storedMessage = messageSelected;
+                  storedMessage = messageAndPath;
                 });
                 showEmojiKeyboard(true);
-              }),
+              },
               onReply: () {
                 setState(() {
                   isReplying = true;
@@ -659,8 +659,5 @@ class ConversationState extends State<Conversation>
     }
   }
 }
-
-typedef ShowEmojis = void Function(
-    bool showEmoji, PathAndValue<StoredMessage>? messageStored);
 
 enum KeyboardMode { none, native, emoji, emojiReaction }

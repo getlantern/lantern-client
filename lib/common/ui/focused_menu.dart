@@ -4,54 +4,33 @@ import 'package:flutter/material.dart';
 
 /// Forked version of https://github.com/retroportalstudio/focused_menu that
 /// always displays the focused child at the top of the page
-class FocusedMenuItem {
-  Color? backgroundColor;
-  Widget title;
-  Icon? trailingIcon;
-  Function onPressed;
-
-  FocusedMenuItem(
-      {this.backgroundColor,
-      required this.title,
-      this.trailingIcon,
-      required this.onPressed});
-}
-
 class FocusedMenuHolder extends StatefulWidget {
   final Widget child;
-  final double menuItemExtent;
+  final SizedBox menu;
   final double menuWidth;
-  final List<FocusedMenuItem> menuItems;
-  final bool? animateMenuItems;
   final BoxDecoration? menuBoxDecoration;
   final Function onPressed;
   final Duration? duration;
   final double? blurSize;
-  final Color? blurBackgroundColor;
+  final Color blurBackgroundColor;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
 
-  /// Open with tap insted of long press.
-  final bool openWithTap;
-
-  const FocusedMenuHolder(
-      {Key? key,
-      required this.child,
-      required this.onPressed,
-      required this.menuItems,
-      this.duration,
-      this.menuBoxDecoration,
-      this.menuItemExtent = 50.0,
-      this.animateMenuItems,
-      this.blurSize,
-      this.blurBackgroundColor,
-      required this.menuWidth,
-      this.menuOffset = 0,
-      this.paddingTop = 0,
-      this.paddingBottom = 0,
-      this.openWithTap = false})
-      : super(key: key);
+  const FocusedMenuHolder({
+    Key? key,
+    required this.child,
+    required this.menu,
+    required this.onPressed,
+    this.duration,
+    this.menuBoxDecoration,
+    this.blurSize,
+    required this.blurBackgroundColor,
+    required this.menuWidth,
+    this.menuOffset = 0,
+    this.paddingTop = 0,
+    this.paddingBottom = 0,
+  }) : super(key: key);
 
   @override
   _FocusedMenuHolderState createState() => _FocusedMenuHolderState();
@@ -79,14 +58,9 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
         key: containerKey,
         onTap: () async {
           widget.onPressed();
-          if (widget.openWithTap) {
-            await openMenu(context);
-          }
         },
         onLongPress: () async {
-          if (!widget.openWithTap) {
-            await openMenu(context);
-          }
+          await openMenu(context);
         },
         child: widget.child);
   }
@@ -103,19 +77,17 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
               return FadeTransition(
                   opacity: animation,
                   child: FocusedMenuDetails(
-                    itemExtent: widget.menuItemExtent,
                     menuBoxDecoration: widget.menuBoxDecoration,
                     childOffset: childOffset,
                     childSize: childSize,
-                    menuItems: widget.menuItems,
                     blurSize: widget.blurSize,
                     menuWidth: widget.menuWidth,
                     blurBackgroundColor: widget.blurBackgroundColor,
-                    animateMenu: widget.animateMenuItems ?? true,
                     menuOffset: widget.menuOffset,
                     paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
                     child: widget.child,
+                    menu: widget.menu,
                   ));
             },
             fullscreenDialog: true,
@@ -124,29 +96,25 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
 }
 
 class FocusedMenuDetails extends StatelessWidget {
-  final List<FocusedMenuItem> menuItems;
+  final Widget child;
+  final SizedBox menu;
   final BoxDecoration? menuBoxDecoration;
   final Offset childOffset;
-  final double itemExtent;
   final Size? childSize;
-  final Widget child;
-  final bool animateMenu;
   final double? blurSize;
   final double menuWidth;
-  final Color? blurBackgroundColor;
+  final Color blurBackgroundColor;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
 
   const FocusedMenuDetails(
       {Key? key,
-      required this.menuItems,
       required this.child,
+      required this.menu,
       required this.childOffset,
       required this.childSize,
       required this.menuBoxDecoration,
-      required this.itemExtent,
-      required this.animateMenu,
       required this.blurSize,
       required this.blurBackgroundColor,
       required this.menuWidth,
@@ -168,7 +136,7 @@ class FocusedMenuDetails extends StatelessWidget {
     // to handle overflow
     final maxMenuHeight =
         size.height - paddingTop - paddingBottom - mediaQuery.viewPadding.top;
-    final menuHeight = min(maxMenuHeight, menuItems.length * itemExtent);
+    final menuHeight = min(maxMenuHeight, menu.height!);
 
     // always position menu so that we can fit all of it on the screen
     var menuY = max(paddingTop + mediaQuery.viewPadding.top,
@@ -192,17 +160,17 @@ class FocusedMenuDetails extends StatelessWidget {
           fit: StackFit.expand,
           children: <Widget>[
             GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                      sigmaX: blurSize ?? 4, sigmaY: blurSize ?? 4),
-                  child: Container(
-                    color:
-                        (blurBackgroundColor ?? Colors.black).withOpacity(0.7),
-                  ),
-                )),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                    sigmaX: blurSize ?? 4, sigmaY: blurSize ?? 4),
+                child: Container(
+                  color: blurBackgroundColor,
+                ),
+              ),
+            ),
             Positioned(
               top: menuY,
               left: menuX,
@@ -232,52 +200,8 @@ class FocusedMenuDetails extends StatelessWidget {
                           ]),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                    child: ListView.builder(
-                      itemCount: menuItems.length,
-                      padding: EdgeInsets.zero,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        var item = menuItems[index];
-                        Widget listItem = GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                              item.onPressed();
-                            },
-                            child: Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(bottom: 1),
-                                color: item.backgroundColor ?? Colors.white,
-                                height: itemExtent,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 14),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      item.title,
-                                      if (item.trailingIcon != null) ...[
-                                        item.trailingIcon!
-                                      ]
-                                    ],
-                                  ),
-                                )));
-                        if (animateMenu) {
-                          return TweenAnimationBuilder(
-                              builder: (context, dynamic value, child) {
-                                return Transform(
-                                  transform: Matrix4.rotationX(1.5708 * value),
-                                  alignment: Alignment.bottomCenter,
-                                  child: child,
-                                );
-                              },
-                              tween: Tween(begin: 1.0, end: 0.0),
-                              duration: Duration(milliseconds: index * 200),
-                              child: listItem);
-                        } else {
-                          return listItem;
-                        }
-                      },
+                    child: SingleChildScrollView(
+                      child: menu,
                     ),
                   ),
                 ),

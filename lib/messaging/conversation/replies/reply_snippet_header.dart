@@ -3,11 +3,11 @@ import 'package:lantern/messaging/messaging.dart';
 class ReplySnippetHeader extends StatelessWidget {
   const ReplySnippetHeader({
     Key? key,
-    required this.msg,
+    required this.message,
     required this.contact,
   }) : super(key: key);
 
-  final StoredMessage msg;
+  final StoredMessage message;
   final Contact contact;
 
   @override
@@ -20,7 +20,7 @@ class ReplySnippetHeader extends StatelessWidget {
           size: 12,
         ),
         CText(
-          'Replying to ${_matchIdToDisplayName(msg.replyToSenderId, contact)}',
+          'Replying to ${_matchIdToDisplayName(message.replyToSenderId, contact)}',
           overflow: TextOverflow.ellipsis,
           style: tsSubtitle2,
         ),
