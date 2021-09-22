@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 /// Forked version of https://github.com/retroportalstudio/focused_menu that
@@ -28,6 +29,7 @@ class FocusedMenuHolder extends StatefulWidget {
   final double? blurSize;
   final Color? blurBackgroundColor;
   final double menuOffset;
+  final double paddingTop;
   final double paddingBottom;
 
   /// Open with tap insted of long press.
@@ -46,6 +48,7 @@ class FocusedMenuHolder extends StatefulWidget {
       this.blurBackgroundColor,
       this.menuWidth,
       this.menuOffset = 0,
+      this.paddingTop = 0,
       this.paddingBottom = 0,
       this.openWithTap = false})
       : super(key: key);
@@ -110,6 +113,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
                     blurBackgroundColor: widget.blurBackgroundColor,
                     animateMenu: widget.animateMenuItems ?? true,
                     menuOffset: widget.menuOffset,
+                    paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
                     child: widget.child,
                   ));
@@ -131,6 +135,7 @@ class FocusedMenuDetails extends StatelessWidget {
   final double? menuWidth;
   final Color? blurBackgroundColor;
   final double menuOffset;
+  final double paddingTop;
   final double paddingBottom;
 
   const FocusedMenuDetails(
@@ -146,6 +151,7 @@ class FocusedMenuDetails extends StatelessWidget {
       required this.blurBackgroundColor,
       required this.menuWidth,
       required this.menuOffset,
+      required this.paddingTop,
       required this.paddingBottom})
       : super(key: key);
 
@@ -154,13 +160,14 @@ class FocusedMenuDetails extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     var size = mediaQuery.size;
 
-    final maxMenuWidth = menuWidth ?? (size.width * 0.70);
+    final maxMenuWidth = menuWidth ?? (size.width * 0.80);
     final menuX = (childOffset.dx + maxMenuWidth) < size.width
         ? childOffset.dx
         : (childOffset.dx - maxMenuWidth + childSize!.width);
 
     final menuHeight = menuItems.length * itemExtent;
-    var menuY = size.height - paddingBottom - menuHeight;
+    var menuY = max(paddingTop + mediaQuery.viewPadding.top,
+        size.height - paddingBottom - menuHeight);
     var childY = menuY - childSize!.height - menuOffset;
     if (childY > childOffset.dy) {
       // our calculated child position is actually lower than the current position
