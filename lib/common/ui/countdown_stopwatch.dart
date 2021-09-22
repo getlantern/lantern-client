@@ -12,7 +12,7 @@ class CountdownStopwatch extends StatelessWidget {
       {required this.startMillis,
       required this.endMillis,
       required this.color,
-      this.size = 12})
+      this.size = 14})
       : durationMillis = endMillis - startMillis;
 
   @override

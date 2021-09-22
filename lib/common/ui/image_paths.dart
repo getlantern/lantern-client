@@ -36,8 +36,10 @@ class ImagePaths {
   static const check_black = 'assets/images/check_black.svg';
   static const alert = 'assets/images/alert.svg';
   static const error = 'assets/images/error.svg';
+  static const error_outline = 'assets/images/error_outline.svg';
   static const cancel = 'assets/images/cancel.svg';
   static const delete = 'assets/images/delete.svg';
+  static const done_all = 'assets/images/done_all.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

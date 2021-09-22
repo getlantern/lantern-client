@@ -50,6 +50,9 @@ CTextStyle tsButton = CTextStyle(
 
 CTextStyle tsOverline = CTextStyle(fontSize: 10, lineHeight: 16);
 
+CTextStyle tsOverlineShort =
+    tsOverline.copiedWith(lineHeight: tsOverline.fontSize);
+
 /*
 ******************
 BUTTON VARIATIONS
