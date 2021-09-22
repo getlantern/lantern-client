@@ -5,16 +5,16 @@ import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'date_marker_bubble.dart';
 import 'mime_types.dart';
 import 'reactions.dart';
+import 'status_row.dart';
 
 class MessageBubble extends StatelessWidget {
-  static final rounded = const Radius.circular(8);
+  static final rounded = const Radius.circular(16);
   static final squared = Radius.zero;
 
   final PathAndValue<StoredMessage> message;
@@ -33,6 +33,9 @@ class MessageBubble extends StatelessWidget {
   late final bool isAttachment;
   late final bool hasReactions;
   late final String dateMarker;
+  late final Color color;
+  late final Color backgroundColor;
+
   late final MessagingModel model;
 
   MessageBubble({
@@ -57,6 +60,8 @@ class MessageBubble extends StatelessWidget {
     isAttachment = msg.attachments.isNotEmpty;
     hasReactions = msg.reactions.isNotEmpty;
     dateMarker = _determineDateSwitch(priorMessage, nextMessage);
+    color = isOutbound ? outboundMsgColor : inboundMsgColor;
+    backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
 
   @override
@@ -279,13 +284,13 @@ class MessageBubble extends StatelessWidget {
               maxWidth: MediaQuery.of(context).size.width * 0.8,
               minHeight: 1),
           clipBehavior: Clip.hardEdge,
-          padding: EdgeInsets.only(
+          padding: EdgeInsetsDirectional.only(
               top: msg.replyToId.isNotEmpty ? 8 : 0,
               bottom: 8,
-              left: isAttachment ? 0 : 8,
-              right: isAttachment ? 0 : 8),
+              start: isAttachment ? 0 : 8,
+              end: isAttachment ? 0 : 8),
           decoration: BoxDecoration(
-            color: isOutbound ? outboundBgColor : inboundBgColor,
+            color: backgroundColor,
             border: isAttachment && !isAudio
                 ? Border.all(color: grey4, width: 0.5)
                 : null,
@@ -325,7 +330,8 @@ class MessageBubble extends StatelessWidget {
                           Flexible(
                             fit: FlexFit.loose,
                             child: Container(
-                              padding: const EdgeInsets.all(8),
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 8, end: 8, top: 8, bottom: 4),
                               child: MarkdownBody(
                                 data: '${msg.text}',
                                 onTapLink: (String text, String? href,
@@ -348,14 +354,9 @@ class MessageBubble extends StatelessWidget {
                                 },
                                 styleSheet: MarkdownStyleSheet(
                                   a: tsBody3.copiedWith(
-                                      color: isOutbound
-                                          ? outboundMsgColor
-                                          : inboundMsgColor,
+                                      color: color,
                                       decoration: TextDecoration.underline),
-                                  p: tsBody3.copiedWith(
-                                      color: isOutbound
-                                          ? outboundMsgColor
-                                          : inboundMsgColor),
+                                  p: tsBody3.copiedWith(color: color),
                                 ),
                               ),
                             ),
@@ -374,7 +375,7 @@ class MessageBubble extends StatelessWidget {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(isOutbound, isInbound, msg, message)
+                                StatusRow(isOutbound, isInbound, msg, message),
                               ]),
                         ],
                       )
