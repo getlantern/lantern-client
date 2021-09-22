@@ -28,7 +28,6 @@ class FocusedMenuHolder extends StatefulWidget {
   final double? blurSize;
   final Color? blurBackgroundColor;
   final double menuOffset;
-  final double paddingTop;
   final double paddingBottom;
 
   /// Open with tap insted of long press.
@@ -47,7 +46,6 @@ class FocusedMenuHolder extends StatefulWidget {
       this.blurBackgroundColor,
       this.menuWidth,
       this.menuOffset = 0,
-      this.paddingTop = 0,
       this.paddingBottom = 0,
       this.openWithTap = false})
       : super(key: key);
@@ -67,7 +65,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
     var size = renderBox.size;
     var offset = renderBox.localToGlobal(Offset.zero);
     setState(() {
-      childOffset = Offset(offset.dx, 0);
+      childOffset = offset;
       childSize = size;
     });
   }
@@ -112,7 +110,6 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
                     blurBackgroundColor: widget.blurBackgroundColor,
                     animateMenu: widget.animateMenuItems ?? true,
                     menuOffset: widget.menuOffset,
-                    paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
                     child: widget.child,
                   ));
@@ -134,7 +131,6 @@ class FocusedMenuDetails extends StatelessWidget {
   final double? menuWidth;
   final Color? blurBackgroundColor;
   final double menuOffset;
-  final double paddingTop;
   final double paddingBottom;
 
   const FocusedMenuDetails(
@@ -150,7 +146,6 @@ class FocusedMenuDetails extends StatelessWidget {
       required this.blurBackgroundColor,
       required this.menuWidth,
       required this.menuOffset,
-      required this.paddingTop,
       required this.paddingBottom})
       : super(key: key);
 
@@ -159,19 +154,22 @@ class FocusedMenuDetails extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     var size = mediaQuery.size;
 
-    final childOffsetY =
-        childOffset.dy + paddingTop + mediaQuery.viewPadding.top;
-
-    final topOffset = childOffsetY + childSize!.height + menuOffset;
-    final maxMenuHeight =
-        size.height - topOffset - paddingBottom - mediaQuery.viewPadding.bottom;
-    final listHeight = menuItems.length * itemExtent;
-
     final maxMenuWidth = menuWidth ?? (size.width * 0.70);
-    final menuHeight = listHeight < maxMenuHeight ? listHeight : maxMenuHeight;
-    final leftOffset = (childOffset.dx + maxMenuWidth) < size.width
+    final menuX = (childOffset.dx + maxMenuWidth) < size.width
         ? childOffset.dx
         : (childOffset.dx - maxMenuWidth + childSize!.width);
+
+    final menuHeight = menuItems.length * itemExtent;
+    var menuY = size.height - paddingBottom - menuHeight;
+    var childY = menuY - childSize!.height - menuOffset;
+    if (childY > childOffset.dy) {
+      // our calculated child position is actually lower than the current position
+      // of the child, adjust it and the menu upwards to keep child in same
+      // position.
+      final yAdjustment = childY - childOffset.dy;
+      childY = childOffset.dy;
+      menuY -= yAdjustment;
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -192,8 +190,8 @@ class FocusedMenuDetails extends StatelessWidget {
                   ),
                 )),
             Positioned(
-              top: topOffset,
-              left: leftOffset,
+              top: menuY,
+              left: menuX,
               child: TweenAnimationBuilder(
                 duration: const Duration(milliseconds: 200),
                 builder: (BuildContext context, dynamic value, Widget? child) {
@@ -272,7 +270,7 @@ class FocusedMenuDetails extends StatelessWidget {
               ),
             ),
             Positioned(
-                top: childOffsetY,
+                top: childY,
                 left: childOffset.dx,
                 child: AbsorbPointer(
                     absorbing: true,
