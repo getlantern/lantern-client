@@ -158,6 +158,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "relayTo" -> {
                 return internalsdk.Internalsdk.relayTo(call.arguments as String)
             }
+            "searchContacts" -> messaging.searchContacts(call.argument<String>("query")!!)
+            "searchMessages" -> messaging.searchMessages(call.argument<String>("query")!!)
             else -> super.doMethodCall(call, notImplemented)
         }
     }

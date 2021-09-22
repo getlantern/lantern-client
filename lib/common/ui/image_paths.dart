@@ -1,6 +1,7 @@
 class ImagePaths {
   // Base screen, Account, Settings etc
   static const messages = 'assets/images/messages.svg';
+  static const arrow_back = 'assets/images/arrow_back.svg';
   static const account = 'assets/images/account.svg';
   static const key = 'assets/images/key.svg';
   static const crown = 'assets/images/crown.svg';
