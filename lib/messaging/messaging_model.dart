@@ -36,7 +36,7 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<Map> addProvisionalContact(String contactId, ContactSource source) {
+  Future<Map> addProvisionalContact(String contactId, {String? source}) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{
       'unsafeContactId': contactId,

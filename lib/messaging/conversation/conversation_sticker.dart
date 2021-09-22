@@ -12,6 +12,16 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: localize the source names
+    var source = 'Unknown';
+    switch (contact.source) {
+      case ContactSource.APP1:
+        source = 'QR Code';
+        break;
+      case ContactSource.APP2:
+        source = 'Messenger ID';
+        break;
+    }
     return ListTile(
       dense: true,
       minLeadingWidth: 18,
@@ -29,7 +39,7 @@ class ConversationSticker extends StatelessWidget {
                   : _partiallyAddedText()),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(contact.source.name),
+            child: Text(source),
           ),
         ],
       ),
