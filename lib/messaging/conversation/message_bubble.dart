@@ -1,12 +1,9 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
-import 'package:lantern/messaging/conversation/reactions.dart';
-import 'package:lantern/messaging/conversation/reactions_utils.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -14,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'date_marker_bubble.dart';
 import 'mime_types.dart';
-import 'reactions_utils.dart';
+import 'reactions.dart';
 
 class MessageBubble extends StatelessWidget {
   static final rounded = const Radius.circular(8);
@@ -37,7 +34,6 @@ class MessageBubble extends StatelessWidget {
   late final bool hasReactions;
   late final String dateMarker;
   late final MessagingModel model;
-  late final Map<String, List<dynamic>> reactions;
 
   MessageBubble({
     Key? key,
@@ -61,7 +57,6 @@ class MessageBubble extends StatelessWidget {
     isAttachment = msg.attachments.isNotEmpty;
     hasReactions = msg.reactions.isNotEmpty;
     dateMarker = _determineDateSwitch(priorMessage, nextMessage);
-    reactions = constructReactionsMap();
   }
 
   @override
@@ -115,7 +110,7 @@ class MessageBubble extends StatelessWidget {
             fit: FlexFit.tight,
             child: Reactions(
               onEmojiTap: onEmojiTap,
-              reactionOptions: reactions.keys.toList(),
+              reactionOptions: constructReactionsMap().keys.toList(),
               message: message,
               messagingModel: model,
             ),
@@ -222,13 +217,42 @@ class MessageBubble extends StatelessWidget {
       return child;
     }
 
-    final reactionsList = constructReactionsList(context, reactions, msg);
+    final counts = countReactions();
+    var width = 24.0;
+    var children = <Widget>[
+      CText(counts.keys.first, style: tsEmoji),
+    ];
+    if (counts.length == 2) {
+      width = 44.0;
+      children.add(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 2),
+          child: CText(counts.keys.last, style: tsEmoji),
+        ),
+      );
+    } else if (counts.containsValue(2)) {
+      width = 44.0;
+      children.add(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 2),
+          child: CText(counts.values.first.toString(), style: tsEmoji),
+        ),
+      );
+    }
+
+    final padding = width / 2;
+
     final reactionsWidget = SizedBox(
-      width: 50,
-      height: 20,
+      width: width,
+      height: 24,
       child: Container(
-        decoration: BoxDecoration(color: pink4),
-        child: Text("hello"),
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, children: children),
       ),
     );
 
@@ -237,7 +261,9 @@ class MessageBubble extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.only(
-              top: 12, start: isOutbound ? 22 : 0, end: isInbound ? 22 : 0),
+              top: 12,
+              start: isOutbound ? padding : 0,
+              end: isInbound ? padding : 0),
           child: child,
         ),
         reactionsWidget,
@@ -381,6 +407,14 @@ class MessageBubble extends StatelessWidget {
     }
 
     return '';
+  }
+
+  Map<String, int> countReactions() {
+    final result = <String, int>{};
+    msg.reactions.values.forEach((reaction) {
+      result[reaction.emoticon] = (result[reaction.emoticon] ?? 0) + 1;
+    });
+    return result;
   }
 
   /// constructs a Map<emoticon, List<reactorName>> : ['😢', ['DisplayName1', 'DisplayName2']]
