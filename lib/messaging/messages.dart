@@ -47,19 +47,13 @@ class Messages extends StatelessWidget {
                                     Widget? child) =>
                                 (introductions.getPending().isNotEmpty)
                                     ? CListTile(
-                                        leading: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 16.0),
-                                          child: CBadge(
-                                            count: introductions
-                                                .getPending()
-                                                .length,
-                                            showBadge: true,
-                                            child: const Icon(
-                                              Icons.people,
-                                              color: Colors.black,
-                                            ),
+                                        leading: CBadge(
+                                          count:
+                                              introductions.getPending().length,
+                                          showBadge: true,
+                                          child: const Icon(
+                                            Icons.people,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         content: CText('introductions'.i18n,

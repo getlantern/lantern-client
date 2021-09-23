@@ -16,8 +16,11 @@ CTextStyle tsDisplay(color) => CTextStyle(
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
-CTextStyle tsHeading2 =
-    CTextStyle(fontSize: 20, minFontSize: 16, lineHeight: 32);
+CTextStyle tsHeading3 = CTextStyle(
+    fontSize: 20,
+    minFontSize: 16,
+    lineHeight: 23.44,
+    fontWeight: FontWeight.w500);
 
 CTextStyle tsSubtitle1 = CTextStyle(fontSize: 16, lineHeight: 26);
 
@@ -32,7 +35,7 @@ CTextStyle tsBody1Color(color) => tsBody1.copiedWith(color: color);
 
 CTextStyle tsBody2 = CTextStyle(fontSize: 12, lineHeight: 19);
 
-CTextStyle tsBody3 = CTextStyle(fontSize: 16, lineHeight: 23);
+CTextStyle tsBody3 = CTextStyle(fontSize: 16, lineHeight: 24);
 
 CTextStyle tsTextField = CTextStyle(fontSize: 16, lineHeight: 18.75);
 
@@ -47,6 +50,9 @@ CTextStyle tsButton = CTextStyle(
 
 CTextStyle tsOverline = CTextStyle(fontSize: 10, lineHeight: 16);
 
+CTextStyle tsOverlineShort =
+    tsOverline.copiedWith(lineHeight: tsOverline.fontSize);
+
 /*
 ******************
 BUTTON VARIATIONS
@@ -58,3 +64,12 @@ CTextStyle tsButtonGrey = tsButton.copiedWith(color: grey5);
 CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
+
+/*
+*********
+EMOTICONS
+*********
+*/
+
+CTextStyle tsEmoji =
+    CTextStyle(fontSize: 14, lineHeight: 14, fontWeight: FontWeight.w500);

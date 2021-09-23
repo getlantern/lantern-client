@@ -27,11 +27,7 @@ void showBottomModal({
                           start: 16.0, end: 16.0, bottom: 16.0),
                       child: CTextWrap(subtitle, style: tsBody1),
                     ),
-                  const CDivider(
-                      size: 1,
-                      thickness: 1,
-                      margin: 0,
-                      color: Color.fromRGBO(235, 235, 235, 1)),
+                  const CDivider(),
                 ],
               ),
             ...children

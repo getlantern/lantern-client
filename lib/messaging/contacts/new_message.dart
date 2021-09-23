@@ -36,12 +36,9 @@ class _NewMessageState extends State<NewMessage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CListTile(
-                leading: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16.0),
-                  child: Icon(
-                    Icons.qr_code,
-                    color: black,
-                  ),
+                leading: Icon(
+                  Icons.qr_code,
+                  color: black,
                 ),
                 content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
                 trailing: const CAssetImage(
@@ -87,14 +84,10 @@ class _NewMessageState extends State<NewMessage> {
                   }
                 }),
               ),
-              Divider(thickness: 1, color: grey2),
               CListTile(
-                leading: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16.0),
-                  child: Icon(
-                    Icons.people,
-                    color: black,
-                  ),
+                leading: Icon(
+                  Icons.people,
+                  color: black,
                 ),
                 content:
                     CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
@@ -103,7 +96,6 @@ class _NewMessageState extends State<NewMessage> {
                 ),
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),
-              Divider(thickness: 1, color: grey2),
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();

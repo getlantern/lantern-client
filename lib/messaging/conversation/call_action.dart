@@ -37,6 +37,7 @@ class CallAction extends StatelessWidget {
                 onTap: () => Navigator.pop(context),
               ),
             ]),
+        padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8, start: 8),
         icon: const CAssetImage(path: ImagePaths.phone),
       ),
     );
