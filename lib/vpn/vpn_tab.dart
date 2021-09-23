@@ -29,41 +29,35 @@ class VPNTab extends StatelessWidget {
           height: 16,
           fit: BoxFit.contain,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              proUser ? Container() : ProBanner(),
-              VPNSwitch(),
-              Container(
-                padding: const EdgeInsetsDirectional.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: borderColor,
-                    width: 1,
-                  ),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(borderRadius),
-                  ),
+        padVertical: true,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            proUser ? Container() : ProBanner(),
+            VPNSwitch(),
+            Container(
+              padding: const EdgeInsetsDirectional.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderColor,
+                  width: 1,
                 ),
-                child: Column(
-                  children: [
-                    VPNStatus(),
-                    Container(
-                      child: const CDivider(
-                        margin: 0.0,
-                        thickness: 1.0,
-                        height: 32.0,
-                      ),
-                    ),
-                    ServerLocationWidget(_openInfoServerLocation),
-                    VPNBandwidth(),
-                  ],
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(borderRadius),
                 ),
               ),
-            ],
-          ),
+              child: Column(
+                children: [
+                  VPNStatus(),
+                  Container(
+                    child: const CDivider(height: 32.0),
+                  ),
+                  ServerLocationWidget(_openInfoServerLocation),
+                  VPNBandwidth(),
+                ],
+              ),
+            ),
+          ],
         ),
       );
     });

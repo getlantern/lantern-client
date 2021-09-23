@@ -38,52 +38,49 @@ class ApproveDevice extends StatelessWidget {
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
         title: 'Add Device'.i18n,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
-                  alignment: Alignment.center,
-                  child: CText(
-                    'Enter or paste device linking PIN'.i18n.toUpperCase(),
-                    style: tsOverline,
-                  ),
+        body: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
+                alignment: Alignment.center,
+                child: CText(
+                  'Enter or paste device linking PIN'.i18n.toUpperCase(),
+                  style: tsOverline,
                 ),
-                PinField(
-                  length: 6,
-                  controller: pinCodeController,
-                  onDone: (code) {
-                    context.loaderOverlay.show();
-                    sessionModel.approveDevice(code).then((value) {
-                      pinCodeController.text = '';
-                      context.loaderOverlay.hide();
-                      Navigator.pop(context);
-                    }).onError((error, stackTrace) {
-                      pinCodeController.text = '';
-                      context.loaderOverlay.hide();
-                    });
-                  },
-                ),
-                CVerticalDivider(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                ),
-                Container(
-                  margin: const EdgeInsetsDirectional.only(bottom: 16),
-                  child: explanationStep(
-                      icon: ImagePaths.number_1,
-                      text: 'approve_device_step_1'.i18n),
-                ),
-                explanationStep(
-                    icon: ImagePaths.number_2,
-                    text: 'approve_device_step_2'.i18n),
-                const Spacer(),
-              ],
-            ),
+              ),
+              PinField(
+                length: 6,
+                controller: pinCodeController,
+                onDone: (code) {
+                  context.loaderOverlay.show();
+                  sessionModel.approveDevice(code).then((value) {
+                    pinCodeController.text = '';
+                    context.loaderOverlay.hide();
+                    Navigator.pop(context);
+                  }).onError((error, stackTrace) {
+                    pinCodeController.text = '';
+                    context.loaderOverlay.hide();
+                  });
+                },
+              ),
+              LabeledDivider(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+              ),
+              Container(
+                margin: const EdgeInsetsDirectional.only(bottom: 16),
+                child: explanationStep(
+                    icon: ImagePaths.number_1,
+                    text: 'approve_device_step_1'.i18n),
+              ),
+              explanationStep(
+                  icon: ImagePaths.number_2,
+                  text: 'approve_device_step_2'.i18n),
+              const Spacer(),
+            ],
           ),
         ),
       );

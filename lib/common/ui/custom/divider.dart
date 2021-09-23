@@ -8,9 +8,9 @@ class CDivider extends StatelessWidget {
 
   const CDivider({
     Key? key,
-    this.margin = 16,
-    this.thickness = 0.0,
-    this.height = 16.0,
+    this.thickness = 1,
+    this.height = 1,
+    this.margin = 0,
     this.color,
   }) : super(key: key);
 

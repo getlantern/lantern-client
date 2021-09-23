@@ -557,7 +557,7 @@ class _renderWaitingUI extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsetsDirectional.only(top: 16.0),
-          child: CAssetImage(path: ImagePaths.check_green, size: 40),
+          child: CAssetImage(path: ImagePaths.check_green_large, size: 40),
         ),
         if (!proceedWithoutProvisionals)
           Padding(

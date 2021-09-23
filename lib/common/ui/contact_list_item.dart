@@ -29,12 +29,8 @@ class ContactListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Wrap(
         children: [
-          CDivider(height: 1, thickness: 0.5, margin: 16, color: grey3),
           CListTile(
-              leading: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 16.0),
-                child: leading,
-              ),
+              leading: leading,
               content: Wrap(
                 direction: Axis.vertical,
                 children: [
@@ -47,7 +43,6 @@ class ContactListItem extends StatelessWidget {
                 child: trailing ?? const SizedBox(),
               ),
               onTap: onTap),
-          CDivider(height: 1, thickness: 0.5, margin: 16, color: grey3),
         ],
       );
 }

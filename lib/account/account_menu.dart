@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/account/account.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/account/account.dart';
 
 import 'settings_item.dart';
 
@@ -120,8 +120,6 @@ class AccountMenu extends StatelessWidget {
         return messagingModel
             .me((BuildContext context, Contact me, Widget? child) {
           return ListView(
-            padding:
-                const EdgeInsetsDirectional.only(top: 2, start: 20, end: 20),
             children: proUser
                 ? proItems(context, me)
                 : freeItems(context, sessionModel, me),
