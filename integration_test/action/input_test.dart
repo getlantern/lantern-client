@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
@@ -36,7 +37,7 @@ class Input {
       {String text = '', Duration delay = Duration.zero}) async {
     await Future.delayed(delay);
     await awaitFor(tester, duration: const Duration(seconds: 1));
-    expect(find.widgetWithText(MessageBubbleContent, text), findsNothing);
+    expect(find.widgetWithText(MessageBubble, text), findsNothing);
   }
 
   static Future<void> setDisappearingMessage(
@@ -65,7 +66,7 @@ class Input {
     await awaitFor(tester, duration: const Duration(seconds: 1));
     if (checkForBubble) {
       if (text != null) {
-        expect(find.widgetWithText(MessageBubbleContent, text), findsOneWidget);
+        expect(find.widgetWithText(MessageBubble, text), findsOneWidget);
       }
       if (isAudio) {
         print('await for the audio to be sended');
@@ -84,7 +85,7 @@ class Input {
       optionTitle = '',
       removeBtnTitle = '',
       bool checkDialog = false}) async {
-    await tester.longPress(find.widgetWithText(MessageBubbleContent, text));
+    await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
@@ -93,12 +94,12 @@ class Input {
     }
     await tester.tap(find.text(removeBtnTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
-    expect(find.widgetWithText(MessageBubbleContent, text), findsNothing);
+    expect(find.widgetWithText(MessageBubble, text), findsNothing);
   }
 
   static Future<void> copyTextMessage(WidgetTester tester, CommonFinders find,
       {String text = '', optionTitle = ''}) async {
-    await tester.longPress(find.widgetWithText(MessageBubbleContent, text));
+    await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await tester.pump();
@@ -106,7 +107,7 @@ class Input {
 
   static Future<void> setReply(WidgetTester tester, CommonFinders find,
       {String text = '', optionTitle = '', bool checkReply = false}) async {
-    await tester.longPress(find.widgetWithText(MessageBubbleContent, text));
+    await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await awaitFor(tester, duration: const Duration(seconds: 1));
@@ -127,7 +128,7 @@ class Input {
       reaction = '',
       customReaction,
       bool isCustomReaction = false}) async {
-    await tester.longPress(find.widgetWithText(MessageBubbleContent, text));
+    await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.byKey(Key(reaction)));
     await awaitFor(tester, duration: const Duration(seconds: 1));

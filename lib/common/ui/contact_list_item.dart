@@ -11,7 +11,7 @@ class ContactListItem extends StatelessWidget {
     required this.index,
     this.isContactPreview,
     required this.title,
-    this.subtitle,
+    this.subTitle,
     required this.leading,
     required this.trailing,
     this.onTap,
@@ -21,7 +21,7 @@ class ContactListItem extends StatelessWidget {
   final int index;
   final bool? isContactPreview;
   final String title;
-  final Widget? subtitle;
+  final String? subTitle;
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
@@ -31,11 +31,15 @@ class ContactListItem extends StatelessWidget {
         children: [
           CListTile(
               leading: leading,
-              content: Wrap(
-                direction: Axis.vertical,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
-                  subtitle ?? const SizedBox(),
+                  if (subTitle != null)
+                    CText(subTitle!,
+                        maxLines: 1, style: tsBody2.copiedWith(color: grey5)),
                 ],
               ),
               trailing: Padding(

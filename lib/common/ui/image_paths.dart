@@ -3,8 +3,8 @@ class ImagePaths {
   static const messages = 'assets/images/messages.svg';
   static const account = 'assets/images/account.svg';
   static const key = 'assets/images/key.svg';
-  static const crown = 'assets/images/crown.svg';
-  static const crown_monochrome = 'assets/images/crown_monochrome.svg';
+  static const pro_icon_black = 'assets/images/pro_icon_black.svg';
+  static const pro_icon_yellow = 'assets/images/pro_icon_yellow.svg';
   static const info = 'assets/images/info.svg';
   static const arrow_back = 'assets/images/arrow_back.svg';
   static const keyboard_arrow_right = 'assets/images/keyboard_arrow_right.svg';
