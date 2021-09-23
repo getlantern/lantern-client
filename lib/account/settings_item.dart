@@ -25,12 +25,12 @@ class SettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       CListTile(
-        leading: icon != null
-            ? CAssetImage(
+        leading: icon == null
+            ? null
+            : CAssetImage(
                 path: icon!,
                 color: iconColor,
-              )
-            : const SizedBox(),
+              ),
         content: Row(
           children: [
             if (title != null)
@@ -72,7 +72,6 @@ class SettingsItem extends StatelessWidget {
         ),
         onTap: onTap,
       ),
-      CVerticalDivider(height: 1),
     ]);
   }
 }

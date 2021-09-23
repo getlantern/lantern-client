@@ -67,6 +67,7 @@ export 'ui/round_button.dart';
 export 'ui/contact_list_item.dart';
 export 'ui/bottom_modal_item.dart';
 export 'ui/focused_menu.dart';
+export 'ui/labeled_divider.dart';
 
 // UI functions
 export 'ui/show_alert_dialog.dart';
@@ -80,7 +81,6 @@ export 'ui/show_bottom_modal.dart';
 // custom UI elements
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
-export 'ui/custom/vertical_divider.dart';
 export 'ui/custom/divider.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_wrap.dart';

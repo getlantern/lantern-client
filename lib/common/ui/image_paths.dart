@@ -29,6 +29,8 @@ class ImagePaths {
   static const speaker = 'assets/images/speaker.svg';
   static const mute = 'assets/images/mute.svg';
   static const hangup = 'assets/images/hangup.svg';
+  static const reply = 'assets/images/reply.svg';
+  static const check_green_large = 'assets/images/check_green_large.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

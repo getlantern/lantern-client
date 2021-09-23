@@ -13,8 +13,8 @@ import 'reactions.dart';
 import 'status_row.dart';
 
 class MessageBubble extends StatelessWidget {
-  static final rounded = const Radius.circular(16);
-  static final squared = Radius.zero;
+  static const rounded = Radius.circular(16);
+  static const squared = Radius.zero;
 
   final StoredMessage message;
   final void Function() onEmojiTap;
@@ -77,8 +77,6 @@ class MessageBubble extends StatelessWidget {
         Flexible(
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-                start: isInbound ? 16 : 0,
-                end: isOutbound ? 16 : 0,
                 top: isStartOfBlock || hasReactions ? 8 : 2,
                 bottom: isNewestMessage ? 8 : 0),
             child: overlayReactions(context, bubble(context)),
@@ -100,91 +98,6 @@ class MessageBubble extends StatelessWidget {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
       onPressed: () {},
-      // menuItems: [
-      //   FocusedMenuItem(
-      //     title: Flexible(
-      //       fit: FlexFit.tight,
-      //       child: Reactions(
-      //         onEmojiTap: onEmojiTap,
-      //         reactionOptions: constructReactionsMap().keys.toList(),
-      //         message: message,
-      //         messagingModel: model,
-      //       ),
-      //     ),
-      //     onPressed: () {},
-      //   ),
-      //   FocusedMenuItem(
-      //     trailingIcon: const Icon(Icons.reply),
-      //     title: CText('reply'.i18n, style: tsBody1),
-      //     onPressed: () {
-      //       onReply();
-      //     },
-      //   ),
-      //   if (!isAttachment)
-      //     FocusedMenuItem(
-      //       trailingIcon: const Icon(Icons.copy),
-      //       title: CText('copy_text'.i18n, style: tsBody1),
-      //       onPressed: () {
-      //         showSnackbar(
-      //           context: context,
-      //           content: Row(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               Expanded(
-      //                   child: CText(
-      //                     'text_copied'.i18n,
-      //                     style: tsBody1Color(white),
-      //                     textAlign: TextAlign.start,
-      //                   )),
-      //             ],
-      //           ),
-      //         );
-      //         Clipboard.setData(ClipboardData(text: msg.text));
-      //       },
-      //     ),
-      //   FocusedMenuItem(
-      //       trailingIcon: const Icon(Icons.delete),
-      //       title: CText('delete_for_me'.i18n, style: tsBody1),
-      //       onPressed: () => showAlertDialog(
-      //         context: context,
-      //         key: const ValueKey('deleteDialog'),
-      //         barrierDismissible: true,
-      //         content: SingleChildScrollView(
-      //           child: ListBody(
-      //             children: <Widget>[
-      //               CTextWrap(
-      //                   'This will delete the message for you only. Everyone else will still be able to see it.'
-      //                       .i18n,
-      //                   style: tsBody1)
-      //             ],
-      //           ),
-      //         ),
-      //         title: CText('Delete for me', style: tsBody3),
-      //         agreeAction: () => model.deleteLocally(message),
-      //         agreeText: 'Delete',
-      //       )),
-      //   if (isOutbound)
-      //     FocusedMenuItem(
-      //         trailingIcon: const Icon(Icons.delete_forever),
-      //         title: CText('delete_for_everyone'.i18n, style: tsBody1),
-      //         onPressed: () => showAlertDialog(
-      //           context: context,
-      //           key: const ValueKey('deleteDialog'),
-      //           barrierDismissible: true,
-      //           content: SingleChildScrollView(
-      //             child: ListBody(
-      //               children: <Widget>[
-      //                 CTextWrap(
-      //                     'This will delete the message for everyone.'.i18n,
-      //                     style: tsBody1)
-      //               ],
-      //             ),
-      //           ),
-      //           title: CText('Delete for everyone', style: tsBody3),
-      //           agreeAction: () => model.deleteGlobally(message),
-      //           agreeText: 'Delete',
-      //         )),
-      // ],
       menu: messageMenu(context),
       child: Column(
         crossAxisAlignment:
@@ -375,25 +288,139 @@ class MessageBubble extends StatelessWidget {
   }
 
   SizedBox messageMenu(BuildContext context) {
+    var textCopied = false;
+
     return SizedBox(
       height: 311,
       child: Padding(
-        padding: const EdgeInsetsDirectional.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Reactions(
-              message: message,
-              model: model,
-              onEmojiTap: onEmojiTap,
+            SizedBox(
+              height: 80,
+              child: Reactions(
+                message: message,
+                model: model,
+                onEmojiTap: onEmojiTap,
+              ),
             ),
-            CDivider(height: 32, thickness: 1, margin: 0, color: grey3),
-            Text('hi'),
+            const CDivider(),
+            CListTile(
+              height: 48,
+              showDivider: false,
+              leading: ImagePaths.reply,
+              content: 'reply'.i18n,
+              onTap: onReply,
+            ),
+            if (!isAttachment)
+              StatefulBuilder(
+                key: ValueKey(message.id),
+                builder: (context, setState) => CListTile(
+                  height: 48,
+                  showDivider: false,
+                  leading: textCopied
+                      ? ImagePaths.check_green
+                      : ImagePaths.content_copy,
+                  content: 'copy_text'.i18n,
+                  onTap: () {
+                    copyText(context);
+                    setState(() {
+                      textCopied = true;
+                    });
+                  },
+                ),
+              ),
+            CListTile(
+              height: 48,
+              showDivider: false,
+              leading: ImagePaths.delete,
+              content: 'delete_for_me'.i18n,
+              onTap: () => deleteForMe(context),
+            ),
+            if (isOutbound)
+              CListTile(
+                height: 48,
+                showDivider: false,
+                leading: ImagePaths.delete,
+                content: 'delete_for_everyone'.i18n,
+                onTap: () => deleteForEveryone(context),
+              ),
+            const CDivider(),
+            if (message.disappearAt > 0)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: HumanizedDate.fromMillis(
+                    message.disappearAt.toInt(),
+                    builder: (context, date) => CText(
+                      'message_will_disappear_at'.i18n.fill([date]),
+                      // TODO: use long form humanization like "today at 11:56"
+                      style: tsBody2.copiedWith(
+                          color: grey5, lineHeight: tsBody2.fontSize),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
+    );
+  }
+
+  void copyText(BuildContext context) {
+    showSnackbar(
+      context: context,
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+              child: CText(
+            'text_copied'.i18n,
+            style: tsBody1Color(white),
+            textAlign: TextAlign.start,
+          )),
+        ],
+      ),
+    );
+    Clipboard.setData(ClipboardData(text: message.text));
+  }
+
+  void deleteForMe(BuildContext context) {
+    showAlertDialog(
+      context: context,
+      key: const ValueKey('deleteForMeDialog'),
+      barrierDismissible: true,
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            CTextWrap('delete_for_me_explanation'.i18n, style: tsBody1)
+          ],
+        ),
+      ),
+      title: CText('delete_for_me'.i18n, style: tsSubtitle1),
+      agreeAction: () => model.deleteLocally(message),
+      agreeText: 'delete'.i18n,
+    );
+  }
+
+  void deleteForEveryone(BuildContext context) {
+    showAlertDialog(
+      context: context,
+      key: const ValueKey('deleteForEveryoneDialog'),
+      barrierDismissible: true,
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            CTextWrap('delete_for_everyone_explanation'.i18n, style: tsBody1)
+          ],
+        ),
+      ),
+      title: CText('delete_for_everyone'.i18n, style: tsSubtitle1),
+      agreeAction: () => model.deleteLocally(message),
+      agreeText: 'delete'.i18n,
     );
   }
 
