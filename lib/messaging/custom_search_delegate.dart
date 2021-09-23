@@ -39,74 +39,92 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    return query.isEmpty
-        // TODO: handle on UI
-        ? const Center(child: Text('Empty state container'))
-        : query.length < 3
-            ? Center(child: Text('Please enter at least 3 letters'.i18n))
-            : FutureBuilder(
-                future: Future.wait(
-                    [model.searchContacts(query), model.searchMessages(query)]),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return const Center(child: CircularProgressIndicator());
-                    default:
-                      if (snapshot.hasError) {
-                        // TODO: handle on UI
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        final results = snapshot.data as List;
+    // TODO: dismiss keyboard on scroll
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Container(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight,
+          color: white,
+          child: query.isEmpty
+              // TODO: update copy
+              ? const Center(child: Text('Empty state container'))
+              : query.length < 3
+                  // TODO: update copy
+                  ? Center(child: Text('Please enter at least 3 letters'.i18n))
+                  : FutureBuilder(
+                      future: Future.wait([
+                        model.searchContacts(query),
+                        model.searchMessages(query)
+                      ]),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          default:
+                            if (snapshot.hasError) {
+                              // TODO: handle on UI?
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else {
+                              final results = snapshot.data as List;
+                              final contacts = results[0] as List<Contact>;
+                              final messages =
+                                  results[1] as List<StoredMessage>;
 
-                        return LayoutBuilder(builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          // scale height to keep line height the same even though font size changed
-                          return Container(
-                            width: constraints.maxWidth,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 20, top: 20),
-                                  child: Text(
-                                    'Contacts (${results[0].length} results)'
-                                        .i18n
-                                        .toUpperCase(),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: SuggestedContacts(
-                                    contacts: results[0] as List<Contact>,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 20, top: 20),
-                                  child: Text(
-                                      'Messages (${results[1].length} results)'
-                                          .i18n
-                                          .toUpperCase()),
-                                ),
-                                Flexible(
-                                  child: SuggestedMessages(
-                                    model: model,
-                                    messages: results[1] as List<StoredMessage>,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                      }
-                  }
-                });
+                              return true
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 20, top: 20),
+                                          child: Text(
+                                            'Contacts (${contacts.length} results)'
+                                                .i18n
+                                                .toUpperCase(),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: SuggestedContacts(
+                                            contacts: contacts,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  start: 20, top: 20),
+                                          child: Text(
+                                              'Messages (${messages.length} results)'
+                                                  .i18n
+                                                  .toUpperCase()),
+                                        ),
+                                        Flexible(
+                                          child: SuggestedMessages(
+                                            model: model,
+                                            messages: messages,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  // TODO: update copy
+                                  : const Center(
+                                      child: Text('No results found sorrrry'));
+                            }
+                        }
+                      }));
+    });
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Center(child: Text('build results'));
+    // TODO: can we just do that? Need to look this up
+    return buildSuggestions(context);
   }
 }
 
@@ -138,7 +156,7 @@ class SuggestedContacts extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: contact.displayName.split('*')[1],
-                          style: const TextStyle(fontWeight: FontWeight.w500)),
+                          style: const TextStyle(fontWeight: FontWeight.w600)),
                       TextSpan(text: contact.displayName.split('*')[2]),
                     ],
                   ),
@@ -184,15 +202,17 @@ class SuggestedMessages extends StatelessWidget {
                       style: tsSubtitle1Short),
                   subtitle: RichText(
                       text: TextSpan(
-                    text: message.text.split('*')[0],
+                    // TODO: slightly hacky here
+                    text: '...',
                     style: DefaultTextStyle.of(context).style,
                     children: <TextSpan>[
                       TextSpan(
                           text: message.text.split('*')[1],
-                          style: const TextStyle(fontWeight: FontWeight.w500)),
+                          style: const TextStyle(fontWeight: FontWeight.w600)),
                       TextSpan(text: message.text.split('*')[2]),
                     ],
                   )),
+                  // TODO: scroll to message
                   onTap: () async => await context
                       .pushRoute(Conversation(contactId: message.contactId)),
                   trailing: null,
