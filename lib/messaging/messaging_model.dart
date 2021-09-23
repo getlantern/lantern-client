@@ -174,16 +174,20 @@ class MessagingModel extends Model {
         'unsafeToId': toId,
       });
 
-  Future<List<PathAndValue<Contact>>> searchContacts(String query) async =>
+  Future<List<Contact>> searchContacts(String query) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': query,
-      }).then((value) => value as List<PathAndValue<Contact>>);
+      }).then((value) => (value as List)
+          .map((serialized) => Contact.fromBuffer(serialized))
+          .toList());
 
-  Future<List<PathAndValue<StoredMessage>>> searchMessages(
-          String query) async =>
+  Future<List<StoredMessage>> searchMessages(String query) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
         'query': query,
-      }).then((value) => value as List<PathAndValue<StoredMessage>>);
+      }).then((value) => (value as List)
+          .map((serialized) => StoredMessage.fromBuffer(serialized))
+          .toList());
+
   /*
   Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
   whom we're being introduced.
