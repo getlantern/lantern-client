@@ -38,7 +38,7 @@ class ReplyPreview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ReplySnippetHeader(msg: quotedMessage!, contact: contact),
+                  ReplySnippetHeader(message: quotedMessage!, contact: contact),
                   const Padding(
                     padding: EdgeInsets.all(2.0),
                   ),

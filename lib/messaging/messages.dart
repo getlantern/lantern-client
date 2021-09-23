@@ -41,19 +41,13 @@ class Messages extends StatelessWidget {
                                     Widget? child) =>
                                 (introductions.getPending().isNotEmpty)
                                     ? CListTile(
-                                        leading: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 16.0),
-                                          child: CBadge(
-                                            count: introductions
-                                                .getPending()
-                                                .length,
-                                            showBadge: true,
-                                            child: const Icon(
-                                              Icons.people,
-                                              color: Colors.black,
-                                            ),
+                                        leading: CBadge(
+                                          count:
+                                              introductions.getPending().length,
+                                          showBadge: true,
+                                          child: const Icon(
+                                            Icons.people,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         content: CText('introductions'.i18n,
@@ -95,10 +89,8 @@ class Messages extends StatelessWidget {
                                               contact.value.displayName),
                                       title: sanitizeContactName(
                                           contact.value.displayName),
-                                      subtitle: CText(
+                                      subTitle:
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
-                                          style:
-                                              tsBody2.copiedWith(color: grey5)),
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
