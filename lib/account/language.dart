@@ -28,6 +28,7 @@ class Language extends StatelessWidget {
 
     return BaseScreen(
       title: 'language'.i18n,
+      padVertical: true,
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
         return ListView.builder(

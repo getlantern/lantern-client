@@ -8,6 +8,8 @@ class BaseScreen extends StatelessWidget {
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool? centerTitle;
   final bool resizeToAvoidBottomInset;
+  final bool padHorizontal;
+  final bool padVertical;
 
   BaseScreen(
       {this.title,
@@ -17,6 +19,8 @@ class BaseScreen extends StatelessWidget {
       this.floatingActionButtonLocation,
       this.centerTitle = true,
       this.resizeToAvoidBottomInset = true,
+      this.padHorizontal = true,
+      this.padVertical = false,
       Key? key})
       : super(key: key);
 
@@ -26,18 +30,23 @@ class BaseScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: AppBar(
-        title: title.runtimeType == String
+        title: title is String
             ? CText(
                 title,
-                style: tsHeading2.copiedWith(fontWeight: FontWeight.w500),
+                style: tsHeading3,
               )
             : title,
         elevation: 1,
         backgroundColor: Colors.white,
         centerTitle: centerTitle,
+        titleSpacing: 0,
         actions: actions,
       ),
-      body: body,
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: padHorizontal ? 16 : 0, vertical: padVertical ? 16 : 0),
+        child: body,
+      ),
       floatingActionButton: actionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
     );

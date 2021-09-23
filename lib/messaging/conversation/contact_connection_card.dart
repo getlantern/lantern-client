@@ -5,23 +5,19 @@ class ContactConnectionCard extends StatelessWidget {
   final Contact contact;
   final bool inbound;
   final bool outbound;
-  final StoredMessage msg;
-  final PathAndValue<StoredMessage> message;
-  final List<dynamic> reactionsList;
+  final StoredMessage message;
 
   ContactConnectionCard(
     this.contact,
     this.inbound,
     this.outbound,
-    this.msg,
     this.message,
-    this.reactionsList,
   ) : super();
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<MessagingModel>();
-    final introduction = msg.introduction;
+    final introduction = message.introduction;
     return Column(
       crossAxisAlignment:
           outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -43,19 +39,19 @@ class ContactConnectionCard extends StatelessWidget {
                   : FittedBox(
                       child: Row(
                         children: [
-                          if (msg.introduction.status ==
+                          if (message.introduction.status ==
                               IntroductionDetails_IntroductionStatus.ACCEPTED)
                             Icon(Icons.check_circle,
                                 color: outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor),
                           Icon(
-                              (msg.introduction.status ==
+                              (message.introduction.status ==
                                       IntroductionDetails_IntroductionStatus
                                           .PENDING)
                                   ? Icons.info_outline_rounded
                                   : Icons.keyboard_arrow_right_outlined,
-                              size: (msg.introduction.status ==
+                              size: (message.introduction.status ==
                                       IntroductionDetails_IntroductionStatus
                                           .PENDING)
                                   ? 20.0
@@ -68,7 +64,7 @@ class ContactConnectionCard extends StatelessWidget {
                     ),
               onTap: () async {
                 if (inbound &&
-                    msg.introduction.status ==
+                    message.introduction.status ==
                         IntroductionDetails_IntroductionStatus.PENDING) {
                   _showOptions(
                     context,
@@ -77,7 +73,7 @@ class ContactConnectionCard extends StatelessWidget {
                     contact,
                   );
                 }
-                if (msg.introduction.status ==
+                if (message.introduction.status ==
                     IntroductionDetails_IntroductionStatus.ACCEPTED) {
                   await context
                       .pushRoute(Conversation(contactId: introduction.to));
@@ -88,7 +84,7 @@ class ContactConnectionCard extends StatelessWidget {
         }),
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: [StatusRow(outbound, inbound, msg, message, reactionsList)],
+          children: [StatusRow(outbound, inbound, message)],
         )
       ],
     );

@@ -11,7 +11,7 @@ class ContactListItem extends StatelessWidget {
     required this.index,
     this.isContactPreview,
     required this.title,
-    this.subtitle,
+    this.subTitle,
     required this.leading,
     required this.trailing,
     this.onTap,
@@ -21,7 +21,7 @@ class ContactListItem extends StatelessWidget {
   final int index;
   final bool? isContactPreview;
   final String title;
-  final Widget? subtitle;
+  final String? subTitle;
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
@@ -29,21 +29,17 @@ class ContactListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Wrap(
         children: [
-          const CDivider(
-              size: 1,
-              thickness: 0.5,
-              margin: 16,
-              color: Color.fromRGBO(235, 235, 235, 1)),
           CListTile(
-              leading: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 16.0),
-                child: leading,
-              ),
-              content: Wrap(
-                direction: Axis.vertical,
+              leading: leading,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
-                  subtitle ?? const SizedBox(),
+                  if (subTitle != null)
+                    CText(subTitle!,
+                        maxLines: 1, style: tsBody2.copiedWith(color: grey5)),
                 ],
               ),
               trailing: Padding(
@@ -51,11 +47,6 @@ class ContactListItem extends StatelessWidget {
                 child: trailing ?? const SizedBox(),
               ),
               onTap: onTap),
-          const CDivider(
-              size: 1,
-              thickness: 0.5,
-              margin: 16,
-              color: Color.fromRGBO(235, 235, 235, 1)),
         ],
       );
 }
