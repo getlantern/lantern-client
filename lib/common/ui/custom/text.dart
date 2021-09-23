@@ -5,7 +5,7 @@ class CText extends StatelessWidget {
   late final String text;
   final CTextStyle style;
   final TextAlign? textAlign;
-  final TextOverflow overflow;
+  late final TextOverflow? overflow;
   final int? maxLines;
   final bool? softWrap;
 
@@ -20,12 +20,14 @@ class CText extends StatelessWidget {
   CText(String text,
       {required this.style,
       this.textAlign,
-      this.overflow = TextOverflow.ellipsis,
+      TextOverflow? overflow,
       this.maxLines,
       this.softWrap}) {
     // Workaround for https://github.com/flutter/flutter/issues/18761
     this.text =
         maxLines == 1 ? Characters(text).toList().join('\u{200B}') : text;
+    this.overflow =
+        overflow ?? (maxLines != null ? TextOverflow.ellipsis : null);
   }
 
   @override

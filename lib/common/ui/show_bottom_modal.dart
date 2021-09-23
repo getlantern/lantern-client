@@ -25,7 +25,7 @@ void showBottomModal({
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
                           start: 16.0, end: 16.0, bottom: 16.0),
-                      child: CTextWrap(subtitle, style: tsBody1),
+                      child: CText(subtitle, style: tsBody1),
                     ),
                   const CDivider(),
                 ],

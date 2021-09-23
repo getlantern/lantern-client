@@ -83,7 +83,6 @@ export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
 export 'ui/custom/divider.dart';
 export 'ui/custom/text.dart';
-export 'ui/custom/text_wrap.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/custom/list_tile.dart';
 export 'ui/custom/rounded_rectangle_border.dart';

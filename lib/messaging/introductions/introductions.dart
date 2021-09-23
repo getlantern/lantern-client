@@ -13,7 +13,7 @@ class Introductions extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n, style: tsBody1),
+                child: CText('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
@@ -97,7 +97,7 @@ class Introductions extends StatelessWidget {
                                                                           .i18n,
                                                                       style:
                                                                           tsBody3),
-                                                                  content: CTextWrap(
+                                                                  content: CText(
                                                                       'introductions_reject_content'
                                                                           .i18n,
                                                                       style:
@@ -182,7 +182,7 @@ class Introductions extends StatelessWidget {
                                                                     children: [
                                                                       Expanded(
                                                                         child:
-                                                                            CTextWrap(
+                                                                            CText(
                                                                           'introduction_approved'
                                                                               .i18n
                                                                               .fill([

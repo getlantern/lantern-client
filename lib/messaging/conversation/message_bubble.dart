@@ -243,7 +243,7 @@ class MessageBubble extends StatelessWidget {
                                         context: context,
                                         title: CText('open_url'.i18n,
                                             style: tsBody3),
-                                        content: CTextWrap(
+                                        content: CText(
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
                                             style: tsBody1),
@@ -396,7 +396,7 @@ class MessageBubble extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            CTextWrap('delete_for_me_explanation'.i18n, style: tsBody1)
+            CText('delete_for_me_explanation'.i18n, style: tsBody1)
           ],
         ),
       ),
@@ -414,7 +414,7 @@ class MessageBubble extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            CTextWrap('delete_for_everyone_explanation'.i18n, style: tsBody1)
+            CText('delete_for_everyone_explanation'.i18n, style: tsBody1)
           ],
         ),
       ),
