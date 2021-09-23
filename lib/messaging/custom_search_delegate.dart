@@ -56,8 +56,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else {
                         return SuggestedContactList(
-                          suggestedContacts:
-                              snapshot.data as List<PathAndValue<Contact>>,
+                          suggestedContacts: snapshot.data as List<Contact>,
                         );
                       }
                   }
@@ -71,7 +70,7 @@ class CustomSearchDelegate extends SearchDelegate {
 }
 
 class SuggestedContactList extends StatelessWidget {
-  final List<PathAndValue<Contact>>? suggestedContacts;
+  final List<Contact>? suggestedContacts;
 
   const SuggestedContactList({this.suggestedContacts});
 
@@ -85,15 +84,15 @@ class SuggestedContactList extends StatelessWidget {
           return Column(
             children: [
               ContactListItem(
-                contact: contact.value,
+                contact: contact,
                 index: index,
                 leading: CustomAvatar(
-                    id: contact.value.contactId.id,
-                    displayName: contact.value.displayName),
-                title: sanitizeContactName(contact.value.displayName),
-                onTap: () async => await context.pushRoute(
-                    Conversation(contactId: contact.value.contactId)),
+                    id: contact.contactId.id, displayName: contact.displayName),
+                title: sanitizeContactName(contact.displayName),
+                onTap: () async => await context
+                    .pushRoute(Conversation(contactId: contact.contactId)),
                 trailing: null,
+                disableBorders: true,
               ),
             ],
           );

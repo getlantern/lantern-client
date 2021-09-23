@@ -15,17 +15,10 @@ class Messages extends StatelessWidget {
               icon: const Icon(Icons.search),
               tooltip: 'search'.i18n,
               onPressed: () async {
-                try {
-                  var results = await model.searchContacts('pin');
-                  print('results $results');
-                } catch (e) {
-                  print('results ${e.toString()}');
-                }
-
-                // await showSearch(
-                //   context: context,
-                //   delegate: CustomSearchDelegate(),
-                // );
+                await showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
               },
             ),
           ],
