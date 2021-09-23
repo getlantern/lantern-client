@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:lantern/common/common.dart';
 
-Function() showAlertDialog({
+void showAlertDialog({
   required BuildContext context,
   Key? key,
   barrierDismissible = true,

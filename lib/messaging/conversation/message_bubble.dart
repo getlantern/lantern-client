@@ -291,7 +291,7 @@ class MessageBubble extends StatelessWidget {
     var textCopied = false;
 
     return SizedBox(
-      height: 311,
+      height: isOutbound ? 315 : 267,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
