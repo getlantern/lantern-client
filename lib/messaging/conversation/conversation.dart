@@ -296,6 +296,7 @@ class ConversationState extends State<Conversation>
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
+        padHorizontal: false,
         // Conversation title (contact name)
         title: dismissKeyboardsOnTap(
           Row(
@@ -349,7 +350,12 @@ class ConversationState extends State<Conversation>
             Column(
               children: [
                 Flexible(
-                  child: dismissKeyboardsOnTap(buildList(contact)),
+                  child: dismissKeyboardsOnTap(
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: buildList(contact),
+                    ),
+                  ),
                 ),
                 // Reply container
                 if (isReplying)
