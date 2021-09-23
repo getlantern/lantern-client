@@ -139,6 +139,8 @@ class CTextStyle extends TextStyle {
         'fontSize $fontSize, minFontSize is $minFontSize, please set minFontSize to something less than fontSize');
   }
 
+  CTextStyle get short => copiedWith(lineHeight: fontSize);
+
   CTextStyle copiedWith(
       {bool? inherit,
       Color? color,
