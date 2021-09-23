@@ -16,19 +16,17 @@ class ContactListItem extends StatelessWidget {
     required this.trailing,
     this.onTap,
     this.disableBorders = false,
-    this.enableRichText = false,
   }) : super();
 
   final Contact contact;
   final int index;
   final bool? isContactPreview;
-  final String title;
+  final Widget title;
   final Widget? subtitle;
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
   final bool disableBorders;
-  final bool enableRichText;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -47,23 +45,7 @@ class ContactListItem extends StatelessWidget {
               content: Wrap(
                 direction: Axis.vertical,
                 children: [
-                  enableRichText
-                      ? RichText(
-                          text: TextSpan(
-                            text: title.split('*')[0],
-                            style: DefaultTextStyle.of(context).style,
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: title.split('*')[1],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(text: title.split('*')[2]),
-                            ],
-                          ),
-                        )
-                      : CText(title.toString(),
-                          maxLines: 1, style: tsSubtitle1Short),
-                  // TODO: handle rich text for subtitle
+                  title,
                   subtitle ?? const SizedBox(),
                 ],
               ),

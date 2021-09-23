@@ -127,15 +127,26 @@ class SuggestedContacts extends StatelessWidget {
               ContactListItem(
                 contact: contact,
                 index: index,
-                // TODO: remove * for the avatar
                 leading: CustomAvatar(
-                    id: contact.contactId.id, displayName: contact.displayName),
-                title: sanitizeContactName(contact.displayName),
+                    id: contact.contactId.id,
+                    displayName:
+                        contact.displayName.replaceAll(RegExp(r'\*'), '')),
+                title: RichText(
+                  text: TextSpan(
+                    text: contact.displayName.split('*')[0],
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: contact.displayName.split('*')[1],
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
+                      TextSpan(text: contact.displayName.split('*')[2]),
+                    ],
+                  ),
+                ),
                 onTap: () async => await context
                     .pushRoute(Conversation(contactId: contact.contactId)),
                 trailing: null,
                 disableBorders: true,
-                enableRichText: false,
               ),
             ],
           );
@@ -164,19 +175,28 @@ class SuggestedMessages extends StatelessWidget {
                 ContactListItem(
                   contact: contact,
                   index: index,
-                  // TODO: remove * for the avatar
                   leading: CustomAvatar(
                       id: message.contactId.id,
                       displayName: contact.displayName),
-                  title: sanitizeContactName(contact.displayName),
-                  subtitle: CText(
-                      "${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'.i18n}",
-                      style: tsBody2.copiedWith(color: grey5)),
+                  title: CText(
+                      sanitizeContactName(contact.displayName).toString(),
+                      maxLines: 1,
+                      style: tsSubtitle1Short),
+                  subtitle: RichText(
+                      text: TextSpan(
+                    text: message.text.split('*')[0],
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: message.text.split('*')[1],
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
+                      TextSpan(text: message.text.split('*')[2]),
+                    ],
+                  )),
                   onTap: () async => await context
                       .pushRoute(Conversation(contactId: message.contactId)),
                   trailing: null,
                   disableBorders: true,
-                  enableRichText: false,
                 ),
               ],
             );

@@ -36,7 +36,10 @@ ScrollablePositionedList groupedContactListGenerator({
                   contact: contact.value,
                   index: index,
                   leading: leadingCallback!(contact.value),
-                  title: sanitizeContactName(contact.value.displayName),
+                  title: CText(
+                      sanitizeContactName(contact.value.displayName).toString(),
+                      maxLines: 1,
+                      style: tsSubtitle1Short),
                   trailing: trailingCallback != null
                       ? trailingCallback(index, contact.value)
                       : null,
