@@ -30,16 +30,14 @@ ScrollablePositionedList groupedContactListGenerator({
               ),
             ],
           ),
-          Divider(height: 1.0, color: grey3),
+          const CDivider(),
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map((contact) => ContactListItem(
                   contact: contact.value,
                   index: index,
                   leading: leadingCallback!(contact.value),
-                  title: CText(
+                  title:
                       sanitizeContactName(contact.value.displayName).toString(),
-                      maxLines: 1,
-                      style: tsSubtitle1Short),
                   trailing: trailingCallback != null
                       ? trailingCallback(index, contact.value)
                       : null,

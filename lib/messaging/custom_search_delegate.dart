@@ -1,5 +1,3 @@
-import 'package:flutter_markdown/flutter_markdown.dart';
-
 import 'messaging.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
@@ -155,18 +153,11 @@ class SuggestedContacts extends StatelessWidget {
                     id: contact.contactId.id,
                     displayName:
                         contact.displayName.replaceAll(RegExp(r'\*'), '')),
-                title: MarkdownBody(
-                  data: contact.displayName,
-                  styleSheet: MarkdownStyleSheet(
-                    p: tsSubtitle1Short,
-                    em: tsSubtitle1Short.copiedWith(
-                        color: pink4, fontWeight: FontWeight.w500),
-                  ),
-                ),
+                title: contact.displayName,
                 onTap: () async => await context
                     .pushRoute(Conversation(contactId: contact.contactId)),
-                trailing: null,
                 showDivider: false,
+                useMarkdown: true,
               ),
             ],
           );
@@ -198,23 +189,13 @@ class SuggestedMessages extends StatelessWidget {
                   leading: CustomAvatar(
                       id: message.contactId.id,
                       displayName: contact.displayName),
-                  title: CText(
-                      sanitizeContactName(contact.displayName).toString(),
-                      maxLines: 1,
-                      style: tsSubtitle1Short),
-                  subtitle: MarkdownBody(
-                    data: message.text,
-                    styleSheet: MarkdownStyleSheet(
-                      p: tsBody2,
-                      em: tsBody2.copiedWith(
-                          color: pink4, fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                  title: sanitizeContactName(contact.displayName).toString(),
+                  subTitle: message.text,
                   // TODO: scroll to message
                   onTap: () async => await context
                       .pushRoute(Conversation(contactId: message.contactId)),
-                  trailing: null,
                   showDivider: false,
+                  useMarkdown: true,
                 ),
               ],
             );

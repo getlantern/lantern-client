@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 /*
 * Generic widget that renders a row with a Contact avatar, a Contact name and a trailing widget. 
@@ -11,22 +12,24 @@ class ContactListItem extends StatelessWidget {
     required this.index,
     this.isContactPreview,
     required this.title,
-    this.subtitle,
+    this.subTitle,
     required this.leading,
-    required this.trailing,
+    this.trailing,
     this.onTap,
     this.showDivider = true,
+    this.useMarkdown = false,
   }) : super();
 
   final Contact contact;
   final int index;
   final bool? isContactPreview;
-  final Widget title;
-  final Widget? subtitle;
+  final String title;
+  final String? subTitle;
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
   final bool showDivider;
+  final bool useMarkdown;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -34,11 +37,34 @@ class ContactListItem extends StatelessWidget {
           CListTile(
               leading: leading,
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  title,
-                  subtitle ?? const SizedBox(),
+                  !useMarkdown
+                      ? CText(title.toString(),
+                          maxLines: 1, style: tsSubtitle1Short)
+                      : MarkdownBody(
+                          data: title,
+                          styleSheet: MarkdownStyleSheet(
+                            p: tsSubtitle1Short,
+                            em: tsSubtitle1Short.copiedWith(
+                                color: pink4, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                  if (subTitle != null)
+                    !useMarkdown
+                        ? CText(subTitle!,
+                            maxLines: 1,
+                            style: tsBody2.copiedWith(color: grey5))
+                        : MarkdownBody(
+                            data: subTitle!,
+                            styleSheet: MarkdownStyleSheet(
+                              p: tsBody2,
+                              em: tsBody2.copiedWith(
+                                  color: pink4, fontWeight: FontWeight.w500),
+                            ),
+                          ),
                 ],
               ),
               trailing: Padding(
