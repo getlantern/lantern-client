@@ -8,7 +8,7 @@ void showConfirmationDialog() {
     content: SingleChildScrollView(
       child: ListBody(
         children: <Widget>[
-          CTextWrap('delete_for_me_explanation'.i18n, style: tsBody1)
+          CText('delete_for_me_explanation'.i18n, style: tsBody1)
         ],
       ),
     ),
