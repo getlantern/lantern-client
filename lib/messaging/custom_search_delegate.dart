@@ -44,7 +44,6 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    // TODO: dismiss keyboard on scroll
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
@@ -91,12 +90,11 @@ class CustomSearchDelegate extends SearchDelegate {
 
                           return (hasResults)
                               ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsetsDirectional.only(
-                                          start: 20, top: 20),
+                                          top: 20),
                                       child: Text(
                                         'Contacts (${contacts.length} results)'
                                             .i18n
@@ -110,7 +108,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                       Padding(
                                         padding:
                                             const EdgeInsetsDirectional.only(
-                                                start: 20, top: 20),
+                                                top: 20),
                                         child: Text(
                                             'Messages (${messages.length} results)'
                                                 .i18n
@@ -142,54 +140,57 @@ class CustomSearchDelegate extends SearchDelegate {
 class SuggestionBuilder extends StatelessWidget {
   final MessagingModel? model;
   final List suggestions;
-
   const SuggestionBuilder({this.model, required this.suggestions});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: suggestions.length,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        physics: defaultScrollPhysics,
-        itemBuilder: (context, index) {
-          var suggestion = suggestions[index];
+    return Expanded(
+      flex: suggestions.isNotEmpty ? 1 : 0,
+      child: ListView.builder(
+          itemCount: suggestions.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          physics: defaultScrollPhysics,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          itemBuilder: (context, index) {
+            var suggestion = suggestions[index];
 
-          if (suggestion is Contact) {
-            return ContactListItem(
-              contact: suggestion,
-              index: index,
-              leading: CustomAvatar(
-                  id: suggestion.contactId.id,
-                  displayName:
-                      suggestion.displayName.replaceAll(RegExp(r'\*'), '')),
-              title: suggestion.displayName,
-              onTap: () async => await context
-                  .pushRoute(Conversation(contactId: suggestion.contactId)),
-              showDivider: false,
-              useMarkdown: true,
-            );
-          }
-          if (suggestion is StoredMessage) {
-            return model!.singleContactById(context, suggestion.contactId,
-                (context, contact, child) {
+            if (suggestion is Contact) {
               return ContactListItem(
-                contact: contact,
+                contact: suggestion,
                 index: index,
                 leading: CustomAvatar(
                     id: suggestion.contactId.id,
-                    displayName: contact.displayName),
-                title: sanitizeContactName(contact.displayName).toString(),
-                subTitle: suggestion.text,
-                // TODO: scroll to message
+                    displayName:
+                        suggestion.displayName.replaceAll(RegExp(r'\*'), '')),
+                title: suggestion.displayName,
                 onTap: () async => await context
                     .pushRoute(Conversation(contactId: suggestion.contactId)),
                 showDivider: false,
                 useMarkdown: true,
               );
-            });
-          }
-          return Container();
-        });
+            }
+            if (suggestion is StoredMessage) {
+              return model!.singleContactById(context, suggestion.contactId,
+                  (context, contact, child) {
+                return ContactListItem(
+                  contact: contact,
+                  index: index,
+                  leading: CustomAvatar(
+                      id: suggestion.contactId.id,
+                      displayName: contact.displayName),
+                  title: sanitizeContactName(contact.displayName).toString(),
+                  subTitle: suggestion.text,
+                  // TODO: scroll to message
+                  onTap: () async => await context
+                      .pushRoute(Conversation(contactId: suggestion.contactId)),
+                  showDivider: false,
+                  useMarkdown: true,
+                );
+              });
+            }
+            return Container();
+          }),
+    );
   }
 }
