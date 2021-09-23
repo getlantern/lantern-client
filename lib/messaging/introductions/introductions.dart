@@ -60,14 +60,10 @@ class Introductions extends StatelessWidget {
                                                 ? ContactListItem(
                                                     contact: introductor,
                                                     index: index,
-                                                    title: CText(
-                                                        sanitizeContactName(value
-                                                                .introduction
+                                                    title: sanitizeContactName(
+                                                            value.introduction
                                                                 .displayName)
-                                                            .toString(),
-                                                        maxLines: 1,
-                                                        style:
-                                                            tsSubtitle1Short),
+                                                        .toString(),
                                                     leading: CBadge(
                                                       showBadge: true,
                                                       top: 25,
