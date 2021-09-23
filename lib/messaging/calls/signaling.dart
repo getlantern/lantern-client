@@ -216,15 +216,15 @@ class Signaling extends ValueNotifier<SignalingState>
             return;
           }
           closeAlertDialog?.call();
-          closeAlertDialog = showAlertDialog(
+          closeAlertDialog = showConfirmationDialog(
               context: navigatorKey.currentContext!,
               autoDismissAfter: const Duration(seconds: 30),
               // force dismissal through actual dismiss action to make sure we stop ringtone, etc
               barrierDismissible: false,
-              title: CText('incoming_call'.i18n, style: tsBody1),
-              content: CText('call_from'.i18n.fill([contact.displayName]),
-                  style: tsBody1),
+              title: 'incoming_call'.i18n,
+              explanation: 'call_from'.i18n.fill([contact.displayName]),
               dismissText: 'dismiss'.i18n,
+              agreeText: 'accept'.i18n,
               dismissAction: () async {
                 await FlutterRingtonePlayer.stop();
                 _sendBye(peerId, sessionId);
