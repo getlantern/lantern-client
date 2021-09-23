@@ -1,4 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:lantern/common/ui/show_confirmation_dialog.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
@@ -380,38 +381,26 @@ class MessageBubble extends StatelessWidget {
   }
 
   void deleteForMe(BuildContext context) {
-    showAlertDialog(
+    showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForMeDialog'),
-      barrierDismissible: true,
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            CText('delete_for_me_explanation'.i18n, style: tsBody1)
-          ],
-        ),
-      ),
-      title: CText('delete_for_me'.i18n, style: tsSubtitle1),
-      agreeAction: () => model.deleteLocally(message),
+      iconPath: ImagePaths.delete,
+      title: 'delete_for_me'.i18n,
+      explanation: 'delete_for_me_explanation'.i18n,
       agreeText: 'delete'.i18n,
+      agreeAction: () => model.deleteLocally(message),
     );
   }
 
   void deleteForEveryone(BuildContext context) {
-    showAlertDialog(
+    showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForEveryoneDialog'),
-      barrierDismissible: true,
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            CText('delete_for_everyone_explanation'.i18n, style: tsBody1)
-          ],
-        ),
-      ),
-      title: CText('delete_for_everyone'.i18n, style: tsSubtitle1),
-      agreeAction: () => model.deleteLocally(message),
+      iconPath: ImagePaths.delete,
+      title: 'delete_for_everyone'.i18n,
+      explanation: 'delete_for_everyone_explanation'.i18n,
       agreeText: 'delete'.i18n,
+      agreeAction: () => model.deleteLocally(message),
     );
   }
 
