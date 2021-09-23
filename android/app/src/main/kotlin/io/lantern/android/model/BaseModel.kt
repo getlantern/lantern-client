@@ -42,6 +42,8 @@ abstract class BaseModel(
 
     companion object {
         private const val TAG = "BaseModel"
+        private const val dbPasswordKey = "dbPassword"
+        private const val dbPasswordLength = 32
 
         val masterDB: DB
 
@@ -79,19 +81,28 @@ abstract class BaseModel(
                 }
             }
             val dbLocation = File(dbDir, "db").absolutePath
-            val dbPassword = secrets.get("dbPassword", 32)
+            val dbPassword = secrets.get(dbPasswordKey, dbPasswordLength)
             masterDB = try {
                 DB.createOrOpen(context, dbLocation, dbPassword)
             } catch (e: Exception) {
-                if (!migrated || e.message?.contains("file is not a database") == false) {
+                val oldStylePassword = dbPassword.contains("=")
+                // There are two scenarios that seem to cause database corruption on older
+                // Android versions, especially 5.1.x
+                //
+                // 1. Database was created in the .lantern folder
+                // 2. Database was created using a password that contains a line feed
+                val recoverable = (migrated || oldStylePassword)
+                if (!recoverable || e.message?.contains("file is not a database") == false) {
                     throw e
                 }
-                // This means that we just migrated the database and the old database was corrupted.
-                // There's no way to recover the data, so just delete it and start fresh
-                Logger.debug(TAG, "Migrated database was corrupted, delete and start fresh")
+                // Let's recover by recreating the database using a new password. The latest version
+                // of secrets-android omits newlines (and padding) from generated secrets.
+                Logger.debug(TAG, "database was corrupted, error is recoverable, delete and start fresh")
+                val newDbPassword = secrets.generate(dbPasswordLength)
+                secrets.put(dbPasswordKey, newDbPassword)
                 dbDir.deleteRecursively()
                 dbDir.mkdirs()
-                DB.createOrOpen(context, dbLocation, dbPassword)
+                DB.createOrOpen(context, dbLocation, newDbPassword)
             }
             Logger.debug(TAG, "createOrOpen finished at ${System.currentTimeMillis() - start}")
         }

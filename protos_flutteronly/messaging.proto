@@ -20,11 +20,23 @@ message ContactId {
   string id = 2; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
 }
 
+enum ContactSource {
+  UNKNOWN = 0; // source of contact is unknown
+  INTRODUCTION = 1; // contact was added through introduction
+  APP1 = 2; // application-specific source 1
+  APP2 = 3; // application-specific source 2
+  APP3 = 4; // application-specific source 3
+  APP4 = 5; // application-specific source 4
+  APP5 = 6; // application-specific source 5
+}
+
 // A contact in the address book
 message Contact {
   ContactId contactId = 1;
+  map<int32, string> applicationIds = 14; // application-specific contacts ids like usernames, phone numbers, etc. keyed to an integer type (type is application-defined)
   repeated string memberIds = 2; // the ids of group member Contacts, base32 encoded (only applies to Contacts of type GROUP)
   string displayName = 3; // the display name shown for this Contact (specific to our current device, the contact may have different display names in other people's address books)
+  ContactSource source = 13; // source from which the Contact was added
   int64 createdTs = 4; // the millisecond unix timestamp when this contact was created
   int64 mostRecentMessageTs = 5; // the millisecond unix timestamp of the most recent message with this contact (excluding control messages)
   MessageDirection mostRecentMessageDirection = 6; // direction of the most recent message with this contact
@@ -43,6 +55,7 @@ message Contact {
 message ProvisionalContact {
   string contactId = 1; // the ID of the contact (base32 encoded)
   int64 expiresAt = 2; // the unix timestamp in milliseconds of when this provisional contact expires
+  ContactSource source = 3; // source from which the Contact was added
 }
 
 // An attachment to a Message
