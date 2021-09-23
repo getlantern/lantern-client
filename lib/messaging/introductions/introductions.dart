@@ -89,19 +89,14 @@ class Introductions extends StatelessWidget {
                                                       children: [
                                                         TextButton(
                                                           onPressed: () =>
-                                                              showAlertDialog(
+                                                              showConfirmationDialog(
                                                                   context:
                                                                       context,
-                                                                  title: CText(
+                                                                  title:
                                                                       'introductions_reject_title'
                                                                           .i18n,
-                                                                      style:
-                                                                          tsBody3),
-                                                                  content: CText(
-                                                                      'introductions_reject_content'
-                                                                          .i18n,
-                                                                      style:
-                                                                          tsBody3),
+                                                                  explanation:
+                                                                      'introductions_reject_content',
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'

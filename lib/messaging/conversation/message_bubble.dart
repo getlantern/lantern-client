@@ -1,5 +1,4 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/common/ui/show_confirmation_dialog.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
@@ -231,14 +230,12 @@ class MessageBubble extends StatelessWidget {
                                 onTapLink: (String text, String? href,
                                     String title) async {
                                   if (href != null && await canLaunch(href)) {
-                                    showAlertDialog(
+                                    showConfirmationDialog(
                                         context: context,
-                                        title: CText('open_url'.i18n,
-                                            style: tsBody3),
-                                        content: CText(
+                                        title: 'open_url'.i18n,
+                                        explanation:
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
-                                            style: tsBody1),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,
                                         agreeAction: () async {

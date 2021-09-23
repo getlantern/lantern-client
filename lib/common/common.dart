@@ -70,7 +70,7 @@ export 'ui/focused_menu.dart';
 export 'ui/labeled_divider.dart';
 
 // UI functions
-export 'ui/show_alert_dialog.dart';
+export 'ui/show_confirmation_dialog.dart';
 export 'ui/show_error_dialog.dart';
 export 'ui/show_info_dialog.dart';
 export 'ui/show_bottom_modal.dart';
