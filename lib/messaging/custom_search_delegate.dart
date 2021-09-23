@@ -1,3 +1,5 @@
+import 'package:flutter_markdown/flutter_markdown.dart';
+
 import 'messaging.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
@@ -43,6 +45,7 @@ class CustomSearchDelegate extends SearchDelegate {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
+          padding: const EdgeInsetsDirectional.all(16.0),
           width: constraints.maxWidth,
           height: constraints.maxHeight,
           color: white,
@@ -92,6 +95,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                           ),
                                         ),
                                         Flexible(
+                                          flex: 1,
                                           child: SuggestedContacts(
                                             contacts: contacts,
                                           ),
@@ -106,6 +110,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                                   .toUpperCase()),
                                         ),
                                         Flexible(
+                                          flex: 1,
                                           child: SuggestedMessages(
                                             model: model,
                                             messages: messages,
@@ -150,22 +155,18 @@ class SuggestedContacts extends StatelessWidget {
                     id: contact.contactId.id,
                     displayName:
                         contact.displayName.replaceAll(RegExp(r'\*'), '')),
-                title: RichText(
-                  text: TextSpan(
-                    text: contact.displayName.split('*')[0],
-                    style: DefaultTextStyle.of(context).style,
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: contact.displayName.split('*')[1],
-                          style: const TextStyle(fontWeight: FontWeight.w600)),
-                      TextSpan(text: contact.displayName.split('*')[2]),
-                    ],
+                title: MarkdownBody(
+                  data: contact.displayName,
+                  styleSheet: MarkdownStyleSheet(
+                    p: tsSubtitle1Short,
+                    em: tsSubtitle1Short.copiedWith(
+                        color: pink4, fontWeight: FontWeight.w500),
                   ),
                 ),
                 onTap: () async => await context
                     .pushRoute(Conversation(contactId: contact.contactId)),
                 trailing: null,
-                disableBorders: true,
+                showDivider: false,
               ),
             ],
           );
@@ -201,28 +202,23 @@ class SuggestedMessages extends StatelessWidget {
                       sanitizeContactName(contact.displayName).toString(),
                       maxLines: 1,
                       style: tsSubtitle1Short),
-                  subtitle: RichText(
-                      text: TextSpan(
-                    // TODO: slightly hacky here
-                    text: '...',
-                    style: DefaultTextStyle.of(context).style,
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: message.text.split('*')[1],
-                          style: const TextStyle(fontWeight: FontWeight.w600)),
-                      TextSpan(text: message.text.split('*')[2]),
-                    ],
-                  )),
+                  subtitle: MarkdownBody(
+                    data: message.text,
+                    styleSheet: MarkdownStyleSheet(
+                      p: tsBody2,
+                      em: tsBody2.copiedWith(
+                          color: pink4, fontWeight: FontWeight.w500),
+                    ),
+                  ),
                   // TODO: scroll to message
                   onTap: () async => await context
                       .pushRoute(Conversation(contactId: message.contactId)),
                   trailing: null,
-                  disableBorders: true,
+                  showDivider: false,
                 ),
               ],
             );
           });
         });
-    ;
   }
 }

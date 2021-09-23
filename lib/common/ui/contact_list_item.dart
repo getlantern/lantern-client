@@ -15,7 +15,7 @@ class ContactListItem extends StatelessWidget {
     required this.leading,
     required this.trailing,
     this.onTap,
-    this.disableBorders = false,
+    this.showDivider = true,
   }) : super();
 
   final Contact contact;
@@ -26,15 +26,16 @@ class ContactListItem extends StatelessWidget {
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
-  final bool disableBorders;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) => Wrap(
         children: [
           CListTile(
               leading: leading,
-              content: Wrap(
-                direction: Axis.vertical,
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   title,
                   subtitle ?? const SizedBox(),
@@ -44,7 +45,8 @@ class ContactListItem extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.only(end: 8.0),
                 child: trailing ?? const SizedBox(),
               ),
-              onTap: onTap),
+              onTap: onTap,
+              showDivider: showDivider),
         ],
       );
 }
