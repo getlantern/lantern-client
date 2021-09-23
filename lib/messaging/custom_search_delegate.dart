@@ -73,7 +73,8 @@ class CustomSearchDelegate extends SearchDelegate {
                               final messages =
                                   results[1] as List<StoredMessage>;
 
-                              return true
+                              return (contacts.isNotEmpty ||
+                                      messages.isNotEmpty)
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
