@@ -1,5 +1,4 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:intl/intl.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
@@ -7,7 +6,6 @@ import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'date_marker_bubble.dart';
 import 'mime_types.dart';
 import 'reactions.dart';
 import 'status_row.dart';
@@ -30,7 +28,6 @@ class MessageBubble extends StatelessWidget {
   late final bool wasDeleted;
   late final bool isAttachment;
   late final bool hasReactions;
-  late final String dateMarker;
   late final Color color;
   late final Color backgroundColor;
 
@@ -56,7 +53,6 @@ class MessageBubble extends StatelessWidget {
     wasDeleted = message.remotelyDeletedAt != 0;
     isAttachment = message.attachments.isNotEmpty;
     hasReactions = message.reactions.isNotEmpty;
-    dateMarker = determineDateSwitch(priorMessage, nextMessage);
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
@@ -103,11 +99,6 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          if (dateMarker.isNotEmpty)
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsetsDirectional.only(bottom: 10),
-                child: DateMarker(dateMarker)),
           content(context),
         ],
       ),
@@ -422,23 +413,6 @@ class MessageBubble extends StatelessWidget {
       agreeAction: () => model.deleteLocally(message),
       agreeText: 'delete'.i18n,
     );
-  }
-
-  String determineDateSwitch(
-      StoredMessage? priorMessage, StoredMessage? nextMessage) {
-    if (priorMessage == null || nextMessage == null) return '';
-
-    var currentDateTime =
-        DateTime.fromMillisecondsSinceEpoch(priorMessage.ts.toInt());
-    var nextMessageDateTime =
-        DateTime.fromMillisecondsSinceEpoch(nextMessage.ts.toInt());
-
-    if (nextMessageDateTime.difference(currentDateTime).inDays >= 1) {
-      currentDateTime = nextMessageDateTime;
-      return DateFormat.yMMMMd('en_US').format(currentDateTime);
-    }
-
-    return '';
   }
 
   double maxBubbleWidth(BuildContext context) =>
