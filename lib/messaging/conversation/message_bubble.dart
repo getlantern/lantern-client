@@ -98,19 +98,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return FocusedMenuHolder(
-      blurBackgroundColor: black.withOpacity(0.5),
       menuWidth: maxBubbleWidth(context),
-      menuOffset: 5.0,
-      paddingTop: 16,
-      paddingBottom: 16,
-      duration: const Duration(seconds: 0),
-      menuBoxDecoration: BoxDecoration(
-          color: white,
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          boxShadow: [
-            const BoxShadow(
-                color: Colors.black38, blurRadius: 10, spreadRadius: 1)
-          ]),
       onPressed: () {},
       // menuItems: [
       //   FocusedMenuItem(

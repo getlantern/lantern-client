@@ -2,17 +2,15 @@ import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+import 'package:lantern/common/common.dart';
+
 /// Forked version of https://github.com/retroportalstudio/focused_menu that
 /// always displays the focused child at the top of the page
 class FocusedMenuHolder extends StatefulWidget {
   final Widget child;
   final SizedBox menu;
   final double menuWidth;
-  final BoxDecoration? menuBoxDecoration;
   final Function onPressed;
-  final Duration? duration;
-  final double? blurSize;
-  final Color blurBackgroundColor;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
@@ -22,14 +20,10 @@ class FocusedMenuHolder extends StatefulWidget {
     required this.child,
     required this.menu,
     required this.onPressed,
-    this.duration,
-    this.menuBoxDecoration,
-    this.blurSize,
-    required this.blurBackgroundColor,
     required this.menuWidth,
-    this.menuOffset = 0,
-    this.paddingTop = 0,
-    this.paddingBottom = 0,
+    this.menuOffset = 5,
+    this.paddingTop = 16,
+    this.paddingBottom = 16,
   }) : super(key: key);
 
   @override
@@ -70,19 +64,14 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
     await Navigator.push(
         context,
         PageRouteBuilder(
-            transitionDuration:
-                widget.duration ?? const Duration(milliseconds: 100),
             pageBuilder: (context, animation, secondaryAnimation) {
               animation = Tween(begin: 0.0, end: 1.0).animate(animation);
               return FadeTransition(
                   opacity: animation,
                   child: FocusedMenuDetails(
-                    menuBoxDecoration: widget.menuBoxDecoration,
                     childOffset: childOffset,
                     childSize: childSize,
-                    blurSize: widget.blurSize,
                     menuWidth: widget.menuWidth,
-                    blurBackgroundColor: widget.blurBackgroundColor,
                     menuOffset: widget.menuOffset,
                     paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
@@ -98,12 +87,9 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
 class FocusedMenuDetails extends StatelessWidget {
   final Widget child;
   final SizedBox menu;
-  final BoxDecoration? menuBoxDecoration;
   final Offset childOffset;
   final Size? childSize;
-  final double? blurSize;
   final double menuWidth;
-  final Color blurBackgroundColor;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
@@ -114,9 +100,6 @@ class FocusedMenuDetails extends StatelessWidget {
       required this.menu,
       required this.childOffset,
       required this.childSize,
-      required this.menuBoxDecoration,
-      required this.blurSize,
-      required this.blurBackgroundColor,
       required this.menuWidth,
       required this.menuOffset,
       required this.paddingTop,
@@ -164,10 +147,9 @@ class FocusedMenuDetails extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: blurSize ?? 4, sigmaY: blurSize ?? 4),
+                filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                 child: Container(
-                  color: blurBackgroundColor,
+                  color: black.withOpacity(0.5),
                 ),
               ),
             ),
@@ -187,17 +169,10 @@ class FocusedMenuDetails extends StatelessWidget {
                 child: Container(
                   width: menuWidth,
                   height: menuHeight,
-                  decoration: menuBoxDecoration ??
-                      BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
-                          boxShadow: [
-                            const BoxShadow(
-                                color: Colors.black38,
-                                blurRadius: 10,
-                                spreadRadius: 1)
-                          ]),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                     child: SingleChildScrollView(
