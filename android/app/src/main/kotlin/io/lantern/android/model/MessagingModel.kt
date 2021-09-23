@@ -51,7 +51,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         when (call.method) {
             "sendSignal" -> {
                 messaging.sendWebRTCSignal(
-                    call.argument("recipientId")!!,
+                    unsafeRecipientId = call.argument("recipientId")!!,
                     call.argument<String>("content")!!.toByteArray(Charsets.UTF_8)
                 ) {
                     if (it.succeeded) {
@@ -74,9 +74,14 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         return when (call.method) {
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
-            "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("displayName") ?: "")
+            "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("unsafeDisplayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
-                call.argument("contactId")!!
+                call.argument("unsafeContactId")!!,
+                when (call.argument<Any>("source")) {
+                    "qr" -> Model.ContactSource.APP1
+                    "id" -> Model.ContactSource.APP2
+                    else -> Model.ContactSource.UNKNOWN
+                },
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
@@ -105,10 +110,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("id")!!)
-            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("recipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(unsafeFromId = call.argument<String>("unsafeFromId")!!, unsafeToId = call.argument<String>("unsafeToId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(unsafeFromId = call.argument<String>("fromId")!!, unsafeToId = call.argument<String>("toId")!!)
+            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
+            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {

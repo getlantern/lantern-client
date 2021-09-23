@@ -1,5 +1,11 @@
 
 - [ ] New code should not be using FutureBuilder (use ValueListenableBuilder instead)
+- [ ] All strings are defined using localized message keys like `'my_message_key'.i18n` and are defined in `en.po`.
+- [ ] All colors are defined using Hex (not using built-in colors), are defined in `colors.dart` and are not duplicated
+- [ ] All text styles are defined in `text_styles.dart` and are not duplicated
+- [ ] All icons are using the vector resource from Figma (do not use built-in Icons)
+- [ ] Repeated code has been factored into custom widgets
+- [ ] Layout looks good in both LTR (English) and RTL (Persian) languages
 - [ ] If you refactored existing code, have you tested the refactored functionality against the old version to make sure you didn't break anything?
 - [ ] Do the tests pass? Consistently?
 - [ ] Did this change improve test coverage?

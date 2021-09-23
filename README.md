@@ -38,7 +38,7 @@ You can compile routes by running `make routes`.
 * [Android NDK](#steps-to-run-the-project)
 * Android SDK from 25 up to the latest.
 * [Git LFS](https://git-lfs.github.com) (more information on **STEPS TO RUN THE PROJECT**)
-* [Flutter V2.0.6](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos) (This is due to a custom plugin that needs to be migrated)
+* [Flutter (latest version)](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
 
 In the welcome screen choose the "Open an existing Android Studio" option and
@@ -98,6 +98,7 @@ Once the required tools are installed and the lfs are downloaded, open the proje
 
 Run unit tests with `make test`.
 
+## Integration tests
 Run integration tests with `make integration-test`. This will run all files in `integration_test` that end
 in `_test.dart`.
 

@@ -39,6 +39,31 @@ class ContactType extends $pb.ProtobufEnum {
   const ContactType._($core.int v, $core.String n) : super(v, n);
 }
 
+class ContactSource extends $pb.ProtobufEnum {
+  static const ContactSource UNKNOWN = ContactSource._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UNKNOWN');
+  static const ContactSource INTRODUCTION = ContactSource._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'INTRODUCTION');
+  static const ContactSource APP1 = ContactSource._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP1');
+  static const ContactSource APP2 = ContactSource._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP2');
+  static const ContactSource APP3 = ContactSource._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP3');
+  static const ContactSource APP4 = ContactSource._(5, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP4');
+  static const ContactSource APP5 = ContactSource._(6, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP5');
+
+  static const $core.List<ContactSource> values = <ContactSource> [
+    UNKNOWN,
+    INTRODUCTION,
+    APP1,
+    APP2,
+    APP3,
+    APP4,
+    APP5,
+  ];
+
+  static final $core.Map<$core.int, ContactSource> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static ContactSource? valueOf($core.int value) => _byValue[value];
+
+  const ContactSource._($core.int v, $core.String n) : super(v, n);
+}
+
 class StoredAttachment_Status extends $pb.ProtobufEnum {
   static const StoredAttachment_Status PENDING = StoredAttachment_Status._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING');
   static const StoredAttachment_Status PENDING_UPLOAD = StoredAttachment_Status._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PENDING_UPLOAD');

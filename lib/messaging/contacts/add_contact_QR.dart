@@ -57,12 +57,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   final addProvisionalContactOnce = once<Future<void>>();
 
   Future<void> addProvisionalContact(
-      MessagingModel model, String contactId) async {
+      MessagingModel model, String contactId, String source) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(contactId);
+    var result = await model.addProvisionalContact(contactId, source: source);
 
     contactNotifier = model.contactNotifier(contactId);
     listener = () async {
@@ -120,7 +120,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       try {
         await addProvisionalContactOnce(() {
           contactIdController.text = scanData.code;
-          return addProvisionalContact(model, scanData.code);
+          return addProvisionalContact(model, scanData.code, 'qr');
         });
       } catch (e, s) {
         setState(() {
@@ -138,7 +138,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     if (_formKey.currentState!.validate()) {
       await addProvisionalContactOnce(() {
         return addProvisionalContact(
-            model, contactIdController.text.replaceAll('\-', ''));
+            model, contactIdController.text.replaceAll('\-', ''), 'id');
       });
     }
   }

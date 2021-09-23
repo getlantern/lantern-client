@@ -30,6 +30,22 @@ const ContactType$json = const {
 
 /// Descriptor for `ContactType`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List contactTypeDescriptor = $convert.base64Decode('CgtDb250YWN0VHlwZRIKCgZESVJFQ1QQABIJCgVHUk9VUBAB');
+@$core.Deprecated('Use contactSourceDescriptor instead')
+const ContactSource$json = const {
+  '1': 'ContactSource',
+  '2': const [
+    const {'1': 'UNKNOWN', '2': 0},
+    const {'1': 'INTRODUCTION', '2': 1},
+    const {'1': 'APP1', '2': 2},
+    const {'1': 'APP2', '2': 3},
+    const {'1': 'APP3', '2': 4},
+    const {'1': 'APP4', '2': 5},
+    const {'1': 'APP5', '2': 6},
+  ],
+};
+
+/// Descriptor for `ContactSource`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List contactSourceDescriptor = $convert.base64Decode('Cg1Db250YWN0U291cmNlEgsKB1VOS05PV04QABIQCgxJTlRST0RVQ1RJT04QARIICgRBUFAxEAISCAoEQVBQMhADEggKBEFQUDMQBBIICgRBUFA0EAUSCAoEQVBQNRAG');
 @$core.Deprecated('Use contactIdDescriptor instead')
 const ContactId$json = const {
   '1': 'ContactId',
@@ -46,8 +62,10 @@ const Contact$json = const {
   '1': 'Contact',
   '2': const [
     const {'1': 'contactId', '3': 1, '4': 1, '5': 11, '6': '.model.ContactId', '10': 'contactId'},
+    const {'1': 'applicationIds', '3': 14, '4': 3, '5': 11, '6': '.model.Contact.ApplicationIdsEntry', '10': 'applicationIds'},
     const {'1': 'memberIds', '3': 2, '4': 3, '5': 9, '10': 'memberIds'},
     const {'1': 'displayName', '3': 3, '4': 1, '5': 9, '10': 'displayName'},
+    const {'1': 'source', '3': 13, '4': 1, '5': 14, '6': '.model.ContactSource', '10': 'source'},
     const {'1': 'createdTs', '3': 4, '4': 1, '5': 3, '10': 'createdTs'},
     const {'1': 'mostRecentMessageTs', '3': 5, '4': 1, '5': 3, '10': 'mostRecentMessageTs'},
     const {'1': 'mostRecentMessageDirection', '3': 6, '4': 1, '5': 14, '6': '.model.MessageDirection', '10': 'mostRecentMessageDirection'},
@@ -58,21 +76,33 @@ const Contact$json = const {
     const {'1': 'hasReceivedMessage', '3': 11, '4': 1, '5': 8, '10': 'hasReceivedMessage'},
     const {'1': 'mostRecentHelloTs', '3': 12, '4': 1, '5': 3, '10': 'mostRecentHelloTs'},
   ],
+  '3': const [Contact_ApplicationIdsEntry$json],
+};
+
+@$core.Deprecated('Use contactDescriptor instead')
+const Contact_ApplicationIdsEntry$json = const {
+  '1': 'ApplicationIdsEntry',
+  '2': const [
+    const {'1': 'key', '3': 1, '4': 1, '5': 5, '10': 'key'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+  '7': const {'7': true},
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEhwKCW1lbWJlcklkcxgCIAMoCVIJbWVtYmVySWRzEiAKC2Rpc3BsYXlOYW1lGAMgASgJUgtkaXNwbGF5TmFtZRIcCgljcmVhdGVkVHMYBCABKANSCWNyZWF0ZWRUcxIwChNtb3N0UmVjZW50TWVzc2FnZVRzGAUgASgDUhNtb3N0UmVjZW50TWVzc2FnZVRzElcKGm1vc3RSZWNlbnRNZXNzYWdlRGlyZWN0aW9uGAYgASgOMhcubW9kZWwuTWVzc2FnZURpcmVjdGlvblIabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24SNAoVbW9zdFJlY2VudE1lc3NhZ2VUZXh0GAcgASgJUhVtb3N0UmVjZW50TWVzc2FnZVRleHQSQgocbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRgIIAEoCVIcbW9zdFJlY2VudEF0dGFjaG1lbnRNaW1lVHlwZRJECh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxgJIAEoBVIdbWVzc2FnZXNEaXNhcHBlYXJBZnRlclNlY29uZHMSNgoWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxgKIAEoA1IWZmlyc3RSZWNlaXZlZE1lc3NhZ2VUcxIuChJoYXNSZWNlaXZlZE1lc3NhZ2UYCyABKAhSEmhhc1JlY2VpdmVkTWVzc2FnZRIsChFtb3N0UmVjZW50SGVsbG9UcxgMIAEoA1IRbW9zdFJlY2VudEhlbGxvVHM=');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEkoKDmFwcGxpY2F0aW9uSWRzGA4gAygLMiIubW9kZWwuQ29udGFjdC5BcHBsaWNhdGlvbklkc0VudHJ5Ug5hcHBsaWNhdGlvbklkcxIcCgltZW1iZXJJZHMYAiADKAlSCW1lbWJlcklkcxIgCgtkaXNwbGF5TmFtZRgDIAEoCVILZGlzcGxheU5hbWUSLAoGc291cmNlGA0gASgOMhQubW9kZWwuQ29udGFjdFNvdXJjZVIGc291cmNlEhwKCWNyZWF0ZWRUcxgEIAEoA1IJY3JlYXRlZFRzEjAKE21vc3RSZWNlbnRNZXNzYWdlVHMYBSABKANSE21vc3RSZWNlbnRNZXNzYWdlVHMSVwoabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24YBiABKA4yFy5tb2RlbC5NZXNzYWdlRGlyZWN0aW9uUhptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhI0ChVtb3N0UmVjZW50TWVzc2FnZVRleHQYByABKAlSFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBJCChxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlGAggASgJUhxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlEkQKHW1lc3NhZ2VzRGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAkgASgFUh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxI2ChZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzGAogASgDUhZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzEi4KEmhhc1JlY2VpdmVkTWVzc2FnZRgLIAEoCFISaGFzUmVjZWl2ZWRNZXNzYWdlEiwKEW1vc3RSZWNlbnRIZWxsb1RzGAwgASgDUhFtb3N0UmVjZW50SGVsbG9UcxpBChNBcHBsaWNhdGlvbklkc0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EhQKBXZhbHVlGAIgASgJUgV2YWx1ZToCOAE=');
 @$core.Deprecated('Use provisionalContactDescriptor instead')
 const ProvisionalContact$json = const {
   '1': 'ProvisionalContact',
   '2': const [
     const {'1': 'contactId', '3': 1, '4': 1, '5': 9, '10': 'contactId'},
     const {'1': 'expiresAt', '3': 2, '4': 1, '5': 3, '10': 'expiresAt'},
+    const {'1': 'source', '3': 3, '4': 1, '5': 14, '6': '.model.ContactSource', '10': 'source'},
   ],
 };
 
 /// Descriptor for `ProvisionalContact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List provisionalContactDescriptor = $convert.base64Decode('ChJQcm92aXNpb25hbENvbnRhY3QSHAoJY29udGFjdElkGAEgASgJUgljb250YWN0SWQSHAoJZXhwaXJlc0F0GAIgASgDUglleHBpcmVzQXQ=');
+final $typed_data.Uint8List provisionalContactDescriptor = $convert.base64Decode('ChJQcm92aXNpb25hbENvbnRhY3QSHAoJY29udGFjdElkGAEgASgJUgljb250YWN0SWQSHAoJZXhwaXJlc0F0GAIgASgDUglleHBpcmVzQXQSLAoGc291cmNlGAMgASgOMhQubW9kZWwuQ29udGFjdFNvdXJjZVIGc291cmNl');
 @$core.Deprecated('Use attachmentDescriptor instead')
 const Attachment$json = const {
   '1': 'Attachment',

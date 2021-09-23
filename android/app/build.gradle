@@ -418,9 +418,8 @@ dependencies {
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     // from https://github.com/getlantern/opus_android
     implementation(name:'opuslib-release', ext: 'aar')
-    implementation 'com.github.getlantern:secrets-android:3ac588e'
-    implementation 'com.github.getlantern:db-android:f45b5eb6f2'
-    implementation 'com.github.getlantern:messaging-android:0de9d4153b'
+    implementation 'com.github.getlantern:secrets-android:35b26fe8f8'
+    implementation 'com.github.getlantern:messaging-android:b74ad6ce06'
 }
 
 apply plugin: 'com.google.gms.google-services'
