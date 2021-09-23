@@ -2,6 +2,8 @@ import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+import '../custom_search_delegate.dart';
+
 class NewMessage extends StatefulWidget {
   @override
   _NewMessageState createState() => _NewMessageState();
@@ -26,7 +28,11 @@ class _NewMessageState extends State<NewMessage> {
         IconButton(
           icon: const Icon(Icons.search),
           tooltip: 'search'.i18n,
-          onPressed: () {},
+          onPressed: () async => await showSearch(
+            context: context,
+            query: '',
+            delegate: CustomSearchDelegate(),
+          ),
         ),
       ],
       body: model.me(

@@ -61,6 +61,8 @@ class ContactListItem extends StatelessWidget {
                             data: subTitle!,
                             styleSheet: MarkdownStyleSheet(
                               p: tsBody2,
+                              a: tsBody2.copiedWith(
+                                  decoration: TextDecoration.underline),
                               em: tsBody2.copiedWith(
                                   color: pink4, fontWeight: FontWeight.w500),
                             ),

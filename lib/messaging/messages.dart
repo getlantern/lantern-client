@@ -12,15 +12,13 @@ class Messages extends StatelessWidget {
           title: 'messages'.i18n,
           actions: [
             IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'search'.i18n,
-              onPressed: () async {
-                await showSearch(
-                  context: context,
-                  delegate: CustomSearchDelegate(),
-                );
-              },
-            ),
+                icon: const Icon(Icons.search),
+                tooltip: 'search'.i18n,
+                onPressed: () async => await showSearch(
+                      context: context,
+                      query: '',
+                      delegate: CustomSearchDelegate(searchMessages: true),
+                    )),
           ],
           body:
               // TODO: the below is just a temporary hack to make sure people have

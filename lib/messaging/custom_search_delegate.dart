@@ -1,6 +1,11 @@
 import 'messaging.dart';
+import 'package:lantern/common/common.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
+  late bool? searchMessages;
+
+  CustomSearchDelegate({this.searchMessages = false});
+
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
@@ -47,159 +52,144 @@ class CustomSearchDelegate extends SearchDelegate {
           width: constraints.maxWidth,
           height: constraints.maxHeight,
           color: white,
-          child: query.isEmpty
-              // TODO: update copy
-              ? const Center(child: Text('Empty state container'))
-              : query.length < 3
-                  // TODO: update copy
-                  ? Center(child: Text('Please enter at least 3 letters'.i18n))
-                  : FutureBuilder(
-                      future: Future.wait([
-                        model.searchContacts(query),
-                        model.searchMessages(query)
-                      ]),
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          default:
-                            if (snapshot.hasError) {
-                              // TODO: handle on UI?
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            } else {
-                              final results = snapshot.data as List;
-                              final contacts = results[0] as List<Contact>;
-                              final messages =
-                                  results[1] as List<StoredMessage>;
+          child: query.isEmpty || query.length < 3
+              ? Center(
+                  child: Text(
+                  'search_chars_min'.i18n,
+                  style: tsSubtitle1,
+                  textAlign: TextAlign.center,
+                ))
+              : FutureBuilder(
+                  future: searchMessages!
+                      ? Future.wait([
+                          model.searchContacts(query),
+                          model.searchMessages(query)
+                        ])
+                      : Future.wait([model.searchContacts(query)]),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: CircularProgressIndicator());
+                      default:
+                        if (snapshot.hasError) {
+                          showErrorDialog(context,
+                              e: snapshot.error!,
+                              s: snapshot.stackTrace!,
+                              des: 'search_error'.i18n);
+                          return Center(
+                              child: Text('search_error'.i18n,
+                                  style: tsSubtitle1,
+                                  textAlign: TextAlign.center));
+                        } else {
+                          final results = snapshot.data as List;
+                          final contacts = results[0] as List<Contact>;
+                          final messages = searchMessages!
+                              ? results[1] as List<StoredMessage>
+                              : [];
+                          final hasResults =
+                              contacts.isNotEmpty || messages.isNotEmpty;
 
-                              return (contacts.isNotEmpty ||
-                                      messages.isNotEmpty)
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 20, top: 20),
-                                          child: Text(
-                                            'Contacts (${contacts.length} results)'
+                          return (hasResults)
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 20, top: 20),
+                                      child: Text(
+                                        'Contacts (${contacts.length} results)'
+                                            .i18n
+                                            .toUpperCase(),
+                                      ),
+                                    ),
+                                    SuggestionBuilder(
+                                      suggestions: contacts,
+                                    ),
+                                    if (searchMessages!)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                start: 20, top: 20),
+                                        child: Text(
+                                            'Messages (${messages.length} results)'
                                                 .i18n
-                                                .toUpperCase(),
-                                          ),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: SuggestedContacts(
-                                            contacts: contacts,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 20, top: 20),
-                                          child: Text(
-                                              'Messages (${messages.length} results)'
-                                                  .i18n
-                                                  .toUpperCase()),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: SuggestedMessages(
-                                            model: model,
-                                            messages: messages,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  // TODO: update copy
-                                  : const Center(
-                                      child: Text('No results found sorrrry'));
-                            }
+                                                .toUpperCase()),
+                                      ),
+                                    if (searchMessages!)
+                                      SuggestionBuilder(
+                                        model: model,
+                                        suggestions: messages,
+                                      ),
+                                  ],
+                                )
+                              : Center(
+                                  child: Text('search_no_results'.i18n,
+                                      style: tsSubtitle1,
+                                      textAlign: TextAlign.center));
                         }
-                      }));
+                    }
+                  }));
     });
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: can we just do that? Need to look this up
     return buildSuggestions(context);
   }
 }
 
-class SuggestedContacts extends StatelessWidget {
-  final List<Contact> contacts;
+class SuggestionBuilder extends StatelessWidget {
+  final MessagingModel? model;
+  final List suggestions;
 
-  const SuggestedContacts({required this.contacts});
+  const SuggestionBuilder({this.model, required this.suggestions});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: contacts.length,
+        itemCount: suggestions.length,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
         physics: defaultScrollPhysics,
         itemBuilder: (context, index) {
-          var contact = contacts[index];
-          return Column(
-            children: [
-              ContactListItem(
+          var suggestion = suggestions[index];
+
+          if (suggestion is Contact) {
+            return ContactListItem(
+              contact: suggestion,
+              index: index,
+              leading: CustomAvatar(
+                  id: suggestion.contactId.id,
+                  displayName:
+                      suggestion.displayName.replaceAll(RegExp(r'\*'), '')),
+              title: suggestion.displayName,
+              onTap: () async => await context
+                  .pushRoute(Conversation(contactId: suggestion.contactId)),
+              showDivider: false,
+              useMarkdown: true,
+            );
+          }
+          if (suggestion is StoredMessage) {
+            return model!.singleContactById(context, suggestion.contactId,
+                (context, contact, child) {
+              return ContactListItem(
                 contact: contact,
                 index: index,
                 leading: CustomAvatar(
-                    id: contact.contactId.id,
-                    displayName:
-                        contact.displayName.replaceAll(RegExp(r'\*'), '')),
-                title: contact.displayName,
+                    id: suggestion.contactId.id,
+                    displayName: contact.displayName),
+                title: sanitizeContactName(contact.displayName).toString(),
+                subTitle: suggestion.text,
+                // TODO: scroll to message
                 onTap: () async => await context
-                    .pushRoute(Conversation(contactId: contact.contactId)),
+                    .pushRoute(Conversation(contactId: suggestion.contactId)),
                 showDivider: false,
                 useMarkdown: true,
-              ),
-            ],
-          );
-        });
-    ;
-  }
-}
-
-class SuggestedMessages extends StatelessWidget {
-  final MessagingModel model;
-  final List<StoredMessage> messages;
-
-  const SuggestedMessages({required this.model, required this.messages});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: messages.length,
-        physics: defaultScrollPhysics,
-        itemBuilder: (context, index) {
-          var message = messages[index];
-          return model.singleContactById(context, message.contactId,
-              (context, contact, child) {
-            return Column(
-              children: [
-                ContactListItem(
-                  contact: contact,
-                  index: index,
-                  leading: CustomAvatar(
-                      id: message.contactId.id,
-                      displayName: contact.displayName),
-                  title: sanitizeContactName(contact.displayName).toString(),
-                  subTitle: message.text,
-                  // TODO: scroll to message
-                  onTap: () async => await context
-                      .pushRoute(Conversation(contactId: message.contactId)),
-                  showDivider: false,
-                  useMarkdown: true,
-                ),
-              ],
-            );
-          });
+              );
+            });
+          }
+          return Container();
         });
   }
 }
