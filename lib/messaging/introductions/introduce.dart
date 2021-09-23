@@ -84,7 +84,7 @@ class _IntroduceState extends State<Introduce> {
                                 ),
                                 (selectedContactIds.length >= 2)
                                     ? Container(
-                                        color: grey1,
+                                        color: white,
                                         padding: const EdgeInsets.all(20.0),
                                         child: Row(
                                             mainAxisAlignment:

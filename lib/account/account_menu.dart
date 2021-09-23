@@ -32,7 +32,7 @@ class AccountMenu extends StatelessWidget {
       BuildContext context, SessionModel sessionModel, Contact me) {
     return [
       SettingsItem(
-        icon: ImagePaths.crown_monochrome,
+        icon: ImagePaths.pro_icon_black,
         title: 'upgrade_to_lantern_pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
