@@ -166,12 +166,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                         SnippetConfig(
                             highlightStart = snippetHighlight,
                             highlightEnd = snippetHighlight,
-                            numTokens = call.argument<int>("numTokens")
+                            numTokens = call.argument("numTokens")!!
                         )
                     ).map {
-                        mapOf("snippet" to it.snippet, "path" to it.path, "contact" to it.bytes)
+                        mapOf("snippet" to it.snippet, "path" to it.path, "contact" to it.value.bytes)
                     }
-
             "searchMessages" ->
                 messaging
                     .searchMessages(
@@ -179,10 +178,10 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                         SnippetConfig(
                             highlightStart = snippetHighlight,
                             highlightEnd = snippetHighlight,
-                            numTokens = call.argument<int>("numTokens")
+                            numTokens = call.argument("numTokens")!!
                         )
                     ).map {
-                        mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.bytes)
+                        mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.value.bytes)
                     }
             else -> super.doMethodCall(call, notImplemented)
         }

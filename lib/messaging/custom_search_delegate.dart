@@ -8,10 +8,16 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return ThemeData(
+    final theme = Theme.of(context);
+    return theme.copyWith(
       appBarTheme: AppBarTheme(
-        elevation: 0,
+        elevation: 1,
         color: white,
+      ),
+      textTheme: TextTheme(headline6: tsSubtitle1),
+      inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
       ),
     );
   }
@@ -61,10 +67,15 @@ class CustomSearchDelegate extends SearchDelegate {
               : FutureBuilder(
                   future: searchMessages!
                       ? Future.wait([
-                          model.searchContacts(query, {}),
-                          model.searchMessages(query, {})
+                          model.searchContacts(
+                              query, SnippetConfig('*', '*', '...', 3)),
+                          model.searchMessages(
+                              query, SnippetConfig('*', '*', '...', 3))
                         ])
-                      : Future.wait([model.searchContacts(query, {})]),
+                      : Future.wait([
+                          model.searchContacts(
+                              query, SnippetConfig('*', '*', '...', 3))
+                        ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -81,9 +92,10 @@ class CustomSearchDelegate extends SearchDelegate {
                                   textAlign: TextAlign.center));
                         } else {
                           final results = snapshot.data as List;
-                          final contacts = results[0] as List<Contact>;
+                          final contacts =
+                              results[0] as List<SearchResult<Contact>>;
                           final messages = searchMessages!
-                              ? results[1] as List<StoredMessage>
+                              ? results[1] as List<SearchResult<StoredMessage>>
                               : [];
                           final hasResults =
                               contacts.isNotEmpty || messages.isNotEmpty;
@@ -155,35 +167,36 @@ class SuggestionBuilder extends StatelessWidget {
           itemBuilder: (context, index) {
             var suggestion = suggestions[index];
 
-            if (suggestion is Contact) {
+            if (suggestion is SearchResult<Contact>) {
               return ContactListItem(
-                contact: suggestion,
+                contact: suggestion.value,
                 index: index,
                 leading: CustomAvatar(
-                    id: suggestion.contactId.id,
+                    id: suggestion.value.contactId.id,
                     displayName:
-                        suggestion.displayName.replaceAll(RegExp(r'\*'), '')),
-                title: suggestion.displayName,
-                onTap: () async => await context
-                    .pushRoute(Conversation(contactId: suggestion.contactId)),
+                        suggestion.snippet.replaceAll(RegExp(r'\*'), '')),
+                title: suggestion.value.displayName,
+                onTap: () async => await context.pushRoute(
+                    Conversation(contactId: suggestion.value.contactId)),
                 showDivider: false,
                 useMarkdown: true,
               );
             }
-            if (suggestion is StoredMessage) {
-              return model!.singleContactById(context, suggestion.contactId,
-                  (context, contact, child) {
+            if (suggestion is SearchResult<StoredMessage>) {
+              return model!
+                  .singleContactById(context, suggestion.value.contactId,
+                      (context, contact, child) {
                 return ContactListItem(
                   contact: contact,
                   index: index,
                   leading: CustomAvatar(
-                      id: suggestion.contactId.id,
+                      id: suggestion.value.contactId.id,
                       displayName: contact.displayName),
                   title: sanitizeContactName(contact.displayName).toString(),
-                  subTitle: suggestion.text,
+                  subTitle: suggestion.snippet,
                   // TODO: scroll to message
-                  onTap: () async => await context
-                      .pushRoute(Conversation(contactId: suggestion.contactId)),
+                  onTap: () async => await context.pushRoute(
+                      Conversation(contactId: suggestion.value.contactId)),
                   showDivider: false,
                   useMarkdown: true,
                 );
