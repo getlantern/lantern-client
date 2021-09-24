@@ -9,8 +9,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.copyWith(
+    return ThemeData(
       appBarTheme: AppBarTheme(
         elevation: 1,
         color: white,
@@ -68,8 +67,8 @@ class CustomSearchDelegate extends SearchDelegate {
                 ))
               : FutureBuilder(
                   future: Future.wait([
-                    model.searchContacts(query),
-                    if (searchMessages == true) model.searchMessages(query, 3)
+                    model.searchContacts(query, 40),
+                    if (searchMessages == true) model.searchMessages(query, 10)
                   ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
@@ -77,10 +76,6 @@ class CustomSearchDelegate extends SearchDelegate {
                         return const Center(child: CircularProgressIndicator());
                       default:
                         if (snapshot.hasError) {
-                          showErrorDialog(context,
-                              e: snapshot.error!,
-                              s: snapshot.stackTrace!,
-                              des: 'search_error'.i18n);
                           return Center(
                               child: Text('search_error'.i18n,
                                   style: tsSubtitle1,
@@ -177,24 +172,25 @@ class SuggestionBuilder extends StatelessWidget {
                 useMarkdown: true,
               );
             }
-            if (suggestion is StoredMessage) {
-              return model!.singleContactById(context, suggestion.contactId,
-                  (context, contact, child) {
+            if (suggestion is SearchResult<StoredMessage>) {
+              return model!
+                  .singleContactById(context, suggestion.value.contactId,
+                      (context, contact, child) {
                 return model!.contactMessages(contact, builder: (context,
                     Iterable<PathAndValue<StoredMessage>> messageRecords,
                     Widget? child) {
                   final initialScrollIndex = messageRecords.toList().indexWhere(
-                      (element) => element.value.id == suggestion.id);
+                      (element) => element.value.id == suggestion.value.id);
                   return ContactListItem(
                     contact: contact,
                     index: index,
                     leading: CustomAvatar(
-                        id: suggestion.contactId.id,
+                        id: suggestion.value.contactId.id,
                         displayName: contact.displayName),
                     title: sanitizeContactName(contact.displayName).toString(),
-                    subTitle: suggestion.text,
+                    subTitle: suggestion.snippet,
                     onTap: () async => await context.pushRoute(Conversation(
-                        contactId: suggestion.contactId,
+                        contactId: suggestion.value.contactId,
                         initialScrollIndex: initialScrollIndex)),
                     showDivider: false,
                     useMarkdown: true,

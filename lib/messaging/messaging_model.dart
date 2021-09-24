@@ -174,10 +174,11 @@ class MessagingModel extends Model {
         'unsafeToId': toId,
       });
 
-  Future<List<SearchResult<Contact>>> searchContacts(String query) async =>
+  Future<List<SearchResult<Contact>>> searchContacts(
+          String query, int? numTokens) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': query,
-        'numTokens': 64,
+        'numTokens': numTokens,
       }).then((value) {
         final results = <SearchResult<Contact>>[];
         value.forEach((element) {
