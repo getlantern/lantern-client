@@ -267,6 +267,9 @@ msgstr "All messages will disappear after %s for you and your contact."
 msgid "delete_contact_confirmation"
 msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
 
+msgid "delete"
+msgstr "Delete"
+
 msgid "conversation_title_bottomsheet"
 msgstr "Conversation Menu"
 
@@ -420,6 +423,21 @@ msgstr "New messages do not disappear."
 msgid "banner_messages_disappear"
 msgstr "Messages disappear after %s."
 
+msgid "banner_source_unknown"
+msgstr "Unknown"
+
+msgid "banner_source_qr"
+msgstr "QR Code"
+
+msgid "banner_source_id"
+msgstr "Messenger ID"
+
+msgid "banner_source_intro"
+msgstr "Introduction"
+
+msgid "message_will_disappear_at"
+msgstr "Message will disappear %s"
+
 msgid "change_display_name"
 msgstr "Change Display Name"
 
@@ -519,8 +537,14 @@ msgstr "Text Copied"
 msgid "delete_for_me"
 msgstr "Delete for me"
 
+msgid "delete_for_me_explanation"
+msgstr "This will delete the message for you only. Everyone else will still be able to see it."
+
 msgid "delete_for_everyone"
 msgstr "Delete for everyone"
+
+msgid "delete_for_everyone_explanation"
+msgstr "This will delete the message for everyone."
 
 msgid "reply"
 msgstr "Reply"

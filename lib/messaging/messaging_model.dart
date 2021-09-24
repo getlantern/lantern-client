@@ -32,20 +32,21 @@ class MessagingModel extends Model {
 
   Future<void> setMyDisplayName(String displayName) {
     return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
-      'displayName': displayName,
+      'unsafeDisplayName': displayName,
     });
   }
 
-  Future<Map> addProvisionalContact(String contactId) {
-    return methodChannel.invokeMethod(
-        'addProvisionalContact', <String, dynamic>{
-      'contactId': contactId
+  Future<Map> addProvisionalContact(String contactId, {String? source}) {
+    return methodChannel
+        .invokeMethod('addProvisionalContact', <String, dynamic>{
+      'unsafeContactId': contactId,
+      'source': source,
     }).then((value) => value as Map);
   }
 
   Future<void> deleteProvisionalContact(String contactId) {
-    return methodChannel.invokeMethod(
-        'deleteProvisionalContact', <String, dynamic>{'contactId': contactId});
+    return methodChannel.invokeMethod('deleteProvisionalContact',
+        <String, dynamic>{'unsafeContactId': contactId});
   }
 
   Future<void> sendToDirectContact(
@@ -64,26 +65,26 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> react(PathAndValue<StoredMessage> message, String reaction) {
+  Future<void> react(StoredMessage message, String reaction) {
     return methodChannel.invokeMethod('react', <String, dynamic>{
-      'msg': message.value.writeToBuffer(),
+      'msg': message.writeToBuffer(),
       'reaction': reaction
     });
   }
 
-  Future<void> markViewed(PathAndValue<StoredMessage> message) {
+  Future<void> markViewed(StoredMessage message) {
     return methodChannel.invokeMethod(
-        'markViewed', <String, dynamic>{'msg': message.value.writeToBuffer()});
+        'markViewed', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
-  Future<void> deleteLocally(PathAndValue<StoredMessage> message) {
-    return methodChannel.invokeMethod('deleteLocally',
-        <String, dynamic>{'msg': message.value.writeToBuffer()});
+  Future<void> deleteLocally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteLocally', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
-  Future<void> deleteGlobally(PathAndValue<StoredMessage> message) {
-    return methodChannel.invokeMethod('deleteGlobally',
-        <String, dynamic>{'msg': message.value.writeToBuffer()});
+  Future<void> deleteGlobally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteGlobally', <String, dynamic>{'msg': message.writeToBuffer()});
   }
 
   Future<void> setDisappearSettings(Contact contact, int seconds) {
@@ -153,12 +154,12 @@ class MessagingModel extends Model {
 
   Future<void> deleteDirectContact(String id) async =>
       methodChannel.invokeMethod('deleteDirectContact', <String, dynamic>{
-        'id': id,
+        'unsafeContactId': id,
       });
 
   Future<void> introduce(List<String> recipientIds) async =>
       methodChannel.invokeMethod('introduce', <String, dynamic>{
-        'recipientIds': recipientIds,
+        'unsafeRecipientIds': recipientIds,
       });
 
   Future<void> acceptIntroduction(String fromId, String toId) async =>

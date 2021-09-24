@@ -12,9 +12,8 @@ class Introductions extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n, style: tsBody1),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: CText('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
@@ -39,9 +38,8 @@ class Introductions extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              16.0, 16.0, 0, 4.0),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 4),
                                       child: CText(
                                           'introduced'.i18n.fill([
                                             introductor.displayName
@@ -49,7 +47,7 @@ class Introductions extends StatelessWidget {
                                           maxLines: 1,
                                           style: tsOverline),
                                     ),
-                                    Divider(height: 1.0, color: grey3),
+                                    const CDivider(),
                                     ...introductionsPerIntroductor.map(
                                         // need to subscribe to StoredMessage via model.message() to receive updates about status
                                         (introMessage) => model.message(
@@ -90,19 +88,14 @@ class Introductions extends StatelessWidget {
                                                       children: [
                                                         TextButton(
                                                           onPressed: () =>
-                                                              showAlertDialog(
+                                                              showConfirmationDialog(
                                                                   context:
                                                                       context,
-                                                                  title: CText(
+                                                                  title:
                                                                       'introductions_reject_title'
                                                                           .i18n,
-                                                                      style:
-                                                                          tsBody3),
-                                                                  content: CTextWrap(
-                                                                      'introductions_reject_content'
-                                                                          .i18n,
-                                                                      style:
-                                                                          tsBody3),
+                                                                  explanation:
+                                                                      'introductions_reject_content',
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'
@@ -183,7 +176,7 @@ class Introductions extends StatelessWidget {
                                                                     children: [
                                                                       Expanded(
                                                                         child:
-                                                                            CTextWrap(
+                                                                            CText(
                                                                           'introduction_approved'
                                                                               .i18n
                                                                               .fill([
