@@ -30,7 +30,9 @@ class CustomSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: const CAssetImage(path: ImagePaths.cancel),
+        icon: CAssetImage(
+            path: ImagePaths.cancel,
+            color: query.isNotEmpty ? black : transparent),
         onPressed: () {
           query.isEmpty ? close(context, null) : query = '';
         },
