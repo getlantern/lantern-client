@@ -165,14 +165,14 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     .searchContacts(
                         call.argument<String>("query")!!,
                         call.argument<SnippetConfig>("snippetConfig")!!,
-                        )
+                        ).map { it.value.toByteArray() }
 
             "searchMessages" ->
                 messaging
                     .searchMessages(
                         call.argument<String>("query")!!, 
                         call.argument<SnippetConfig>("snippetConfig")!!,
-                    )
+                    ).map { it.value.toByteArray() }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
