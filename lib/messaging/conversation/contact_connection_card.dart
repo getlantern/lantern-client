@@ -122,12 +122,10 @@ class ContactConnectionCard extends StatelessWidget {
           BottomModalItem(
               leading: const CAssetImage(path: ImagePaths.cancel),
               label: 'reject'.i18n,
-              onTap: () => showAlertDialog(
+              onTap: () => showConfirmationDialog(
                   context: context,
-                  title:
-                      CText('introductions_reject_title'.i18n, style: tsBody3),
-                  content: CTextWrap('introductions_reject_content'.i18n,
-                      style: tsBody1),
+                  title: 'introductions_reject_title'.i18n,
+                  explanation: 'introductions_reject_content'.i18n,
                   dismissText: 'cancel'.i18n,
                   agreeText: 'reject'.i18n,
                   agreeAction: () async {
