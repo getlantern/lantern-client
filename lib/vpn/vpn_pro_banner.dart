@@ -45,7 +45,7 @@ class _ProBannerState extends State<ProBanner> {
                     const SizedBox(
                       height: 4,
                     ),
-                    CTextWrap(
+                    CText(
                       'Go Pro Description'.i18n,
                       style: tsBody2,
                     ),

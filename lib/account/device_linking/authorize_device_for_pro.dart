@@ -52,7 +52,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsetsDirectional.only(top: 8),
-            child: CTextWrap(
+            child: CText(
               'Requires access to the email you used to buy Lantern Pro'.i18n,
               style: tsBody2,
               textAlign: TextAlign.center,
