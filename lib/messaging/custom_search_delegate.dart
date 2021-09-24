@@ -15,11 +15,10 @@ class CustomSearchDelegate extends SearchDelegate {
         elevation: 1,
         color: white,
       ),
-      textTheme: TextTheme(headline6: tsSubtitle1),
-      inputDecorationTheme: theme.inputDecorationTheme.copyWith(
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-      ),
+      inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+          ),
     );
   }
 
@@ -100,29 +99,29 @@ class CustomSearchDelegate extends SearchDelegate {
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          top: 20),
-                                      child: Text(
-                                        'Contacts (${contacts.length} results)'
-                                            .i18n
-                                            .toUpperCase(),
+                                    if (contacts.isNotEmpty)
+                                      Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  top: 20),
+                                          child: Text('search_contacts'
+                                              .i18n
+                                              .fill([
+                                            contacts.length
+                                          ]).toUpperCase())),
+                                    if (contacts.isNotEmpty)
+                                      SuggestionBuilder(
+                                        suggestions: contacts,
                                       ),
-                                    ),
-                                    SuggestionBuilder(
-                                      suggestions: contacts,
-                                    ),
-                                    if (searchMessages!)
+                                    if (searchMessages! && messages.isNotEmpty)
                                       Padding(
                                         padding:
                                             const EdgeInsetsDirectional.only(
                                                 top: 20),
-                                        child: Text(
-                                            'Messages (${messages.length} results)'
-                                                .i18n
-                                                .toUpperCase()),
+                                        child: Text('search_messages'.i18n.fill(
+                                            [messages.length]).toUpperCase()),
                                       ),
-                                    if (searchMessages!)
+                                    if (searchMessages! && messages.isNotEmpty)
                                       SuggestionBuilder(
                                         model: model,
                                         suggestions: messages,

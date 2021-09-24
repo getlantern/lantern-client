@@ -560,3 +560,9 @@ msgstr "Sorry, we couldn’t find anything matching those words"
 
 msgid "search_error"
 msgstr "Sorry, there was an error retrieving the search results"
+
+msgid "search_contacts"
+msgstr "Contacts (%s)"
+
+msgid "search_messages"
+msgstr "Messages (%s)"
