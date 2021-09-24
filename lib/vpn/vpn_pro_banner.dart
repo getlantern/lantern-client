@@ -29,7 +29,7 @@ class _ProBannerState extends State<ProBanner> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const CAssetImage(
-              path: ImagePaths.crown,
+              path: ImagePaths.pro_icon_yellow,
               size: 32,
             ),
             Expanded(
@@ -45,7 +45,7 @@ class _ProBannerState extends State<ProBanner> {
                     const SizedBox(
                       height: 4,
                     ),
-                    CTextWrap(
+                    CText(
                       'Go Pro Description'.i18n,
                       style: tsBody2,
                     ),

@@ -89,6 +89,8 @@ class Contact extends $pb.GeneratedMessage {
     ..aInt64(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'firstReceivedMessageTs', protoName: 'firstReceivedMessageTs')
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasReceivedMessage', protoName: 'hasReceivedMessage')
     ..aInt64(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentHelloTs', protoName: 'mostRecentHelloTs')
+    ..e<ContactSource>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ContactSource.UNKNOWN, valueOf: ContactSource.valueOf, enumValues: ContactSource.values)
+    ..m<$core.int, $core.String>(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationIds', protoName: 'applicationIds', entryClassName: 'Contact.ApplicationIdsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
@@ -106,6 +108,8 @@ class Contact extends $pb.GeneratedMessage {
     $fixnum.Int64? firstReceivedMessageTs,
     $core.bool? hasReceivedMessage,
     $fixnum.Int64? mostRecentHelloTs,
+    ContactSource? source,
+    $core.Map<$core.int, $core.String>? applicationIds,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -143,6 +147,12 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (mostRecentHelloTs != null) {
       _result.mostRecentHelloTs = mostRecentHelloTs;
+    }
+    if (source != null) {
+      _result.source = source;
+    }
+    if (applicationIds != null) {
+      _result.applicationIds.addAll(applicationIds);
     }
     return _result;
   }
@@ -270,12 +280,25 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasMostRecentHelloTs() => $_has(11);
   @$pb.TagNumber(12)
   void clearMostRecentHelloTs() => clearField(12);
+
+  @$pb.TagNumber(13)
+  ContactSource get source => $_getN(12);
+  @$pb.TagNumber(13)
+  set source(ContactSource v) { setField(13, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasSource() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearSource() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.Map<$core.int, $core.String> get applicationIds => $_getMap(13);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ProvisionalContact', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId')
     ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'expiresAt', protoName: 'expiresAt')
+    ..e<ContactSource>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ContactSource.UNKNOWN, valueOf: ContactSource.valueOf, enumValues: ContactSource.values)
     ..hasRequiredFields = false
   ;
 
@@ -283,6 +306,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
   factory ProvisionalContact({
     $core.String? contactId,
     $fixnum.Int64? expiresAt,
+    ContactSource? source,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -290,6 +314,9 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     }
     if (expiresAt != null) {
       _result.expiresAt = expiresAt;
+    }
+    if (source != null) {
+      _result.source = source;
     }
     return _result;
   }
@@ -331,6 +358,15 @@ class ProvisionalContact extends $pb.GeneratedMessage {
   $core.bool hasExpiresAt() => $_has(1);
   @$pb.TagNumber(2)
   void clearExpiresAt() => clearField(2);
+
+  @$pb.TagNumber(3)
+  ContactSource get source => $_getN(2);
+  @$pb.TagNumber(3)
+  set source(ContactSource v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasSource() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSource() => clearField(3);
 }
 
 class Attachment extends $pb.GeneratedMessage {

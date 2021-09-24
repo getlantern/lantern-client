@@ -12,6 +12,18 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var source = 'banner_source_unknown'.i18n;
+    switch (contact.source) {
+      case ContactSource.APP1:
+        source = 'banner_source_qr'.i18n;
+        break;
+      case ContactSource.APP2:
+        source = 'banner_source_id'.i18n;
+        break;
+      case ContactSource.INTRODUCTION:
+        source = 'banner_source_intro'.i18n;
+        break;
+    }
     return ListTile(
       dense: true,
       minLeadingWidth: 18,
@@ -20,16 +32,25 @@ class ConversationSticker extends StatelessWidget {
         child:
             !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
       ),
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child:
-            !isPendingIntroduction ? _fullyAddedText() : _partiallyAddedText(),
+      title: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: !isPendingIntroduction
+                  ? _fullyAddedText()
+                  : _partiallyAddedText()),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            //TODO: style this per designs
+            child: CText(source, style: tsBody2.copiedWith(color: grey5)),
+          ),
+        ],
       ),
     );
   }
 
-  CTextWrap _partiallyAddedText() {
-    return CTextWrap('banner_intro_waiting'.i18n.fill([contact.displayName]),
+  CText _partiallyAddedText() {
+    return CText('banner_intro_waiting'.i18n.fill([contact.displayName]),
         style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
   }
 
@@ -37,15 +58,15 @@ class ConversationSticker extends StatelessWidget {
     return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
   }
 
-  CTextWrap _fullyAddedText() {
+  CText _fullyAddedText() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? CTextWrap(
+        ? CText(
             'banner_messages_disappear'.i18n.fill([
               contact.messagesDisappearAfterSeconds
                   .humanizeSeconds(longForm: true)
             ]),
             style: tsBody2.copiedWith(color: grey5))
-        : CTextWrap('banner_messages_persist'.i18n,
+        : CText('banner_messages_persist'.i18n,
             style: tsBody2.copiedWith(color: grey5));
   }
 

@@ -8,12 +8,12 @@ import 'package:lantern/messaging/messaging.dart';
 
 class ReplySnippet extends StatelessWidget {
   final bool outbound;
-  final StoredMessage msg;
+  final StoredMessage message;
   final Contact contact;
 
   const ReplySnippet(
     this.outbound,
-    this.msg,
+    this.message,
     this.contact,
   ) : super();
 
@@ -23,7 +23,7 @@ class ReplySnippet extends StatelessWidget {
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
       final quotedMessage = messageRecords
-          .firstWhereOrNull((element) => element.value.id == msg.replyToId);
+          .firstWhereOrNull((element) => element.value.id == message.replyToId);
       final isNotNullOrDeleted =
           (quotedMessage != null && quotedMessage.value.remotelyDeletedAt == 0);
       final isTextResponse = quotedMessage?.value.attachments.isEmpty ?? false;
@@ -53,7 +53,7 @@ class ReplySnippet extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ReplySnippetHeader(msg: msg, contact: contact),
+                      ReplySnippetHeader(message: message, contact: contact),
                       if (isNotNullOrDeleted && isTextResponse)
                         ReplySnippetText(text: quotedMessage!.value.text),
                       if (isNotNullOrDeleted && !isTextResponse)
