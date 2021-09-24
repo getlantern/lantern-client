@@ -61,10 +61,10 @@ class CustomSearchDelegate extends SearchDelegate {
               : FutureBuilder(
                   future: searchMessages!
                       ? Future.wait([
-                          model.searchContacts(query),
-                          model.searchMessages(query)
+                          model.searchContacts(query, {}),
+                          model.searchMessages(query, {})
                         ])
-                      : Future.wait([model.searchContacts(query)]),
+                      : Future.wait([model.searchContacts(query, {})]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
