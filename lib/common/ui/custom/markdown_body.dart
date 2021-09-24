@@ -27,7 +27,7 @@ class CMarkdownBody extends MarkdownWidget {
           textAlign: richText.textAlign,
           textDirection: richText.textDirection,
           softWrap: richText.softWrap,
-          overflow: TextOverflow.clip,
+          overflow: TextOverflow.ellipsis,
           textScaleFactor: richText.textScaleFactor,
           maxLines: 1,
           locale: richText.locale);
