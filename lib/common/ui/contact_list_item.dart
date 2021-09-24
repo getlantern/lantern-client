@@ -1,3 +1,4 @@
+import 'package:lantern/common/ui/custom/markdown_body.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -57,7 +58,7 @@ class ContactListItem extends StatelessWidget {
                         ? CText(subTitle!,
                             maxLines: 1,
                             style: tsBody2.copiedWith(color: grey5))
-                        : MarkdownBody(
+                        : CMarkdownBody(
                             data: subTitle!,
                             styleSheet: MarkdownStyleSheet(
                               p: tsBody2,
