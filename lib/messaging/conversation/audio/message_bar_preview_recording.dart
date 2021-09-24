@@ -31,11 +31,15 @@ class MessageBarPreviewRecording extends StatelessWidget {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.delete, color: Colors.black),
+          icon: const CAssetImage(path: ImagePaths.delete),
           onPressed: onCancelRecording,
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: VerticalDivider(thickness: 1, width: 1, color: grey3),
+        ),
         IconButton(
-          icon: Icon(Icons.send, color: pink4),
+          icon: const CAssetImage(path: ImagePaths.send_rounded),
           onPressed: onSend,
         ),
       ],

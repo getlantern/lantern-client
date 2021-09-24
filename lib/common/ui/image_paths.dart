@@ -23,6 +23,7 @@ class ImagePaths {
 
   // Messaging
   static const add = 'assets/images/add.svg';
+  static const add_circle = 'assets/images/add_circle.svg';
   static const people = 'assets/images/people.svg';
   static const clock = 'assets/images/clock.svg';
   static const phone = 'assets/images/phone.svg';
@@ -31,6 +32,10 @@ class ImagePaths {
   static const hangup = 'assets/images/hangup.svg';
   static const reply = 'assets/images/reply.svg';
   static const check_green_large = 'assets/images/check_green_large.svg';
+  static const send_rounded = 'assets/images/send_rounded.svg';
+  static const play_circle_filled = 'assets/images/play_circle_filled.svg';
+  static const pause_circle_filled = 'assets/images/pause_circle_filled.svg';
+  static const mic = 'assets/images/mic.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

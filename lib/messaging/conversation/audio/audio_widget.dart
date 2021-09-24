@@ -256,10 +256,9 @@ class AudioWidget extends StatelessWidget {
             diameter: height,
             padding: 0,
             backgroundColor: transparent,
-            icon: Icon(
-              Icons.pause,
+            icon: CAssetImage(
+              path: ImagePaths.pause_circle_filled,
               color: initialColor,
-              size: height,
             ),
             onPressed: () {
               if (value.isPlaying) controller.pause();
@@ -268,10 +267,9 @@ class AudioWidget extends StatelessWidget {
         : RoundButton(
             diameter: height,
             backgroundColor: initialColor,
-            icon: Icon(
-              Icons.play_arrow,
+            icon: CAssetImage(
+              path: ImagePaths.play_circle_filled,
               color: progressColor,
-              size: 16,
             ),
             onPressed: () async {
               await controller.play();
