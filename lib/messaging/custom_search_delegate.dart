@@ -67,8 +67,8 @@ class CustomSearchDelegate extends SearchDelegate {
                 ))
               : FutureBuilder(
                   future: Future.wait([
-                    model.searchContacts(query, 40),
-                    if (searchMessages == true) model.searchMessages(query, 10)
+                    model.searchContacts(query, 10),
+                    if (searchMessages == true) model.searchMessages(query, 50)
                   ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
