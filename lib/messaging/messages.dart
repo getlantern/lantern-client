@@ -87,9 +87,8 @@ class Messages extends StatelessWidget {
                                           id: contact.value.contactId.id,
                                           displayName:
                                               contact.value.displayName),
-                                      title: sanitizeContactName(
-                                          contact.value.displayName),
-                                      subTitle:
+                                      title: contact.value.displayName,
+                                      subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
