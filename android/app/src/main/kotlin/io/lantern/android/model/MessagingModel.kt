@@ -9,6 +9,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.messaging.*
+import io.lantern.db.SnippetConfig
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
+import jdk.jshell.Snippet
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
@@ -160,12 +162,17 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             }
             "searchContacts" ->
                 messaging
-                    .searchContacts(call.argument<String>("query")!!)
-                    .map { it.value.toByteArray() }
+                    .searchContacts(
+                        call.argument<String>("query")!!,
+                        call.argument<SnippetConfig>("snippetConfig")!!,
+                        )
+
             "searchMessages" ->
                 messaging
-                    .searchMessages(call.argument<String>("query")!!)
-                    .map { it.value.toByteArray() }
+                    .searchMessages(
+                        call.argument<String>("query")!!, 
+                        call.argument<SnippetConfig>("snippetConfig")!!,
+                    )
             else -> super.doMethodCall(call, notImplemented)
         }
     }
