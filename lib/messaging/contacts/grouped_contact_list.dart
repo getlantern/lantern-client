@@ -30,7 +30,7 @@ ScrollablePositionedList groupedContactListGenerator({
               ),
             ],
           ),
-          Divider(height: 1.0, color: grey3),
+          const CDivider(),
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map((contact) => ContactListItem(
                   contact: contact.value,

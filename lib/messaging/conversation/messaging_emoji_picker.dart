@@ -1,11 +1,11 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as _EmojiPicker;
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as ep;
 import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 
 class MessagingEmojiPicker extends StatelessWidget {
   final double height;
   final String emptySuggestions;
-  final Function(_EmojiPicker.Category, _EmojiPicker.Emoji) onEmojiSelected;
+  final Function(ep.Category, ep.Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
   const MessagingEmojiPicker({
@@ -22,12 +22,12 @@ class MessagingEmojiPicker extends StatelessWidget {
       height: height,
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        return _EmojiPicker.EmojiPicker(
+        return ep.EmojiPicker(
           key: key,
           onBackspacePressed: onBackspacePressed,
           onEmojiSelected: onEmojiSelected,
-          config: _EmojiPicker.Config(
-            initCategory: _EmojiPicker.Category.SMILEYS,
+          config: ep.Config(
+            initCategory: ep.Category.SMILEYS,
             columns: constraints.maxWidth ~/ 40.0,
             iconColor: grey5,
             iconColorSelected: black,

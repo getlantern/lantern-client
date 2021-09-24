@@ -35,7 +35,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
           onPressed: onCancelRecording,
         ),
         IconButton(
-          icon: const Icon(Icons.send, color: Color.fromRGBO(219, 10, 91, 1.0)),
+          icon: Icon(Icons.send, color: pink4),
           onPressed: onSend,
         ),
       ],

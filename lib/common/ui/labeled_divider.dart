@@ -1,12 +1,12 @@
 import 'package:lantern/common/common.dart';
 
-class CVerticalDivider extends StatelessWidget {
+class LabeledDivider extends StatelessWidget {
   late final String? label;
   late final CTextStyle? labelStyle;
   late final EdgeInsetsGeometry? padding;
   late final double height;
 
-  CVerticalDivider(
+  LabeledDivider(
       {Key? key, this.label, this.labelStyle, this.padding, this.height = 20})
       : super(key: key);
 

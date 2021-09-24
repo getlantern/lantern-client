@@ -57,12 +57,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   final addProvisionalContactOnce = once<Future<void>>();
 
   Future<void> addProvisionalContact(
-      MessagingModel model, String contactId) async {
+      MessagingModel model, String contactId, String source) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(contactId);
+    var result = await model.addProvisionalContact(contactId, source: source);
 
     contactNotifier = model.contactNotifier(contactId);
     listener = () async {
@@ -120,7 +120,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       try {
         await addProvisionalContactOnce(() {
           contactIdController.text = scanData.code;
-          return addProvisionalContact(model, scanData.code);
+          return addProvisionalContact(model, scanData.code, 'qr');
         });
       } catch (e, s) {
         setState(() {
@@ -138,7 +138,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     if (_formKey.currentState!.validate()) {
       await addProvisionalContactOnce(() {
         return addProvisionalContact(
-            model, contactIdController.text.replaceAll('\-', ''));
+            model, contactIdController.text.replaceAll('\-', ''), 'id');
       });
     }
   }
@@ -180,8 +180,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       topColor: grey5,
       title: Center(
         child: CText('qr_scanner'.i18n,
-            style: tsHeading2.copiedWith(
-                fontWeight: FontWeight.w500, color: white)),
+            style: tsHeading3.copiedWith(color: white)),
       ),
       onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
@@ -352,9 +351,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         direction: Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CText('qr_add_via_id'.i18n,
-              style: tsHeading2.copiedWith(
-                  fontWeight: FontWeight.w500, color: black)),
+          CText('qr_add_via_id'.i18n, style: tsHeading3),
         ],
       ),
       backButton: const Icon(Icons.arrow_back),
@@ -568,7 +565,7 @@ class _renderWaitingUI extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsetsDirectional.only(top: 16.0),
-          child: CAssetImage(path: ImagePaths.check_green, size: 40),
+          child: CAssetImage(path: ImagePaths.check_green_large, size: 40),
         ),
         if (!proceedWithoutProvisionals)
           Padding(
