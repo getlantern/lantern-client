@@ -373,7 +373,7 @@ class ConversationState extends State<Conversation>
                 Container(
                   color: isRecording ? grey2 : white,
                   width: MediaQuery.of(context).size.width,
-                  height: 57,
+                  height: messageBarHeight,
                   child: buildMessageBar(),
                 ),
                 Offstage(
@@ -582,7 +582,7 @@ class ConversationState extends State<Conversation>
       alignment: Alignment.bottomRight,
       children: [
         CListTile(
-          height: 57,
+          height: messageBarHeight,
           endPadding: 48,
           showDivider: false,
           leading: isRecording

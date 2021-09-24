@@ -81,8 +81,8 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         scale: scale,
         child: Container(
           alignment: Alignment.bottomRight,
-          height: 57,
-          width: 57,
+          height: messageBarHeight,
+          width: messageBarHeight,
           decoration: BoxDecoration(
             color: widget.isRecording ? indicatorRed : transparent,
             borderRadius:
