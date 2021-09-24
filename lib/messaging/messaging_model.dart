@@ -174,22 +174,22 @@ class MessagingModel extends Model {
         'unsafeToId': toId,
       });
 
-  Future<List<Contact>> searchContacts(
+  Future<List<SearchResult<Contact>>> searchContacts(
           String query, SnippetConfig snippetConfig) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': query,
         'snippetConfig': snippetConfig,
-      }).then((value) => (value as List)
-          .map((serialized) => Contact.fromBuffer(serialized))
+      }).then((value) => (value)
+          .map((serialized) => Contact.fromBuffer(serialized.value))
           .toList());
 
-  Future<List<StoredMessage>> searchMessages(
+  Future<List<SearchResult<StoredMessage>>> searchMessages(
           String query, SnippetConfig snippetConfig) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
         'query': query,
         'snippetConfig': snippetConfig,
-      }).then((value) => (value as List)
-          .map((serialized) => StoredMessage.fromBuffer(serialized))
+      }).then((value) => (value)
+          .map((serialized) => StoredMessage.fromBuffer(serialized.value))
           .toList());
 
   /*
