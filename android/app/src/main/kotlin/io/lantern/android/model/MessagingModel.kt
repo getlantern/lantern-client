@@ -8,8 +8,8 @@ import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.messaging.*
 import io.lantern.db.SnippetConfig
+import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
@@ -17,7 +17,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
-import jdk.jshell.Snippet
 
 class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
@@ -164,15 +163,27 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 messaging
                     .searchContacts(
                         call.argument<String>("query")!!,
-                        call.argument<SnippetConfig>("snippetConfig")!!,
-                        ).map { it.value.toByteArray() }
+                        SnippetConfig(
+                            highlightStart = snippetHighlight,
+                            highlightEnd = snippetHighlight,
+                            numTokens = call.argument<int>("numTokens")
+                        )
+                    ).map {
+                        mapOf("snippet" to it.snippet, "path" to it.path, "contact" to it.bytes)
+                    }
 
             "searchMessages" ->
                 messaging
                     .searchMessages(
-                        call.argument<String>("query")!!, 
-                        call.argument<SnippetConfig>("snippetConfig")!!,
-                    ).map { it.value.toByteArray() }
+                        call.argument<String>("query")!!,
+                        SnippetConfig(
+                            highlightStart = snippetHighlight,
+                            highlightEnd = snippetHighlight,
+                            numTokens = call.argument<int>("numTokens")
+                        )
+                    ).map {
+                        mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.bytes)
+                    }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -232,5 +243,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     companion object {
         var currentConversationContact = ""
+
+        val snippetHighlight = "**"
     }
 }
