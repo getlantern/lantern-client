@@ -21,7 +21,7 @@ class CustomAvatar extends StatelessWidget {
 
     return CircleAvatar(
       backgroundColor: customColor ?? getAvatarColor(hue: hue),
-      child: CText(displayName ?? ''.getInitials().toUpperCase(),
+      child: CText(displayName.toString().getInitials().toUpperCase(),
           style: tsBody2.copiedWith(color: white)),
     );
   }
