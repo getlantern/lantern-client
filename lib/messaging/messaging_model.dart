@@ -175,19 +175,20 @@ class MessagingModel extends Model {
       });
 
   Future<List<SearchResult<Contact>>> searchContacts(
-          String query, SnippetConfig snippetConfig) async =>
+          String query, int numTokens) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': query,
-        'snippetConfig': snippetConfig,
+        'numTokens': numTokens,
       }).then((value) => (value)
-          .map((serialized) => Contact.fromBuffer(serialized.value))
+          .map((result) => SearchResult<Contact>(result['path'],
+              Contact.fromBuffer(result['contact']), result['snippet']))
           .toList());
 
   Future<List<SearchResult<StoredMessage>>> searchMessages(
-          String query, SnippetConfig snippetConfig) async =>
+          String query, int numTokens) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
         'query': query,
-        'snippetConfig': snippetConfig,
+        'numTokens': numTokens,
       }).then((value) => (value)
           .map((serialized) => StoredMessage.fromBuffer(serialized.value))
           .toList());

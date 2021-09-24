@@ -147,13 +147,3 @@ class SearchResult<T> {
 
   SearchResult(this.path, this.value, this.snippet);
 }
-
-class SnippetConfig<T> {
-  String highlightStart;
-  String hightlightEnd;
-  String ellipses;
-  int numTokens;
-
-  SnippetConfig(
-      this.highlightStart, this.hightlightEnd, this.ellipses, this.numTokens);
-}
