@@ -34,7 +34,7 @@ abstract class Model {
       'fullTextSearch': fullTextSearch,
       'reverseSort': reverseSort,
     });
-    var result = <T>[];
+    final result = <T>[];
     if (deserialize != null) {
       intermediate
           .forEach((element) => result.add(deserialize(element as Uint8List)));

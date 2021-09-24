@@ -174,24 +174,34 @@ class MessagingModel extends Model {
         'unsafeToId': toId,
       });
 
-  Future<List<SearchResult<Contact>>> searchContacts(
-          String query, int numTokens) async =>
+  Future<List<SearchResult<Contact>>> searchContacts(String query) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': query,
-        'numTokens': numTokens,
-      }).then((value) => (value)
-          .map((result) => SearchResult<Contact>(result['path'],
-              Contact.fromBuffer(result['contact']), result['snippet']))
-          .toList());
+        'numTokens': 64,
+      }).then((value) {
+        final results = <SearchResult<Contact>>[];
+        value.forEach((element) {
+          final result = SearchResult<Contact>(element['path'],
+              Contact.fromBuffer(element['contact']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
 
   Future<List<SearchResult<StoredMessage>>> searchMessages(
-          String query, int numTokens) async =>
+          String query, int? numTokens) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
         'query': query,
         'numTokens': numTokens,
-      }).then((value) => (value)
-          .map((serialized) => StoredMessage.fromBuffer(serialized.value))
-          .toList());
+      }).then((value) {
+        final results = <SearchResult<StoredMessage>>[];
+        value.forEach((element) {
+          final result = SearchResult<StoredMessage>(element['path'],
+              StoredMessage.fromBuffer(element['message']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
 
   /*
   Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to

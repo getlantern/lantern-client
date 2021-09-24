@@ -1,5 +1,6 @@
-import 'messaging.dart';
 import 'package:lantern/common/common.dart';
+
+import 'messaging.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   late bool? searchMessages;
@@ -66,7 +67,7 @@ class CustomSearchDelegate extends SearchDelegate {
                 ))
               : FutureBuilder(
                   future: Future.wait([
-                    model.searchContacts(query, 3),
+                    model.searchContacts(query),
                     if (searchMessages == true) model.searchMessages(query, 3)
                   ]),
                   builder: (context, snapshot) {
@@ -145,6 +146,7 @@ class CustomSearchDelegate extends SearchDelegate {
 class SuggestionBuilder extends StatelessWidget {
   final MessagingModel? model;
   final List suggestions;
+
   const SuggestionBuilder({this.model, required this.suggestions});
 
   @override
@@ -166,9 +168,8 @@ class SuggestionBuilder extends StatelessWidget {
                 index: index,
                 leading: CustomAvatar(
                     id: suggestion.value.contactId.id,
-                    displayName:
-                        suggestion.snippet.replaceAll(RegExp(r'\*'), '')),
-                title: suggestion.value.displayName,
+                    displayName: suggestion.value.displayName),
+                title: suggestion.snippet,
                 onTap: () async => await context.pushRoute(
                     Conversation(contactId: suggestion.value.contactId)),
                 showDivider: false,
