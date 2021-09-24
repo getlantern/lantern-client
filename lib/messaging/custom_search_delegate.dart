@@ -176,24 +176,29 @@ class SuggestionBuilder extends StatelessWidget {
                 useMarkdown: true,
               );
             }
-            if (suggestion is SearchResult<StoredMessage>) {
-              return model!
-                  .singleContactById(context, suggestion.value.contactId,
-                      (context, contact, child) {
-                return ContactListItem(
-                  contact: contact,
-                  index: index,
-                  leading: CustomAvatar(
-                      id: suggestion.value.contactId.id,
-                      displayName: contact.displayName),
-                  title: sanitizeContactName(contact.displayName).toString(),
-                  subTitle: suggestion.snippet,
-                  // TODO: scroll to message
-                  onTap: () async => await context.pushRoute(
-                      Conversation(contactId: suggestion.value.contactId)),
-                  showDivider: false,
-                  useMarkdown: true,
-                );
+            if (suggestion is StoredMessage) {
+              return model!.singleContactById(context, suggestion.contactId,
+                  (context, contact, child) {
+                return model!.contactMessages(contact, builder: (context,
+                    Iterable<PathAndValue<StoredMessage>> messageRecords,
+                    Widget? child) {
+                  final initialScrollIndex = messageRecords.toList().indexWhere(
+                      (element) => element.value.id == suggestion.id);
+                  return ContactListItem(
+                    contact: contact,
+                    index: index,
+                    leading: CustomAvatar(
+                        id: suggestion.contactId.id,
+                        displayName: contact.displayName),
+                    title: sanitizeContactName(contact.displayName).toString(),
+                    subTitle: suggestion.text,
+                    onTap: () async => await context.pushRoute(Conversation(
+                        contactId: suggestion.contactId,
+                        initialScrollIndex: initialScrollIndex)),
+                    showDivider: false,
+                    useMarkdown: true,
+                  );
+                });
               });
             }
             return Container();
