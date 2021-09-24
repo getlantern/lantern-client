@@ -62,9 +62,8 @@ class Introductions extends StatelessWidget {
                                                 ? ContactListItem(
                                                     contact: introductor,
                                                     index: index,
-                                                    title: sanitizeContactName(
-                                                        value.introduction
-                                                            .displayName),
+                                                    title: value.introduction
+                                                        .displayName,
                                                     leading: CBadge(
                                                       showBadge: true,
                                                       top: 25,

@@ -93,8 +93,7 @@ class Messages extends StatelessWidget {
                                           id: contact.value.contactId.id,
                                           displayName:
                                               contact.value.displayName),
-                                      title: sanitizeContactName(
-                                          contact.value.displayName),
+                                      title: contact.value.displayName,
                                       subtitle: CText(
                                           "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
                                           style:

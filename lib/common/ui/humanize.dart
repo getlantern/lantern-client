@@ -33,7 +33,7 @@ extension Humanize on int {
               ? ' week${(this ~/ 604800) > 1 ? 's' : ''}'
               : 'w'); // TODO: add i18n
     }
-    // months or  years
+    // months or years
     return (longForm
         ? '${this ~/ 604800} week${(this ~/ 604800) > 1 ? 's' : ''}'
         : '${this ~/ 86400}d'); // TODO: add i18n
