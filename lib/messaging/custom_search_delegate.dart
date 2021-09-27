@@ -68,9 +68,8 @@ class CustomSearchDelegate extends SearchDelegate {
               // TODO (maybe) - consider ValueListenableBuilder when/if we display thumbnails
               : FutureBuilder(
                   future: Future.wait([
-                    model.searchContacts('$query', 10),
-                    if (searchMessages == true)
-                      model.searchMessages('$query', 10)
+                    model.searchContacts(query, 10),
+                    if (searchMessages == true) model.searchMessages(query, 10)
                   ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
@@ -95,6 +94,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           return (hasResults)
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     if (contacts.isNotEmpty)
                                       Padding(
@@ -150,7 +150,7 @@ class SuggestionBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: suggestions.isNotEmpty ? 1 : 0,
+      flex: 0,
       child: ListView.builder(
           itemCount: suggestions.length,
           scrollDirection: Axis.vertical,
