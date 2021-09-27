@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
@@ -13,6 +14,7 @@ import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'call_action.dart';
+import 'date_marker_bubble.dart';
 import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
@@ -27,6 +29,8 @@ class Conversation extends StatefulWidget {
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
+  static final dayFormat = DateFormat.yMMMMd();
+
   late MessagingModel model;
   bool reactingWithEmoji = false;
   bool hasPermission = false;
@@ -442,64 +446,112 @@ class ConversationState extends State<Conversation>
 
   Widget buildList(Contact contact) {
     return model.contactMessages(contact, builder: (context,
-        Iterable<PathAndValue<StoredMessage>> messageRecords, Widget? child) {
-      // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
-      messageCount = messageRecords.length;
-      if (messageRecords.isEmpty) {
+        Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
+        Widget? child) {
+      // Build list that includes original message records as well as date
+      // separators.
+      var listItems = <Object>[];
+      String? priorDate;
+      originalMessageRecords.forEach((messageRecord) {
+        final date = dayFormat.format(DateTime.fromMillisecondsSinceEpoch(
+            messageRecord.value.ts.toInt()));
+        if (priorDate != null && date != priorDate) {
+          listItems.add(date);
+        }
+        priorDate = date;
+        listItems.add(messageRecord);
+      });
+
+      // render list
+      messageCount = listItems.length;
+      if (listItems.isEmpty) {
         return Container();
       }
+
+      // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       return ScrollablePositionedList.builder(
         itemScrollController: scrollController,
         initialScrollIndex: widget.initialScrollIndex ?? 0,
         reverse: true,
-        itemCount: messageRecords.length + 1,
         physics: defaultScrollPhysics,
+        itemCount: listItems.length + 1,
         itemBuilder: (context, index) {
-          if (index == messageRecords.length) {
+          if (index == listItems.length) {
             // show sticker as first item
             return buildConversationSticker(contact);
           }
 
-          final messageAndPath = messageRecords.elementAt(index);
-          return model.message(context, messageRecords.elementAt(index),
-              (BuildContext context, StoredMessage message, Widget? child) {
-            return MessageBubble(
-              message: message,
-              priorMessage: index >= messageRecords.length - 1
-                  ? null
-                  : messageRecords.elementAt(index + 1).value,
-              nextMessage:
-                  index == 0 ? null : messageRecords.elementAt(index - 1).value,
-              contact: contact,
-              onEmojiTap: () {
-                setState(() {
-                  reactingWithEmoji = true;
-                  storedMessage = messageAndPath;
-                });
-                showEmojiKeyboard(true);
-              },
-              onReply: () {
-                setState(() {
-                  isReplying = true;
-                  quotedMessage = message;
-                  showNativeKeyboard();
-                });
-              },
-              onTapReply: () {
-                final scrollToIndex = messageRecords.toList().indexWhere(
-                    (element) => element.value.id == message.replyToId);
-                if (scrollToIndex != -1 && scrollController.isAttached) {
-                  scrollController.scrollTo(
-                      index: scrollToIndex,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOutCubic);
-                }
-              },
-            );
-          });
+          final item = listItems[index];
+          if (item is PathAndValue<StoredMessage>) {
+            return buildMessageBubble(context, contact, listItems, item, index);
+          } else {
+            return DateMarker(item as String);
+          }
         },
       );
     });
+  }
+
+  Widget buildMessageBubble(
+      BuildContext context,
+      Contact contact,
+      List<Object> listItems,
+      PathAndValue<StoredMessage> messageAndPath,
+      int index) {
+    return model.message(context, messageAndPath,
+        (BuildContext context, StoredMessage message, Widget? child) {
+      return MessageBubble(
+        message: message,
+        priorMessage: priorMessage(listItems, index)?.value,
+        nextMessage: nextMessage(listItems, index)?.value,
+        contact: contact,
+        onEmojiTap: () {
+          setState(() {
+            reactingWithEmoji = true;
+            storedMessage = messageAndPath;
+          });
+          showEmojiKeyboard(true);
+        },
+        onReply: () {
+          setState(() {
+            isReplying = true;
+            quotedMessage = message;
+            showNativeKeyboard();
+          });
+        },
+        onTapReply: () {
+          final scrollToIndex = listItems.toList().indexWhere((element) =>
+              element is PathAndValue<StoredMessage> &&
+              element.value.id == message.replyToId);
+          if (scrollToIndex != -1 && scrollController.isAttached) {
+            scrollController.scrollTo(
+                index: scrollToIndex,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeInOutCubic);
+          }
+        },
+      );
+    });
+  }
+
+  PathAndValue<StoredMessage>? priorMessage(List<Object> listItems, int index) {
+    for (var i = index + 1; i < listItems.length; i++) {
+      final candidate = listItems[i];
+      if (candidate is PathAndValue<StoredMessage>) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  PathAndValue<StoredMessage>? nextMessage(List<Object> listItems, int index) {
+    for (var i = index - 1; i >= 0; i--) {
+      final candidate = listItems[i];
+      if (candidate is PathAndValue<StoredMessage>) {
+        return candidate;
+      }
+    }
+    return null;
   }
 
   Widget buildMessageBar() {

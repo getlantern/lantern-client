@@ -1,5 +1,4 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:intl/intl.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/conversation/deleted_bubble.dart';
@@ -7,7 +6,6 @@ import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'date_marker_bubble.dart';
 import 'mime_types.dart';
 import 'reactions.dart';
 import 'status_row.dart';
@@ -30,7 +28,6 @@ class MessageBubble extends StatelessWidget {
   late final bool wasDeleted;
   late final bool isAttachment;
   late final bool hasReactions;
-  late final String dateMarker;
   late final Color color;
   late final Color backgroundColor;
 
@@ -56,7 +53,6 @@ class MessageBubble extends StatelessWidget {
     wasDeleted = message.remotelyDeletedAt != 0;
     isAttachment = message.attachments.isNotEmpty;
     hasReactions = message.reactions.isNotEmpty;
-    dateMarker = determineDateSwitch(priorMessage, nextMessage);
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
@@ -103,11 +99,6 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          if (dateMarker.isNotEmpty)
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsetsDirectional.only(bottom: 10),
-                child: DateMarker(dateMarker)),
           content(context),
         ],
       ),
@@ -239,14 +230,12 @@ class MessageBubble extends StatelessWidget {
                                 onTapLink: (String text, String? href,
                                     String title) async {
                                   if (href != null && await canLaunch(href)) {
-                                    showAlertDialog(
+                                    showConfirmationDialog(
                                         context: context,
-                                        title: CText('open_url'.i18n,
-                                            style: tsBody3),
-                                        content: CTextWrap(
+                                        title: 'open_url'.i18n,
+                                        explanation:
                                             'are_you_sure_you_want_to_open'
                                                 .fill([href]),
-                                            style: tsBody1),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,
                                         agreeAction: () async {
@@ -291,7 +280,7 @@ class MessageBubble extends StatelessWidget {
     var textCopied = false;
 
     return SizedBox(
-      height: 311,
+      height: isOutbound ? 315 : 267,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -389,56 +378,27 @@ class MessageBubble extends StatelessWidget {
   }
 
   void deleteForMe(BuildContext context) {
-    showAlertDialog(
+    showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForMeDialog'),
-      barrierDismissible: true,
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            CTextWrap('delete_for_me_explanation'.i18n, style: tsBody1)
-          ],
-        ),
-      ),
-      title: CText('delete_for_me'.i18n, style: tsSubtitle1),
-      agreeAction: () => model.deleteLocally(message),
+      iconPath: ImagePaths.delete,
+      title: 'delete_for_me'.i18n,
+      explanation: 'delete_for_me_explanation'.i18n,
       agreeText: 'delete'.i18n,
+      agreeAction: () => model.deleteLocally(message),
     );
   }
 
   void deleteForEveryone(BuildContext context) {
-    showAlertDialog(
+    showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForEveryoneDialog'),
-      barrierDismissible: true,
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            CTextWrap('delete_for_everyone_explanation'.i18n, style: tsBody1)
-          ],
-        ),
-      ),
-      title: CText('delete_for_everyone'.i18n, style: tsSubtitle1),
-      agreeAction: () => model.deleteLocally(message),
+      iconPath: ImagePaths.delete,
+      title: 'delete_for_everyone'.i18n,
+      explanation: 'delete_for_everyone_explanation'.i18n,
       agreeText: 'delete'.i18n,
+      agreeAction: () => model.deleteLocally(message),
     );
-  }
-
-  String determineDateSwitch(
-      StoredMessage? priorMessage, StoredMessage? nextMessage) {
-    if (priorMessage == null || nextMessage == null) return '';
-
-    var currentDateTime =
-        DateTime.fromMillisecondsSinceEpoch(priorMessage.ts.toInt());
-    var nextMessageDateTime =
-        DateTime.fromMillisecondsSinceEpoch(nextMessage.ts.toInt());
-
-    if (nextMessageDateTime.difference(currentDateTime).inDays >= 1) {
-      currentDateTime = nextMessageDateTime;
-      return DateFormat.yMMMMd('en_US').format(currentDateTime);
-    }
-
-    return '';
   }
 
   double maxBubbleWidth(BuildContext context) =>

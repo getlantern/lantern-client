@@ -27,8 +27,8 @@ class _IntroduceState extends State<Introduce> {
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList().sortedAlphabetically();
 
-          var groupedSortedContacts = sortedContacts.groupBy((el) =>
-              sanitizeContactName(el.value.displayName[0].toLowerCase()));
+          var groupedSortedContacts = sortedContacts
+              .groupBy((el) => el.value.displayName[0].toLowerCase());
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +37,8 @@ class _IntroduceState extends State<Introduce> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child: CTextWrap('introduce_contacts_select'.i18n,
-                        style: tsBody1),
+                    child:
+                        CText('introduce_contacts_select'.i18n, style: tsBody1),
                   ),
                 Expanded(
                     child: (sortedContacts.length <= 1)
@@ -46,8 +46,7 @@ class _IntroduceState extends State<Introduce> {
                             alignment: AlignmentDirectional.center,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24.0, vertical: 16.0),
-                            child: CTextWrap(
-                                'need_two_contacts_to_introduce'.i18n,
+                            child: CText('need_two_contacts_to_introduce'.i18n,
                                 style: tsBody1),
                           )
                         : Column(

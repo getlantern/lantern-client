@@ -49,8 +49,8 @@ class ConversationSticker extends StatelessWidget {
     );
   }
 
-  CTextWrap _partiallyAddedText() {
-    return CTextWrap('banner_intro_waiting'.i18n.fill([contact.displayName]),
+  CText _partiallyAddedText() {
+    return CText('banner_intro_waiting'.i18n.fill([contact.displayName]),
         style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
   }
 
@@ -58,15 +58,15 @@ class ConversationSticker extends StatelessWidget {
     return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
   }
 
-  CTextWrap _fullyAddedText() {
+  CText _fullyAddedText() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? CTextWrap(
+        ? CText(
             'banner_messages_disappear'.i18n.fill([
               contact.messagesDisappearAfterSeconds
                   .humanizeSeconds(longForm: true)
             ]),
             style: tsBody2.copiedWith(color: grey5))
-        : CTextWrap('banner_messages_persist'.i18n,
+        : CText('banner_messages_persist'.i18n,
             style: tsBody2.copiedWith(color: grey5));
   }
 
