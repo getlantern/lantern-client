@@ -13,7 +13,7 @@ class Introductions extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: CTextWrap('introductions_info'.i18n, style: tsBody1),
+                child: CText('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.introductionsToContact(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
@@ -60,10 +60,8 @@ class Introductions extends StatelessWidget {
                                                 ? ContactListItem(
                                                     contact: introductor,
                                                     index: index,
-                                                    title: sanitizeContactName(
-                                                            value.introduction
-                                                                .displayName)
-                                                        .toString(),
+                                                    title: value.introduction
+                                                        .displayName,
                                                     leading: CBadge(
                                                       showBadge: true,
                                                       top: 25,
@@ -90,19 +88,14 @@ class Introductions extends StatelessWidget {
                                                       children: [
                                                         TextButton(
                                                           onPressed: () =>
-                                                              showAlertDialog(
+                                                              showConfirmationDialog(
                                                                   context:
                                                                       context,
-                                                                  title: CText(
+                                                                  title:
                                                                       'introductions_reject_title'
                                                                           .i18n,
-                                                                      style:
-                                                                          tsBody3),
-                                                                  content: CTextWrap(
-                                                                      'introductions_reject_content'
-                                                                          .i18n,
-                                                                      style:
-                                                                          tsBody3),
+                                                                  explanation:
+                                                                      'introductions_reject_content',
                                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                   dismissText:
                                                                       'cancel'
@@ -183,7 +176,7 @@ class Introductions extends StatelessWidget {
                                                                     children: [
                                                                       Expanded(
                                                                         child:
-                                                                            CTextWrap(
+                                                                            CText(
                                                                           'introduction_approved'
                                                                               .i18n
                                                                               .fill([

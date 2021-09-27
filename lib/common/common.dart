@@ -70,7 +70,7 @@ export 'ui/focused_menu.dart';
 export 'ui/labeled_divider.dart';
 
 // UI functions
-export 'ui/show_alert_dialog.dart';
+export 'ui/show_confirmation_dialog.dart';
 export 'ui/show_error_dialog.dart';
 export 'ui/show_info_dialog.dart';
 export 'ui/show_bottom_modal.dart';
@@ -83,7 +83,6 @@ export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
 export 'ui/custom/divider.dart';
 export 'ui/custom/text.dart';
-export 'ui/custom/text_wrap.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/custom/list_tile.dart';
 export 'ui/custom/rounded_rectangle_border.dart';

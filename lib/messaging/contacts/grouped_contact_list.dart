@@ -36,8 +36,7 @@ ScrollablePositionedList groupedContactListGenerator({
                   contact: contact.value,
                   index: index,
                   leading: leadingCallback!(contact.value),
-                  title:
-                      sanitizeContactName(contact.value.displayName).toString(),
+                  title: contact.value.displayName,
                   trailing: trailingCallback != null
                       ? trailingCallback(index, contact.value)
                       : null,

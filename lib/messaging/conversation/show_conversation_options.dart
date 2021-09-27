@@ -80,12 +80,12 @@ Future showConversationOptions(
                                                   (selectedPosition != -1 &&
                                                       seconds[selectedPosition] ==
                                                           0)
-                                              ? CTextWrap(
+                                              ? CText(
                                                   'message_disappearing'.i18n,
                                                   style: tsBody1.copiedWith(
                                                       color: grey5),
                                                 )
-                                              : CTextWrap(
+                                              : CText(
                                                   'message_disappearing_description'
                                                       .i18n
                                                       .fill([
@@ -309,7 +309,7 @@ Future showConversationOptions(
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  CTextWrap('delete_contact_confirmation'.i18n,
+                                  CText('delete_contact_confirmation'.i18n,
                                       style: tsBody1)
                                 ],
                               ),
