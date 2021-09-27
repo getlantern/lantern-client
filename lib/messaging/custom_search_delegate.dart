@@ -189,7 +189,7 @@ class SuggestionBuilder extends StatelessWidget {
                     leading: CustomAvatar(
                         id: suggestion.value.contactId.id,
                         displayName: contact.displayName),
-                    title: sanitizeContactName(contact.displayName).toString(),
+                    title: contact.displayName.toString(),
                     subTitle: suggestion.snippet,
                     onTap: () async => await context.pushRoute(Conversation(
                         contactId: suggestion.value.contactId,
