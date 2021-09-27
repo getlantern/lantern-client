@@ -65,10 +65,12 @@ class CustomSearchDelegate extends SearchDelegate {
                   style: tsSubtitle1,
                   textAlign: TextAlign.center,
                 ))
+              // TODO (maybe) - consider ValueListenableBuilder when/if we display thumbnails
               : FutureBuilder(
                   future: Future.wait([
-                    model.searchContacts(query, 10),
-                    if (searchMessages == true) model.searchMessages(query, 50)
+                    model.searchContacts('$query', 10),
+                    if (searchMessages == true)
+                      model.searchMessages('$query', 10)
                   ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
