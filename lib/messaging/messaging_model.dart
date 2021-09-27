@@ -177,7 +177,7 @@ class MessagingModel extends Model {
   Future<List<SearchResult<Contact>>> searchContacts(
           String query, int? numTokens) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
-        'query': query,
+        'query': '"${query.replaceAll('\"', '')}"',
         'numTokens': numTokens,
       }).then((value) {
         final results = <SearchResult<Contact>>[];
@@ -192,7 +192,7 @@ class MessagingModel extends Model {
   Future<List<SearchResult<StoredMessage>>> searchMessages(
           String query, int? numTokens) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
-        'query': query,
+        'query': '"${query.replaceAll('\"', '')}"',
         'numTokens': numTokens,
       }).then((value) {
         final results = <SearchResult<StoredMessage>>[];
