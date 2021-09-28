@@ -177,7 +177,6 @@ class SuggestionBuilder extends StatelessWidget {
               onTap: () async => await context.pushRoute(
                   Conversation(contactId: suggestion.value.contactId)),
               showDivider: false,
-              useMarkdown: true,
             );
           }
           if (suggestion is SearchResult<StoredMessage>) {
@@ -200,7 +199,6 @@ class SuggestionBuilder extends StatelessWidget {
                       contactId: suggestion.value.contactId,
                       initialScrollIndex: initialScrollIndex)),
                   showDivider: false,
-                  useMarkdown: true,
                 );
               });
             });
