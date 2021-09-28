@@ -55,91 +55,104 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     var model = context.watch<MessagingModel>();
+    final scrollController = ScrollController();
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return Container(
-          padding: const EdgeInsetsDirectional.all(16.0),
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          color: white,
-          child: query.isEmpty || query.length < 3
-              ? Center(
-                  child: CText(
-                  'search_chars_min'.i18n,
-                  style: tsSubtitle1,
-                  textAlign: TextAlign.center,
-                ))
-              // TODO (maybe) - consider ValueListenableBuilder when/if we display thumbnails
-              : FutureBuilder(
-                  future: Future.wait([
-                    model.searchContacts(query, 10),
-                    if (searchMessages == true) model.searchMessages(query, 64)
-                  ]),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const Center(child: CircularProgressIndicator());
-                      default:
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: CText('search_error'.i18n,
-                                  style: tsSubtitle1,
-                                  textAlign: TextAlign.center));
-                        } else {
-                          final results = snapshot.data as List;
-                          final contacts =
-                              results[0] as List<SearchResult<Contact>>;
-                          final messages = searchMessages!
-                              ? results[1] as List<SearchResult<StoredMessage>>
-                              : [];
-                          final hasResults =
-                              contacts.isNotEmpty || messages.isNotEmpty;
+      return Scrollbar(
+        controller: scrollController,
+        interactive: true,
+        isAlwaysShown: false,
+        showTrackOnHover: true,
+        radius: const Radius.circular(50),
+        child: Container(
+            padding: const EdgeInsetsDirectional.all(16.0),
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            color: white,
+            child: query.isEmpty || query.length < 3
+                ? Center(
+                    child: CText(
+                    'search_chars_min'.i18n,
+                    style: tsSubtitle1,
+                    textAlign: TextAlign.center,
+                  ))
+                // TODO (maybe) - consider ValueListenableBuilder when/if we display thumbnails
+                : FutureBuilder(
+                    future: Future.wait([
+                      model.searchContacts(query, 10),
+                      if (searchMessages == true)
+                        model.searchMessages(query, 64)
+                    ]),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        default:
+                          if (snapshot.hasError) {
+                            return Center(
+                                child: CText('search_error'.i18n,
+                                    style: tsSubtitle1,
+                                    textAlign: TextAlign.center));
+                          } else {
+                            final results = snapshot.data as List;
+                            final contacts =
+                                results[0] as List<SearchResult<Contact>>;
+                            final messages = searchMessages!
+                                ? results[1]
+                                    as List<SearchResult<StoredMessage>>
+                                : [];
+                            final hasResults =
+                                contacts.isNotEmpty || messages.isNotEmpty;
 
-                          return (hasResults)
-                              ? SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      if (contacts.isNotEmpty)
-                                        CText(
-                                            'search_contacts'.i18n.fill([
-                                              contacts.length
-                                            ]).toUpperCase(),
-                                            style: tsSubtitle1),
-                                      if (contacts.isNotEmpty)
-                                        SuggestionBuilder(
-                                          suggestions: contacts,
-                                        ),
-                                      if (searchMessages! &&
-                                          messages.isNotEmpty)
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  top: 20),
-                                          child: CText(
-                                              'search_messages'.i18n.fill([
-                                                messages.length
+                            return (hasResults)
+                                ? SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        if (contacts.isNotEmpty)
+                                          CText(
+                                              'search_contacts'.i18n.fill([
+                                                contacts.length
                                               ]).toUpperCase(),
                                               style: tsSubtitle1),
-                                        ),
-                                      if (searchMessages! &&
-                                          messages.isNotEmpty)
-                                        SuggestionBuilder(
-                                          model: model,
-                                          suggestions: messages,
-                                        ),
-                                    ],
-                                  ),
-                                )
-                              : Center(
-                                  child: CText('search_no_results'.i18n,
-                                      style: tsSubtitle1,
-                                      textAlign: TextAlign.center));
-                        }
-                    }
-                  }));
+                                        if (contacts.isNotEmpty)
+                                          SuggestionBuilder(
+                                            suggestions: contacts,
+                                            scrollController: scrollController,
+                                          ),
+                                        if (searchMessages! &&
+                                            messages.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .only(top: 20),
+                                            child: CText(
+                                                'search_messages'.i18n.fill([
+                                                  messages.length
+                                                ]).toUpperCase(),
+                                                style: tsSubtitle1),
+                                          ),
+                                        if (searchMessages! &&
+                                            messages.isNotEmpty)
+                                          SuggestionBuilder(
+                                            model: model,
+                                            suggestions: messages,
+                                            scrollController: scrollController,
+                                          ),
+                                      ],
+                                    ),
+                                  )
+                                : Center(
+                                    child: CText('search_no_results'.i18n,
+                                        style: tsSubtitle1,
+                                        textAlign: TextAlign.center));
+                          }
+                      }
+                    })),
+      );
     });
   }
 
@@ -152,12 +165,15 @@ class CustomSearchDelegate extends SearchDelegate {
 class SuggestionBuilder extends StatelessWidget {
   final MessagingModel? model;
   final List suggestions;
+  final ScrollController scrollController;
 
-  const SuggestionBuilder({this.model, required this.suggestions});
+  const SuggestionBuilder(
+      {this.model, required this.suggestions, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        controller: scrollController,
         itemCount: suggestions.length,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

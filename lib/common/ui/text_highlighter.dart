@@ -12,17 +12,18 @@ class TextHighlighter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fragments = text.split('**');
     return RichText(
         overflow: TextOverflow.ellipsis,
         text: TextSpan(
-          text: text.split('**')[0],
+          text: fragments[0],
           style: style,
           children: <TextSpan>[
             TextSpan(
-                text: text.split('**')[1],
+                text: fragments[1],
                 style: style.copiedWith(
                     color: pink4, fontWeight: FontWeight.w500)),
-            TextSpan(text: text.split('**')[2], style: style),
+            TextSpan(text: fragments[2], style: style),
           ],
         ));
   }
