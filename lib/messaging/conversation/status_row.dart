@@ -2,10 +2,12 @@ import 'package:lantern/messaging/messaging.dart';
 
 class StatusRow extends StatelessWidget {
   final bool outbound;
-  final bool inbound;
+  late final bool inbound;
   final StoredMessage message;
 
-  const StatusRow(this.outbound, this.inbound, this.message) : super();
+  StatusRow(this.outbound, this.message) : super() {
+    inbound = !outbound;
+  }
 
   @override
   Widget build(BuildContext context) {

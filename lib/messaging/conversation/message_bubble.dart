@@ -168,7 +168,8 @@ class MessageBubble extends StatelessWidget {
 
     final attachment = message.attachments.isEmpty
         ? null
-        : attachmentWidget(message.attachments.values.first, isInbound);
+        : attachmentWidget(
+            contact, message, message.attachments.values.first, isInbound);
 
     final isAudio = message.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
@@ -267,7 +268,7 @@ class MessageBubble extends StatelessWidget {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(isOutbound, isInbound, message),
+                                StatusRow(isOutbound, message),
                               ]),
                         ],
                       )
