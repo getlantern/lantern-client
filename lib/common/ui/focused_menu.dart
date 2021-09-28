@@ -75,8 +75,8 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
                     menuOffset: widget.menuOffset,
                     paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
-                    child: widget.child,
                     menu: widget.menu,
+                    child: widget.child,
                   ));
             },
             fullscreenDialog: true,

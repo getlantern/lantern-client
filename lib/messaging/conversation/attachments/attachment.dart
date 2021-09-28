@@ -27,11 +27,11 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
     return VideoAttachment(attachment, inbound);
   }
 
-  return _padded(GenericAttachment(
+  return GenericAttachment(
       attachmentTitle: attachmentTitle,
       fileExtension: fileExtension,
       inbound: inbound,
-      icon: Icons.insert_drive_file_rounded));
+      icon: Icons.insert_drive_file_rounded);
 }
 
 /// AttachmentBuilder is a builder for attachments that handles progress
@@ -40,7 +40,7 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
 class AttachmentBuilder extends StatelessWidget {
   final StoredAttachment attachment;
   final bool inbound;
-  final bool padAttachment;
+  final bool scrimAttachment;
   final IconData
       defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
   final Widget Function(BuildContext context, Uint8List thumbnail) builder;
@@ -49,7 +49,7 @@ class AttachmentBuilder extends StatelessWidget {
       {Key? key,
       required this.attachment,
       required this.inbound,
-      this.padAttachment = true,
+      this.scrimAttachment = false,
       required this.defaultIcon,
       required this.builder});
 
@@ -61,10 +61,10 @@ class AttachmentBuilder extends StatelessWidget {
     // _getDecryptedAttachment() in the FutureBuilder
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING:
-        return _progressIndicator();
+        return progressIndicator();
       case StoredAttachment_Status.FAILED:
         // error with download
-        return _errorIndicator();
+        return errorIndicator();
       case StoredAttachment_Status.PENDING_UPLOAD:
         continue alsoDone;
       alsoDone:
@@ -76,13 +76,13 @@ class AttachmentBuilder extends StatelessWidget {
           builder: (BuildContext context,
               CachedValue<Uint8List> cachedThumbnail, Widget? child) {
             if (cachedThumbnail.loading) {
-              return _progressIndicator();
+              return progressIndicator();
             } else if (cachedThumbnail.error != null) {
-              return _errorIndicator();
+              return errorIndicator();
             } else if (cachedThumbnail.value != null) {
               var result = builder(context, cachedThumbnail.value!);
-              if (padAttachment) {
-                result = _padded(result);
+              if (scrimAttachment) {
+                result = addScrim(result);
               }
               return result;
             } else {
@@ -94,28 +94,39 @@ class AttachmentBuilder extends StatelessWidget {
     }
   }
 
-  Widget _progressIndicator() {
-    return _padded(
-      Transform.scale(
-        scale: 0.5,
-        child: CircularProgressIndicator(
-          color: inbound ? inboundMsgColor : outboundMsgColor,
+  /// creates a scrim on top of attachments
+  Widget addScrim(Widget child) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0, 1],
+                colors: [scrimGrey.withOpacity(0), black.withOpacity(0.68)],
+              ),
+            ),
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget progressIndicator() {
+    return Transform.scale(
+      scale: 0.5,
+      child: CircularProgressIndicator(
+        color: inbound ? inboundMsgColor : outboundMsgColor,
       ),
     );
   }
 
-  Widget _errorIndicator() {
-    return _padded(
-      Icon(Icons.error_outlined,
-          color: inbound ? inboundMsgColor : outboundMsgColor),
-    );
+  Widget errorIndicator() {
+    return Icon(Icons.error_outlined,
+        color: inbound ? inboundMsgColor : outboundMsgColor);
   }
-}
-
-Widget _padded(Widget child) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-    child: child,
-  );
 }

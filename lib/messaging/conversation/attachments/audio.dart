@@ -17,7 +17,6 @@ class AudioAttachment extends StatelessWidget {
     return AttachmentBuilder(
         attachment: attachment,
         inbound: inbound,
-        padAttachment: false,
         defaultIcon: Icons.image,
         builder: (BuildContext context, Uint8List thumbnail) {
           return AudioWidget(

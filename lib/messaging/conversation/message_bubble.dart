@@ -163,8 +163,12 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget content(BuildContext context) {
-    final attachments = message.attachments.values
-        .map((attachment) => attachmentWidget(attachment, isInbound));
+    assert(message.attachments.values.length <= 1,
+        'display of messages with multiple attachments is unsupported');
+
+    final attachment = message.attachments.isEmpty
+        ? null
+        : attachmentWidget(message.attachments.values.first, isInbound);
 
     final isAudio = message.attachments.values.any(
         (attachment) => audioMimes.contains(attachment.attachment.mimeType));
@@ -178,7 +182,6 @@ class MessageBubble extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           padding: EdgeInsetsDirectional.only(
               top: message.replyToId.isNotEmpty ? 8 : 0,
-              bottom: 8,
               start: isAttachment ? 0 : 8,
               end: isAttachment ? 0 : 8),
           decoration: BoxDecoration(
@@ -257,7 +260,7 @@ class MessageBubble extends StatelessWidget {
                             ? AlignmentDirectional.bottomEnd
                             : AlignmentDirectional.bottomStart,
                         children: [
-                          ...attachments,
+                          if (attachment != null) attachment,
                           Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: isOutbound
