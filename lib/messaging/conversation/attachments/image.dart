@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class ImageAttachment extends StatelessWidget {
@@ -44,21 +43,20 @@ class ImageAttachment extends StatelessWidget {
   }
 }
 
-class ImageViewer extends StatefulWidget {
+class ImageViewer extends ViewerWidget {
   final MessagingModel model;
-  final Contact contact;
-  final StoredMessage message;
   final StoredAttachment attachment;
 
-  ImageViewer(this.model, this.contact, this.message, this.attachment);
+  ImageViewer(
+      this.model, Contact contact, StoredMessage message, this.attachment)
+      : super(contact, message);
 
   @override
   State<StatefulWidget> createState() => ImageViewerState();
 }
 
-class ImageViewerState extends State<ImageViewer> {
+class ImageViewerState extends ViewerState<ImageViewer> {
   BasicMemoryImage? image;
-  bool showInfo = true;
 
   @override
   void initState() {
@@ -69,11 +67,7 @@ class ImageViewerState extends State<ImageViewer> {
           .resolve(const ImageConfiguration())
           .addListener(ImageStreamListener((info, _) {
         if (info.image.width > info.image.height) {
-          // force landscape
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.landscapeRight,
-            DeviceOrientation.landscapeLeft,
-          ]);
+          forceLandscape();
         }
       }));
       setState(() => image = newImage);
@@ -81,40 +75,8 @@ class ImageViewerState extends State<ImageViewer> {
   }
 
   @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-    super.dispose();
-  }
+  bool ready() => image != null;
 
   @override
-  Widget build(BuildContext context) {
-    return BaseScreen(
-      title: CText(
-        widget.contact.displayName,
-        maxLines: 1,
-        style: tsHeading3.copiedWith(color: white),
-      ),
-      padHorizontal: false,
-      foregroundColor: white,
-      backgroundColor: black,
-      showAppBar: showInfo,
-      body: GestureDetector(
-        onTap: () => setState(() => showInfo = !showInfo),
-        child: !showInfo && image != null
-            ? Align(alignment: Alignment.center, child: image!)
-            : Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(child: image == null ? Container() : image!),
-                  Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: StatusRow(true, widget.message)),
-                ],
-              ),
-      ),
-    );
-  }
+  Widget body(BuildContext context) => image!;
 }

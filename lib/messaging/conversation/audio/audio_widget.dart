@@ -176,7 +176,18 @@ class AudioWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _getPlayIcon(controller, value),
+            PlayButton(
+              size: height,
+              color: initialColor,
+              playing: value.isPlaying,
+              onPressed: () async {
+                if (value.isPlaying) {
+                  await controller.pause();
+                } else {
+                  await controller.play();
+                }
+              },
+            ),
             Container(width: 12),
             Container(
               width: constraints.maxWidth - 36,
@@ -248,36 +259,6 @@ class AudioWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _getPlayIcon(AudioController controller, AudioValue value) {
-    return value.isPlaying
-        ? RoundButton(
-            diameter: height,
-            padding: 0,
-            backgroundColor: transparent,
-            icon: CAssetImage(
-              path: ImagePaths.pause_circle_filled,
-              color: initialColor,
-              size: height,
-            ),
-            onPressed: () {
-              if (value.isPlaying) controller.pause();
-            },
-          )
-        : RoundButton(
-            diameter: height,
-            padding: 0,
-            backgroundColor: transparent,
-            icon: CAssetImage(
-              path: ImagePaths.play_circle_filled,
-              color: initialColor,
-              size: height,
-            ),
-            onPressed: () async {
-              await controller.play();
-            },
-          );
   }
 
   Widget _getWaveform(
