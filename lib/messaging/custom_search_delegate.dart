@@ -22,6 +22,10 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   @override
+  String get searchFieldLabel =>
+      'search_in_${searchMessages! ? 'messages' : 'contacts'}'.i18n;
+
+  @override
   TextStyle get searchFieldStyle => tsSubtitle2.copiedWith(color: grey5);
 
   @override
@@ -69,7 +73,7 @@ class CustomSearchDelegate extends SearchDelegate {
               : FutureBuilder(
                   future: Future.wait([
                     model.searchContacts(query, 10),
-                    if (searchMessages == true) model.searchMessages(query, 10)
+                    if (searchMessages == true) model.searchMessages(query, 64)
                   ]),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {

@@ -204,7 +204,10 @@ class MessagingModel extends Model {
         return Future.value(results);
       });
 
-  String sanitizeQuery(String query) => "${query.replaceAll('\"', '')}";
+  String sanitizeQuery(String query) => query
+      .split(RegExp(r'\s'))
+      .map((s) => '"${s.replaceAll('\"', '')}"')
+      .join(' ');
   /*
   Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
   whom we're being introduced.
