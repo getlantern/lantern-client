@@ -15,6 +15,7 @@ class ImageAttachment extends StatelessWidget {
           attachment: attachment,
           inbound: inbound,
           defaultIcon: Icons.image,
+          scrimAttachment: true,
           builder: (BuildContext context, Uint8List thumbnail) {
             return ConstrainedBox(
               // this box keeps the video from being too tall

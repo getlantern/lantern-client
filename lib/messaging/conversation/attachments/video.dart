@@ -14,6 +14,7 @@ class VideoAttachment extends StatelessWidget {
         attachment: attachment,
         inbound: inbound,
         defaultIcon: Icons.image,
+        scrimAttachment: true,
         builder: (BuildContext context, Uint8List thumbnail) {
           var image = BasicMemoryImage(
             thumbnail,

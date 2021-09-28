@@ -20,6 +20,7 @@ Color grey2 = HexColor('#F5F5F5');
 Color grey3 = HexColor('#EBEBEB');
 Color grey4 = HexColor('#BFBFBF');
 Color grey5 = HexColor('#707070');
+Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
 
 // Avatars

@@ -12,7 +12,7 @@ class StatusRow extends StatelessWidget {
     final msgSelfDeletes = !message.disappearAt.isZero;
     final color = outbound ? outboundMsgColor : inboundMsgColor;
     return Container(
-      padding: const EdgeInsets.only(left: 8, right: 8),
+      padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

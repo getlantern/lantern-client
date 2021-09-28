@@ -35,7 +35,7 @@ extension StringExtensions on String {
     // 'mies van der rohe' => ['mies', 'van', 'der', 'rohe'] => we pick M and R
     // 'lionelmessi' => ['l', 'i', 'o', ....] => we pick L and I (first and second)
     // 'l' => ['l'] => we only display one letter (L)
-    var parts = this.split(' ');
+    var parts = split(' ');
     return parts.length > 1
         // display name contained spaces and was broken up
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
