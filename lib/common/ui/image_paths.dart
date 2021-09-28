@@ -20,6 +20,7 @@ class ImagePaths {
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
+  static const more_vert = 'assets/images/more_vert.svg';
 
   // Messaging
   static const add = 'assets/images/add.svg';
@@ -36,6 +37,8 @@ class ImagePaths {
   static const play_circle_filled = 'assets/images/play_circle_filled.svg';
   static const pause_circle_filled = 'assets/images/pause_circle_filled.svg';
   static const mic = 'assets/images/mic.svg';
+  static const insert_emoticon = 'assets/images/insert_emoticon.svg';
+  static const keyboard = 'assets/images/keyboard.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

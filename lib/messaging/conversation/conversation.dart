@@ -336,7 +336,7 @@ class ConversationState extends State<Conversation>
             children: [
               CallAction(contact),
               IconButton(
-                icon: const Icon(Icons.more_vert_rounded),
+                icon: const CAssetImage(path: ImagePaths.more_vert),
                 padding:
                     const EdgeInsetsDirectional.only(top: 8, bottom: 8, end: 8),
                 tooltip: 'menu'.i18n,
@@ -356,7 +356,7 @@ class ConversationState extends State<Conversation>
                 Flexible(
                   child: dismissKeyboardsOnTap(
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: buildList(contact),
                     ),
                   ),
@@ -583,7 +583,7 @@ class ConversationState extends State<Conversation>
       children: [
         CListTile(
           height: messageBarHeight,
-          endPadding: 48,
+          endPadding: isSendIconVisible ? 0 : 48,
           showDivider: false,
           leading: isRecording
               ? Row(
@@ -626,12 +626,10 @@ class ConversationState extends State<Conversation>
                       }
                     }
                   },
-                  icon: Icon(
-                      keyboardMode == KeyboardMode.emoji ||
-                              keyboardMode == KeyboardMode.emojiReaction
-                          ? Icons.keyboard_alt_outlined
-                          : Icons.sentiment_very_satisfied,
-                      color: grey5),
+                  icon: keyboardMode == KeyboardMode.emoji ||
+                          keyboardMode == KeyboardMode.emojiReaction
+                      ? const CAssetImage(path: ImagePaths.keyboard)
+                      : const CAssetImage(path: ImagePaths.insert_emoticon),
                 ),
           content: Stack(
             alignment: Alignment.center,
@@ -656,6 +654,7 @@ class ConversationState extends State<Conversation>
                   hintText: 'message'.i18n,
                   border: const OutlineInputBorder(),
                 ),
+                style: tsSubtitle1.copiedWith(color: grey5).short,
               ),
               // hide TextFormField while recording by painting over it. this allows
               // the form field to retain focus to keep the keyboard open and keep
@@ -669,10 +668,20 @@ class ConversationState extends State<Conversation>
             ],
           ),
           trailing: isSendIconVisible && !isRecording
-              ? IconButton(
-                  key: const ValueKey('send_message'),
-                  icon: Icon(Icons.send, color: black),
-                  onPressed: send,
+              ? Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child:
+                          VerticalDivider(thickness: 1, width: 1, color: grey3),
+                    ),
+                    IconButton(
+                      key: const ValueKey('send_message'),
+                      icon: CAssetImage(
+                          path: ImagePaths.send_rounded, color: pink4),
+                      onPressed: send,
+                    ),
+                  ],
                 )
               : Row(
                   mainAxisSize: MainAxisSize.min,
@@ -689,13 +698,14 @@ class ConversationState extends State<Conversation>
                   ],
                 ),
         ),
-        VoiceRecorder(
-          isRecording: isRecording,
-          onRecording: () async => await startRecording(),
-          onStopRecording: () async =>
-              hasPermission ? await finishRecording() : null,
-          onTapUpListener: () async => await finishRecording(),
-        ),
+        if (!isSendIconVisible)
+          VoiceRecorder(
+            isRecording: isRecording,
+            onRecording: () async => await startRecording(),
+            onStopRecording: () async =>
+                hasPermission ? await finishRecording() : null,
+            onTapUpListener: () async => await finishRecording(),
+          ),
       ],
     );
   }
