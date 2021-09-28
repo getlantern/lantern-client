@@ -86,3 +86,4 @@ export 'ui/custom/text.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/custom/list_tile.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
+export 'ui/custom/markdown_body.dart';
