@@ -92,36 +92,42 @@ class CustomSearchDelegate extends SearchDelegate {
                               contacts.isNotEmpty || messages.isNotEmpty;
 
                           return (hasResults)
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    if (contacts.isNotEmpty)
-                                      CText(
-                                          'search_contacts'.i18n.fill(
-                                              [contacts.length]).toUpperCase(),
-                                          style: tsSubtitle1),
-                                    if (contacts.isNotEmpty)
-                                      SuggestionBuilder(
-                                        suggestions: contacts,
-                                      ),
-                                    if (searchMessages! && messages.isNotEmpty)
-                                      Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                top: 20),
-                                        child: CText(
-                                            'search_messages'.i18n.fill([
-                                              messages.length
+                              ? SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      if (contacts.isNotEmpty)
+                                        CText(
+                                            'search_contacts'.i18n.fill([
+                                              contacts.length
                                             ]).toUpperCase(),
                                             style: tsSubtitle1),
-                                      ),
-                                    if (searchMessages! && messages.isNotEmpty)
-                                      SuggestionBuilder(
-                                        model: model,
-                                        suggestions: messages,
-                                      ),
-                                  ],
+                                      if (contacts.isNotEmpty)
+                                        SuggestionBuilder(
+                                          suggestions: contacts,
+                                        ),
+                                      if (searchMessages! &&
+                                          messages.isNotEmpty)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.only(
+                                                  top: 20),
+                                          child: CText(
+                                              'search_messages'.i18n.fill([
+                                                messages.length
+                                              ]).toUpperCase(),
+                                              style: tsSubtitle1),
+                                        ),
+                                      if (searchMessages! &&
+                                          messages.isNotEmpty)
+                                        SuggestionBuilder(
+                                          model: model,
+                                          suggestions: messages,
+                                        ),
+                                    ],
+                                  ),
                                 )
                               : Center(
                                   child: CText('search_no_results'.i18n,
@@ -147,59 +153,57 @@ class SuggestionBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 0,
-      child: ListView.builder(
-          itemCount: suggestions.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          physics: defaultScrollPhysics,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemBuilder: (context, index) {
-            var suggestion = suggestions[index];
+    return ListView.builder(
+        itemCount: suggestions.length,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: defaultScrollPhysics,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemBuilder: (context, index) {
+          var suggestion = suggestions[index];
 
-            if (suggestion is SearchResult<Contact>) {
-              return ContactListItem(
-                contact: suggestion.value,
-                index: index,
-                leading: CustomAvatar(
-                    id: suggestion.value.contactId.id,
-                    displayName: suggestion.value.displayName),
-                title: suggestion.snippet,
-                onTap: () async => await context.pushRoute(
-                    Conversation(contactId: suggestion.value.contactId)),
-                showDivider: false,
-                useMarkdown: true,
-              );
-            }
-            if (suggestion is SearchResult<StoredMessage>) {
-              return model!
-                  .singleContactById(context, suggestion.value.contactId,
-                      (context, contact, child) {
-                return model!.contactMessages(contact, builder: (context,
-                    Iterable<PathAndValue<StoredMessage>> messageRecords,
-                    Widget? child) {
-                  final initialScrollIndex = messageRecords.toList().indexWhere(
-                      (element) => element.value.id == suggestion.value.id);
-                  return ContactListItem(
-                    contact: contact,
-                    index: index,
-                    leading: CustomAvatar(
-                        id: suggestion.value.contactId.id,
-                        displayName: contact.displayName),
-                    title: contact.displayName.toString(),
-                    subTitle: suggestion.snippet,
-                    onTap: () async => await context.pushRoute(Conversation(
-                        contactId: suggestion.value.contactId,
-                        initialScrollIndex: initialScrollIndex)),
-                    showDivider: false,
-                    useMarkdown: true,
-                  );
-                });
+          if (suggestion is SearchResult<Contact>) {
+            return ContactListItem(
+              contact: suggestion.value,
+              index: index,
+              leading: CustomAvatar(
+                  id: suggestion.value.contactId.id,
+                  displayName: suggestion.value.displayName),
+              title: suggestion.snippet,
+              onTap: () async => await context.pushRoute(
+                  Conversation(contactId: suggestion.value.contactId)),
+              showDivider: false,
+              useMarkdown: true,
+            );
+          }
+          if (suggestion is SearchResult<StoredMessage>) {
+            return model!.singleContactById(context, suggestion.value.contactId,
+                (context, contact, child) {
+              return model!.contactMessages(contact, builder: (context,
+                  Iterable<PathAndValue<StoredMessage>> messageRecords,
+                  Widget? child) {
+                final initialScrollIndex = messageRecords.toList().indexWhere(
+                    (element) => element.value.id == suggestion.value.id);
+                return ContactListItem(
+                  contact: contact,
+                  index: index,
+                  leading: CustomAvatar(
+                      id: suggestion.value.contactId.id,
+                      displayName: contact.displayName),
+                  title: contact.displayName.toString(),
+                  subTitle: suggestion.snippet,
+                  onTap: () async => await context.pushRoute(Conversation(
+                      contactId: suggestion.value.contactId,
+                      initialScrollIndex: initialScrollIndex)),
+                  showDivider: false,
+                  useMarkdown: true,
+                );
               });
-            }
-            return Container();
-          }),
-    );
+            });
+          }
+          assert(false,
+              'suggestion type is not supported by Search:  ${suggestion.runtimeType}');
+          return const SizedBox();
+        });
   }
 }
