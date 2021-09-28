@@ -280,9 +280,12 @@ class MessageBubble extends StatelessWidget {
 
   SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
+    var height = 219.0;
+    if (isOutbound) height += 48;
+    if (!isAttachment) height += 48;
 
     return SizedBox(
-      height: isOutbound ? 315 : 267,
+      height: height,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
