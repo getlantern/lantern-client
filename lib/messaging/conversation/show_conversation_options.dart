@@ -300,7 +300,7 @@ Future showConversationOptions(
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.delete),
+                                  child: CAssetImage(path: ImagePaths.delete),
                                 ),
                                 CText('delete_contact'.i18n.toUpperCase(),
                                     style: tsBody3),
