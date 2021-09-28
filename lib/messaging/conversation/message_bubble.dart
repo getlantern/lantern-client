@@ -31,8 +31,6 @@ class MessageBubble extends StatelessWidget {
   late final Color color;
   late final Color backgroundColor;
 
-  late final MessagingModel model;
-
   MessageBubble({
     Key? key,
     required this.message,
@@ -59,7 +57,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    model = context.watch<MessagingModel>();
+    final model = context.watch<MessagingModel>();
 
     if (message.firstViewedAt == 0) {
       model.markViewed(message);
@@ -75,14 +73,14 @@ class MessageBubble extends StatelessWidget {
             padding: EdgeInsetsDirectional.only(
                 top: isStartOfBlock || hasReactions ? 8 : 2,
                 bottom: isNewestMessage ? 8 : 0),
-            child: overlayReactions(context, bubble(context)),
+            child: overlayReactions(context, bubble(context, model)),
           ),
         ),
       ],
     );
   }
 
-  Widget bubble(BuildContext context) {
+  Widget bubble(BuildContext context, MessagingModel model) {
     if (wasDeleted) {
       final humanizedSenderName =
           message.remotelyDeletedBy.id == contact.contactId.id
@@ -94,7 +92,7 @@ class MessageBubble extends StatelessWidget {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
       onPressed: () {},
-      menu: messageMenu(context),
+      menu: messageMenu(context, model),
       child: Column(
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -276,7 +274,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  SizedBox messageMenu(BuildContext context) {
+  SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
 
     return SizedBox(
@@ -327,7 +325,7 @@ class MessageBubble extends StatelessWidget {
               showDivider: false,
               leading: ImagePaths.delete,
               content: 'delete_for_me'.i18n,
-              onTap: () => deleteForMe(context),
+              onTap: () => deleteForMe(context, model),
             ),
             if (isOutbound)
               CListTile(
@@ -335,7 +333,7 @@ class MessageBubble extends StatelessWidget {
                 showDivider: false,
                 leading: ImagePaths.delete,
                 content: 'delete_for_everyone'.i18n,
-                onTap: () => deleteForEveryone(context),
+                onTap: () => deleteForEveryone(context, model),
               ),
             const CDivider(),
             if (message.disappearAt > 0)
@@ -377,7 +375,7 @@ class MessageBubble extends StatelessWidget {
     Clipboard.setData(ClipboardData(text: message.text));
   }
 
-  void deleteForMe(BuildContext context) {
+  void deleteForMe(BuildContext context, MessagingModel model) {
     showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForMeDialog'),
@@ -389,7 +387,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  void deleteForEveryone(BuildContext context) {
+  void deleteForEveryone(BuildContext context, MessagingModel model) {
     showConfirmationDialog(
       context: context,
       key: const ValueKey('deleteForEveryoneDialog'),
