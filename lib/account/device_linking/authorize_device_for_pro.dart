@@ -11,20 +11,20 @@ class AuthorizeDeviceForPro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'Authorize Device for Pro'.i18n,
+      title: 'authorize_device_pro'.i18n,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Spacer(),
           CText(
-            'Authorize with Device Linking Pin'.i18n,
+            'authorize_device_pin'.i18n,
             style: tsSubtitle1,
           ),
           Container(
             margin: const EdgeInsetsDirectional.only(top: 8),
             child: CText(
-              'Requires physical access to a Lantern Pro Device'.i18n,
+              'requires_physical_access'.i18n,
               style: tsBody2,
               textAlign: TextAlign.center,
             ),
@@ -32,7 +32,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           const Spacer(),
           Button(
             width: 200,
-            text: 'Link with PIN'.i18n,
+            text: 'link_with_pin'.i18n,
             onPressed: () {
               LanternNavigator.startScreen(LanternNavigator.SCREEN_LINK_PIN);
             },
@@ -47,13 +47,13 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           ),
           const Spacer(),
           CText(
-            'Authorize Device via Email'.i18n,
+            'authorize_via_email'.i18n,
             style: tsSubtitle1Short,
           ),
           Container(
             margin: const EdgeInsetsDirectional.only(top: 8),
             child: CText(
-              'Requires access to the email you used to buy Lantern Pro'.i18n,
+              'requires_access_to_email'.i18n,
               style: tsBody2,
               textAlign: TextAlign.center,
             ),
@@ -61,7 +61,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           const Spacer(),
           Button(
             width: 200,
-            text: 'Link via Email'.i18n,
+            text: 'link_via_email'.i18n,
             secondary: true,
             onPressed: () async =>
                 await context.pushRoute(AuthorizeDeviceEmail()),

@@ -20,8 +20,8 @@ class VPNStatus extends StatelessWidget {
                   children: [
                     CText(
                       (vpnStatus == 'connecting')
-                          ? 'Connecting'.i18n
-                          : 'Disconnecting'.i18n,
+                          ? 'connecting'.i18n
+                          : 'disconnecting'.i18n,
                       style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                     ),
                     const Padding(

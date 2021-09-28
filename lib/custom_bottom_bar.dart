@@ -52,7 +52,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 1,
             total: isDevelop ? 4 : 3,
-            label: CText('VPN', style: tsFloatingLabel),
+            label: CText('VPN'.i18n, style: tsFloatingLabel),
             icon: SvgPicture.asset(
               ImagePaths.key,
               color:
@@ -72,7 +72,7 @@ class CustomBottomBar extends StatelessWidget {
             ),
           ),
           label: '',
-          tooltip: 'VPN',
+          tooltip: 'VPN'.i18n,
         ),
         BottomNavigationBarItem(
           icon: CustomBottomItem(

@@ -237,6 +237,7 @@ class MessageBubble extends StatelessWidget {
                                         title: 'open_url'.i18n,
                                         explanation:
                                             'are_you_sure_you_want_to_open'
+                                                .i18n
                                                 .fill([href]),
                                         dismissText: 'cancel'.i18n,
                                         agreeText: 'continue'.i18n,

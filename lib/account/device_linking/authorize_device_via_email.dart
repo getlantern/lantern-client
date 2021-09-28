@@ -16,7 +16,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     formKey: formKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'Please enter a valid email address'.i18n,
+        : 'enter_valid_address'.i18n,
   );
 
   @override
@@ -24,7 +24,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'Authorize Device via Email'.i18n,
+      title: 'authorize_via_email'.i18n,
       body: Form(
         key: formKey,
         child: Column(

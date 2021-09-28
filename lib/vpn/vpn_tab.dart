@@ -11,8 +11,8 @@ class VPNTab extends StatelessWidget {
 
   void _openInfoServerLocation(BuildContext context) {
     showInfoDialog(context,
-        title: 'Server Location'.i18n,
-        des: 'Server Location Info'.i18n,
+        title: 'server_location'.i18n,
+        des: 'server_location Info'.i18n,
         icon: ImagePaths.location_on,
         buttonText: 'OK'.i18n);
   }

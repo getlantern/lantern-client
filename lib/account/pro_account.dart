@@ -32,7 +32,7 @@ class ProAccount extends StatelessWidget {
               );
             }),
             SettingsSectionHeader(
-              label: 'Pro Account Expiration'.i18n,
+              label: 'pro_expiration'.i18n,
             ),
             sessionModel.expiryDate(
                 (BuildContext context, String expirationDate, Widget? child) {
@@ -99,8 +99,7 @@ class ProAccount extends StatelessWidget {
                     },
               child: !allowRemoval
                   ? null
-                  : CText(
-                      (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
+                  : CText((isMyDevice ? 'logout' : 'Remove').i18n.toUpperCase(),
                       style: tsButtonPink),
             );
           }));
@@ -110,7 +109,7 @@ class ProAccount extends StatelessWidget {
               title: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               child:
-                  CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink),
+                  CText('add_device'.i18n.toUpperCase(), style: tsButtonPink),
             ));
           }
 
