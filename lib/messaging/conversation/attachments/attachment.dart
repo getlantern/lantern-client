@@ -7,7 +7,8 @@ import 'image.dart';
 import 'video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
-Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
+Widget attachmentWidget(Contact contact, StoredMessage message,
+    StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final fileExtension = attachment.attachment.metadata['fileExtension'];
   final mimeType = attachment.attachment.mimeType;
@@ -20,7 +21,7 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
   }
 
   if (imageMimes.contains(mimeType)) {
-    return ImageAttachment(attachment, inbound);
+    return ImageAttachment(contact, message, attachment, inbound);
   }
 
   if (videoMimes.contains(mimeType)) {
@@ -44,14 +45,17 @@ class AttachmentBuilder extends StatelessWidget {
   final IconData
       defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
   final Widget Function(BuildContext context, Uint8List thumbnail) builder;
+  final void Function()? onTap;
 
-  AttachmentBuilder(
-      {Key? key,
-      required this.attachment,
-      required this.inbound,
-      this.scrimAttachment = false,
-      required this.defaultIcon,
-      required this.builder});
+  AttachmentBuilder({
+    Key? key,
+    required this.attachment,
+    required this.inbound,
+    this.scrimAttachment = false,
+    required this.defaultIcon,
+    required this.builder,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,9 @@ class AttachmentBuilder extends StatelessWidget {
               var result = builder(context, cachedThumbnail.value!);
               if (scrimAttachment) {
                 result = addScrim(result);
+              }
+              if (onTap != null) {
+                result = GestureDetector(onTap: onTap, child: result);
               }
               return result;
             } else {
