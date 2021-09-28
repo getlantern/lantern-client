@@ -246,9 +246,6 @@ msgstr "Copied!"
 msgid "new_message"
 msgstr "New Message"
 
-msgid "search"
-msgstr "Search"
-
 msgid "your_contact_info"
 msgstr "Your Contact Info"
 
@@ -566,3 +563,9 @@ msgstr "Contacts (%s)"
 
 msgid "search_messages"
 msgstr "Messages (%s)"
+
+msgid "search_in_contacts"
+msgstr "Search in Contacts"
+
+msgid "search_in_messages"
+msgstr "Search in Messages and Contacts"
