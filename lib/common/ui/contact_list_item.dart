@@ -38,12 +38,12 @@ class ContactListItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  !title.contains('*')
+                  !title.contains('**')
                       ? CText(title.toString(),
                           maxLines: 1, style: tsSubtitle1Short)
                       : TextHighlighter(text: title, style: tsSubtitle1),
                   if (subTitle != null)
-                    !subTitle!.contains('*')
+                    !subTitle!.contains('**')
                         ? CText(subTitle!,
                             maxLines: 1,
                             style: tsBody2.copiedWith(color: grey5))
