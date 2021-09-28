@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/common/common.dart';
 
 /*
 * Generic widget that renders a row with a Contact avatar, a Contact name and a trailing widget. 
@@ -45,7 +44,7 @@ class ContactListItem extends StatelessWidget {
                   !useMarkdown
                       ? CText(title.toString(),
                           maxLines: 1, style: tsSubtitle1Short)
-                      : CMarkdownBody(
+                      : MarkdownBody(
                           data: title,
                           styleSheet: MarkdownStyleSheet(
                             p: tsSubtitle1Short,
@@ -58,7 +57,7 @@ class ContactListItem extends StatelessWidget {
                         ? CText(subTitle!,
                             maxLines: 1,
                             style: tsBody2.copiedWith(color: grey5))
-                        : CMarkdownBody(
+                        : MarkdownBody(
                             data: subTitle!,
                             styleSheet: MarkdownStyleSheet(
                               p: tsBody2,
