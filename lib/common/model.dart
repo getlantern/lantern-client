@@ -134,16 +134,16 @@ abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
 }
 
 class PathAndValue<T> {
-  String path;
-  T value;
+  final String path;
+  final T value;
 
-  PathAndValue(this.path, this.value);
+  const PathAndValue(this.path, this.value);
 }
 
 class SearchResult<T> {
-  String path;
-  T value;
-  String snippet;
+  final String path;
+  final T value;
+  final String snippet;
 
-  SearchResult(this.path, this.value, this.snippet);
+  const SearchResult(this.path, this.value, this.snippet);
 }

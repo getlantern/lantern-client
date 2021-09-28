@@ -60,7 +60,7 @@ class CustomSearchDelegate extends SearchDelegate {
           color: white,
           child: query.isEmpty || query.length < 3
               ? Center(
-                  child: Text(
+                  child: CText(
                   'search_chars_min'.i18n,
                   style: tsSubtitle1,
                   textAlign: TextAlign.center,
@@ -78,7 +78,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       default:
                         if (snapshot.hasError) {
                           return Center(
-                              child: Text('search_error'.i18n,
+                              child: CText('search_error'.i18n,
                                   style: tsSubtitle1,
                                   textAlign: TextAlign.center));
                         } else {
@@ -97,15 +97,10 @@ class CustomSearchDelegate extends SearchDelegate {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     if (contacts.isNotEmpty)
-                                      Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  top: 20),
-                                          child: Text('search_contacts'
-                                              .i18n
-                                              .fill([
-                                            contacts.length
-                                          ]).toUpperCase())),
+                                      CText(
+                                          'search_contacts'.i18n.fill(
+                                              [contacts.length]).toUpperCase(),
+                                          style: tsSubtitle1),
                                     if (contacts.isNotEmpty)
                                       SuggestionBuilder(
                                         suggestions: contacts,
@@ -115,8 +110,11 @@ class CustomSearchDelegate extends SearchDelegate {
                                         padding:
                                             const EdgeInsetsDirectional.only(
                                                 top: 20),
-                                        child: Text('search_messages'.i18n.fill(
-                                            [messages.length]).toUpperCase()),
+                                        child: CText(
+                                            'search_messages'.i18n.fill([
+                                              messages.length
+                                            ]).toUpperCase(),
+                                            style: tsSubtitle1),
                                       ),
                                     if (searchMessages! && messages.isNotEmpty)
                                       SuggestionBuilder(
@@ -126,7 +124,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   ],
                                 )
                               : Center(
-                                  child: Text('search_no_results'.i18n,
+                                  child: CText('search_no_results'.i18n,
                                       style: tsSubtitle1,
                                       textAlign: TextAlign.center));
                         }

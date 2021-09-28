@@ -2,6 +2,7 @@ import 'messaging_model.dart';
 
 export 'package:lantern/common/common.dart';
 export 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+export 'custom_search_delegate.dart';
 
 export 'messaging_model.dart';
 export 'notifications.dart';

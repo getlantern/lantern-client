@@ -1,6 +1,4 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
-
-import 'custom_search_delegate.dart';
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -11,14 +9,15 @@ class Messages extends StatelessWidget {
       return BaseScreen(
           title: 'messages'.i18n,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.search),
-                tooltip: 'search'.i18n,
-                onPressed: () async => await showSearch(
-                      context: context,
-                      query: '',
-                      delegate: CustomSearchDelegate(searchMessages: true),
-                    )),
+            RoundButton(
+              onPressed: () async => await showSearch(
+                context: context,
+                query: '',
+                delegate: CustomSearchDelegate(searchMessages: true),
+              ),
+              backgroundColor: transparent,
+              icon: const CAssetImage(path: ImagePaths.search),
+            ),
           ],
           body:
               // TODO: the below is just a temporary hack to make sure people have
