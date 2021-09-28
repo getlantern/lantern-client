@@ -29,7 +29,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
     return sessionModel.emailAddress(
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
-        title: 'Authorize Device via Email'.i18n,
+        title: 'authorize_via_email'.i18n,
         body: Form(
           key: formKey,
           child: Column(
@@ -40,7 +40,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
                 alignment: Alignment.center,
                 child: CText(
-                  'Enter or paste linking code'.i18n.toUpperCase(),
+                  'paste_linking_code'.i18n.toUpperCase(),
                   style: tsOverline,
                 ),
               ),
@@ -94,7 +94,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                     });
                   },
                   child: CText(
-                    'Re-send Email'.i18n.toUpperCase(),
+                    'resend_email'.i18n.toUpperCase(),
                     style: tsButtonPink,
                   ),
                 ),

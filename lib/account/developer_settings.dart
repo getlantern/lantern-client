@@ -10,7 +10,7 @@ class DeveloperSettingsTab extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'Developer Settings'.i18n,
+      title: 'dev_settings'.i18n,
       padVertical: true,
       body: ListView(
         children: [
@@ -28,7 +28,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 style: tsBody3),
           ),
           SettingsItem(
-            title: 'Payment Test Mode'.i18n,
+            title: 'Payment Test Mode',
             child: sessionModel.paymentTestMode(
                 (BuildContext context, bool value, Widget? child) {
               return FlutterSwitch(

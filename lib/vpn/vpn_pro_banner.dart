@@ -39,14 +39,14 @@ class _ProBannerState extends State<ProBanner> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CText(
-                      'Go Pro Title'.i18n,
+                      'go_pro_title'.i18n,
                       style: tsSubtitle2,
                     ),
                     const SizedBox(
                       height: 4,
                     ),
                     CText(
-                      'Go Pro Description'.i18n,
+                      'go_pro_description'.i18n,
                       style: tsBody2,
                     ),
                   ],
