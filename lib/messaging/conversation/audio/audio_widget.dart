@@ -131,7 +131,7 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
-  static const height = 20.0;
+  static const height = 24.0;
 
   final AudioController controller;
   final Color initialColor;
@@ -179,7 +179,7 @@ class AudioWidget extends StatelessWidget {
             _getPlayIcon(controller, value),
             Container(width: 12),
             Container(
-              width: constraints.maxWidth - 32,
+              width: constraints.maxWidth - 36,
               height: height,
               child: Stack(
                 clipBehavior: Clip.hardEdge,
@@ -187,7 +187,7 @@ class AudioWidget extends StatelessWidget {
                 children: [
                   value.bars.isNotEmpty
                       ? _getWaveform(
-                          context, value, value.bars, constraints.maxWidth - 32)
+                          context, value, value.bars, constraints.maxWidth - 36)
                       : const SizedBox(),
                   _getSliderOverlay(value),
                 ],
@@ -259,6 +259,7 @@ class AudioWidget extends StatelessWidget {
             icon: CAssetImage(
               path: ImagePaths.pause_circle_filled,
               color: initialColor,
+              size: height,
             ),
             onPressed: () {
               if (value.isPlaying) controller.pause();
@@ -266,10 +267,12 @@ class AudioWidget extends StatelessWidget {
           )
         : RoundButton(
             diameter: height,
-            backgroundColor: initialColor,
+            padding: 0,
+            backgroundColor: transparent,
             icon: CAssetImage(
               path: ImagePaths.play_circle_filled,
-              color: progressColor,
+              color: initialColor,
+              size: height,
             ),
             onPressed: () async {
               await controller.play();
