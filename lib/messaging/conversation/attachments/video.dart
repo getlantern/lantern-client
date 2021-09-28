@@ -3,182 +3,164 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatelessWidget {
+  final Contact contact;
+  final StoredMessage message;
   final StoredAttachment attachment;
   final bool inbound;
 
-  VideoAttachment(this.attachment, this.inbound);
+  VideoAttachment(this.contact, this.message, this.attachment, this.inbound);
 
   @override
   Widget build(BuildContext context) {
-    return AttachmentBuilder(
-        attachment: attachment,
-        inbound: inbound,
-        defaultIcon: Icons.image,
-        scrimAttachment: true,
-        builder: (BuildContext context, Uint8List thumbnail) {
-          var image = BasicMemoryImage(
-            thumbnail,
-            errorBuilder:
-                (BuildContext context, Object error, StackTrace? stackTrace) =>
-                    Icon(Icons.error_outlined,
-                        color: inbound ? inboundMsgColor : outboundMsgColor),
-          );
-          return _VideoAttachment(attachment, inbound, image);
-        });
+    final model = context.watch<MessagingModel>();
+
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return AttachmentBuilder(
+          attachment: attachment,
+          inbound: inbound,
+          defaultIcon: Icons.image,
+          scrimAttachment: true,
+          onTap: () async => await context.router.push(
+                FullScreenDialogPage(
+                    widget: VideoViewer(model, contact, message, attachment)),
+              ),
+          builder: (BuildContext context, Uint8List thumbnail) {
+            return ConstrainedBox(
+              // this box keeps the image from being too tall
+              constraints: BoxConstraints(maxHeight: constraints.maxWidth),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  FittedBox(
+                    child: BasicMemoryImage(
+                      thumbnail,
+                      errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) =>
+                          Icon(Icons.error_outlined,
+                              color:
+                                  inbound ? inboundMsgColor : outboundMsgColor),
+                    ),
+                  ),
+                  PlayButton(size: 48),
+                ],
+              ),
+            );
+          });
+    });
   }
 }
 
-class _VideoAttachment extends StatefulWidget {
+class VideoViewer extends ViewerWidget {
+  final MessagingModel model;
   final StoredAttachment attachment;
-  final bool inbound;
-  final Image image;
 
-  _VideoAttachment(this.attachment, this.inbound, this.image);
+  VideoViewer(
+      this.model, Contact contact, StoredMessage message, this.attachment)
+      : super(contact, message);
 
   @override
-  _VideoAttachmentState createState() => _VideoAttachmentState();
+  State<StatefulWidget> createState() => VideoViewerState();
 }
 
-class _VideoAttachmentState extends State<_VideoAttachment> {
-  VideoPlayerController? _controller;
-  var _playing = false;
-  var _reachedEnd = false;
+class VideoViewerState extends ViewerState<VideoViewer> {
+  VideoPlayerController? controller;
+  var playing = false;
+  bool showInfo = true;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _disposeControllerIfReachedEnd();
+    context.loaderOverlay.show();
+    widget.model.decryptVideoForPlayback(widget.attachment).catchError((e) {
+      context.loaderOverlay.hide();
+    }).then((videoFilename) {
+      context.loaderOverlay.hide();
+      setState(() {
+        controller = VideoPlayerController.file(File(videoFilename))
+          ..initialize().then((_) {
+            if (controller!.value.aspectRatio > 1) {
+              // force landscape
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.landscapeRight,
+                DeviceOrientation.landscapeLeft,
+              ]);
+            }
+            setState(() {
+              controller?.play().then((_) {
+                // update UI after playing stops
+                setState(() {});
+              });
+            });
+          });
+        controller?.addListener(() {
+          if (controller!.value.isPlaying != playing) {
+            setState(() {
+              playing = !playing;
+            });
+          }
+        });
+      });
     });
   }
 
   @override
   void dispose() {
+    controller?.dispose();
+    controller = null;
     super.dispose();
-    _controller?.dispose();
-    _controller = null;
-  }
-
-  void _disposeControllerIfReachedEnd() {
-    if (_reachedEnd) {
-      // video already reached end, start from beginning
-      _controller!.dispose();
-      setState(() {
-        _controller = null;
-        _reachedEnd = false;
-      });
-    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
+  bool ready() => controller != null;
 
+  @override
+  Widget body(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      final height = constraints.maxWidth;
-
+      if (controller == null) {
+        return Container();
+      }
       return Stack(
         alignment: Alignment.center,
         children: [
-          // Always render the thumbnail in order to preserve the size of the stack
-          // while the video starts playing
-          ConstrainedBox(
-            // this box keeps the video from being too tall
-            constraints: BoxConstraints(maxHeight: height),
-            child: widget.image,
+          ValueListenableBuilder(
+            valueListenable: controller!,
+            builder:
+                (BuildContext context, VideoPlayerValue value, Widget? child) {
+              if (!value.isInitialized) {
+                return const SizedBox();
+              }
+              return Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
+                  // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                  AspectRatio(
+                    aspectRatio: controller!.value.aspectRatio,
+                    // we rotate landscape videos as a workaround for
+                    // https://github.com/flutter/flutter/issues/62400
+                    child: Transform.rotate(
+                      angle: controller!.value.aspectRatio > 1 ? pi : 0,
+                      child: VideoPlayer(controller!),
+                    ),
+                  ),
+                  VideoProgressIndicator(controller!, allowScrubbing: true),
+                ],
+              );
+            },
           ),
-          if (_controller != null)
-            ConstrainedBox(
-              // this box keeps the video from being too tall
-              constraints: BoxConstraints(
-                maxWidth: height * _controller!.value.aspectRatio,
-              ),
-              child: ValueListenableBuilder(
-                valueListenable: _controller!,
-                builder: (BuildContext context, VideoPlayerValue value,
-                    Widget? child) {
-                  if (!value.isInitialized) {
-                    return const SizedBox();
-                  }
-                  return Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.bottomCenter,
-                    children: <Widget>[
-                      // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                      AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
-                        child: VideoPlayer(_controller!),
-                      ),
-                      ConstrainedBox(
-                        // this box keeps the video from being too tall
-                        constraints: BoxConstraints(
-                          maxWidth: height * _controller!.value.aspectRatio,
-                        ),
-                        child: VideoProgressIndicator(_controller!,
-                            allowScrubbing: true),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
           // button goes in main stack
-          FittedBox(
-            child: IconButton(
-                iconSize: height / 4,
-                icon: Icon(
-                    _playing
-                        ? Icons.stop_circle_outlined
-                        : Icons.play_circle_outline,
-                    color: (widget.inbound ? inboundMsgColor : outboundMsgColor)
-                        .withOpacity(0.8)),
-                onPressed: () {
-                  _disposeControllerIfReachedEnd();
-
-                  if (_controller != null) {
-                    if (_controller!.value.isPlaying) {
-                      _controller!.pause();
-                    } else {
-                      _controller!.play();
-                    }
-                    return;
-                  }
-
-                  context.loaderOverlay.show();
-                  model
-                      .decryptVideoForPlayback(widget.attachment)
-                      .catchError((e) {
-                    context.loaderOverlay.hide();
-                  }).then((videoFilename) {
-                    context.loaderOverlay.hide();
-                    setState(() {
-                      _controller =
-                          VideoPlayerController.file(File(videoFilename))
-                            ..initialize().then((_) {
-                              setState(() {
-                                _controller?.play().then((_) {
-                                  // update UI after playing stops
-                                  setState(() {});
-                                });
-                              });
-                            });
-                      _controller?.addListener(() {
-                        if (_controller!.value.isPlaying != _playing) {
-                          setState(() {
-                            _playing = !_playing;
-                            if (!_playing &&
-                                _controller!.value.position ==
-                                    _controller!.value.duration) {
-                              // reached end of video, mark for reset
-                              _reachedEnd = true;
-                            }
-                          });
-                        }
-                      });
-                    });
-                  });
-                }),
+          PlayButton(
+            size: 48,
+            playing: playing,
+            onPressed: () {
+              if (controller!.value.isPlaying) {
+                controller!.pause();
+              } else {
+                controller!.play();
+              }
+            },
           ),
         ],
       );

@@ -16,7 +16,6 @@ class CAssetImage extends StatelessWidget {
       height: size,
       width: size,
       color: color,
-      fit: BoxFit.scaleDown,
     );
   }
 }
