@@ -10,7 +10,7 @@ class VPNStatus extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CText(
-            'VPN Status'.i18n + ': ',
+            'VPN_status'.i18n,
             style: tsBody1.copiedWith(
               color: unselectedTabLabelColor,
             ),

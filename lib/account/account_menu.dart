@@ -38,7 +38,7 @@ class AccountMenu extends StatelessWidget {
       ),
       SettingsItem(
         icon: ImagePaths.devices,
-        title: 'authorize_device_for_pro'.i18n,
+        title: 'authorize_device_pro'.i18n,
         onTap: () {
           authorizeDeviceForPro(context);
         },
@@ -114,7 +114,7 @@ class AccountMenu extends StatelessWidget {
     var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'Account'.i18n,
+      title: 'account'.i18n,
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return messagingModel

@@ -373,7 +373,7 @@ class MessageBubble extends StatelessWidget {
         children: [
           Expanded(
               child: CText(
-            'text_copied'.i18n,
+            'copied'.i18n,
             style: tsBody1Color(white),
             textAlign: TextAlign.start,
           )),

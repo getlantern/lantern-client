@@ -64,7 +64,7 @@ class CustomBottomBar extends StatelessWidget {
               (context, value, child) => CircleAvatar(
                 maxRadius: activeIconSize - 4,
                 backgroundColor: (value.toLowerCase() ==
-                            'Disconnecting'.i18n.toLowerCase() ||
+                            'disconnecting'.i18n.toLowerCase() ||
                         value == 'connected'.i18n.toLowerCase())
                     ? indicatorGreen
                     : indicatorRed,
@@ -79,7 +79,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 2,
             total: isDevelop ? 4 : 3,
-            label: CText('Account'.i18n, style: tsFloatingLabel),
+            label: CText('account'.i18n, style: tsFloatingLabel),
             onTap: () => onTap!(2),
             icon: SvgPicture.asset(
               ImagePaths.account,
@@ -89,7 +89,7 @@ class CustomBottomBar extends StatelessWidget {
             ),
           ),
           label: '',
-          tooltip: 'Account'.i18n,
+          tooltip: 'account'.i18n,
         ),
         if (isDevelop)
           BottomNavigationBarItem(
