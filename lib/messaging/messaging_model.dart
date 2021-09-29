@@ -174,6 +174,40 @@ class MessagingModel extends Model {
         'unsafeToId': toId,
       });
 
+  Future<List<SearchResult<Contact>>> searchContacts(
+          String query, int? numTokens) async =>
+      methodChannel.invokeMethod('searchContacts', <String, dynamic>{
+        'query': sanitizeQuery(query),
+        'numTokens': numTokens,
+      }).then((value) {
+        final results = <SearchResult<Contact>>[];
+        value.forEach((element) {
+          final result = SearchResult<Contact>(element['path'],
+              Contact.fromBuffer(element['contact']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
+
+  Future<List<SearchResult<StoredMessage>>> searchMessages(
+          String query, int? numTokens) async =>
+      methodChannel.invokeMethod('searchMessages', <String, dynamic>{
+        'query': sanitizeQuery(query),
+        'numTokens': numTokens,
+      }).then((value) {
+        final results = <SearchResult<StoredMessage>>[];
+        value.forEach((element) {
+          final result = SearchResult<StoredMessage>(element['path'],
+              StoredMessage.fromBuffer(element['message']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
+
+  String sanitizeQuery(String query) => query
+      .split(RegExp(r'\s'))
+      .map((s) => '"${s.replaceAll('\"', '')}"')
+      .join(' ');
   /*
   Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
   whom we're being introduced.

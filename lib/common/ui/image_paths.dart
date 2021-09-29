@@ -39,6 +39,7 @@ class ImagePaths {
   static const mic = 'assets/images/mic.svg';
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
+  static const search = 'assets/images/search.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
