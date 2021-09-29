@@ -166,7 +166,7 @@ msgstr "Are you sure you want to unlink this device from your Pro account?"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "dev_settings"
+msgid "dev_title"
 msgstr "Developer Settings"
 
 msgid "developer"
