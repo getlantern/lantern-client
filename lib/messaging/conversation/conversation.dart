@@ -368,7 +368,7 @@ class ConversationState extends State<Conversation>
                     quotedMessage: quotedMessage,
                     model: model,
                     contact: contact,
-                    onCloseListener: () => setState(() => isReplying = false),
+                    onCancel: () => setState(() => isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(

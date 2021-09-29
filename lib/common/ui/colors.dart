@@ -56,8 +56,7 @@ Color outboundMsgColor = white;
 Color inboundMsgColor = black;
 Color inboundBgColor = grey3;
 
-Color snippetBgColor = grey2;
-Color snippetShadowColor = const Color.fromARGB(100, 0, 0, 0);
+Color snippetShadowColor = black.withOpacity(0.18);
 
 Color selectedTabColor = white;
 Color unselectedTabColor = grey1;

@@ -179,17 +179,12 @@ class MessageBubble extends StatelessWidget {
                       : CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (message.replyToId.isNotEmpty)
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => onTapReply(),
-                              child: ReplySnippet(isOutbound, message, contact),
-                            ),
-                        ],
-                      ),
+                      if (message.replyToId.isNotEmpty)
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () => onTapReply(),
+                          child: ReplySnippet(isOutbound, message, contact),
+                        ),
                       if (message.text.isNotEmpty || wasDeleted)
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
@@ -338,7 +333,10 @@ class MessageBubble extends StatelessWidget {
               showDivider: false,
               leading: ImagePaths.reply,
               content: 'reply'.i18n,
-              onTap: onReply,
+              onTap: () {
+                Navigator.of(context).pop();
+                onReply();
+              },
             ),
             if (!isAttachment)
               StatefulBuilder(
