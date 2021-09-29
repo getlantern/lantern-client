@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
-
 import 'package:lantern/messaging/conversation/replies/reply_mime.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_description.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet_header.dart';
-import 'package:lantern/messaging/conversation/replies/reply_snippet_text.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class ReplySnippet extends StatelessWidget {
@@ -31,7 +29,8 @@ class ReplySnippet extends StatelessWidget {
       return Container(
           height: 56.0,
           decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(borderRadius)),
               boxShadow: [
                 BoxShadow(
                   color: snippetShadowColor,
@@ -39,23 +38,24 @@ class ReplySnippet extends StatelessWidget {
                   offset: const Offset(0, 0),
                 ),
               ],
-              color: snippetBgColor),
+              color: white),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
+              Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 3.5),
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 8, end: 8, bottom: 4),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ReplySnippetHeader(message: message, contact: contact),
+                      ReplySnippetHeader(
+                          message: message, contact: contact, showIcon: true),
                       if (isNotNullOrDeleted && isTextResponse)
-                        ReplySnippetText(text: quotedMessage!.value.text),
+                        CText(quotedMessage!.value.text,
+                            maxLines: 1, style: tsSubtitle1),
                       if (isNotNullOrDeleted && !isTextResponse)
                         ReplySnippetDescription(
                           descriptiveText: quotedMessage

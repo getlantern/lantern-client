@@ -66,7 +66,6 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
-  bool showInfo = true;
 
   @override
   void initState() {

@@ -549,6 +549,9 @@ msgstr "This will delete the message for everyone."
 msgid "reply"
 msgstr "Reply"
 
+msgid "replying_to"
+msgstr "Replying to %s"
+
 msgid "attachment"
 msgstr "attachment"
 

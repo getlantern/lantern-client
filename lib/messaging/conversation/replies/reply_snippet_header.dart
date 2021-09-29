@@ -1,34 +1,42 @@
 import 'package:lantern/messaging/messaging.dart';
 
 class ReplySnippetHeader extends StatelessWidget {
+  final StoredMessage message;
+  final Contact contact;
+  final bool showIcon;
+
   const ReplySnippetHeader({
     Key? key,
     required this.message,
     required this.contact,
+    this.showIcon = false,
   }) : super(key: key);
-
-  final StoredMessage message;
-  final Contact contact;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        const Icon(
-          Icons.reply,
-          size: 12,
-        ),
+        if (showIcon)
+          const Padding(
+            padding: EdgeInsetsDirectional.only(end: 4),
+            child: CAssetImage(
+              path: ImagePaths.reply,
+              size: 16,
+            ),
+          ),
         CText(
-          'Replying to ${_matchIdToDisplayName(message.replyToSenderId, contact)}',
-          overflow: TextOverflow.ellipsis,
+          'replying_to'
+              .i18n
+              .fill([replyToDisplayName(message.senderId, contact)]),
+          maxLines: 1,
           style: tsSubtitle2,
         ),
       ],
     );
   }
 
-  String _matchIdToDisplayName(String contactIdToMatch, Contact contact) {
+  String replyToDisplayName(String contactIdToMatch, Contact contact) {
     return contactIdToMatch == contact.contactId.id
         ? contact.displayName
         : 'me'.i18n;
