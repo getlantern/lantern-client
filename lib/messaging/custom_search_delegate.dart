@@ -63,7 +63,7 @@ class CustomSearchDelegate extends SearchDelegate {
         interactive: true,
         isAlwaysShown: false,
         showTrackOnHover: true,
-        radius: const Radius.circular(50),
+        radius: const Radius.circular(scrollBarRadius),
         child: Container(
             padding: const EdgeInsetsDirectional.all(16.0),
             width: constraints.maxWidth,
