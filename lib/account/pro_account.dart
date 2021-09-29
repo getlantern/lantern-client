@@ -21,7 +21,7 @@ class ProAccount extends StatelessWidget {
             .devices((BuildContext context, Devices devices, Widget? child) {
           var items = [
             SettingsSectionHeader(
-              label: 'Email'.i18n,
+              label: 'email'.i18n,
             ),
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {

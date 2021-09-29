@@ -16,8 +16,8 @@ class GenericAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = attachmentTitle ?? 'Could not render file title'.i18n;
-    final fileType = fileExtension ?? 'Could not render filetype'.i18n;
+    final title = attachmentTitle ?? 'could_not_render_title'.i18n;
+    final fileType = fileExtension ?? 'could_not_render_type'.i18n;
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
       child: Row(

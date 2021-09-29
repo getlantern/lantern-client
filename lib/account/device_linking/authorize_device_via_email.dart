@@ -37,9 +37,8 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 controller: emailController,
                 autovalidateMode: AutovalidateMode.disabled,
                 //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
-                label: 'Email'.i18n,
-                helperText:
-                    'Enter the email associated with your Pro account'.i18n,
+                label: 'email'.i18n,
+                helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: const Icon(
                   Icons.email,
@@ -52,7 +51,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(
                 width: 200,
-                text: 'Submit'.i18n,
+                text: 'submit'.i18n,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     context.loaderOverlay.show();
