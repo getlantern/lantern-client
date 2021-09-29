@@ -33,7 +33,8 @@ class ImageAttachment extends StatelessWidget {
                   thumbnail,
                   errorBuilder: (BuildContext context, Object error,
                           StackTrace? stackTrace) =>
-                      Icon(Icons.error_outlined,
+                      CAssetImage(
+                          path: ImagePaths.error_outline,
                           color: inbound ? inboundMsgColor : outboundMsgColor),
                 ),
               ),

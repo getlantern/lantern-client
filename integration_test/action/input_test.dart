@@ -20,6 +20,7 @@ class Input {
     if (emojiSelection == null) {
       await tester.enterText(find.byType(TextFormField), text);
     } else {
+      // TODO: This is outdated, needs fix
       await tester.tap(find.byIcon(Icons.sentiment_very_satisfied));
       await awaitFor(tester, duration: const Duration(seconds: 1));
       await tester.tap(find.text(emojiSelection));

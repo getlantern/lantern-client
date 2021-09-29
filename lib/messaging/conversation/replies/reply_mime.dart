@@ -27,7 +27,7 @@ class ReplyMime extends StatelessWidget {
                         StackTrace? stackTrace) =>
                     _getIconWrapper(Icons.error_outlined),
                 height: 56),
-            const Icon(Icons.play_circle_outline, color: Colors.white),
+            const CAssetImage(path: ImagePaths.play_circle_filled),
           ]),
         );
       case MimeTypes.IMAGE:
