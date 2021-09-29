@@ -34,7 +34,9 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.widgetWithText(AppBar, 'New Message'), findsOneWidget);
       print('Search and QR should be displayed');
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.search), findsWidgets);
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.qr_code), findsWidgets);
     });
 

@@ -133,7 +133,8 @@ class AttachmentBuilder extends StatelessWidget {
   }
 
   Widget errorIndicator() {
-    return Icon(Icons.error_outlined,
+    return CAssetImage(
+        path: ImagePaths.error_outline,
         color: inbound ? inboundMsgColor : outboundMsgColor);
   }
 }

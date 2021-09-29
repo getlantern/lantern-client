@@ -34,8 +34,10 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget,
           reason: 'Search for a CustomAppBar');
       expect(find.widgetWithText(AppBar, 'Messages'), findsOneWidget);
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.search), findsOneWidget,
           reason: 'Search should be displayed');
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.qr_code), findsOneWidget,
           reason: 'QR should be displayed');
     });

@@ -54,8 +54,9 @@ class ConversationSticker extends StatelessWidget {
         style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
   }
 
-  Icon _partiallyAddedIcon() {
-    return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
+  CAssetImage _partiallyAddedIcon() {
+    return const CAssetImage(
+        path: ImagePaths.more_horiz, size: 18, color: Colors.black);
   }
 
   CText _fullyAddedText() {
@@ -70,9 +71,11 @@ class ConversationSticker extends StatelessWidget {
             style: tsBody2.copiedWith(color: grey5));
   }
 
-  Icon _fullyAddedIcon() {
+  CAssetImage _fullyAddedIcon() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? const Icon(Icons.timer, size: 18, color: Colors.black)
-        : const Icon(Icons.lock_clock, size: 18, color: Colors.black);
+        ? const CAssetImage(
+            path: ImagePaths.clock, size: 18, color: Colors.black)
+        : const CAssetImage(
+            path: ImagePaths.lock_clock, size: 18, color: Colors.black);
   }
 }
