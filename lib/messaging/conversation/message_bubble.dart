@@ -272,7 +272,7 @@ class MessageBubble extends StatelessWidget {
 
     if (wasDeleted) {
       return DottedBorder(
-        color: grey3,
+        color: grey4,
         dashPattern: [3],
         strokeWidth: 1,
         customPath: (size) => borderRadius.toPath(size),
