@@ -62,8 +62,7 @@ class AttachmentBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    // we are first downloading attachments and then decrypting them by calling
-    // _getDecryptedAttachment() in the FutureBuilder
+    // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment()
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING:
         return progressIndicator();

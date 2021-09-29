@@ -1,7 +1,6 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/deleted_bubble.dart';
 import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,14 +80,6 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget bubble(BuildContext context, MessagingModel model) {
-    if (wasDeleted) {
-      final humanizedSenderName =
-          message.remotelyDeletedBy.id == contact.contactId.id
-              ? contact.displayName
-              : 'me'.i18n;
-      return DeletedBubble('$humanizedSenderName deleted this message'.i18n);
-    }
-
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
       onPressed: () {},
@@ -177,31 +168,10 @@ class MessageBubble extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-          constraints: BoxConstraints(
-              minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
-          clipBehavior: Clip.hardEdge,
-          padding: EdgeInsetsDirectional.only(
-              top: message.replyToId.isNotEmpty ? 8 : 0,
-              start: isAttachment ? 0 : 8,
-              end: isAttachment ? 0 : 8),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            border: isAttachment && !isAudio
-                ? Border.all(color: grey4, width: 0.5)
-                : null,
-            borderRadius: BorderRadius.only(
-              topLeft: isInbound && !isStartOfBlock ? squared : rounded,
-              topRight: isOutbound && !isStartOfBlock ? squared : rounded,
-              bottomLeft: isInbound && (isNewestMessage || !isEndOfBlock)
-                  ? squared
-                  : rounded,
-              bottomRight: isOutbound && (isNewestMessage || !isEndOfBlock)
-                  ? squared
-                  : rounded,
-            ),
-          ),
-          child: isContactConnectionCard
+        return wrapBubble(
+          context,
+          isAudio,
+          isContactConnectionCard
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : Column(
                   crossAxisAlignment: isOutbound
@@ -220,13 +190,22 @@ class MessageBubble extends StatelessWidget {
                             ),
                         ],
                       ),
+                      if (wasDeleted)
+                        CText(
+                            'message_deleted'.i18n.fill([
+                              message.remotelyDeletedBy.id ==
+                                      contact.contactId.id
+                                  ? contact.displayName
+                                  : 'me'.i18n
+                            ]),
+                            style: tsSubtitle1),
                       if (message.text.isNotEmpty)
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
                             fit: FlexFit.loose,
                             child: Container(
                               padding: const EdgeInsetsDirectional.only(
-                                  start: 8, end: 8, top: 8, bottom: 4),
+                                  start: 8, end: 8, top: 4, bottom: 4),
                               child: MarkdownBody(
                                 data: '${message.text}',
                                 onTapLink: (String text, String? href,
@@ -275,6 +254,54 @@ class MessageBubble extends StatelessWidget {
                     ]),
         );
       },
+    );
+  }
+
+  Widget wrapBubble(BuildContext context, bool isAudio, Widget child) {
+    if (wasDeleted) {
+      return DottedBorder(
+        color: grey3,
+        radius: const Radius.circular(8),
+        dashPattern: [3],
+        strokeWidth: 1,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          clipBehavior: Clip.hardEdge,
+          child: Padding(
+            padding: EdgeInsetsDirectional.only(
+                top: message.replyToId.isNotEmpty ? 8 : 0,
+                start: isAttachment ? 0 : 8,
+                end: isAttachment ? 0 : 8),
+            child: child,
+          ),
+        ),
+      );
+    }
+    return Container(
+      constraints: BoxConstraints(
+          minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
+      clipBehavior: Clip.hardEdge,
+      padding: EdgeInsetsDirectional.only(
+          top: message.replyToId.isNotEmpty ? 8 : 0,
+          start: isAttachment ? 0 : 8,
+          end: isAttachment ? 0 : 8),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: isAttachment && !isAudio
+            ? Border.all(color: grey4, width: 0.5)
+            : null,
+        borderRadius: BorderRadius.only(
+          topLeft: isInbound && !isStartOfBlock ? squared : rounded,
+          topRight: isOutbound && !isStartOfBlock ? squared : rounded,
+          bottomLeft: isInbound && (isNewestMessage || !isEndOfBlock)
+              ? squared
+              : rounded,
+          bottomRight: isOutbound && (isNewestMessage || !isEndOfBlock)
+              ? squared
+              : rounded,
+        ),
+      ),
+      child: child,
     );
   }
 
@@ -390,7 +417,10 @@ class MessageBubble extends StatelessWidget {
       title: 'delete_for_me'.i18n,
       explanation: 'delete_for_me_explanation'.i18n,
       agreeText: 'delete'.i18n,
-      agreeAction: () => model.deleteLocally(message),
+      agreeAction: () async {
+        await model.deleteLocally(message);
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -402,7 +432,10 @@ class MessageBubble extends StatelessWidget {
       title: 'delete_for_everyone'.i18n,
       explanation: 'delete_for_everyone_explanation'.i18n,
       agreeText: 'delete'.i18n,
-      agreeAction: () => model.deleteLocally(message),
+      agreeAction: () async {
+        await model.deleteGlobally(message);
+        Navigator.pop(context);
+      },
     );
   }
 

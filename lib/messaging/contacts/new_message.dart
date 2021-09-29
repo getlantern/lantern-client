@@ -23,10 +23,14 @@ class _NewMessageState extends State<NewMessage> {
     return BaseScreen(
       title: 'new_message'.i18n,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          tooltip: 'search'.i18n,
-          onPressed: () {},
+        RoundButton(
+          onPressed: () async => await showSearch(
+            context: context,
+            query: '',
+            delegate: CustomSearchDelegate(),
+          ),
+          backgroundColor: transparent,
+          icon: const CAssetImage(path: ImagePaths.search),
         ),
       ],
       body: model.me(
@@ -103,8 +107,8 @@ class _NewMessageState extends State<NewMessage> {
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedContacts = contacts.sortedAlphabetically();
 
-                var groupedSortedContacts = sortedContacts.groupBy((el) =>
-                    sanitizeContactName(el.value.displayName[0].toLowerCase()));
+                var groupedSortedContacts = sortedContacts
+                    .groupBy((el) => el.value.displayName[0].toLowerCase());
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)
