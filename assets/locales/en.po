@@ -30,7 +30,10 @@ msgid "go_pro_description"
 msgstr "Unlock faster speeds, and unlimited data!"
 
 msgid "server_location"
-msgstr "Server Location: "
+msgstr "Server Location"
+
+msgid "server_location_info"
+msgstr "Server Location Info"
 
 msgid "OK"
 msgstr "OK"
