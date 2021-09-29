@@ -23,10 +23,14 @@ class _NewMessageState extends State<NewMessage> {
     return BaseScreen(
       title: 'new_message'.i18n,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          tooltip: 'search'.i18n,
-          onPressed: () {},
+        RoundButton(
+          onPressed: () async => await showSearch(
+            context: context,
+            query: '',
+            delegate: CustomSearchDelegate(),
+          ),
+          backgroundColor: transparent,
+          icon: const CAssetImage(path: ImagePaths.search),
         ),
       ],
       body: model.me(

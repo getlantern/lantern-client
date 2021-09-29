@@ -19,8 +19,9 @@ import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId contactId;
+  final int? initialScrollIndex;
 
-  Conversation(this.contactId) : super();
+  Conversation({required this.contactId, this.initialScrollIndex}) : super();
 
   @override
   ConversationState createState() => ConversationState();
@@ -470,7 +471,9 @@ class ConversationState extends State<Conversation>
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
       return ScrollablePositionedList.builder(
         itemScrollController: scrollController,
+        initialScrollIndex: widget.initialScrollIndex ?? 0,
         reverse: true,
+        physics: defaultScrollPhysics,
         itemCount: listItems.length + 1,
         itemBuilder: (context, index) {
           if (index == listItems.length) {

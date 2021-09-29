@@ -246,9 +246,6 @@ msgstr "Copied!"
 msgid "new_message"
 msgstr "New Message"
 
-msgid "search"
-msgstr "Search"
-
 msgid "your_contact_info"
 msgstr "Your Contact Info"
 
@@ -551,3 +548,24 @@ msgstr "Reply"
 
 msgid "attachment"
 msgstr "attachment"
+
+msgid "search_chars_min"
+msgstr "Type at least three characters"
+
+msgid "search_no_results"
+msgstr "Sorry, we couldn’t find anything matching this search."
+
+msgid "search_error"
+msgstr "Sorry, there was an error retrieving the search results."
+
+msgid "search_contacts"
+msgstr "Contacts (%s)"
+
+msgid "search_messages"
+msgstr "Messages (%s)"
+
+msgid "search_in_contacts"
+msgstr "Search in Contacts"
+
+msgid "search_in_messages"
+msgstr "Search in Messages and Contacts"

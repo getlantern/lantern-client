@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
-
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -10,10 +9,14 @@ class Messages extends StatelessWidget {
       return BaseScreen(
           title: 'messages'.i18n,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'search'.i18n,
-              onPressed: () {},
+            RoundButton(
+              onPressed: () async => await showSearch(
+                context: context,
+                query: '',
+                delegate: CustomSearchDelegate(searchMessages: true),
+              ),
+              backgroundColor: transparent,
+              icon: const CAssetImage(path: ImagePaths.search),
             ),
           ],
           body:
@@ -88,8 +91,9 @@ class Messages extends StatelessWidget {
                                           displayName:
                                               contact.value.displayName),
                                       title: contact.value.displayName,
-                                      subtitle: CText(
-                                          "${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'.i18n}",
+                                      subTitle:
+                                          '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
+                                              .i18n,
                                       onTap: () async =>
                                           await context.pushRoute(Conversation(
                                               contactId:
