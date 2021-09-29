@@ -13,8 +13,9 @@ class ContactListItem extends StatelessWidget {
     required this.title,
     this.subTitle,
     required this.leading,
-    required this.trailing,
+    this.trailing,
     this.onTap,
+    this.showDivider = true,
   }) : super();
 
   final Contact contact;
@@ -25,6 +26,7 @@ class ContactListItem extends StatelessWidget {
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) => Wrap(
@@ -36,17 +38,24 @@ class ContactListItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
+                  !title.contains('**')
+                      ? CText(title.toString(),
+                          maxLines: 1, style: tsSubtitle1Short)
+                      : TextHighlighter(text: title, style: tsSubtitle1),
                   if (subTitle != null)
-                    CText(subTitle!,
-                        maxLines: 1, style: tsBody2.copiedWith(color: grey5)),
+                    !subTitle!.contains('**')
+                        ? CText(subTitle!,
+                            maxLines: 1,
+                            style: tsBody2.copiedWith(color: grey5))
+                        : TextHighlighter(text: subTitle!, style: tsBody2),
                 ],
               ),
               trailing: Padding(
                 padding: const EdgeInsetsDirectional.only(end: 8.0),
                 child: trailing ?? const SizedBox(),
               ),
-              onTap: onTap),
+              onTap: onTap,
+              showDivider: showDivider),
         ],
       );
 }

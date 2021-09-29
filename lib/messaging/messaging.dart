@@ -2,8 +2,8 @@ import 'messaging_model.dart';
 
 export 'package:lantern/common/common.dart';
 export 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+export 'custom_search_delegate.dart';
 
-export 'humanize.dart';
 export 'messaging_model.dart';
 export 'notifications.dart';
 export 'custom_avatar.dart';

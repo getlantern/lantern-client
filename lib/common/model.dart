@@ -34,7 +34,7 @@ abstract class Model {
       'fullTextSearch': fullTextSearch,
       'reverseSort': reverseSort,
     });
-    var result = <T>[];
+    final result = <T>[];
     if (deserialize != null) {
       intermediate
           .forEach((element) => result.add(deserialize(element as Uint8List)));
@@ -134,8 +134,16 @@ abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
 }
 
 class PathAndValue<T> {
-  String path;
-  T value;
+  final String path;
+  final T value;
 
-  PathAndValue(this.path, this.value);
+  const PathAndValue(this.path, this.value);
+}
+
+class SearchResult<T> {
+  final String path;
+  final T value;
+  final String snippet;
+
+  const SearchResult(this.path, this.value, this.snippet);
 }
