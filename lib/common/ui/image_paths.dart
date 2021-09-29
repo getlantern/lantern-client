@@ -31,6 +31,7 @@ class ImagePaths {
   static const hangup = 'assets/images/hangup.svg';
   static const reply = 'assets/images/reply.svg';
   static const check_green_large = 'assets/images/check_green_large.svg';
+  static const search = 'assets/images/search.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

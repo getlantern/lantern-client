@@ -131,7 +131,8 @@ Future showConversationOptions(
                                         interactive: true,
                                         isAlwaysShown: true,
                                         showTrackOnHover: true,
-                                        radius: const Radius.circular(50),
+                                        radius: const Radius.circular(
+                                            scrollBarRadius),
                                         child: ListView.builder(
                                           controller: scrollController,
                                           scrollDirection: Axis.vertical,

@@ -27,7 +27,6 @@ import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
 import 'package:lantern/messaging/messages.dart' as _i9;
 import 'package:lantern/messaging/messaging.dart' as _i21;
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i22;
 import 'package:lantern/vpn/vpn_tab.dart' as _i11;
 
 class AppRouter extends _i1.RootStackRouter {
@@ -57,7 +56,9 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ConversationArgs>();
-          return _i5.Conversation(args.contactId);
+          return _i5.Conversation(
+              contactId: args.contactId,
+              initialScrollIndex: args.initialScrollIndex);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 450,
@@ -329,17 +330,21 @@ class FullScreenDialogPageArgs {
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i22.ContactId contactId})
+  Conversation({required _i21.ContactId contactId, int? initialScrollIndex})
       : super(name,
-            path: 'conversation', args: ConversationArgs(contactId: contactId));
+            path: 'conversation',
+            args: ConversationArgs(
+                contactId: contactId, initialScrollIndex: initialScrollIndex));
 
   static const String name = 'Conversation';
 }
 
 class ConversationArgs {
-  const ConversationArgs({required this.contactId});
+  const ConversationArgs({required this.contactId, this.initialScrollIndex});
 
-  final _i22.ContactId contactId;
+  final _i21.ContactId contactId;
+
+  final int? initialScrollIndex;
 }
 
 class NewMessage extends _i1.PageRouteInfo {
@@ -395,7 +400,7 @@ class MessagesRoute extends _i1.PageRouteInfo {
 }
 
 class DisplayName extends _i1.PageRouteInfo<DisplayNameArgs> {
-  DisplayName({_i21.Key? key, required _i22.Contact me})
+  DisplayName({_i21.Key? key, required _i21.Contact me})
       : super(name,
             path: 'displayName', args: DisplayNameArgs(key: key, me: me));
 
@@ -407,7 +412,7 @@ class DisplayNameArgs {
 
   final _i21.Key? key;
 
-  final _i22.Contact me;
+  final _i21.Contact me;
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {

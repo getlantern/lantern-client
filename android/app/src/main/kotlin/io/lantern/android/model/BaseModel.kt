@@ -180,7 +180,7 @@ abstract class BaseModel(
                 val count = call.argument<Int?>("count") ?: Int.MAX_VALUE
                 val fullTextSearch = call.argument<String?>("fullTextSearch")
                 val reverseSort = call.argument<Boolean?>("reverseSort") ?: false
-                db.listRaw<Any>(path!!, start, count, fullTextSearch, reverseSort).map { it.value.valueOrProtoBytes }
+                db.listRaw<Any>(path!!, start, count, reverseSort).map { it.value.valueOrProtoBytes }
             }
             else -> notImplemented()
         }
