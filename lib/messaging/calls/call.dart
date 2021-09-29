@@ -104,8 +104,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: CText(
                             widget.contact.displayName.isNotEmpty
-                                ? sanitizeContactName(
-                                    widget.contact.displayName)
+                                ? widget.contact.displayName
                                 : widget.contact.contactId.id,
                             style: tsHeading1.copiedWith(color: white),
                           ),

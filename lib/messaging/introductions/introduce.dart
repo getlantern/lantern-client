@@ -27,8 +27,8 @@ class _IntroduceState extends State<Introduce> {
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts.toList().sortedAlphabetically();
 
-          var groupedSortedContacts = sortedContacts.groupBy((el) =>
-              sanitizeContactName(el.value.displayName[0].toLowerCase()));
+          var groupedSortedContacts = sortedContacts
+              .groupBy((el) => el.value.displayName[0].toLowerCase());
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

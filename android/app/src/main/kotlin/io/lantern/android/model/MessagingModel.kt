@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.db.SnippetConfig
 import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
@@ -158,6 +159,30 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "relayTo" -> {
                 return internalsdk.Internalsdk.relayTo(call.arguments as String)
             }
+            "searchContacts" ->
+                messaging
+                    .searchContacts(
+                        call.argument<String>("query")!!,
+                        SnippetConfig(
+                            highlightStart = snippetHighlight,
+                            highlightEnd = snippetHighlight,
+                            numTokens = call.argument("numTokens")!!
+                        )
+                    ).map {
+                        mapOf("snippet" to it.snippet, "path" to it.path, "contact" to it.value.bytes)
+                    }
+            "searchMessages" ->
+                messaging
+                    .searchMessages(
+                        call.argument<String>("query")!!,
+                        SnippetConfig(
+                            highlightStart = snippetHighlight,
+                            highlightEnd = snippetHighlight,
+                            numTokens = call.argument("numTokens")!!
+                        )
+                    ).map {
+                        mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.value.bytes)
+                    }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -217,5 +242,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     companion object {
         var currentConversationContact = ""
+
+        val snippetHighlight = "**"
     }
 }
