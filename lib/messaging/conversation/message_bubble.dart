@@ -190,16 +190,7 @@ class MessageBubble extends StatelessWidget {
                             ),
                         ],
                       ),
-                      if (wasDeleted)
-                        CText(
-                            'message_deleted'.i18n.fill([
-                              message.remotelyDeletedBy.id ==
-                                      contact.contactId.id
-                                  ? contact.displayName
-                                  : 'me'.i18n
-                            ]),
-                            style: tsSubtitle1),
-                      if (message.text.isNotEmpty)
+                      if (message.text.isNotEmpty || wasDeleted)
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
                             fit: FlexFit.loose,
@@ -207,7 +198,14 @@ class MessageBubble extends StatelessWidget {
                               padding: const EdgeInsetsDirectional.only(
                                   start: 8, end: 8, top: 4, bottom: 4),
                               child: MarkdownBody(
-                                data: '${message.text}',
+                                data: wasDeleted
+                                    ? 'message_deleted'.i18n.fill([
+                                        message.remotelyDeletedBy.id ==
+                                                contact.contactId.id
+                                            ? contact.displayName
+                                            : 'me'.i18n
+                                      ])
+                                    : message.text,
                                 onTapLink: (String text, String? href,
                                     String title) async {
                                   if (href != null && await canLaunch(href)) {
@@ -226,9 +224,14 @@ class MessageBubble extends StatelessWidget {
                                 },
                                 styleSheet: MarkdownStyleSheet(
                                   a: tsBody3.copiedWith(
-                                      color: color,
-                                      decoration: TextDecoration.underline),
-                                  p: tsBody3.copiedWith(color: color),
+                                    color: color,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  p: tsBody3.copiedWith(
+                                    color: color,
+                                    fontStyle:
+                                        wasDeleted ? FontStyle.italic : null,
+                                  ),
                                 ),
                               ),
                             ),
@@ -258,12 +261,21 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget wrapBubble(BuildContext context, bool isAudio, Widget child) {
+    final borderRadius = BorderRadius.only(
+      topLeft: isInbound && !isStartOfBlock ? squared : rounded,
+      topRight: isOutbound && !isStartOfBlock ? squared : rounded,
+      bottomLeft:
+          isInbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
+      bottomRight:
+          isOutbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
+    );
+
     if (wasDeleted) {
       return DottedBorder(
         color: grey3,
-        radius: const Radius.circular(8),
         dashPattern: [3],
         strokeWidth: 1,
+        customPath: (size) => borderRadius.toPath(size),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(50)),
           clipBehavior: Clip.hardEdge,
@@ -277,6 +289,7 @@ class MessageBubble extends StatelessWidget {
         ),
       );
     }
+
     return Container(
       constraints: BoxConstraints(
           minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
@@ -290,16 +303,7 @@ class MessageBubble extends StatelessWidget {
         border: isAttachment && !isAudio
             ? Border.all(color: grey4, width: 0.5)
             : null,
-        borderRadius: BorderRadius.only(
-          topLeft: isInbound && !isStartOfBlock ? squared : rounded,
-          topRight: isOutbound && !isStartOfBlock ? squared : rounded,
-          bottomLeft: isInbound && (isNewestMessage || !isEndOfBlock)
-              ? squared
-              : rounded,
-          bottomRight: isOutbound && (isNewestMessage || !isEndOfBlock)
-              ? squared
-              : rounded,
-        ),
+        borderRadius: borderRadius,
       ),
       child: child,
     );
