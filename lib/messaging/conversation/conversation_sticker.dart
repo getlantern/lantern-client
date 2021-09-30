@@ -56,7 +56,7 @@ class ConversationSticker extends StatelessWidget {
 
   CAssetImage _partiallyAddedIcon() {
     return const CAssetImage(
-        path: ImagePaths.more_horiz, size: 18, color: Colors.black);
+        path: ImagePaths.pending, size: 18, color: Colors.black);
   }
 
   CText _fullyAddedText() {
