@@ -194,6 +194,7 @@ class MessageBubble extends StatelessWidget {
                                   contact: contact,
                                   message: replyToMessage,
                                   shrink: attachment == null,
+                                  isOutbound: isOutbound,
                                 ),
                               ),
                             ),
