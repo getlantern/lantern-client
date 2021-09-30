@@ -1,51 +1,14 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 
-class ImageAttachment extends StatelessWidget {
-  final Contact contact;
-  final StoredMessage message;
-  final StoredAttachment attachment;
-  final bool inbound;
-
-  ImageAttachment(this.contact, this.message, this.attachment, this.inbound);
+class ImageAttachment extends VisualAttachment {
+  ImageAttachment(Contact contact, StoredMessage message,
+      StoredAttachment attachment, bool inbound)
+      : super(contact, message, attachment, inbound);
 
   @override
-  Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
-
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return AttachmentBuilder(
-          attachment: attachment,
-          inbound: inbound,
-          defaultIcon: Icons.image,
-          scrimAttachment: true,
-          onTap: () async => await context.router.push(
-                FullScreenDialogPage(
-                    widget: ImageViewer(model, contact, message, attachment)),
-              ),
-          builder: (BuildContext context, Uint8List thumbnail) {
-            return ConstrainedBox(
-              // this box keeps the image from being too tall
-              constraints: BoxConstraints(
-                  maxHeight: constraints.maxWidth,
-                  minWidth: constraints.maxWidth),
-              child: FittedBox(
-                child: BasicMemoryImage(
-                  thumbnail,
-                  width: 2000,
-                  height: 2000,
-                  fit: BoxFit.cover,
-                  errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) =>
-                      Icon(Icons.error_outlined,
-                          color: inbound ? inboundMsgColor : outboundMsgColor),
-                ),
-              ),
-            );
-          });
-    });
-  }
+  Widget buildViewer(MessagingModel model) =>
+      ImageViewer(model, contact, message, attachment);
 }
 
 class ImageViewer extends ViewerWidget {
