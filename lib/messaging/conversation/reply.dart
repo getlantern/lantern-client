@@ -6,12 +6,14 @@ class Reply extends StatelessWidget {
   final MessagingModel model;
   final Contact contact;
   final StoredMessage message;
+  final bool shrink;
   final void Function()? onCancel;
 
   const Reply({
     required this.model,
     required this.message,
     required this.contact,
+    this.shrink = false,
     this.onCancel,
   }) : super();
 
@@ -46,7 +48,7 @@ class Reply extends StatelessWidget {
 
   Widget buildHeader() {
     return Row(
-      mainAxisSize: isPreview ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
       children: [
         if (!isPreview)
           const Padding(
@@ -97,7 +99,7 @@ class Reply extends StatelessWidget {
               ],
       ),
       child: Row(
-        mainAxisSize: isPreview ? MainAxisSize.max : MainAxisSize.min,
+        mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
         children: [
           wrapBody(
             Padding(
@@ -147,10 +149,10 @@ class Reply extends StatelessWidget {
   }
 
   Widget wrapBody(Widget body) {
-    if (isPreview) {
-      return Expanded(child: body);
-    } else {
+    if (shrink) {
       return Flexible(child: body);
+    } else {
+      return Expanded(child: body);
     }
   }
 

@@ -187,59 +187,66 @@ class MessageBubble extends StatelessWidget {
                             behavior: HitTestBehavior.translucent,
                             onTap: () => onTapReply(),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.only(top: 8),
-                              child: Reply(
+                              padding: const EdgeInsetsDirectional.all(8),
+                              child: SizedBox(
+                                child: Reply(
                                   model: model,
                                   contact: contact,
-                                  message: replyToMessage),
+                                  message: replyToMessage,
+                                  shrink: attachment == null,
+                                ),
+                              ),
                             ),
                           );
                         }),
                       if (message.text.isNotEmpty || wasRemotelyDeleted)
-                        Row(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(
-                              padding: const EdgeInsetsDirectional.only(
-                                  start: 8, end: 8, top: 4, bottom: 4),
-                              child: MarkdownBody(
-                                data: wasRemotelyDeleted
-                                    ? 'message_deleted'
-                                        .i18n
-                                        .fill([contact.displayName])
-                                    : message.text,
-                                onTapLink: (String text, String? href,
-                                    String title) async {
-                                  if (href != null && await canLaunch(href)) {
-                                    showConfirmationDialog(
-                                        context: context,
-                                        title: 'open_url'.i18n,
-                                        explanation:
-                                            'are_you_sure_you_want_to_open'
-                                                .fill([href]),
-                                        dismissText: 'cancel'.i18n,
-                                        agreeText: 'continue'.i18n,
-                                        agreeAction: () async {
-                                          await launch(href);
-                                        });
-                                  }
-                                },
-                                styleSheet: MarkdownStyleSheet(
-                                  a: tsBody3.copiedWith(
-                                    color: color,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  p: tsBody3.copiedWith(
-                                    color: color,
-                                    fontStyle: wasRemotelyDeleted
-                                        ? FontStyle.italic
-                                        : null,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 8, end: 8, bottom: 4),
+                                child: MarkdownBody(
+                                  data: wasRemotelyDeleted
+                                      ? 'message_deleted'
+                                          .i18n
+                                          .fill([contact.displayName])
+                                      : message.text,
+                                  onTapLink: (String text, String? href,
+                                      String title) async {
+                                    if (href != null && await canLaunch(href)) {
+                                      showConfirmationDialog(
+                                          context: context,
+                                          title: 'open_url'.i18n,
+                                          explanation:
+                                              'are_you_sure_you_want_to_open'
+                                                  .fill([href]),
+                                          dismissText: 'cancel'.i18n,
+                                          agreeText: 'continue'.i18n,
+                                          agreeAction: () async {
+                                            await launch(href);
+                                          });
+                                    }
+                                  },
+                                  styleSheet: MarkdownStyleSheet(
+                                    a: tsBody3.copiedWith(
+                                      color: color,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    p: tsBody3.copiedWith(
+                                      color: color,
+                                      fontStyle: wasRemotelyDeleted
+                                          ? FontStyle.italic
+                                          : null,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]),
+                          ]),
+                        ),
                       Stack(
                         fit: StackFit.passthrough,
                         alignment: isOutbound
@@ -297,8 +304,6 @@ class MessageBubble extends StatelessWidget {
       constraints: BoxConstraints(
           minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
       clipBehavior: Clip.hardEdge,
-      padding: EdgeInsetsDirectional.only(
-          start: isAttachment ? 0 : 8, end: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: isAttachment && !isAudio
