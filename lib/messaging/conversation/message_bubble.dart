@@ -4,7 +4,7 @@ import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'mime_types.dart';
+import 'mime_type.dart';
 import 'reactions.dart';
 import 'reply.dart';
 import 'status_row.dart';

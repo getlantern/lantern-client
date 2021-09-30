@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/conversation/mime_types.dart';
+import 'package:lantern/messaging/conversation/mime_type.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
@@ -46,7 +46,7 @@ class Reply extends StatelessWidget {
 
   Widget buildHeader() {
     return Row(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: isPreview ? MainAxisSize.max : MainAxisSize.min,
       children: [
         if (!isPreview)
           const Padding(
@@ -97,9 +97,10 @@ class Reply extends StatelessWidget {
               ],
       ),
       child: Row(
+        mainAxisSize: isPreview ? MainAxisSize.max : MainAxisSize.min,
         children: [
-          Expanded(
-            child: Padding(
+          wrapBody(
+            Padding(
               padding: EdgeInsetsDirectional.only(
                   end: 16, top: isPreview ? 12 : 4, bottom: 8),
               child: Column(
@@ -143,6 +144,14 @@ class Reply extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget wrapBody(Widget body) {
+    if (isPreview) {
+      return Expanded(child: body);
+    } else {
+      return Flexible(child: body);
+    }
   }
 
   String attachmentText() {
