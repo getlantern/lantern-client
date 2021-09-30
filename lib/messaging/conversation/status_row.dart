@@ -1,18 +1,25 @@
 import 'package:lantern/messaging/messaging.dart';
 
+import 'mime_type.dart';
+
 class StatusRow extends StatelessWidget {
   final bool outbound;
   late final bool inbound;
   final StoredMessage message;
+  late final bool isImageAttachment;
 
   StatusRow(this.outbound, this.message) : super() {
     inbound = !outbound;
+    isImageAttachment = message.attachments.isNotEmpty &&
+        [MimeType.IMAGE, MimeType.VIDEO]
+            .contains(mimeTypeOf(message.attachments[0]!.attachment.mimeType));
   }
 
   @override
   Widget build(BuildContext context) {
     final msgSelfDeletes = !message.disappearAt.isZero;
-    final color = outbound ? outboundMsgColor : inboundMsgColor;
+    final color =
+        outbound || isImageAttachment ? outboundMsgColor : inboundMsgColor;
     return Container(
       padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
       child: Row(
