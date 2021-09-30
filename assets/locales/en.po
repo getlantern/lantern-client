@@ -450,8 +450,17 @@ msgstr "Please use only letters, numbers or spaces"
 msgid "yesterday"
 msgstr "yesterday"
 
+msgid "tomorrow"
+msgstr "tomorrow"
+
 msgid "just_now"
 msgstr "just now"
+
+msgid "within_one_minute"
+msgstr "within one minute"
+
+msgid "at_date"
+msgstr "at %s"
 
 msgid "error_fetching_message_preview"
 msgstr "Error fetching Message Preview"
