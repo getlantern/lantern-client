@@ -163,8 +163,9 @@ class Reply extends StatelessWidget {
         return 'image';
       case MimeType.VIDEO:
         return 'video';
+      default:
+        return 'attachment';
     }
-    return 'attachment';
   }
 
   Widget attachmentWidget() {
@@ -183,8 +184,9 @@ class Reply extends StatelessWidget {
             PlayButton(),
           ],
         );
+      default:
+        return const CAssetImage(path: ImagePaths.insert_drive_file);
     }
-    return const CAssetImage(path: ImagePaths.insert_drive_file);
   }
 
   Widget thumbnail(StoredAttachment attachment) {
