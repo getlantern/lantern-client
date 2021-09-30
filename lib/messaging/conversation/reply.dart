@@ -7,6 +7,7 @@ class Reply extends StatelessWidget {
   final Contact contact;
   final StoredMessage message;
   final bool shrink;
+  final bool isOutbound;
   final void Function()? onCancel;
 
   const Reply({
@@ -14,6 +15,7 @@ class Reply extends StatelessWidget {
     required this.message,
     required this.contact,
     this.shrink = false,
+    this.isOutbound = false,
     this.onCancel,
   }) : super();
 
@@ -65,7 +67,7 @@ class Reply extends StatelessWidget {
                   .fill([replyToDisplayName(message.senderId, contact)])
               : replyToDisplayName(message.senderId, contact),
           maxLines: 1,
-          style: tsSubtitle2,
+          style: tsSubtitle2.copiedWith(color: isOutbound ? white : black),
         ),
       ],
     );
@@ -86,7 +88,11 @@ class Reply extends StatelessWidget {
           : const EdgeInsetsDirectional.only(start: 8),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: isPreview ? grey2 : white,
+        color: isPreview
+            ? grey2
+            : isOutbound
+                ? blue5
+                : white,
         borderRadius: isPreview
             ? null
             : const BorderRadius.all(Radius.circular(borderRadius)),
@@ -122,6 +128,7 @@ class Reply extends StatelessWidget {
                             : message.text,
                     maxLines: 1,
                     style: tsSubtitle1.short.copiedWith(
+                        color: isOutbound ? white : black,
                         fontStyle: isAttachment || wasRemotelyDeleted
                             ? FontStyle.italic
                             : null),

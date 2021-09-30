@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 Color transparent = Colors.transparent;
 
+Color blue5 = HexColor('#006163');
 Color blue4 = HexColor('#007A7C');
 Color pink4 = HexColor('#DB0A5B');
 Color yellow4 = HexColor('#FFC107');
