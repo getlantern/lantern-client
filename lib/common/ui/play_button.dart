@@ -5,9 +5,15 @@ class PlayButton extends StatelessWidget {
   late final Color color;
   final bool playing;
   final void Function()? onPressed;
+  final Color? backgroundColor;
 
-  PlayButton(
-      {this.size = 24, Color? color, this.playing = false, this.onPressed}) {
+  PlayButton({
+    this.size = 24,
+    Color? color,
+    this.playing = false,
+    this.onPressed,
+    this.backgroundColor,
+  }) {
     this.color = color ?? white;
   }
 
@@ -16,7 +22,7 @@ class PlayButton extends StatelessWidget {
     return RoundButton(
       diameter: size,
       padding: 0,
-      backgroundColor: transparent,
+      backgroundColor: backgroundColor ?? transparent,
       icon: CAssetImage(
         path: playing
             ? ImagePaths.pause_circle_filled
