@@ -318,7 +318,7 @@ class MessageBubble extends StatelessWidget {
         color: backgroundColor,
         border: !isAttachment && !isAudio
             ? Border.all(color: grey4, width: 0.5)
-            : Border.all(color: white, width: 0.5),
+            : null,
         borderRadius: borderRadius,
       ),
       child: child,

@@ -8,7 +8,7 @@ class Reply extends StatelessWidget {
   final StoredMessage message;
   final bool shrink;
   final bool isOutbound;
-  final void Function()? onCancel;
+  final void Function()? onCancelReply;
 
   const Reply({
     required this.model,
@@ -16,10 +16,10 @@ class Reply extends StatelessWidget {
     required this.contact,
     this.shrink = false,
     this.isOutbound = false,
-    this.onCancel,
+    this.onCancelReply,
   }) : super();
 
-  bool get isPreview => onCancel != null;
+  bool get isPreview => onCancelReply != null;
 
   bool get wasRemotelyDeleted => message.remotelyDeletedAt != 0;
 
@@ -50,6 +50,7 @@ class Reply extends StatelessWidget {
     return body;
   }
 
+  // "Replying to .... " segment
   Widget buildHeader() {
     return Row(
       mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
@@ -82,6 +83,8 @@ class Reply extends StatelessWidget {
         : 'me'.i18n;
   }
 
+  // Renders text if we are replying to a text
+  // Renders mime type and thumbnail if we are replying to attachment
   Widget buildBody() {
     return Container(
       height: 56,
@@ -153,7 +156,7 @@ class Reply extends StatelessWidget {
               iconSize: 24,
               padding: EdgeInsetsDirectional.zero,
               icon: const CAssetImage(path: ImagePaths.delete),
-              onPressed: onCancel!,
+              onPressed: onCancelReply!,
             )
         ],
       ),
@@ -195,7 +198,9 @@ class Reply extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             thumbnail(attachment),
-            PlayButton(),
+            PlayButton(
+              backgroundColor: black,
+            ),
           ],
         );
       default:

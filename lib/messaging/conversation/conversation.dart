@@ -171,37 +171,6 @@ class ConversationState extends State<Conversation>
     super.dispose();
   }
 
-  Future<void> sendMessage(String text,
-      {List<Uint8List>? attachments,
-      String? replyToSenderId,
-      String? replyToId}) async {
-    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
-    try {
-      await model.sendToDirectContact(
-        widget.contactId.id,
-        text: text,
-        attachments: attachments,
-        replyToId: replyToId,
-        replyToSenderId: replyToSenderId,
-      );
-      newMessage.clear();
-      setState(() {
-        recording = null;
-        audioPreviewController = null;
-      });
-      if (messageCount > 0) {
-        await scrollController.scrollTo(
-            index: 0,
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeInOutCubic);
-      }
-    } catch (e, s) {
-      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
-    } finally {
-      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
-    }
-  }
-
   Future<void> startRecording() async {
     if (isRecording) {
       return;
@@ -272,7 +241,7 @@ class ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> handleSubmit(TextEditingController newMessage) async {
+  Future<void> handleMessageBarSubmit(TextEditingController newMessage) async {
     if (mounted) {
       setState(() {
         isSendIconVisible = false;
@@ -280,6 +249,59 @@ class ConversationState extends State<Conversation>
     }
     await sendMessage(newMessage.value.text,
         replyToSenderId: quotedMessage?.senderId, replyToId: quotedMessage?.id);
+  }
+
+  // handles backend send message logic
+  Future<void> sendMessage(String text,
+      {List<Uint8List>? attachments,
+      String? replyToSenderId,
+      String? replyToId}) async {
+    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
+    try {
+      await model.sendToDirectContact(
+        widget.contactId.id,
+        text: text,
+        attachments: attachments,
+        replyToId: replyToId,
+        replyToSenderId: replyToSenderId,
+      );
+      newMessage.clear();
+      setState(() {
+        recording = null;
+        audioPreviewController = null;
+        quotedMessage = null;
+      });
+      if (messageCount > 0) {
+        await scrollController.scrollTo(
+            index: 0,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOutCubic);
+      }
+    } catch (e, s) {
+      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
+    } finally {
+      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
+    }
+  }
+
+  // handles client send message logic
+  void send() async {
+    if (newMessage.value.text.trim().isEmpty && recording == null) {
+      return;
+    }
+    await sendMessage(newMessage.value.text,
+        attachments:
+            recording != null && recording!.isNotEmpty ? [recording!] : [],
+        replyToSenderId: quotedMessage?.senderId,
+        replyToId: quotedMessage?.id);
+    if (mounted) {
+      setState(() {
+        quotedMessage = null;
+        isRecording = false;
+        finishedRecording = false;
+        isSendIconVisible = false;
+      });
+    }
   }
 
   @override
@@ -370,7 +392,7 @@ class ConversationState extends State<Conversation>
                     model: model,
                     contact: contact,
                     message: quotedMessage!,
-                    onCancel: () => setState(() => quotedMessage = null),
+                    onCancelReply: () => setState(() => quotedMessage = null),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
@@ -554,6 +576,7 @@ class ConversationState extends State<Conversation>
     return null;
   }
 
+  // Entry point to audio waveform widget (MessageBarPreviewRecording)
   Widget buildMessageBar() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -582,6 +605,8 @@ class ConversationState extends State<Conversation>
     );
   }
 
+  // Renders Emoji button, message bar and recording icon
+  // Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomRight,
@@ -650,8 +675,9 @@ class ConversationState extends State<Conversation>
                   }
                 },
                 focusNode: focusNode,
-                onFieldSubmitted: (value) async =>
-                    value.isEmpty ? null : await handleSubmit(newMessage),
+                onFieldSubmitted: (value) async => value.isEmpty
+                    ? null
+                    : await handleMessageBarSubmit(newMessage),
                 decoration: InputDecoration(
                   // Send icon
                   enabledBorder: InputBorder.none,
@@ -715,25 +741,6 @@ class ConversationState extends State<Conversation>
           ),
       ],
     );
-  }
-
-  void send() async {
-    if (newMessage.value.text.trim().isEmpty && recording == null) {
-      return;
-    }
-    await sendMessage(newMessage.value.text,
-        attachments:
-            recording != null && recording!.isNotEmpty ? [recording!] : [],
-        replyToSenderId: quotedMessage?.senderId,
-        replyToId: quotedMessage?.id);
-    if (mounted) {
-      setState(() {
-        quotedMessage = null;
-        isRecording = false;
-        finishedRecording = false;
-        isSendIconVisible = false;
-      });
-    }
   }
 }
 
