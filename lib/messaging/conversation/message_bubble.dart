@@ -176,9 +176,7 @@ class MessageBubble extends StatelessWidget {
           isContactConnectionCard
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : Column(
-                  crossAxisAlignment: isOutbound
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
                       if (message.replyToId.isNotEmpty)

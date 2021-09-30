@@ -59,9 +59,11 @@ class Reply extends StatelessWidget {
             ),
           ),
         CText(
-          'replying_to'
-              .i18n
-              .fill([replyToDisplayName(message.senderId, contact)]),
+          isPreview
+              ? 'replying_to'
+                  .i18n
+                  .fill([replyToDisplayName(message.senderId, contact)])
+              : replyToDisplayName(message.senderId, contact),
           maxLines: 1,
           style: tsSubtitle2,
         ),
