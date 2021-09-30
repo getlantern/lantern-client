@@ -262,7 +262,11 @@ class MessageBubble extends StatelessWidget {
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
-                                StatusRow(isOutbound, message),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: StatusRow(isOutbound, message),
+                                ),
                               ]),
                         ],
                       )
@@ -293,9 +297,8 @@ class MessageBubble extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-                top: message.replyToId.isNotEmpty ? 8 : 0,
-                start: isAttachment ? 0 : 8,
-                end: isAttachment ? 0 : 8),
+              top: message.replyToId.isNotEmpty ? 8 : 0,
+            ),
             child: child,
           ),
         ),
@@ -321,7 +324,7 @@ class MessageBubble extends StatelessWidget {
     var textCopied = false;
     var height = 219.0;
     if (isOutbound) height += 48;
-    if (!isAttachment) height += 48;
+    if (!isAttachment && !wasRemotelyDeleted) height += 48;
 
     return SizedBox(
       height: height,
@@ -351,7 +354,7 @@ class MessageBubble extends StatelessWidget {
                 onReply();
               },
             ),
-            if (!isAttachment)
+            if (!isAttachment && !wasRemotelyDeleted)
               StatefulBuilder(
                 key: ValueKey(message.id),
                 builder: (context, setState) => CListTile(
