@@ -2,53 +2,20 @@ import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoAttachment extends StatelessWidget {
-  final Contact contact;
-  final StoredMessage message;
-  final StoredAttachment attachment;
-  final bool inbound;
-
-  VideoAttachment(this.contact, this.message, this.attachment, this.inbound);
+class VideoAttachment extends VisualAttachment {
+  VideoAttachment(Contact contact, StoredMessage message,
+      StoredAttachment attachment, bool inbound)
+      : super(contact, message, attachment, inbound);
 
   @override
-  Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
+  Widget buildViewer(MessagingModel model) =>
+      VideoViewer(model, contact, message, attachment);
 
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return AttachmentBuilder(
-          attachment: attachment,
-          inbound: inbound,
-          defaultIcon: Icons.image,
-          scrimAttachment: true,
-          onTap: () async => await context.router.push(
-                FullScreenDialogPage(
-                    widget: VideoViewer(model, contact, message, attachment)),
-              ),
-          builder: (BuildContext context, Uint8List thumbnail) {
-            return ConstrainedBox(
-              // this box keeps the image from being too tall
-              constraints: BoxConstraints(maxHeight: constraints.maxWidth),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  FittedBox(
-                    child: BasicMemoryImage(
-                      thumbnail,
-                      errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          Icon(Icons.error_outlined,
-                              color:
-                                  inbound ? inboundMsgColor : outboundMsgColor),
-                    ),
-                  ),
-                  PlayButton(size: 48),
-                ],
-              ),
-            );
-          });
-    });
-  }
+  @override
+  Widget wrapThumbnail(Widget thumbnail) => Stack(
+        alignment: Alignment.center,
+        children: [thumbnail, PlayButton(size: 48)],
+      );
 }
 
 class VideoViewer extends ViewerWidget {

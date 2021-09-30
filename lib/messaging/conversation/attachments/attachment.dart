@@ -133,7 +133,80 @@ class AttachmentBuilder extends StatelessWidget {
     return Icon(Icons.error_outlined,
         color: inbound ? inboundMsgColor : outboundMsgColor);
   }
+
+  Widget buildVisualThumbnail(BuildContext context, Uint8List thumbnail,
+      BoxConstraints constraints, Widget Function(Widget) wrap) {
+    return ConstrainedBox(
+      // this box keeps the image from being too tall
+      constraints: BoxConstraints(
+          maxHeight: constraints.maxWidth, minWidth: constraints.maxWidth),
+      child: wrap(FittedBox(
+        child: BasicMemoryImage(
+          thumbnail,
+          width: 2000,
+          height: 2000,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (BuildContext context, Object error, StackTrace? stackTrace) =>
+                  Icon(Icons.error_outlined,
+                      color: inbound ? inboundMsgColor : outboundMsgColor),
+        ),
+      )),
+    );
+  }
 }
+
+abstract class VisualAttachment extends StatelessWidget {
+  final Contact contact;
+  final StoredMessage message;
+  final StoredAttachment attachment;
+  final bool inbound;
+
+  VisualAttachment(this.contact, this.message, this.attachment, this.inbound);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<MessagingModel>();
+
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return AttachmentBuilder(
+          attachment: attachment,
+          inbound: inbound,
+          defaultIcon: Icons.image,
+          scrimAttachment: true,
+          onTap: () async => await context.router.push(
+                FullScreenDialogPage(widget: buildViewer(model)),
+              ),
+          builder: (BuildContext context, Uint8List thumbnail) {
+            return ConstrainedBox(
+              // this box keeps the thumbnail from being too tall
+              constraints: BoxConstraints(
+                  maxHeight: constraints.maxWidth,
+                  minWidth: constraints.maxWidth),
+              child: wrapThumbnail(FittedBox(
+                child: BasicMemoryImage(
+                  thumbnail,
+                  width: 2000,
+                  height: 2000,
+                  fit: BoxFit.cover,
+                  errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) =>
+                      Icon(Icons.error_outlined,
+                          color: inbound ? inboundMsgColor : outboundMsgColor),
+                ),
+              )),
+            );
+          });
+    });
+  }
+
+  Widget buildViewer(MessagingModel model);
+
+  Widget wrapThumbnail(Widget thumbnail) => thumbnail;
+}
+
+abstract class ImageAttachmentBuilder extends AttachmentBuilder {}
 
 /// Base class for widgets that allow viewing attachments like images and videos.
 abstract class ViewerWidget extends StatefulWidget {
