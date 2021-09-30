@@ -16,6 +16,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage message;
   final void Function() onEmojiTap;
   final Contact contact;
+  final void Function() onOpenMenu;
   final void Function() onReply;
   final void Function() onTapReply;
 
@@ -36,6 +37,7 @@ class MessageBubble extends StatelessWidget {
     StoredMessage? priorMessage,
     StoredMessage? nextMessage,
     required this.contact,
+    required this.onOpenMenu,
     required this.onReply,
     required this.onTapReply,
     required this.onEmojiTap,
@@ -82,7 +84,7 @@ class MessageBubble extends StatelessWidget {
   Widget bubble(BuildContext context, MessagingModel model) {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
-      onPressed: () {},
+      onOpen: onOpenMenu,
       menu: messageMenu(context, model),
       child: Column(
         crossAxisAlignment:
