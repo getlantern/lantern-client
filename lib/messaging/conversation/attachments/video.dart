@@ -14,7 +14,14 @@ class VideoAttachment extends VisualAttachment {
   @override
   Widget wrapThumbnail(Widget thumbnail) => Stack(
         alignment: Alignment.center,
-        children: [thumbnail, PlayButton(size: 48)],
+        children: [
+          thumbnail,
+          PlayButton(
+            size: 48,
+            backgroundColor: black,
+            color: white,
+          )
+        ],
       );
 }
 
@@ -120,6 +127,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
           PlayButton(
             size: 48,
             playing: playing,
+            backgroundColor: black,
             onPressed: () {
               if (controller!.value.isPlaying) {
                 controller!.pause();
