@@ -321,10 +321,10 @@ class MessageBubble extends StatelessWidget {
 
   SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
-    var height = 219.0;
+    var isConnectionCard = message.hasIntroduction();
+    var height = isConnectionCard ? 123.0 : 219.0;
     if (isOutbound) height += 48;
     if (!isAttachment && !wasRemotelyDeleted) height += 48;
-
     return SizedBox(
       height: height,
       child: Padding(
@@ -343,17 +343,18 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
             const CDivider(),
-            CListTile(
-              height: 48,
-              showDivider: false,
-              leading: ImagePaths.reply,
-              content: 'reply'.i18n,
-              onTap: () {
-                Navigator.of(context).pop();
-                onReply();
-              },
-            ),
-            if (!isAttachment && !wasRemotelyDeleted)
+            if (!isConnectionCard)
+              CListTile(
+                height: 48,
+                showDivider: false,
+                leading: ImagePaths.reply,
+                content: 'reply'.i18n,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onReply();
+                },
+              ),
+            if (!isAttachment && !wasRemotelyDeleted && !isConnectionCard)
               StatefulBuilder(
                 key: ValueKey(message.id),
                 builder: (context, setState) => CListTile(
