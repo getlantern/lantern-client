@@ -40,7 +40,6 @@ class ConversationState extends State<Conversation>
   bool isRecording = false;
   bool finishedRecording = false;
   bool isSendIconVisible = false;
-  bool isReplying = false;
   Uint8List? recording;
   AudioController? audioPreviewController;
   StoredMessage? quotedMessage;
@@ -277,7 +276,6 @@ class ConversationState extends State<Conversation>
     if (mounted) {
       setState(() {
         isSendIconVisible = false;
-        isReplying = false;
       });
     }
     await sendMessage(newMessage.value.text,
@@ -367,12 +365,12 @@ class ConversationState extends State<Conversation>
                   ),
                 ),
                 // Reply container
-                if (isReplying)
+                if (quotedMessage != null)
                   Reply(
                     model: model,
                     contact: contact,
                     message: quotedMessage!,
-                    onCancel: () => setState(() => isReplying = false),
+                    onCancel: () => setState(() => quotedMessage = null),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
@@ -516,7 +514,6 @@ class ConversationState extends State<Conversation>
         },
         onReply: () {
           setState(() {
-            isReplying = true;
             quotedMessage = message;
             showNativeKeyboard();
           });
@@ -734,7 +731,6 @@ class ConversationState extends State<Conversation>
         isRecording = false;
         finishedRecording = false;
         isSendIconVisible = false;
-        isReplying = false;
       });
     }
   }
