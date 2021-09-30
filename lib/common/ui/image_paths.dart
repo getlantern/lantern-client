@@ -21,7 +21,8 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const more_vert = 'assets/images/more_vert.svg';
-  static const more_horiz = 'assets/images/more_horiz.svg';
+  // static const more_horiz = 'assets/images/more_horiz.svg';
+  static const pending = 'assets/images/pending.svg';
   static const arrow_downward = 'assets/images/arrow_downward.svg';
 
   // Messaging
