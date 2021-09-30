@@ -25,6 +25,8 @@ class Reply extends StatelessWidget {
 
   bool get isAttachment => message.attachments.isNotEmpty;
 
+  Color get foregroundColor => isOutbound ? white : black;
+
   @override
   Widget build(BuildContext context) {
     final body = buildBody();
@@ -53,11 +55,12 @@ class Reply extends StatelessWidget {
       mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
       children: [
         if (!isPreview)
-          const Padding(
-            padding: EdgeInsetsDirectional.only(end: 4),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 4),
             child: CAssetImage(
               path: ImagePaths.reply,
               size: 16,
+              color: foregroundColor,
             ),
           ),
         CText(
@@ -67,7 +70,7 @@ class Reply extends StatelessWidget {
                   .fill([replyToDisplayName(message.senderId, contact)])
               : replyToDisplayName(message.senderId, contact),
           maxLines: 1,
-          style: tsSubtitle2.copiedWith(color: isOutbound ? white : black),
+          style: tsSubtitle2.copiedWith(color: foregroundColor),
         ),
       ],
     );
@@ -128,7 +131,7 @@ class Reply extends StatelessWidget {
                             : message.text,
                     maxLines: 1,
                     style: tsSubtitle1.short.copiedWith(
-                        color: isOutbound ? white : black,
+                        color: foregroundColor,
                         fontStyle: isAttachment || wasRemotelyDeleted
                             ? FontStyle.italic
                             : null),
