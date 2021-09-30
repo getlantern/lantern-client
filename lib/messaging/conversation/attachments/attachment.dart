@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/conversation/mime_types.dart';
+import 'package:lantern/messaging/conversation/mime_type.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -12,28 +12,25 @@ Widget attachmentWidget(Contact contact, StoredMessage message,
     StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final fileExtension = attachment.attachment.metadata['fileExtension'];
-  final mimeType = attachment.attachment.mimeType;
+  final mimeType = mimeTypeOf(attachment.attachment.mimeType);
 
-  if (audioMimes.contains(mimeType)) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
-      child: AudioAttachment(attachment, inbound),
-    );
+  switch (mimeType) {
+    case MimeType.AUDIO:
+      return Padding(
+        padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+        child: AudioAttachment(attachment, inbound),
+      );
+    case MimeType.IMAGE:
+      return ImageAttachment(contact, message, attachment, inbound);
+    case MimeType.VIDEO:
+      return VideoAttachment(contact, message, attachment, inbound);
+    default:
+      return GenericAttachment(
+          attachmentTitle: attachmentTitle,
+          fileExtension: fileExtension,
+          inbound: inbound,
+          icon: Icons.insert_drive_file_rounded);
   }
-
-  if (imageMimes.contains(mimeType)) {
-    return ImageAttachment(contact, message, attachment, inbound);
-  }
-
-  if (videoMimes.contains(mimeType)) {
-    return VideoAttachment(contact, message, attachment, inbound);
-  }
-
-  return GenericAttachment(
-      attachmentTitle: attachmentTitle,
-      fileExtension: fileExtension,
-      inbound: inbound,
-      icon: Icons.insert_drive_file_rounded);
 }
 
 /// AttachmentBuilder is a builder for attachments that handles progress
