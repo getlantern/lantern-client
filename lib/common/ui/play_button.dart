@@ -2,32 +2,23 @@ import '../common.dart';
 
 class PlayButton extends StatelessWidget {
   final double size;
-  late final Color color;
-  final bool playing;
   final void Function()? onPressed;
-  final Color? backgroundColor;
+  final String path;
 
   PlayButton({
     this.size = 24,
-    Color? color,
-    this.playing = false,
     this.onPressed,
-    this.backgroundColor,
-  }) {
-    this.color = color ?? white;
-  }
+    required this.path,
+  });
 
   @override
   Widget build(BuildContext context) {
     return RoundButton(
       diameter: size,
       padding: 0,
-      backgroundColor: backgroundColor ?? transparent,
+      backgroundColor: transparent,
       icon: CAssetImage(
-        path: playing
-            ? ImagePaths.pause_circle_filled
-            : ImagePaths.play_circle_filled,
-        color: color,
+        path: path,
         size: size,
       ),
       onPressed: () {
