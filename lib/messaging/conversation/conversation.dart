@@ -8,13 +8,13 @@ import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
 import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
-import 'package:lantern/messaging/conversation/replies/reply_preview.dart';
 import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'audio/voice_recorder.dart';
 import 'call_action.dart';
 import 'date_marker_bubble.dart';
+import 'reply.dart';
 import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
@@ -364,10 +364,10 @@ class ConversationState extends State<Conversation>
                 ),
                 // Reply container
                 if (isReplying)
-                  ReplyPreview(
-                    quotedMessage: quotedMessage,
+                  Reply(
                     model: model,
                     contact: contact,
+                    message: quotedMessage!,
                     onCancel: () => setState(() => isReplying = false),
                   ),
                 Divider(height: 1.0, color: grey3),

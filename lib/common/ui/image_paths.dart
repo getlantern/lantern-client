@@ -40,6 +40,8 @@ class ImagePaths {
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
   static const search = 'assets/images/search.svg';
+  static const volume_up = 'assets/images/volume_up.svg';
+  static const insert_drive_file = 'assets/images/insert_drive_file.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
