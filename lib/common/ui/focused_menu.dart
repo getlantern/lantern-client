@@ -10,7 +10,7 @@ class FocusedMenuHolder extends StatefulWidget {
   final Widget child;
   final SizedBox menu;
   final double menuWidth;
-  final Function onPressed;
+  final void Function()? onOpen;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
@@ -19,7 +19,7 @@ class FocusedMenuHolder extends StatefulWidget {
     Key? key,
     required this.child,
     required this.menu,
-    required this.onPressed,
+    this.onOpen,
     required this.menuWidth,
     this.menuOffset = 5,
     this.paddingTop = 16,
@@ -50,10 +50,8 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
   Widget build(BuildContext context) {
     return GestureDetector(
         key: containerKey,
-        onTap: () async {
-          widget.onPressed();
-        },
         onLongPress: () async {
+          widget.onOpen?.call();
           await openMenu(context);
         },
         child: widget.child);

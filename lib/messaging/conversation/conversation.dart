@@ -505,6 +505,7 @@ class ConversationState extends State<Conversation>
         priorMessage: priorMessage(listItems, index)?.value,
         nextMessage: nextMessage(listItems, index)?.value,
         contact: contact,
+        onOpenMenu: dismissAllKeyboards,
         onEmojiTap: () {
           setState(() {
             reactingWithEmoji = true;
