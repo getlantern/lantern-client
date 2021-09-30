@@ -12,18 +12,18 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var source = 'banner_source_unknown'.i18n;
-    switch (contact.source) {
-      case ContactSource.APP1:
-        source = 'banner_source_qr'.i18n;
-        break;
-      case ContactSource.APP2:
-        source = 'banner_source_id'.i18n;
-        break;
-      case ContactSource.INTRODUCTION:
-        source = 'banner_source_intro'.i18n;
-        break;
-    }
+    // var source = 'banner_source_unknown'.i18n;
+    // switch (contact.source) {
+    //   case ContactSource.APP1:
+    //     source = 'banner_source_qr'.i18n;
+    //     break;
+    //   case ContactSource.APP2:
+    //     source = 'banner_source_id'.i18n;
+    //     break;
+    //   case ContactSource.INTRODUCTION:
+    //     source = 'banner_source_intro'.i18n;
+    //     break;
+    // }
     return ListTile(
       dense: true,
       minLeadingWidth: 18,
@@ -39,11 +39,10 @@ class ConversationSticker extends StatelessWidget {
               child: !isPendingIntroduction
                   ? _fullyAddedText()
                   : _partiallyAddedText()),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            //TODO: style this per designs
-            child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+          //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
+          // ),
         ],
       ),
     );
