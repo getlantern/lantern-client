@@ -1,12 +1,12 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_types.dart';
 import 'reactions.dart';
+import 'reply.dart';
 import 'status_row.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -24,7 +24,7 @@ class MessageBubble extends StatelessWidget {
   late final bool isStartOfBlock;
   late final bool isEndOfBlock;
   late final bool isNewestMessage;
-  late final bool wasDeleted;
+  late final bool wasRemotelyDeleted;
   late final bool isAttachment;
   late final bool hasReactions;
   late final Color color;
@@ -47,7 +47,7 @@ class MessageBubble extends StatelessWidget {
     isEndOfBlock =
         nextMessage == null || nextMessage.direction != message.direction;
     isNewestMessage = nextMessage == null;
-    wasDeleted = message.remotelyDeletedAt != 0;
+    wasRemotelyDeleted = message.remotelyDeletedAt != 0;
     isAttachment = message.attachments.isNotEmpty;
     hasReactions = message.reactions.isNotEmpty;
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
@@ -88,7 +88,7 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          content(context),
+          content(context, model),
         ],
       ),
     );
@@ -153,7 +153,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context) {
+  Widget content(BuildContext context, MessagingModel model) {
     assert(message.attachments.values.length <= 1,
         'display of messages with multiple attachments is unsupported');
 
@@ -177,15 +177,25 @@ class MessageBubble extends StatelessWidget {
                   crossAxisAlignment: isOutbound
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                       if (message.replyToId.isNotEmpty)
-                        GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: () => onTapReply(),
-                          child: ReplySnippet(isOutbound, message, contact),
-                        ),
-                      if (message.text.isNotEmpty || wasDeleted)
+                        model.singleMessage(
+                            message.replyToSenderId, message.replyToId,
+                            (context, replyToMessage, child) {
+                          return GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () => onTapReply(),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.only(top: 8),
+                              child: Reply(
+                                  model: model,
+                                  contact: contact,
+                                  message: replyToMessage),
+                            ),
+                          );
+                        }),
+                      if (message.text.isNotEmpty || wasRemotelyDeleted)
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           Flexible(
                             fit: FlexFit.loose,
@@ -193,13 +203,10 @@ class MessageBubble extends StatelessWidget {
                               padding: const EdgeInsetsDirectional.only(
                                   start: 8, end: 8, top: 4, bottom: 4),
                               child: MarkdownBody(
-                                data: wasDeleted
-                                    ? 'message_deleted'.i18n.fill([
-                                        message.remotelyDeletedBy.id ==
-                                                contact.contactId.id
-                                            ? contact.displayName
-                                            : 'me'.i18n
-                                      ])
+                                data: wasRemotelyDeleted
+                                    ? 'message_deleted'
+                                        .i18n
+                                        .fill([contact.displayName])
                                     : message.text,
                                 onTapLink: (String text, String? href,
                                     String title) async {
@@ -224,8 +231,9 @@ class MessageBubble extends StatelessWidget {
                                   ),
                                   p: tsBody3.copiedWith(
                                     color: color,
-                                    fontStyle:
-                                        wasDeleted ? FontStyle.italic : null,
+                                    fontStyle: wasRemotelyDeleted
+                                        ? FontStyle.italic
+                                        : null,
                                   ),
                                 ),
                               ),
@@ -265,7 +273,7 @@ class MessageBubble extends StatelessWidget {
           isOutbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
     );
 
-    if (wasDeleted) {
+    if (wasRemotelyDeleted) {
       return DottedBorder(
         color: grey4,
         dashPattern: [3],
@@ -290,9 +298,7 @@ class MessageBubble extends StatelessWidget {
           minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
       clipBehavior: Clip.hardEdge,
       padding: EdgeInsetsDirectional.only(
-          top: message.replyToId.isNotEmpty ? 8 : 0,
-          start: isAttachment ? 0 : 8,
-          end: isAttachment ? 0 : 8),
+          start: isAttachment ? 0 : 8, end: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: isAttachment && !isAudio

@@ -553,7 +553,16 @@ msgid "replying_to"
 msgstr "Replying to %s"
 
 msgid "attachment"
-msgstr "attachment"
+msgstr "Attachment"
+
+msgid "audio"
+msgstr "Audio"
+
+msgid "image"
+msgstr "Image"
+
+msgid "video"
+msgstr "Video"
 
 msgid "search_chars_min"
 msgstr "Type at least three characters"

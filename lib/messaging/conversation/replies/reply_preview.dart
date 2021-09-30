@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/conversation/replies/reply_snippet_header.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/messaging/conversation/mime_types.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ReplyPreview extends StatelessWidget {
@@ -39,7 +40,7 @@ class ReplyPreview extends StatelessWidget {
                       child: isTextResponse
                           ? CText(quotedMessage!.text,
                               maxLines: 1, style: tsSubtitle1.short)
-                          : null,
+                          : attachmentInfo(context),
                     ),
                   ),
                   IconButton(
@@ -57,6 +58,27 @@ class ReplyPreview extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget attachmentInfo(BuildContext context) {
+    final mimeType =
+        mimeTypeOf(quotedMessage!.attachments[0]!.attachment.mimeType);
+    var text = 'attachment'.i18n;
+    Widget image = const CAssetImage(path: ImagePaths.insert_drive_file);
+    switch (mimeType) {
+      case MimeType.AUDIO:
+        text = 'audio'.i18n;
+        image = const CAssetImage(path: ImagePaths.volume_up);
+    }
+
+    return Row(
+      children: [
+        Expanded(
+          child: CText(text, maxLines: 1, style: tsSubtitle1.italic),
+        ),
+        image,
+      ],
     );
   }
 }
