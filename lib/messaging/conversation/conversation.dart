@@ -57,7 +57,7 @@ class ConversationState extends State<Conversation>
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
   double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
-  static var highestKeyboardHeight = 0.0;
+  static var latestKeyboardHeight = 0.0;
 
   void showNativeKeyboard() {
     focusNode.requestFocus();
@@ -82,9 +82,9 @@ class ConversationState extends State<Conversation>
                 WidgetsBinding.instance!.window.devicePixelRatio)
             .bottom,
         MediaQuery.of(context).viewInsets.bottom);
-    if (currentKeyboardHeight > highestKeyboardHeight) {
+    if (currentKeyboardHeight > 0) {
       setState(() {
-        highestKeyboardHeight = currentKeyboardHeight;
+        latestKeyboardHeight = currentKeyboardHeight;
       });
     }
   }
@@ -286,9 +286,8 @@ class ConversationState extends State<Conversation>
     // update keyboard height values
     updateKeyboardHeight();
 
-    final keyboardHeight = highestKeyboardHeight > 0
-        ? highestKeyboardHeight
-        : defaultKeyboardHeight;
+    final keyboardHeight =
+        latestKeyboardHeight > 0 ? latestKeyboardHeight : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget.contactId.id))
