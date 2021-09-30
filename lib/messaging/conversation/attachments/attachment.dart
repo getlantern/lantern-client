@@ -206,8 +206,6 @@ abstract class VisualAttachment extends StatelessWidget {
   Widget wrapThumbnail(Widget thumbnail) => thumbnail;
 }
 
-abstract class ImageAttachmentBuilder extends AttachmentBuilder {}
-
 /// Base class for widgets that allow viewing attachments like images and videos.
 abstract class ViewerWidget extends StatefulWidget {
   final Contact contact;
