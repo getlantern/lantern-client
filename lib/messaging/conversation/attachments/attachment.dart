@@ -26,10 +26,10 @@ Widget attachmentWidget(Contact contact, StoredMessage message,
       return VideoAttachment(contact, message, attachment, inbound);
     default:
       return GenericAttachment(
-          attachmentTitle: attachmentTitle,
-          fileExtension: fileExtension,
-          inbound: inbound,
-          icon: Icons.insert_drive_file_rounded);
+        attachmentTitle: attachmentTitle,
+        fileExtension: fileExtension,
+        inbound: inbound,
+      );
   }
 }
 
