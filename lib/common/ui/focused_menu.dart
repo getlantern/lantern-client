@@ -154,28 +154,17 @@ class FocusedMenuDetails extends StatelessWidget {
             Positioned(
               top: menuY,
               left: menuX,
-              child: TweenAnimationBuilder(
-                duration: const Duration(milliseconds: 200),
-                builder: (BuildContext context, dynamic value, Widget? child) {
-                  return Transform.scale(
-                    scale: value,
-                    alignment: Alignment.center,
-                    child: child,
-                  );
-                },
-                tween: Tween(begin: 0.0, end: 1.0),
-                child: Container(
-                  width: menuWidth,
-                  height: menuHeight,
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                    child: SingleChildScrollView(
-                      child: menu,
-                    ),
+              child: Container(
+                width: menuWidth,
+                height: menuHeight,
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  child: SingleChildScrollView(
+                    child: menu,
                   ),
                 ),
               ),
