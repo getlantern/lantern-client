@@ -27,10 +27,15 @@ class ImageAttachment extends StatelessWidget {
           builder: (BuildContext context, Uint8List thumbnail) {
             return ConstrainedBox(
               // this box keeps the image from being too tall
-              constraints: BoxConstraints(maxHeight: constraints.maxWidth),
+              constraints: BoxConstraints(
+                  maxHeight: constraints.maxWidth,
+                  minWidth: constraints.maxWidth),
               child: FittedBox(
                 child: BasicMemoryImage(
                   thumbnail,
+                  width: 2000,
+                  height: 2000,
+                  fit: BoxFit.cover,
                   errorBuilder: (BuildContext context, Object error,
                           StackTrace? stackTrace) =>
                       Icon(Icons.error_outlined,

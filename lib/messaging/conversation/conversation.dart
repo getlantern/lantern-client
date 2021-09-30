@@ -247,7 +247,8 @@ class ConversationState extends State<Conversation>
         return;
       }
       context.loaderOverlay.show();
-      result.files.forEach((el) async {
+      for (var i = 0; i < result.files.length; i++) {
+        final el = result.files[i];
         // TODO: we might need to sanitize title
         final title = el.path.toString().split('file_picker/')[1].split('.')[
             0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
@@ -259,8 +260,12 @@ class ConversationState extends State<Conversation>
         };
         final attachment =
             await model.filePickerLoadAttachment(el.path.toString(), metadata);
-        await sendMessage(newMessage.value.text, attachments: [attachment]);
-      });
+        await sendMessage(newMessage.value.text,
+            attachments: [attachment],
+            replyToSenderId: quotedMessage?.senderId,
+            replyToId: quotedMessage?.id);
+      }
+      setState(() => quotedMessage = null);
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'share_media_error'.i18n);
     } finally {
