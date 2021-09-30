@@ -81,6 +81,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Renders bubble inside overlayReactions
   Widget bubble(BuildContext context, MessagingModel model) {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
@@ -96,6 +97,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Renders the overlay which pins the reaction emojis to the exterior of the bubble, which it envelops.
   Widget overlayReactions(BuildContext context, Widget child) {
     if (!hasReactions) {
       return child;
@@ -155,6 +157,9 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Distinguishes between contact connection card, text message, audio message, attachments, replies.
+  // Handles URLs on tap.
+  // Adds status row.
   Widget content(BuildContext context, MessagingModel model) {
     assert(message.attachments.values.length <= 1,
         'display of messages with multiple attachments is unsupported');
@@ -275,6 +280,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Handles borders and their radii
   Widget wrapBubble(BuildContext context, bool isAudio, Widget child) {
     final borderRadius = BorderRadius.only(
       topLeft: isInbound && !isStartOfBlock ? squared : rounded,
@@ -310,7 +316,7 @@ class MessageBubble extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: backgroundColor,
-        border: isAttachment && !isAudio
+        border: !isAttachment && !isAudio
             ? Border.all(color: grey4, width: 0.5)
             : null,
         borderRadius: borderRadius,
@@ -319,6 +325,8 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Renders message options (Reply, Copy, Delete) on long tap
+  // Renders "Message disappears on/at ..." line.
   SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
     var isConnectionCard = message.hasIntroduction();
