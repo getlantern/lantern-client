@@ -41,6 +41,5 @@ class BottomModalItem extends StatelessWidget {
             ),
             trailing: trailing,
             onTap: onTap),
-        const CDivider(),
       ]);
 }
