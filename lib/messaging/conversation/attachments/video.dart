@@ -18,8 +18,7 @@ class VideoAttachment extends VisualAttachment {
           thumbnail,
           PlayButton(
             size: 48,
-            backgroundColor: black,
-            color: white,
+            path: ImagePaths.play_circle_filled_custom,
           )
         ],
       );
@@ -126,8 +125,9 @@ class VideoViewerState extends ViewerState<VideoViewer> {
           // button goes in main stack
           PlayButton(
             size: 48,
-            playing: playing,
-            backgroundColor: black,
+            path: controller!.value.isPlaying
+                ? ImagePaths.pause_circle_outline_custom
+                : ImagePaths.play_circle_filled_custom,
             onPressed: () {
               if (controller!.value.isPlaying) {
                 controller!.pause();

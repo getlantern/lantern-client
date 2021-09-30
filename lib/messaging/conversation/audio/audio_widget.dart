@@ -178,8 +178,9 @@ class AudioWidget extends StatelessWidget {
           children: [
             PlayButton(
               size: height,
-              color: initialColor,
-              playing: value.isPlaying,
+              path: value.isPlaying
+                  ? ImagePaths.pause_circle_filled
+                  : ImagePaths.play_circle_filled_custom,
               onPressed: () async {
                 if (value.isPlaying) {
                   await controller.pause();
