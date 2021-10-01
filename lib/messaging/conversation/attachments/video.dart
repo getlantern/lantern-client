@@ -110,12 +110,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                   AspectRatio(
                     aspectRatio: controller!.value.aspectRatio,
-                    // we rotate landscape videos as a workaround for
-                    // https://github.com/flutter/flutter/issues/62400
-                    child: Transform.rotate(
-                      angle: controller!.value.aspectRatio > 1 ? pi : 0,
-                      child: VideoPlayer(controller!),
-                    ),
+                    child: VideoPlayer(controller!),
                   ),
                   VideoProgressIndicator(controller!, allowScrubbing: true),
                 ],

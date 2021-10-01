@@ -269,7 +269,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
 
   void forceLandscape() {
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
     ]);
   }
 }

@@ -46,5 +46,6 @@ class ImageViewerState extends ViewerState<ImageViewer> {
   bool ready() => image != null;
 
   @override
-  Widget body(BuildContext context) => image!;
+  Widget body(BuildContext context) =>
+      Align(alignment: Alignment.center, child: image!);
 }
