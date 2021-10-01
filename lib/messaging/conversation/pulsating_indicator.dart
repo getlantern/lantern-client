@@ -51,8 +51,7 @@ class _PulsatingIndicatorState extends State<PulsatingIndicator>
         borderRadius: BorderRadius.circular(widget.size / 2),
         boxShadow: [
           BoxShadow(
-            color: widget.pulseColor?.withOpacity(0.3) ??
-                Colors.black.withOpacity(0.3),
+            color: widget.pulseColor.withOpacity(0.3),
             spreadRadius: _animation.value,
             blurRadius: _animation.value,
           ),

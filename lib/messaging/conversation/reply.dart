@@ -6,7 +6,6 @@ class Reply extends StatelessWidget {
   final MessagingModel model;
   final Contact contact;
   final StoredMessage message;
-  final bool shrink;
   final bool isOutbound;
   final void Function()? onCancelReply;
 
@@ -14,7 +13,6 @@ class Reply extends StatelessWidget {
     required this.model,
     required this.message,
     required this.contact,
-    this.shrink = false,
     this.isOutbound = false,
     this.onCancelReply,
   }) : super();
@@ -53,7 +51,6 @@ class Reply extends StatelessWidget {
   // "Replying to .... " segment
   Widget buildHeader() {
     return Row(
-      mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
       children: [
         if (!isPreview)
           Padding(
@@ -113,10 +110,9 @@ class Reply extends StatelessWidget {
               ],
       ),
       child: Row(
-        mainAxisSize: shrink ? MainAxisSize.min : MainAxisSize.max,
         children: [
-          wrapBody(
-            Padding(
+          Expanded(
+            child: Padding(
               padding: EdgeInsetsDirectional.only(
                   end: 16, top: isPreview ? 12 : 4, bottom: 8),
               child: Column(
@@ -161,14 +157,6 @@ class Reply extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget wrapBody(Widget body) {
-    if (shrink) {
-      return Flexible(child: body);
-    } else {
-      return Expanded(child: body);
-    }
   }
 
   String attachmentText() {
