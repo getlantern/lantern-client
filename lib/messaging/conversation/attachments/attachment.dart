@@ -175,9 +175,14 @@ abstract class VisualAttachment extends StatelessWidget {
           inbound: inbound,
           defaultIcon: Icons.image,
           scrimAttachment: true,
-          onTap: () async => await context.router.push(
-                FullScreenDialogPage(widget: buildViewer(model)),
-              ),
+          onTap: () async {
+            await context.router.push(
+              FullScreenDialogPage(widget: buildViewer(model)),
+            );
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+            ]);
+          },
           builder: (BuildContext context, Uint8List thumbnail) {
             return ConstrainedBox(
               // this box keeps the thumbnail from being too tall
