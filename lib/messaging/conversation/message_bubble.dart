@@ -318,9 +318,6 @@ class MessageBubble extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: backgroundColor,
-        border: !isAttachment && !isAudio
-            ? Border.all(color: grey4, width: 0.5)
-            : null,
         borderRadius: borderRadius,
       ),
       child: child,
