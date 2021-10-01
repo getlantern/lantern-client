@@ -258,7 +258,9 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
                   Expanded(child: !ready() ? Container() : body(context)),
                   Padding(
                       padding: const EdgeInsets.all(4),
-                      child: StatusRow(true, widget.message)),
+                      child: StatusRow(
+                          widget.message.direction == MessageDirection.OUT,
+                          widget.message)),
                 ],
               ),
       ),
@@ -268,7 +270,6 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
   void forceLandscape() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
     ]);
   }
 }

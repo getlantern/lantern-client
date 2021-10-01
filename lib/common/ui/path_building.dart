@@ -17,4 +17,24 @@ extension PathBuilding on BorderRadius {
       ..lineTo(0, topLeft.y / 2)
       ..arcToPoint(Offset(topLeft.x / 2, 0), radius: topLeft);
   }
+
+  CustomClipper<Path> toClipper() {
+    return BorderRadiusClipper(this);
+  }
+}
+
+class BorderRadiusClipper extends CustomClipper<Path> {
+  final BorderRadius radius;
+
+  BorderRadiusClipper(this.radius);
+
+  @override
+  Path getClip(Size size) {
+    return radius.toPath(size);
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
+  }
 }

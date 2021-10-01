@@ -259,18 +259,21 @@ class MessageBubble extends StatelessWidget {
                             : AlignmentDirectional.bottomStart,
                         children: [
                           if (attachment != null) attachment,
-                          Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: isOutbound
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: StatusRow(isOutbound, message),
-                                ),
-                              ]),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: isOutbound
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: StatusRow(isOutbound, message),
+                                  ),
+                                ]),
+                          ),
                         ],
                       )
                     ]),
@@ -296,8 +299,8 @@ class MessageBubble extends StatelessWidget {
         dashPattern: [3],
         strokeWidth: 1,
         customPath: (size) => borderRadius.toPath(size),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(50)),
+        child: ClipPath(
+          clipper: borderRadius.toClipper(),
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: EdgeInsetsDirectional.only(
