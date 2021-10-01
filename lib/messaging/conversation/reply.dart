@@ -198,7 +198,7 @@ class Reply extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             thumbnail(attachment),
-            PlayButton(path: ImagePaths.play_circle_filled),
+            PlayButton(custom: true),
           ],
         );
       default:
