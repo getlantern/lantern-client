@@ -12,7 +12,7 @@ import 'package:lantern/common/common.dart';
 ///
 /// See also:
 ///
-///  * [CRoundedRectangleBorder], which is similar to this class, but with less options to control the appearance of each side/corner.
+///  * [RoundedRectangleBorder], which is similar to this class, but with less options to control the appearance of each side/corner.
 ///  * [BorderSide], which is used to describe each side of the box.
 ///  * [Border], which, when used with [BoxDecoration], can also
 ///    describe a rounded rectangle.

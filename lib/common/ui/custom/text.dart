@@ -141,6 +141,8 @@ class CTextStyle extends TextStyle {
 
   CTextStyle get short => copiedWith(lineHeight: fontSize);
 
+  CTextStyle get italic => copiedWith(fontStyle: FontStyle.italic);
+
   CTextStyle copiedWith(
       {bool? inherit,
       Color? color,
