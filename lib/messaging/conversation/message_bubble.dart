@@ -28,6 +28,7 @@ class MessageBubble extends StatelessWidget {
   late final bool wasRemotelyDeleted;
   late final bool isAttachment;
   late final bool hasReactions;
+  late final bool rendersAsText;
   late final Color color;
   late final Color backgroundColor;
 
@@ -52,6 +53,7 @@ class MessageBubble extends StatelessWidget {
     wasRemotelyDeleted = message.remotelyDeletedAt != 0;
     isAttachment = message.attachments.isNotEmpty;
     hasReactions = message.reactions.isNotEmpty;
+    rendersAsText = message.text.isNotEmpty || wasRemotelyDeleted;
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
@@ -192,7 +194,11 @@ class MessageBubble extends StatelessWidget {
                             behavior: HitTestBehavior.translucent,
                             onTap: () => onTapReply(),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.all(8),
+                              padding: EdgeInsetsDirectional.only(
+                                  start: 8,
+                                  end: 8,
+                                  top: 8,
+                                  bottom: rendersAsText ? 0 : 8),
                               child: SizedBox(
                                 child: Reply(
                                   model: model,
@@ -205,9 +211,10 @@ class MessageBubble extends StatelessWidget {
                             ),
                           );
                         }),
-                      if (message.text.isNotEmpty || wasRemotelyDeleted)
+                      if (rendersAsText)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsetsDirectional.only(
+                              start: 8, end: 8, top: 4),
                           child: Row(mainAxisSize: MainAxisSize.min, children: [
                             Flexible(
                               fit: FlexFit.loose,
