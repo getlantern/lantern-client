@@ -55,7 +55,7 @@ Color outboundBgColor = blue4;
 Color outboundMsgColor = white;
 
 Color inboundMsgColor = black;
-Color inboundBgColor = grey3;
+Color inboundBgColor = grey2;
 
 Color snippetShadowColor = black.withOpacity(0.18);
 
