@@ -182,111 +182,121 @@ class MessageBubble extends StatelessWidget {
           isAudio,
           isContactConnectionCard
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                      if (message.replyToId.isNotEmpty)
-                        model.singleMessage(
-                            message.replyToSenderId, message.replyToId,
-                            (context, replyToMessage, child) {
-                          return GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () => onTapReply(),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.only(
-                                  start: 8,
-                                  end: 8,
-                                  top: 8,
-                                  bottom: rendersAsText ? 0 : 8),
-                              child: SizedBox(
-                                child: Reply(
-                                  model: model,
-                                  contact: contact,
-                                  message: replyToMessage,
-                                  shrink: attachment == null,
-                                  isOutbound: isOutbound,
+              : wrapIntrinsicWidthIfNecessary(
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (message.replyToId.isNotEmpty)
+                          model.singleMessage(
+                              message.replyToSenderId, message.replyToId,
+                              (context, replyToMessage, child) {
+                            return GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () => onTapReply(),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.only(
+                                    start: 8,
+                                    end: 8,
+                                    top: 8,
+                                    bottom: rendersAsText ? 0 : 8),
+                                child: SizedBox(
+                                  child: Reply(
+                                    model: model,
+                                    contact: contact,
+                                    message: replyToMessage,
+                                    isOutbound: isOutbound,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
-                      if (rendersAsText)
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 8, end: 8, top: 4),
-                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Container(
-                                padding: const EdgeInsetsDirectional.only(
-                                    start: 8, end: 8, bottom: 4),
-                                child: MarkdownBody(
-                                  data: wasRemotelyDeleted
-                                      ? 'message_deleted'
-                                          .i18n
-                                          .fill([contact.displayName])
-                                      : message.text,
-                                  onTapLink: (String text, String? href,
-                                      String title) async {
-                                    if (href != null && await canLaunch(href)) {
-                                      showConfirmationDialog(
-                                          context: context,
-                                          title: 'open_url'.i18n,
-                                          explanation:
-                                              'are_you_sure_you_want_to_open'
-                                                  .fill([href]),
-                                          dismissText: 'cancel'.i18n,
-                                          agreeText: 'continue'.i18n,
-                                          agreeAction: () async {
-                                            await launch(href);
-                                          });
-                                    }
-                                  },
-                                  styleSheet: MarkdownStyleSheet(
-                                    a: tsBody3.copiedWith(
-                                      color: color,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                    p: tsBody3.copiedWith(
-                                      color: color,
-                                      fontStyle: wasRemotelyDeleted
-                                          ? FontStyle.italic
-                                          : null,
+                            );
+                          }),
+                        if (rendersAsText)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(
+                                start: 8, end: 8, top: 4),
+                            child:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 8, end: 8, bottom: 4),
+                                  child: MarkdownBody(
+                                    data: wasRemotelyDeleted
+                                        ? 'message_deleted'
+                                            .i18n
+                                            .fill([contact.displayName])
+                                        : message.text,
+                                    onTapLink: (String text, String? href,
+                                        String title) async {
+                                      if (href != null &&
+                                          await canLaunch(href)) {
+                                        showConfirmationDialog(
+                                            context: context,
+                                            title: 'open_url'.i18n,
+                                            explanation:
+                                                'are_you_sure_you_want_to_open'
+                                                    .fill([href]),
+                                            dismissText: 'cancel'.i18n,
+                                            agreeText: 'continue'.i18n,
+                                            agreeAction: () async {
+                                              await launch(href);
+                                            });
+                                      }
+                                    },
+                                    styleSheet: MarkdownStyleSheet(
+                                      a: tsBody3.copiedWith(
+                                        color: color,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      p: tsBody3.copiedWith(
+                                        color: color,
+                                        fontStyle: wasRemotelyDeleted
+                                            ? FontStyle.italic
+                                            : null,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ]),
-                        ),
-                      Stack(
-                        alignment: isOutbound
-                            ? AlignmentDirectional.bottomEnd
-                            : AlignmentDirectional.bottomStart,
-                        children: [
-                          if (attachment != null) attachment,
-                          FittedBox(
-                            fit: BoxFit.contain,
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: isOutbound
-                                    ? MainAxisAlignment.end
-                                    : MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: StatusRow(isOutbound, message),
-                                  ),
-                                ]),
+                            ]),
                           ),
-                        ],
-                      )
-                    ]),
+                        Stack(
+                          alignment: isOutbound
+                              ? AlignmentDirectional.bottomEnd
+                              : AlignmentDirectional.bottomStart,
+                          children: [
+                            if (attachment != null) attachment,
+                            FittedBox(
+                              fit: BoxFit.contain,
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: isOutbound
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: StatusRow(isOutbound, message),
+                                    ),
+                                  ]),
+                            ),
+                          ],
+                        )
+                      ]),
+                ),
         );
       },
     );
+  }
+
+  Widget wrapIntrinsicWidthIfNecessary(Widget child) {
+    if (rendersAsText) {
+      return IntrinsicWidth(child: child);
+    }
+    return child;
   }
 
   // Handles borders and their radii
