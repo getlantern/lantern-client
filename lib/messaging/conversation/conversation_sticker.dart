@@ -24,27 +24,26 @@ class ConversationSticker extends StatelessWidget {
     //     source = 'banner_source_intro'.i18n;
     //     break;
     // }
-    return ListTile(
-      dense: true,
-      minLeadingWidth: 18,
-      leading: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child:
-            !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
-      ),
-      title: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: !isPendingIntroduction
-                  ? _fullyAddedText()
-                  : _partiallyAddedText()),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-          //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-          // ),
-        ],
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
+        Column(
+          children: [
+            Padding(
+                padding: const EdgeInsetsDirectional.only(
+                    start: 16, top: 8, bottom: 8),
+                child: !isPendingIntroduction
+                    ? _fullyAddedText()
+                    : _partiallyAddedText()),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+            //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
+            // ),
+          ],
+        ),
+      ],
     );
   }
 
