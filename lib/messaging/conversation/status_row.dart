@@ -25,6 +25,7 @@ class StatusRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(

@@ -182,7 +182,7 @@ class MessageBubble extends StatelessWidget {
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                       if (message.replyToId.isNotEmpty)
                         model.singleMessage(
@@ -254,7 +254,6 @@ class MessageBubble extends StatelessWidget {
                           ]),
                         ),
                       Stack(
-                        fit: StackFit.passthrough,
                         alignment: isOutbound
                             ? AlignmentDirectional.bottomEnd
                             : AlignmentDirectional.bottomStart,
