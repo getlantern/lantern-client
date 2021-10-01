@@ -442,24 +442,33 @@ class ConversationState extends State<Conversation>
 
   Widget buildConversationSticker(Contact contact) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return Card(
-            color: grey1,
+          return FittedBox(
+            fit: BoxFit.none,
             child: Container(
-              width: constraints.maxWidth * 0.7,
-              child: model.introductionsToContact(
-                builder: (context,
-                    Iterable<PathAndValue<StoredMessage>> introductions,
-                    Widget? child) {
-                  final isPendingIntroduction = !contact.hasReceivedMessage &&
-                      introductions
-                          .toList()
-                          .where((intro) =>
-                              intro.value.introduction.to == contact.contactId)
-                          .isNotEmpty;
-                  return ConversationSticker(
-                      contact: contact,
-                      isPendingIntroduction: isPendingIntroduction);
-                },
+              margin: const EdgeInsetsDirectional.only(top: 8),
+              decoration: BoxDecoration(
+                  color: white,
+                  border: Border.all(color: grey3),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(borderRadius))),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: model.introductionsToContact(
+                  builder: (context,
+                      Iterable<PathAndValue<StoredMessage>> introductions,
+                      Widget? child) {
+                    final isPendingIntroduction = !contact.hasReceivedMessage &&
+                        introductions
+                            .toList()
+                            .where((intro) =>
+                                intro.value.introduction.to ==
+                                contact.contactId)
+                            .isNotEmpty;
+                    return ConversationSticker(
+                        contact: contact,
+                        isPendingIntroduction: isPendingIntroduction);
+                  },
+                ),
               ),
             ),
           );
