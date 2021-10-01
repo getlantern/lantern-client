@@ -1,4 +1,5 @@
-import 'package:lantern/messaging/conversation/mime_types.dart';
+import 'package:lantern/messaging/conversation/mime_type.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'audio.dart';
@@ -7,31 +8,29 @@ import 'image.dart';
 import 'video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
-Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
+Widget attachmentWidget(Contact contact, StoredMessage message,
+    StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final fileExtension = attachment.attachment.metadata['fileExtension'];
-  final mimeType = attachment.attachment.mimeType;
+  final mimeType = mimeTypeOf(attachment.attachment.mimeType);
 
-  if (audioMimes.contains(mimeType)) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
-      child: AudioAttachment(attachment, inbound),
-    );
+  switch (mimeType) {
+    case MimeType.AUDIO:
+      return Padding(
+        padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+        child: AudioAttachment(attachment, inbound),
+      );
+    case MimeType.IMAGE:
+      return ImageAttachment(contact, message, attachment, inbound);
+    case MimeType.VIDEO:
+      return VideoAttachment(contact, message, attachment, inbound);
+    default:
+      return GenericAttachment(
+        attachmentTitle: attachmentTitle,
+        fileExtension: fileExtension,
+        inbound: inbound,
+      );
   }
-
-  if (imageMimes.contains(mimeType)) {
-    return ImageAttachment(attachment, inbound);
-  }
-
-  if (videoMimes.contains(mimeType)) {
-    return VideoAttachment(attachment, inbound);
-  }
-
-  return _padded(GenericAttachment(
-      attachmentTitle: attachmentTitle,
-      fileExtension: fileExtension,
-      inbound: inbound,
-      icon: Icons.insert_drive_file_rounded));
 }
 
 /// AttachmentBuilder is a builder for attachments that handles progress
@@ -40,18 +39,21 @@ Widget attachmentWidget(StoredAttachment attachment, bool inbound) {
 class AttachmentBuilder extends StatelessWidget {
   final StoredAttachment attachment;
   final bool inbound;
-  final bool padAttachment;
+  final bool scrimAttachment;
   final IconData
       defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
   final Widget Function(BuildContext context, Uint8List thumbnail) builder;
+  final void Function()? onTap;
 
-  AttachmentBuilder(
-      {Key? key,
-      required this.attachment,
-      required this.inbound,
-      this.padAttachment = true,
-      required this.defaultIcon,
-      required this.builder});
+  AttachmentBuilder({
+    Key? key,
+    required this.attachment,
+    required this.inbound,
+    this.scrimAttachment = false,
+    required this.defaultIcon,
+    required this.builder,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +62,10 @@ class AttachmentBuilder extends StatelessWidget {
     // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment()
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING:
-        return _progressIndicator();
+        return progressIndicator();
       case StoredAttachment_Status.FAILED:
         // error with download
-        return _errorIndicator();
+        return errorIndicator();
       case StoredAttachment_Status.PENDING_UPLOAD:
         continue alsoDone;
       alsoDone:
@@ -75,13 +77,16 @@ class AttachmentBuilder extends StatelessWidget {
           builder: (BuildContext context,
               CachedValue<Uint8List> cachedThumbnail, Widget? child) {
             if (cachedThumbnail.loading) {
-              return _progressIndicator();
+              return progressIndicator();
             } else if (cachedThumbnail.error != null) {
-              return _errorIndicator();
+              return errorIndicator();
             } else if (cachedThumbnail.value != null) {
               var result = builder(context, cachedThumbnail.value!);
-              if (padAttachment) {
-                result = _padded(result);
+              if (scrimAttachment) {
+                result = addScrim(result);
+              }
+              if (onTap != null) {
+                result = GestureDetector(onTap: onTap, child: result);
               }
               return result;
             } else {
@@ -93,28 +98,178 @@ class AttachmentBuilder extends StatelessWidget {
     }
   }
 
-  Widget _progressIndicator() {
-    return _padded(
-      Transform.scale(
-        scale: 0.5,
-        child: CircularProgressIndicator(
-          color: inbound ? inboundMsgColor : outboundMsgColor,
+  /// creates a scrim on top of attachments
+  Widget addScrim(Widget child) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0, 1],
+                colors: [scrimGrey.withOpacity(0), black.withOpacity(0.68)],
+              ),
+            ),
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget progressIndicator() {
+    return Transform.scale(
+      scale: 0.5,
+      child: CircularProgressIndicator(
+        color: inbound ? inboundMsgColor : outboundMsgColor,
       ),
     );
   }
 
-  Widget _errorIndicator() {
-    return _padded(
-      Icon(Icons.error_outlined,
-          color: inbound ? inboundMsgColor : outboundMsgColor),
+  Widget errorIndicator() {
+    return Icon(Icons.error_outlined,
+        color: inbound ? inboundMsgColor : outboundMsgColor);
+  }
+
+  Widget buildVisualThumbnail(BuildContext context, Uint8List thumbnail,
+      BoxConstraints constraints, Widget Function(Widget) wrap) {
+    return ConstrainedBox(
+      // this box keeps the image from being too tall
+      constraints: BoxConstraints(
+          maxHeight: constraints.maxWidth, minWidth: constraints.maxWidth),
+      child: wrap(FittedBox(
+        child: BasicMemoryImage(
+          thumbnail,
+          width: 2000,
+          height: 2000,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (BuildContext context, Object error, StackTrace? stackTrace) =>
+                  Icon(Icons.error_outlined,
+                      color: inbound ? inboundMsgColor : outboundMsgColor),
+        ),
+      )),
     );
   }
 }
 
-Widget _padded(Widget child) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 0, 0, 18),
-    child: child,
-  );
+abstract class VisualAttachment extends StatelessWidget {
+  final Contact contact;
+  final StoredMessage message;
+  final StoredAttachment attachment;
+  final bool inbound;
+
+  VisualAttachment(this.contact, this.message, this.attachment, this.inbound);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<MessagingModel>();
+
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return AttachmentBuilder(
+          attachment: attachment,
+          inbound: inbound,
+          defaultIcon: Icons.image,
+          scrimAttachment: true,
+          onTap: () async {
+            await context.router.push(
+              FullScreenDialogPage(widget: buildViewer(model)),
+            );
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+            ]);
+          },
+          builder: (BuildContext context, Uint8List thumbnail) {
+            return ConstrainedBox(
+              // this box keeps the thumbnail from being too tall
+              constraints: BoxConstraints(
+                  maxHeight: constraints.maxWidth,
+                  minWidth: constraints.maxWidth),
+              child: wrapThumbnail(FittedBox(
+                child: BasicMemoryImage(
+                  thumbnail,
+                  width: 2000,
+                  height: 2000,
+                  fit: BoxFit.cover,
+                  errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) =>
+                      Icon(Icons.error_outlined,
+                          color: inbound ? inboundMsgColor : outboundMsgColor),
+                ),
+              )),
+            );
+          });
+    });
+  }
+
+  Widget buildViewer(MessagingModel model);
+
+  Widget wrapThumbnail(Widget thumbnail) => thumbnail;
+}
+
+/// Base class for widgets that allow viewing attachments like images and videos.
+abstract class ViewerWidget extends StatefulWidget {
+  final Contact contact;
+  final StoredMessage message;
+
+  ViewerWidget(this.contact, this.message);
+}
+
+/// Base class for state associated with ViewerWidgets.
+abstract class ViewerState<T extends ViewerWidget> extends State<T> {
+  bool showInfo = true;
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
+  }
+
+  bool ready();
+
+  Widget body(BuildContext context);
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      title: CText(
+        widget.contact.displayName,
+        maxLines: 1,
+        style: tsHeading3.copiedWith(color: white),
+      ),
+      padHorizontal: false,
+      foregroundColor: white,
+      backgroundColor: black,
+      showAppBar: showInfo,
+      body: GestureDetector(
+        onTap: () => setState(() => showInfo = !showInfo),
+        child: !showInfo && ready()
+            ? Align(alignment: Alignment.center, child: body(context))
+            : Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: !ready() ? Container() : body(context)),
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: StatusRow(
+                          widget.message.direction == MessageDirection.OUT,
+                          widget.message)),
+                ],
+              ),
+      ),
+    );
+  }
+
+  void forceLandscape() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
 }

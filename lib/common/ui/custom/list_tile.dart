@@ -5,6 +5,7 @@ class CListTile extends StatelessWidget {
   final dynamic content;
   final Widget? trailing;
   final double height;
+  final double endPadding;
   final bool showDivider;
   final void Function()? onTap;
 
@@ -13,6 +14,7 @@ class CListTile extends StatelessWidget {
     required this.content,
     this.trailing,
     this.height = 72,
+    this.endPadding = 8,
     this.showDivider = true,
     this.onTap,
   }) : super();
@@ -49,7 +51,7 @@ class CListTile extends StatelessWidget {
                   ),
                   if (trailing != null)
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 8.0),
+                      padding: EdgeInsetsDirectional.only(end: endPadding),
                       child: trailing,
                     ),
                 ],

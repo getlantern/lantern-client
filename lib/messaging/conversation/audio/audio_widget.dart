@@ -131,7 +131,7 @@ class AudioController extends ValueNotifier<AudioValue> {
 }
 
 class AudioWidget extends StatelessWidget {
-  static const height = 20.0;
+  static const height = 24.0;
 
   final AudioController controller;
   final Color initialColor;
@@ -176,10 +176,21 @@ class AudioWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _getPlayIcon(controller, value),
+            PlayButton(
+              size: height,
+              color: initialColor,
+              playing: value.isPlaying,
+              onPressed: () async {
+                if (value.isPlaying) {
+                  await controller.pause();
+                } else {
+                  await controller.play();
+                }
+              },
+            ),
             Container(width: 12),
             Container(
-              width: constraints.maxWidth - 32,
+              width: constraints.maxWidth - 36,
               height: height,
               child: Stack(
                 clipBehavior: Clip.hardEdge,
@@ -187,7 +198,7 @@ class AudioWidget extends StatelessWidget {
                 children: [
                   value.bars.isNotEmpty
                       ? _getWaveform(
-                          context, value, value.bars, constraints.maxWidth - 32)
+                          context, value, value.bars, constraints.maxWidth - 36)
                       : const SizedBox(),
                   _getSliderOverlay(value),
                 ],
@@ -200,7 +211,7 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getTimeRemaining(AudioValue value) => Container(
-        padding: const EdgeInsets.only(top: 7.0),
+        padding: const EdgeInsets.only(bottom: 6.0, top: 2.0),
         child: CText(
           (value.duration! - (value.position ?? const Duration()))
               .toString()
@@ -248,35 +259,6 @@ class AudioWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _getPlayIcon(AudioController controller, AudioValue value) {
-    return value.isPlaying
-        ? RoundButton(
-            diameter: height,
-            padding: 0,
-            backgroundColor: transparent,
-            icon: Icon(
-              Icons.pause,
-              color: initialColor,
-              size: height,
-            ),
-            onPressed: () {
-              if (value.isPlaying) controller.pause();
-            },
-          )
-        : RoundButton(
-            diameter: height,
-            backgroundColor: initialColor,
-            icon: Icon(
-              Icons.play_arrow,
-              color: progressColor,
-              size: 16,
-            ),
-            onPressed: () async {
-              await controller.play();
-            },
-          );
   }
 
   Widget _getWaveform(

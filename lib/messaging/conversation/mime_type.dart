@@ -1,3 +1,14 @@
+enum MimeType { VIDEO, AUDIO, IMAGE, UNKNOWN }
+
+MimeType mimeTypeOf(String mimeType) {
+  if (mimeType.isNotEmpty) {
+    if (audioMimes.contains(mimeType)) return MimeType.AUDIO;
+    if (imageMimes.contains(mimeType)) return MimeType.IMAGE;
+    if (videoMimes.contains(mimeType)) return MimeType.VIDEO;
+  }
+  return MimeType.UNKNOWN;
+}
+
 // https://developer.android.com/guide/topics/media/media-formats
 const List<String> audioMimes = [
   'application/ogg',
