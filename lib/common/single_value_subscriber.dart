@@ -28,7 +28,9 @@ class SubscribedSingleValueBuilder<T> extends ValueListenableBuilder<T?> {
       : super(
             valueListenable: notifier,
             builder: (BuildContext context, T? value, Widget? child) =>
-                value == null ? Container() : builder(context, value, child));
+                value == null
+                    ? const SizedBox()
+                    : builder(context, value, child));
 
   @override
   _SubscribedSingleValueBuilderState createState() =>

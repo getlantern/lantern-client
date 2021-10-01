@@ -38,12 +38,19 @@ class ImagePaths {
   static const check_green_large = 'assets/images/check_green_large.svg';
   static const send_rounded = 'assets/images/send_rounded.svg';
   static const play_circle_filled = 'assets/images/play_circle_filled.svg';
+  static const play_circle_filled_custom =
+      'assets/images/play_circle_filled_custom.svg';
   static const pause_circle_filled = 'assets/images/pause_circle_filled.svg';
+  static const pause_circle_outline = 'assets/images/pause_circle_outline.svg';
+  static const pause_circle_outline_custom =
+      'assets/images/pause_circle_outline_custom.svg';
   static const mic = 'assets/images/mic.svg';
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
   static const search = 'assets/images/search.svg';
   static const lock_clock = 'assets/images/lock_clock.svg';
+  static const volume_up = 'assets/images/volume_up.svg';
+  static const insert_drive_file = 'assets/images/insert_drive_file.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
