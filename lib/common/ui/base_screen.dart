@@ -10,6 +10,9 @@ class BaseScreen extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final bool padHorizontal;
   final bool padVertical;
+  final bool showAppBar;
+  late final Color foregroundColor;
+  late final Color backgroundColor;
 
   BaseScreen(
       {this.title,
@@ -21,27 +24,37 @@ class BaseScreen extends StatelessWidget {
       this.resizeToAvoidBottomInset = true,
       this.padHorizontal = true,
       this.padVertical = false,
+      Color? foregroundColor,
+      Color? backgroundColor,
+      this.showAppBar = true,
       Key? key})
-      : super(key: key);
+      : super(key: key) {
+    this.foregroundColor = foregroundColor ?? black;
+    this.backgroundColor = backgroundColor ?? white;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: AppBar(
-        title: title is String
-            ? CText(
-                title,
-                style: tsHeading3,
-              )
-            : title,
-        elevation: 1,
-        backgroundColor: Colors.white,
-        centerTitle: centerTitle,
-        titleSpacing: 0,
-        actions: actions,
-      ),
+      appBar: !showAppBar
+          ? null
+          : AppBar(
+              title: title is String
+                  ? CText(
+                      title,
+                      style: tsHeading3.copiedWith(color: foregroundColor),
+                    )
+                  : title,
+              elevation: 1,
+              foregroundColor: foregroundColor,
+              backgroundColor: backgroundColor,
+              iconTheme: IconThemeData(color: foregroundColor),
+              centerTitle: centerTitle,
+              titleSpacing: 0,
+              actions: actions,
+            ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: padHorizontal ? 16 : 0, vertical: padVertical ? 16 : 0),

@@ -84,7 +84,7 @@ class ContactConnectionCard extends StatelessWidget {
         }),
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: [StatusRow(outbound, inbound, message)],
+          children: [StatusRow(outbound, message)],
         )
       ],
     );

@@ -3,18 +3,18 @@ import 'package:intl/intl.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
-import 'package:lantern/messaging/conversation/audio/voice_recorder.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
 import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
 import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
-import 'package:lantern/messaging/conversation/replies/reply_preview.dart';
 import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+import 'audio/voice_recorder.dart';
 import 'call_action.dart';
 import 'date_marker_bubble.dart';
+import 'reply.dart';
 import 'show_conversation_options.dart';
 
 class Conversation extends StatefulWidget {
@@ -40,7 +40,6 @@ class ConversationState extends State<Conversation>
   bool isRecording = false;
   bool finishedRecording = false;
   bool isSendIconVisible = false;
-  bool isReplying = false;
   Uint8List? recording;
   AudioController? audioPreviewController;
   StoredMessage? quotedMessage;
@@ -57,7 +56,7 @@ class ConversationState extends State<Conversation>
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
   double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
-  static var highestKeyboardHeight = 0.0;
+  static var latestKeyboardHeight = 0.0;
 
   void showNativeKeyboard() {
     focusNode.requestFocus();
@@ -82,9 +81,9 @@ class ConversationState extends State<Conversation>
                 WidgetsBinding.instance!.window.devicePixelRatio)
             .bottom,
         MediaQuery.of(context).viewInsets.bottom);
-    if (currentKeyboardHeight > highestKeyboardHeight) {
+    if (currentKeyboardHeight > 0) {
       setState(() {
-        highestKeyboardHeight = currentKeyboardHeight;
+        latestKeyboardHeight = currentKeyboardHeight;
       });
     }
   }
@@ -172,37 +171,6 @@ class ConversationState extends State<Conversation>
     super.dispose();
   }
 
-  Future<void> sendMessage(String text,
-      {List<Uint8List>? attachments,
-      String? replyToSenderId,
-      String? replyToId}) async {
-    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
-    try {
-      await model.sendToDirectContact(
-        widget.contactId.id,
-        text: text,
-        attachments: attachments,
-        replyToId: replyToId,
-        replyToSenderId: replyToSenderId,
-      );
-      newMessage.clear();
-      setState(() {
-        recording = null;
-        audioPreviewController = null;
-      });
-      if (messageCount > 0) {
-        await scrollController.scrollTo(
-            index: 0,
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeInOutCubic);
-      }
-    } catch (e, s) {
-      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
-    } finally {
-      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
-    }
-  }
-
   Future<void> startRecording() async {
     if (isRecording) {
       return;
@@ -247,7 +215,8 @@ class ConversationState extends State<Conversation>
         return;
       }
       context.loaderOverlay.show();
-      result.files.forEach((el) async {
+      for (var i = 0; i < result.files.length; i++) {
+        final el = result.files[i];
         // TODO: we might need to sanitize title
         final title = el.path.toString().split('file_picker/')[1].split('.')[
             0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
@@ -259,8 +228,12 @@ class ConversationState extends State<Conversation>
         };
         final attachment =
             await model.filePickerLoadAttachment(el.path.toString(), metadata);
-        await sendMessage(newMessage.value.text, attachments: [attachment]);
-      });
+        await sendMessage(newMessage.value.text,
+            attachments: [attachment],
+            replyToSenderId: quotedMessage?.senderId,
+            replyToId: quotedMessage?.id);
+      }
+      setState(() => quotedMessage = null);
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'share_media_error'.i18n);
     } finally {
@@ -268,15 +241,67 @@ class ConversationState extends State<Conversation>
     }
   }
 
-  Future<void> handleSubmit(TextEditingController newMessage) async {
+  Future<void> handleMessageBarSubmit(TextEditingController newMessage) async {
     if (mounted) {
       setState(() {
         isSendIconVisible = false;
-        isReplying = false;
       });
     }
     await sendMessage(newMessage.value.text,
         replyToSenderId: quotedMessage?.senderId, replyToId: quotedMessage?.id);
+  }
+
+  // handles backend send message logic
+  Future<void> sendMessage(String text,
+      {List<Uint8List>? attachments,
+      String? replyToSenderId,
+      String? replyToId}) async {
+    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
+    try {
+      await model.sendToDirectContact(
+        widget.contactId.id,
+        text: text,
+        attachments: attachments,
+        replyToId: replyToId,
+        replyToSenderId: replyToSenderId,
+      );
+      newMessage.clear();
+      setState(() {
+        recording = null;
+        audioPreviewController = null;
+        quotedMessage = null;
+      });
+      if (messageCount > 0) {
+        await scrollController.scrollTo(
+            index: 0,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOutCubic);
+      }
+    } catch (e, s) {
+      showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
+    } finally {
+      if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
+    }
+  }
+
+  // handles client send message logic
+  void send() async {
+    if (newMessage.value.text.trim().isEmpty && recording == null) {
+      return;
+    }
+    await sendMessage(newMessage.value.text,
+        attachments:
+            recording != null && recording!.isNotEmpty ? [recording!] : [],
+        replyToSenderId: quotedMessage?.senderId,
+        replyToId: quotedMessage?.id);
+    if (mounted) {
+      setState(() {
+        quotedMessage = null;
+        isRecording = false;
+        finishedRecording = false;
+        isSendIconVisible = false;
+      });
+    }
   }
 
   @override
@@ -286,9 +311,8 @@ class ConversationState extends State<Conversation>
     // update keyboard height values
     updateKeyboardHeight();
 
-    final keyboardHeight = highestKeyboardHeight > 0
-        ? highestKeyboardHeight
-        : defaultKeyboardHeight;
+    final keyboardHeight =
+        latestKeyboardHeight > 0 ? latestKeyboardHeight : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget.contactId.id))
@@ -337,7 +361,7 @@ class ConversationState extends State<Conversation>
             children: [
               CallAction(contact),
               IconButton(
-                icon: const Icon(Icons.more_vert_rounded),
+                icon: const CAssetImage(path: ImagePaths.more_vert),
                 padding:
                     const EdgeInsetsDirectional.only(top: 8, bottom: 8, end: 8),
                 tooltip: 'menu'.i18n,
@@ -357,26 +381,24 @@ class ConversationState extends State<Conversation>
                 Flexible(
                   child: dismissKeyboardsOnTap(
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: buildList(contact),
                     ),
                   ),
                 ),
                 // Reply container
-                if (isReplying)
-                  ReplyPreview(
-                    quotedMessage: quotedMessage,
+                if (quotedMessage != null)
+                  Reply(
                     model: model,
                     contact: contact,
-                    onCloseListener: () => setState(() => isReplying = false),
+                    message: quotedMessage!,
+                    onCancelReply: () => setState(() => quotedMessage = null),
                   ),
                 Divider(height: 1.0, color: grey3),
                 Container(
-                  color: isRecording
-                      ? const Color.fromRGBO(245, 245, 245, 1)
-                      : Colors.white,
+                  color: isRecording ? grey2 : white,
                   width: MediaQuery.of(context).size.width,
-                  height: kBottomNavigationBarHeight,
+                  height: messageBarHeight,
                   child: buildMessageBar(),
                 ),
                 Offstage(
@@ -420,24 +442,33 @@ class ConversationState extends State<Conversation>
 
   Widget buildConversationSticker(Contact contact) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return Card(
-            color: grey1,
+          return FittedBox(
+            fit: BoxFit.none,
             child: Container(
-              width: constraints.maxWidth * 0.7,
-              child: model.introductionsToContact(
-                builder: (context,
-                    Iterable<PathAndValue<StoredMessage>> introductions,
-                    Widget? child) {
-                  final isPendingIntroduction = !contact.hasReceivedMessage &&
-                      introductions
-                          .toList()
-                          .where((intro) =>
-                              intro.value.introduction.to == contact.contactId)
-                          .isNotEmpty;
-                  return ConversationSticker(
-                      contact: contact,
-                      isPendingIntroduction: isPendingIntroduction);
-                },
+              margin: const EdgeInsetsDirectional.only(top: 8),
+              decoration: BoxDecoration(
+                  color: white,
+                  border: Border.all(color: grey3),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(borderRadius))),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: model.introductionsToContact(
+                  builder: (context,
+                      Iterable<PathAndValue<StoredMessage>> introductions,
+                      Widget? child) {
+                    final isPendingIntroduction = !contact.hasReceivedMessage &&
+                        introductions
+                            .toList()
+                            .where((intro) =>
+                                intro.value.introduction.to ==
+                                contact.contactId)
+                            .isNotEmpty;
+                    return ConversationSticker(
+                        contact: contact,
+                        isPendingIntroduction: isPendingIntroduction);
+                  },
+                ),
               ),
             ),
           );
@@ -505,6 +536,7 @@ class ConversationState extends State<Conversation>
         priorMessage: priorMessage(listItems, index)?.value,
         nextMessage: nextMessage(listItems, index)?.value,
         contact: contact,
+        onOpenMenu: dismissAllKeyboards,
         onEmojiTap: () {
           setState(() {
             reactingWithEmoji = true;
@@ -514,7 +546,6 @@ class ConversationState extends State<Conversation>
         },
         onReply: () {
           setState(() {
-            isReplying = true;
             quotedMessage = message;
             showNativeKeyboard();
           });
@@ -554,13 +585,10 @@ class ConversationState extends State<Conversation>
     return null;
   }
 
+  // Entry point to audio waveform widget (MessageBarPreviewRecording)
   Widget buildMessageBar() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 55,
-      margin: isRecording
-          ? const EdgeInsets.only(right: 0, left: 8.0, bottom: 0)
-          : EdgeInsets.zero,
       child: IndexedStack(
         index: finishedRecording ? 1 : 0,
         children: [
@@ -586,138 +614,137 @@ class ConversationState extends State<Conversation>
     );
   }
 
+  // Renders Emoji button, message bar and recording icon
+  // Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
-    return ListTile(
-      contentPadding: isRecording
-          ? const EdgeInsets.only(right: 0, left: 2.0)
-          : EdgeInsets.zero,
-      leading: isRecording
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: PulsatingIndicator(
-                    width: 25,
-                    height: 25,
-                    duration: const Duration(milliseconds: 700),
-                    pulseColor: indicatorRed,
-                    color: indicatorRed,
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 14),
-                    child: StopwatchTimer(
-                      stopWatchTimer: stopWatchTimer,
-                      style: tsOverline.copiedWith(color: indicatorRed),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          : IconButton(
-              onPressed: () {
-                {
-                  if (keyboardMode == KeyboardMode.emoji ||
-                      keyboardMode == KeyboardMode.emojiReaction) {
-                    keyboardMode = KeyboardMode.native;
-                    showNativeKeyboard();
-                  } else {
-                    showEmojiKeyboard(false);
-                  }
-                }
-              },
-              icon: Icon(
-                  keyboardMode == KeyboardMode.emoji ||
-                          keyboardMode == KeyboardMode.emojiReaction
-                      ? Icons.keyboard_alt_outlined
-                      : Icons.sentiment_very_satisfied,
-                  color: grey5),
-            ),
-      title: Stack(
-        alignment: Alignment.center,
-        children: [
-          TextFormField(
-            autofocus: false,
-            textInputAction: TextInputAction.send,
-            controller: newMessage,
-            onChanged: (value) {
-              final newIsSendIconVisible = value.isNotEmpty;
-              if (newIsSendIconVisible != isSendIconVisible) {
-                setState(() => isSendIconVisible = newIsSendIconVisible);
-              }
-            },
-            focusNode: focusNode,
-            onFieldSubmitted: (value) async =>
-                value.isEmpty ? null : await handleSubmit(newMessage),
-            decoration: InputDecoration(
-              // Send icon
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: 'message'.i18n,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          // hide TextFormField while recording by painting over it. this allows
-          // the form field to retain focus to keep the keyboard open and keep
-          // the layout from changing while we're recording.
-          if (isRecording)
-            SizedBox(
-              child: Container(
-                decoration: BoxDecoration(color: grey2),
-              ),
-            ),
-        ],
-      ),
-      trailing: isSendIconVisible && !isRecording
-          ? IconButton(
-              key: const ValueKey('send_message'),
-              icon: const Icon(Icons.send, color: Colors.black),
-              onPressed: send,
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                isRecording
-                    ? const SizedBox()
-                    : IconButton(
-                        onPressed: () async => await selectFilesToShare(),
-                        icon: const Icon(Icons.add_circle_rounded),
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        CListTile(
+          height: messageBarHeight,
+          endPadding: isSendIconVisible ? 0 : 48,
+          showDivider: false,
+          leading: isRecording
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 16),
+                        child: PulsatingIndicator(),
                       ),
-                VoiceRecorder(
-                  isRecording: isRecording,
-                  onRecording: () async => await startRecording(),
-                  onStopRecording: () async =>
-                      hasPermission ? await finishRecording() : null,
-                  onTapUpListener: () async => await finishRecording(),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 16),
+                        child: StopwatchTimer(
+                          stopWatchTimer: stopWatchTimer,
+                          style:
+                              tsSubtitle1.copiedWith(color: indicatorRed).short,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : IconButton(
+                  onPressed: () {
+                    {
+                      if (keyboardMode == KeyboardMode.emoji ||
+                          keyboardMode == KeyboardMode.emojiReaction) {
+                        keyboardMode = KeyboardMode.native;
+                        showNativeKeyboard();
+                      } else {
+                        showEmojiKeyboard(false);
+                      }
+                    }
+                  },
+                  icon: keyboardMode == KeyboardMode.emoji ||
+                          keyboardMode == KeyboardMode.emojiReaction
+                      ? const CAssetImage(path: ImagePaths.keyboard)
+                      : const CAssetImage(path: ImagePaths.insert_emoticon),
                 ),
-              ],
-            ),
+          content: Stack(
+            alignment: Alignment.center,
+            children: [
+              TextFormField(
+                autofocus: false,
+                textInputAction: TextInputAction.send,
+                controller: newMessage,
+                onChanged: (value) {
+                  final newIsSendIconVisible = value.isNotEmpty;
+                  if (newIsSendIconVisible != isSendIconVisible) {
+                    setState(() => isSendIconVisible = newIsSendIconVisible);
+                  }
+                },
+                focusNode: focusNode,
+                onFieldSubmitted: (value) async => value.isEmpty
+                    ? null
+                    : await handleMessageBarSubmit(newMessage),
+                decoration: InputDecoration(
+                  // Send icon
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  hintText: 'message'.i18n,
+                  border: const OutlineInputBorder(),
+                ),
+                style: tsSubtitle1
+                    .copiedWith(color: isSendIconVisible ? black : grey5)
+                    .short,
+              ),
+              // hide TextFormField while recording by painting over it. this allows
+              // the form field to retain focus to keep the keyboard open and keep
+              // the layout from changing while we're recording.
+              if (isRecording)
+                SizedBox(
+                  child: Container(
+                    decoration: BoxDecoration(color: grey2),
+                  ),
+                ),
+            ],
+          ),
+          trailing: isSendIconVisible && !isRecording
+              ? Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child:
+                          VerticalDivider(thickness: 1, width: 1, color: grey3),
+                    ),
+                    IconButton(
+                      key: const ValueKey('send_message'),
+                      icon: CAssetImage(
+                          path: ImagePaths.send_rounded, color: pink4),
+                      onPressed: send,
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    isRecording
+                        ? const SizedBox()
+                        : IconButton(
+                            onPressed: () async => await selectFilesToShare(),
+                            icon:
+                                const CAssetImage(path: ImagePaths.add_circle),
+                          ),
+                  ],
+                ),
+        ),
+        if (!isSendIconVisible)
+          VoiceRecorder(
+            isRecording: isRecording,
+            onRecording: () async => await startRecording(),
+            onStopRecording: () async =>
+                hasPermission ? await finishRecording() : null,
+            onTapUpListener: () async => await finishRecording(),
+          ),
+      ],
     );
-  }
-
-  void send() async {
-    if (newMessage.value.text.trim().isEmpty && recording == null) {
-      return;
-    }
-    await sendMessage(newMessage.value.text,
-        attachments:
-            recording != null && recording!.isNotEmpty ? [recording!] : [],
-        replyToSenderId: quotedMessage?.senderId,
-        replyToId: quotedMessage?.id);
-    if (mounted) {
-      setState(() {
-        quotedMessage = null;
-        isRecording = false;
-        finishedRecording = false;
-        isSendIconVisible = false;
-        isReplying = false;
-      });
-    }
   }
 }
 

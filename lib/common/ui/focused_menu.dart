@@ -10,7 +10,7 @@ class FocusedMenuHolder extends StatefulWidget {
   final Widget child;
   final SizedBox menu;
   final double menuWidth;
-  final Function onPressed;
+  final void Function()? onOpen;
   final double menuOffset;
   final double paddingTop;
   final double paddingBottom;
@@ -19,7 +19,7 @@ class FocusedMenuHolder extends StatefulWidget {
     Key? key,
     required this.child,
     required this.menu,
-    required this.onPressed,
+    this.onOpen,
     required this.menuWidth,
     this.menuOffset = 5,
     this.paddingTop = 16,
@@ -50,10 +50,8 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
   Widget build(BuildContext context) {
     return GestureDetector(
         key: containerKey,
-        onTap: () async {
-          widget.onPressed();
-        },
         onLongPress: () async {
+          widget.onOpen?.call();
           await openMenu(context);
         },
         child: widget.child);
@@ -75,8 +73,8 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
                     menuOffset: widget.menuOffset,
                     paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
-                    child: widget.child,
                     menu: widget.menu,
+                    child: widget.child,
                   ));
             },
             fullscreenDialog: true,
@@ -156,28 +154,17 @@ class FocusedMenuDetails extends StatelessWidget {
             Positioned(
               top: menuY,
               left: menuX,
-              child: TweenAnimationBuilder(
-                duration: const Duration(milliseconds: 200),
-                builder: (BuildContext context, dynamic value, Widget? child) {
-                  return Transform.scale(
-                    scale: value,
-                    alignment: Alignment.center,
-                    child: child,
-                  );
-                },
-                tween: Tween(begin: 0.0, end: 1.0),
-                child: Container(
-                  width: menuWidth,
-                  height: menuHeight,
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                    child: SingleChildScrollView(
-                      child: menu,
-                    ),
+              child: Container(
+                width: menuWidth,
+                height: menuHeight,
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  child: SingleChildScrollView(
+                    child: menu,
                   ),
                 ),
               ),
