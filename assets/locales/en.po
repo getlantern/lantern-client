@@ -433,7 +433,7 @@ msgid "banner_source_intro"
 msgstr "Introduction"
 
 msgid "message_will_disappear_at"
-msgstr "Message will disappear %s"
+msgstr "Disappears %s"
 
 msgid "change_display_name"
 msgstr "Change Display Name"
