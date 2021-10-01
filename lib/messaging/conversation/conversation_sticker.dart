@@ -70,7 +70,7 @@ class ConversationSticker extends StatelessWidget {
 
   Icon _fullyAddedIcon() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? const Icon(Icons.timer, size: 18, color: Colors.black)
-        : const Icon(Icons.lock_clock, size: 18, color: Colors.black);
+        ? const Icon(Icons.timer, color: Colors.black)
+        : const Icon(Icons.lock_clock, color: Colors.black);
   }
 }
