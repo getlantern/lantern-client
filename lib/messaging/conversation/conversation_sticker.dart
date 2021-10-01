@@ -53,7 +53,7 @@ class ConversationSticker extends StatelessWidget {
   }
 
   Icon _partiallyAddedIcon() {
-    return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
+    return const Icon(Icons.more_horiz_rounded, color: Colors.black);
   }
 
   CText _fullyAddedText() {

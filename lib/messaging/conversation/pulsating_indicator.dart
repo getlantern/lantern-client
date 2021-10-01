@@ -2,23 +2,20 @@ import 'package:lantern/messaging/messaging.dart';
 
 class PulsatingIndicator extends StatefulWidget {
   final Duration duration;
-  final Widget? child;
-  final EdgeInsets? padding;
-  final double width;
-  final double height;
-  final Color? color;
-  final Color? pulseColor;
+  final double size;
+  late final Color color;
+  late final Color pulseColor;
 
-  const PulsatingIndicator({
+  PulsatingIndicator({
     Key? key,
-    required this.duration,
-    this.child,
-    this.padding,
-    required this.width,
-    required this.height,
-    this.color,
-    required this.pulseColor,
-  }) : super(key: key);
+    this.duration = const Duration(milliseconds: 700),
+    this.size = 16,
+    Color? color,
+    Color? pulseColor,
+  }) : super(key: key) {
+    this.color = color ?? indicatorRed;
+    this.pulseColor = color ?? indicatorRed;
+  }
 
   @override
   _PulsatingIndicatorState createState() => _PulsatingIndicatorState();
@@ -34,8 +31,9 @@ class _PulsatingIndicatorState extends State<PulsatingIndicator>
     _animationController =
         AnimationController(vsync: this, duration: widget.duration);
     _animationController.repeat(reverse: true);
-    _animation = Tween<double>(begin: 0, end: 5).animate(_animationController)
-      ..addListener(() => setState(() {}));
+    _animation = Tween<double>(begin: 0, end: widget.size * .25)
+        .animate(_animationController)
+          ..addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -48,10 +46,9 @@ class _PulsatingIndicatorState extends State<PulsatingIndicator>
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: widget.padding ?? const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: widget.color ?? Colors.white,
-        borderRadius: BorderRadius.circular(30),
+        color: widget.color,
+        borderRadius: BorderRadius.circular(widget.size / 2),
         boxShadow: [
           BoxShadow(
             color: widget.pulseColor?.withOpacity(0.3) ??
@@ -61,7 +58,10 @@ class _PulsatingIndicatorState extends State<PulsatingIndicator>
           ),
         ],
       ),
-      child: widget.child ?? const SizedBox(),
+      child: SizedBox(
+        width: widget.size * .75,
+        height: widget.size * .75,
+      ),
     );
   }
 }
