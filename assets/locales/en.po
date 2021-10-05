@@ -121,7 +121,7 @@ msgstr "Save"
 msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
 
-msgid "Re-send Email""
+msgid "Re-send Email"
 msgstr "Re-send Email"
 
 msgid "Paste from clipboard?"
