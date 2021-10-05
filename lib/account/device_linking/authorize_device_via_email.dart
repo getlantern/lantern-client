@@ -38,8 +38,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 autovalidateMode: AutovalidateMode.disabled,
                 //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
                 label: 'Email'.i18n,
-                helperText:
-                    'Enter the email associated with your Pro account'.i18n,
+                helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: const Icon(
                   Icons.email,

@@ -41,7 +41,8 @@ class ContactConnectionCard extends StatelessWidget {
                         children: [
                           if (message.introduction.status ==
                               IntroductionDetails_IntroductionStatus.ACCEPTED)
-                            Icon(Icons.check_circle,
+                            CAssetImage(
+                                path: ImagePaths.check_circle_outline,
                                 color: outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor),
