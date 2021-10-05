@@ -398,7 +398,7 @@ msgid "banner_source_intro"
 msgstr "Introduction"
 
 msgid "message_will_disappear_at"
-msgstr "Message will disappear %s"
+msgstr "Disappears %s"
 
 msgid "change_display_name"
 msgstr "Change Display Name"
@@ -415,8 +415,17 @@ msgstr "Please use only letters, numbers or spaces"
 msgid "yesterday"
 msgstr "yesterday"
 
+msgid "tomorrow"
+msgstr "tomorrow"
+
 msgid "just_now"
 msgstr "just now"
+
+msgid "within_one_minute"
+msgstr "within one minute"
+
+msgid "at_date"
+msgstr "at %s"
 
 msgid "error_fetching_message_preview"
 msgstr "Error fetching Message Preview"
@@ -490,6 +499,9 @@ msgstr "Please enter a valid username"
 msgid "open_url"
 msgstr "Open URL"
 
+msgid "message_deleted"
+msgstr "%s deleted this message"
+
 msgid "never"
 msgstr "Never"
 
@@ -508,8 +520,20 @@ msgstr "This will delete the message for everyone."
 msgid "reply"
 msgstr "Reply"
 
+msgid "replying_to"
+msgstr "Replying to %s"
+
 msgid "attachment"
-msgstr "attachment"
+msgstr "Attachment"
+
+msgid "audio"
+msgstr "Audio"
+
+msgid "image"
+msgstr "Image"
+
+msgid "video"
+msgstr "Video"
 
 msgid "search_chars_min"
 msgstr "Type at least three characters"
