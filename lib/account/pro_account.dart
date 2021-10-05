@@ -14,14 +14,14 @@ class ProAccount extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'pro_account_management'.i18n,
+      title: 'Pro Account Management'.i18n,
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         return sessionModel
             .devices((BuildContext context, Devices devices, Widget? child) {
           var items = [
             SettingsSectionHeader(
-              label: 'email'.i18n,
+              label: 'Email'.i18n,
             ),
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {
@@ -32,7 +32,7 @@ class ProAccount extends StatelessWidget {
               );
             }),
             SettingsSectionHeader(
-              label: 'pro_expiration'.i18n,
+              label: 'Pro Account Expiration'.i18n,
             ),
             sessionModel.expiryDate(
                 (BuildContext context, String expirationDate, Widget? child) {
@@ -99,7 +99,8 @@ class ProAccount extends StatelessWidget {
                     },
               child: !allowRemoval
                   ? null
-                  : CText((isMyDevice ? 'logout' : 'Remove').i18n.toUpperCase(),
+                  : CText(
+                      (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
                       style: tsButtonPink),
             );
           }));
@@ -109,7 +110,7 @@ class ProAccount extends StatelessWidget {
               title: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               child:
-                  CText('add_device'.i18n.toUpperCase(), style: tsButtonPink),
+                  CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink),
             ));
           }
 

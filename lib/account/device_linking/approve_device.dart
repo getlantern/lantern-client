@@ -37,7 +37,7 @@ class ApproveDevice extends StatelessWidget {
     return sessionModel.emailAddress(
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
-        title: 'add_device'.i18n,
+        title: 'Add Device'.i18n,
         body: Form(
           key: formKey,
           child: Column(
