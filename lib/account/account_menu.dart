@@ -33,19 +33,19 @@ class AccountMenu extends StatelessWidget {
     return [
       SettingsItem(
         icon: ImagePaths.pro_icon_black,
-        title: 'upgrade_to_lantern_pro'.i18n,
+        title: 'Upgrade to Lantern Pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
       SettingsItem(
         icon: ImagePaths.devices,
-        title: 'authorize_device_pro'.i18n,
+        title: 'Authorize Device for Pro'.i18n,
         onTap: () {
           authorizeDeviceForPro(context);
         },
       ),
       SettingsItem(
         icon: ImagePaths.star,
-        title: 'invite_friends'.i18n,
+        title: 'Invite Friends'.i18n,
         onTap: inviteFriends,
       ),
       SettingsItem(
@@ -74,17 +74,17 @@ class AccountMenu extends StatelessWidget {
         SettingsItem(
           icon: ImagePaths.account,
           iconColor: Colors.black,
-          title: 'pro_account_management'.i18n,
+          title: 'Pro Account Management'.i18n,
           onTap: () async => await context.pushRoute(ProAccount()),
         ),
         SettingsItem(
           icon: ImagePaths.devices,
-          title: 'add_device'.i18n,
+          title: 'Add Device'.i18n,
           onTap: () async => await context.pushRoute(ApproveDevice()),
         ),
         SettingsItem(
           icon: ImagePaths.star,
-          title: 'invite_friends'.i18n,
+          title: 'Invite Friends'.i18n,
           onTap: inviteFriends,
         ),
         SettingsItem(
@@ -114,7 +114,7 @@ class AccountMenu extends StatelessWidget {
     var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'account'.i18n,
+      title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return messagingModel

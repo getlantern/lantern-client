@@ -518,7 +518,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   margin: const EdgeInsetsDirectional.only(bottom: 32),
                   child: Button(
                     width: 200,
-                    text: 'submit'.i18n,
+                    text: 'Submit'.i18n,
                     onPressed: () {
                       _onContactIdAdd();
                       FocusScope.of(context).unfocus();

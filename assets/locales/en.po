@@ -5,7 +5,7 @@ msgstr ""
 msgid "app_name"
 msgstr "Lantern"
 
-msgid "daily_data_usage"
+msgid "Daily Data Usage"
 msgstr "Daily Data Usage: "
 
 msgid "is"
@@ -14,40 +14,40 @@ msgstr "is"
 msgid "connected"
 msgstr "Connected"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Disconnected"
 
-msgid "disconnecting"
+msgid "Disconnecting"
 msgstr "Disconnecting..."
 
-msgid "connecting"
+msgid "Connecting"
 msgstr "Connecting..."
 
-msgid "go_pro_title"
+msgid "Go Pro Title"
 msgstr "Go Pro!"
 
-msgid "go_pro_description"
+msgid "Go Pro Description"
 msgstr "Unlock faster speeds, and unlimited data!"
 
-msgid "server_location"
+msgid "Server Location"
 msgstr "Server Location"
 
-msgid "server_location_info"
+msgid "Server Location Infoo"
 msgstr "Server Location Info"
 
 msgid "OK"
 msgstr "OK"
 
-msgid "pro_account_management"
+msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "add_device"
+msgid "Add Device"
 msgstr "Add Device"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Upgrade to Lantern Pro"
 
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Invite Friends"
 
 msgid "desktop_version"
@@ -73,58 +73,58 @@ msgstr ""
 "If enabled all traffic will be sent through Lantern (more secure). If "
 "disabled, only blocked traffic will be sent through Lantern (faster)."
 
-msgid "account"
+msgid "Account"
 msgstr "Account"
 
-msgid "VPN_status"
+msgid "VPN Status"
 msgstr "VPN Status: "
 
 msgid "VPN"
 msgstr "VPN"
 
-msgid "authorize_device_pro"
+msgid "Authorize Device for Pro"
 msgstr "Authorize Device for Pro"
 
-msgid "authorize_device_pin"
+msgid "Authorize with Device Linking Pin"
 msgstr "Authorize with Device Linking Pin"
 
-msgid "requires_physical_access"
+msgid "Requires physical access to a Lantern Pro Device"
 msgstr "Requires physical access to a Lantern Pro Device"
 
-msgid "link_with_pin"
+msgid "Link with PIN"
 msgstr "Link with PIN"
 
 msgid "OR"
 msgstr "OR"
 
-msgid "authorize_via_email"
+msgid "Authorize Device via Email"
 msgstr "Authorize Device via Email"
 
 msgid "auth_email_helper_text"
 msgstr "Enter the email associated with your Pro account"
 
-msgid "requires_access_to_email"
+msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr "Requires access to the email you used to buy Lantern Pro"
 
-msgid "link_via_email"
+msgid "Link via Email"
 msgstr "Link via Email"
 
-msgid "email"
+msgid "Email"
 msgstr "Email"
 
-msgid "submit"
+msgid "Submit"
 msgstr "Submit"
 
 msgid "save"
 msgstr "Save"
 
-msgid "enter_valid_address"
+msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
 
-msgid "resend_email"
+msgid "Re-send Email""
 msgstr "Re-send Email"
 
-msgid "paste_pin"
+msgid "Paste from clipboard?"
 msgstr "Paste from clipboard?"
 
 msgid "Yes"
@@ -133,13 +133,13 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
-msgid "paste_linking_code"
+msgid "Enter or paste linking code"
 msgstr "Enter or paste linking code"
 
 msgid "recovery_email_sent"
 msgstr "A Linking PIN has been sent to %s if this account exists. Input the PIN from that email above. The email may take several hours to arrive."
 
-msgid "add_device"
+msgid "Add Device"
 msgstr "Add Device"
 
 msgid "approve_device_step_1"
@@ -148,7 +148,7 @@ msgstr "Open 'Authorize Device for Pro' from the account menu on the device you 
 msgid "approve_device_step_2"
 msgstr "Enter the linking code obtained from step 1"
 
-msgid "pro_expiration"
+msgid "Pro Account Expiration"
 msgstr "Pro Account Expiration"
 
 msgid "Renew"
@@ -160,7 +160,7 @@ msgstr "Lantern Pro Devices (Up to 3)"
 msgid "Remove"
 msgstr "Remove"
 
-msgid "logout"
+msgid "Log Out"
 msgstr "Log Out"
 
 msgid "confirm_remove_device"
@@ -169,10 +169,10 @@ msgstr "Are you sure you want to unlink this device from your Pro account?"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "dev_title"
+msgid "Developer Settings"
 msgstr "Developer Settings"
 
-msgid "developer"
+msgid "Developer"
 msgstr "Developer"
 
 msgid "dev_settings"
@@ -181,16 +181,16 @@ msgstr "These settings are for development use only. Changing any setting will a
 msgid "dev_payment_mode"
 msgstr "When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV."
 
-msgid "payment_test_mode"
+msgid "Payment Test Mode"
 msgstr "Payment Test Mode"
 
-msgid "play_version"
+msgid "Play Version"
 msgstr "Play Version"
 
-msgid "force_country"
+msgid "Force Country"
 msgstr "Force Country"
 
-msgid "error"
+msgid "Error"
 msgstr "Error"
 
 msgid "accept"
@@ -237,9 +237,6 @@ msgstr "Conversation Menu"
 
 msgid "off"
 msgstr "Off"
-
-msgid "cancel"
-msgstr "Cancel"
 
 msgid "continue"
 msgstr "Continue"

@@ -16,7 +16,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     formKey: formKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'enter_valid_address'.i18n,
+        : 'Please enter a valid email address'.i18n,
   );
 
   @override
@@ -24,7 +24,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'authorize_via_email'.i18n,
+      title: 'Authorize Device via Email'.i18n,
       body: Form(
         key: formKey,
         child: Column(
@@ -37,7 +37,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 controller: emailController,
                 autovalidateMode: AutovalidateMode.disabled,
                 //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
-                label: 'email'.i18n,
+                label: 'Email'.i18n,
                 helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: const Icon(
@@ -51,7 +51,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(
                 width: 200,
-                text: 'submit'.i18n,
+                text: 'Submit'.i18n,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     context.loaderOverlay.show();

@@ -114,7 +114,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           child: CText(
                             signaling.value.callState == CallState.Connected
                                 ? 'connected'.i18n
-                                : 'connecting'.i18n,
+                                : 'Connecting'.i18n,
                             style: tsBody1.copiedWith(color: white),
                           ),
                         ),

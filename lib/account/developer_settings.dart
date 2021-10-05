@@ -10,7 +10,7 @@ class DeveloperSettingsTab extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
 
     return BaseScreen(
-      title: 'dev_title'.i18n,
+      title: 'Developer Settings'.i18n,
       padVertical: true,
       body: ListView(
         children: [
@@ -26,7 +26,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             child: CText('dev_payment_mode'.i18n, style: tsBody3),
           ),
           SettingsItem(
-            title: 'payment_test_mode'.i18n,
+            title: 'Payment Test Mode'.i18n,
             child: sessionModel.paymentTestMode(
                 (BuildContext context, bool value, Widget? child) {
               return FlutterSwitch(
@@ -43,7 +43,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             }),
           ),
           SettingsItem(
-            title: 'play_version'.i18n,
+            title: 'Play Version'.i18n,
             child: sessionModel
                 .playVersion((BuildContext context, bool value, Widget? child) {
               return FlutterSwitch(
@@ -60,7 +60,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             }),
           ),
           SettingsItem(
-            title: 'force_country'.i18n,
+            title: 'Force Country'.i18n,
             child: sessionModel.forceCountry(
                 (BuildContext context, String value, Widget? child) {
               return DropdownButton<String>(

@@ -10,7 +10,7 @@ class VPNStatus extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CText(
-            'VPN_status'.i18n,
+            'VPN Status'.i18n,
             style: tsBody1.copiedWith(
               color: unselectedTabLabelColor,
             ),
@@ -20,8 +20,8 @@ class VPNStatus extends StatelessWidget {
                   children: [
                     CText(
                       (vpnStatus == 'connecting')
-                          ? 'connecting'.i18n
-                          : 'disconnecting'.i18n,
+                          ? 'Connecting'.i18n
+                          : 'Disconnecting'.i18n,
                       style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                     ),
                     const Padding(
@@ -39,7 +39,7 @@ class VPNStatus extends StatelessWidget {
               : CText(
                   (vpnStatus == 'connected')
                       ? 'connected'.i18n
-                      : 'disconnected'.i18n,
+                      : 'Disconnected'.i18n,
                   style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                 ),
         ],
