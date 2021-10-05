@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 Color transparent = Colors.transparent;
 
+Color blue5 = HexColor('#006163');
 Color blue4 = HexColor('#007A7C');
 Color pink4 = HexColor('#DB0A5B');
 Color yellow4 = HexColor('#FFC107');
@@ -54,10 +55,9 @@ Color outboundBgColor = blue4;
 Color outboundMsgColor = white;
 
 Color inboundMsgColor = black;
-Color inboundBgColor = grey3;
+Color inboundBgColor = grey2;
 
-Color snippetBgColor = grey2;
-Color snippetShadowColor = const Color.fromARGB(100, 0, 0, 0);
+Color snippetShadowColor = black.withOpacity(0.18);
 
 Color selectedTabColor = white;
 Color unselectedTabColor = grey1;

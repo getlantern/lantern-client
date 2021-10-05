@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/conversation/mime_types.dart';
+import 'package:lantern/messaging/conversation/mime_type.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -12,28 +12,25 @@ Widget attachmentWidget(Contact contact, StoredMessage message,
     StoredAttachment attachment, bool inbound) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final fileExtension = attachment.attachment.metadata['fileExtension'];
-  final mimeType = attachment.attachment.mimeType;
+  final mimeType = mimeTypeOf(attachment.attachment.mimeType);
 
-  if (audioMimes.contains(mimeType)) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
-      child: AudioAttachment(attachment, inbound),
-    );
+  switch (mimeType) {
+    case MimeType.AUDIO:
+      return Padding(
+        padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+        child: AudioAttachment(attachment, inbound),
+      );
+    case MimeType.IMAGE:
+      return ImageAttachment(contact, message, attachment, inbound);
+    case MimeType.VIDEO:
+      return VideoAttachment(contact, message, attachment, inbound);
+    default:
+      return GenericAttachment(
+        attachmentTitle: attachmentTitle,
+        fileExtension: fileExtension,
+        inbound: inbound,
+      );
   }
-
-  if (imageMimes.contains(mimeType)) {
-    return ImageAttachment(contact, message, attachment, inbound);
-  }
-
-  if (videoMimes.contains(mimeType)) {
-    return VideoAttachment(contact, message, attachment, inbound);
-  }
-
-  return GenericAttachment(
-      attachmentTitle: attachmentTitle,
-      fileExtension: fileExtension,
-      inbound: inbound,
-      icon: Icons.insert_drive_file_rounded);
 }
 
 /// AttachmentBuilder is a builder for attachments that handles progress
@@ -137,6 +134,83 @@ class AttachmentBuilder extends StatelessWidget {
         path: ImagePaths.error_outline,
         color: inbound ? inboundMsgColor : outboundMsgColor);
   }
+
+  Widget buildVisualThumbnail(BuildContext context, Uint8List thumbnail,
+      BoxConstraints constraints, Widget Function(Widget) wrap) {
+    return ConstrainedBox(
+      // this box keeps the image from being too tall
+      constraints: BoxConstraints(
+          maxHeight: constraints.maxWidth, minWidth: constraints.maxWidth),
+      child: wrap(FittedBox(
+        child: BasicMemoryImage(
+          thumbnail,
+          width: 2000,
+          height: 2000,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (BuildContext context, Object error, StackTrace? stackTrace) =>
+                  CAssetImage(
+                      path: ImagePaths.error_outline,
+                      color: inbound ? inboundMsgColor : outboundMsgColor),
+        ),
+      )),
+    );
+  }
+}
+
+abstract class VisualAttachment extends StatelessWidget {
+  final Contact contact;
+  final StoredMessage message;
+  final StoredAttachment attachment;
+  final bool inbound;
+
+  VisualAttachment(this.contact, this.message, this.attachment, this.inbound);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<MessagingModel>();
+
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return AttachmentBuilder(
+          attachment: attachment,
+          inbound: inbound,
+          defaultIcon: Icons.image,
+          scrimAttachment: true,
+          onTap: () async {
+            await context.router.push(
+              FullScreenDialogPage(widget: buildViewer(model)),
+            );
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+            ]);
+          },
+          builder: (BuildContext context, Uint8List thumbnail) {
+            return ConstrainedBox(
+              // this box keeps the thumbnail from being too tall
+              constraints: BoxConstraints(
+                  maxHeight: constraints.maxWidth,
+                  minWidth: constraints.maxWidth),
+              child: wrapThumbnail(FittedBox(
+                child: BasicMemoryImage(
+                  thumbnail,
+                  width: 2000,
+                  height: 2000,
+                  fit: BoxFit.cover,
+                  errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) =>
+                      Icon(Icons.error_outlined,
+                          color: inbound ? inboundMsgColor : outboundMsgColor),
+                ),
+              )),
+            );
+          });
+    });
+  }
+
+  Widget buildViewer(MessagingModel model);
+
+  Widget wrapThumbnail(Widget thumbnail) => thumbnail;
 }
 
 /// Base class for widgets that allow viewing attachments like images and videos.
@@ -186,7 +260,9 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
                   Expanded(child: !ready() ? Container() : body(context)),
                   Padding(
                       padding: const EdgeInsets.all(4),
-                      child: StatusRow(true, widget.message)),
+                      child: StatusRow(
+                          widget.message.direction == MessageDirection.OUT,
+                          widget.message)),
                 ],
               ),
       ),
@@ -195,7 +271,6 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
 
   void forceLandscape() {
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
   }

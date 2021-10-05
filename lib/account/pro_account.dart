@@ -117,8 +117,6 @@ class ProAccount extends StatelessWidget {
           return ListView(
             padding: const EdgeInsetsDirectional.only(
               bottom: 8,
-              start: 20,
-              end: 20,
             ),
             children: items,
           );

@@ -6,13 +6,11 @@ class GenericAttachment extends StatelessWidget {
     required this.attachmentTitle,
     required this.fileExtension,
     required this.inbound,
-    required this.icon,
   }) : super(key: key);
 
   final String? attachmentTitle;
   final String? fileExtension;
   final bool inbound;
-  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +23,12 @@ class GenericAttachment extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.only(right: 10.0),
-            padding: const EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: inbound ? inboundMsgColor : outboundMsgColor,
-                width: 1,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(borderRadius),
-              ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 16),
+            child: CAssetImage(
+              path: ImagePaths.insert_drive_file,
+              color: inbound ? black : white,
             ),
-            child: Icon(icon,
-                size: 30, color: inbound ? inboundMsgColor : outboundMsgColor),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

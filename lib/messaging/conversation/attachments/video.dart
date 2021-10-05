@@ -2,54 +2,26 @@ import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoAttachment extends StatelessWidget {
-  final Contact contact;
-  final StoredMessage message;
-  final StoredAttachment attachment;
-  final bool inbound;
-
-  VideoAttachment(this.contact, this.message, this.attachment, this.inbound);
+class VideoAttachment extends VisualAttachment {
+  VideoAttachment(Contact contact, StoredMessage message,
+      StoredAttachment attachment, bool inbound)
+      : super(contact, message, attachment, inbound);
 
   @override
-  Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
+  Widget buildViewer(MessagingModel model) =>
+      VideoViewer(model, contact, message, attachment);
 
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return AttachmentBuilder(
-          attachment: attachment,
-          inbound: inbound,
-          defaultIcon: Icons.image,
-          scrimAttachment: true,
-          onTap: () async => await context.router.push(
-                FullScreenDialogPage(
-                    widget: VideoViewer(model, contact, message, attachment)),
-              ),
-          builder: (BuildContext context, Uint8List thumbnail) {
-            return ConstrainedBox(
-              // this box keeps the image from being too tall
-              constraints: BoxConstraints(maxHeight: constraints.maxWidth),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  FittedBox(
-                    child: BasicMemoryImage(
-                      thumbnail,
-                      errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          CAssetImage(
-                              path: ImagePaths.error_outline,
-                              color:
-                                  inbound ? inboundMsgColor : outboundMsgColor),
-                    ),
-                  ),
-                  PlayButton(size: 48),
-                ],
-              ),
-            );
-          });
-    });
-  }
+  @override
+  Widget wrapThumbnail(Widget thumbnail) => Stack(
+        alignment: Alignment.center,
+        children: [
+          thumbnail,
+          PlayButton(
+            size: 48,
+            custom: true,
+          )
+        ],
+      );
 }
 
 class VideoViewer extends ViewerWidget {
@@ -67,7 +39,6 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
-  bool showInfo = true;
 
   @override
   void initState() {
@@ -139,12 +110,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                   AspectRatio(
                     aspectRatio: controller!.value.aspectRatio,
-                    // we rotate landscape videos as a workaround for
-                    // https://github.com/flutter/flutter/issues/62400
-                    child: Transform.rotate(
-                      angle: controller!.value.aspectRatio > 1 ? pi : 0,
-                      child: VideoPlayer(controller!),
-                    ),
+                    child: VideoPlayer(controller!),
                   ),
                   VideoProgressIndicator(controller!, allowScrubbing: true),
                 ],
@@ -154,7 +120,8 @@ class VideoViewerState extends ViewerState<VideoViewer> {
           // button goes in main stack
           PlayButton(
             size: 48,
-            playing: playing,
+            custom: true,
+            playing: controller!.value.isPlaying,
             onPressed: () {
               if (controller!.value.isPlaying) {
                 controller!.pause();
