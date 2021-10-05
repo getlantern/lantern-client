@@ -10,7 +10,7 @@ class VPNStatus extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CText(
-            'VPN Status'.i18n + ': ',
+            'VPN Status'.i18n,
             style: tsBody1.copiedWith(
               color: unselectedTabLabelColor,
             ),
@@ -39,7 +39,7 @@ class VPNStatus extends StatelessWidget {
               : CText(
                   (vpnStatus == 'connected')
                       ? 'connected'.i18n
-                      : 'disconnected'.i18n,
+                      : 'Disconnected'.i18n,
                   style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
                 ),
         ],

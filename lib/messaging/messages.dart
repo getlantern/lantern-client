@@ -28,7 +28,7 @@ class Messages extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Button(
                         width: 200,
-                        text: 'Set Display Name'.i18n,
+                        text: 'set_display_name'.i18n,
                         onPressed: () {
                           context.pushRoute(DisplayName(me: me));
                         },

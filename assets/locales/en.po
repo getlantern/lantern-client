@@ -6,7 +6,7 @@ msgid "app_name"
 msgstr "Lantern"
 
 msgid "Daily Data Usage"
-msgstr "Daily Data Usage"
+msgstr "Daily Data Usage: "
 
 msgid "is"
 msgstr "is"
@@ -14,7 +14,7 @@ msgstr "is"
 msgid "connected"
 msgstr "Connected"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Disconnected"
 
 msgid "Disconnecting"
@@ -32,27 +32,22 @@ msgstr "Unlock faster speeds, and unlimited data!"
 msgid "Server Location"
 msgstr "Server Location"
 
-msgid "Server Location Info"
-msgstr ""
-"Lantern uses smart server selection to automatically connect you to our best"
-" data centers."
+msgid "Server Location Infoo"
+msgstr "Server Location Info"
 
 msgid "OK"
 msgstr "OK"
 
-msgid "pro_account_management"
+msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "add_device"
+msgid "Add Device"
 msgstr "Add Device"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Upgrade to Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Authorize Device for Pro"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Invite Friends"
 
 msgid "desktop_version"
@@ -78,53 +73,11 @@ msgstr ""
 "If enabled all traffic will be sent through Lantern (more secure). If "
 "disabled, only blocked traffic will be sent through Lantern (faster)."
 
-msgid "Exchange"
-msgstr "Exchange"
-
 msgid "Account"
 msgstr "Account"
 
-msgid "In partnership with"
-msgstr "In partnership with"
-
-msgid "Buy"
-msgstr "Buy"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "With"
-
-msgid "Online Wallets"
-msgstr "Online Wallets"
-
-msgid "Bank Transfers"
-msgstr "Bank Transfers"
-
-msgid "Gift Cards"
-msgstr "Gift Cards"
-
-msgid "Game Cards"
-msgstr "Game Cards"
-
-msgid "Cash Payment"
-msgstr "Cash Payment"
-
-msgid "Digital Currencies"
-msgstr "Digital Currencies"
-
-msgid "Payment Method"
-msgstr "Payment Method"
-
-msgid "SHOW BEST DEALS"
-msgstr "SHOW BEST DEALS"
-
 msgid "VPN Status"
-msgstr "VPN Status"
+msgstr "VPN Status: "
 
 msgid "VPN"
 msgstr "VPN"
@@ -146,6 +99,9 @@ msgstr "OR"
 
 msgid "Authorize Device via Email"
 msgstr "Authorize Device via Email"
+
+msgid "auth_email_helper_text"
+msgstr "Enter the email associated with your Pro account"
 
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr "Requires access to the email you used to buy Lantern Pro"
@@ -219,13 +175,22 @@ msgstr "Developer Settings"
 msgid "Developer"
 msgstr "Developer"
 
+msgid "dev_settings"
+msgstr "These settings are for development use only. Changing any setting will automatically stop and restart the application."
+
+msgid "dev_payment_mode"
+msgstr "When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV."
+
 msgid "Payment Test Mode"
 msgstr "Payment Test Mode"
 
 msgid "Play Version"
 msgstr "Play Version"
 
-msgid "error"
+msgid "Force Country"
+msgstr "Force Country"
+
+msgid "Error"
 msgstr "Error"
 
 msgid "accept"
@@ -273,9 +238,6 @@ msgstr "Conversation Menu"
 msgid "off"
 msgstr "Off"
 
-msgid "cancel"
-msgstr "Cancel"
-
 msgid "continue"
 msgstr "Continue"
 
@@ -296,6 +258,9 @@ msgstr "Something went wrong while sharing a media file"
 
 msgid "no_recents"
 msgstr "No Recents"
+
+msgid "set_display_name"
+msgstr "Set Display Name"
 
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
@@ -540,9 +505,6 @@ msgstr "%s deleted this message"
 msgid "never"
 msgstr "Never"
 
-msgid "text_copied"
-msgstr "Text Copied"
-
 msgid "delete_for_me"
 msgstr "Delete for me"
 
@@ -593,3 +555,9 @@ msgstr "Search in Contacts"
 
 msgid "search_in_messages"
 msgstr "Search in Messages and Contacts"
+
+msgid "could_not_render_title"
+msgstr "Could not render file title"
+
+msgid "could_not_render_type"
+msgstr "Could not render file type"

@@ -21,6 +21,9 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const more_vert = 'assets/images/more_vert.svg';
+  // static const more_horiz = 'assets/images/more_horiz.svg';
+  static const pending = 'assets/images/pending.svg';
+  static const arrow_downward = 'assets/images/arrow_downward.svg';
 
   // Messaging
   static const add = 'assets/images/add.svg';
@@ -45,6 +48,7 @@ class ImagePaths {
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
   static const search = 'assets/images/search.svg';
+  static const lock_clock = 'assets/images/lock_clock.svg';
   static const volume_up = 'assets/images/volume_up.svg';
   static const insert_drive_file = 'assets/images/insert_drive_file.svg';
 
@@ -52,6 +56,7 @@ class ImagePaths {
   static const content_copy = 'assets/images/content_copy.svg';
   static const check_green = 'assets/images/check_green.svg';
   static const check_black = 'assets/images/check_black.svg';
+  static const check_circle_outline = 'assets/images/check_circle_outline.svg';
   static const alert = 'assets/images/alert.svg';
   static const error = 'assets/images/error.svg';
   static const error_outline = 'assets/images/error_outline.svg';
