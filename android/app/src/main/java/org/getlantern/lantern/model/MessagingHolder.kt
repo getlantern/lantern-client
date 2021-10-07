@@ -207,17 +207,17 @@ class MessagingHolder {
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
 
             // paint avatar
-            val bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888)
+            val bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             val paintBg = Paint()
             val paintAv = Paint()
             paintAv.isAntiAlias = true
             paintBg.isAntiAlias = true
             paintBg.color = Color.parseColor("#00a9b2")
-            canvas.drawCircle(20F, 20F, 20F, paintBg)
+            canvas.drawCircle(200F, 200F, 200F, paintBg)
             paintAv.color = Color.WHITE
-            paintAv.textSize = 15F
-            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 10F, 25F, paintAv)
+            paintAv.textSize = 150F
+            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 100F, 250F, paintAv)
             customNotification.setImageViewBitmap(R.id.avatar, bitmap)
 
             // set intents
