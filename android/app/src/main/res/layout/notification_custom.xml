@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="103dp"
+    android:background="@color/black"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.85"
             android:layout_marginTop="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:orientation="vertical">
-            
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_account_circle"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
             <TextView
                 android:id="@+id/caller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white" 
-                android:padding="5dp" />
-          
-            <TextView
-                android:id="@+id/incomingCall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textColor="@color/white" 
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                android:textFontWeight="700"
                 />
+
+                <TextView
+                    android:id="@+id/incomingCall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
-
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +61,7 @@
             android:id="@+id/btnDecline"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
             android:backgroundTint="@color/red"
@@ -57,6 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
             android:backgroundTint="@color/green"
             android:textColor="@color/white" />
