@@ -29,18 +29,19 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       session = Future.value(widget.initialSession!);
     } else {
       session = signaling.call(
-          peerId: widget.contact.contactId.id,
-          media: 'audio',
-          onError: () {
-            showConfirmationDialog(
-                context: context,
-                title: 'unable_to_complete_call'.i18n,
-                explanation: 'please_try_again'.i18n,
-                agreeText: 'close'.i18n,
-                agreeAction: () async {
-                  signaling.bye(await session);
-                });
-          });
+        peerId: widget.contact.contactId.id,
+        media: 'audio',
+        // onError: () {
+        //   showConfirmationDialog(
+        //       context: context,
+        //       title: 'unable_to_complete_call'.i18n,
+        //       explanation: 'please_try_again'.i18n,
+        //       agreeText: 'close'.i18n,
+        //       agreeAction: () async {
+        //         signaling.bye(await session);
+        //       });
+        // },
+      );
     }
   }
 

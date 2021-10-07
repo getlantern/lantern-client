@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:auto_route/auto_route.dart';
+import 'package:lantern/core/router/router.gr.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:lantern/app.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:lantern/messaging/messaging.dart';
-
-import 'call.dart';
 
 enum CallState {
   New,
@@ -41,11 +48,8 @@ class SignalingState {
 }
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
-class Signaling extends ValueNotifier<SignalingState>
-    with WidgetsBindingObserver {
-  Signaling({required this.model, required this.mc}) : super(SignalingState()) {
-    WidgetsBinding.instance!.addObserver(this);
-  }
+class Signaling extends ValueNotifier<SignalingState> {
+  Signaling({required this.model, required this.mc}) : super(SignalingState());
 
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
@@ -55,7 +59,6 @@ class Signaling extends ValueNotifier<SignalingState>
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
   Function? closeAlertDialog;
-  var visible = true;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -88,23 +91,6 @@ class Signaling extends ValueNotifier<SignalingState>
         'optional': [],
       };
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.detached:
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
-        visible = false;
-        break;
-      case AppLifecycleState.resumed:
-        visible = true;
-        break;
-      default:
-        break;
-    }
-  }
-
   void close() async {
     await _cleanSessions();
   }
@@ -135,16 +121,13 @@ class Signaling extends ValueNotifier<SignalingState>
     notifyListeners();
   }
 
-  Future<Session> call(
-      {required String peerId,
-      required String media,
-      required Function() onError}) async {
+  Future<Session> call({required String peerId, required String media}) async {
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
         isInitiator: true, peerId: peerId, sessionId: sessionId, media: media);
     _sessions[sessionId] = session;
-    await _createOffer(session, media, onError);
+    await _createOffer(session, media);
     value.muted = false;
     value.speakerphoneOn = false;
     value.callState = CallState.Ringing;
@@ -191,7 +174,7 @@ class Signaling extends ValueNotifier<SignalingState>
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson, {bool ring = true}) async {
+  void onMessage(String peerId, String messageJson) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
 
@@ -206,60 +189,51 @@ class Signaling extends ValueNotifier<SignalingState>
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
-          if (ring) {
-            unawaited(FlutterRingtonePlayer.playRingtone());
-          }
-          if (!visible) {
-            // show ringer as a system notification
-            await notifications.showRingingNotification(
-                contact, peerId, messageJson);
-            return;
-          }
-          closeAlertDialog?.call();
-          closeAlertDialog = showConfirmationDialog(
-              context: navigatorKey.currentContext!,
-              autoDismissAfter: const Duration(seconds: 30),
-              // force dismissal through actual dismiss action to make sure we stop ringtone, etc
-              barrierDismissible: false,
-              title: 'incoming_call'.i18n,
-              explanation: 'call_from'.i18n.fill([contact.displayName]),
-              dismissText: 'dismiss'.i18n,
-              agreeText: 'accept'.i18n,
-              dismissAction: () async {
-                await FlutterRingtonePlayer.stop();
-                _sendBye(peerId, sessionId);
-              },
-              agreeAction: () async {
-                await FlutterRingtonePlayer.stop();
-                var newSession = await _createSession(
-                    isInitiator: false,
-                    session: _sessions[sessionId],
-                    peerId: peerId,
-                    sessionId: sessionId,
-                    media: media);
-                _sessions[sessionId] = newSession;
-                await newSession.pc!.setRemoteDescription(RTCSessionDescription(
-                    description['sdp'], description['type']));
-                await _createAnswer(newSession, media);
-                if (newSession.remoteCandidates.isNotEmpty) {
-                  newSession.remoteCandidates.forEach((candidate) async {
-                    await _addRemoteCandidate(newSession, candidate);
-                  });
-                  newSession.remoteCandidates.clear();
-                }
+          // TODO: move this to Kotlin
+          // closeAlertDialog?.call();
+          // closeAlertDialog = showAlertDialog(
+          //     context: navigatorKey.currentContext!,
+          //     autoDismissAfter: const Duration(seconds: 30),
+          //     // force dismissal through actual dismiss action to make sure we stop ringtone, etc
+          //     barrierDismissible: false,
+          //     title: Text('Incoming Call'.i18n),
+          //     content: Text('From '.i18n + contact.displayName),
+          //     dismissText: 'Dismiss'.i18n,
+          //     dismissAction: () async {
+          //       await FlutterRingtonePlayer.stop();
+          //       _sendBye(peerId, sessionId);
+          //     },
+          //     agreeAction: () async {
+          //       await FlutterRingtonePlayer.stop();
+          //       var newSession = await _createSession(
+          //           isInitiator: false,
+          //           session: _sessions[sessionId],
+          //           peerId: peerId,
+          //           sessionId: sessionId,
+          //           media: media);
+          //       _sessions[sessionId] = newSession;
+          //       await newSession.pc!.setRemoteDescription(RTCSessionDescription(
+          //           description['sdp'], description['type']));
+          //       await _createAnswer(newSession, media);
+          //       if (newSession.remoteCandidates.isNotEmpty) {
+          //         newSession.remoteCandidates.forEach((candidate) async {
+          //           await _addRemoteCandidate(newSession, candidate);
+          //         });
+          //         newSession.remoteCandidates.clear();
+          //       }
 
-                value.callState = CallState.Connected;
-                notifyListeners();
+          //       value.callState = CallState.Connected;
+          //       notifyListeners();
 
-                await navigatorKey.currentContext?.pushRoute(
-                  FullScreenDialogPage(
-                      widget: Call(
-                    contact: contact,
-                    model: model,
-                    initialSession: newSession,
-                  )),
-                );
-              });
+          //       await navigatorKey.currentContext?.pushRoute(
+          //         FullScreenDialogPage(
+          //             widget: Call(
+          //           contact: contact,
+          //           model: model,
+          //           initialSession: newSession,
+          //         )),
+          //       );
+          //     });
         }
         break;
       case 'answer':
@@ -372,7 +346,6 @@ class Signaling extends ValueNotifier<SignalingState>
         init: RTCRtpTransceiverInit(
             direction: TransceiverDirection.SendOnly, streams: [_localStream]),
       );
-
       await pc.addTransceiver(
         track: _localStream.getVideoTracks()[0],
         init: RTCRtpTransceiverInit(
@@ -464,17 +437,16 @@ class Signaling extends ValueNotifier<SignalingState>
     }
   }
 
-  Future<void> _createOffer(
-      Session session, String media, Function() onError) async {
+  Future<void> _createOffer(Session session, String media) async {
     try {
       var s =
           await session.pc!.createOffer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
-      unawaited(_send(session.pid, 'offer', {
+      await _send(session.pid, 'offer', {
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': session.sid,
         'media': media,
-      }).onError((error, stackTrace) => onError()));
+      });
     } catch (e) {
       print(e.toString());
     }
