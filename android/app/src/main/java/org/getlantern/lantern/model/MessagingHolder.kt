@@ -73,11 +73,8 @@ class MessagingHolder {
                 val msg = Json.gson.fromJson(signal.content.toString(Charsets.UTF_8), SignalingMessage::class.java)
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
-                    "bye" -> {
-                        callNotificationIds.remove(signal.senderId)?.let { notificationId ->
-                            notificationManager.cancel(notificationId)
-                        }
-                    }
+                    "answer" -> acceptCall(notificationManager, signal)
+                    "bye" -> declineCall(notificationManager, signal)
                 }
             }
         } catch (t: Throwable) {
@@ -144,58 +141,80 @@ class MessagingHolder {
         }
     }
 
+    private fun declineCall(
+        notificationManager: NotificationManager,
+        signal: WebRTCSignal
+    ) {
+        callNotificationIds.remove(signal.senderId)?.let { notificationId ->
+            notificationManager.cancel(notificationId)
+        }
+    }
+
+    private fun acceptCall(
+        notificationManager: NotificationManager,
+        signal: WebRTCSignal
+    ) {
+        // do something to answer
+    }
+
     private fun notifyCall(
         application: Application,
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
-//        if (MainActivity.visible) {
-//            // don't bother notifying if the MainActivity is currently visible, since it has its
-//            // own incoming call notification
-//            return
-//        }
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
             var notificationId = callNotificationIds[signal.senderId]
             if (notificationId == null) {
                 notificationId = nextNotificationId++
-                callNotificationIds[signal.senderId] = notificationId!!
+                callNotificationIds[signal.senderId] = notificationId
             }
-            val mainActivityIntent =
+            val notificationIntent =
                 Intent(application, MainActivity::class.java)
-            mainActivityIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            mainActivityIntent.putExtra(
+            notificationIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            notificationIntent.putExtra(
                 "signal",
                 Json.gson.toJson(signal)
             )
-            val openMainActivity = PendingIntent.getActivity(
-                application, notificationId!!, mainActivityIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            val declineIntent =
+                Intent(application, MainActivity::class.java) // Technically this should be "webRTC class intent" or something? Or can we invoke declineCall() right away?
+            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            declineIntent.putExtra("signal", Json.gson.toJson(signal))
+
+            val acceptIntent =
+                Intent(application, MainActivity::class.java) // Same as above
+            acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            declineIntent.putExtra("signal", Json.gson.toJson(signal))
+
+            val notificationPendingIntent = PendingIntent.getActivity(application, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val declinePendingIntent = PendingIntent.getBroadcast(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val acceptPendingIntent = PendingIntent.getBroadcast(application, notificationId, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
             val builder = NotificationCompat.Builder(
                 application,
                 defaultNotificationChannelId
             )
 
-            val notificationLayout = RemoteViews(application.packageName, R.layout.notification_custom)
-            notificationLayout.setOnClickPendingIntent(R.id.btnAccept, null) // TODO: define acceptIntent
-            notificationLayout.setOnClickPendingIntent(R.id.btnDecline, null) // TODO: define declineIntent
-
+            val customNotification = RemoteViews(application.packageName, R.layout.notification_custom)
             // set strings in custom notification
-            notificationLayout.setTextViewText(R.id.name, contact.displayName)
-            notificationLayout.setTextViewText(R.id.incomingCall, application.getString(R.string.incoming_call))
-            notificationLayout.setTextViewText(R.id.btnAccept, application.getString(R.string.accept))
-            notificationLayout.setTextViewText(R.id.btnDecline, application.getString(R.string.decline))
+            customNotification.setTextViewText(R.id.caller, contact.displayName)
+            customNotification.setTextViewText(R.id.incomingCall, application.getString(R.string.incoming_call))
+            customNotification.setTextViewText(R.id.btnAccept, application.getString(R.string.accept))
+            customNotification.setTextViewText(R.id.btnDecline, application.getString(R.string.decline))
 
             builder.setContentTitle(application.getString(R.string.incoming_call))
             builder.setContentText(contact.displayName)
             builder.setSmallIcon(R.drawable.status_on)
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            builder.setCustomContentView(notificationLayout)
+            builder.setCustomContentView(customNotification)
             builder.setOngoing(true)
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
-            builder.setContentIntent(openMainActivity) // TODO: this needs to change
+
+            // set intents
+            customNotification.setOnClickPendingIntent(R.id.btnAccept, declinePendingIntent)
+            customNotification.setOnClickPendingIntent(R.id.btnDecline, acceptPendingIntent)
+            builder.setContentIntent(notificationPendingIntent) // TODO: not sure
 
             val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -216,10 +235,17 @@ class MessagingHolder {
                 notificationManager.createNotificationChannel(
                     notificationChannel
                 )
+            } else {
+                // This is a custom action assignment in case the API does not accept remote views
+                val hangupAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, application.getString(R.string.decline), declinePendingIntent).build()
+                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, application.getString(R.string.accept), declinePendingIntent).build()
+                builder.addAction(hangupAction)
+                builder.addAction(acceptAction)
             }
             builder.setDefaults(Notification.DEFAULT_ALL)
-            builder.setTimeoutAfter(30000)
-            notificationManager.notify(notificationId!!, builder.build())
+            builder.setTimeoutAfter(50000)
+
+            notificationManager.notify(notificationId, builder.build())
         }
     }
 }
