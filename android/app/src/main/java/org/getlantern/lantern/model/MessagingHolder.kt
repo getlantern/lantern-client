@@ -1,12 +1,12 @@
 package org.getlantern.lantern.model
 
-import android.app.Application
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
@@ -16,18 +16,13 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
-import io.lantern.messaging.Schema
-import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.path
+import io.lantern.messaging.*
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.util.Json
 import java.io.File
-import java.util.HashMap
+import java.util.*
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -210,6 +205,20 @@ class MessagingHolder {
             builder.setCustomContentView(customNotification)
             builder.setOngoing(true)
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
+
+            // paint avatar
+            val bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val paintBg = Paint()
+            val paintAv = Paint()
+            paintAv.isAntiAlias = true
+            paintBg.isAntiAlias = true
+            paintBg.color = Color.parseColor("#00a9b2")
+            canvas.drawCircle(20F, 20F, 20F, paintBg)
+            paintAv.color = Color.WHITE
+            paintAv.textSize = 15F
+            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 10F, 25F, paintAv)
+            customNotification.setImageViewBitmap(R.id.avatar, bitmap)
 
             // set intents
             customNotification.setOnClickPendingIntent(R.id.btnAccept, declinePendingIntent)
