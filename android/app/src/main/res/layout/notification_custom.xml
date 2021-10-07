@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
     android:layout_height="103dp"
-    android:background="@color/black"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         >
         <LinearLayout
             android:layout_width="0dp"
@@ -37,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginTop="5dp"
-                android:textFontWeight="700"
+                android:textStyle="bold"
+                android:textSize="16sp"
                 />
-
                 <TextView
                     android:id="@+id/incomingCall"
                     android:layout_width="match_parent"
@@ -47,24 +50,26 @@
                     android:textColor="@color/white"
                     />
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:paddingStart="5dp"
-        android:paddingEnd="5dp">
-
+        android:paddingEnd="5dp"
+        >
         <Button
             android:id="@+id/btnDecline"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
-            android:backgroundTint="@color/red"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:background="@color/red"
             android:textColor="@color/white" />
 
         <Button
@@ -72,9 +77,9 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
-            android:backgroundTint="@color/green"
+            android:textSize="16sp"
+            android:background="@color/green"
             android:textColor="@color/white" />
 
     </LinearLayout>
