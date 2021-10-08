@@ -192,8 +192,8 @@ class MessagingHolder {
             declineIntent.putExtra("signal", Json.gson.toJson(signal))
 
             val notificationPendingIntent = PendingIntent.getActivity(application, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val declinePendingIntent = PendingIntent.getBroadcast(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val acceptPendingIntent = PendingIntent.getBroadcast(application, notificationId, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val declinePendingIntent = PendingIntent.getActivity(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val acceptPendingIntent = PendingIntent.getActivity(application, notificationId, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val builder = NotificationCompat.Builder(
                 application,
@@ -213,14 +213,15 @@ class MessagingHolder {
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
             builder.setCustomContentView(customNotification)
             builder.setOngoing(true)
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH)
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
 
             // paint avatar
             paintAvatar(contact, customNotification)
 
             // set intents
-            customNotification.setOnClickPendingIntent(R.id.btnAccept, declinePendingIntent)
-            customNotification.setOnClickPendingIntent(R.id.btnDecline, acceptPendingIntent)
+            customNotification.setOnClickPendingIntent(R.id.btnDecline, declinePendingIntent)
+            customNotification.setOnClickPendingIntent(R.id.btnAccept, acceptPendingIntent)
             builder.setContentIntent(notificationPendingIntent) // TODO: not sure
 
             val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
