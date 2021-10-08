@@ -598,8 +598,7 @@ class ConversationState extends State<Conversation>
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(start: 16),
                         child: PulsatingIndicator(
-                          width: 25,
-                          height: 25,
+                          size: 25,
                           duration: const Duration(milliseconds: 700),
                           pulseColor: indicatorRed,
                           color: indicatorRed,

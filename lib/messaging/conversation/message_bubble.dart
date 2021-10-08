@@ -82,7 +82,7 @@ class MessageBubble extends StatelessWidget {
   Widget bubble(BuildContext context, MessagingModel model) {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
-      onPressed: () {},
+      onOpen: () {},
       menu: messageMenu(context, model),
       child: Column(
         crossAxisAlignment:
