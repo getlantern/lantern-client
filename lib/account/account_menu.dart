@@ -24,10 +24,6 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
-  void openDisplayName(BuildContext context, Contact me) async {
-    await context.pushRoute(DisplayName(me: me));
-  }
-
   List<Widget> freeItems(
       BuildContext context, SessionModel sessionModel, Contact me) {
     return [
@@ -60,13 +56,6 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
-      SettingsItem(
-        icon: ImagePaths.account,
-        title: 'display_name'.i18n.fill([me.displayName]),
-        onTap: () {
-          openDisplayName(context, me);
-        },
-      ),
     ];
   }
 
@@ -97,13 +86,6 @@ class AccountMenu extends StatelessWidget {
           title: 'settings'.i18n,
           onTap: () {
             openSettings(context);
-          },
-        ),
-        SettingsItem(
-          icon: ImagePaths.account,
-          title: 'display_name'.i18n.fill([me.displayName]),
-          onTap: () {
-            openDisplayName(context, me);
           },
         ),
       ];

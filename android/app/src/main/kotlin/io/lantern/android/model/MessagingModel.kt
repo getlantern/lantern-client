@@ -75,7 +75,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         return when (call.method) {
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
-            "setMyDisplayName" -> messaging.setMyDisplayName(call.argument("unsafeDisplayName") ?: "")
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("unsafeContactId")!!,
                 when (call.argument<Any>("source")) {
