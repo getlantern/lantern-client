@@ -76,12 +76,16 @@ class Introductions extends StatelessWidget {
                                                                   .disappearAt
                                                                   .toInt(),
                                                               color: black),
-                                                      child: CustomAvatar(
-                                                          id: value.introduction
-                                                              .to.id,
-                                                          displayName: value
-                                                              .introduction
-                                                              .displayName),
+                                                      child: model.singleContactById(
+                                                          context,
+                                                          value.introduction.to,
+                                                          (context, value,
+                                                                  child) =>
+                                                              CustomAvatar(
+                                                                  hue:
+                                                                      value.hue,
+                                                                  displayName: value
+                                                                      .displayName)),
                                                     ),
                                                     trailing: FittedBox(
                                                         child: Row(

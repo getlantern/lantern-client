@@ -30,7 +30,7 @@ class ContactConnectionCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
               leading: CustomAvatar(
-                  id: contact.contactId.id, displayName: contact.displayName),
+                  hue: contact.hue, displayName: contact.displayName),
               title: CText(introduction.displayName,
                   style: tsBody3.copiedWith(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),

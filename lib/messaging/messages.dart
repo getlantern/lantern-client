@@ -87,7 +87,7 @@ class Messages extends StatelessWidget {
                                       contact: contact.value,
                                       index: index,
                                       leading: CustomAvatar(
-                                          id: contact.value.contactId.id,
+                                          hue: contact.value.hue,
                                           displayName:
                                               contact.value.displayName),
                                       title: contact.value.displayName,

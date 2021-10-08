@@ -311,7 +311,7 @@ class ConversationState extends State<Conversation>
               Padding(
                 padding: const EdgeInsetsDirectional.only(end: 16),
                 child: CustomAvatar(
-                    id: contact.contactId.id, displayName: contact.displayName),
+                    hue: contact.hue, displayName: contact.displayName),
               ),
               Expanded(
                 child: Column(

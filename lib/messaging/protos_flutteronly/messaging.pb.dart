@@ -91,6 +91,9 @@ class Contact extends $pb.GeneratedMessage {
     ..aInt64(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mostRecentHelloTs', protoName: 'mostRecentHelloTs')
     ..e<ContactSource>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ContactSource.UNKNOWN, valueOf: ContactSource.valueOf, enumValues: ContactSource.values)
     ..m<$core.int, $core.String>(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationIds', protoName: 'applicationIds', entryClassName: 'Contact.ApplicationIdsEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('model'))
+    ..e<VerificationLevel>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationLevel', $pb.PbFieldType.OE, protoName: 'verificationLevel', defaultOrMaker: VerificationLevel.UNACCEPTED, valueOf: VerificationLevel.valueOf, enumValues: VerificationLevel.values)
+    ..aOS(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'numericFingerprint', protoName: 'numericFingerprint')
+    ..a<$core.int>(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hue', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -110,6 +113,9 @@ class Contact extends $pb.GeneratedMessage {
     $fixnum.Int64? mostRecentHelloTs,
     ContactSource? source,
     $core.Map<$core.int, $core.String>? applicationIds,
+    VerificationLevel? verificationLevel,
+    $core.String? numericFingerprint,
+    $core.int? hue,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -153,6 +159,15 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (applicationIds != null) {
       _result.applicationIds.addAll(applicationIds);
+    }
+    if (verificationLevel != null) {
+      _result.verificationLevel = verificationLevel;
+    }
+    if (numericFingerprint != null) {
+      _result.numericFingerprint = numericFingerprint;
+    }
+    if (hue != null) {
+      _result.hue = hue;
     }
     return _result;
   }
@@ -292,6 +307,33 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(14)
   $core.Map<$core.int, $core.String> get applicationIds => $_getMap(13);
+
+  @$pb.TagNumber(15)
+  VerificationLevel get verificationLevel => $_getN(14);
+  @$pb.TagNumber(15)
+  set verificationLevel(VerificationLevel v) { setField(15, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasVerificationLevel() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearVerificationLevel() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get numericFingerprint => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set numericFingerprint($core.String v) { $_setString(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasNumericFingerprint() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearNumericFingerprint() => clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.int get hue => $_getIZ(16);
+  @$pb.TagNumber(17)
+  set hue($core.int v) { $_setSignedInt32(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasHue() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearHue() => clearField(17);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {
@@ -299,6 +341,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId')
     ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'expiresAt', protoName: 'expiresAt')
     ..e<ContactSource>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ContactSource.UNKNOWN, valueOf: ContactSource.valueOf, enumValues: ContactSource.values)
+    ..e<VerificationLevel>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationLevel', $pb.PbFieldType.OE, protoName: 'verificationLevel', defaultOrMaker: VerificationLevel.UNACCEPTED, valueOf: VerificationLevel.valueOf, enumValues: VerificationLevel.values)
     ..hasRequiredFields = false
   ;
 
@@ -307,6 +350,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     $core.String? contactId,
     $fixnum.Int64? expiresAt,
     ContactSource? source,
+    VerificationLevel? verificationLevel,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -317,6 +361,9 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     }
     if (source != null) {
       _result.source = source;
+    }
+    if (verificationLevel != null) {
+      _result.verificationLevel = verificationLevel;
     }
     return _result;
   }
@@ -367,6 +414,15 @@ class ProvisionalContact extends $pb.GeneratedMessage {
   $core.bool hasSource() => $_has(2);
   @$pb.TagNumber(3)
   void clearSource() => clearField(3);
+
+  @$pb.TagNumber(4)
+  VerificationLevel get verificationLevel => $_getN(3);
+  @$pb.TagNumber(4)
+  set verificationLevel(VerificationLevel v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasVerificationLevel() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearVerificationLevel() => clearField(4);
 }
 
 class Attachment extends $pb.GeneratedMessage {
@@ -670,6 +726,7 @@ class Introduction extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Introduction', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OY)
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
+    ..e<VerificationLevel>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationLevel', $pb.PbFieldType.OE, protoName: 'verificationLevel', defaultOrMaker: VerificationLevel.UNACCEPTED, valueOf: VerificationLevel.valueOf, enumValues: VerificationLevel.values)
     ..hasRequiredFields = false
   ;
 
@@ -677,6 +734,7 @@ class Introduction extends $pb.GeneratedMessage {
   factory Introduction({
     $core.List<$core.int>? id,
     $core.String? displayName,
+    VerificationLevel? verificationLevel,
   }) {
     final _result = create();
     if (id != null) {
@@ -684,6 +742,9 @@ class Introduction extends $pb.GeneratedMessage {
     }
     if (displayName != null) {
       _result.displayName = displayName;
+    }
+    if (verificationLevel != null) {
+      _result.verificationLevel = verificationLevel;
     }
     return _result;
   }
@@ -725,6 +786,15 @@ class Introduction extends $pb.GeneratedMessage {
   $core.bool hasDisplayName() => $_has(1);
   @$pb.TagNumber(2)
   void clearDisplayName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  VerificationLevel get verificationLevel => $_getN(2);
+  @$pb.TagNumber(3)
+  set verificationLevel(VerificationLevel v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasVerificationLevel() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearVerificationLevel() => clearField(3);
 }
 
 class IntroductionDetails extends $pb.GeneratedMessage {
@@ -733,6 +803,7 @@ class IntroductionDetails extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'originalDisplayName', protoName: 'originalDisplayName')
     ..e<IntroductionDetails_IntroductionStatus>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: IntroductionDetails_IntroductionStatus.PENDING, valueOf: IntroductionDetails_IntroductionStatus.valueOf, enumValues: IntroductionDetails_IntroductionStatus.values)
+    ..e<VerificationLevel>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationLevel', $pb.PbFieldType.OE, protoName: 'verificationLevel', defaultOrMaker: VerificationLevel.UNACCEPTED, valueOf: VerificationLevel.valueOf, enumValues: VerificationLevel.values)
     ..hasRequiredFields = false
   ;
 
@@ -742,6 +813,7 @@ class IntroductionDetails extends $pb.GeneratedMessage {
     $core.String? displayName,
     $core.String? originalDisplayName,
     IntroductionDetails_IntroductionStatus? status,
+    VerificationLevel? verificationLevel,
   }) {
     final _result = create();
     if (to != null) {
@@ -755,6 +827,9 @@ class IntroductionDetails extends $pb.GeneratedMessage {
     }
     if (status != null) {
       _result.status = status;
+    }
+    if (verificationLevel != null) {
+      _result.verificationLevel = verificationLevel;
     }
     return _result;
   }
@@ -816,6 +891,15 @@ class IntroductionDetails extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(3);
   @$pb.TagNumber(4)
   void clearStatus() => clearField(4);
+
+  @$pb.TagNumber(5)
+  VerificationLevel get verificationLevel => $_getN(4);
+  @$pb.TagNumber(5)
+  set verificationLevel(VerificationLevel v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasVerificationLevel() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearVerificationLevel() => clearField(5);
 }
 
 class Message extends $pb.GeneratedMessage {
@@ -1342,20 +1426,15 @@ class DisappearSettings extends $pb.GeneratedMessage {
 
 class Hello extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Hello', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'displayName', protoName: 'displayName')
     ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'final')
     ..hasRequiredFields = false
   ;
 
   Hello._() : super();
   factory Hello({
-    $core.String? displayName,
     $core.bool? final_2,
   }) {
     final _result = create();
-    if (displayName != null) {
-      _result.displayName = displayName;
-    }
     if (final_2 != null) {
       _result.final_2 = final_2;
     }
@@ -1382,21 +1461,12 @@ class Hello extends $pb.GeneratedMessage {
   static Hello getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Hello>(create);
   static Hello? _defaultInstance;
 
-  @$pb.TagNumber(1)
-  $core.String get displayName => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set displayName($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasDisplayName() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearDisplayName() => clearField(1);
-
   @$pb.TagNumber(2)
-  $core.bool get final_2 => $_getBF(1);
+  $core.bool get final_2 => $_getBF(0);
   @$pb.TagNumber(2)
-  set final_2($core.bool v) { $_setBool(1, v); }
+  set final_2($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(2)
-  $core.bool hasFinal_2() => $_has(1);
+  $core.bool hasFinal_2() => $_has(0);
   @$pb.TagNumber(2)
   void clearFinal_2() => clearField(2);
 }

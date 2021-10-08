@@ -59,7 +59,7 @@ class _IntroduceState extends State<Introduce> {
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
                                           CustomAvatar(
-                                              id: contact.contactId.id,
+                                              hue: contact.hue,
                                               displayName: contact.displayName),
                                       trailingCallback: (int index,
                                               Contact contact) =>
