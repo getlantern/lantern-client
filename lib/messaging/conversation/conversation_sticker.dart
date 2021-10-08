@@ -12,40 +12,38 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var source = 'banner_source_unknown'.i18n;
-    switch (contact.source) {
-      case ContactSource.APP1:
-        source = 'banner_source_qr'.i18n;
-        break;
-      case ContactSource.APP2:
-        source = 'banner_source_id'.i18n;
-        break;
-      case ContactSource.INTRODUCTION:
-        source = 'banner_source_intro'.i18n;
-        break;
-    }
-    return ListTile(
-      dense: true,
-      minLeadingWidth: 18,
-      leading: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child:
-            !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
-      ),
-      title: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: !isPendingIntroduction
-                  ? _fullyAddedText()
-                  : _partiallyAddedText()),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            //TODO: style this per designs
-            child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-          ),
-        ],
-      ),
+    // var source = 'banner_source_unknown'.i18n;
+    // switch (contact.source) {
+    //   case ContactSource.APP1:
+    //     source = 'banner_source_qr'.i18n;
+    //     break;
+    //   case ContactSource.APP2:
+    //     source = 'banner_source_id'.i18n;
+    //     break;
+    //   case ContactSource.INTRODUCTION:
+    //     source = 'banner_source_intro'.i18n;
+    //     break;
+    // }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
+        Column(
+          children: [
+            Padding(
+                padding: const EdgeInsetsDirectional.only(
+                    start: 16, top: 8, bottom: 8),
+                child: !isPendingIntroduction
+                    ? _fullyAddedText()
+                    : _partiallyAddedText()),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+            //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
+            // ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -54,8 +52,8 @@ class ConversationSticker extends StatelessWidget {
         style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
   }
 
-  Icon _partiallyAddedIcon() {
-    return const Icon(Icons.more_horiz_rounded, size: 18, color: Colors.black);
+  CAssetImage _partiallyAddedIcon() {
+    return const CAssetImage(path: ImagePaths.pending, color: Colors.black);
   }
 
   CText _fullyAddedText() {
@@ -70,9 +68,9 @@ class ConversationSticker extends StatelessWidget {
             style: tsBody2.copiedWith(color: grey5));
   }
 
-  Icon _fullyAddedIcon() {
+  CAssetImage _fullyAddedIcon() {
     return contact.messagesDisappearAfterSeconds > 0
-        ? const Icon(Icons.timer, size: 18, color: Colors.black)
-        : const Icon(Icons.lock_clock, size: 18, color: Colors.black);
+        ? const CAssetImage(path: ImagePaths.clock, color: Colors.black)
+        : const CAssetImage(path: ImagePaths.lock_clock, color: Colors.black);
   }
 }

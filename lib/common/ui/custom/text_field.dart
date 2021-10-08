@@ -10,7 +10,7 @@ class CTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
-  late final Icon? suffixIcon;
+  late final CAssetImage? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
   late final int? minLines;
@@ -103,7 +103,7 @@ class _CTextFieldState extends State<CTextField> {
                 prefixIcon: widget.prefixIcon,
                 suffixIcon: fieldKey.currentState?.mounted == true &&
                         fieldKey.currentState?.hasError == true
-                    ? Icon(Icons.error, color: indicatorRed)
+                    ? CAssetImage(path: ImagePaths.error, color: indicatorRed)
                     : widget.suffixIcon),
           ),
         ),

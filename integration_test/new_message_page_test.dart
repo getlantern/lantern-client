@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/messages.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
-import 'package:lantern/common/common.dart' as Common;
+import 'package:lantern/common/common.dart' as common;
 
 import 'action/navigation_action_test.dart';
 import 'enums/screens_test.dart';
@@ -34,7 +34,9 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.widgetWithText(AppBar, 'New Message'), findsOneWidget);
       print('Search and QR should be displayed');
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.search), findsWidgets);
+      // TODO: This is outdated, needs fix
       expect(find.byIcon(Icons.qr_code), findsWidgets);
     });
 
@@ -54,7 +56,7 @@ void main() {
       print('Flush the widget tree');
       await tester.pumpAndSettle();
       var contactElement =
-          find.widgetWithText(Common.ContactListItem, 'Note to self');
+          find.widgetWithText(common.ContactListItem, 'Note to self');
       expect(contactElement, findsOneWidget);
     });
 

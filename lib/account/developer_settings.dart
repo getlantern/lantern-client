@@ -17,15 +17,13 @@ class DeveloperSettingsTab extends StatelessWidget {
           Container(
             margin: const EdgeInsetsDirectional.only(bottom: 16.0),
             child: CText(
-              'These settings are for development use only. Changing any setting will automatically stop and restart the application',
+              'dev_settings'.i18n,
               style: tsBody3,
             ),
           ),
           Container(
             margin: const EdgeInsetsDirectional.only(bottom: 16.0),
-            child: CText(
-                'When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV.',
-                style: tsBody3),
+            child: CText('dev_payment_mode'.i18n, style: tsBody3),
           ),
           SettingsItem(
             title: 'Payment Test Mode'.i18n,
@@ -67,7 +65,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 (BuildContext context, String value, Widget? child) {
               return DropdownButton<String>(
                 value: value,
-                icon: const Icon(Icons.arrow_downward),
+                icon: const CAssetImage(path: ImagePaths.arrow_downward),
                 iconSize: iconSize,
                 elevation: 16,
                 underline: Container(

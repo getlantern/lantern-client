@@ -7,6 +7,7 @@ class BasicMemoryImage extends Image {
     double scale = 1,
     double? width,
     double? height,
+    BoxFit fit = BoxFit.contain,
     ImageErrorWidgetBuilder? errorBuilder,
   }) : super(
           image: MemoryImage(bytes, scale: scale),
@@ -25,7 +26,7 @@ class BasicMemoryImage extends Image {
           width: width,
           height: height,
           excludeFromSemantics: true,
-          fit: BoxFit.contain,
+          fit: fit,
           alignment: Alignment.center,
           repeat: ImageRepeat.noRepeat,
         );

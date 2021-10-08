@@ -1,12 +1,12 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
-import 'package:lantern/messaging/conversation/replies/reply_snippet.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'mime_types.dart';
+import 'mime_type.dart';
 import 'reactions.dart';
+import 'reply.dart';
 import 'status_row.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -16,6 +16,7 @@ class MessageBubble extends StatelessWidget {
   final StoredMessage message;
   final void Function() onEmojiTap;
   final Contact contact;
+  final void Function() onOpenMenu;
   final void Function() onReply;
   final void Function() onTapReply;
 
@@ -24,9 +25,10 @@ class MessageBubble extends StatelessWidget {
   late final bool isStartOfBlock;
   late final bool isEndOfBlock;
   late final bool isNewestMessage;
-  late final bool wasDeleted;
+  late final bool wasRemotelyDeleted;
   late final bool isAttachment;
   late final bool hasReactions;
+  late final bool rendersAsText;
   late final Color color;
   late final Color backgroundColor;
 
@@ -36,6 +38,7 @@ class MessageBubble extends StatelessWidget {
     StoredMessage? priorMessage,
     StoredMessage? nextMessage,
     required this.contact,
+    required this.onOpenMenu,
     required this.onReply,
     required this.onTapReply,
     required this.onEmojiTap,
@@ -47,9 +50,10 @@ class MessageBubble extends StatelessWidget {
     isEndOfBlock =
         nextMessage == null || nextMessage.direction != message.direction;
     isNewestMessage = nextMessage == null;
-    wasDeleted = message.remotelyDeletedAt != 0;
+    wasRemotelyDeleted = message.remotelyDeletedAt != 0;
     isAttachment = message.attachments.isNotEmpty;
     hasReactions = message.reactions.isNotEmpty;
+    rendersAsText = message.text.isNotEmpty || wasRemotelyDeleted;
     color = isOutbound ? outboundMsgColor : inboundMsgColor;
     backgroundColor = isOutbound ? outboundBgColor : inboundBgColor;
   }
@@ -79,6 +83,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
+  // Renders bubble inside overlayReactions
   Widget bubble(BuildContext context, MessagingModel model) {
     return FocusedMenuHolder(
       menuWidth: maxBubbleWidth(context),
@@ -88,12 +93,13 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          content(context),
+          content(context, model),
         ],
       ),
     );
   }
 
+  // Renders the overlay which pins the reaction emojis to the exterior of the bubble, which it envelops.
   Widget overlayReactions(BuildContext context, Widget child) {
     if (!hasReactions) {
       return child;
@@ -153,7 +159,10 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context) {
+  // Distinguishes between contact connection card, text message, audio message, attachments, replies.
+  // Handles URLs on tap.
+  // Adds status row.
+  Widget content(BuildContext context, MessagingModel model) {
     assert(message.attachments.values.length <= 1,
         'display of messages with multiple attachments is unsupported');
 
@@ -173,93 +182,124 @@ class MessageBubble extends StatelessWidget {
           isAudio,
           isContactConnectionCard
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
-              : Column(
-                  crossAxisAlignment: isOutbound
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (message.replyToId.isNotEmpty)
-                            GestureDetector(
+              : wrapIntrinsicWidthIfNecessary(
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (message.replyToId.isNotEmpty)
+                          model.singleMessage(
+                              message.replyToSenderId, message.replyToId,
+                              (context, replyToMessage, child) {
+                            return GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () => onTapReply(),
-                              child: ReplySnippet(isOutbound, message, contact),
-                            ),
-                        ],
-                      ),
-                      if (message.text.isNotEmpty || wasDeleted)
-                        Row(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Container(
-                              padding: const EdgeInsetsDirectional.only(
-                                  start: 8, end: 8, top: 4, bottom: 4),
-                              child: MarkdownBody(
-                                data: wasDeleted
-                                    ? 'message_deleted'.i18n.fill([
-                                        message.remotelyDeletedBy.id ==
-                                                contact.contactId.id
-                                            ? contact.displayName
-                                            : 'me'.i18n
-                                      ])
-                                    : message.text,
-                                onTapLink: (String text, String? href,
-                                    String title) async {
-                                  if (href != null && await canLaunch(href)) {
-                                    showConfirmationDialog(
-                                        context: context,
-                                        title: 'open_url'.i18n,
-                                        explanation:
-                                            'are_you_sure_you_want_to_open'
-                                                .fill([href]),
-                                        dismissText: 'cancel'.i18n,
-                                        agreeText: 'continue'.i18n,
-                                        agreeAction: () async {
-                                          await launch(href);
-                                        });
-                                  }
-                                },
-                                styleSheet: MarkdownStyleSheet(
-                                  a: tsBody3.copiedWith(
-                                    color: color,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  p: tsBody3.copiedWith(
-                                    color: color,
-                                    fontStyle:
-                                        wasDeleted ? FontStyle.italic : null,
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.only(
+                                    start: 8,
+                                    end: 8,
+                                    top: 8,
+                                    bottom: rendersAsText ? 0 : 8),
+                                child: SizedBox(
+                                  child: Reply(
+                                    model: model,
+                                    contact: contact,
+                                    message: replyToMessage,
+                                    isOutbound: isOutbound,
                                   ),
                                 ),
                               ),
-                            ),
+                            );
+                          }),
+                        if (rendersAsText)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(
+                                start: 8, end: 8, top: 4),
+                            child:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Container(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 8, end: 8, bottom: 4),
+                                  child: MarkdownBody(
+                                    data: wasRemotelyDeleted
+                                        ? 'message_deleted'
+                                            .i18n
+                                            .fill([contact.displayName])
+                                        : message.text,
+                                    onTapLink: (String text, String? href,
+                                        String title) async {
+                                      if (href != null &&
+                                          await canLaunch(href)) {
+                                        showConfirmationDialog(
+                                            context: context,
+                                            title: 'open_url'.i18n,
+                                            explanation:
+                                                'are_you_sure_you_want_to_open'
+                                                    .fill([href]),
+                                            dismissText: 'cancel'.i18n,
+                                            agreeText: 'continue'.i18n,
+                                            agreeAction: () async {
+                                              await launch(href);
+                                            });
+                                      }
+                                    },
+                                    styleSheet: MarkdownStyleSheet(
+                                      a: tsBody3.copiedWith(
+                                        color: color,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      p: tsBody3.copiedWith(
+                                        color: color,
+                                        fontStyle: wasRemotelyDeleted
+                                            ? FontStyle.italic
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
                           ),
-                        ]),
-                      Stack(
-                        fit: StackFit.passthrough,
-                        alignment: isOutbound
-                            ? AlignmentDirectional.bottomEnd
-                            : AlignmentDirectional.bottomStart,
-                        children: [
-                          if (attachment != null) attachment,
-                          Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: isOutbound
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.start,
-                              children: [
-                                StatusRow(isOutbound, message),
-                              ]),
-                        ],
-                      )
-                    ]),
+                        Stack(
+                          alignment: isOutbound
+                              ? AlignmentDirectional.bottomEnd
+                              : AlignmentDirectional.bottomStart,
+                          children: [
+                            if (attachment != null) attachment,
+                            FittedBox(
+                              fit: BoxFit.contain,
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: isOutbound
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: StatusRow(isOutbound, message),
+                                    ),
+                                  ]),
+                            ),
+                          ],
+                        )
+                      ]),
+                ),
         );
       },
     );
   }
 
+  Widget wrapIntrinsicWidthIfNecessary(Widget child) {
+    if (rendersAsText) {
+      return IntrinsicWidth(child: child);
+    }
+    return child;
+  }
+
+  // Handles borders and their radii
   Widget wrapBubble(BuildContext context, bool isAudio, Widget child) {
     final borderRadius = BorderRadius.only(
       topLeft: isInbound && !isStartOfBlock ? squared : rounded,
@@ -270,20 +310,19 @@ class MessageBubble extends StatelessWidget {
           isOutbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
     );
 
-    if (wasDeleted) {
+    if (wasRemotelyDeleted) {
       return DottedBorder(
         color: grey4,
         dashPattern: [3],
         strokeWidth: 1,
         customPath: (size) => borderRadius.toPath(size),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(50)),
+        child: ClipPath(
+          clipper: borderRadius.toClipper(),
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-                top: message.replyToId.isNotEmpty ? 8 : 0,
-                start: isAttachment ? 0 : 8,
-                end: isAttachment ? 0 : 8),
+              top: message.replyToId.isNotEmpty ? 8 : 0,
+            ),
             child: child,
           ),
         ),
@@ -294,27 +333,22 @@ class MessageBubble extends StatelessWidget {
       constraints: BoxConstraints(
           minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
       clipBehavior: Clip.hardEdge,
-      padding: EdgeInsetsDirectional.only(
-          top: message.replyToId.isNotEmpty ? 8 : 0,
-          start: isAttachment ? 0 : 8,
-          end: isAttachment ? 0 : 8),
       decoration: BoxDecoration(
         color: backgroundColor,
-        border: isAttachment && !isAudio
-            ? Border.all(color: grey4, width: 0.5)
-            : null,
         borderRadius: borderRadius,
       ),
       child: child,
     );
   }
 
+  // Renders message options (Reply, Copy, Delete) on long tap
+  // Renders "Message disappears on/at ..." line.
   SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
-    var height = 219.0;
+    var isConnectionCard = message.hasIntroduction();
+    var height = isConnectionCard ? 123.0 : 219.0;
     if (isOutbound) height += 48;
-    if (!isAttachment) height += 48;
-
+    if (!isAttachment && !wasRemotelyDeleted) height += 48;
     return SizedBox(
       height: height,
       child: Padding(
@@ -333,14 +367,18 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
             const CDivider(),
-            CListTile(
-              height: 48,
-              showDivider: false,
-              leading: ImagePaths.reply,
-              content: 'reply'.i18n,
-              onTap: onReply,
-            ),
-            if (!isAttachment)
+            if (!isConnectionCard)
+              CListTile(
+                height: 48,
+                showDivider: false,
+                leading: ImagePaths.reply,
+                content: 'reply'.i18n,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onReply();
+                },
+              ),
+            if (!isAttachment && !wasRemotelyDeleted && !isConnectionCard)
               StatefulBuilder(
                 key: ValueKey(message.id),
                 builder: (context, setState) => CListTile(
@@ -403,7 +441,7 @@ class MessageBubble extends StatelessWidget {
         children: [
           Expanded(
               child: CText(
-            'text_copied'.i18n,
+            'copied'.i18n,
             style: tsBody1Color(white),
             textAlign: TextAlign.start,
           )),

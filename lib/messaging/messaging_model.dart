@@ -316,6 +316,15 @@ class MessagingModel extends Model {
         defaultValue: message.value, builder: builder);
   }
 
+  Widget singleMessage(String senderId, String messageId,
+      ValueWidgetBuilder<StoredMessage> builder) {
+    return subscribedSingleValueBuilder<StoredMessage>(
+        '/m/$senderId/$messageId',
+        builder: builder, deserialize: (Uint8List serialized) {
+      return StoredMessage.fromBuffer(serialized);
+    });
+  }
+
   Widget me(ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder<Contact>('/me', builder: builder,
         deserialize: (Uint8List serialized) {
