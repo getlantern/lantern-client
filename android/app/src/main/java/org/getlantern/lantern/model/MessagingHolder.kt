@@ -1,6 +1,10 @@
 package org.getlantern.lantern.model
 
-import android.app.*
+import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -17,13 +21,17 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.Schema
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.path
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.util.Json
 import java.io.File
-import java.util.*
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -153,14 +161,6 @@ class MessagingHolder {
         // do something to answer
     }
 
-    private fun getAvatarBgColor(id: String): Int {
-        val hash = id.hashCode()
-        val maxHash = 2147483647.rem(2).toFloat()
-        val hue = maxOf(0.toFloat(), hash / maxHash * 360)
-        val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
-        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
-    }
-
     private fun notifyCall(
         application: Application,
         notificationManager: NotificationManager,
@@ -216,18 +216,7 @@ class MessagingHolder {
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
 
             // paint avatar
-            val bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            val paintBg = Paint()
-            val paintAv = Paint()
-            paintAv.isAntiAlias = true
-            paintBg.isAntiAlias = true
-            paintBg.color = getAvatarBgColor(contact.contactId.id)
-            canvas.drawCircle(200.toFloat(), 200.toFloat(), 200.toFloat(), paintBg)
-            paintAv.color = Color.WHITE
-            paintAv.textSize = 150.toFloat()
-            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 100.toFloat(), 250.toFloat(), paintAv)
-            customNotification.setImageViewBitmap(R.id.avatar, bitmap)
+            paintAvatar(contact, customNotification)
 
             // set intents
             customNotification.setOnClickPendingIntent(R.id.btnAccept, declinePendingIntent)
@@ -265,6 +254,35 @@ class MessagingHolder {
 
             notificationManager.notify(notificationId, builder.build())
         }
+    }
+
+    private fun getAvatarBgColor(id: String): Int {
+        val hash = id.hashCode()
+        val maxHash = 2147483647.rem(2).toFloat()
+        val hue = maxOf(0.toFloat(), hash / maxHash * 360)
+        val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
+    }
+
+    private fun paintAvatar(contact: Model.Contact, customNotification: RemoteViews) {
+        val bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paintBg = Paint()
+        val paintAv = Paint()
+        val paintStroke = Paint()
+        paintAv.isAntiAlias = true
+        paintBg.isAntiAlias = true
+        paintStroke.isAntiAlias = true
+        paintBg.color = getAvatarBgColor(contact.contactId.id)
+        paintStroke.color = Color.WHITE
+        canvas.drawCircle(200.toFloat(), 200.toFloat(), 200.toFloat(), paintStroke)
+        canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
+        paintAv.color = Color.WHITE
+        paintAv.textSize = 150.toFloat()
+        canvas.drawText(contact.displayName.take(2).toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
+
+        // update customNotification
+        customNotification.setImageViewBitmap(R.id.avatar, bitmap)
     }
 }
 

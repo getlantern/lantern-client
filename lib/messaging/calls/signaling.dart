@@ -121,7 +121,10 @@ class Signaling extends ValueNotifier<SignalingState> {
     notifyListeners();
   }
 
-  Future<Session> call({required String peerId, required String media}) async {
+  Future<Session> call(
+      {required String peerId,
+      required String media,
+      required Function() onError}) async {
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(

@@ -1,12 +1,14 @@
 import 'messaging.dart';
 
 class CustomAvatar extends StatelessWidget {
-  const CustomAvatar({Key? key, this.id, this.displayName, this.customColor})
+  const CustomAvatar(
+      {Key? key, this.id, this.displayName, this.customColor, this.radius})
       : super(key: key);
 
   final String? id;
   final String? displayName;
   final Color? customColor;
+  final double? radius;
 
   // For some reason, the range of hashCodes seems to fall within
   // 0 to Max Int 32 / 2. It would be nice to have some more insight into what is
@@ -20,9 +22,17 @@ class CustomAvatar extends StatelessWidget {
     var hue = max(0.0, hash / maxHash * 360);
 
     return CircleAvatar(
+      radius: radius,
       backgroundColor: customColor ?? getAvatarColor(hue: hue),
-      child: CText(displayName.toString().getInitials().toUpperCase(),
-          style: tsBody2.copiedWith(color: white)),
+      child: Transform.translate(
+        offset: Offset(0.0, radius != null ? 10.0 : 0.0),
+        child: Text(displayName.toString().getInitials().toUpperCase(),
+            style: tsBody2.copiedWith(
+              color: white,
+              fontSize:
+                  radius != null ? tsDisplay(white).fontSize : tsBody2.fontSize,
+            )),
+      ),
     );
   }
 }

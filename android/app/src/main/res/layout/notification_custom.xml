@@ -2,18 +2,17 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginTop="5dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    android:layout_height="103dp"
+    android:layout_height="115dp"
     android:orientation="vertical"
-    android:visibility="visible"
+    android:backgroundTint="@color/black_transparent"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         >
         <LinearLayout
             android:layout_width="0dp"
@@ -22,13 +21,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
-<!--            <ImageView-->
-<!--                android:layout_width="40dp"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginEnd="5dp"-->
-<!--                android:src="@drawable/ic_account_circle"-->
-<!--                />-->
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="40dp"
@@ -46,7 +38,6 @@
                 android:id="@+id/caller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
@@ -55,7 +46,6 @@
                     android:id="@+id/incomingCall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -65,30 +55,36 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         >
         <Button
             android:id="@+id/btnDecline"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
             android:textAllCaps="true"
-            android:textSize="16sp"
-            android:background="@color/red"
-            android:textColor="@color/white" />
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:background="@drawable/notification_button"
+            />
 
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="32dp"
             android:layout_marginStart="5dp"
             android:layout_weight="0.5"
-            android:textSize="16sp"
-            android:background="@color/green"
-            android:textColor="@color/white" />
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/green"
+            android:background="@drawable/notification_button"
+            />
 
     </LinearLayout>
 
