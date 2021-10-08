@@ -78,6 +78,18 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     }
   }
 
+  String getCallStatus(CallState callState) {
+    switch (callState) {
+      case CallState.Connected:
+        return 'Connected'.i18n;
+      case CallState.Bye:
+        return 'Disconnecting'
+            .i18n; // TODO: this shows up very briefly on start of call (normal?)
+      default:
+        return 'Connecting'.i18n;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -114,9 +126,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ),
                         Container(
                           child: CText(
-                            signaling.value.callState == CallState.Connected
-                                ? 'connected'.i18n
-                                : 'Connecting'.i18n,
+                            getCallStatus(signaling.value.callState),
                             style: tsBody1.copiedWith(color: white),
                           ),
                         ),
