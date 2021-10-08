@@ -75,6 +75,15 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         return when (call.method) {
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
+            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
+                unsafeId = call.argument<String>("unsafeId")!!,
+                displayName = call.argument<String>("displayName")!!,
+                source = call.argument<Model.ContactSource>("source"),
+                applicationIds = call.argument<Map<Int, String>?>("applicationIds"),
+                initialVerificationLevel = call.argument<Model.VerificationLevel>("initialVerificationLevel")!!,
+            )
+            "acceptDirectContact" -> messaging.acceptDirectContact(call.argument<String>("unsafeId")!!)
+            "markContactVerified" -> messaging.acceptDirectContact(call.argument<String>("unsafeId")!!)
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("unsafeContactId")!!,
                 when (call.argument<Any>("source")) {
@@ -82,6 +91,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "id" -> Model.ContactSource.APP2
                     else -> Model.ContactSource.UNKNOWN
                 },
+                when (call.argument<Any>("verificationLevel")) {
+                    "qr" -> Model.VerificationLevel.VERIFIED
+                    "id" -> Model.VerificationLevel.UNVERIFIED
+                    else -> Model.VerificationLevel.UNACCEPTED
+                }
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
