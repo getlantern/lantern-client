@@ -12,6 +12,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.ColorUtils
 import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
@@ -152,6 +153,14 @@ class MessagingHolder {
         // do something to answer
     }
 
+    private fun getAvatarBgColor(id: String): Int {
+        val hash = id.hashCode()
+        val maxHash = 2147483647.rem(2).toFloat()
+        val hue = maxOf(0.toFloat(), hash / maxHash * 360)
+        val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
+    }
+
     private fun notifyCall(
         application: Application,
         notificationManager: NotificationManager,
@@ -213,11 +222,11 @@ class MessagingHolder {
             val paintAv = Paint()
             paintAv.isAntiAlias = true
             paintBg.isAntiAlias = true
-            paintBg.color = Color.parseColor("#00a9b2")
-            canvas.drawCircle(200F, 200F, 200F, paintBg)
+            paintBg.color = getAvatarBgColor(contact.contactId.id)
+            canvas.drawCircle(200.toFloat(), 200.toFloat(), 200.toFloat(), paintBg)
             paintAv.color = Color.WHITE
-            paintAv.textSize = 150F
-            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 100F, 250F, paintAv)
+            paintAv.textSize = 150.toFloat()
+            canvas.drawText(contact.displayName.take(2).toUpperCase(Locale.getDefault()), 100.toFloat(), 250.toFloat(), paintAv)
             customNotification.setImageViewBitmap(R.id.avatar, bitmap)
 
             // set intents
