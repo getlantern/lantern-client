@@ -37,17 +37,18 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         // TODO: handle incoming calls when UI is closed (similar to how we handle message
         // notifications when UI is closed)
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
-            sendSignal(signal)
+            sendSignal(signal, false) // since we have not accepted yet
         }
     }
 
-    fun sendSignal(signal: WebRTCSignal) {
+    fun sendSignal(signal: WebRTCSignal, accepted: Boolean) {
         mainHandler.post {
             methodChannel.invokeMethod(
                 "onSignal",
                 mapOf(
                     "senderId" to signal.senderId,
                     "content" to signal.content.toString(Charsets.UTF_8),
+                    "accepted" to accepted,
                 )
             )
         }
