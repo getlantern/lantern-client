@@ -14,6 +14,7 @@ import android.graphics.Paint
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.ColorUtils
@@ -77,8 +78,7 @@ class MessagingHolder {
                 val msg = Json.gson.fromJson(signal.content.toString(Charsets.UTF_8), SignalingMessage::class.java)
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
-                    "answer" -> acceptCall(notificationManager, signal)
-                    "bye" -> declineCall(notificationManager, signal)
+                    "bye" -> declineAndDismiss(notificationManager, signal)
                 }
             }
         } catch (t: Throwable) {
@@ -145,20 +145,13 @@ class MessagingHolder {
         }
     }
 
-    private fun declineCall(
+    private fun declineAndDismiss(
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
         callNotificationIds.remove(signal.senderId)?.let { notificationId ->
             notificationManager.cancel(notificationId)
         }
-    }
-
-    private fun acceptCall(
-        notificationManager: NotificationManager,
-        signal: WebRTCSignal
-    ) {
-        // do something to answer
     }
 
     private fun notifyCall(
@@ -174,22 +167,28 @@ class MessagingHolder {
                 notificationId = nextNotificationId++
                 callNotificationIds[signal.senderId] = notificationId
             }
+
+            val declineIntent =
+                Intent(application, MessagingHolder::class.java)
+//            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+//            declineIntent.putExtra("bye", Json.gson.toJson(signal))
+
             val notificationIntent =
                 Intent(application, MainActivity::class.java)
+            // TODO: cleanup - do we need two separate bundles?
+            val notificationExtras = Bundle()
             notificationIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            notificationIntent.putExtra(
-                "signal",
-                Json.gson.toJson(signal)
-            )
-            val declineIntent =
-                Intent(application, MainActivity::class.java) // Technically this should be "webRTC class intent" or something? Or can we invoke declineCall() right away?
-            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            declineIntent.putExtra("signal", Json.gson.toJson(signal))
+            notificationExtras.putString("signal", Json.gson.toJson(signal))
+            notificationExtras.putBoolean("accepted", false)
+            notificationIntent.putExtras(notificationExtras)
 
             val acceptIntent =
-                Intent(application, MainActivity::class.java) // Same as above
+                Intent(application, MainActivity::class.java)
+            val acceptExtras = Bundle()
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            declineIntent.putExtra("signal", Json.gson.toJson(signal))
+            acceptExtras.putString("signal", Json.gson.toJson(signal))
+            acceptExtras.putBoolean("accepted", true)
+            acceptIntent.putExtras(acceptExtras)
 
             val notificationPendingIntent = PendingIntent.getActivity(application, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val declinePendingIntent = PendingIntent.getActivity(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -224,6 +223,7 @@ class MessagingHolder {
             customNotification.setOnClickPendingIntent(R.id.btnAccept, acceptPendingIntent)
             builder.setContentIntent(notificationPendingIntent) // TODO: not sure
 
+            // TODO: as soon as we hit decline, make sure ringing stops
             val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_HIGH
@@ -251,12 +251,15 @@ class MessagingHolder {
                 builder.addAction(acceptAction)
             }
             builder.setDefaults(Notification.DEFAULT_ALL)
-            builder.setTimeoutAfter(50000)
+            builder.setTimeoutAfter(8000) // setting this to 8 seconds
 
             notificationManager.notify(notificationId, builder.build())
+
+            // TODO: call notificationManager.cancel(notificationId) if we have accepted
         }
     }
 
+    // TODO: fix when we merge messaging-android updates
     private fun getAvatarBgColor(id: String): Int {
         val hash = id.hashCode()
         val maxHash = 2147483647.rem(2).toFloat()

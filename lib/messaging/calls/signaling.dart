@@ -1,16 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/core/router/router.gr.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/messaging/messaging.dart';
+
+import 'call.dart';
 
 enum CallState {
   New,
@@ -177,12 +170,13 @@ class Signaling extends ValueNotifier<SignalingState> {
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson) async {
+  void onMessage(String peerId, String messageJson, bool accepted) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
 
     switch (parsedMessage['type']) {
       case 'offer':
+        print('signal offer');
         {
           var description = data['description'];
           var media = data['media'];
@@ -192,54 +186,42 @@ class Signaling extends ValueNotifier<SignalingState> {
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
-          // TODO: move this to Kotlin
-          // closeAlertDialog?.call();
-          // closeAlertDialog = showAlertDialog(
-          //     context: navigatorKey.currentContext!,
-          //     autoDismissAfter: const Duration(seconds: 30),
-          //     // force dismissal through actual dismiss action to make sure we stop ringtone, etc
-          //     barrierDismissible: false,
-          //     title: Text('Incoming Call'.i18n),
-          //     content: Text('From '.i18n + contact.displayName),
-          //     dismissText: 'Dismiss'.i18n,
-          //     dismissAction: () async {
-          //       await FlutterRingtonePlayer.stop();
-          //       _sendBye(peerId, sessionId);
-          //     },
-          //     agreeAction: () async {
-          //       await FlutterRingtonePlayer.stop();
-          //       var newSession = await _createSession(
-          //           isInitiator: false,
-          //           session: _sessions[sessionId],
-          //           peerId: peerId,
-          //           sessionId: sessionId,
-          //           media: media);
-          //       _sessions[sessionId] = newSession;
-          //       await newSession.pc!.setRemoteDescription(RTCSessionDescription(
-          //           description['sdp'], description['type']));
-          //       await _createAnswer(newSession, media);
-          //       if (newSession.remoteCandidates.isNotEmpty) {
-          //         newSession.remoteCandidates.forEach((candidate) async {
-          //           await _addRemoteCandidate(newSession, candidate);
-          //         });
-          //         newSession.remoteCandidates.clear();
-          //       }
 
-          //       value.callState = CallState.Connected;
-          //       notifyListeners();
+          if (accepted) {
+            await FlutterRingtonePlayer.stop();
+            var newSession = await _createSession(
+                isInitiator: false,
+                session: _sessions[sessionId],
+                peerId: peerId,
+                sessionId: sessionId,
+                media: media);
+            _sessions[sessionId] = newSession;
+            await newSession.pc!.setRemoteDescription(
+                RTCSessionDescription(description['sdp'], description['type']));
+            await _createAnswer(newSession, media);
+            if (newSession.remoteCandidates.isNotEmpty) {
+              newSession.remoteCandidates.forEach((candidate) async {
+                await _addRemoteCandidate(newSession, candidate);
+              });
+              newSession.remoteCandidates.clear();
+            }
 
-          //       await navigatorKey.currentContext?.pushRoute(
-          //         FullScreenDialogPage(
-          //             widget: Call(
-          //           contact: contact,
-          //           model: model,
-          //           initialSession: newSession,
-          //         )),
-          //       );
-          //     });
+            value.callState = CallState.Connected;
+            notifyListeners();
+
+            await navigatorKey.currentContext?.pushRoute(
+              FullScreenDialogPage(
+                  widget: Call(
+                contact: contact,
+                model: model,
+                initialSession: newSession,
+              )),
+            );
+          }
         }
         break;
       case 'answer':
+        print('signal answer');
         {
           var description = data['description'];
           var sessionId = data['session_id'];
@@ -255,6 +237,7 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'candidate':
+        print('signal candidate');
         {
           var candidateMap = data['candidate'];
           var candidateString = candidateMap['candidate'] as String;
@@ -277,12 +260,14 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'leave':
+        print('signal leave');
         {
           var peerId = data as String;
           _closeSessionByPeerId(peerId);
         }
         break;
       case 'bye':
+        print('signal bye');
         {
           var sessionId = data['session_id'];
           print('bye: ' + sessionId);
@@ -297,6 +282,7 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'keepalive':
+        print('signal keepalive');
         {
           print('keepalive response!');
         }
