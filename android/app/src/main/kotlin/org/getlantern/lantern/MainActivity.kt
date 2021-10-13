@@ -140,11 +140,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             intent.removeExtra("contactForConversation")
         }
 
-        // get extras Bundle from notifyCall()
-        if (intent.extras != null) {
-            val notifyCallExtras = intent.extras
-            val signal = notifyCallExtras!!.getString("signal")
-            val accepted = notifyCallExtras.getBoolean("accepted")
+        intent.getStringExtra("signal")?.let { signal ->
+            val accepted = intent.getBooleanExtra("accepted", false)
             messagingModel.sendSignal(Json.gson.fromJson(signal, WebRTCSignal::class.java), accepted)
             intent.removeExtra("signal")
             intent.removeExtra("accepted") // TODO: we could also do intent.replaceExtras(Bundle())
