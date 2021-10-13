@@ -176,7 +176,6 @@ class Signaling extends ValueNotifier<SignalingState> {
 
     switch (parsedMessage['type']) {
       case 'offer':
-        print('signal offer');
         {
           var description = data['description'];
           var media = data['media'];
@@ -221,7 +220,6 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'answer':
-        print('signal answer');
         {
           var description = data['description'];
           var sessionId = data['session_id'];
@@ -237,7 +235,6 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'candidate':
-        print('signal candidate');
         {
           var candidateMap = data['candidate'];
           var candidateString = candidateMap['candidate'] as String;
@@ -260,14 +257,12 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'leave':
-        print('signal leave');
         {
           var peerId = data as String;
           _closeSessionByPeerId(peerId);
         }
         break;
       case 'bye':
-        print('signal bye');
         {
           var sessionId = data['session_id'];
           print('bye: ' + sessionId);
@@ -282,7 +277,6 @@ class Signaling extends ValueNotifier<SignalingState> {
         }
         break;
       case 'keepalive':
-        print('signal keepalive');
         {
           print('keepalive response!');
         }

@@ -168,10 +168,9 @@ class MessagingHolder {
                 callNotificationIds[signal.senderId] = notificationId
             }
 
+            // TODO: invoke declineAndDismiss()
             val declineIntent =
                 Intent(application, MessagingHolder::class.java)
-//            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-//            declineIntent.putExtra("bye", Json.gson.toJson(signal))
 
             val notificationIntent =
                 Intent(application, MainActivity::class.java)
@@ -211,7 +210,8 @@ class MessagingHolder {
             builder.setSmallIcon(R.drawable.status_on)
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
             builder.setCustomContentView(customNotification)
-            builder.setOngoing(true)
+//            builder.setOngoing(true) // we can use this if we want an indicator of the ongoing call
+            builder.setAutoCancel(false)
             builder.setPriority(NotificationCompat.PRIORITY_HIGH)
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
 
@@ -245,9 +245,9 @@ class MessagingHolder {
                 )
             } else {
                 // This is a custom action assignment in case the API does not accept remote views
-                val hangupAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, application.getString(R.string.decline), declinePendingIntent).build()
-                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, application.getString(R.string.accept), declinePendingIntent).build()
-                builder.addAction(hangupAction)
+                val declineAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, application.getString(R.string.decline), declinePendingIntent).build()
+                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, application.getString(R.string.accept), acceptPendingIntent).build()
+                builder.addAction(declineAction)
                 builder.addAction(acceptAction)
             }
             builder.setDefaults(Notification.DEFAULT_ALL)
