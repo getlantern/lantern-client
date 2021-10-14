@@ -452,22 +452,7 @@ class ConversationState extends State<Conversation>
                       const BorderRadius.all(Radius.circular(borderRadius))),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: model.introductionsToContact(
-                  builder: (context,
-                      Iterable<PathAndValue<StoredMessage>> introductions,
-                      Widget? child) {
-                    final isPendingIntroduction = !contact.hasReceivedMessage &&
-                        introductions
-                            .toList()
-                            .where((intro) =>
-                                intro.value.introduction.to ==
-                                contact.contactId)
-                            .isNotEmpty;
-                    return ConversationSticker(
-                        contact: contact,
-                        isPendingIntroduction: isPendingIntroduction);
-                  },
-                ),
+                child: ConversationSticker(contact),
               ),
             ),
           );
