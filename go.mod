@@ -3,7 +3,6 @@ module github.com/getlantern/android-lantern
 go 1.15
 
 require (
-	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21 // indirect
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
 	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
@@ -19,12 +18,14 @@ require (
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
+	github.com/getlantern/replica v0.6.1-0.20211020081401-5c51375e95fb
 	github.com/go-stack/stack v1.8.1 // indirect
+	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
-	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
 	golang.org/x/net v0.0.0-20211111160137-58aab5ef257a
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
 	golang.org/x/tools v0.1.8 // indirect
@@ -50,8 +51,11 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2021
 
 //replace github.com/getlantern/lantern-server => ../lantern-server
 
-// For https://github.com/crawshaw/sqlite/pull/112 and https://github.com/crawshaw/sqlite/pull/103.
-replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20210215090556-4f83cf7731f0
+// XXX <15-10-21, soltzen> Using our own crawshaw.io/sqlite fork mainly for:
+// - https://github.com/crawshaw/sqlite/pull/112
+// - https://github.com/crawshaw/sqlite/pull/103
+// - https://github.com/getlantern/sqlite/pull/4
+replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20211018070028-9eeb5042b175
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 
