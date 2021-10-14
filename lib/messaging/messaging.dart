@@ -7,6 +7,7 @@ export 'custom_search_delegate.dart';
 export 'messaging_model.dart';
 export 'notifications.dart';
 export 'custom_avatar.dart';
+export 'display_name.dart';
 export 'package:lantern/messaging/contacts/contacts_extension.dart';
 
 final messagingModel = MessagingModel();

@@ -66,9 +66,8 @@ class _NewMessageState extends State<NewMessage> {
                           children: [
                             Expanded(
                               child: CText(
-                                'qr_success_snackbar'
-                                    .i18n
-                                    .fill([_updatedContact!.displayName]),
+                                'qr_success_snackbar'.i18n.fill(
+                                    [_updatedContact!.displayNameOrFallback]),
                                 overflow: TextOverflow.visible,
                                 style: tsBody1Color(white),
                                 textAlign: TextAlign.start,
@@ -107,8 +106,8 @@ class _NewMessageState extends State<NewMessage> {
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedContacts = contacts.sortedAlphabetically();
 
-                var groupedSortedContacts = sortedContacts
-                    .groupBy((el) => el.value.displayName[0].toLowerCase());
+                var groupedSortedContacts = sortedContacts.groupBy(
+                    (el) => el.value.displayNameOrFallback[0].toLowerCase());
 
                 // scroll to index of the contact we just added, if there is one
                 // otherwise start from top (index = 0)
@@ -129,8 +128,8 @@ class _NewMessageState extends State<NewMessage> {
                         groupedSortedList: groupedSortedContacts,
                         scrollListController: scrollListController,
                         leadingCallback: (Contact contact) => CustomAvatar(
-                            id: contact.contactId.id,
-                            displayName: contact.displayName),
+                            messengerId: contact.contactId.id,
+                            displayName: contact.displayNameOrFallback),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
                                 Conversation(contactId: contact.contactId)))

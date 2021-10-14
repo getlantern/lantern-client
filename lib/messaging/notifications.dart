@@ -61,7 +61,7 @@ class Notifications {
         .show(
             _notificationId++,
             'incoming_call_from'.i18n.fill([
-              contact.displayName
+              contact.displayNameOrFallback
             ]), //TODO: since the model limits characters to 100, should we leave as is?
             'touch_here_to_open_call'.i18n,
             _ringingChannel,
@@ -75,7 +75,7 @@ class Notifications {
         .show(
             id,
             'in_call_with'.i18n.fill([
-              contact.displayName
+              contact.displayNameOrFallback
             ]), //TODO: since the model limits characters to 100, should we leave as is?
             'touch_here_to_open_call'.i18n,
             _inCallChannel)

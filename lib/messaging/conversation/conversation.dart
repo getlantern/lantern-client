@@ -319,9 +319,7 @@ class ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
-      final title = contact.displayName.isNotEmpty
-          ? contact.displayName
-          : contact.contactId.id;
+      final title = contact.displayNameOrFallback;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -335,7 +333,8 @@ class ConversationState extends State<Conversation>
               Padding(
                 padding: const EdgeInsetsDirectional.only(end: 16),
                 child: CustomAvatar(
-                    id: contact.contactId.id, displayName: contact.displayName),
+                    messengerId: contact.contactId.id,
+                    displayName: contact.displayNameOrFallback),
               ),
               Expanded(
                 child: Column(

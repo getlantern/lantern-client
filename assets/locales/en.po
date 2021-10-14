@@ -552,3 +552,6 @@ msgstr "Could not render file title"
 
 msgid "could_not_render_type"
 msgstr "Could not render file type"
+
+msgid "unnamed_contact"
+msgstr "Unnamed Contact"
