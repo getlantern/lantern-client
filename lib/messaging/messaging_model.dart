@@ -22,7 +22,6 @@ class MessagingModel extends Model {
       switch (call.method) {
         case 'onSignal':
           var args = call.arguments as Map;
-          // only call this if the call is accepted
           signaling.onMessage(
               args['senderId'], args['content'], args['accepted']);
           break;
