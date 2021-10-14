@@ -37,6 +37,8 @@ func (c testSettings) StickyConfig() bool       { return true }
 func (c testSettings) TimeoutMillis() int       { return 15000 }
 func (c testSettings) GetHttpProxyHost() string { return "127.0.0.1" }
 func (c testSettings) GetHttpProxyPort() int    { return 49128 }
+func (c testSettings) GetReplicaPort() int      { return 0 }
+func (c testSettings) ShouldRunReplica() bool   { return false }
 
 func (c testSession) AfterStart() error                        { return nil }
 func (c testSession) BandwidthUpdate(int, int, int, int) error { return nil }
