@@ -205,7 +205,7 @@ The core Lantern functionality can be packaged into a native Android library
 with:
 
 ```
-make android-lib
+make android-lib ANDROID_ARCH=all
 ```
 
 Note: if you're running the first time, you have to run this command first:
