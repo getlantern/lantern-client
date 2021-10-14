@@ -353,15 +353,16 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	$(call check-go-version) && \
-	$(call build-tags) && \
-	echo "Running gomobile with `which gomobile` ..." && \
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
+	@$(call check-go-version)
+	$(call build-tags)
+	go env -w 'GOPRIVATE=github.com/getlantern/*'
+	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAG) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
 	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
+.PHONY: android-lib
 android-lib: $(MOBILE_ANDROID_LIB)
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
