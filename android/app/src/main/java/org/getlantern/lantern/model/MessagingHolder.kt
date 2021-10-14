@@ -167,9 +167,16 @@ class MessagingHolder {
                 notificationId = nextNotificationId++
                 callNotificationIds[signal.senderId] = notificationId
             }
-            val acceptIntentExtras = Bundle()
+
+            // decline intent
+            val declineIntentExtras = Bundle()
             val declineIntent =
-                Intent(application, MessagingHolder::class.java)
+                Intent(application, MainActivity::class.java)
+            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            declineIntentExtras.putInt("dismissNotificationId", notificationId)
+
+            // accept intent
+            val acceptIntentExtras = Bundle()
             val acceptIntent =
                 Intent(application, MainActivity::class.java)
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
@@ -239,6 +246,7 @@ class MessagingHolder {
             builder.setSmallIcon(R.drawable.status_on)
             builder.setOngoing(true)
             builder.setAutoCancel(false)
+            builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
             builder.setPriority(NotificationCompat.PRIORITY_HIGH)
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
             builder.setDefaults(Notification.DEFAULT_ALL)
