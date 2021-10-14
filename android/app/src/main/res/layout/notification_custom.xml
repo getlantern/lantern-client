@@ -72,7 +72,6 @@
             android:backgroundTint="@color/red"
             android:background="@drawable/notification_button"
             />
-
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="0dp"

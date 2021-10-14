@@ -25,8 +25,9 @@ class Notifications {
         switch (payload.type) {
           case PayloadType.ringing:
             Map<String, dynamic> data = payload.data;
-            messagingModel.signaling
-                .onMessage(data['peerId'], data['messageJson'], false);
+            messagingModel.signaling.onMessage(
+                data['peerId'], data['messageJson'], false,
+                ring: false);
             break;
         }
       }

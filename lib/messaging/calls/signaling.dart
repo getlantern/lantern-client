@@ -170,16 +170,20 @@ class Signaling extends ValueNotifier<SignalingState> {
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson, bool accepted) async {
+  void onMessage(String peerId, String messageJson, bool accepted,
+      {bool ring = true}) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
-
     switch (parsedMessage['type']) {
       case 'offer':
         {
           var description = data['description'];
           var media = data['media'];
           var sessionId = data['session_id'];
+
+          if (ring) {
+            unawaited(FlutterRingtonePlayer.playRingtone());
+          }
 
           // IMPORTANT - instead of immediately accepting the offer, we first
           // prompt the user. This prevents the system from transmitting audio

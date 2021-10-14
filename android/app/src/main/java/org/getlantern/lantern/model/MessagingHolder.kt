@@ -167,29 +167,17 @@ class MessagingHolder {
                 notificationId = nextNotificationId++
                 callNotificationIds[signal.senderId] = notificationId
             }
-
-            // TODO: invoke declineAndDismiss()
+            val acceptIntentExtras = Bundle()
             val declineIntent =
                 Intent(application, MessagingHolder::class.java)
-
-            val notificationIntent =
-                Intent(application, MainActivity::class.java)
-            // TODO: cleanup - do we need two separate bundles?
-            val notificationExtras = Bundle()
-            notificationIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            notificationExtras.putString("signal", Json.gson.toJson(signal))
-            notificationExtras.putBoolean("accepted", false)
-            notificationIntent.putExtras(notificationExtras)
-
             val acceptIntent =
                 Intent(application, MainActivity::class.java)
-            val acceptExtras = Bundle()
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            acceptExtras.putString("signal", Json.gson.toJson(signal))
-            acceptExtras.putBoolean("accepted", true)
-            acceptIntent.putExtras(acceptExtras)
+            acceptIntentExtras.putString("signal", Json.gson.toJson(signal))
+            acceptIntentExtras.putBoolean("accepted", true)
+            acceptIntent.putExtras(acceptIntentExtras)
 
-            val notificationPendingIntent = PendingIntent.getActivity(application, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            // TODO: declinePendingIntent should be a broadcast?
             val declinePendingIntent = PendingIntent.getActivity(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val acceptPendingIntent = PendingIntent.getActivity(application, notificationId, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -198,33 +186,22 @@ class MessagingHolder {
                 defaultNotificationChannelId
             )
 
+            // RemoteViews styles
             val customNotification = RemoteViews(application.packageName, R.layout.notification_custom)
-            // set strings in custom notification
             customNotification.setTextViewText(R.id.caller, contact.displayName)
             customNotification.setTextViewText(R.id.incomingCall, application.getString(R.string.incoming_call))
             customNotification.setTextViewText(R.id.btnAccept, application.getString(R.string.accept))
             customNotification.setTextViewText(R.id.btnDecline, application.getString(R.string.decline))
-
-            builder.setContentTitle(application.getString(R.string.incoming_call))
-            builder.setContentText(contact.displayName)
-            builder.setSmallIcon(R.drawable.status_on)
-            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            builder.setCustomContentView(customNotification)
-//            builder.setOngoing(true) // we can use this if we want an indicator of the ongoing call
-            builder.setAutoCancel(false)
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH)
-            builder.setCategory(NotificationCompat.CATEGORY_CALL)
-
-            // paint avatar
             paintAvatar(contact, customNotification)
 
-            // set intents
+            // Set button intents
             customNotification.setOnClickPendingIntent(R.id.btnDecline, declinePendingIntent)
             customNotification.setOnClickPendingIntent(R.id.btnAccept, acceptPendingIntent)
-            builder.setContentIntent(notificationPendingIntent) // TODO: not sure
 
-            // TODO: as soon as we hit decline, make sure ringing stops
-            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            // Attach RemoteView to builder()
+            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            builder.setCustomContentView(customNotification)
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_HIGH
                 val notificationChannel = NotificationChannel(
@@ -234,28 +211,40 @@ class MessagingHolder {
                 )
                 notificationChannel.enableVibration(true)
                 notificationChannel.enableLights(true)
-                val ringtoneAttrs = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
-                notificationChannel.setSound(ringtone, ringtoneAttrs)
+                // TODO: Confirm - handling ringtone on Dart side for now
+//            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+//                val ringtoneAttrs = AudioAttributes.Builder()
+//                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                    .build()
+//                notificationChannel.setSound(ringtone, ringtoneAttrs)
                 builder.setChannelId(callNotificationChannelId)
                 notificationManager.createNotificationChannel(
                     notificationChannel
                 )
             } else {
                 // This is a custom action assignment in case the API does not accept remote views
+                // TODO: need to test this
                 val declineAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, application.getString(R.string.decline), declinePendingIntent).build()
                 val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, application.getString(R.string.accept), acceptPendingIntent).build()
                 builder.addAction(declineAction)
                 builder.addAction(acceptAction)
             }
+
+            // Set misc builder flags
+            // TODO: Probably don't need all of these
+            builder.setContentTitle(application.getString(R.string.incoming_call))
+            builder.setTicker("CALL_STATUS")
+            builder.setContentText(contact.displayName)
+            builder.setSmallIcon(R.drawable.status_on)
+            builder.setOngoing(true)
+            builder.setAutoCancel(false)
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH)
+            builder.setCategory(NotificationCompat.CATEGORY_CALL)
             builder.setDefaults(Notification.DEFAULT_ALL)
-            builder.setTimeoutAfter(8000) // setting this to 8 seconds
+            builder.setTimeoutAfter(10000)
 
             notificationManager.notify(notificationId, builder.build())
-
-            // TODO: call notificationManager.cancel(notificationId) if we have accepted
         }
     }
 
