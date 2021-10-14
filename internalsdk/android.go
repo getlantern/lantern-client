@@ -3,12 +3,13 @@ package internalsdk
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -57,6 +58,8 @@ var (
 
 type Settings interface {
 	StickyConfig() bool
+	GetReplicaPort() int
+	ShouldRunReplica() bool
 	GetHttpProxyHost() string
 	GetHttpProxyPort() int
 	TimeoutMillis() int
