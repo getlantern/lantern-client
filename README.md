@@ -1,10 +1,8 @@
 # Lantern Android
 
-## Overview
+Lantern Android is an app that uses the [VpnService][https://developer.android.com/reference/android/net/VpnService] API to intercept and reroute all device traffic to the Lantern circumvention tool.
 
-Lantern Android is an app that uses the Android [VpnService][4] API to
-intercept and reroute all device traffic to the Lantern
-circumvention tool.
+## Usage
 
 This project is meant to be used inside of the context of a local clone of https://github.com/getlantern/lantern-build.
 
@@ -29,43 +27,36 @@ update the generated dart code.
 
 Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`. It seems that one can ignore this.
 
-### Autorouter
-Routes are defined in `lib/core/router` and need to be compiled into `lib/core/router/router.gr.dart` whenever they're changed.
-You can compile routes by running `make routes`.
-
 ## Building from Android Studio
 
-#### Prerequisites
----
+### Dependencies
 
 * [Android Studio](https://developer.android.com/studio?gclid=Cj0KCQjw2NyFBhDoARIsAMtHtZ6iZDqZH5ST7d4xlnwfdMGD8GoquRh0Q6B_KJRmUl-MRyj-OPSPrLwaAgo7EALw_wcB&gclsrc=aw.ds)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
 * Android SDK from 25 up to the latest.
-* [Git LFS](https://git-lfs.github.com) (more information on **STEPS TO RUN THE PROJECT**)
+* [Git LFS](https://git-lfs.github.com) (more information in [Usage](#usage))
 * [Flutter (latest version)](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
+* [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
 
-In the welcome screen choose the "Open an existing Android Studio" option and
-select the `android` folder.
+In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
 You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. That file is built automatically.
 
-<p>&nbsp;</p>
+Do this the first time your run the project:
 
-## STEPS TO RUN THE PROJECT.
----
-<p>&nbsp;</p>
-
-### Installing required components
-1. Go to the **SDK MANAGER**
-2. Select **Android SDK**
-3. Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
-4. Go to **SDK Tools** and check the option **Show Package Details**
-5. On the Android SDK Build-Tools, check from: SDK 30 up to the latest at the moment. (is optional if you wish to add more SDK alternatives such as 27.0, 28 or 29).
-6. On the NDK(Side by side) check from 20.1 up to the latest at the moment.
-7. Make sure that you have the latest **Android SDK Command-line Tools**
-8. Finally select the following:
+* Install all prerequisites
+* Run `git submodule update --init --recursive`
+* Run `git lfs install && git pull`
+* Go to the **SDK MANAGER**
+* Select **Android SDK**
+* Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
+* Go to **SDK Tools** and check the option **Show Package Details**
+* On the Android SDK Build-Tools, check from: SDK 30 up to the latest at the moment. (is optional if you wish to add more SDK alternatives such as 27.0, 28 or 29).
+* On the NDK(Side by side) check from 20.1 up to the latest at the moment.
+* Make sure that you have the latest **Android SDK Command-line Tools**
+* Finally select the following:
    - Android Emulator
    - Android SDK Platform-Tools
    - Google play APK Expansion Library
@@ -73,54 +64,46 @@ You'll need the liblantern-all.aar containing the Go back-end code in order for 
    - Google Play Licensing Library
    - Google Play Services
    - Intel x86 Emulator Accelerator (HAXM installer)
-9. Click on Apply and accept the Terms and Conditions.
-<p>&nbsp;</p>
-
-### Downloading LFS Files
-1. Once you have installed GIT LFS, go to the root of your project
-2. Open your favorite terminal and type: 
-   
-   > ```git lfs install```
-
-   or you can also type:
-   > ```git pull```
-
-   that do the same task as lfs install.
+* Click on Apply and accept the Terms and Conditions.
 
 ### Running the project
-Once the required tools are installed and the lfs are downloaded, open the project on your preferred IDE.
 
-1. On your terminal type:
-   
-   > flutter pub get
+* `flutter pub get`
+* `flutter run --flavor prod`
 
-2. Finally this project uses flavor as args, so type this:
-   - VSCode: ```flutter run --flavor prod```
-   - AndroidStudio
-     - Edit the run config and add on the flavor option prod
+Or, run it from Android Studio if you're using that.
 
-## Unit Tests
+### Building the InternalSdk (AKA Lantern Core) as a library
 
-Run unit tests with `make test`.
+The core Lantern functionality is written in Go and lives in `./internalsdk`.
+It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
-## Integration tests
-Run integration tests with `make integration-test`. This will run all files in `integration_test` that end
-in `_test.dart`.
+Package the AAR with `make android-lib ANDROID_ARCH=all`
 
-To run a specific integration test, run `TEST=name make integration-test` where name is the name of the
-integration test file without the `.dart` suffix. For example `TEST=conversation_page_test make integration-test`.
+### Testing
 
-BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!! When you run the integration tests, you'll need to
-select a device. If you select a device that already has Lantern installed, that Lantern will be
-replaced with a new build for the integration test. Consider using an emulator to avoid wiping your
-data.
+#### Flutter
 
-### Using VSCode
+* Run running Flutter unit tests run `make test`
+* Run running Flutter integration tests with `make integration-test`. This will run all files in `integration_test` that end in `_test.dart`.
+  * To run a specific integration test, run `TEST=name make integration-test` where name is the name of the integration test file without the `.dart` suffix. For example `TEST=conversation_page_test make integration-test`
+  * **BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!!** When you run the integration tests, you'll need to select a device. If you select a device that already has Lantern installed, that Lantern will be replaced with a new build for the integration test. Consider using an emulator to avoid wiping your data
+* To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
+  * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
+
+#### Java/Kotlin
+
+* For testing all `android/app/src/test` tests, run `./gradlew :app:test`
+* For testing all `android/app/src/androidTest` tests, run `./gradlew :app:connectedAndroidTest`
+* For testing a specific an `androidTest` test, easiest is to open that file in Android Studio and clicking on the green play button next to the test
+* For testing the internalsdk package, run `cd ./internalsdk && go test ./...`
+
+#### Testing with VSCode
 
 To run the unit test you need to input the following setup.
-- Create a folder on the root of your project named: ```.vscode```
-- Inside .vscode create a file named: ```launch.json```
-- Add the following inside ```launch.json```
+- Create a folder on the root of your project named: `.vscode`
+- Inside .vscode create a file named: `launch.json`
+- Add the following inside `launch.json`
 - The segment named `program` is to specificy if you wish to run all the U.T or a specific one.
 
 ```json
@@ -141,30 +124,14 @@ To run the unit test you need to input the following setup.
 }
 ```
 
-
-<p>&nbsp;</p>
-
-### Run Independent Tests
-
-On your terminal go to the root of the project and type:
-`flutter test test/my_folder_test.dart`
-
-in case that you need the code coverage just add the following argument.
-`flutter test --coverage test/my_folder_test.dart`
-
-
-<p>&nbsp;</p>
-
-### Unit Test Graph
+#### Unit Test Graph
 
 If you wanna visualize the current percentage of code coverage you need to do the following steps.
 
 1. On your `terminal` check if you have installed: `lcov` if not then install.
 2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
 
-<p>&nbsp;</p>
-
-### Flutter Test Drive
+#### Flutter Test Drive
 
 This test is to ensure the correct functionality of the Flutter application. In case that you need to test the functionality of the Flutter application, you need to do the following steps.
 
@@ -175,68 +142,7 @@ If you modify the code and you want to test the changes, you need to do the foll
 1. If the file has their own test, you will need to adjust the test to the new code.
 2. Finally run all the integration tests to ensure that the new code is working properly with the rest of the code.
 
-
-### Extra
-
-If you like that VSCode start running the project without the need of be constantly typing the command.
-- Create a folder on the root of your project named: ```.vscode```
-- Inside .vscode create a file named: ```launch.json```
-- Add the following inside ```launch.json```
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug",
-            "program": "lib/main.dart",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": ["--no-sound-null-safety"]
-        }
-    ]
-}
-```
-
-
-<p>&nbsp;</p>
-
-## Building from Command Line
-
-### Go Android Library
-
-The core Lantern functionality can be packaged into a native Android library
-with:
-
-```
-make android-lib ANDROID_ARCH=all
-```
-
-Note: if you're running the first time, you have to run this command first:
-
-```
-make vendor
-```
-
-### Known issues when building the project:
-
-**Gradle could not start your build:**
-
-```
-> Could not create service of type FileAccessTimeJournal using GradleUserHomeScopeServices.createFileAccessTimeJournal().
-   > Timeout waiting to lock journal cache (/Users/<username>/.gradle/caches/journal-1). It is currently in use by another Gradle instance.
-```
-
-Just simply restart your computer.
-
-**Android Studio tries to access proxy server**
-If you're running Lantern when you start Android Studio, and then turn off Lantern, Android Studio will keep trying to access resources via the proxy (which is no longer running).
-To fix this, restart Android Studio.
-
-### Lantern Mobile App
-
-#### Debug
+### Making debug builds
 
 To create a debug build of the full lantern mobile app:
 
@@ -256,7 +162,7 @@ or
 make android-release-install
 ```
 
-#### Staging
+### Making staging builds
 
 To build mobile for staging, use the STAGING command line argument:
 
@@ -264,7 +170,8 @@ To build mobile for staging, use the STAGING command line argument:
 STAGING=true make android-debug android-install
 ```
 
-#### Release
+### Making release builds
+
 
 The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab)
 for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
@@ -286,13 +193,13 @@ Google Play.
 
 To build all release packages, run:
 
-##### Building Release Packages
+### Building release packages
 
 ```
 VERSION=<version here> make package-android
 ```
 
-##### Tagging a Release
+### Tagging releases
 
 This creates a git tag and updates CHANGELOG.md for the currently checked out code.
 
@@ -300,20 +207,20 @@ This creates a git tag and updates CHANGELOG.md for the currently checked out co
 VERSION=<version here> make tag
 ```
 
-##### Deploying a Release to QA
+### Deploying a release to QA
 
 ```
 VERSION=<version here> make release-qa
 ```
 
-##### Testing Auto-Update with Release Builds
+### Testing Auto-Update with release builds
 Sometimes you may need to make a release bulid with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
 
 ```
 APP=lantern VERSION_CODE=1 VERSION=1.0.0 make android-release
 ```
 
-##### APKs
+### APKs
 
 For side-loading, we currently only support a 32 bit ARM APK, which you can build like this:
 
@@ -343,14 +250,31 @@ ANDROID_ARCH=arm SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make 
 ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-release
 ```
 
-##### App Bundle
+### Making app bundles
 
 ```sh
 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
 
-## Testing Google Play Payments
----
+## Code Generation
+
+This project includes various pieces of autogenerated code like protocol buffers and routes.
+All of this code can be generated by running `make codegen` or just `make`. Specific pieces of
+code can be generated per the below instructions.
+
+## Protocol buffers
+
+If you update the protocol buffer definitions in protos_shared, make sure to run `make protos` to
+update the generated dart code.
+
+Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`. It seems that one can ignore this.
+
+### Autorouter
+
+Routes are defined in `lib/core/router` and need to be compiled into `lib/core/router/router.gr.dart` whenever they're changed.
+You can compile routes by running `make routes`.
+
+## Testing Google Play payments
 
 If you're trying to test Google Play Payments with a sideloaded build, you will need to satisfy one of the following conditions, otherwise you'll get an error saying "the item you requested is not available for purchase"
 when trying to purchase in-app.
@@ -375,36 +299,48 @@ B. Alternately, you can also try to follow [these steps](https://stackoverflow.c
     Make sure to set VersionCode and VersionName in the manifest to be the same as the version in the developer console (Alpha, Beta or Production. Drafts does not work anymore). @alexgophermix answer worked for me.
 ```
 
-## ktlint
----
-This project is formatted and linted with ktlint using the [ktlint-gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle).
+## Known issues when building the project
 
-You can install the [ktlint Intellij plugin](https://plugins.jetbrains.com/plugin/15057-ktlint-unofficial-)
-for some support for linting within Android Studio.
+**Gradle could not start your build:**
 
+```
+> Could not create service of type FileAccessTimeJournal using GradleUserHomeScopeServices.createFileAccessTimeJournal().
+   > Timeout waiting to lock journal cache (/Users/<username>/.gradle/caches/journal-1). It is currently in use by another Gradle instance.
+```
 
-### Add Commit Hook
----
-./gradlew addKtlintCheckGitPreCommitHook
+Restart your computer.
 
-This adds a pre commit hook that lints all staged files upon commit.
+**Android Studio tries to access proxy server**
+If you're running Lantern when you start Android Studio, and then turn off Lantern, Android Studio will keep trying to access resources via the proxy (which is no longer running).
+To fix this, restart Android Studio.
 
+## VSCode configurations
 
-### Manually Auto-format
----
-./gradlew ktlintFormat
+If you like that VSCode start running the project without the need of be constantly typing the command.
+- Create a folder on the root of your project named: `.vscode`
+- Inside .vscode create a file named: `launch.json`
+- Add the following inside `launch.json`
 
-This auto-formats all Kotlin files in the project.
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": ["--no-sound-null-safety"]
+        }
+    ]
+}
+```
 
+## Debugging with VSCode
 
-### Manually Check
----
-./gradlew ktlintCheck
-
-This manually runs the linter against all Kotlin files in the project.
-
-### VSCode debugging
 Create this `.vscode/launch.json` file: 
+
 ```
 {
   // Use IntelliSense to learn about possible attributes.
@@ -426,3 +362,37 @@ Create this `.vscode/launch.json` file:
   ]
 }
 ```
+
+## Linting
+
+This project is formatted and linted with ktlint using the [ktlint-gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle).
+
+You can install the [ktlint Intellij plugin](https://plugins.jetbrains.com/plugin/15057-ktlint-unofficial-)
+for some support for linting within Android Studio.
+
+
+### Add Commit Hook
+
+```
+./gradlew addKtlintCheckGitPreCommitHook
+```
+
+This adds a pre commit hook that lints all staged files upon commit.
+
+
+### Manually Auto-format
+
+```
+./gradlew ktlintFormat
+```
+
+This auto-formats all Kotlin files in the project.
+
+
+### Manually Check
+
+```
+./gradlew ktlintCheck
+```
+
+This manually runs the linter against all Kotlin files in the project.
