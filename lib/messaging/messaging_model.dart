@@ -30,12 +30,6 @@ class MessagingModel extends Model {
     });
   }
 
-  Future<void> setMyDisplayName(String displayName) {
-    return methodChannel.invokeMethod('setMyDisplayName', <String, dynamic>{
-      'unsafeDisplayName': displayName,
-    });
-  }
-
   Future<Map> addProvisionalContact(String contactId, {String? source}) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:crypto/crypto.dart';
 import 'package:lantern/common/common.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -24,9 +25,20 @@ Color grey5 = HexColor('#707070');
 Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
 
+final maxSha1Hash = BigInt.from(2).pow(160);
+final numHues = BigInt.from(360);
+
+double sha1Hue(String value) {
+  var bytes = utf8.encode(value);
+  var digest = sha1.convert(bytes);
+  return (BigInt.parse(digest.toString(), radix: 16) * numHues ~/ maxSha1Hash)
+      .toDouble();
+}
+
 // Avatars
-Color getAvatarColor({required double hue, bool inverted = false}) =>
-    HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
+Color getAvatarColor({required String messengerId, bool inverted = false}) {
+  return HSLColor.fromAHSL(1, sha1Hue(messengerId), 1, 0.3).toColor();
+}
 
 // Indicator
 Color indicatorGreen = HexColor('#00A83E');

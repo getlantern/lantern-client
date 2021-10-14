@@ -1,10 +1,11 @@
 import 'messaging.dart';
 
 class CustomAvatar extends StatelessWidget {
-  const CustomAvatar({Key? key, this.id, this.displayName, this.customColor})
+  const CustomAvatar(
+      {Key? key, required this.id, this.displayName, this.customColor})
       : super(key: key);
 
-  final String? id;
+  final String id;
   final String? displayName;
   final Color? customColor;
 
@@ -16,11 +17,8 @@ class CustomAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var hash = id!.hashCode;
-    var hue = max(0.0, hash / maxHash * 360);
-
     return CircleAvatar(
-      backgroundColor: customColor ?? getAvatarColor(hue: hue),
+      backgroundColor: customColor ?? getAvatarColor(messengerId: id),
       child: CText(displayName.toString().getInitials().toUpperCase(),
           style: tsBody2.copiedWith(color: white)),
     );
