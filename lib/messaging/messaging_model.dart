@@ -202,32 +202,13 @@ class MessagingModel extends Model {
       .split(RegExp(r'\s'))
       .map((s) => '"${s.replaceAll('\"', '')}"')
       .join(' ');
-  /*
-  Returns an index of Introduction messages keyed to the contact who introduced us and then the contact to
-  whom we're being introduced.
-  */
-  Widget introductionsFromContact(
-      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
-          builder}) {
-    return subscribedListBuilder<StoredMessage>('/intro/from/',
-        details: true,
-        compare: sortReversed,
-        builder: builder, deserialize: (Uint8List serialized) {
-      return StoredMessage.fromBuffer(serialized);
-    });
-  }
 
-  /*
-  Returns an index of Introduction messages keyed to the contact to whom we're being introduced and then the
-  contact who introduced us.
-  */
-  Widget introductionsToContact(
+  /// Returns the best introductions to each contact.
+  Widget bestIntroductions(
       {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
           builder}) {
-    return subscribedListBuilder<StoredMessage>('/intro/to/',
-        details: true,
-        compare: sortReversed,
-        builder: builder, deserialize: (Uint8List serialized) {
+    return subscribedListBuilder<StoredMessage>('/intro/best/',
+        details: true, builder: builder, deserialize: (Uint8List serialized) {
       return StoredMessage.fromBuffer(serialized);
     });
   }

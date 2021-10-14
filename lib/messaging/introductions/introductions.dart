@@ -15,7 +15,7 @@ class Introductions extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: CText('introductions_info'.i18n, style: tsBody1),
               ),
-              Expanded(child: model.introductionsToContact(builder: (context,
+              Expanded(child: model.bestIntroductions(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
                   Widget? child) {
                 // group by the contactId of the user who made the introduction

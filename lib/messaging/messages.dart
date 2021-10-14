@@ -21,7 +21,7 @@ class Messages extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            model.introductionsFromContact(
+            model.bestIntroductions(
                 builder: (context,
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
