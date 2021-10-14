@@ -121,7 +121,7 @@ class ApplicationTest {
     @Test
     fun upgradeWithStripe() {
         Log.d(TAG, "Testing upgrading to Pro with a Stripe purchase")
-        clickButton(R.id.upgradeBtn)
+//        clickButton(R.id.upgradeBtn)
         clickButton(R.id.oneYearBtn)
         fillField(R.id.emailInput, "ox+testuser@gmail.com")
         fillField(R.id.cardInput, "4242424242424242")
