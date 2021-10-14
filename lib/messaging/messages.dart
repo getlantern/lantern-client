@@ -67,9 +67,9 @@ class Messages extends StatelessWidget {
                           contact: contact.value,
                           index: index,
                           leading: CustomAvatar(
-                              id: contact.value.contactId.id,
-                              displayName: contact.value.displayName),
-                          title: contact.value.displayName,
+                              messengerId: contact.value.contactId.id,
+                              displayName: contact.value.displayNameOrFallback),
+                          title: contact.value.displayNameOrFallback,
                           subTitle:
                               '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
                                   .i18n,

@@ -48,8 +48,10 @@ class ConversationSticker extends StatelessWidget {
   }
 
   CText _partiallyAddedText() {
-    return CText('banner_intro_waiting'.i18n.fill([contact.displayName]),
-        style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
+    return CText(
+        'banner_intro_waiting'.i18n.fill([contact.displayNameOrFallback]),
+        style: tsBody2.copiedWith(color: grey5),
+        textAlign: TextAlign.center);
   }
 
   CAssetImage _partiallyAddedIcon() {

@@ -28,7 +28,7 @@ class _IntroduceState extends State<Introduce> {
           var sortedContacts = _contacts.toList().sortedAlphabetically();
 
           var groupedSortedContacts = sortedContacts
-              .groupBy((el) => el.value.displayName[0].toLowerCase());
+              .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,8 +59,9 @@ class _IntroduceState extends State<Introduce> {
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
                                           CustomAvatar(
-                                              id: contact.contactId.id,
-                                              displayName: contact.displayName),
+                                              messengerId: contact.contactId.id,
+                                              displayName: contact
+                                                  .displayNameOrFallback),
                                       trailingCallback: (int index,
                                               Contact contact) =>
                                           Checkbox(
