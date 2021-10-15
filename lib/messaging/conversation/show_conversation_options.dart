@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
-import '../messaging_model.dart';
+import '../messaging.dart';
 
 Future showConversationOptions(
     {required MessagingModel model,
@@ -289,7 +289,9 @@ Future showConversationOptions(
                   leading: const CAssetImage(
                     path: ImagePaths.delete,
                   ),
-                  label: 'delete_contact_name'.i18n.fill([contact.displayName]),
+                  label: 'delete_contact_name'
+                      .i18n
+                      .fill([contact.displayNameOrFallback]),
                   onTap: () => showDialog<void>(
                         context: bottomContext,
                         barrierDismissible: true,

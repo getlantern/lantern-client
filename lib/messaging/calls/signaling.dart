@@ -222,7 +222,8 @@ class Signaling extends ValueNotifier<SignalingState>
               // force dismissal through actual dismiss action to make sure we stop ringtone, etc
               barrierDismissible: false,
               title: 'incoming_call'.i18n,
-              explanation: 'call_from'.i18n.fill([contact.displayName]),
+              explanation:
+                  'call_from'.i18n.fill([contact.displayNameOrFallback]),
               dismissText: 'dismiss'.i18n,
               agreeText: 'accept'.i18n,
               dismissAction: () async {

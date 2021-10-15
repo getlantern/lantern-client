@@ -376,9 +376,6 @@ msgstr "Me"
 msgid "disappearing_messages"
 msgstr "Disappearing Messages"
 
-msgid "banner_intro_waiting"
-msgstr "Waiting for %s. They will receive your messages once they accept the introduction."
-
 msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
 
@@ -402,15 +399,6 @@ msgstr "Disappears %s"
 
 msgid "change_display_name"
 msgstr "Change Display Name"
-
-msgid "display_name_label"
-msgstr "Display Name"
-
-msgid "display_name_helper"
-msgstr "Other users will see this name when they add you as a contact"
-
-msgid "display_name_invalid"
-msgstr "Please use only letters, numbers or spaces"
 
 msgid "yesterday"
 msgstr "yesterday"
@@ -561,3 +549,6 @@ msgstr "Could not render file title"
 
 msgid "could_not_render_type"
 msgstr "Could not render file type"
+
+msgid "unnamed_contact"
+msgstr "Unnamed Contact"
