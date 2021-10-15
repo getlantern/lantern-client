@@ -22,6 +22,8 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.util.Json
 import java.io.File
+import java.math.BigInteger
+import java.security.MessageDigest
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -259,15 +261,6 @@ class MessagingHolder {
         }
     }
 
-    // TODO: fix when we merge messaging-android updates
-    private fun getAvatarBgColor(id: String): Int {
-        val hash = id.hashCode()
-        val maxHash = 2147483647.rem(2).toFloat()
-        val hue = maxOf(0.toFloat(), hash / maxHash * 360)
-        val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
-        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
-    }
-
     private fun paintAvatar(contact: Model.Contact, customNotification: RemoteViews) {
         val bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -283,10 +276,25 @@ class MessagingHolder {
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
-        canvas.drawText(contact.displayName.take(2).toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
+        canvas.drawText(contact.displayName.take(2).toUpperCase(), 125.toFloat(), 250.toFloat(), paintAv)
 
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
+    }
+
+    private fun getAvatarBgColor(id: String): Int {
+        val color = floatArrayOf(id.sha1(360).toFloat(), 1.toFloat(), 0.3.toFloat())
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
+    }
+
+    /**
+     * Calculates a SHA1 hash of the string's UTF-8 representation, coerced to a scaled integer between
+     * 0 and max inclusive.
+     */
+    fun String.sha1(max: Long): Long {
+        val maxSha1Hash = BigInteger.valueOf(2).pow(160)
+        val bytes = MessageDigest.getInstance("SHA-1").digest(this.toByteArray(Charsets.UTF_8))
+        return BigInteger(1, bytes).times(BigInteger.valueOf(max)).div(maxSha1Hash).toLong()
     }
 }
 
