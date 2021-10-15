@@ -78,7 +78,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
+        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
