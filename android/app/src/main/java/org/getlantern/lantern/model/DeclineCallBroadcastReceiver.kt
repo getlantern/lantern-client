@@ -15,6 +15,7 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
         val signal = intent!!.getStringExtra("signal")
         if (signal != null) {
             LanternApp.messaging.declineAndDismiss(
+                context!!,
                 (context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!,
                 Json.gson.fromJson(signal, WebRTCSignal::class.java)
             )
