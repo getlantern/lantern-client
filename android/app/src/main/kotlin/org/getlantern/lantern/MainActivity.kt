@@ -142,23 +142,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             intent.removeExtra("contactForConversation")
         }
 
-        intent.getIntExtra("dismissNotificationId", -1).let { declinedCallId ->
-            if (declinedCallId != -1) {
-                val notificationManager =
-                    application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.cancel(declinedCallId)
-            }
-            intent.removeExtra("dismissNotificationId")
-            return@let
-        }
-
         intent.getStringExtra("signal")?.let { signal ->
-            if (signal != "") {
-                val accepted = intent.getBooleanExtra("accepted", false)
-                messagingModel.sendSignal(Json.gson.fromJson(signal, WebRTCSignal::class.java), accepted)
-                intent.removeExtra("signal")
-                intent.removeExtra("accepted") // TODO: we could also do intent.replaceExtras(Bundle())
-            }
+            val accepted = intent.getBooleanExtra("accepted", false)
+            messagingModel.sendSignal(Json.gson.fromJson(signal, WebRTCSignal::class.java), accepted)
+            intent.removeExtra("signal")
+            intent.removeExtra("accepted") // TODO: we could also do intent.replaceExtras(Bundle())
         }
     }
 

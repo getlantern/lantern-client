@@ -160,13 +160,11 @@ class MessagingHolder {
             val serializedSignal = Json.gson.toJson(signal)
 
             // decline intent
-            val declineIntentExtras = Bundle()
             val declineIntent =
                 Intent(application, DeclineCallBroadcastReceiver::class.java)
-            declineIntentExtras.putString("signal", serializedSignal)
-            declineIntent.putExtras(declineIntentExtras)
+            declineIntent.putExtra("signal", serializedSignal)
 
-            // accept intent
+            // accept intent - we use Bundle() since we are sending two params
             val acceptIntentExtras = Bundle()
             val acceptIntent =
                 Intent(application, MainActivity::class.java)
