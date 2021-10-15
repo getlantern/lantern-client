@@ -170,8 +170,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson, bool accepted,
-      {bool ring = true}) async {
+  void onMessage(String peerId, String messageJson, bool accepted) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {

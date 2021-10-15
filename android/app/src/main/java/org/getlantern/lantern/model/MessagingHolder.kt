@@ -20,6 +20,7 @@ import io.lantern.messaging.*
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
+import org.getlantern.lantern.service.IncomingCallNotificationService
 import org.getlantern.lantern.util.Json
 import java.io.File
 
@@ -67,7 +68,7 @@ class MessagingHolder {
                 val msg = Json.gson.fromJson(signal.content.toString(Charsets.UTF_8), SignalingMessage::class.java)
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
-                    "bye" -> declineAndDismiss(notificationManager, signal)
+                    "bye" -> declineAndDismiss(application, notificationManager, signal)
                 }
             }
         } catch (t: Throwable) {
@@ -134,71 +135,65 @@ class MessagingHolder {
         }
     }
 
-    fun declineAndDismiss(
+    fun notifyCall(
+        context: Context,
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
-        callNotificationIds.remove(signal.senderId)?.let { notificationId ->
-            notificationManager.cancel(notificationId)
-        }
-    }
+        val intent = Intent(context, IncomingCallNotificationService::class.java)
+        val intentExtras = Bundle()
+        intentExtras.putString("signal", Json.gson.toJson(signal))
+        intent.putExtras(intentExtras)
+        context.startService(intent)
 
-    private fun notifyCall(
-        application: Application,
-        notificationManager: NotificationManager,
-        signal: WebRTCSignal
-    ) {
+        val serializedSignal = Json.gson.toJson(signal)
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
-            var notificationId = callNotificationIds[signal.senderId]
-            if (notificationId == null) {
-                notificationId = nextNotificationId++
-                callNotificationIds[signal.senderId] = notificationId
-            }
-
-            val serializedSignal = Json.gson.toJson(signal)
+            val calledFromService = context is IncomingCallNotificationService
+            var notificationId = if (calledFromService) nextNotificationId else nextNotificationId++
+            callNotificationIds[signal.senderId] = notificationId
 
             // decline intent
             val declineIntentExtras = Bundle()
             val declineIntent =
-                Intent(application, DeclineCallBroadcastReceiver::class.java)
+                Intent(context, DeclineCallBroadcastReceiver::class.java)
             declineIntentExtras.putString("signal", serializedSignal)
             declineIntent.putExtras(declineIntentExtras)
 
             // accept intent
             val acceptIntentExtras = Bundle()
             val acceptIntent =
-                Intent(application, MainActivity::class.java)
+                Intent(context, MainActivity::class.java)
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
             acceptIntentExtras.putString("signal", serializedSignal)
             acceptIntentExtras.putBoolean("accepted", true)
             acceptIntent.putExtras(acceptIntentExtras)
 
             val declinePendingIntent = PendingIntent.getBroadcast(
-                application,
+                context,
                 notificationId,
                 declineIntent,
                 PendingIntent.FLAG_ONE_SHOT
             )
             val acceptPendingIntent = PendingIntent.getActivity(
-                application,
+                context,
                 notificationId,
                 acceptIntent,
                 PendingIntent.FLAG_ONE_SHOT
             )
 
             val builder = NotificationCompat.Builder(
-                application,
+                context,
                 defaultNotificationChannelId
             )
 
             // RemoteViews styles
-            val customNotification = RemoteViews(application.packageName, R.layout.notification_custom)
+            val customNotification = RemoteViews(context.packageName, R.layout.notification_custom)
             customNotification.setTextViewText(R.id.caller, contact.displayName)
-            customNotification.setTextViewText(R.id.incomingCall, application.getString(R.string.incoming_call))
-            customNotification.setTextViewText(R.id.btnAccept, application.getString(R.string.accept))
-            customNotification.setTextViewText(R.id.btnDecline, application.getString(R.string.decline))
+            customNotification.setTextViewText(R.id.incomingCall, context.getString(R.string.incoming_call))
+            customNotification.setTextViewText(R.id.btnAccept, context.getString(R.string.accept))
+            customNotification.setTextViewText(R.id.btnDecline, context.getString(R.string.decline))
             paintAvatar(contact, customNotification)
 
             // Set button intents
@@ -232,22 +227,13 @@ class MessagingHolder {
             } else {
                 // This is a custom action assignment in case the API does not accept remote views
                 // TODO: need to test this
-                val declineAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, application.getString(R.string.decline), declinePendingIntent).build()
-                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, application.getString(R.string.accept), acceptPendingIntent).build()
+                val declineAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, context.getString(R.string.decline), declinePendingIntent).build()
+                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, context.getString(R.string.accept), acceptPendingIntent).build()
                 builder.addAction(declineAction)
                 builder.addAction(acceptAction)
             }
 
-            // set as a full screen intent to make sure phone doesn't auto-dismiss
-            // see https://stackoverflow.com/a/61593818
-            val dummyIntent = PendingIntent.getActivity(
-                application,
-                0,
-                Intent(),
-                0
-            )
-//            builder.setFullScreenIntent(dummyIntent, true)
-            builder.setContentTitle(application.getString(R.string.incoming_call))
+            builder.setContentTitle(context.getString(R.string.incoming_call))
             builder.setContentText(contact.displayName)
             builder.setSmallIcon(R.drawable.status_on)
             builder.setAutoCancel(false)
@@ -257,7 +243,25 @@ class MessagingHolder {
             builder.setDefaults(Notification.FLAG_ONGOING_EVENT)
             builder.setTimeoutAfter(10000)
             builder.setDeleteIntent(declinePendingIntent)
-            notificationManager.notify(notificationId, builder.build())
+
+            // This convoluted scheme is necessary to keep heads up notification up on some phones
+            // like Huawei. See https://stackoverflow.com/a/61593818.
+            if (calledFromService) {
+                val notification = builder.build()
+                notificationManager.notify(notificationId, notification)
+                return
+            }
+            val serviceIntent = Intent(context, IncomingCallNotificationService::class.java)
+            val intentExtras = Bundle()
+            intentExtras.putString("signal", serializedSignal)
+            serviceIntent.putExtras(intentExtras)
+            val pendingServiceIntent = PendingIntent.getService(
+                context,
+                notificationId,
+                serviceIntent,
+                0
+            )
+            context.startService(serviceIntent)
         }
     }
 
@@ -268,6 +272,17 @@ class MessagingHolder {
         val hue = maxOf(0.toFloat(), hash / maxHash * 360)
         val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
         return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
+    }
+
+    fun declineAndDismiss(
+        context: Context,
+        notificationManager: NotificationManager,
+        signal: WebRTCSignal
+    ) {
+        callNotificationIds.remove(signal.senderId)?.let { notificationId ->
+            notificationManager.cancel(notificationId)
+        }
+        context.stopService(Intent(context, IncomingCallNotificationService::class.java))
     }
 
     private fun paintAvatar(contact: Model.Contact, customNotification: RemoteViews) {
