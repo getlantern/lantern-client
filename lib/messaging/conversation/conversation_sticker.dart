@@ -2,13 +2,8 @@ import 'package:lantern/messaging/messaging.dart';
 
 class ConversationSticker extends StatelessWidget {
   final Contact contact;
-  final bool isPendingIntroduction;
 
-  const ConversationSticker({
-    Key? key,
-    required this.contact,
-    required this.isPendingIntroduction,
-  }) : super(key: key);
+  const ConversationSticker(this.contact);
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +23,14 @@ class ConversationSticker extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        !isPendingIntroduction ? _fullyAddedIcon() : _partiallyAddedIcon(),
+        _fullyAddedIcon(),
         Column(
           children: [
             Padding(
-                padding: const EdgeInsetsDirectional.only(
-                    start: 16, top: 8, bottom: 8),
-                child: !isPendingIntroduction
-                    ? _fullyAddedText()
-                    : _partiallyAddedText()),
+              padding: const EdgeInsetsDirectional.only(
+                  start: 16, top: 8, bottom: 8),
+              child: _fullyAddedText(),
+            ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(vertical: 8.0),
             //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
@@ -45,15 +39,6 @@ class ConversationSticker extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  CText _partiallyAddedText() {
-    return CText('banner_intro_waiting'.i18n.fill([contact.displayName]),
-        style: tsBody2.copiedWith(color: grey5), textAlign: TextAlign.center);
-  }
-
-  CAssetImage _partiallyAddedIcon() {
-    return const CAssetImage(path: ImagePaths.pending, color: Colors.black);
   }
 
   CText _fullyAddedText() {
