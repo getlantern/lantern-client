@@ -76,7 +76,7 @@ class Reply extends StatelessWidget {
 
   String replyToDisplayName(String contactIdToMatch, Contact contact) {
     return contactIdToMatch == contact.contactId.id
-        ? contact.displayName
+        ? contact.displayNameOrFallback
         : 'me'.i18n;
   }
 
@@ -124,7 +124,9 @@ class Reply extends StatelessWidget {
                   if (!isPreview) const Spacer(),
                   CText(
                     wasRemotelyDeleted
-                        ? 'message_deleted'.i18n.fill([contact.displayName])
+                        ? 'message_deleted'
+                            .i18n
+                            .fill([contact.displayNameOrFallback])
                         : isAttachment
                             ? attachmentText().i18n
                             : message.text,

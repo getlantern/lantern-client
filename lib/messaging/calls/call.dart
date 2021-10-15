@@ -97,14 +97,14 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     child: Column(
                       children: [
                         CustomAvatar(
-                            id: widget.contact.contactId.id,
-                            displayName: widget.contact.displayName,
+                            messengerId: widget.contact.contactId.id,
+                            displayName: widget.contact.displayNameOrFallback,
                             customColor: grey5),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(top: 10),
                           child: CText(
-                            widget.contact.displayName.isNotEmpty
-                                ? widget.contact.displayName
+                            widget.contact.displayNameOrFallback.isNotEmpty
+                                ? widget.contact.displayNameOrFallback
                                 : widget.contact.contactId.id,
                             style: tsHeading1.copiedWith(color: white),
                           ),

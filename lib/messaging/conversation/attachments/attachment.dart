@@ -241,7 +241,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: CText(
-        widget.contact.displayName,
+        widget.contact.displayNameOrFallback,
         maxLines: 1,
         style: tsHeading3.copiedWith(color: white),
       ),
