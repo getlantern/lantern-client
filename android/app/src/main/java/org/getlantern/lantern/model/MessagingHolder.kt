@@ -1,18 +1,12 @@
 package org.getlantern.lantern.model
 
-import android.app.Application
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.media.AudioAttributes
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
@@ -22,12 +16,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
-import io.lantern.messaging.Schema
-import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.path
+import io.lantern.messaging.*
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -116,7 +105,7 @@ class MessagingHolder {
                 )
                 val openMainActivity = PendingIntent.getActivity(
                     application, notificationId, mainActivityIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_ONE_SHOT
                 )
                 val builder = NotificationCompat.Builder(
                     application,
@@ -145,7 +134,7 @@ class MessagingHolder {
         }
     }
 
-    private fun declineAndDismiss(
+    fun declineAndDismiss(
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
@@ -168,25 +157,36 @@ class MessagingHolder {
                 callNotificationIds[signal.senderId] = notificationId
             }
 
+            val serializedSignal = Json.gson.toJson(signal)
+
             // decline intent
             val declineIntentExtras = Bundle()
             val declineIntent =
-                Intent(application, MainActivity::class.java)
-            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            declineIntentExtras.putInt("dismissNotificationId", notificationId)
+                Intent(application, DeclineCallBroadcastReceiver::class.java)
+            declineIntentExtras.putString("signal", serializedSignal)
+            declineIntent.putExtras(declineIntentExtras)
 
             // accept intent
             val acceptIntentExtras = Bundle()
             val acceptIntent =
                 Intent(application, MainActivity::class.java)
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            acceptIntentExtras.putString("signal", Json.gson.toJson(signal))
+            acceptIntentExtras.putString("signal", serializedSignal)
             acceptIntentExtras.putBoolean("accepted", true)
             acceptIntent.putExtras(acceptIntentExtras)
 
-            // TODO: declinePendingIntent should be a broadcast?
-            val declinePendingIntent = PendingIntent.getActivity(application, notificationId, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val acceptPendingIntent = PendingIntent.getActivity(application, notificationId, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val declinePendingIntent = PendingIntent.getBroadcast(
+                application,
+                notificationId,
+                declineIntent,
+                PendingIntent.FLAG_ONE_SHOT
+            )
+            val acceptPendingIntent = PendingIntent.getActivity(
+                application,
+                notificationId,
+                acceptIntent,
+                PendingIntent.FLAG_ONE_SHOT
+            )
 
             val builder = NotificationCompat.Builder(
                 application,
@@ -238,20 +238,25 @@ class MessagingHolder {
                 builder.addAction(acceptAction)
             }
 
-            // Set misc builder flags
-            // TODO: Probably don't need all of these
+            // set as a full screen intent to make sure phone doesn't auto-dismiss
+            // see https://stackoverflow.com/a/61593818
+            val dummyIntent = PendingIntent.getActivity(
+                application,
+                0,
+                Intent(),
+                0
+            )
+//            builder.setFullScreenIntent(dummyIntent, true)
             builder.setContentTitle(application.getString(R.string.incoming_call))
-            builder.setTicker("CALL_STATUS")
             builder.setContentText(contact.displayName)
             builder.setSmallIcon(R.drawable.status_on)
-            builder.setOngoing(true)
             builder.setAutoCancel(false)
             builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH)
+            builder.priority = NotificationCompat.PRIORITY_MAX
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
-            builder.setDefaults(Notification.DEFAULT_ALL)
+            builder.setDefaults(Notification.FLAG_ONGOING_EVENT)
             builder.setTimeoutAfter(10000)
-
+            builder.setDeleteIntent(declinePendingIntent)
             notificationManager.notify(notificationId, builder.build())
         }
     }
