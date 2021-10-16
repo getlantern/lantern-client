@@ -20,7 +20,6 @@ import io.lantern.messaging.*
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.service.IncomingCallNotificationService
 import org.getlantern.lantern.util.Json
 import java.io.File
 import java.math.BigInteger

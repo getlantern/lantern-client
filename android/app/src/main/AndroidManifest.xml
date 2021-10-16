@@ -71,13 +71,6 @@
             android:name=".service.LanternService_">
         </service>
 
-        <service
-            android:enabled="true"
-            android:exported="false"
-            android:stopWithTask="false"
-            android:name=".service.IncomingCallNotificationService">
-        </service>
-
         <receiver android:name = ".model.DeclineCallBroadcastReceiver" />
 
         <activity
