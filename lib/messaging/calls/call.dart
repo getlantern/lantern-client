@@ -112,7 +112,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                       children: [
                         const Padding(padding: EdgeInsetsDirectional.all(80)),
                         CustomAvatar(
-                            id: widget.contact.contactId.id,
+                            messengerId: widget.contact.contactId.id,
                             displayName: widget.contact.displayName,
                             customColor: grey5,
                             radius: 80),

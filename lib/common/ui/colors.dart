@@ -25,8 +25,9 @@ Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
 
 // Avatars
-Color getAvatarColor({required double hue, bool inverted = false}) =>
-    HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
+Color getAvatarColor(double hue, {bool inverted = false}) {
+  return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
+}
 
 // Indicator
 Color indicatorGreen = HexColor('#00A83E');

@@ -1,11 +1,17 @@
 import 'messaging.dart';
 
+import 'package:crypto/crypto.dart';
+
 class CustomAvatar extends StatelessWidget {
   const CustomAvatar(
-      {Key? key, this.id, this.displayName, this.customColor, this.radius})
+      {Key? key,
+      required this.messengerId,
+      this.displayName,
+      this.customColor,
+      this.radius})
       : super(key: key);
 
-  final String? id;
+  final String messengerId;
   final String? displayName;
   final Color? customColor;
   final double? radius;
@@ -18,12 +24,9 @@ class CustomAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var hash = id!.hashCode;
-    var hue = max(0.0, hash / maxHash * 360);
-
     return CircleAvatar(
       radius: radius,
-      backgroundColor: customColor ?? getAvatarColor(hue: hue),
+      backgroundColor: customColor ?? getAvatarColor(sha1Hue(messengerId)),
       child: Transform.translate(
         offset: Offset(0.0, radius != null ? 10.0 : 0.0),
         child: Text(displayName.toString().getInitials().toUpperCase(),
@@ -51,4 +54,14 @@ extension StringExtensions on String {
         // display name is a single string
         : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);
   }
+}
+
+final maxSha1Hash = BigInt.from(2).pow(160);
+final numHues = BigInt.from(360);
+
+double sha1Hue(String value) {
+  var bytes = utf8.encode(value);
+  var digest = sha1.convert(bytes);
+  return (BigInt.parse(digest.toString(), radix: 16) * numHues ~/ maxSha1Hash)
+      .toDouble();
 }

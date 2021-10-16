@@ -23,6 +23,10 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.service.IncomingCallNotificationService
 import org.getlantern.lantern.util.Json
 import java.io.File
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -31,8 +35,11 @@ internal const val defaultNotificationChannelId = "default"
 class MessagingHolder {
     lateinit var messaging: Messaging
     private val contactNotificationIds = HashMap<Model.ContactId, Int>()
-    private val callNotificationIds = HashMap<String, Int>()
     private var nextNotificationId = 5000
+    private val incomingCalls = HashMap<String, Notification>()
+    private val ringer = Executors.newSingleThreadScheduledExecutor { r ->
+        Thread(r, "ringer-thread")
+    }
 
     fun init(application: Application) {
         val lanternDir = File(application.filesDir, ".lantern")
@@ -150,24 +157,24 @@ class MessagingHolder {
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
-            val calledFromService = context is IncomingCallNotificationService
-            var notificationId = if (calledFromService) nextNotificationId else nextNotificationId++
-            callNotificationIds[signal.senderId] = notificationId
+            var notificationId = nextNotificationId++
 
             // decline intent
-            val declineIntentExtras = Bundle()
             val declineIntent =
                 Intent(context, DeclineCallBroadcastReceiver::class.java)
+            val declineIntentExtras = Bundle()
             declineIntentExtras.putString("signal", serializedSignal)
+            declineIntentExtras.putInt("notificationId", notificationId)
             declineIntent.putExtras(declineIntentExtras)
 
-            // accept intent
+            // accept intent - we use Bundle() since we are sending two params
             val acceptIntentExtras = Bundle()
             val acceptIntent =
                 Intent(context, MainActivity::class.java)
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
             acceptIntentExtras.putString("signal", serializedSignal)
             acceptIntentExtras.putBoolean("accepted", true)
+            acceptIntentExtras.putInt("notificationId", notificationId)
             acceptIntent.putExtras(acceptIntentExtras)
 
             val declinePendingIntent = PendingIntent.getBroadcast(
@@ -213,7 +220,7 @@ class MessagingHolder {
                 )
                 notificationChannel.enableVibration(true)
                 notificationChannel.enableLights(true)
-                // TODO: Confirm - handling ringtone on Dart side for now
+                // TODO: Handle ringtone here instead of in Dart
 //            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
 //                val ringtoneAttrs = AudioAttributes.Builder()
 //                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
@@ -244,34 +251,25 @@ class MessagingHolder {
             builder.setTimeoutAfter(10000)
             builder.setDeleteIntent(declinePendingIntent)
 
-            // This convoluted scheme is necessary to keep heads up notification up on some phones
-            // like Huawei. See https://stackoverflow.com/a/61593818.
-            if (calledFromService) {
-                val notification = builder.build()
-                notificationManager.notify(notificationId, notification)
-                return
+            val notification = builder.build()
+            val ring = object: Runnable {
+                override fun run() {
+                    notificationManager.notify(notificationId, notification)
+                    // on some phones like Huawei, the heads up notification only stays heads up
+                    // for a few seconds, so we re-notify every second while ringing in order to
+                    // keep it heads up
+                    ringer.schedule({
+                        if (incomingCalls.containsKey(signal.senderId)) {
+                            run()
+                        }
+                    }, 1, TimeUnit.SECONDS)
+                }
             }
-            val serviceIntent = Intent(context, IncomingCallNotificationService::class.java)
-            val intentExtras = Bundle()
-            intentExtras.putString("signal", serializedSignal)
-            serviceIntent.putExtras(intentExtras)
-            val pendingServiceIntent = PendingIntent.getService(
-                context,
-                notificationId,
-                serviceIntent,
-                0
-            )
-            context.startService(serviceIntent)
+            ringer.execute {
+                incomingCalls[signal.senderId] = notification
+                ring.run()
+            }
         }
-    }
-
-    // TODO: fix when we merge messaging-android updates
-    private fun getAvatarBgColor(id: String): Int {
-        val hash = id.hashCode()
-        val maxHash = 2147483647.rem(2).toFloat()
-        val hue = maxOf(0.toFloat(), hash / maxHash * 360)
-        val color = floatArrayOf(hue, 1.toFloat(), 0.3.toFloat())
-        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
     }
 
     fun declineAndDismiss(
@@ -279,10 +277,11 @@ class MessagingHolder {
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
-        callNotificationIds.remove(signal.senderId)?.let { notificationId ->
-            notificationManager.cancel(notificationId)
+        ringer.execute {
+            incomingCalls.remove(signal.senderId)?.let { notification ->
+                notificationManager.cancel(notification.extras.getInt("notificationId"))
+            }
         }
-        context.stopService(Intent(context, IncomingCallNotificationService::class.java))
     }
 
     private fun paintAvatar(contact: Model.Contact, customNotification: RemoteViews) {
@@ -300,10 +299,25 @@ class MessagingHolder {
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
-        canvas.drawText(contact.displayName.take(2).toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
+        canvas.drawText(contact.displayName.take(2).toUpperCase(), 125.toFloat(), 250.toFloat(), paintAv)
 
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
+    }
+
+    private fun getAvatarBgColor(id: String): Int {
+        val color = floatArrayOf(id.sha1(360).toFloat(), 1.toFloat(), 0.3.toFloat())
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(color), 255)
+    }
+
+    /**
+     * Calculates a SHA1 hash of the string's UTF-8 representation, coerced to a scaled integer between
+     * 0 and max inclusive.
+     */
+    fun String.sha1(max: Long): Long {
+        val maxSha1Hash = BigInteger.valueOf(2).pow(160)
+        val bytes = MessageDigest.getInstance("SHA-1").digest(this.toByteArray(Charsets.UTF_8))
+        return BigInteger(1, bytes).times(BigInteger.valueOf(max)).div(maxSha1Hash).toLong()
     }
 }
 

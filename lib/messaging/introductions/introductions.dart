@@ -15,7 +15,7 @@ class Introductions extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: CText('introductions_info'.i18n, style: tsBody1),
               ),
-              Expanded(child: model.introductionsToContact(builder: (context,
+              Expanded(child: model.bestIntroductions(builder: (context,
                   Iterable<PathAndValue<StoredMessage>> introductionPaths,
                   Widget? child) {
                 // group by the contactId of the user who made the introduction
@@ -42,7 +42,7 @@ class Introductions extends StatelessWidget {
                                           start: 4),
                                       child: CText(
                                           'introduced'.i18n.fill([
-                                            introductor.displayName
+                                            introductor.displayNameOrFallback
                                           ]).toUpperCase(),
                                           maxLines: 1,
                                           style: tsOverline),
@@ -77,8 +77,10 @@ class Introductions extends StatelessWidget {
                                                                   .toInt(),
                                                               color: black),
                                                       child: CustomAvatar(
-                                                          id: value.introduction
-                                                              .to.id,
+                                                          messengerId: value
+                                                              .introduction
+                                                              .to
+                                                              .id,
                                                           displayName: value
                                                               .introduction
                                                               .displayName),

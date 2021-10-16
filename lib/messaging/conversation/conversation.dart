@@ -319,9 +319,7 @@ class ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
-      final title = contact.displayName.isNotEmpty
-          ? contact.displayName
-          : contact.contactId.id;
+      final title = contact.displayNameOrFallback;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -335,7 +333,8 @@ class ConversationState extends State<Conversation>
               Padding(
                 padding: const EdgeInsetsDirectional.only(end: 16),
                 child: CustomAvatar(
-                    id: contact.contactId.id, displayName: contact.displayName),
+                    messengerId: contact.contactId.id,
+                    displayName: contact.displayNameOrFallback),
               ),
               Expanded(
                 child: Column(
@@ -453,22 +452,7 @@ class ConversationState extends State<Conversation>
                       const BorderRadius.all(Radius.circular(borderRadius))),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: model.introductionsToContact(
-                  builder: (context,
-                      Iterable<PathAndValue<StoredMessage>> introductions,
-                      Widget? child) {
-                    final isPendingIntroduction = !contact.hasReceivedMessage &&
-                        introductions
-                            .toList()
-                            .where((intro) =>
-                                intro.value.introduction.to ==
-                                contact.contactId)
-                            .isNotEmpty;
-                    return ConversationSticker(
-                        contact: contact,
-                        isPendingIntroduction: isPendingIntroduction);
-                  },
-                ),
+                child: ConversationSticker(contact),
               ),
             ),
           );
