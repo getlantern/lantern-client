@@ -224,9 +224,8 @@ class MessageBubble extends StatelessWidget {
                                       start: 8, end: 8, bottom: 4),
                                   child: MarkdownBody(
                                     data: wasRemotelyDeleted
-                                        ? 'message_deleted'
-                                            .i18n
-                                            .fill([contact.displayName])
+                                        ? 'message_deleted'.i18n.fill(
+                                            [contact.displayNameOrFallback])
                                         : message.text,
                                     onTapLink: (String text, String? href,
                                         String title) async {

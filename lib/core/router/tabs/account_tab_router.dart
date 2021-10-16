@@ -6,7 +6,6 @@ import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
-import 'package:lantern/account/messaging/display_name.dart';
 import 'package:lantern/account/pro_account.dart';
 import 'package:lantern/account/settings.dart';
 
@@ -68,13 +67,6 @@ const account_tab_router = CustomRoute<void>(
         page: ApproveDevice,
         name: 'ApproveDevice',
         path: 'approveDevice',
-        transitionsBuilder: defaultTransition,
-        durationInMilliseconds: defaultTransitionMillis,
-        reverseDurationInMilliseconds: defaultTransitionMillis),
-    CustomRoute<void>(
-        page: DisplayName,
-        name: 'DisplayName',
-        path: 'displayName',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

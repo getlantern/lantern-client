@@ -187,8 +187,8 @@ class SuggestionBuilder extends StatelessWidget {
               contact: suggestion.value,
               index: index,
               leading: CustomAvatar(
-                  id: suggestion.value.contactId.id,
-                  displayName: suggestion.value.displayName),
+                  messengerId: suggestion.value.contactId.id,
+                  displayName: suggestion.value.displayNameOrFallback),
               title: suggestion.snippet,
               onTap: () async => await context.pushRoute(
                   Conversation(contactId: suggestion.value.contactId)),
@@ -207,9 +207,9 @@ class SuggestionBuilder extends StatelessWidget {
                   contact: contact,
                   index: index,
                   leading: CustomAvatar(
-                      id: suggestion.value.contactId.id,
-                      displayName: contact.displayName),
-                  title: contact.displayName.toString(),
+                      messengerId: suggestion.value.contactId.id,
+                      displayName: contact.displayNameOrFallback),
+                  title: contact.displayNameOrFallback,
                   subTitle: suggestion.snippet,
                   onTap: () async => await context.pushRoute(Conversation(
                       contactId: suggestion.value.contactId,
