@@ -1,5 +1,5 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
@@ -29,7 +29,7 @@ class Conversation extends StatefulWidget {
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
-  static final dayFormat = DateFormat.yMMMMd();
+  static final dayFormat = intl.DateFormat.yMMMMd();
 
   late MessagingModel model;
   bool reactingWithEmoji = false;
@@ -380,7 +380,8 @@ class ConversationState extends State<Conversation>
                 Flexible(
                   child: dismissKeyboardsOnTap(
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding:
+                          const EdgeInsetsDirectional.only(start: 16, end: 16),
                       child: buildList(contact),
                     ),
                   ),
@@ -601,8 +602,9 @@ class ConversationState extends State<Conversation>
   // Renders Emoji button, message bar and recording icon
   // Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
+    final isLTR = Directionality.of(context) == TextDirection.ltr;
     return Stack(
-      alignment: Alignment.bottomRight,
+      alignment: isLTR ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         CListTile(
           height: messageBarHeight,
@@ -692,7 +694,8 @@ class ConversationState extends State<Conversation>
               ? Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding:
+                          const EdgeInsetsDirectional.only(top: 8, bottom: 8),
                       child:
                           VerticalDivider(thickness: 1, width: 1, color: grey3),
                     ),

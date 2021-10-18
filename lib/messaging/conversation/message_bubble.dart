@@ -68,6 +68,8 @@ class MessageBubble extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
+      textDirection:
+          TextDirection.ltr, // enforce LTR for the inbound/outbound distinction
       mainAxisAlignment:
           isOutbound ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
@@ -129,7 +131,6 @@ class MessageBubble extends StatelessWidget {
     }
 
     final padding = width / 2;
-
     final reactionsWidget = SizedBox(
       width: width,
       height: 24,
@@ -143,7 +144,6 @@ class MessageBubble extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center, children: children),
       ),
     );
-
     return Stack(
       alignment: isOutbound ? Alignment.topLeft : Alignment.topRight,
       children: [
