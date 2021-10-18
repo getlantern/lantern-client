@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
@@ -213,13 +215,14 @@ class MessagingHolder {
                 )
                 notificationChannel.enableVibration(true)
                 notificationChannel.enableLights(true)
-                // TODO: Handle ringtone here instead of in Dart
-//            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-//                val ringtoneAttrs = AudioAttributes.Builder()
-//                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                    .build()
-//                notificationChannel.setSound(ringtone, ringtoneAttrs)
+
+                // Incoming call ringtone handling
+                val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                val ringtoneAttrs = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+                notificationChannel.setSound(ringtone, ringtoneAttrs)
                 builder.setChannelId(callNotificationChannelId)
                 notificationManager.createNotificationChannel(
                     notificationChannel
@@ -247,6 +250,7 @@ class MessagingHolder {
             val notification = builder.build()
             val ring = object: Runnable {
                 override fun run() {
+                    // build notification
                     notificationManager.notify(notificationId, notification)
                     // on some phones like Huawei, the heads up notification only stays heads up
                     // for a few seconds, so we re-notify every second while ringing in order to
@@ -270,6 +274,9 @@ class MessagingHolder {
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
+        // Stop ringtone
+        notificationManager.deleteNotificationChannel(callNotificationChannelId)
+
         ringer.execute {
             incomingCalls.remove(signal.senderId)?.let { notification ->
                 notificationManager.cancel(notification.extras.getInt("notificationId"))
