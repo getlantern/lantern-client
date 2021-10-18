@@ -22,17 +22,18 @@ class Waveform extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLTR = Directionality.of(context) == TextDirection.ltr;
     return SizedBox(
       height: height,
       width: width,
       child: CustomPaint(
         painter: _BarsPainter(
-          bars: bars,
-          height: height,
-          progressedTo: width * progressPercentage / 100,
-          initialColor: initialColor,
-          progressColor: progressColor,
-        ),
+            bars: bars,
+            height: height,
+            progressedTo: width * progressPercentage / 100,
+            initialColor: initialColor,
+            progressColor: progressColor,
+            isLTR: isLTR),
       ),
     );
   }
@@ -68,14 +69,16 @@ class _BarsPainter extends CustomPainter {
   final double progressedTo;
   final Paint initialPaint;
   final Paint progressPaint;
+  final bool isLTR = false;
 
-  _BarsPainter(
-      {required this.bars,
-      required this.height,
-      required this.progressedTo,
-      required Color initialColor,
-      required Color progressColor})
-      : initialPaint = Paint()
+  _BarsPainter({
+    required this.bars,
+    required this.height,
+    required this.progressedTo,
+    required Color initialColor,
+    required Color progressColor,
+    required bool isLTR,
+  })  : initialPaint = Paint()
           ..color = initialColor
           ..style = PaintingStyle.fill,
         progressPaint = Paint()
@@ -89,12 +92,19 @@ class _BarsPainter extends CustomPainter {
       var barHeight = min(-1 * bars[i], -1).toDouble();
       canvas.drawRRect(
         RRect.fromRectAndCorners(
-          Rect.fromLTWH(
-            startingPosition,
-            height,
-            barWidth,
-            barHeight,
-          ),
+          isLTR
+              ? Rect.fromLTWH(
+                  startingPosition,
+                  height,
+                  barWidth,
+                  barHeight,
+                )
+              : Rect.fromLTWH(
+                  size.width - startingPosition,
+                  height,
+                  barWidth,
+                  barHeight,
+                ),
           topLeft: const Radius.circular(1),
           topRight: const Radius.circular(1),
         ),
