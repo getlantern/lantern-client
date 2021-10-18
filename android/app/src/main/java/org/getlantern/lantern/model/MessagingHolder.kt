@@ -158,6 +158,7 @@ class MessagingHolder {
             val declineIntent =
                 Intent(context, DeclineCallBroadcastReceiver::class.java)
             val declineIntentExtras = Bundle()
+            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
             declineIntentExtras.putString("signal", serializedSignal)
             declineIntentExtras.putInt("notificationId", notificationId)
             declineIntent.putExtras(declineIntentExtras)
@@ -269,17 +270,16 @@ class MessagingHolder {
         }
     }
 
+    // remove notification, stop ringtone
     fun declineAndDismiss(
         context: Context,
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
-        // Stop ringtone
-        notificationManager.deleteNotificationChannel(callNotificationChannelId)
-
         ringer.execute {
             incomingCalls.remove(signal.senderId)?.let { notification ->
                 notificationManager.cancel(notification.extras.getInt("notificationId"))
+                RingtoneManager(context).stopPreviousRingtone()
             }
         }
     }

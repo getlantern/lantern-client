@@ -137,16 +137,25 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     }
 
     private fun navigateForIntent(intent: Intent) {
+        // handles text messaging intent
         intent.getByteArrayExtra("contactForConversation")?.let { contact ->
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
 
+        // handles incoming call intent
         intent.getStringExtra("signal")?.let { signal ->
             val accepted = intent.getBooleanExtra("accepted", false)
-            messagingModel.sendSignal(Json.gson.fromJson(signal, WebRTCSignal::class.java), accepted)
+            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
+            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
+            // pass this on to Kotlin and then Dart messaging model
+            messagingModel.sendSignal(webRTCSignal, accepted)
+            // if we accepted, remove notification and stop ringtone
+            if (accepted) {
+                LanternApp.messaging.declineAndDismiss(context, notificationManager, webRTCSignal)
+            }
             intent.removeExtra("signal")
-            intent.removeExtra("accepted") // TODO: we could also do intent.replaceExtras(Bundle())
+            intent.removeExtra("accepted")
         }
     }
 

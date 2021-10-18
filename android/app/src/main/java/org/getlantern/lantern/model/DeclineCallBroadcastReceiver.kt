@@ -20,5 +20,7 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
                 Json.gson.fromJson(signal, WebRTCSignal::class.java)
             )
         }
+        intent.removeExtra("signal")
+        intent.removeExtra("notificationId")
     }
 }
