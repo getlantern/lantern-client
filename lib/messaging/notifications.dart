@@ -25,9 +25,8 @@ class Notifications {
         switch (payload.type) {
           case PayloadType.ringing:
             Map<String, dynamic> data = payload.data;
-            messagingModel.signaling.onMessage(
-                data['peerId'], data['messageJson'], false,
-                ring: false);
+            messagingModel.signaling.onMessage(data['peerId'],
+                data['messageJson'], false); // false for the 'accepted' var
             break;
         }
       }

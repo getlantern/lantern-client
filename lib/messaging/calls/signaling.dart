@@ -1,4 +1,3 @@
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -170,8 +169,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson, bool accepted,
-      {bool ring = true}) async {
+  void onMessage(String peerId, String messageJson, bool accepted) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {
@@ -181,17 +179,12 @@ class Signaling extends ValueNotifier<SignalingState> {
           var media = data['media'];
           var sessionId = data['session_id'];
 
-          if (ring) {
-            unawaited(FlutterRingtonePlayer.playRingtone());
-          }
-
           // IMPORTANT - instead of immediately accepting the offer, we first
           // prompt the user. This prevents the system from transmitting audio
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
 
           if (accepted) {
-            await FlutterRingtonePlayer.stop();
             var newSession = await _createSession(
                 isInitiator: false,
                 session: _sessions[sessionId],
@@ -276,7 +269,6 @@ class Signaling extends ValueNotifier<SignalingState> {
             notifyListeners();
           }
           closeAlertDialog?.call();
-          unawaited(FlutterRingtonePlayer.stop());
           unawaited(_closeSession(session));
         }
         break;
