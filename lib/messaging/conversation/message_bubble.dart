@@ -148,10 +148,11 @@ class MessageBubble extends StatelessWidget {
       alignment: isOutbound ? Alignment.topLeft : Alignment.topRight,
       children: [
         Padding(
-          padding: EdgeInsetsDirectional.only(
+          padding: EdgeInsets.only(
+              // EdgeInsetsDirectional creates an extra padding here we don't want
               top: 12,
-              start: isOutbound ? padding : 0,
-              end: isInbound ? padding : 0),
+              left: isOutbound ? padding : 0,
+              right: isInbound ? padding : 0),
           child: child,
         ),
         reactionsWidget,
@@ -276,8 +277,8 @@ class MessageBubble extends StatelessWidget {
                                       : MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 8, end: 8),
                                       child: StatusRow(isOutbound, message),
                                     ),
                                   ]),
