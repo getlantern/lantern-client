@@ -490,4 +490,6 @@
     <string name="incoming_call">Incoming Call</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+    <string name="new_message">New Message</string>
+    <string name="from_sender">From %1$s</string>
 </resources>

@@ -120,8 +120,9 @@ class MessagingHolder {
                     application,
                     defaultNotificationChannelId
                 )
-                builder.setContentTitle("New Message") // TODO: localize me
-                builder.setContentText("from ${contact.displayName ?: contact.contactId.id}")
+                builder.setContentTitle(application.getString(R.string.new_message))
+                val contentString = application.getString(R.string.from_sender, contact.displayName ?: contact.contactId.id)
+                builder.setContentText(contentString)
                 builder.setSmallIcon(R.drawable.status_on)
                 builder.setAutoCancel(true)
                 builder.setOnlyAlertOnce(true)
