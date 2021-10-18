@@ -146,12 +146,6 @@ class MessagingHolder {
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
-        val intent = Intent(context, IncomingCallNotificationService::class.java)
-        val intentExtras = Bundle()
-        intentExtras.putString("signal", Json.gson.toJson(signal))
-        intent.putExtras(intentExtras)
-        context.startService(intent)
-
         val serializedSignal = Json.gson.toJson(signal)
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
