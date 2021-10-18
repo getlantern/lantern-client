@@ -22,7 +22,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 18),
+            padding: const EdgeInsetsDirectional.only(start: 18),
             child: AudioWidget(
               controller: audioController,
               initialColor: Colors.black,
@@ -35,7 +35,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
           onPressed: onCancelRecording,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
           child: VerticalDivider(thickness: 1, width: 1, color: grey3),
         ),
         IconButton(
