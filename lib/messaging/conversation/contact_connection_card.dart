@@ -19,8 +19,13 @@ class ContactConnectionCard extends StatelessWidget {
     final model = context.watch<MessagingModel>();
     final introduction = message.introduction;
     return Column(
-      crossAxisAlignment:
-          outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: isLTR(context)
+          ? outbound
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start
+          : outbound
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
         LayoutBuilder(
