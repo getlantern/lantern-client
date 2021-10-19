@@ -112,7 +112,10 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                     aspectRatio: controller!.value.aspectRatio,
                     child: VideoPlayer(controller!),
                   ),
-                  VideoProgressIndicator(controller!, allowScrubbing: true),
+                  mirrorBy180deg(
+                      context: context,
+                      child: VideoProgressIndicator(controller!,
+                          allowScrubbing: true)),
                 ],
               );
             },
