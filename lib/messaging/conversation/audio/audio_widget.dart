@@ -154,7 +154,6 @@ class AudioWidget extends StatelessWidget {
         if (timeRemainingAlignment != null) {
           return Column(
             crossAxisAlignment: timeRemainingAlignment!,
-            textDirection: TextDirection.ltr,
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 4),

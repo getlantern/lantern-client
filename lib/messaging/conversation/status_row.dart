@@ -46,13 +46,10 @@ class StatusRow extends StatelessWidget {
                       padding: const EdgeInsetsDirectional.only(start: 4),
                       child: message.status ==
                               StoredMessage_DeliveryStatus.COMPLETELY_SENT
-                          ? mirrorBy180deg(
-                              context: context,
-                              child: CAssetImage(
-                                path: ImagePaths.done_all,
-                                size: 10,
-                                color: color,
-                              ),
+                          ? CAssetImage(
+                              path: ImagePaths.done_all,
+                              size: 10,
+                              color: color,
                             )
                           : message.status ==
                                   StoredMessage_DeliveryStatus.SENDING
