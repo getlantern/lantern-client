@@ -39,7 +39,10 @@ class MessageBarPreviewRecording extends StatelessWidget {
           child: VerticalDivider(thickness: 1, width: 1, color: grey3),
         ),
         IconButton(
-          icon: const CAssetImage(path: ImagePaths.send_rounded),
+          icon: mirrorBy180deg(
+            context: context,
+            child: CAssetImage(path: ImagePaths.send_rounded, color: pink4),
+          ),
           onPressed: onSend,
         ),
       ],
