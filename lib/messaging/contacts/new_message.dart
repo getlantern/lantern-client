@@ -45,8 +45,11 @@ class _NewMessageState extends State<NewMessage> {
                   color: black,
                 ),
                 content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
-                trailing: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right,
+                trailing: mirrorBy180deg(
+                  context: context,
+                  child: const CAssetImage(
+                    path: ImagePaths.keyboard_arrow_right,
+                  ),
                 ),
                 onTap: () async => await context.router
                     .push(
@@ -94,8 +97,11 @@ class _NewMessageState extends State<NewMessage> {
                 ),
                 content:
                     CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
-                trailing: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right,
+                trailing: mirrorBy180deg(
+                  context: context,
+                  child: const CAssetImage(
+                    path: ImagePaths.keyboard_arrow_right,
+                  ),
                 ),
                 onTap: () async => await context.pushRoute(const Introduce()),
               ),
