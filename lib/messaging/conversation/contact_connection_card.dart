@@ -32,7 +32,7 @@ class ContactConnectionCard extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           return Container(
             width: constraints.maxWidth,
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsetsDirectional.only(top: 10),
             child: ListTile(
               leading: CustomAvatar(
                   messengerId: contact.contactId.id,
@@ -52,20 +52,22 @@ class ContactConnectionCard extends StatelessWidget {
                                 color: outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor),
-                          Icon(
-                              (message.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? Icons.info_outline_rounded
-                                  : Icons.keyboard_arrow_right_outlined,
-                              size: (message.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? 20.0
-                                  : 30.0,
-                              color: outbound
-                                  ? outboundMsgColor
-                                  : inboundMsgColor),
+                          mirrorBy180deg(
+                              context: context,
+                              child: CAssetImage(
+                                  path: (message.introduction.status ==
+                                          IntroductionDetails_IntroductionStatus
+                                              .PENDING)
+                                      ? ImagePaths.info
+                                      : ImagePaths.keyboard_arrow_right,
+                                  size: (message.introduction.status ==
+                                          IntroductionDetails_IntroductionStatus
+                                              .PENDING)
+                                      ? 20.0
+                                      : 30.0,
+                                  color: outbound
+                                      ? outboundMsgColor
+                                      : inboundMsgColor)),
                         ],
                       ),
                     ),
