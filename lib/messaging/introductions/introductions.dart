@@ -61,7 +61,7 @@ class Introductions extends StatelessWidget {
                                                     contact: introductor,
                                                     index: index,
                                                     title: value.introduction
-                                                        .displayName,
+                                                        .displayNameOrFallback,
                                                     leading: CBadge(
                                                       showBadge: true,
                                                       top: 25,
@@ -83,7 +83,7 @@ class Introductions extends StatelessWidget {
                                                               .id,
                                                           displayName: value
                                                               .introduction
-                                                              .displayName),
+                                                              .displayNameOrFallback),
                                                     ),
                                                     trailing: FittedBox(
                                                         child: Row(
@@ -182,7 +182,7 @@ class Introductions extends StatelessWidget {
                                                                           'introduction_approved'
                                                                               .i18n
                                                                               .fill([
-                                                                            value.introduction.displayName
+                                                                            value.introduction.displayNameOrFallback
                                                                           ]),
                                                                           style:
                                                                               tsBody1Color(white),
