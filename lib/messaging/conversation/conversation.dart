@@ -442,21 +442,32 @@ class ConversationState extends State<Conversation>
     });
   }
 
-  Widget buildConversationSticker(Contact contact) => LayoutBuilder(
+  Widget buildConversationSticker(Contact contact, int listItemsLength) =>
+      LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return FittedBox(
-            fit: BoxFit.none,
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              decoration: BoxDecoration(
-                  color: white,
-                  border: Border.all(color: grey3),
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(borderRadius))),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ConversationSticker(contact),
-              ),
+          return Container(
+            height: 350, // TODO: pin this to top?
+            child: Column(
+              children: [
+                Container(
+                    margin:
+                        const EdgeInsetsDirectional.only(top: 40, bottom: 8),
+                    child: SvgPicture.asset(
+                      ImagePaths.sticker_figure,
+                      color: getAvatarColor(sha1Hue(contact.contactId.id)),
+                    )),
+                Container(
+                  margin: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                  child: CText(
+                      'start_of_your_history'
+                          .i18n
+                          .fill([contact.displayNameOrFallback]),
+                      style: tsBody2.copiedWith(color: grey5)),
+                ),
+                Container(
+                    margin: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                    child: ConversationSticker(contact)),
+              ],
             ),
           );
         },
@@ -496,7 +507,7 @@ class ConversationState extends State<Conversation>
         itemBuilder: (context, index) {
           if (index == listItems.length) {
             // show sticker as first item
-            return buildConversationSticker(contact);
+            return buildConversationSticker(contact, listItems.length);
           }
 
           final item = listItems[index];

@@ -376,6 +376,9 @@ msgstr "Me"
 msgid "disappearing_messages"
 msgstr "Disappearing Messages"
 
+msgid "start_of_your_history"
+msgstr "This is the start of your message history with %s"
+
 msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
 
