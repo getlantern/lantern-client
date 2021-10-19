@@ -22,7 +22,6 @@ class Waveform extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLTR = Directionality.of(context) == TextDirection.ltr;
     return SizedBox(
       height: height,
       width: width,
@@ -32,8 +31,7 @@ class Waveform extends StatelessWidget {
             height: height,
             progressedTo: width * progressPercentage / 100,
             initialColor: initialColor,
-            progressColor: progressColor,
-            isLTR: isLTR),
+            progressColor: progressColor),
       ),
     );
   }
@@ -69,7 +67,6 @@ class _BarsPainter extends CustomPainter {
   final double progressedTo;
   final Paint initialPaint;
   final Paint progressPaint;
-  final bool isLTR = false;
 
   _BarsPainter({
     required this.bars,
@@ -77,7 +74,6 @@ class _BarsPainter extends CustomPainter {
     required this.progressedTo,
     required Color initialColor,
     required Color progressColor,
-    required bool isLTR,
   })  : initialPaint = Paint()
           ..color = initialColor
           ..style = PaintingStyle.fill,
@@ -92,19 +88,12 @@ class _BarsPainter extends CustomPainter {
       var barHeight = min(-1 * bars[i], -1).toDouble();
       canvas.drawRRect(
         RRect.fromRectAndCorners(
-          isLTR
-              ? Rect.fromLTWH(
-                  startingPosition,
-                  height,
-                  barWidth,
-                  barHeight,
-                )
-              : Rect.fromLTWH(
-                  size.width - startingPosition,
-                  height,
-                  barWidth,
-                  barHeight,
-                ),
+          Rect.fromLTWH(
+            startingPosition,
+            height,
+            barWidth,
+            barHeight,
+          ),
           topLeft: const Radius.circular(1),
           topRight: const Radius.circular(1),
         ),

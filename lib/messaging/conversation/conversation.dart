@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/common/ui/dimens.dart';
+
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
@@ -602,9 +604,8 @@ class ConversationState extends State<Conversation>
   // Renders Emoji button, message bar and recording icon
   // Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
-    final isLTR = Directionality.of(context) == TextDirection.ltr;
     return Stack(
-      alignment: isLTR ? Alignment.bottomRight : Alignment.bottomLeft,
+      alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         CListTile(
           height: messageBarHeight,
@@ -701,8 +702,11 @@ class ConversationState extends State<Conversation>
                     ),
                     IconButton(
                       key: const ValueKey('send_message'),
-                      icon: CAssetImage(
-                          path: ImagePaths.send_rounded, color: pink4),
+                      icon: mirrorBy180deg(
+                        context: context,
+                        child: CAssetImage(
+                            path: ImagePaths.send_rounded, color: pink4),
+                      ),
                       onPressed: send,
                     ),
                   ],
