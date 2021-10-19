@@ -263,6 +263,7 @@ class MessageBubble extends StatelessWidget {
                             ]),
                           ),
                         Stack(
+                          textDirection: TextDirection.ltr, // enforce LTR
                           alignment: isOutbound
                               ? AlignmentDirectional.bottomEnd
                               : AlignmentDirectional.bottomStart,

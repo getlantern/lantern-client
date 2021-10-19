@@ -27,8 +27,6 @@ class StatusRow extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          textDirection: TextDirection
-              .ltr, // enforce LTR here since we don't want the order to change
           children: [
             Container(
               padding: const EdgeInsetsDirectional.only(end: 2.0),
@@ -48,10 +46,13 @@ class StatusRow extends StatelessWidget {
                       padding: const EdgeInsetsDirectional.only(start: 4),
                       child: message.status ==
                               StoredMessage_DeliveryStatus.COMPLETELY_SENT
-                          ? CAssetImage(
-                              path: ImagePaths.done_all,
-                              size: 10,
-                              color: color,
+                          ? mirrorBy180deg(
+                              context: context,
+                              child: CAssetImage(
+                                path: ImagePaths.done_all,
+                                size: 10,
+                                color: color,
+                              ),
                             )
                           : message.status ==
                                   StoredMessage_DeliveryStatus.SENDING
