@@ -22,19 +22,16 @@ class PlayButton extends StatelessWidget {
       diameter: size,
       padding: 0,
       backgroundColor: transparent,
-      icon: mirrorBy180deg(
-        context: context,
-        child: CAssetImage(
-          size: size,
-          color: color,
-          path: playing
-              ? custom
-                  ? ImagePaths.pause_circle_outline_custom
-                  : ImagePaths.pause_circle_filled
-              : custom
-                  ? ImagePaths.play_circle_filled_custom
-                  : ImagePaths.play_circle_filled,
-        ),
+      icon: CAssetImage(
+        size: size,
+        color: color,
+        path: playing
+            ? custom
+                ? ImagePaths.pause_circle_outline_custom
+                : ImagePaths.pause_circle_filled
+            : custom
+                ? ImagePaths.play_circle_filled_custom
+                : ImagePaths.play_circle_filled,
       ),
       onPressed: () {
         if (onPressed != null) onPressed!();
