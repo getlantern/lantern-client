@@ -296,7 +296,7 @@ msgid "qr_info_description"
 msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
 
 msgid "qr_info_scan"
-msgstr "Scan each others QR codes, to add a contact."
+msgstr "Scan each others QR codes, to add a contact"
 
 msgid "qr_success_snackbar"
 msgstr "%s is a Contact"
@@ -317,7 +317,7 @@ msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
 msgid "contact_id_error_description"
-msgstr "Something went wrong while adding this contact."
+msgstr "Something went wrong while adding this contact"
 
 msgid "contact_id_enter_manually"
 msgstr "Enter your friend's Messenger ID manually"
