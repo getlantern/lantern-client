@@ -19,25 +19,38 @@ class ConversationSticker extends StatelessWidget {
     //     source = 'banner_source_intro'.i18n;
     //     break;
     // }
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _fullyAddedIcon(),
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                  start: 16, top: 8, bottom: 8),
-              child: _fullyAddedText(),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-            //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-            // ),
-          ],
+    return FittedBox(
+      fit: BoxFit.none,
+      child: Container(
+        decoration: BoxDecoration(
+            color: white,
+            border: Border.all(color: grey3),
+            borderRadius:
+                const BorderRadius.all(Radius.circular(borderRadius))),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _fullyAddedIcon(),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 16, top: 8, bottom: 8),
+                    child: _fullyAddedText(),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
+                  // ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 

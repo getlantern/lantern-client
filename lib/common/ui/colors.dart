@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:lantern/common/common.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:crypto/crypto.dart';
 
 Color transparent = Colors.transparent;
 
@@ -27,6 +28,16 @@ Color black = HexColor('#000000');
 // Avatars
 Color getAvatarColor(double hue, {bool inverted = false}) {
   return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
+}
+
+final maxSha1Hash = BigInt.from(2).pow(160);
+final numHues = BigInt.from(360);
+
+double sha1Hue(String value) {
+  var bytes = utf8.encode(value);
+  var digest = sha1.convert(bytes);
+  return (BigInt.parse(digest.toString(), radix: 16) * numHues ~/ maxSha1Hash)
+      .toDouble();
 }
 
 // Indicator

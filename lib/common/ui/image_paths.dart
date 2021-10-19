@@ -51,6 +51,7 @@ class ImagePaths {
   static const lock_clock = 'assets/images/lock_clock.svg';
   static const volume_up = 'assets/images/volume_up.svg';
   static const insert_drive_file = 'assets/images/insert_drive_file.svg';
+  static const sticker_figure = 'assets/images/sticker_figure.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
