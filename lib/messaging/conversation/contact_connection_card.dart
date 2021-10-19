@@ -37,7 +37,7 @@ class ContactConnectionCard extends StatelessWidget {
               leading: CustomAvatar(
                   messengerId: contact.contactId.id,
                   displayName: contact.displayNameOrFallback),
-              title: CText(introduction.displayName,
+              title: CText(introduction.displayNameOrFallback,
                   style: tsBody3.copiedWith(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),
               trailing: outbound
@@ -102,7 +102,9 @@ class ContactConnectionCard extends StatelessWidget {
     return showBottomModal(
         context: context,
         title: CText(
-            'introductions_title'.i18n.fill([introduction.displayName]),
+            'introductions_title'
+                .i18n
+                .fill([introduction.displayNameOrFallback]),
             maxLines: 1,
             style: tsSubtitle1),
         subtitle: 'introductions_info'.i18n,
