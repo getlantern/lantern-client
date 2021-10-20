@@ -188,7 +188,7 @@ class MessageBubble extends StatelessWidget {
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : wrapIntrinsicWidthIfNecessary(
                   Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (message.replyToId.isNotEmpty)
