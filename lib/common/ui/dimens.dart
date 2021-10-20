@@ -16,8 +16,7 @@ Widget mirrorBy180deg({required BuildContext context, required Widget child}) =>
         transform: Matrix4.rotationY(isLTR(context) ? 0 : pi),
         child: child);
 
-double calculateStickerHeight(
-    BuildContext context, BoxConstraints constraints, int messageCount) {
+double calculateStickerHeight(BuildContext context, int messageCount) {
   final conversationInnerHeight = MediaQuery.of(context).size.height -
       100.0 -
       100.0; // rough approximation for inner height - top bar height - message bar height
