@@ -21,10 +21,11 @@ class ConversationSticker extends StatelessWidget {
     //     break;
     // }
 
+    // TODO: do we need LayoutBuilder here?
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
-        height: calculateStickerHeight(context, constraints, messageCount),
+        height: calculateStickerHeight(context, messageCount),
         child: Column(
           children: [
             // ** Illustration ** //
