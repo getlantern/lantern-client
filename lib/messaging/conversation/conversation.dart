@@ -442,37 +442,6 @@ class ConversationState extends State<Conversation>
     });
   }
 
-  Widget buildConversationSticker(Contact contact, int listItemsLength) =>
-      LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            height: 350, // TODO: pin this to top?
-            child: Column(
-              children: [
-                Container(
-                    margin:
-                        const EdgeInsetsDirectional.only(top: 40, bottom: 8),
-                    child: SvgPicture.asset(
-                      ImagePaths.sticker_figure,
-                      color: getAvatarColor(sha1Hue(contact.contactId.id)),
-                    )),
-                Container(
-                  margin: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                  child: CText(
-                      'start_of_your_history'
-                          .i18n
-                          .fill([contact.displayNameOrFallback]),
-                      style: tsBody2.copiedWith(color: grey5)),
-                ),
-                Container(
-                    margin: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                    child: ConversationSticker(contact)),
-              ],
-            ),
-          );
-        },
-      );
-
   Widget buildList(Contact contact) {
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
@@ -503,11 +472,11 @@ class ConversationState extends State<Conversation>
         initialScrollIndex: widget.initialScrollIndex ?? 0,
         reverse: true,
         physics: defaultScrollPhysics,
-        itemCount: listItems.length + 1,
+        itemCount: messageCount + 1,
         itemBuilder: (context, index) {
-          if (index == listItems.length) {
+          if (index == messageCount) {
             // show sticker as first item
-            return buildConversationSticker(contact, listItems.length);
+            return ConversationSticker(contact, messageCount);
           }
 
           final item = listItems[index];

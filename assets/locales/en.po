@@ -382,8 +382,8 @@ msgstr "This is the start of your message history with %s"
 msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
 
-msgid "banner_messages_disappear"
-msgstr "Messages disappear after %s."
+msgid "banner_message_retention"
+msgstr "Message retention is set to %s."
 
 msgid "banner_source_unknown"
 msgstr "Unknown"
