@@ -462,8 +462,10 @@ class ConversationState extends State<Conversation>
 
       // render list
       messageCount = listItems.length;
+
+      // show sticker when we have no messages
       if (listItems.isEmpty) {
-        return Container();
+        return ConversationSticker(contact, messageCount);
       }
 
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
