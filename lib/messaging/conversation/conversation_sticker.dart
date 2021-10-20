@@ -24,22 +24,23 @@ class ConversationSticker extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
-        padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+        height: calculateStickerHeight(context, constraints, messageCount),
         child: Column(
           children: [
             // ** Illustration ** //
             Container(
+                padding: const EdgeInsetsDirectional.only(top: 20, bottom: 8),
                 child: Stack(
-              children: [
-                SvgPicture.asset(
-                  ImagePaths.sticker_figure_background,
-                ),
-                SvgPicture.asset(
-                  ImagePaths.sticker_figure_foreground,
-                  color: getIllustrationColor(contact),
-                ),
-              ],
-            )),
+                  children: [
+                    SvgPicture.asset(
+                      ImagePaths.sticker_figure_background,
+                    ),
+                    SvgPicture.asset(
+                      ImagePaths.sticker_figure_foreground,
+                      color: getIllustrationColor(contact),
+                    ),
+                  ],
+                )),
             Container(
               padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
               child: CText(
@@ -50,7 +51,7 @@ class ConversationSticker extends StatelessWidget {
             ),
             // ** Message Retention ** //
             Container(
-              padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+              padding: const EdgeInsetsDirectional.only(top: 8, bottom: 20),
               child: FittedBox(
                 fit: BoxFit.none,
                 child: Container(
