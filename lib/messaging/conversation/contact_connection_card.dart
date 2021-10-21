@@ -109,7 +109,8 @@ class ContactConnectionCard extends StatelessWidget {
                 .fill([introduction.displayNameOrFallback]),
             maxLines: 1,
             style: tsSubtitle1),
-        subtitle: 'introductions_info'.i18n,
+        subtitle: CText('introductions_info'.i18n,
+            style: tsBody1.copiedWith(color: grey5)),
         children: [
           BottomModalItem(
               leading: const CAssetImage(path: ImagePaths.check_black),

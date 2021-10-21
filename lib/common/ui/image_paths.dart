@@ -16,6 +16,7 @@ class ImagePaths {
   static const desktop = 'assets/images/desktop.svg';
   static const settings = 'assets/images/settings.svg';
   static const qr_code = 'assets/images/qr_code.svg';
+  static const qr_code_scanner = 'assets/images/qr_code_scanner.svg';
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
@@ -56,6 +57,8 @@ class ImagePaths {
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
   static const timer = 'assets/images/timer.svg';
+  static const verification_alert = 'assets/images/verification_alert.svg';
+  static const verified_user = 'assets/images/verified_user.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
