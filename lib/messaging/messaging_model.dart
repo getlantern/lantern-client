@@ -30,6 +30,10 @@ class MessagingModel extends Model {
     });
   }
 
+  /*
+  * CONTACTS 
+  */
+
   Future<Map> addProvisionalContact(String contactId, {String? source}) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{
@@ -43,92 +47,24 @@ class MessagingModel extends Model {
         <String, dynamic>{'unsafeContactId': contactId});
   }
 
-  Future<void> sendToDirectContact(
-    String identityKey, {
-    String? text,
-    List<Uint8List>? attachments,
-    String? replyToId,
-    String? replyToSenderId,
-  }) {
-    return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
-      'identityKey': identityKey,
-      'text': text,
-      'attachments': attachments,
-      'replyToId': replyToId,
-      'replyToSenderId': replyToSenderId,
-    });
-  }
-
-  Future<void> react(StoredMessage message, String reaction) {
-    return methodChannel.invokeMethod('react', <String, dynamic>{
-      'msg': message.writeToBuffer(),
-      'reaction': reaction
-    });
-  }
-
-  Future<void> markViewed(StoredMessage message) {
+  Future<void> acceptDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
-        'markViewed', <String, dynamic>{'msg': message.writeToBuffer()});
+        'acceptDirectContact', <String, dynamic>{'unsafeId': unsafeId});
   }
 
-  Future<void> deleteLocally(StoredMessage message) {
+  Future<void> markDirectContactVerified(String unsafeId) {
     return methodChannel.invokeMethod(
-        'deleteLocally', <String, dynamic>{'msg': message.writeToBuffer()});
+        'markDirectContactVerified', <String, dynamic>{'unsafeId': unsafeId});
   }
 
-  Future<void> deleteGlobally(StoredMessage message) {
+  Future<void> blockDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
-        'deleteGlobally', <String, dynamic>{'msg': message.writeToBuffer()});
+        'blockDirectContact', <String, dynamic>{'unsafeId': unsafeId});
   }
 
-  Future<void> setDisappearSettings(Contact contact, int seconds) {
-    return methodChannel.invokeMethod('setDisappearSettings', <String, dynamic>{
-      'contactId': contact.contactId.id,
-      'seconds': seconds
-    });
-  }
-
-  Future<bool> startRecordingVoiceMemo() async {
-    return methodChannel
-        .invokeMethod('startRecordingVoiceMemo')
-        .then((value) => value as bool);
-  }
-
-  Future<Uint8List> stopRecordingVoiceMemo() async {
-    return methodChannel
-        .invokeMethod('stopRecordingVoiceMemo')
-        .then((value) => value as Uint8List);
-  }
-
-  Future<Uint8List> filePickerLoadAttachment(
-      String filePath, Map<String, String> metadata) async {
-    return methodChannel
-        .invokeMethod('filePickerLoadAttachment', <String, dynamic>{
-      'filePath': filePath,
-      'metadata': metadata,
-    }).then((value) {
-      return value as Uint8List;
-    });
-  }
-
-  ValueListenable<CachedValue<Uint8List>> thumbnail(
-      StoredAttachment attachment) {
-    return _thumbnailCache.get(attachment);
-  }
-
-  Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
-    return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
-      'attachment': attachment.writeToBuffer(),
-    }).then((value) {
-      return value as Uint8List;
-    });
-  }
-
-  Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {
-    return methodChannel
-        .invokeMethod('decryptVideoForPlayback', <String, dynamic>{
-      'attachment': attachment.writeToBuffer(),
-    }).then((value) => value as String);
+  Future<void> unblockDirectContact(String unsafeId) {
+    return methodChannel.invokeMethod(
+        'unblockDirectContact', <String, dynamic>{'unsafeId': unsafeId});
   }
 
   Future<void> setCurrentConversationContact(
@@ -167,41 +103,6 @@ class MessagingModel extends Model {
         'unsafeFromId': fromId,
         'unsafeToId': toId,
       });
-
-  Future<List<SearchResult<Contact>>> searchContacts(
-          String query, int? numTokens) async =>
-      methodChannel.invokeMethod('searchContacts', <String, dynamic>{
-        'query': sanitizeQuery(query),
-        'numTokens': numTokens,
-      }).then((value) {
-        final results = <SearchResult<Contact>>[];
-        value.forEach((element) {
-          final result = SearchResult<Contact>(element['path'],
-              Contact.fromBuffer(element['contact']), element['snippet']);
-          results.add(result);
-        });
-        return Future.value(results);
-      });
-
-  Future<List<SearchResult<StoredMessage>>> searchMessages(
-          String query, int? numTokens) async =>
-      methodChannel.invokeMethod('searchMessages', <String, dynamic>{
-        'query': sanitizeQuery(query),
-        'numTokens': numTokens,
-      }).then((value) {
-        final results = <SearchResult<StoredMessage>>[];
-        value.forEach((element) {
-          final result = SearchResult<StoredMessage>(element['path'],
-              StoredMessage.fromBuffer(element['message']), element['snippet']);
-          results.add(result);
-        });
-        return Future.value(results);
-      });
-
-  String sanitizeQuery(String query) => query
-      .split(RegExp(r'\s'))
-      .map((s) => '"${s.replaceAll('\"', '')}"')
-      .join(' ');
 
   /// Returns the best introductions to each contact.
   Widget bestIntroductions(
@@ -313,6 +214,110 @@ class MessagingModel extends Model {
     });
   }
 
+  String _contactPathSegment(ContactId contactId) {
+    return contactId.type == ContactType.DIRECT
+        ? 'd/${contactId.id}'
+        : 'g/${contactId.id}';
+  }
+
+  String _directContactPath(String contactId) => '/contacts/d/$contactId';
+
+  /*
+  * MESSAGES 
+  */
+
+  Future<void> sendToDirectContact(
+    String identityKey, {
+    String? text,
+    List<Uint8List>? attachments,
+    String? replyToId,
+    String? replyToSenderId,
+  }) {
+    return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
+      'identityKey': identityKey,
+      'text': text,
+      'attachments': attachments,
+      'replyToId': replyToId,
+      'replyToSenderId': replyToSenderId,
+    });
+  }
+
+  Future<void> react(StoredMessage message, String reaction) {
+    return methodChannel.invokeMethod('react', <String, dynamic>{
+      'msg': message.writeToBuffer(),
+      'reaction': reaction
+    });
+  }
+
+  Future<void> markViewed(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'markViewed', <String, dynamic>{'msg': message.writeToBuffer()});
+  }
+
+  Future<void> deleteLocally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteLocally', <String, dynamic>{'msg': message.writeToBuffer()});
+  }
+
+  Future<void> deleteGlobally(StoredMessage message) {
+    return methodChannel.invokeMethod(
+        'deleteGlobally', <String, dynamic>{'msg': message.writeToBuffer()});
+  }
+
+  Future<void> setDisappearSettings(Contact contact, int seconds) {
+    return methodChannel.invokeMethod('setDisappearSettings', <String, dynamic>{
+      'contactId': contact.contactId.id,
+      'seconds': seconds
+    });
+  }
+
+  /*
+  * ATTACHMENTS 
+  */
+
+  Future<bool> startRecordingVoiceMemo() async {
+    return methodChannel
+        .invokeMethod('startRecordingVoiceMemo')
+        .then((value) => value as bool);
+  }
+
+  Future<Uint8List> stopRecordingVoiceMemo() async {
+    return methodChannel
+        .invokeMethod('stopRecordingVoiceMemo')
+        .then((value) => value as Uint8List);
+  }
+
+  Future<Uint8List> filePickerLoadAttachment(
+      String filePath, Map<String, String> metadata) async {
+    return methodChannel
+        .invokeMethod('filePickerLoadAttachment', <String, dynamic>{
+      'filePath': filePath,
+      'metadata': metadata,
+    }).then((value) {
+      return value as Uint8List;
+    });
+  }
+
+  ValueListenable<CachedValue<Uint8List>> thumbnail(
+      StoredAttachment attachment) {
+    return _thumbnailCache.get(attachment);
+  }
+
+  Future<Uint8List> decryptAttachment(StoredAttachment attachment) async {
+    return methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
+      'attachment': attachment.writeToBuffer(),
+    }).then((value) {
+      return value as Uint8List;
+    });
+  }
+
+  Future<String> decryptVideoForPlayback(StoredAttachment attachment) async {
+    return methodChannel
+        .invokeMethod('decryptVideoForPlayback', <String, dynamic>{
+      'attachment': attachment.writeToBuffer(),
+    }).then((value) => value as String);
+  }
+
   Future<String> allocateRelayAddress(String localAddr) {
     return methodChannel
         .invokeMethod('allocateRelayAddress', localAddr)
@@ -325,11 +330,42 @@ class MessagingModel extends Model {
         .then((value) => value as String);
   }
 
-  String _contactPathSegment(ContactId contactId) {
-    return contactId.type == ContactType.DIRECT
-        ? 'd/${contactId.id}'
-        : 'g/${contactId.id}';
-  }
+  /*
+  * SEARCH 
+  */
 
-  String _directContactPath(String contactId) => '/contacts/d/$contactId';
+  Future<List<SearchResult<Contact>>> searchContacts(
+          String query, int? numTokens) async =>
+      methodChannel.invokeMethod('searchContacts', <String, dynamic>{
+        'query': sanitizeQuery(query),
+        'numTokens': numTokens,
+      }).then((value) {
+        final results = <SearchResult<Contact>>[];
+        value.forEach((element) {
+          final result = SearchResult<Contact>(element['path'],
+              Contact.fromBuffer(element['contact']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
+
+  Future<List<SearchResult<StoredMessage>>> searchMessages(
+          String query, int? numTokens) async =>
+      methodChannel.invokeMethod('searchMessages', <String, dynamic>{
+        'query': sanitizeQuery(query),
+        'numTokens': numTokens,
+      }).then((value) {
+        final results = <SearchResult<StoredMessage>>[];
+        value.forEach((element) {
+          final result = SearchResult<StoredMessage>(element['path'],
+              StoredMessage.fromBuffer(element['message']), element['snippet']);
+          results.add(result);
+        });
+        return Future.value(results);
+      });
+
+  String sanitizeQuery(String query) => query
+      .split(RegExp(r'\s'))
+      .map((s) => '"${s.replaceAll('\"', '')}"')
+      .join(' ');
 }

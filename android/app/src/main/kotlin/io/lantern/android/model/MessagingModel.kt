@@ -73,6 +73,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+          /*
+          * Contacts
+          */
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
             "addProvisionalContact" -> messaging.addProvisionalContact(
@@ -91,6 +94,17 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
                 call.argument("contactId")!!
             )
+            "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
+            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
+            "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)
+            "blockDirectContact" -> messaging.blockDirectContact(call.argument("unsafeId")!!)
+            "unblockDirectContact" -> messaging.unblockDirectContact(call.argument("unsafeId")!!)
+            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+          /*
+          * Messages 
+          */
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
                 call.argument("seconds")!!
@@ -110,10 +124,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
-            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+          /*
+          * Attachments
+          */
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
@@ -158,6 +171,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "relayTo" -> {
                 return internalsdk.Internalsdk.relayTo(call.arguments as String)
             }
+          /*
+          * Search
+          */
             "searchContacts" ->
                 messaging
                     .searchContacts(
