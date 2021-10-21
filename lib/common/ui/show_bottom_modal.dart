@@ -5,7 +5,7 @@ void showBottomModal({
   required List<Widget> children,
   bool isDismissible = true,
   Widget? title,
-  String? subtitle = '',
+  CText? subtitle,
 }) {
   showModalBottomSheet(
       context: context,
@@ -21,11 +21,11 @@ void showBottomModal({
                     padding: const EdgeInsets.all(16),
                     child: Center(child: title),
                   ),
-                  if (subtitle!.isNotEmpty)
+                  if (subtitle != null)
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
-                          start: 16.0, end: 16.0, bottom: 16.0),
-                      child: CText(subtitle, style: tsBody1),
+                          start: 24.0, end: 24.0, bottom: 16.0),
+                      child: subtitle,
                     ),
                   const CDivider(),
                 ],

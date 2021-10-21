@@ -427,6 +427,24 @@ msgstr "Message was deleted"
 msgid "close"
 msgstr "Close"
 
+msgid "verify_contact"
+msgstr "Verify %s"
+
+msgid "verified"
+msgstr "Verified"
+
+msgid "verify_description"
+msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours. \n Would you like to verify in person or via a phone call?"
+
+msgid "verify_in_person"
+msgstr "Verify in person"
+
+msgid "verify_via_call"
+msgstr "Verify via voice call"
+
+msgid "dismiss_notification"
+msgstr "Dismiss Notification"
+
 msgid "call_contact"
 msgstr "Call %s ?"
 

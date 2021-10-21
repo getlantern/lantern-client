@@ -348,7 +348,20 @@ class ConversationState extends State<Conversation>
                       maxLines: 1,
                       style: tsHeading3,
                     ),
-                    DisappearingTimerAction(contact),
+                    Row(
+                      children: [
+                        DisappearingTimerAction(contact),
+                        // TODO: only show when actually verified
+                        const Padding(
+                          padding: EdgeInsetsDirectional.only(start: 8.0),
+                          child: CAssetImage(
+                            path: ImagePaths.verified_user,
+                            size: 12.0,
+                          ),
+                        ),
+                        CText('verified'.i18n.toUpperCase(), style: tsOverline)
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -357,15 +370,54 @@ class ConversationState extends State<Conversation>
         ),
         actions: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                onPressed: () => showBottomModal(
+                    context: context,
+                    title: CText(
+                        'verify_contact'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]),
+                        maxLines: 1,
+                        style: tsSubtitle1),
+                    subtitle: CText(
+                        'verify_description'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]),
+                        style: tsBody1.copiedWith(color: grey5)),
+                    children: [
+                      BottomModalItem(
+                        leading:
+                            const CAssetImage(path: ImagePaths.qr_code_scanner),
+                        label: 'verify_in_person'.i18n,
+                        onTap: () {},
+                        trailing: const CAssetImage(
+                          path: ImagePaths.keyboard_arrow_right,
+                        ),
+                      ),
+                      BottomModalItem(
+                        leading: const CAssetImage(path: ImagePaths.phone),
+                        label: 'verify_via_call'.i18n,
+                        onTap: () {},
+                        trailing: const CAssetImage(
+                          path: ImagePaths.keyboard_arrow_right,
+                        ),
+                      ),
+                      BottomModalItem(
+                        leading: const CAssetImage(path: ImagePaths.cancel),
+                        label: 'dismiss_notification'.i18n,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ]),
+                icon: const CAssetImage(path: ImagePaths.verification_alert),
+              ),
               CallAction(contact),
               IconButton(
+                visualDensity: VisualDensity.compact,
                 icon: const CAssetImage(path: ImagePaths.more_vert),
-                padding:
-                    const EdgeInsetsDirectional.only(top: 8, bottom: 8, end: 8),
-                tooltip: 'menu'.i18n,
                 onPressed: () => showConversationOptions(
                     model: model, parentContext: context, contact: contact),
               )
