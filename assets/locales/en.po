@@ -284,10 +284,10 @@ msgid "no_contacts_yet"
 msgstr "No contacts yet"
 
 msgid "qr_error_description"
-msgstr "Something went wrong while scanning the QR code"
+msgstr "Something went wrong while scanning this QR code."
 
 msgid "qr_scanner"
-msgstr "QR Code"
+msgstr "Contact Verification"
 
 msgid "qr_info_title"
 msgstr "Scan QR Code"
@@ -296,7 +296,7 @@ msgid "qr_info_description"
 msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
 
 msgid "qr_info_scan"
-msgstr "Scan each others QR codes, to add a contact"
+msgstr "Scan each others QR codes to verify."
 
 msgid "qr_success_snackbar"
 msgstr "%s is a Contact"
