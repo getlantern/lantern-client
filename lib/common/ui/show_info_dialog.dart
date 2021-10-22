@@ -47,6 +47,7 @@ void showInfoDialog(BuildContext context,
               Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
+                  focusColor: grey3,
                   onTap: () {
                     Navigator.pop(context);
                   },

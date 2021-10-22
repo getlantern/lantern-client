@@ -3,7 +3,7 @@ import 'package:lantern/common/common.dart';
 void showSnackbar(
     {required BuildContext context,
     required Widget content,
-    Duration duration = const Duration(milliseconds: 1000),
+    Duration duration = defaultAnimationDuration,
     SnackBarAction? action}) {
   final snackBar = SnackBar(
     content: content,

@@ -5,11 +5,21 @@ import '../messaging.dart';
 
 class ContactInfo extends StatelessWidget {
   final Contact contact;
-  const ContactInfo({required this.contact}) : super();
+  final formKey = GlobalKey<FormState>();
+  late final displayNameController = CustomTextEditingController(
+      formKey: formKey, text: contact.displayNameOrFallback);
+
+  ContactInfo({Key? key, required this.contact}) : super(key: key) {
+    displayNameController.focusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
+    var textCopied = false;
+    var confirmBlock = false;
+    var isEditing = false;
+
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       centerTitle: true,
@@ -47,25 +57,47 @@ class ContactInfo extends StatelessWidget {
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
-                    CListTile(
-                      leading: const CAssetImage(
-                        path: ImagePaths.user,
-                      ),
-                      content: CText(
-                        contact.displayNameOrFallback,
-                        style: tsSubtitle1Short,
-                      ),
-                      trailing: InkWell(
-                        onTap: () {}, // TODO: Edit
-                        child: Ink(
-                          padding: const EdgeInsets.all(8),
-                          child: CText(
-                            'edit'.i18n.toUpperCase(),
-                            style: tsButtonPink,
-                          ),
-                        ),
-                      ),
-                    ),
+                    StatefulBuilder(
+                        builder: (context, setState) => CListTile(
+                              leading: const CAssetImage(
+                                path: ImagePaths.user,
+                              ),
+                              content: !isEditing
+                                  ? CText(displayNameController.value.text,
+                                      style: tsBody1)
+                                  : TextField(
+                                      // TODO: we don't exactly need the UI and the functionality of CTextField but can change
+                                      controller: displayNameController,
+                                      style: tsBody1,
+                                      focusNode:
+                                          displayNameController.focusNode,
+                                      decoration: InputDecoration(
+                                          filled: isEditing,
+                                          fillColor:
+                                              isEditing ? grey1 : transparent,
+                                          border: const OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                          )),
+                                      keyboardType: TextInputType.text,
+                                    ),
+                              trailing: InkWell(
+                                focusColor: grey3,
+                                onTap: () {
+                                  setState(() => isEditing = !isEditing);
+                                  // TODO: Save this to model
+                                  // await messagingModel.setMyDisplayName(name);
+                                },
+                                child: Ink(
+                                  padding: const EdgeInsets.all(8),
+                                  child: CText(
+                                    isEditing
+                                        ? 'save'.i18n.toUpperCase()
+                                        : 'edit'.i18n.toUpperCase(),
+                                    style: tsButtonPink,
+                                  ),
+                                ),
+                              ),
+                            )),
                   ],
                 ),
                 /*
@@ -80,21 +112,33 @@ class ContactInfo extends StatelessWidget {
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
-                    CListTile(
-                      leading: const CAssetImage(
-                        path: ImagePaths.user,
-                      ),
-                      content: CText(
-                        contact.displayNameOrFallback,
-                        style: tsSubtitle1Short,
-                      ),
-                      trailing: InkWell(
-                        onTap: () {}, // TODO: Copy
-                        child: const CAssetImage(
-                          path: ImagePaths.content_copy_outline,
-                        ),
-                      ),
-                    ),
+                    StatefulBuilder(
+                        builder: (context, setState) => CListTile(
+                              leading: const CAssetImage(
+                                path: ImagePaths.user,
+                              ),
+                              content: CText(
+                                '@${contact.displayNameOrFallback}', // TODO: this should be username
+                                style: tsSubtitle1Short,
+                              ),
+                              trailing: InkWell(
+                                focusColor: grey3,
+                                onTap: () {
+                                  copyText(
+                                      context,
+                                      contact
+                                          .displayNameOrFallback); // TODO: this should be username
+                                  setState(() => textCopied = true);
+                                  Future.delayed(defaultAnimationDuration,
+                                      () => setState(() => textCopied = false));
+                                },
+                                child: CAssetImage(
+                                  path: textCopied
+                                      ? ImagePaths.check_green
+                                      : ImagePaths.content_copy_outline,
+                                ),
+                              ),
+                            )),
                   ],
                 ),
                 /*
@@ -109,24 +153,34 @@ class ContactInfo extends StatelessWidget {
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
-                    CListTile(
-                      leading: const CAssetImage(
-                        path: ImagePaths.user,
-                      ),
-                      content: CText(
-                        contact.contactId.id,
-                        style: tsSubtitle1Short,
-                      ),
-                      trailing: InkWell(
-                        onTap: () {}, // TODO: Copy
-                        child: const Padding(
-                          padding: EdgeInsetsDirectional.only(start: 10.0),
-                          child: CAssetImage(
-                            path: ImagePaths.content_copy_outline,
-                          ),
-                        ),
-                      ),
-                    ),
+                    StatefulBuilder(
+                        builder: (context, setState) => CListTile(
+                              leading: const CAssetImage(
+                                path: ImagePaths.user,
+                              ),
+                              content: CText(
+                                contact.contactId.id,
+                                style: tsSubtitle1Short,
+                              ),
+                              trailing: InkWell(
+                                focusColor: grey3,
+                                onTap: () {
+                                  copyText(context, contact.contactId.id);
+                                  setState(() => textCopied = true);
+                                  Future.delayed(defaultAnimationDuration,
+                                      () => setState(() => textCopied = false));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 10.0),
+                                  child: CAssetImage(
+                                    path: textCopied
+                                        ? ImagePaths.check_green
+                                        : ImagePaths.content_copy_outline,
+                                  ),
+                                ),
+                              ),
+                            ))
                   ],
                 ),
                 /*
@@ -150,6 +204,7 @@ class ContactInfo extends StatelessWidget {
                           style: tsSubtitle1Short,
                         ),
                         trailing: InkWell(
+                          focusColor: grey3,
                           onTap: () => showDialog(
                             context: context,
                             barrierDismissible: true,
@@ -187,23 +242,22 @@ class ContactInfo extends StatelessWidget {
                                                 start: 8.0, end: 8.0),
                                         child: Row(
                                           children: [
-                                            Checkbox(
-                                                checkColor: Colors.white,
-                                                fillColor: MaterialStateProperty
-                                                    .resolveWith(
-                                                        getCheckboxColor),
-                                                value:
-                                                    false, // TODO: checkbox state
-                                                onChanged: (bool? value) =>
-                                                    {} // TODO: checkbox state
-                                                //     setState(() {
-                                                //   value!
-                                                //       ? selectedContactIds
-                                                //           .add(contact.contactId.id)
-                                                //       : selectedContactIds
-                                                //           .remove(contact.contactId.id);
-                                                // }),
-                                                ),
+                                            StatefulBuilder(
+                                                builder: (context, setState) =>
+                                                    Checkbox(
+                                                        checkColor:
+                                                            Colors.white,
+                                                        fillColor:
+                                                            MaterialStateProperty
+                                                                .resolveWith(
+                                                                    getCheckboxColor),
+                                                        value: confirmBlock,
+                                                        onChanged:
+                                                            (bool? value) {
+                                                          setState(() =>
+                                                              confirmBlock =
+                                                                  value!);
+                                                        })),
                                             Container(
                                               // not sure why our overflow doesnt work here...
                                               constraints: BoxConstraints(
@@ -237,14 +291,14 @@ class ContactInfo extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 15),
                                       TextButton(
+                                        // TODO: Block
                                         onPressed: () async {
-                                          context.loaderOverlay.show(
-                                              widget: Center(
-                                            child: CircularProgressIndicator(
-                                              color: white,
-                                            ),
-                                          ));
-                                          // TODO: Block
+                                          // context.loaderOverlay.show(
+                                          //     widget: Center(
+                                          //   child: CircularProgressIndicator(
+                                          //     color: white,
+                                          //   ),
+                                          // ));
                                           // try {
                                           //   await model.deleteDirectContact(
                                           //       contact.contactId.id);
@@ -260,7 +314,9 @@ class ContactInfo extends StatelessWidget {
                                           // }
                                         },
                                         child: CText('block'.i18n.toUpperCase(),
-                                            style: tsButtonPink),
+                                            style: confirmBlock
+                                                ? tsButtonPink
+                                                : tsButtonGrey),
                                       )
                                     ],
                                   )
@@ -286,6 +342,7 @@ class ContactInfo extends StatelessWidget {
                           style: tsSubtitle1Short,
                         ),
                         trailing: InkWell(
+                          focusColor: grey3,
                           onTap: () => showDialog(
                             context: context,
                             barrierDismissible: true,
@@ -376,19 +433,8 @@ class ContactInfo extends StatelessWidget {
                   child: Button(
                     width: 200,
                     text: 'message'.i18n.toUpperCase(),
-                    onPressed: () async {
-                      context.loaderOverlay.show();
-                      // try {
-                      //   final name = displayNameController.value.text;
-                      //   await messagingModel.setMyDisplayName(name);
-                      //   Navigator.pop(context);
-                      // } catch (e) {
-                      //   displayNameController.error =
-                      //       'display_name_invalid'.i18n;
-                      // } finally {
-                      //   context.loaderOverlay.hide();
-                      // }
-                    },
+                    onPressed: () async => await context
+                        .pushRoute(Conversation(contactId: contact.contactId)),
                   ),
                 ),
               ],

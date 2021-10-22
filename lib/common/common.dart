@@ -80,6 +80,7 @@ export 'ui/show_bottom_modal.dart';
 export 'ui/show_fullscreen_dialog.dart';
 export 'ui/show_snackbar.dart';
 export 'ui/show_bottom_modal.dart';
+export 'ui/copy_text.dart';
 
 // custom UI elements
 export 'ui/custom/asset_image.dart';
