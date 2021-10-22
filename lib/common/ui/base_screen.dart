@@ -35,33 +35,46 @@ class BaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: !showAppBar
-          ? null
-          : AppBar(
-              title: title is String
-                  ? CText(
-                      title,
-                      style: tsHeading3.copiedWith(color: foregroundColor),
-                    )
-                  : title,
-              elevation: 1,
-              foregroundColor: foregroundColor,
-              backgroundColor: backgroundColor,
-              iconTheme: IconThemeData(color: foregroundColor),
-              centerTitle: centerTitle,
-              titleSpacing: 0,
-              actions: actions,
-            ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: padHorizontal ? 16 : 0, vertical: padVertical ? 16 : 0),
-        child: body,
+    return testRTL(
+      Scaffold(
+        backgroundColor: backgroundColor,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        appBar: !showAppBar
+            ? null
+            : AppBar(
+                title: title is String
+                    ? CText(
+                        title,
+                        style: tsHeading3.copiedWith(color: foregroundColor),
+                      )
+                    : title,
+                elevation: 1,
+                foregroundColor: foregroundColor,
+                backgroundColor: backgroundColor,
+                iconTheme: IconThemeData(color: foregroundColor),
+                centerTitle: centerTitle,
+                titleSpacing: 0,
+                actions: actions,
+              ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: padHorizontal ? 16 : 0,
+              vertical: padVertical ? 16 : 0),
+          child: body,
+        ),
+        floatingActionButton: actionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
       ),
-      floatingActionButton: actionButton,
-      floatingActionButtonLocation: floatingActionButtonLocation,
     );
+  }
+
+  Widget testRTL(Widget child) {
+    var forceRTL = true; // set to true to force RTL for testing
+    return !forceRTL
+        ? child
+        : Directionality(
+            textDirection: TextDirection.rtl,
+            child: child,
+          );
   }
 }
