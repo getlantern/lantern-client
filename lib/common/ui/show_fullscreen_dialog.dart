@@ -17,7 +17,7 @@ Widget showFullscreenDialog(
             color: topColor,
             height: 100,
             child: Stack(
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               children: [
                 if (backButton != null)
                   Container(

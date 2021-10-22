@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/common/ui/dimens.dart';
+
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
@@ -29,7 +31,7 @@ class Conversation extends StatefulWidget {
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
-  static final dayFormat = DateFormat.yMMMMd();
+  static final dayFormat = intl.DateFormat.yMMMMd();
 
   late MessagingModel model;
   bool reactingWithEmoji = false;
@@ -380,7 +382,8 @@ class ConversationState extends State<Conversation>
                 Flexible(
                   child: dismissKeyboardsOnTap(
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding:
+                          const EdgeInsetsDirectional.only(start: 16, end: 16),
                       child: buildList(contact),
                     ),
                   ),
@@ -439,26 +442,6 @@ class ConversationState extends State<Conversation>
     });
   }
 
-  Widget buildConversationSticker(Contact contact) => LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return FittedBox(
-            fit: BoxFit.none,
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(top: 8),
-              decoration: BoxDecoration(
-                  color: white,
-                  border: Border.all(color: grey3),
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(borderRadius))),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ConversationSticker(contact),
-              ),
-            ),
-          );
-        },
-      );
-
   Widget buildList(Contact contact) {
     return model.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
@@ -479,8 +462,10 @@ class ConversationState extends State<Conversation>
 
       // render list
       messageCount = listItems.length;
+
+      // show sticker when we have no messages
       if (listItems.isEmpty) {
-        return Container();
+        return ConversationSticker(contact, messageCount);
       }
 
       // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
@@ -489,11 +474,11 @@ class ConversationState extends State<Conversation>
         initialScrollIndex: widget.initialScrollIndex ?? 0,
         reverse: true,
         physics: defaultScrollPhysics,
-        itemCount: listItems.length + 1,
+        itemCount: messageCount + 1,
         itemBuilder: (context, index) {
-          if (index == listItems.length) {
+          if (index == messageCount) {
             // show sticker as first item
-            return buildConversationSticker(contact);
+            return ConversationSticker(contact, messageCount);
           }
 
           final item = listItems[index];
@@ -602,7 +587,7 @@ class ConversationState extends State<Conversation>
   // Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
     return Stack(
-      alignment: Alignment.bottomRight,
+      alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         CListTile(
           height: messageBarHeight,
@@ -692,14 +677,18 @@ class ConversationState extends State<Conversation>
               ? Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding:
+                          const EdgeInsetsDirectional.only(top: 8, bottom: 8),
                       child:
                           VerticalDivider(thickness: 1, width: 1, color: grey3),
                     ),
                     IconButton(
                       key: const ValueKey('send_message'),
-                      icon: CAssetImage(
-                          path: ImagePaths.send_rounded, color: pink4),
+                      icon: mirrorLTR(
+                        context: context,
+                        child: CAssetImage(
+                            path: ImagePaths.send_rounded, color: pink4),
+                      ),
                       onPressed: send,
                     ),
                   ],

@@ -27,12 +27,11 @@ class Waveform extends StatelessWidget {
       width: width,
       child: CustomPaint(
         painter: _BarsPainter(
-          bars: bars,
-          height: height,
-          progressedTo: width * progressPercentage / 100,
-          initialColor: initialColor,
-          progressColor: progressColor,
-        ),
+            bars: bars,
+            height: height,
+            progressedTo: width * progressPercentage / 100,
+            initialColor: initialColor,
+            progressColor: progressColor),
       ),
     );
   }
@@ -69,13 +68,13 @@ class _BarsPainter extends CustomPainter {
   final Paint initialPaint;
   final Paint progressPaint;
 
-  _BarsPainter(
-      {required this.bars,
-      required this.height,
-      required this.progressedTo,
-      required Color initialColor,
-      required Color progressColor})
-      : initialPaint = Paint()
+  _BarsPainter({
+    required this.bars,
+    required this.height,
+    required this.progressedTo,
+    required Color initialColor,
+    required Color progressColor,
+  })  : initialPaint = Paint()
           ..color = initialColor
           ..style = PaintingStyle.fill,
         progressPaint = Paint()

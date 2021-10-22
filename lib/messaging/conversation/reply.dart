@@ -27,7 +27,7 @@ class Reply extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final body = buildBody();
+    final body = buildBody(context);
 
     if (isPreview) {
       return Container(
@@ -38,7 +38,7 @@ class Reply extends StatelessWidget {
             body,
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 16),
-              child: buildHeader(),
+              child: buildHeader(context),
             ),
           ],
         ),
@@ -49,16 +49,19 @@ class Reply extends StatelessWidget {
   }
 
   // "Replying to .... " segment
-  Widget buildHeader() {
+  Widget buildHeader(BuildContext context) {
     return Row(
       children: [
         if (!isPreview)
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 4),
-            child: CAssetImage(
-              path: ImagePaths.reply,
-              size: 16,
-              color: foregroundColor,
+            child: mirrorLTR(
+              context: context,
+              child: CAssetImage(
+                path: ImagePaths.reply,
+                size: 16,
+                color: foregroundColor,
+              ),
             ),
           ),
         CText(
@@ -82,7 +85,7 @@ class Reply extends StatelessWidget {
 
   // Renders text if we are replying to a text
   // Renders mime type and thumbnail if we are replying to attachment
-  Widget buildBody() {
+  Widget buildBody(BuildContext context) {
     return Container(
       height: 56,
       margin: isPreview ? const EdgeInsetsDirectional.only(top: 12) : null,
@@ -120,7 +123,7 @@ class Reply extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!isPreview) buildHeader(),
+                  if (!isPreview) buildHeader(context),
                   if (!isPreview) const Spacer(),
                   CText(
                     wasRemotelyDeleted

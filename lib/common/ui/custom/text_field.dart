@@ -10,7 +10,7 @@ class CTextField extends StatefulWidget {
   late final String label;
   late final String? helperText;
   late final Icon? prefixIcon;
-  late final CAssetImage? suffixIcon;
+  late final Widget? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
   late final int? minLines;

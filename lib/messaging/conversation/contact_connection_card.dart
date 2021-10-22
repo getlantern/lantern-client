@@ -19,20 +19,25 @@ class ContactConnectionCard extends StatelessWidget {
     final model = context.watch<MessagingModel>();
     final introduction = message.introduction;
     return Column(
-      crossAxisAlignment:
-          outbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: isLTR(context)
+          ? outbound
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start
+          : outbound
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
         LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return Container(
             width: constraints.maxWidth,
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsetsDirectional.only(top: 10),
             child: ListTile(
               leading: CustomAvatar(
                   messengerId: contact.contactId.id,
                   displayName: contact.displayNameOrFallback),
-              title: CText(introduction.displayName,
+              title: CText(introduction.displayNameOrFallback,
                   style: tsBody3.copiedWith(
                       color: outbound ? outboundMsgColor : inboundMsgColor)),
               trailing: outbound
@@ -47,20 +52,22 @@ class ContactConnectionCard extends StatelessWidget {
                                 color: outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor),
-                          Icon(
-                              (message.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? Icons.info_outline_rounded
-                                  : Icons.keyboard_arrow_right_outlined,
-                              size: (message.introduction.status ==
-                                      IntroductionDetails_IntroductionStatus
-                                          .PENDING)
-                                  ? 20.0
-                                  : 30.0,
-                              color: outbound
-                                  ? outboundMsgColor
-                                  : inboundMsgColor),
+                          mirrorLTR(
+                              context: context,
+                              child: CAssetImage(
+                                  path: (message.introduction.status ==
+                                          IntroductionDetails_IntroductionStatus
+                                              .PENDING)
+                                      ? ImagePaths.info
+                                      : ImagePaths.keyboard_arrow_right,
+                                  size: (message.introduction.status ==
+                                          IntroductionDetails_IntroductionStatus
+                                              .PENDING)
+                                      ? 20.0
+                                      : 30.0,
+                                  color: outbound
+                                      ? outboundMsgColor
+                                      : inboundMsgColor)),
                         ],
                       ),
                     ),
@@ -97,7 +104,9 @@ class ContactConnectionCard extends StatelessWidget {
     return showBottomModal(
         context: context,
         title: CText(
-            'introductions_title'.i18n.fill([introduction.displayName]),
+            'introductions_title'
+                .i18n
+                .fill([introduction.displayNameOrFallback]),
             maxLines: 1,
             style: tsSubtitle1),
         subtitle: 'introductions_info'.i18n,

@@ -129,7 +129,6 @@ class MessageBubble extends StatelessWidget {
     }
 
     final padding = width / 2;
-
     final reactionsWidget = SizedBox(
       width: width,
       height: 24,
@@ -143,9 +142,14 @@ class MessageBubble extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center, children: children),
       ),
     );
-
     return Stack(
-      alignment: isOutbound ? Alignment.topLeft : Alignment.topRight,
+      alignment: isLTR(context)
+          ? isOutbound
+              ? Alignment.topLeft
+              : Alignment.topRight
+          : isOutbound
+              ? Alignment.topRight
+              : Alignment.topLeft,
       children: [
         Padding(
           padding: EdgeInsetsDirectional.only(
@@ -276,8 +280,8 @@ class MessageBubble extends StatelessWidget {
                                       : MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 8, end: 8),
                                       child: StatusRow(isOutbound, message),
                                     ),
                                   ]),
@@ -300,14 +304,27 @@ class MessageBubble extends StatelessWidget {
 
   // Handles borders and their radii
   Widget wrapBubble(BuildContext context, bool isAudio, Widget child) {
-    final borderRadius = BorderRadius.only(
-      topLeft: isInbound && !isStartOfBlock ? squared : rounded,
-      topRight: isOutbound && !isStartOfBlock ? squared : rounded,
-      bottomLeft:
-          isInbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
-      bottomRight:
-          isOutbound && (isNewestMessage || !isEndOfBlock) ? squared : rounded,
-    );
+    final borderRadius = isLTR(context)
+        ? BorderRadius.only(
+            topLeft: isInbound && !isStartOfBlock ? squared : rounded,
+            topRight: isOutbound && !isStartOfBlock ? squared : rounded,
+            bottomLeft: isInbound && (isNewestMessage || !isEndOfBlock)
+                ? squared
+                : rounded,
+            bottomRight: isOutbound && (isNewestMessage || !isEndOfBlock)
+                ? squared
+                : rounded,
+          )
+        : BorderRadius.only(
+            topLeft: isOutbound && !isStartOfBlock ? squared : rounded,
+            topRight: isInbound && !isStartOfBlock ? squared : rounded,
+            bottomLeft: isOutbound && (isNewestMessage || !isEndOfBlock)
+                ? squared
+                : rounded,
+            bottomRight: isInbound && (isNewestMessage || !isEndOfBlock)
+                ? squared
+                : rounded,
+          );
 
     if (wasRemotelyDeleted) {
       return DottedBorder(

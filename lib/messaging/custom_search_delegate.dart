@@ -45,7 +45,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: const CAssetImage(path: ImagePaths.arrow_back),
+      icon: mirrorLTR(
+          context: context,
+          child: const CAssetImage(path: ImagePaths.arrow_back)),
       onPressed: () {
         close(context, null);
       },
