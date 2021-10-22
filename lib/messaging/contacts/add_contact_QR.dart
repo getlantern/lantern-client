@@ -330,9 +330,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 0, 16.0, 0),
-                          child: CAssetImage(
-                              path: ImagePaths.keyboard_arrow_right,
-                              color: white),
+                          child: mirrorLTR(
+                            context: context,
+                            child: CAssetImage(
+                                path: ImagePaths.keyboard_arrow_right,
+                                color: white),
+                          ),
                         )
                       ],
                     ),
@@ -356,7 +359,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           CText('qr_add_via_id'.i18n, style: tsHeading3),
         ],
       ),
-      backButton: const CAssetImage(path: ImagePaths.arrow_back),
+      backButton: mirrorLTR(
+          context: context,
+          child: const CAssetImage(path: ImagePaths.arrow_back)),
       onBackCallback: () {
         setState(() {
           usingId = false;
@@ -393,8 +398,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                     keyboardType: TextInputType.text,
                                     minLines: 2,
                                     maxLines: null,
-                                    suffixIcon: const CAssetImage(
-                                        path: ImagePaths.keyboard_arrow_right)),
+                                    suffixIcon: mirrorLTR(
+                                      context: context,
+                                      child: const CAssetImage(
+                                          path:
+                                              ImagePaths.keyboard_arrow_right),
+                                    )),
                               ],
                             ),
                           ),

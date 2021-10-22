@@ -77,16 +77,19 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         });
       },
       child: Transform.scale(
-        alignment: Alignment.bottomRight,
+        alignment:
+            isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
         scale: scale,
         child: Container(
-          alignment: Alignment.bottomRight,
+          alignment:
+              isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
           height: messageBarHeight,
           width: messageBarHeight,
           decoration: BoxDecoration(
             color: widget.isRecording ? indicatorRed : transparent,
-            borderRadius:
-                const BorderRadius.only(topLeft: Radius.circular(1000)),
+            borderRadius: isLTR(context)
+                ? const BorderRadius.only(topLeft: Radius.circular(1000))
+                : const BorderRadius.only(topRight: Radius.circular(1000)),
           ),
           child: Padding(
             padding: widget.isRecording

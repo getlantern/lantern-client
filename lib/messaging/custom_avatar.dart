@@ -1,7 +1,5 @@
 import 'messaging.dart';
 
-import 'package:crypto/crypto.dart';
-
 class CustomAvatar extends StatelessWidget {
   const CustomAvatar(
       {Key? key, required this.messengerId, this.displayName, this.customColor})
@@ -42,14 +40,4 @@ extension StringExtensions on String {
         // display name is a single string
         : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);
   }
-}
-
-final maxSha1Hash = BigInt.from(2).pow(160);
-final numHues = BigInt.from(360);
-
-double sha1Hue(String value) {
-  var bytes = utf8.encode(value);
-  var digest = sha1.convert(bytes);
-  return (BigInt.parse(digest.toString(), radix: 16) * numHues ~/ maxSha1Hash)
-      .toDouble();
 }

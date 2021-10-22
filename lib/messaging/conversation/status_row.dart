@@ -23,13 +23,13 @@ class StatusRow extends StatelessWidget {
     return Opacity(
       opacity: 0.8,
       child: Container(
-        padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
+        padding: const EdgeInsetsDirectional.only(bottom: 4, start: 8, end: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.only(right: 2.0),
+              padding: const EdgeInsetsDirectional.only(end: 2.0),
               child: HumanizedDate.fromMillis(
                 message.ts.toInt(),
                 builder: (context, date) => CText(
@@ -39,7 +39,7 @@ class StatusRow extends StatelessWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(right: 2.0),
+              padding: const EdgeInsetsDirectional.only(end: 2.0),
               child: inbound
                   ? null
                   : Padding(

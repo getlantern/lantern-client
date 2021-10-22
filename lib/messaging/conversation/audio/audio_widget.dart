@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/conversation/audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/common/ui/dimens.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -172,6 +173,9 @@ class AudioWidget extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Row(
+          // Always force LTR direction since we're talking about the passage
+          // of time.
+          textDirection: TextDirection.ltr,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -200,7 +204,7 @@ class AudioWidget extends StatelessWidget {
                       ? _getWaveform(
                           context, value, value.bars, constraints.maxWidth - 36)
                       : const SizedBox(),
-                  _getSliderOverlay(value),
+                  _getSliderOverlay(context, value),
                 ],
               ),
             ),
@@ -224,38 +228,42 @@ class AudioWidget extends StatelessWidget {
         ),
       );
 
-  Widget _getSliderOverlay(AudioValue value) {
+  Widget _getSliderOverlay(BuildContext context, AudioValue value) {
     var _progress = _updateProgress(value);
     return Align(
       alignment: Alignment.bottomCenter,
-      child: SliderTheme(
-        data: SliderThemeData(
-            trackHeight: 0,
-            activeTrackColor: value.bars.isNotEmpty ? transparent : Colors.grey,
-            inactiveTrackColor:
-                value.bars.isNotEmpty ? transparent : Colors.blue,
-            valueIndicatorColor: Colors.grey.shade200,
-            trackShape: CustomTrackShape(),
-            thumbShape: RectangleSliderThumbShapes(
-                height: height,
-                isPlaying: value.playerState == PlayerState.playing ||
-                    value.playerState == PlayerState.paused)),
-        child: Slider(
-          onChanged: (v) {
-            if (value.playerState == PlayerState.stopped) {
-              // can't seek while stopped
-              return;
-            }
-            final position = v * value.duration!.inMilliseconds / 100;
-            controller.seek(
-              Duration(
-                milliseconds: position.round(),
-              ),
-            );
-          },
-          min: 0,
-          max: 100,
-          value: _progress,
+      child: mirrorLTR(
+        context: context,
+        child: SliderTheme(
+          data: SliderThemeData(
+              trackHeight: 0,
+              activeTrackColor:
+                  value.bars.isNotEmpty ? transparent : Colors.grey,
+              inactiveTrackColor:
+                  value.bars.isNotEmpty ? transparent : Colors.blue,
+              valueIndicatorColor: Colors.grey.shade200,
+              trackShape: CustomTrackShape(),
+              thumbShape: RectangleSliderThumbShapes(
+                  height: height,
+                  isPlaying: value.playerState == PlayerState.playing ||
+                      value.playerState == PlayerState.paused)),
+          child: Slider(
+            onChanged: (v) {
+              if (value.playerState == PlayerState.stopped) {
+                // can't seek while stopped
+                return;
+              }
+              final position = v * value.duration!.inMilliseconds / 100;
+              controller.seek(
+                Duration(
+                  milliseconds: position.round(),
+                ),
+              );
+            },
+            min: 0,
+            max: 100,
+            value: _progress,
+          ),
         ),
       ),
     );
