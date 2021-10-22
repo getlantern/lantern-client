@@ -45,7 +45,7 @@ class _NewMessageState extends State<NewMessage> {
                   color: black,
                 ),
                 content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
-                trailing: mirrorBy180deg(
+                trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
@@ -97,7 +97,7 @@ class _NewMessageState extends State<NewMessage> {
                 ),
                 content:
                     CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
-                trailing: mirrorBy180deg(
+                trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,

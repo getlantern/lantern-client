@@ -229,7 +229,7 @@ class AudioWidget extends StatelessWidget {
     var _progress = _updateProgress(value);
     return Align(
       alignment: Alignment.bottomCenter,
-      child: mirrorBy180deg(
+      child: mirrorLTR(
         context: context,
         child: SliderTheme(
           data: SliderThemeData(
