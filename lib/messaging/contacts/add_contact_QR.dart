@@ -230,7 +230,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                   onTap: () => showInfoDialog(context,
                                       title: 'qr_info_title'.i18n,
                                       des: 'qr_info_description'.i18n,
-                                      icon: ImagePaths.qr_code,
+                                      assetPath: ImagePaths.qr_code,
                                       buttonText: 'info_dialog_confirm'
                                           .i18n
                                           .toUpperCase()),

@@ -2,6 +2,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
+import 'show_verification_options.dart';
 
 Future showConversationOptions(
     {required MessagingModel model,
@@ -294,13 +295,12 @@ Future showConversationOptions(
                     await bottomContext.pushRoute(const Introduce()),
               ),
               BottomModalItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.verified_user,
-                ),
-                label: 'contact_verification'.i18n,
-                onTap:
-                    () {}, // TODO show bottom modal for contact verification here
-              ),
+                  leading: const CAssetImage(
+                    path: ImagePaths.verified_user,
+                  ),
+                  label: 'contact_verification'.i18n,
+                  onTap: () => showVerificationOptions(
+                      model: model, contact: contact, context: bottomContext)),
               // BottomModalItem(
               //     leading: const CAssetImage(
               //       path: ImagePaths.delete,
