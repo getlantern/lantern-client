@@ -139,7 +139,10 @@ class MessagingHolder {
                     defaultNotificationChannelId
                 )
                 builder.setContentTitle(application.getString(R.string.new_message))
-                val contentString = application.getString(R.string.from_sender, contact.displayName ?: contact.contactId.id)
+                val contentString = application.getString(
+                    R.string.from_sender,
+                    displayName(application, contact)
+                )
                 builder.setContentText(contentString)
                 builder.setSmallIcon(R.drawable.status_on)
                 builder.setAutoCancel(true)
@@ -272,24 +275,18 @@ class MessagingHolder {
             defaultNotificationChannelId
         )
 
-        val displayName = if (contact.displayName.isEmpty())
-            context.getString(R.string.unnamed_contact)
-        else
-            contact.displayName
-
         // Attach RemoteView to builder()
         builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
         builder.setCustomContentView(
             incomingCallRemoteView(
                 context,
                 contact,
-                displayName,
                 acceptPendingIntent,
                 declinePendingIntent,
             )
         )
         builder.setContentTitle(context.getString(R.string.incoming_call))
-        builder.setContentText(displayName)
+        builder.setContentText(displayName(context, contact))
         builder.setSmallIcon(R.drawable.status_on)
         builder.setAutoCancel(false)
         builder.priority = NotificationCompat.PRIORITY_MAX
@@ -334,13 +331,12 @@ class MessagingHolder {
     private fun incomingCallRemoteView(
         context: Context,
         contact: Model.Contact,
-        displayName: String,
         acceptPendingIntent: PendingIntent,
         declinePendingIntent: PendingIntent,
     ): RemoteViews {
         // RemoteViews styles
         val remoteView = RemoteViews(context.packageName, R.layout.notification_custom)
-        remoteView.setTextViewText(R.id.caller, displayName)
+        remoteView.setTextViewText(R.id.caller, displayName(context, contact))
         remoteView.setTextViewText(R.id.incomingCall, context.getString(R.string.incoming_call))
         remoteView.setTextViewText(R.id.btnAccept, context.getString(R.string.accept))
         remoteView.setTextViewText(R.id.btnDecline, context.getString(R.string.decline))
@@ -401,6 +397,12 @@ class MessagingHolder {
             }
         }
     }
+
+    private fun displayName(context: Context, contact: Model.Contact): String =
+        if (contact.displayName.isEmpty())
+            context.getString(R.string.unnamed_contact)
+        else
+            contact.displayName
 
     companion object {
         private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
