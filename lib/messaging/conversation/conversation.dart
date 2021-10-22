@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
+import 'package:lantern/messaging/calls/call.dart';
+import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/contact_info_topbar.dart';
 
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
@@ -18,6 +20,7 @@ import 'call_action.dart';
 import 'date_marker_bubble.dart';
 import 'reply.dart';
 import 'show_conversation_options.dart';
+import 'show_verification_options.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId contactId;
@@ -336,61 +339,33 @@ class ConversationState extends State<Conversation>
           ),
         ),
         actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // TODO: Verification - only show once (?)
-              IconButton(
-                visualDensity: VisualDensity.compact,
-                onPressed: () => showBottomModal(
-                    context: context,
-                    title: CText(
-                        'verify_contact'
-                            .i18n
-                            .fill([contact.displayNameOrFallback]),
-                        maxLines: 1,
-                        style: tsSubtitle1),
-                    subtitle: CText(
-                        'verify_description'
-                            .i18n
-                            .fill([contact.displayNameOrFallback]),
-                        style: tsBody1.copiedWith(color: grey5)),
-                    children: [
-                      BottomModalItem(
-                        leading:
-                            const CAssetImage(path: ImagePaths.qr_code_scanner),
-                        label: 'verify_in_person'.i18n,
-                        onTap: () {},
-                        trailing: const CAssetImage(
-                          path: ImagePaths.keyboard_arrow_right,
-                        ),
-                      ),
-                      BottomModalItem(
-                        leading: const CAssetImage(path: ImagePaths.phone),
-                        label: 'verify_via_call'.i18n,
-                        onTap: () {},
-                        trailing: const CAssetImage(
-                          path: ImagePaths.keyboard_arrow_right,
-                        ),
-                      ),
-                      BottomModalItem(
-                        leading: const CAssetImage(path: ImagePaths.cancel),
-                        label: 'dismiss_notification'.i18n,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ]),
-                icon: const CAssetImage(path: ImagePaths.verification_alert),
-              ),
-              CallAction(contact),
-              IconButton(
-                visualDensity: VisualDensity.compact,
-                icon: const CAssetImage(path: ImagePaths.more_vert),
-                onPressed: () => showConversationOptions(
-                    model: model, parentContext: context, contact: contact),
-              )
-            ],
-          ),
+          model.me((bottomModalContext, me, child) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // TODO: Verification - only show once (?)
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () => showVerificationOptions(
+                        model: model,
+                        contact: contact,
+                        context: bottomModalContext),
+                    icon: CAssetImage(
+                      path: ImagePaths.verification_alert,
+                      color: getAvatarColor(sha1Hue(contact.contactId.id)),
+                    ),
+                  ),
+                  CallAction(contact),
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    icon: const CAssetImage(path: ImagePaths.more_vert),
+                    onPressed: () => showConversationOptions(
+                        model: model,
+                        parentContext: bottomModalContext,
+                        contact: contact),
+                  )
+                ],
+              )),
         ],
         body: Padding(
           padding: EdgeInsetsDirectional.only(
