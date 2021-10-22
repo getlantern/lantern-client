@@ -407,30 +407,32 @@ class MessagingHolder {
     companion object {
         private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
         private val vibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
-        private val playingRingtone = AtomicBoolean()
-        private val ringtone = AtomicReference<Ringtone>()
-        private val vibrator = AtomicReference<Vibrator>()
+        private var playingRingtone = false
+        private var ringtone: Ringtone? = null
+        private var vibrator: Vibrator? = null
 
+        @Synchronized
         private fun playRingtone(context: Context) {
-            if (!playingRingtone.getAndSet(true)) {
-                val vib = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator.set(vib)
-                vib.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
+            if (!playingRingtone) {
+                playingRingtone = true
+                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator!!.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
+                ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
+                val rtone = ringtone!!
                 thread {
-                    val notification = ringtoneUri
-                    val rtone = RingtoneManager.getRingtone(context, notification)
-                    ringtone.set(rtone)
                     rtone.play()
                 }
             }
         }
 
+        @Synchronized
         private fun stopPlayingRingtone() {
-            if (playingRingtone.getAndSet(false)) {
-                ringtone.get().stop()
-                ringtone.set(null)
-                vibrator.get().cancel()
-                vibrator.set(null)
+            if (playingRingtone) {
+                playingRingtone = false
+                ringtone!!.stop()
+                ringtone = null
+                vibrator!!.cancel()
+                vibrator = null
             }
         }
     }
