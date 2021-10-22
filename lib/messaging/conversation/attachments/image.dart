@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 
 class ImageAttachment extends VisualAttachment {
   ImageAttachment(Contact contact, StoredMessage message,
@@ -49,9 +48,7 @@ class ImageViewerState extends ViewerState<ImageViewer> {
   @override
   Widget body(BuildContext context) => Align(
         alignment: Alignment.center,
-        child: PinchZoom(
-          resetDuration: const Duration(milliseconds: 100),
-          maxScale: 2.5,
+        child: InteractiveViewer(
           child: image!,
         ),
       );
