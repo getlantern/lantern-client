@@ -1,5 +1,7 @@
 import 'package:lantern/common/common.dart';
 
+var forceRTL = true; // set to true to force RTL for testing
+
 class BaseScreen extends StatelessWidget {
   final dynamic title;
   final List<Widget>? actions;
@@ -69,7 +71,6 @@ class BaseScreen extends StatelessWidget {
   }
 
   Widget testRTL(Widget child) {
-    var forceRTL = true; // set to true to force RTL for testing
     return !forceRTL
         ? child
         : Directionality(
