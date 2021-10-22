@@ -330,7 +330,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 0, 16.0, 0),
-                          child: mirrorBy180deg(
+                          child: mirrorLTR(
                             context: context,
                             child: CAssetImage(
                                 path: ImagePaths.keyboard_arrow_right,
@@ -359,7 +359,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           CText('qr_add_via_id'.i18n, style: tsHeading3),
         ],
       ),
-      backButton: mirrorBy180deg(
+      backButton: mirrorLTR(
           context: context,
           child: const CAssetImage(path: ImagePaths.arrow_back)),
       onBackCallback: () {
@@ -398,7 +398,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                     keyboardType: TextInputType.text,
                                     minLines: 2,
                                     maxLines: null,
-                                    suffixIcon: mirrorBy180deg(
+                                    suffixIcon: mirrorLTR(
                                       context: context,
                                       child: const CAssetImage(
                                           path:
