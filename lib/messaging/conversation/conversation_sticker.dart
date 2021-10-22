@@ -39,13 +39,23 @@ class ConversationSticker extends StatelessWidget {
                   ),
                 ],
               )),
-          Container(
+          Padding(
             padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-            child: CText(
-                'start_of_your_history'
-                    .i18n
-                    .fill([contact.displayNameOrFallback]),
-                style: tsBody2.copiedWith(color: grey5)),
+            child: Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.center,
+              children: [
+                CText(
+                  'start_of_your_history'.i18n,
+                  style: tsBody2.copiedWith(color: grey5),
+                ),
+                CText(
+                  contact.displayNameOrFallback,
+                  overflow: TextOverflow.visible,
+                  style: tsBody2.copiedWith(color: grey5),
+                ),
+              ],
+            ),
           ),
           // ** Message Retention ** //
           Container(
