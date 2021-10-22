@@ -34,6 +34,7 @@ class ImagePaths {
   static const phone = 'assets/images/phone.svg';
   static const speaker = 'assets/images/speaker.svg';
   static const mute = 'assets/images/mute.svg';
+  static const block = 'assets/images/block.svg';
   static const hangup = 'assets/images/hangup.svg';
   static const reply = 'assets/images/reply.svg';
   static const check_green_large = 'assets/images/check_green_large.svg';
