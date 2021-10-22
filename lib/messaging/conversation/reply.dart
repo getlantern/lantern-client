@@ -55,7 +55,7 @@ class Reply extends StatelessWidget {
         if (!isPreview)
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 4),
-            child: mirrorBy180deg(
+            child: mirrorLTR(
               context: context,
               child: CAssetImage(
                 path: ImagePaths.reply,

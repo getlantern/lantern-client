@@ -16,36 +16,45 @@ class MessageBarPreviewRecording extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final children = [
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 18),
+          child: AudioWidget(
+            controller: audioController,
+            initialColor: Colors.black,
+            progressColor: outboundMsgColor,
+          ),
+        ),
+      ),
+      IconButton(
+        icon: const CAssetImage(path: ImagePaths.delete),
+        onPressed: onCancelRecording,
+      ),
+      Padding(
+        padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+        child: VerticalDivider(thickness: 1, width: 1, color: grey3),
+      ),
+      IconButton(
+        icon: mirrorLTR(
+          context: context,
+          child: CAssetImage(path: ImagePaths.send_rounded, color: pink4),
+        ),
+        onPressed: onSend,
+      ),
+    ];
+
+    if (Directionality.of(context) == TextDirection.rtl) {
+      // swap AudioWidget and delete button
+      final audioWidget = children[0];
+      final deleteButton = children[1];
+      children[0] = deleteButton;
+      children[1] = audioWidget;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(start: 18),
-            child: AudioWidget(
-              controller: audioController,
-              initialColor: Colors.black,
-              progressColor: outboundMsgColor,
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const CAssetImage(path: ImagePaths.delete),
-          onPressed: onCancelRecording,
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-          child: VerticalDivider(thickness: 1, width: 1, color: grey3),
-        ),
-        IconButton(
-          icon: mirrorBy180deg(
-            context: context,
-            child: CAssetImage(path: ImagePaths.send_rounded, color: pink4),
-          ),
-          onPressed: onSend,
-        ),
-      ],
+      children: children,
     );
   }
 }
