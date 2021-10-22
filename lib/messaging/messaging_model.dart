@@ -23,7 +23,7 @@ class MessagingModel extends Model {
         case 'onSignal':
           var args = call.arguments as Map;
           signaling.onMessage(
-              args['senderId'], args['content'], args['accepted']);
+              args['senderId'], args['content'], args['acceptedCall']);
           break;
         default:
           break;

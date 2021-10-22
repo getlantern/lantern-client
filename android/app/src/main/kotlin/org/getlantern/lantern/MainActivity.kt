@@ -145,17 +145,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         // handles incoming call intent
         intent.getStringExtra("signal")?.let { signal ->
-            val accepted = intent.getBooleanExtra("accepted", false)
             val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
             val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
             // pass this on to Kotlin and then Dart messaging model
-            messagingModel.sendSignal(webRTCSignal, accepted)
-            // if we accepted, remove notification and stop ringtone
-            if (accepted) {
-                LanternApp.messaging.declineAndDismiss(context, notificationManager, webRTCSignal)
-            }
+            messagingModel.sendSignal(webRTCSignal, true)
+            LanternApp.messaging.dismissIncomingCallNotification(
+                notificationManager,
+                webRTCSignal
+            )
             intent.removeExtra("signal")
-            intent.removeExtra("accepted")
         }
     }
 

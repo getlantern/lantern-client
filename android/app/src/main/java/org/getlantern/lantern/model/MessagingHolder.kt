@@ -1,13 +1,17 @@
 package org.getlantern.lantern.model
 
-import android.app.*
+import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.media.AudioAttributes
+import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +22,12 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.Schema
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.path
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -28,6 +37,8 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.concurrent.thread
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -43,8 +54,11 @@ class MessagingHolder {
     }
 
     fun init(application: Application) {
+        initRingtone(application)
+
         val lanternDir = File(application.filesDir, ".lantern")
         lanternDir.mkdirs()
+
         try {
             messaging = Messaging(
                 BaseModel.masterDB,
@@ -72,11 +86,14 @@ class MessagingHolder {
             )
 
             // show notifications for incoming calls
-            messaging.subscribeToWebRTCSignals("systemNotifications") { signal ->
-                val msg = Json.gson.fromJson(signal.content.toString(Charsets.UTF_8), SignalingMessage::class.java)
+            messaging.subscribeToWebRTCSignals("messagingholder") { signal ->
+                val msg = Json.gson.fromJson(
+                    signal.content.toString(Charsets.UTF_8),
+                    SignalingMessage::class.java
+                )
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
-                    "bye" -> declineAndDismiss(application, notificationManager, signal)
+                    "bye" -> dismissIncomingCallNotification(notificationManager, signal)
                 }
             }
         } catch (t: Throwable) {
@@ -144,7 +161,7 @@ class MessagingHolder {
         }
     }
 
-    fun notifyCall(
+    private fun notifyCall(
         context: Context,
         notificationManager: NotificationManager,
         signal: WebRTCSignal
@@ -153,7 +170,7 @@ class MessagingHolder {
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
-            var notificationId = nextNotificationId++
+            val notificationId = nextNotificationId++
 
             // decline intent
             val declineIntent =
@@ -171,7 +188,6 @@ class MessagingHolder {
             acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
             acceptIntentExtras.putString("signal", serializedSignal)
             acceptIntentExtras.putBoolean("accepted", true)
-            acceptIntentExtras.putInt("notificationId", notificationId)
             acceptIntent.putExtras(acceptIntentExtras)
 
             val declinePendingIntent = PendingIntent.getBroadcast(
@@ -217,14 +233,6 @@ class MessagingHolder {
                 )
                 notificationChannel.enableVibration(true)
                 notificationChannel.enableLights(true)
-
-                // Incoming call ringtone handling
-                val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-                val ringtoneAttrs = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
-                notificationChannel.setSound(ringtone, ringtoneAttrs)
                 builder.setChannelId(callNotificationChannelId)
                 notificationManager.createNotificationChannel(
                     notificationChannel
@@ -242,26 +250,30 @@ class MessagingHolder {
             builder.setContentText(contact.displayName)
             builder.setSmallIcon(R.drawable.status_on)
             builder.setAutoCancel(false)
-            builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+//            builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+
             builder.priority = NotificationCompat.PRIORITY_MAX
             builder.setCategory(NotificationCompat.CATEGORY_CALL)
-            builder.setDefaults(Notification.FLAG_ONGOING_EVENT)
-            builder.setTimeoutAfter(10000)
+            builder.setTimeoutAfter(30000)
             builder.setDeleteIntent(declinePendingIntent)
+            builder.extras.putInt("notificationId", notificationId)
 
             val notification = builder.build()
-            val ring = object: Runnable {
+            val ring = object : Runnable {
                 override fun run() {
-                    // build notification
+                    playRingtone()
                     notificationManager.notify(notificationId, notification)
                     // on some phones like Huawei, the heads up notification only stays heads up
                     // for a few seconds, so we re-notify every second while ringing in order to
                     // keep it heads up
-                    ringer.schedule({
-                        if (incomingCalls.containsKey(signal.senderId)) {
-                            run()
-                        }
-                    }, 1, TimeUnit.SECONDS)
+                    ringer.schedule(
+                        {
+                            if (incomingCalls.containsKey(signal.senderId)) {
+                                run()
+                            }
+                        },
+                        1, TimeUnit.SECONDS
+                    )
                 }
             }
             ringer.execute {
@@ -272,15 +284,14 @@ class MessagingHolder {
     }
 
     // remove notification, stop ringtone
-    fun declineAndDismiss(
-        context: Context,
+    fun dismissIncomingCallNotification(
         notificationManager: NotificationManager,
         signal: WebRTCSignal
     ) {
         ringer.execute {
             incomingCalls.remove(signal.senderId)?.let { notification ->
                 notificationManager.cancel(notification.extras.getInt("notificationId"))
-                RingtoneManager(context).stopPreviousRingtone()
+                stopPlayingRingtone()
             }
         }
     }
@@ -319,6 +330,30 @@ class MessagingHolder {
         val maxSha1Hash = BigInteger.valueOf(2).pow(160)
         val bytes = MessageDigest.getInstance("SHA-1").digest(this.toByteArray(Charsets.UTF_8))
         return BigInteger(1, bytes).times(BigInteger.valueOf(max)).div(maxSha1Hash).toLong()
+    }
+
+    companion object {
+        private lateinit var ringtone: Ringtone
+        private val playingRingtone = AtomicBoolean()
+
+        private fun initRingtone(context: Context) {
+            val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            ringtone = RingtoneManager.getRingtone(context, notification)
+        }
+
+        private fun playRingtone() {
+            if (!playingRingtone.getAndSet(true)) {
+                thread {
+                    ringtone.play()
+                }
+            }
+        }
+
+        private fun stopPlayingRingtone() {
+            if (playingRingtone.getAndSet(false)) {
+                ringtone.stop()
+            }
+        }
     }
 }
 
