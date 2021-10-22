@@ -1,6 +1,6 @@
 import 'package:lantern/common/common.dart';
 
-var forceRTL = true; // set to true to force RTL for testing
+var forceRTL = false; // set to true to force RTL for testing
 
 class BaseScreen extends StatelessWidget {
   final dynamic title;
