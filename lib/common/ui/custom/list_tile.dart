@@ -22,7 +22,13 @@ class CListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
+      builder: (BuildContext context, BoxConstraints constraints) => Container(
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
         height: height,
         child: InkWell(
           onTap: onTap ?? () {},

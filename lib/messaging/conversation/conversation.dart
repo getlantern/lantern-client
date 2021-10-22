@@ -328,44 +328,48 @@ class ConversationState extends State<Conversation>
         padHorizontal: false,
         // Conversation title (contact name)
         title: dismissKeyboardsOnTap(
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 16),
-                child: CustomAvatar(
-                    messengerId: contact.contactId.id,
-                    displayName: contact.displayNameOrFallback),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CText(
-                      title,
-                      maxLines: 1,
-                      style: tsHeading3,
-                    ),
-                    Row(
-                      children: [
-                        DisappearingTimerAction(contact),
-                        // TODO: only show when actually verified
-                        const Padding(
-                          padding: EdgeInsetsDirectional.only(start: 8.0),
-                          child: CAssetImage(
-                            path: ImagePaths.verified_user,
-                            size: 12.0,
-                          ),
-                        ),
-                        CText('verified'.i18n.toUpperCase(), style: tsOverline)
-                      ],
-                    ),
-                  ],
+          GestureDetector(
+            onTap: () {}, // TODO: show Contact Info
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 16),
+                  child: CustomAvatar(
+                      messengerId: contact.contactId.id,
+                      displayName: contact.displayNameOrFallback),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CText(
+                        title,
+                        maxLines: 1,
+                        style: tsHeading3,
+                      ),
+                      Row(
+                        children: [
+                          DisappearingTimerAction(contact),
+                          // TODO: only show when actually verified
+                          const Padding(
+                            padding: EdgeInsetsDirectional.only(start: 8.0),
+                            child: CAssetImage(
+                              path: ImagePaths.verified_user,
+                              size: 12.0,
+                            ),
+                          ),
+                          CText('verified'.i18n.toUpperCase(),
+                              style: tsOverline)
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         actions: [

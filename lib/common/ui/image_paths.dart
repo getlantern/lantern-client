@@ -56,9 +56,6 @@ class ImagePaths {
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
-  static const timer = 'assets/images/timer.svg';
-  static const verification_alert = 'assets/images/verification_alert.svg';
-  static const verified_user = 'assets/images/verified_user.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
@@ -71,6 +68,11 @@ class ImagePaths {
   static const cancel = 'assets/images/cancel.svg';
   static const delete = 'assets/images/delete.svg';
   static const done_all = 'assets/images/done_all.svg';
+  static const timer = 'assets/images/timer.svg';
+  static const verification_alert = 'assets/images/verification_alert.svg';
+  static const verified_user = 'assets/images/verified_user.svg';
+  static const user = 'assets/images/user.svg';
+  static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

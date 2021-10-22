@@ -39,12 +39,27 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                margin: const EdgeInsetsDirectional.only(
+                    start: 4, top: 21, bottom: 3),
+                child: CText('add_new_contact'.i18n.toUpperCase(),
+                    maxLines: 1, style: tsOverline),
+              ),
+              const CDivider(),
               CListTile(
-                leading: Icon(
-                  Icons.qr_code,
-                  color: black,
+                leading: const CAssetImage(
+                  path: ImagePaths.qr_code_scanner,
                 ),
-                content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                    CText('add_contact_in_person'.i18n,
+                        style: tsBody1.copiedWith(color: grey5))
+                  ],
+                ),
                 trailing: mirrorBy180deg(
                   context: context,
                   child: const CAssetImage(
@@ -91,12 +106,10 @@ class _NewMessageState extends State<NewMessage> {
                 }),
               ),
               CListTile(
-                leading: Icon(
-                  Icons.people,
-                  color: black,
+                leading: const CAssetImage(
+                  path: ImagePaths.person_add_alt_1,
                 ),
-                content:
-                    CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
+                content: CText('add_via_id'.i18n, style: tsSubtitle1Short),
                 trailing: mirrorBy180deg(
                   context: context,
                   child: const CAssetImage(
@@ -138,7 +151,37 @@ class _NewMessageState extends State<NewMessage> {
                             displayName: contact.displayNameOrFallback),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
-                                Conversation(contactId: contact.contactId)))
+                                Conversation(contactId: contact.contactId)),
+                        focusMenu: SizedBox(
+                          height: 150,
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.only(start: 4),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CListTile(
+                                  leading: const CAssetImage(
+                                    path: ImagePaths.user,
+                                  ),
+                                  showDivider: false,
+                                  content: 'view_contact_info'.i18n,
+                                  onTap: () {}, // TODO show Contact Info view
+                                ),
+                                CListTile(
+                                  leading: const CAssetImage(
+                                    path: ImagePaths.people,
+                                  ),
+                                  showDivider: false,
+                                  content: 'introduce_contacts'.i18n,
+                                  onTap: () async => await context
+                                      .pushRoute(const Introduce()),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ))
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),
