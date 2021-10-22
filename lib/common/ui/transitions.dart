@@ -4,7 +4,11 @@ const RouteTransitionsBuilder defaultTransition = TransitionsBuilders.fadeIn;
 
 const defaultTransitionMillis = 200;
 
+const defaultAnimationMillis = 1000;
+
 const defaultTransitionDuration =
     Duration(milliseconds: defaultTransitionMillis);
+
+const defaultAnimationDuration = Duration(milliseconds: defaultAnimationMillis);
 
 ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();

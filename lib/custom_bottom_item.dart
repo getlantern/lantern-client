@@ -35,6 +35,7 @@ class CustomBottomItem extends StatelessWidget {
             fit: FlexFit.tight,
             flex: 1,
             child: InkWell(
+              focusColor: grey3,
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(

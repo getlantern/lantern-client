@@ -405,7 +405,7 @@ class MessageBubble extends StatelessWidget {
                       : ImagePaths.content_copy,
                   content: 'copy_text'.i18n,
                   onTap: () {
-                    copyText(context);
+                    copyText(context, message.text);
                     setState(() {
                       textCopied = true;
                     });
@@ -447,24 +447,6 @@ class MessageBubble extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void copyText(BuildContext context) {
-    showSnackbar(
-      context: context,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-              child: CText(
-            'copied'.i18n,
-            style: tsBody1Color(white),
-            textAlign: TextAlign.start,
-          )),
-        ],
-      ),
-    );
-    Clipboard.setData(ClipboardData(text: message.text));
   }
 
   void deleteForMe(BuildContext context, MessagingModel model) {

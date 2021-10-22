@@ -34,7 +34,9 @@ ScrollablePositionedList groupedContactListGenerator({
           const CDivider(),
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map((contact) => FocusedMenuHolder(
-                  menu: focusMenuCallback!() ?? const SizedBox(),
+                  menu: (focusMenuCallback != null)
+                      ? focusMenuCallback(contact.value)
+                      : const SizedBox(),
                   onOpen: () {}, // TODO: maybe needed for keyboard dismissal
                   menuWidth: MediaQuery.of(context).size.width * 0.8,
                   child: ContactListItem(

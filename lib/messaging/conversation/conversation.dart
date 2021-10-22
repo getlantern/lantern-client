@@ -327,9 +327,11 @@ class ConversationState extends State<Conversation>
         padHorizontal: false,
         // Conversation title (contact name)
         title: dismissKeyboardsOnTap(
-          GestureDetector(
+          InkWell(
+            focusColor: grey3,
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
+            // TODO: I had initially extracted this into its own widget since the designs were reusing it, but thats not the case anymore. We can switch it back.
             child: ContactInfoTopBar(contact: contact),
           ),
         ),
