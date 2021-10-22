@@ -56,9 +56,6 @@ msgstr "Desktop version"
 msgid "settings"
 msgstr "Settings"
 
-msgid "display_name"
-msgstr "Display Name: %s"
-
 msgid "proxy_all"
 msgstr "Proxy everything"
 
@@ -214,6 +211,45 @@ msgstr "New Message"
 msgid "your_contact_info"
 msgstr "Your Contact Info"
 
+msgid "display_name"
+msgstr "Display Name:"
+
+msgid "edit"
+msgstr "Edit"
+
+msgid "username"
+msgstr "Username:"
+
+msgid "messenger_id"
+msgstr "Messenger ID:"
+
+msgid "more_options"
+msgstr "More options"
+
+msgid "block_user"
+msgstr "Block user"
+
+msgid "block"
+msgstr "Block"
+
+msgid "block_info_title"
+msgstr "Block %s ?"
+
+msgid "block_info_description"
+msgstr "Blocking this user will delete the message history, and prevent them from contacting you in the future. You can unblock users from the settings menu."
+
+msgid "block_info_checkbox"
+msgstr "I understand that this will delete all message history"
+
+msgid "delete_permanently"
+msgstr "Delete user permanently"
+
+msgid "delete_contact"
+msgstr "Delete contact"
+
+msgid "delete_info_description"
+msgstr "Once deleted, you will need to scan add their contact information if you want to message them again."
+
 msgid "add_new_contact"
 msgstr "Add new contact:"
 
@@ -231,9 +267,6 @@ msgstr "All messages will not disappear for you and your contact."
 
 msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and your contact."
-
-msgid "delete_contact_confirmation"
-msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
 
 msgid "delete"
 msgstr "Delete"

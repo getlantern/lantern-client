@@ -31,6 +31,8 @@ class CListTile extends StatelessWidget {
         ),
         height: height,
         child: InkWell(
+          splashColor: grey1,
+          focusColor: grey1,
           onTap: onTap ?? () {},
           child: Ink(
             child: Container(

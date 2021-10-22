@@ -25,7 +25,8 @@ Future showConversationOptions(
                   path: ImagePaths.user,
                 ),
                 label: 'view_contact_info'.i18n,
-                onTap: () {}, // TODO show Contact Info view
+                onTap: () async => await bottomContext
+                    .pushRoute(ContactInfo(contact: contact)),
               ),
               BottomModalItem(
                 leading: const CAssetImage(
