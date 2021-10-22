@@ -173,6 +173,9 @@ class AudioWidget extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Row(
+          // Always force LTR direction since we're talking about the passage
+          // of time.
+          textDirection: TextDirection.ltr,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
