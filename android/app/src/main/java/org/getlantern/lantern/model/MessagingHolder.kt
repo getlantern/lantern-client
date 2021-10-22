@@ -15,6 +15,8 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.ColorUtils
@@ -401,13 +403,19 @@ class MessagingHolder {
     }
 
     companion object {
+        private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        private val vibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
         private val playingRingtone = AtomicBoolean()
         private val ringtone = AtomicReference<Ringtone>()
+        private val vibrator = AtomicReference<Vibrator>()
 
         private fun playRingtone(context: Context) {
             if (!playingRingtone.getAndSet(true)) {
+                val vib = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.set(vib)
+                vib.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
                 thread {
-                    val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                    val notification = ringtoneUri
                     val rtone = RingtoneManager.getRingtone(context, notification)
                     ringtone.set(rtone)
                     rtone.play()
@@ -419,6 +427,8 @@ class MessagingHolder {
             if (playingRingtone.getAndSet(false)) {
                 ringtone.get().stop()
                 ringtone.set(null)
+                vibrator.get().cancel()
+                vibrator.set(null)
             }
         }
     }
