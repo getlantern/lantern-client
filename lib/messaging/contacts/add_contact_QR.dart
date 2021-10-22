@@ -187,7 +187,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // icon color
       topColor: grey5,
       title: Center(
-        child: CText('qr_scanner'.i18n,
+        child: CText('contact_verification'.i18n,
             style: tsHeading3.copiedWith(color: white)),
       ),
       backButton: mirrorBy180deg(

@@ -203,7 +203,7 @@ msgid "reject"
 msgstr "Reject"
 
 msgid "info_dialog_confirm"
-msgstr "Got it"
+msgstr "OK"
 
 msgid "copied"
 msgstr "Copied!"
@@ -214,8 +214,14 @@ msgstr "New Message"
 msgid "your_contact_info"
 msgstr "Your Contact Info"
 
+msgid "add_new_contact"
+msgstr "Add new contact:"
+
 msgid "scan_qr_code"
-msgstr "Scan Contact QR Code"
+msgstr "Scan QR Code"
+
+msgid "add_contact_in_person"
+msgstr "Add contacts in person"
 
 msgid "start_chat"
 msgstr "Start chat"
@@ -232,8 +238,8 @@ msgstr "Once deleted, you will need to scan their QR code or have a mutual frien
 msgid "delete"
 msgstr "Delete"
 
-msgid "conversation_title_bottomsheet"
-msgstr "Conversation Menu"
+msgid "view_contact_info"
+msgstr "View Contact Info"
 
 msgid "off"
 msgstr "Off"
@@ -283,17 +289,17 @@ msgstr "Introductions Sent!"
 msgid "no_contacts_yet"
 msgstr "No contacts yet"
 
+msgid "contact_verification"
+msgstr "Contact Verification"
+
 msgid "qr_error_description"
 msgstr "Something went wrong while scanning this QR code."
 
-msgid "qr_scanner"
-msgstr "Contact Verification"
-
 msgid "qr_info_title"
-msgstr "Scan QR Code"
+msgstr "In Person Contact Verification"
 
 msgid "qr_info_description"
-msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+msgstr "To verify your contact, scan each other's QR codes.\n\nThis process ensures the privacy and end-to-end encryption of your conversations."
 
 msgid "qr_info_scan"
 msgstr "Scan each others QR codes to verify."
@@ -310,8 +316,8 @@ msgstr "Scan complete"
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
-msgid "qr_add_via_id"
-msgstr "Add via Messenger ID"
+msgid "add_via_id"
+msgstr "Add via Username or Lantern ID"
 
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
@@ -434,7 +440,7 @@ msgid "verified"
 msgstr "Verified"
 
 msgid "verify_description"
-msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours. \n Would you like to verify in person or via a phone call?"
+msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
 
 msgid "verify_in_person"
 msgstr "Verify in person"
