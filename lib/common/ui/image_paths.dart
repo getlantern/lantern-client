@@ -59,6 +59,7 @@ class ImagePaths {
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
+  static const content_copy_outline = 'assets/images/content_copy_outline.svg';
   static const check_green = 'assets/images/check_green.svg';
   static const check_black = 'assets/images/check_black.svg';
   static const check_circle_outline = 'assets/images/check_circle_outline.svg';

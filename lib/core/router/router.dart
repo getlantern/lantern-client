@@ -6,6 +6,7 @@ import 'package:lantern/core/router/tabs/message_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
+import 'package:lantern/messaging/contacts/contact_info.dart';
 import 'package:lantern/home.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
@@ -37,6 +38,13 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         page: Conversation,
         name: 'Conversation',
         path: 'conversation',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ContactInfo,
+        name: 'ContactInfo',
+        path: 'contactInfo',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

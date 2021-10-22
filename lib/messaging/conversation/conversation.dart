@@ -2,11 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
+import 'package:lantern/messaging/contacts/contact_info_topbar.dart';
 
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
 import 'package:lantern/messaging/conversation/conversation_sticker.dart';
-import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
 import 'package:lantern/messaging/conversation/message_bubble.dart';
 import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
 import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
@@ -321,7 +321,6 @@ class ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
-      final title = contact.displayNameOrFallback;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -329,47 +328,9 @@ class ConversationState extends State<Conversation>
         // Conversation title (contact name)
         title: dismissKeyboardsOnTap(
           GestureDetector(
-            onTap: () {}, // TODO: show Contact Info
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 16),
-                  child: CustomAvatar(
-                      messengerId: contact.contactId.id,
-                      displayName: contact.displayNameOrFallback),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CText(
-                        title,
-                        maxLines: 1,
-                        style: tsHeading3,
-                      ),
-                      Row(
-                        children: [
-                          DisappearingTimerAction(contact),
-                          // TODO: only show when actually verified
-                          const Padding(
-                            padding: EdgeInsetsDirectional.only(start: 8.0),
-                            child: CAssetImage(
-                              path: ImagePaths.verified_user,
-                              size: 12.0,
-                            ),
-                          ),
-                          CText('verified'.i18n.toUpperCase(),
-                              style: tsOverline)
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            onTap: () async =>
+                await context.pushRoute(ContactInfo(contact: contact)),
+            child: ContactInfoTopBar(contact: contact),
           ),
         ),
         actions: [
@@ -377,6 +338,7 @@ class ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // TODO: Verification - only show once (?)
               IconButton(
                 visualDensity: VisualDensity.compact,
                 onPressed: () => showBottomModal(

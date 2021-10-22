@@ -152,36 +152,38 @@ class _NewMessageState extends State<NewMessage> {
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
                                 Conversation(contactId: contact.contactId)),
-                        focusMenu: SizedBox(
-                          height: 150,
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.only(start: 4),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CListTile(
-                                  leading: const CAssetImage(
-                                    path: ImagePaths.user,
-                                  ),
-                                  showDivider: false,
-                                  content: 'view_contact_info'.i18n,
-                                  onTap: () {}, // TODO show Contact Info view
+                        focusMenuCallback: (Contact contact) => SizedBox(
+                              height: 150,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(start: 4),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CListTile(
+                                        leading: const CAssetImage(
+                                          path: ImagePaths.user,
+                                        ),
+                                        showDivider: false,
+                                        content: 'view_contact_info'.i18n,
+                                        onTap: () async =>
+                                            await context.pushRoute(
+                                                ContactInfo(contact: contact))),
+                                    CListTile(
+                                      leading: const CAssetImage(
+                                        path: ImagePaths.people,
+                                      ),
+                                      showDivider: false,
+                                      content: 'introduce_contacts'.i18n,
+                                      onTap: () async => await context
+                                          .pushRoute(const Introduce()),
+                                    ),
+                                  ],
                                 ),
-                                CListTile(
-                                  leading: const CAssetImage(
-                                    path: ImagePaths.people,
-                                  ),
-                                  showDivider: false,
-                                  content: 'introduce_contacts'.i18n,
-                                  onTap: () async => await context
-                                      .pushRoute(const Introduce()),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ))
+                              ),
+                            ))
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),
