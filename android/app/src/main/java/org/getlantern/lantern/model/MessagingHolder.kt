@@ -354,13 +354,9 @@ class MessagingHolder {
         val canvas = Canvas(bitmap)
         val paintBg = Paint()
         val paintAv = Paint()
-        val paintStroke = Paint()
         paintAv.isAntiAlias = true
         paintBg.isAntiAlias = true
-        paintStroke.isAntiAlias = true
         paintBg.color = getAvatarBgColor(contact.contactId.id)
-        paintStroke.color = Color.WHITE
-        canvas.drawCircle(200.toFloat(), 200.toFloat(), 200.toFloat(), paintStroke)
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
