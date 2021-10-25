@@ -50,7 +50,6 @@ class Signaling extends ValueNotifier<SignalingState> {
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
-  Function? closeAlertDialog;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -269,7 +268,6 @@ class Signaling extends ValueNotifier<SignalingState> {
             value.callState = CallState.Bye;
             notifyListeners();
           }
-          closeAlertDialog?.call();
           unawaited(_closeSession(session));
         }
         break;
