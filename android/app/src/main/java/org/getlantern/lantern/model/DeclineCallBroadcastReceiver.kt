@@ -12,15 +12,11 @@ import org.getlantern.lantern.util.Json
 
 class DeclineCallBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val signal = intent!!.getStringExtra("signal")
-        if (signal != null) {
-            LanternApp.messaging.declineAndDismiss(
-                context!!,
-                (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!,
+        intent!!.getStringExtra("signal")?.let { signal ->
+            LanternApp.messaging.dismissIncomingCallNotification(
+                (context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!,
                 Json.gson.fromJson(signal, WebRTCSignal::class.java)
             )
         }
-        intent.removeExtra("signal")
-        intent.removeExtra("notificationId")
     }
 }

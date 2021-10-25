@@ -50,7 +50,6 @@ class Signaling extends ValueNotifier<SignalingState> {
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
-  Function? closeAlertDialog;
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -169,7 +168,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     return stream;
   }
 
-  void onMessage(String peerId, String messageJson, bool accepted) async {
+  void onMessage(String peerId, String messageJson, bool acceptedCall) async {
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {
@@ -184,7 +183,8 @@ class Signaling extends ValueNotifier<SignalingState> {
           // or video without the user's knowledge.
           var contact = await model.getDirectContact(peerId);
 
-          if (accepted) {
+          if (acceptedCall) {
+            // only create session if user accepted call
             var newSession = await _createSession(
                 isInitiator: false,
                 session: _sessions[sessionId],
@@ -268,7 +268,6 @@ class Signaling extends ValueNotifier<SignalingState> {
             value.callState = CallState.Bye;
             notifyListeners();
           }
-          closeAlertDialog?.call();
           unawaited(_closeSession(session));
         }
         break;
