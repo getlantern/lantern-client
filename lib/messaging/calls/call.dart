@@ -18,6 +18,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   late Future<Session> session;
   late Signaling signaling;
   var closed = false;
+  var isPanelShowing = false;
 
   @override
   void initState() {
@@ -90,6 +91,24 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     }
   }
 
+  void showVerificationPanel() {
+    setState(() {
+      isPanelShowing = true;
+    });
+    // animate avatar
+    // if verified, change panel text
+    // if verified, change Button text
+  }
+
+  void handleTapping({required String key}) {
+    // strikethrough
+    print('key is $key');
+  }
+
+  void markAsVerified() {
+    // talk to model and mark as verified
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -102,62 +121,172 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                 color: black,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  /*
+                   * Avatar, title and call status
+                   */
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      child: isPanelShowing
+                          ? Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 24.0, top: 40.0, bottom: 24.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding:
+                                        const EdgeInsetsDirectional.all(8.0),
+                                    child: CustomAvatar(
+                                        messengerId:
+                                            widget.contact.contactId.id,
+                                        displayName: widget
+                                            .contact.displayNameOrFallback,
+                                        customColor: grey5),
+                                  ),
+                                  renderTitle()
+                                ],
+                              ),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsetsDirectional.all(8.0),
+                                  child: CustomAvatar(
+                                      messengerId: widget.contact.contactId.id,
+                                      displayName:
+                                          widget.contact.displayNameOrFallback,
+                                      customColor: grey5,
+                                      radius: 80),
+                                ),
+                                renderTitle()
+                              ],
+                            )),
+                  /*
+                   * Verification panel
+                   */
+                  if (isPanelShowing)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: const EdgeInsetsDirectional.only(
+                                top: 30, bottom: 30),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              color: grey5,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Stack(
+                                  alignment: AlignmentDirectional.topEnd,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.close_rounded,
+                                        color: white,
+                                      ),
+                                      onPressed: () => setState(
+                                          () => isPanelShowing = false),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 24,
+                                          end: 24,
+                                          top: 32,
+                                          bottom: 24),
+                                      child: CText(
+                                          'This is your verification number. Check that your number matches Effe’s exactly before marking them verified.'
+                                              .i18n,
+                                          style:
+                                              tsBody1.copiedWith(color: grey3)),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        bottom: 24.0),
+                                    child: Wrap(
+                                      children: [
+                                        ...humanizeVerificationNum(widget
+                                                .contact.numericFingerprint)
+                                            .asMap()
+                                            .entries
+                                            .map((entry) => GestureDetector(
+                                                  key: ValueKey(entry.key),
+                                                  onTap: () => handleTapping(
+                                                      key: entry.value),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                                .only(
+                                                            start: 10.0,
+                                                            end: 10.0),
+                                                    child: CText(
+                                                        entry.value.toString(),
+                                                        style: tsHeading1
+                                                            .copiedWith(
+                                                                color: white)),
+                                                  ),
+                                                ))
+                                      ],
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      bottom: 24.0),
+                                  child: Button(
+                                    tertiary: true,
+                                    width: 200,
+                                    iconPath: ImagePaths.verified_user,
+                                    text: 'Mark as verified'.i18n,
+                                    onPressed: () => markAsVerified(),
+                                  ),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
+                  /*
+                   * Verify button
+                   */
+                  if (!isPanelShowing)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Padding(padding: EdgeInsetsDirectional.all(80)),
-                        CustomAvatar(
-                            messengerId: widget.contact.contactId.id,
-                            displayName: widget.contact.displayNameOrFallback,
-                            customColor: grey5,
-                            radius: 80),
                         Container(
-                          child: CText(
-                            widget.contact.displayNameOrFallback.isNotEmpty
-                                ? widget.contact.displayNameOrFallback
-                                : widget.contact.contactId.id,
-                            style: tsHeading1.copiedWith(color: white),
-                          ),
-                        ),
-                        Container(
-                          child: CText(
-                            getCallStatus(signaling.value.callState),
-                            style: tsBody1.copiedWith(color: white),
+                          padding: const EdgeInsetsDirectional.all(24.0),
+                          child: Stack(
+                            alignment: AlignmentDirectional.bottomCenter,
+                            children: [
+                              RoundButton(
+                                icon: CAssetImage(
+                                    path: ImagePaths.verified_user,
+                                    color: white),
+                                backgroundColor: grey5,
+                                onPressed: () => showVerificationPanel(),
+                              ),
+                              Transform.translate(
+                                offset: const Offset(0.0, 30.0),
+                                child: CText('verification'.i18n,
+                                    style: tsBody1.copiedWith(color: white)),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.all(24.0),
-                        child: Stack(
-                          alignment: AlignmentDirectional.bottomCenter,
-                          children: [
-                            RoundButton(
-                              icon: CAssetImage(
-                                  path: ImagePaths.verified_user, color: white),
-                              backgroundColor: grey5,
-                              onPressed: () {}, //TODO: show verification panel
-                            ),
-                            Transform.translate(
-                              offset: const Offset(0.0, 30.0),
-                              child: CText('verification'.i18n,
-                                  style: tsBody1.copiedWith(color: white)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  /*
+                   * Controls
+                   */
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -248,4 +377,45 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
           );
         });
   }
+
+  List<dynamic> humanizeVerificationNum(String verificationNum) {
+    final verificationNumList =
+        widget.contact.numericFingerprint.characters.toList();
+    var verificationFragments = [];
+    for (var i = 0; i < verificationNumList.length; i += 5) {
+      final fragment = verificationNumList.sublist(
+          i,
+          i + 5 > verificationNumList.length
+              ? verificationNumList.length
+              : i + 5);
+      final cleanFragment = fragment.join();
+      verificationFragments.add(cleanFragment);
+    }
+    return verificationFragments;
+  }
+
+  Column renderTitle() => Column(
+          mainAxisAlignment: isPanelShowing
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
+          crossAxisAlignment: isPanelShowing
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: CText(
+                widget.contact.displayNameOrFallback.isNotEmpty
+                    ? widget.contact.displayNameOrFallback
+                    : widget.contact.contactId.id,
+                style: tsHeading1.copiedWith(color: white),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsetsDirectional.only(bottom: 80.0),
+              child: CText(
+                getCallStatus(signaling.value.callState),
+                style: tsBody1.copiedWith(color: white),
+              ),
+            ),
+          ]);
 }
