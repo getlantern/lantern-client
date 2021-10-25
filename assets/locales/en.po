@@ -325,6 +325,9 @@ msgstr "No contacts yet"
 msgid "contact_verification"
 msgstr "Contact Verification"
 
+msgid "verification"
+msgstr "Verification"
+
 msgid "contact_verification_description"
 msgstr "Contact verification is always available from the message menu in the top right."
 
