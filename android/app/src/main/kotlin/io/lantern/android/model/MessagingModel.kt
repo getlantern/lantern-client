@@ -41,14 +41,14 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         }
     }
 
-    fun sendSignal(signal: WebRTCSignal, accepted: Boolean) {
+    fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
         mainHandler.post {
             methodChannel.invokeMethod(
                 "onSignal",
                 mapOf(
                     "senderId" to signal.senderId,
                     "content" to signal.content.toString(Charsets.UTF_8),
-                    "accepted" to accepted,
+                    "acceptedCall" to acceptedCall,
                 )
             )
         }

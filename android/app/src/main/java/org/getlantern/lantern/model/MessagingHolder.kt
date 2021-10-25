@@ -1,16 +1,22 @@
 package org.getlantern.lantern.model
 
-import android.app.*
+import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.media.AudioAttributes
+import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.ColorUtils
@@ -18,7 +24,12 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.Schema
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.path
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -28,6 +39,9 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.concurrent.thread
 
 internal const val messageNotificationChannelId = "10001"
 internal const val callNotificationChannelId = "10002"
@@ -45,6 +59,7 @@ class MessagingHolder {
     fun init(application: Application) {
         val lanternDir = File(application.filesDir, ".lantern")
         lanternDir.mkdirs()
+
         try {
             messaging = Messaging(
                 BaseModel.masterDB,
@@ -72,11 +87,14 @@ class MessagingHolder {
             )
 
             // show notifications for incoming calls
-            messaging.subscribeToWebRTCSignals("systemNotifications") { signal ->
-                val msg = Json.gson.fromJson(signal.content.toString(Charsets.UTF_8), SignalingMessage::class.java)
+            messaging.subscribeToWebRTCSignals("messagingholder") { signal ->
+                val msg = Json.gson.fromJson(
+                    signal.content.toString(Charsets.UTF_8),
+                    SignalingMessage::class.java
+                )
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
-                    "bye" -> declineAndDismiss(application, notificationManager, signal)
+                    "bye" -> dismissIncomingCallNotification(notificationManager, signal)
                 }
             }
         } catch (t: Throwable) {
@@ -121,7 +139,10 @@ class MessagingHolder {
                     defaultNotificationChannelId
                 )
                 builder.setContentTitle(application.getString(R.string.new_message))
-                val contentString = application.getString(R.string.from_sender, contact.displayName ?: contact.contactId.id)
+                val contentString = application.getString(
+                    R.string.from_sender,
+                    displayName(application, contact)
+                )
                 builder.setContentText(contentString)
                 builder.setSmallIcon(R.drawable.status_on)
                 builder.setAutoCancel(true)
@@ -144,7 +165,7 @@ class MessagingHolder {
         }
     }
 
-    fun notifyCall(
+    private fun notifyCall(
         context: Context,
         notificationManager: NotificationManager,
         signal: WebRTCSignal
@@ -153,115 +174,41 @@ class MessagingHolder {
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
-            var notificationId = nextNotificationId++
-
-            // decline intent
-            val declineIntent =
-                Intent(context, DeclineCallBroadcastReceiver::class.java)
-            val declineIntentExtras = Bundle()
-            declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            declineIntentExtras.putString("signal", serializedSignal)
-            declineIntentExtras.putInt("notificationId", notificationId)
-            declineIntent.putExtras(declineIntentExtras)
-
-            // accept intent - we use Bundle() since we are sending two params
-            val acceptIntentExtras = Bundle()
-            val acceptIntent =
-                Intent(context, MainActivity::class.java)
-            acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-            acceptIntentExtras.putString("signal", serializedSignal)
-            acceptIntentExtras.putBoolean("accepted", true)
-            acceptIntentExtras.putInt("notificationId", notificationId)
-            acceptIntent.putExtras(acceptIntentExtras)
-
-            val declinePendingIntent = PendingIntent.getBroadcast(
+            val notificationId = nextNotificationId++
+            val acceptPendingIntent = acceptIntent(
                 context,
                 notificationId,
-                declineIntent,
-                PendingIntent.FLAG_ONE_SHOT
+                serializedSignal
             )
-            val acceptPendingIntent = PendingIntent.getActivity(
+            val declinePendingIntent = declineIntent(
                 context,
                 notificationId,
-                acceptIntent,
-                PendingIntent.FLAG_ONE_SHOT
+                serializedSignal
             )
 
-            val builder = NotificationCompat.Builder(
+            val notification = incomingCallNotification(
                 context,
-                defaultNotificationChannelId
+                notificationManager,
+                notificationId,
+                contact,
+                acceptPendingIntent,
+                declinePendingIntent
             )
-
-            // RemoteViews styles
-            val customNotification = RemoteViews(context.packageName, R.layout.notification_custom)
-            customNotification.setTextViewText(R.id.caller, contact.displayName)
-            customNotification.setTextViewText(R.id.incomingCall, context.getString(R.string.incoming_call))
-            customNotification.setTextViewText(R.id.btnAccept, context.getString(R.string.accept))
-            customNotification.setTextViewText(R.id.btnDecline, context.getString(R.string.decline))
-            paintAvatar(contact, customNotification)
-
-            // Set button intents
-            customNotification.setOnClickPendingIntent(R.id.btnDecline, declinePendingIntent)
-            customNotification.setOnClickPendingIntent(R.id.btnAccept, acceptPendingIntent)
-
-            // Attach RemoteView to builder()
-            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            builder.setCustomContentView(customNotification)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val importance = NotificationManager.IMPORTANCE_HIGH
-                val notificationChannel = NotificationChannel(
-                    callNotificationChannelId,
-                    "CallNotificationChannel",
-                    importance
-                )
-                notificationChannel.enableVibration(true)
-                notificationChannel.enableLights(true)
-
-                // Incoming call ringtone handling
-                val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-                val ringtoneAttrs = AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
-                notificationChannel.setSound(ringtone, ringtoneAttrs)
-                builder.setChannelId(callNotificationChannelId)
-                notificationManager.createNotificationChannel(
-                    notificationChannel
-                )
-            } else {
-                // This is a custom action assignment in case the API does not accept remote views
-                // TODO: need to test this
-                val declineAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_delete, context.getString(R.string.decline), declinePendingIntent).build()
-                val acceptAction = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_call, context.getString(R.string.accept), acceptPendingIntent).build()
-                builder.addAction(declineAction)
-                builder.addAction(acceptAction)
-            }
-
-            builder.setContentTitle(context.getString(R.string.incoming_call))
-            builder.setContentText(contact.displayName)
-            builder.setSmallIcon(R.drawable.status_on)
-            builder.setAutoCancel(false)
-            builder.setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-            builder.priority = NotificationCompat.PRIORITY_MAX
-            builder.setCategory(NotificationCompat.CATEGORY_CALL)
-            builder.setDefaults(Notification.FLAG_ONGOING_EVENT)
-            builder.setTimeoutAfter(10000)
-            builder.setDeleteIntent(declinePendingIntent)
-
-            val notification = builder.build()
-            val ring = object: Runnable {
+            val ring = object : Runnable {
                 override fun run() {
-                    // build notification
+                    playRingtone(context)
                     notificationManager.notify(notificationId, notification)
                     // on some phones like Huawei, the heads up notification only stays heads up
                     // for a few seconds, so we re-notify every second while ringing in order to
                     // keep it heads up
-                    ringer.schedule({
-                        if (incomingCalls.containsKey(signal.senderId)) {
-                            run()
-                        }
-                    }, 1, TimeUnit.SECONDS)
+                    ringer.schedule(
+                        {
+                            if (incomingCalls.containsKey(signal.senderId)) {
+                                run()
+                            }
+                        },
+                        2, TimeUnit.SECONDS
+                    )
                 }
             }
             ringer.execute {
@@ -271,18 +218,135 @@ class MessagingHolder {
         }
     }
 
-    // remove notification, stop ringtone
-    fun declineAndDismiss(
+    private fun acceptIntent(
+        context: Context,
+        notificationId: Int,
+        serializedSignal: String
+    ): PendingIntent {
+        // accept intent - we use Bundle() since we are sending two params
+        val acceptIntentExtras = Bundle()
+        val acceptIntent =
+            Intent(context, MainActivity::class.java)
+        acceptIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+        acceptIntentExtras.putString("signal", serializedSignal)
+        acceptIntentExtras.putBoolean("accepted", true)
+        acceptIntent.putExtras(acceptIntentExtras)
+
+        return PendingIntent.getActivity(
+            context,
+            notificationId,
+            acceptIntent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+    }
+
+    private fun declineIntent(
+        context: Context,
+        notificationId: Int,
+        serializedSignal: String
+    ): PendingIntent {
+        // decline intent
+        val declineIntent =
+            Intent(context, DeclineCallBroadcastReceiver::class.java)
+        val declineIntentExtras = Bundle()
+        declineIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+        declineIntentExtras.putString("signal", serializedSignal)
+        declineIntentExtras.putInt("notificationId", notificationId)
+        declineIntent.putExtras(declineIntentExtras)
+
+        return PendingIntent.getBroadcast(
+            context,
+            notificationId,
+            declineIntent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+    }
+
+    fun incomingCallNotification(
         context: Context,
         notificationManager: NotificationManager,
-        signal: WebRTCSignal
-    ) {
-        ringer.execute {
-            incomingCalls.remove(signal.senderId)?.let { notification ->
-                notificationManager.cancel(notification.extras.getInt("notificationId"))
-                RingtoneManager(context).stopPreviousRingtone()
-            }
+        notificationId: Int,
+        contact: Model.Contact,
+        acceptPendingIntent: PendingIntent,
+        declinePendingIntent: PendingIntent
+    ): Notification {
+        val builder = NotificationCompat.Builder(
+            context,
+            defaultNotificationChannelId
+        )
+
+        // Attach RemoteView to builder()
+        builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+        builder.setCustomContentView(
+            incomingCallRemoteView(
+                context,
+                contact,
+                acceptPendingIntent,
+                declinePendingIntent,
+            )
+        )
+        builder.setContentTitle(context.getString(R.string.incoming_call))
+        builder.setContentText(displayName(context, contact))
+        builder.setSmallIcon(R.drawable.status_on)
+        builder.setAutoCancel(false)
+        builder.priority = NotificationCompat.PRIORITY_MAX
+        builder.setCategory(NotificationCompat.CATEGORY_CALL)
+        builder.setTimeoutAfter(30000)
+        builder.setDeleteIntent(declinePendingIntent)
+        builder.extras.putInt("notificationId", notificationId)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel = NotificationChannel(
+                callNotificationChannelId,
+                "CallNotificationChannel",
+                importance
+            )
+            notificationChannel.enableVibration(true)
+            notificationChannel.enableLights(true)
+            builder.setChannelId(callNotificationChannelId)
+            notificationManager.createNotificationChannel(
+                notificationChannel
+            )
+        } else {
+            // This is a custom action assignment in case the API does not accept remote views
+            // TODO: need to test this
+            val declineAction = NotificationCompat.Action.Builder(
+                android.R.drawable.ic_menu_delete,
+                context.getString(R.string.decline),
+                declinePendingIntent
+            ).build()
+            val acceptAction = NotificationCompat.Action.Builder(
+                android.R.drawable.ic_menu_call,
+                context.getString(R.string.accept),
+                acceptPendingIntent
+            ).build()
+            builder.addAction(declineAction)
+            builder.addAction(acceptAction)
         }
+
+        return builder.build()
+    }
+
+    private fun incomingCallRemoteView(
+        context: Context,
+        contact: Model.Contact,
+        acceptPendingIntent: PendingIntent,
+        declinePendingIntent: PendingIntent,
+    ): RemoteViews {
+        // RemoteViews styles
+        val remoteView = RemoteViews(context.packageName, R.layout.notification_custom)
+        remoteView.setTextViewText(R.id.caller, displayName(context, contact))
+        remoteView.setTextViewText(R.id.incomingCall, context.getString(R.string.incoming_call))
+        remoteView.setTextViewText(R.id.btnAccept, context.getString(R.string.accept))
+        remoteView.setTextViewText(R.id.btnDecline, context.getString(R.string.decline))
+        paintAvatar(contact, remoteView)
+
+        // Set button intents
+        remoteView.setOnClickPendingIntent(R.id.btnDecline, declinePendingIntent)
+        remoteView.setOnClickPendingIntent(R.id.btnAccept, acceptPendingIntent)
+
+        return remoteView
     }
 
     private fun paintAvatar(contact: Model.Contact, customNotification: RemoteViews) {
@@ -290,13 +354,9 @@ class MessagingHolder {
         val canvas = Canvas(bitmap)
         val paintBg = Paint()
         val paintAv = Paint()
-        val paintStroke = Paint()
         paintAv.isAntiAlias = true
         paintBg.isAntiAlias = true
-        paintStroke.isAntiAlias = true
         paintBg.color = getAvatarBgColor(contact.contactId.id)
-        paintStroke.color = Color.WHITE
-        canvas.drawCircle(200.toFloat(), 200.toFloat(), 200.toFloat(), paintStroke)
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
@@ -315,10 +375,62 @@ class MessagingHolder {
      * Calculates a SHA1 hash of the string's UTF-8 representation, coerced to a scaled integer between
      * 0 and max inclusive.
      */
-    fun String.sha1(max: Long): Long {
+    private fun String.sha1(max: Long): Long {
         val maxSha1Hash = BigInteger.valueOf(2).pow(160)
         val bytes = MessageDigest.getInstance("SHA-1").digest(this.toByteArray(Charsets.UTF_8))
         return BigInteger(1, bytes).times(BigInteger.valueOf(max)).div(maxSha1Hash).toLong()
+    }
+
+    // remove notification, stop ringtone
+    fun dismissIncomingCallNotification(
+        notificationManager: NotificationManager,
+        signal: WebRTCSignal
+    ) {
+        ringer.execute {
+            incomingCalls.remove(signal.senderId)?.let { notification ->
+                notificationManager.cancel(notification.extras.getInt("notificationId"))
+                stopPlayingRingtone()
+            }
+        }
+    }
+
+    private fun displayName(context: Context, contact: Model.Contact): String =
+        if (contact.displayName.isEmpty())
+            context.getString(R.string.unnamed_contact)
+        else
+            contact.displayName
+
+    companion object {
+        private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        private val vibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
+        private var playingRingtone = false
+        private var ringtone: Ringtone? = null
+        private var vibrator: Vibrator? = null
+
+        @Synchronized
+        private fun playRingtone(context: Context) {
+            if (!playingRingtone) {
+                playingRingtone = true
+                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator!!.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
+                ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
+                val rtone = ringtone!!
+                thread {
+                    rtone.play()
+                }
+            }
+        }
+
+        @Synchronized
+        private fun stopPlayingRingtone() {
+            if (playingRingtone) {
+                playingRingtone = false
+                ringtone!!.stop()
+                ringtone = null
+                vibrator!!.cancel()
+                vibrator = null
+            }
+        }
     }
 }
 
