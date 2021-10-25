@@ -679,7 +679,7 @@ class ConversationState extends State<Conversation>
                     ),
                     IconButton(
                       key: const ValueKey('send_message'),
-                      icon: mirrorBy180deg(
+                      icon: mirrorLTR(
                         context: context,
                         child: CAssetImage(
                             path: ImagePaths.send_rounded, color: pink4),

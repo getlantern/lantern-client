@@ -190,7 +190,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         child: CText('contact_verification'.i18n,
             style: tsHeading3.copiedWith(color: white)),
       ),
-      backButton: mirrorBy180deg(
+      backButton: mirrorLTR(
           context: context,
           child: CAssetImage(
             path: ImagePaths.arrow_back,
