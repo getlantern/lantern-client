@@ -553,5 +553,20 @@ msgstr "Could not render file title"
 msgid "could_not_render_type"
 msgstr "Could not render file type"
 
+msgid "speaker"
+msgstr "Speaker"
+
+msgid "speaker_on"
+msgstr "Speaker On"
+
+msgid "mute"
+msgstr "Mute"
+
+msgid "muted"
+msgstr "Muted"
+
+msgid "end_call"
+msgstr "End Call"
+
 msgid "unnamed_contact"
 msgstr "Unnamed Contact"

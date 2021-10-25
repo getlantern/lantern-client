@@ -68,7 +68,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }});
 
     private Activity currentActivity;
-    public final MessagingHolder messaging = new MessagingHolder();
+    public static final MessagingHolder messaging = new MessagingHolder();
 
     @Override
     public void onCreate() {
