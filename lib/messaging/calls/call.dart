@@ -134,17 +134,40 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.all(24.0),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          children: [
+                            RoundButton(
+                              icon: CAssetImage(
+                                  path: ImagePaths.verified_user, color: white),
+                              backgroundColor: grey5,
+                              onPressed: () {}, //TODO: show verification panel
+                            ),
+                            Transform.translate(
+                              offset: const Offset(0.0, 30.0),
+                              child: CText('verification'.i18n,
+                                  style: tsBody1.copiedWith(color: white)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsetsDirectional.all(20.0),
+                          padding: const EdgeInsetsDirectional.all(24.0),
                           child: Stack(
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
                               RoundButton(
-                                diameter: 70,
-                                padding: 15,
                                 icon: CAssetImage(
                                     path: ImagePaths.speaker,
                                     color: signalingState.speakerphoneOn
@@ -169,13 +192,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsetsDirectional.all(20.0),
+                          padding: const EdgeInsetsDirectional.all(24.0),
                           child: Stack(
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
                               RoundButton(
-                                diameter: 70,
-                                padding: 15,
                                 icon: CAssetImage(
                                     path: ImagePaths.mute,
                                     color:
@@ -198,13 +219,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsetsDirectional.all(20.0),
+                          padding: const EdgeInsetsDirectional.all(24.0),
                           child: Stack(
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
                               RoundButton(
-                                diameter: 70,
-                                padding: 15,
                                 icon:
                                     const CAssetImage(path: ImagePaths.hangup),
                                 backgroundColor: indicatorRed,
@@ -221,7 +240,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           ),
                         ),
                       ]),
-                  const Padding(padding: EdgeInsetsDirectional.all(20)),
+                  const Padding(
+                      padding: EdgeInsetsDirectional.only(bottom: 40)),
                 ],
               ),
             ),
