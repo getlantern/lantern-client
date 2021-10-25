@@ -8,6 +8,7 @@ class Button extends StatelessWidget {
   late final double? width;
   late final bool secondary;
   late final bool disabled;
+  late final bool tertiary;
 
   Button(
       {required this.text,
@@ -15,7 +16,8 @@ class Button extends StatelessWidget {
       this.onPressed,
       this.width,
       this.secondary = false,
-      this.disabled = false});
+      this.disabled = false,
+      this.tertiary = false});
 
   void _handleOnPress() {
     if (disabled) return null;
@@ -37,10 +39,18 @@ class Button extends StatelessWidget {
             backgroundColor: disabled
                 ? grey3
                 : secondary
-                    ? white
-                    : pink4,
+                    ? !tertiary
+                        ? white
+                        : pink4
+                    : black,
             padding: const EdgeInsets.symmetric(vertical: 15),
-            side: BorderSide(width: 2, color: disabled ? grey5 : pink4),
+            side: BorderSide(
+                width: 2,
+                color: disabled
+                    ? grey5
+                    : !tertiary
+                        ? pink4
+                        : black),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 23),
@@ -48,22 +58,26 @@ class Button extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (iconPath != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 8.0),
+                    child: CAssetImage(
+                      path: iconPath!,
+                      color: Colors.white,
+                    ),
+                  ),
                 CText(
                   text.toUpperCase(),
                   // style: disabled ? tsButtonGrey : tsButtonWhite,
                   style: disabled
                       ? tsButtonGrey
                       : secondary
-                          ? tsButtonPink
+                          ? !tertiary
+                              ? tsButtonPink
+                              : tsButtonWhite
                           : tsButtonWhite,
                   textAlign: TextAlign.center,
                 ),
-                if (iconPath != null) const SizedBox(width: 5),
-                if (iconPath != null)
-                  CAssetImage(
-                    path: iconPath!,
-                    color: Colors.white,
-                  )
               ],
             ),
           ),
