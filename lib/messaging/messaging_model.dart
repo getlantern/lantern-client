@@ -22,7 +22,8 @@ class MessagingModel extends Model {
       switch (call.method) {
         case 'onSignal':
           var args = call.arguments as Map;
-          signaling.onMessage(args['senderId'], args['content']);
+          signaling.onMessage(
+              args['senderId'], args['content'], args['acceptedCall']);
           break;
         default:
           break;
@@ -203,7 +204,8 @@ class MessagingModel extends Model {
       .map((s) => '"${s.replaceAll('\"', '')}"')
       .join(' ');
 
-  /// Returns the best introductions to each contact.
+  // Returns the best introductions to each contact.
+  // "Best" means most trusted (highest verification level).
   Widget bestIntroductions(
       {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
           builder}) {

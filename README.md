@@ -42,7 +42,7 @@ You can compile routes by running `make routes`.
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
 
 In the welcome screen choose the "Open an existing Android Studio" option and
-select the folder containing this README.
+select the `android` folder.
 
 You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. That file is built automatically.
 

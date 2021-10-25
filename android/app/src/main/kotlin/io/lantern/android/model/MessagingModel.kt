@@ -9,7 +9,12 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.db.SnippetConfig
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.dbPath
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
@@ -32,17 +37,18 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         // TODO: handle incoming calls when UI is closed (similar to how we handle message
         // notifications when UI is closed)
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
-            sendSignal(signal)
+            sendSignal(signal, false) // since we have not accepted yet
         }
     }
 
-    fun sendSignal(signal: WebRTCSignal) {
+    fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
         mainHandler.post {
             methodChannel.invokeMethod(
                 "onSignal",
                 mapOf(
                     "senderId" to signal.senderId,
                     "content" to signal.content.toString(Charsets.UTF_8),
+                    "acceptedCall" to acceptedCall,
                 )
             )
         }

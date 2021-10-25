@@ -2,7 +2,9 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
@@ -76,7 +78,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(this, flutterEngine, (application as LanternApp).messaging.messaging)
+        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
@@ -135,13 +137,22 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     }
 
     private fun navigateForIntent(intent: Intent) {
+        // handles text messaging intent
         intent.getByteArrayExtra("contactForConversation")?.let { contact ->
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
 
+        // handles incoming call intent
         intent.getStringExtra("signal")?.let { signal ->
-            messagingModel.sendSignal(Json.gson.fromJson(signal, WebRTCSignal::class.java))
+            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
+            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
+            // pass this on to Kotlin and then Dart messaging model
+            messagingModel.sendSignal(webRTCSignal, true)
+            LanternApp.messaging.dismissIncomingCallNotification(
+                notificationManager,
+                webRTCSignal
+            )
             intent.removeExtra("signal")
         }
     }
