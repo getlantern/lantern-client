@@ -52,7 +52,7 @@ class ContactConnectionCard extends StatelessWidget {
                                 color: outbound
                                     ? outboundMsgColor
                                     : inboundMsgColor),
-                          mirrorBy180deg(
+                          mirrorLTR(
                               context: context,
                               child: CAssetImage(
                                   path: (message.introduction.status ==

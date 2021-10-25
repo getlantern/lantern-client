@@ -60,7 +60,7 @@ class _NewMessageState extends State<NewMessage> {
                         style: tsBody1.copiedWith(color: grey5))
                   ],
                 ),
-                trailing: mirrorBy180deg(
+                trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
@@ -110,7 +110,7 @@ class _NewMessageState extends State<NewMessage> {
                   path: ImagePaths.person_add_alt_1,
                 ),
                 content: CText('add_via_id'.i18n, style: tsSubtitle1Short),
-                trailing: mirrorBy180deg(
+                trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
