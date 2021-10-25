@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/messaging/conversation/call_action.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
@@ -25,6 +26,14 @@ class ContactInfo extends StatelessWidget {
       centerTitle: true,
       padHorizontal: false,
       title: contact.displayNameOrFallback,
+      actions: [
+        CallAction(contact),
+        IconButton(
+            visualDensity: VisualDensity.compact,
+            icon: const CAssetImage(path: ImagePaths.messages),
+            onPressed: () async => await context
+                .pushRoute(Conversation(contactId: contact.contactId)))
+      ],
       body: ListView(
         physics: defaultScrollPhysics,
         children: [
@@ -423,19 +432,6 @@ class ContactInfo extends StatelessWidget {
                           ),
                         )),
                   ],
-                ),
-                /*
-                * BUTTON
-                */
-                Container(
-                  padding:
-                      const EdgeInsetsDirectional.only(top: 24, bottom: 32),
-                  child: Button(
-                    width: 200,
-                    text: 'message'.i18n.toUpperCase(),
-                    onPressed: () async => await context
-                        .pushRoute(Conversation(contactId: contact.contactId)),
-                  ),
                 ),
               ],
             ),
