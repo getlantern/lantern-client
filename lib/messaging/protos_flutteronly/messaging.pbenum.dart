@@ -47,6 +47,7 @@ class ContactSource extends $pb.ProtobufEnum {
   static const ContactSource APP3 = ContactSource._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP3');
   static const ContactSource APP4 = ContactSource._(5, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP4');
   static const ContactSource APP5 = ContactSource._(6, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'APP5');
+  static const ContactSource UNSOLICITED = ContactSource._(7, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UNSOLICITED');
 
   static const $core.List<ContactSource> values = <ContactSource> [
     UNKNOWN,
@@ -56,12 +57,30 @@ class ContactSource extends $pb.ProtobufEnum {
     APP3,
     APP4,
     APP5,
+    UNSOLICITED,
   ];
 
   static final $core.Map<$core.int, ContactSource> _byValue = $pb.ProtobufEnum.initByValue(values);
   static ContactSource? valueOf($core.int value) => _byValue[value];
 
   const ContactSource._($core.int v, $core.String n) : super(v, n);
+}
+
+class VerificationLevel extends $pb.ProtobufEnum {
+  static const VerificationLevel UNACCEPTED = VerificationLevel._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UNACCEPTED');
+  static const VerificationLevel UNVERIFIED = VerificationLevel._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UNVERIFIED');
+  static const VerificationLevel VERIFIED = VerificationLevel._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'VERIFIED');
+
+  static const $core.List<VerificationLevel> values = <VerificationLevel> [
+    UNACCEPTED,
+    UNVERIFIED,
+    VERIFIED,
+  ];
+
+  static final $core.Map<$core.int, VerificationLevel> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static VerificationLevel? valueOf($core.int value) => _byValue[value];
+
+  const VerificationLevel._($core.int v, $core.String n) : super(v, n);
 }
 
 class StoredAttachment_Status extends $pb.ProtobufEnum {
