@@ -350,9 +350,8 @@ class ConversationState extends State<Conversation>
                         model: model,
                         contact: contact,
                         context: bottomModalContext),
-                    icon: CAssetImage(
+                    icon: const CAssetImage(
                       path: ImagePaths.verification_alert,
-                      color: getAvatarColor(sha1Hue(contact.contactId.id)),
                     ),
                   ),
                   CallAction(contact),
