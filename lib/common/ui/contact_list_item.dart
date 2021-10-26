@@ -31,38 +31,34 @@ class ContactListItem extends StatelessWidget {
   final bool showDivider;
 
   @override
-  Widget build(BuildContext context) => FocusedMenuHolder(
-        menu: focusedMenu ?? const SizedBox(),
-        onOpen: () {}, // TODO: maybe needed for keyboard dismissal
-        menuWidth: MediaQuery.of(context).size.width * 0.8,
-        child: Wrap(
-          children: [
-            CListTile(
-                leading: leading,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    !title.contains('**')
-                        ? CText(title.toString(),
-                            maxLines: 1, style: tsSubtitle1Short)
-                        : TextHighlighter(text: title, style: tsSubtitle1),
-                    if (subTitle != null)
-                      !subTitle!.contains('**')
-                          ? CText(subTitle!,
-                              maxLines: 1,
-                              style: tsBody2.copiedWith(color: grey5))
-                          : TextHighlighter(text: subTitle!, style: tsBody2),
-                  ],
-                ),
-                trailing: Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 8.0),
-                  child: trailing ?? const SizedBox(),
-                ),
-                onTap: onTap,
-                showDivider: showDivider),
-          ],
-        ),
+  Widget build(BuildContext context) => Wrap(
+        children: [
+          CListTile(
+              focusedMenu: focusedMenu,
+              leading: leading,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  !title.contains('**')
+                      ? CText(title.toString(),
+                          maxLines: 1, style: tsSubtitle1Short)
+                      : TextHighlighter(text: title, style: tsSubtitle1),
+                  if (subTitle != null)
+                    !subTitle!.contains('**')
+                        ? CText(subTitle!,
+                            maxLines: 1,
+                            style: tsBody2.copiedWith(color: grey5))
+                        : TextHighlighter(text: subTitle!, style: tsBody2),
+                ],
+              ),
+              trailing: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8.0),
+                child: trailing ?? const SizedBox(),
+              ),
+              onTap: onTap,
+              showDivider: showDivider),
+        ],
       );
 }
