@@ -106,21 +106,6 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     setState(() => isVerified = fragmentsAreVerified());
   }
 
-  void markFragments(bool value, int? key) {
-    // mark one fragment
-    if (key != null) {
-      setState(() {
-        fragmentStatusMap[key]['isConfirmed'] = value;
-      });
-    } else {
-      // mark all fragments
-      setState(() {
-        fragmentStatusMap.updateAll(
-            (key, el) => {'fragment': el['fragment'], 'isConfirmed': value});
-      });
-    }
-  }
-
   // returns true if all the fragments have been verified
   bool fragmentsAreVerified() {
     return !fragmentStatusMap.entries
@@ -134,6 +119,21 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     } else {
       markFragments(true, null); // mark all fragments as verified
       isVerified = true;
+    }
+  }
+
+  void markFragments(bool value, int? key) {
+    // mark one fragment
+    if (key != null) {
+      setState(() {
+        fragmentStatusMap[key]['isConfirmed'] = value;
+      });
+    } else {
+      // mark all fragments
+      setState(() {
+        fragmentStatusMap.updateAll(
+            (key, el) => {'fragment': el['fragment'], 'isConfirmed': value});
+      });
     }
   }
 
