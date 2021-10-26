@@ -33,25 +33,23 @@ ScrollablePositionedList groupedContactListGenerator({
           ),
           const CDivider(),
           if (itemsPerKey.isNotEmpty)
-            ...itemsPerKey.map((contact) => FocusedMenuHolder(
-                  menu: (focusMenuCallback != null)
-                      ? focusMenuCallback(contact.value)
-                      : const SizedBox(),
-                  onOpen: () {}, // TODO: maybe needed for keyboard dismissal
-                  menuWidth: MediaQuery.of(context).size.width * 0.8,
-                  child: ContactListItem(
-                    contact: contact.value,
-                    index: index,
-                    leading: leadingCallback!(contact.value),
-                    title: contact.value.displayNameOrFallback,
-                    trailing: trailingCallback != null
-                        ? trailingCallback(index, contact.value)
-                        : null,
-                    onTap: onTapCallback != null
-                        ? () => onTapCallback(contact.value)
-                        : null,
-                  ),
-                ))
+            ...itemsPerKey.map(
+              (contact) => ContactListItem(
+                focusedMenu: (focusMenuCallback != null)
+                    ? focusMenuCallback(contact.value)
+                    : const SizedBox(),
+                contact: contact.value,
+                index: index,
+                leading: leadingCallback!(contact.value),
+                title: contact.value.displayNameOrFallback,
+                trailing: trailingCallback != null
+                    ? trailingCallback(index, contact.value)
+                    : null,
+                onTap: onTapCallback != null
+                    ? () => onTapCallback(contact.value)
+                    : null,
+              ),
+            )
         ],
       );
     },

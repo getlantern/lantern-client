@@ -40,10 +40,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 label: 'Email'.i18n,
                 helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(
-                  Icons.email,
-                  color: Colors.black,
-                ),
+                prefixIcon: const CAssetImage(path: ImagePaths.email),
               ),
             ),
             const Spacer(),

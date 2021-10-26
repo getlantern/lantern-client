@@ -30,16 +30,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
   final closeOnce = once();
 
-  final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
-  late final contactIdController = CustomTextEditingController(
-      formKey: _formKey,
-      validator: (value) => value == null ||
-              value.isEmpty ||
-              value == widget.me.contactId.id ||
-              value.length != widget.me.contactId.id.length
-          ? 'contact_id_error_description'.i18n
-          : null);
-
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -126,7 +116,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
         await addProvisionalContactOnce(() {
-          contactIdController.text = scanData.code;
           return addProvisionalContact(model, scanData.code, 'qr');
         });
       } catch (e, s) {
@@ -140,16 +129,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     });
   }
 
-  // void _onContactIdAdd() async {
-  //   // checking if the input field is not empty
-  //   if (_formKey.currentState!.validate()) {
-  //     await addProvisionalContactOnce(() {
-  //       return addProvisionalContact(
-  //           model, contactIdController.text.replaceAll('\-', ''), 'id');
-  //     });
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -161,7 +140,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void dispose() {
     subscription?.cancel();
     qrController?.dispose();
-    // contactIdController.dispose();
     countdownController.dispose();
     if (listener != null) {
       contactNotifier?.removeListener(listener!);
@@ -176,7 +154,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    // return usingId ? renderIdForm(context) : renderQRScanner(context);
     return renderQRScanner(context);
   }
 
@@ -197,7 +174,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
             color: white,
           )),
       onBackCallback: () => Navigator.pop(context, null),
-      // onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
       child: Container(
         color: grey5,
         child: Column(
@@ -315,263 +291,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              /* 
-              * ADD VIA USERNAME //TODO: delete completely
-              */
-              // Container(
-              //   // the margin between the QR code and this section is 27,
-              //   // which we split into 16 margin on the QR and 11 margin here
-              //   // to make sure that the QR code ends up exactly the same size
-              //   // as the QR scanner. If we put the full 27 margin on the QR
-              //   // code, it would render a little smaller than the scanner.
-              //   margin: const EdgeInsetsDirectional.only(top: 27 - 16),
-              //   child: GestureDetector(
-              //     onTap: () {
-              //       setState(() {
-              //         usingId = true;
-              //       });
-              //       qrController?.pauseCamera();
-              //     },
-              //     child: Container(
-              //       color: black,
-              //       padding:
-              //           const EdgeInsetsDirectional.fromSTEB(0, 15.0, 0, 15.0),
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //         crossAxisAlignment: CrossAxisAlignment.center,
-              //         children: [
-              //           Padding(
-              //             padding: const EdgeInsetsDirectional.fromSTEB(
-              //                 16.0, 0, 16.0, 0),
-              //             child: CText(
-              //               'qr_add_via_id'.i18n,
-              //               style: tsBody1Color(white),
-              //             ),
-              //           ),
-              //           Padding(
-              //             padding: const EdgeInsetsDirectional.fromSTEB(
-              //                 16.0, 0, 16.0, 0),
-              //             child: mirrorBy180deg(
-              //               context: context,
-              //               child: CAssetImage(
-              //                   path: ImagePaths.keyboard_arrow_right,
-              //                   color: white),
-              //             ),
-              //           )
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ]),
       ),
     );
   }
-
-  // Widget renderIdForm(BuildContext context) {
-  //   return showFullscreenDialog(
-  //     topColor: Colors.white,
-  //     iconColor: Colors.black,
-  //     context: context,
-  //     title: Flex(
-  //       direction: Axis.horizontal,
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         CText('qr_add_via_id'.i18n, style: tsHeading3),
-  //       ],
-  //     ),
-  //     backButton: mirrorBy180deg(
-  //         context: context,
-  //         child: const CAssetImage(path: ImagePaths.arrow_back)),
-  //     // onBackCallback: () {
-  //     //   setState(() {
-  //     //     usingId = false;
-  //     //   });
-  //     // },
-  //     onCloseCallback: () => Navigator.pop(context, null),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         FocusScope.of(context).unfocus();
-  //       },
-  //       child: Container(
-  //         color: Colors.white,
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           children: [
-  //             Expanded(
-  //               child: Form(
-  //                 key: _formKey,
-  //                 child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.start,
-  //                     children: [
-  //                       if (provisionalContactId == null &&
-  //                           !proceedWithoutProvisionals)
-  //                         Padding(
-  //                           padding: const EdgeInsetsDirectional.all(20.0),
-  //                           child: Wrap(
-  //                             children: [
-  //                               CTextField(
-  //                                   controller: contactIdController,
-  //                                   autovalidateMode: AutovalidateMode.disabled,
-  //                                   label: 'contact_id_messenger_id'.i18n,
-  //                                   helperText:
-  //                                       'contact_id_enter_manually'.i18n,
-  //                                   keyboardType: TextInputType.text,
-  //                                   minLines: 2,
-  //                                   maxLines: null,
-  //                                   suffixIcon: mirrorBy180deg(
-  //                                     context: context,
-  //                                     child: const CAssetImage(
-  //                                         path:
-  //                                             ImagePaths.keyboard_arrow_right),
-  //                                   )),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       if (provisionalContactId != null ||
-  //                           proceedWithoutProvisionals)
-  //                         Expanded(
-  //                           flex: 0,
-  //                           child: Container(
-  //                             margin: const EdgeInsetsDirectional.all(20.0),
-  //                             alignment: Alignment.center,
-  //                             decoration: BoxDecoration(
-  //                               border: Border.all(
-  //                                 color: grey3,
-  //                                 width: 1,
-  //                               ),
-  //                               borderRadius: const BorderRadius.all(
-  //                                   Radius.circular(8.0)),
-  //                             ),
-  //                             child: _renderWaitingUI(
-  //                               proceedWithoutProvisionals:
-  //                                   proceedWithoutProvisionals,
-  //                               countdownController: countdownController,
-  //                               timeoutMillis: timeoutMillis,
-  //                               fontColor: black,
-  //                               infoText: 'qr_info_waiting_id'.i18n,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       Padding(
-  //                         padding: const EdgeInsetsDirectional.all(20.0),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Row(
-  //                               mainAxisAlignment:
-  //                                   MainAxisAlignment.spaceBetween,
-  //                               children: [
-  //                                 Padding(
-  //                                   padding: const EdgeInsetsDirectional.only(
-  //                                       start: 10),
-  //                                   child: CText(
-  //                                     'contact_id_your_id'.i18n.toUpperCase(),
-  //                                     style: tsOverline,
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                             Divider(thickness: 1, color: grey3),
-  //                             Row(
-  //                               crossAxisAlignment: CrossAxisAlignment.center,
-  //                               children: [
-  //                                 Expanded(
-  //                                   child: GestureDetector(
-  //                                     onTap: () {
-  //                                       showSnackbar(
-  //                                         context: context,
-  //                                         content: Row(
-  //                                           mainAxisAlignment:
-  //                                               MainAxisAlignment.center,
-  //                                           children: [
-  //                                             Expanded(
-  //                                                 child: CText(
-  //                                               'copied'.i18n,
-  //                                               style: tsBody1Color(white),
-  //                                               textAlign: TextAlign.start,
-  //                                             )),
-  //                                           ],
-  //                                         ),
-  //                                       );
-  //                                       Clipboard.setData(ClipboardData(
-  //                                           text: widget.me.contactId.id));
-  //                                     },
-  //                                     child: Padding(
-  //                                       padding:
-  //                                           const EdgeInsetsDirectional.only(
-  //                                               start: 10.0, end: 10),
-  //                                       child: CText(
-  //                                           humanizeContactId(
-  //                                               widget.me.contactId.id),
-  //                                           overflow: TextOverflow.visible,
-  //                                           style: tsSubtitle1),
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 IconButton(
-  //                                     onPressed: () {
-  //                                       Clipboard.setData(ClipboardData(
-  //                                           text: widget.me.contactId.id));
-  //                                       showSnackbar(
-  //                                         context: context,
-  //                                         content: Row(
-  //                                           mainAxisAlignment:
-  //                                               MainAxisAlignment.center,
-  //                                           children: [
-  //                                             Expanded(
-  //                                                 child: CText(
-  //                                               'copied'.i18n,
-  //                                               style: tsBody1Color(white),
-  //                                               textAlign: TextAlign.start,
-  //                                             )),
-  //                                           ],
-  //                                         ),
-  //                                       );
-  //                                     },
-  //                                     icon: CAssetImage(
-  //                                       path: ImagePaths.content_copy,
-  //                                       size: 20,
-  //                                       color: black,
-  //                                     ))
-  //                               ],
-  //                             ),
-  //                             Divider(thickness: 1, color: grey3),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ]),
-  //               ),
-  //             ),
-  //             if (provisionalContactId == null && !proceedWithoutProvisionals)
-  //               Container(
-  //                 margin: const EdgeInsetsDirectional.only(bottom: 32),
-  //                 child: Button(
-  //                   width: 200,
-  //                   text: 'Submit'.i18n,
-  //                   onPressed: () {
-  //                     _onContactIdAdd();
-  //                     FocusScope.of(context).unfocus();
-  //                   },
-  //                   disabled: provisionalContactId != null ||
-  //                       proceedWithoutProvisionals,
-  //                 ),
-  //               ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
-String humanizeContactId(String id) {
-  var humanizedId = id.splitMapJoin(RegExp('.{4}'),
-      onMatch: (m) => '${m[0]}', // (or no onMatch at all)
-      onNonMatch: (n) => '-');
-
-  return humanizedId.substring(1, humanizedId.length - 1);
-}
+// TODO: get rid of this as well
 
 class _renderWaitingUI extends StatelessWidget {
   const _renderWaitingUI(

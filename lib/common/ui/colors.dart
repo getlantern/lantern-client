@@ -62,6 +62,20 @@ Color getIllustrationColor(Contact contact) {
   return getAvatarColor(sha1Hue(contact.contactId.id));
 }
 
+// Button colors
+Color getBgColor(bool secondary, bool disabled, bool tertiary) {
+  if (secondary) return white;
+  if (tertiary) return black;
+  if (disabled) return grey5;
+  return pink4;
+}
+
+Color getBorderColor(bool disabled, bool tertiary) {
+  if (tertiary) return black;
+  if (disabled) return grey5;
+  return pink4;
+}
+
 /*
 ******************
 REUSABLE COLORS

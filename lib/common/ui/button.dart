@@ -6,6 +6,7 @@ class Button extends StatelessWidget {
   late final String? iconPath;
   late final void Function()? onPressed;
   late final double? width;
+  late final bool primary;
   late final bool secondary;
   late final bool disabled;
   late final bool tertiary;
@@ -15,6 +16,7 @@ class Button extends StatelessWidget {
       this.iconPath,
       this.onPressed,
       this.width,
+      this.primary = true,
       this.secondary = false,
       this.disabled = false,
       this.tertiary = false});
@@ -26,60 +28,39 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: disabled ? 0.7 : 1,
-      child: SizedBox(
-        height: 56,
-        width: width,
-        child: OutlinedButton(
-          onPressed: _handleOnPress,
-          style: OutlinedButton.styleFrom(
-            splashFactory:
-                disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
-            backgroundColor: disabled
-                ? grey3
-                : secondary
-                    ? !tertiary
-                        ? white
-                        : pink4
-                    : black,
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            side: BorderSide(
-                width: 2,
-                color: disabled
-                    ? grey5
-                    : !tertiary
-                        ? pink4
-                        : black),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 23),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (iconPath != null)
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 8.0),
-                    child: CAssetImage(
-                      path: iconPath!,
-                      color: Colors.white,
-                    ),
+    return SizedBox(
+      height: 56,
+      width: width,
+      child: OutlinedButton(
+        onPressed: _handleOnPress,
+        style: OutlinedButton.styleFrom(
+          splashFactory:
+              disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
+          backgroundColor: getBgColor(secondary, disabled, tertiary),
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          side: BorderSide(width: 2, color: getBorderColor(disabled, tertiary)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (iconPath != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 8.0),
+                  child: CAssetImage(
+                    path: iconPath!,
+                    color: white,
                   ),
-                CText(
-                  text.toUpperCase(),
-                  // style: disabled ? tsButtonGrey : tsButtonWhite,
-                  style: disabled
-                      ? tsButtonGrey
-                      : secondary
-                          ? !tertiary
-                              ? tsButtonPink
-                              : tsButtonWhite
-                          : tsButtonWhite,
-                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
+              CText(
+                text.toUpperCase(),
+                // style: disabled ? tsButtonGrey : tsButtonWhite,
+                style: getTextStyle(secondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),

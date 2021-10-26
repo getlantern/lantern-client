@@ -253,6 +253,9 @@ msgstr "Once deleted, you will need to scan add their contact information if you
 msgid "add_new_contact"
 msgstr "Add new contact:"
 
+msgid "add_contact"
+msgstr "Add Contact"
+
 msgid "scan_qr_code"
 msgstr "Scan QR Code"
 
@@ -362,13 +365,19 @@ msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
 msgid "contact_id_error_description"
-msgstr "Something went wrong while adding this contact"
+msgstr "Something went wrong while adding this user"
 
-msgid "contact_id_enter_manually"
-msgstr "Enter your friend's Messenger ID manually"
+msgid "contact_id_type"
+msgstr "Type the ID or Username"
 
 msgid "contact_id_messenger_id"
-msgstr "Messenger ID"
+msgstr "Username or Messenger ID"
+
+msgid "messenger_id_not_found"
+msgstr "Invalid Messenger ID"
+
+msgid "username_not_found"
+msgstr "Username not found"
 
 msgid "contact_id_your_id"
 msgstr "Your Messenger ID"
