@@ -2,8 +2,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
-import 'package:lantern/messaging/calls/call.dart';
-import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/conversation/contact_info_topbar.dart';
 
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';

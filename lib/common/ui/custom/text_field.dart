@@ -72,8 +72,11 @@ class _CTextFieldState extends State<CTextField> {
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
             validator: (value) {
+              // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
               var result = widget.controller.validate(value);
-              setState(() {});
+              WidgetsBinding.instance?.addPostFrameCallback((_) {
+                setState(() {});
+              });
               return result;
             },
             minLines: widget.minLines,

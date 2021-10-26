@@ -364,8 +364,8 @@ msgstr "Add via Username or Lantern ID"
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "contact_id_error_description"
-msgstr "Something went wrong while adding this user"
+msgid "contact_id_validation_general"
+msgstr "Please enter a valid username or Lantern ID"
 
 msgid "contact_id_type"
 msgstr "Type the ID or Username"
