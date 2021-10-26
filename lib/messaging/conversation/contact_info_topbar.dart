@@ -12,7 +12,13 @@ class ContactInfoTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
     final title = contact.displayNameOrFallback;
+    // TODO: only trigger when we have come from Conversation with a verified status
+    var verifiedColor =
+        contact.verificationLevel == VerificationLevel.UNVERIFIED
+            ? indicatorGreen
+            : black;
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -33,20 +39,46 @@ class ContactInfoTopBar extends StatelessWidget {
                 maxLines: 1,
                 style: tsHeading3,
               ),
-              Row(
-                children: [
-                  DisappearingTimerAction(contact),
-                  // TODO: Verification - only show when actually verified
-                  const Padding(
-                    padding: EdgeInsetsDirectional.only(start: 8.0),
-                    child: CAssetImage(
-                      path: ImagePaths.verified_user,
-                      size: 12.0,
+              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsetsDirectional.only(end: 2.0),
+                      child: CAssetImage(
+                        path: ImagePaths.pending,
+                        size: 12.0,
+                      ),
                     ),
-                  ),
-                  CText('verified'.i18n.toUpperCase(), style: tsOverline)
-                ],
-              ),
+                    CText('pending_verification'.i18n.toUpperCase(),
+                        style: tsOverline)
+                  ],
+                ),
+              if (contact.verificationLevel == VerificationLevel.VERIFIED)
+                StatefulBuilder(
+                    key: const ValueKey('verification_field'),
+                    builder: (context, setState) {
+                      Future.delayed(defaultAnimationDuration,
+                          () => setState(() => verifiedColor = black));
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          DisappearingTimerAction(contact),
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 8.0),
+                            child: CAssetImage(
+                              path: ImagePaths.verified_user,
+                              size: 12.0,
+                              color: verifiedColor,
+                            ),
+                          ),
+                          CText('verified'.i18n.toUpperCase(),
+                              style:
+                                  tsOverline.copiedWith(color: verifiedColor)),
+                        ],
+                      );
+                    }),
             ],
           ),
         ),

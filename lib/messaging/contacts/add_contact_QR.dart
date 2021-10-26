@@ -64,7 +64,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         /* 
         * VERIFICATION SUCCESS
         */
-        // TODO: go back to conversation
+        // TODO: navigate to Conversation
         // TODO: mark as verified
         // TODO: show snackbar
         // TODO: color animation for "Verified" status
