@@ -75,6 +75,130 @@ class ContactId extends $pb.GeneratedMessage {
   void clearId() => clearField(2);
 }
 
+enum Datum_Value {
+  string, 
+  float, 
+  int_3, 
+  bool_4, 
+  bytes, 
+  notSet
+}
+
+class Datum extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, Datum_Value> _Datum_ValueByTag = {
+    1 : Datum_Value.string,
+    2 : Datum_Value.float,
+    3 : Datum_Value.int_3,
+    4 : Datum_Value.bool_4,
+    5 : Datum_Value.bytes,
+    0 : Datum_Value.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Datum', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..oo(0, [1, 2, 3, 4, 5])
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'string')
+    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'float', $pb.PbFieldType.OD)
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'int')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bool')
+    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'bytes', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  Datum._() : super();
+  factory Datum({
+    $core.String? string,
+    $core.double? float,
+    $fixnum.Int64? int_3,
+    $core.bool? bool_4,
+    $core.List<$core.int>? bytes,
+  }) {
+    final _result = create();
+    if (string != null) {
+      _result.string = string;
+    }
+    if (float != null) {
+      _result.float = float;
+    }
+    if (int_3 != null) {
+      _result.int_3 = int_3;
+    }
+    if (bool_4 != null) {
+      _result.bool_4 = bool_4;
+    }
+    if (bytes != null) {
+      _result.bytes = bytes;
+    }
+    return _result;
+  }
+  factory Datum.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Datum.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Datum clone() => Datum()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Datum copyWith(void Function(Datum) updates) => super.copyWith((message) => updates(message as Datum)) as Datum; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Datum create() => Datum._();
+  Datum createEmptyInstance() => create();
+  static $pb.PbList<Datum> createRepeated() => $pb.PbList<Datum>();
+  @$core.pragma('dart2js:noInline')
+  static Datum getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Datum>(create);
+  static Datum? _defaultInstance;
+
+  Datum_Value whichValue() => _Datum_ValueByTag[$_whichOneof(0)]!;
+  void clearValue() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.String get string => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set string($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasString() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearString() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.double get float => $_getN(1);
+  @$pb.TagNumber(2)
+  set float($core.double v) { $_setDouble(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFloat() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFloat() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get int_3 => $_getI64(2);
+  @$pb.TagNumber(3)
+  set int_3($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasInt_3() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearInt_3() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get bool_4 => $_getBF(3);
+  @$pb.TagNumber(4)
+  set bool_4($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasBool_4() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBool_4() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.List<$core.int> get bytes => $_getN(4);
+  @$pb.TagNumber(5)
+  set bytes($core.List<$core.int> v) { $_setBytes(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearBytes() => clearField(5);
+}
+
 class Contact extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Contact', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
     ..aOM<ContactId>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'contactId', protoName: 'contactId', subBuilder: ContactId.create)
@@ -94,6 +218,7 @@ class Contact extends $pb.GeneratedMessage {
     ..e<VerificationLevel>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'verificationLevel', $pb.PbFieldType.OE, protoName: 'verificationLevel', defaultOrMaker: VerificationLevel.UNACCEPTED, valueOf: VerificationLevel.valueOf, enumValues: VerificationLevel.values)
     ..aOS(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'numericFingerprint', protoName: 'numericFingerprint')
     ..aOB(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blocked')
+    ..m<$core.String, Datum>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationData', protoName: 'applicationData', entryClassName: 'Contact.ApplicationDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: Datum.create, packageName: const $pb.PackageName('model'))
     ..hasRequiredFields = false
   ;
 
@@ -116,6 +241,7 @@ class Contact extends $pb.GeneratedMessage {
     VerificationLevel? verificationLevel,
     $core.String? numericFingerprint,
     $core.bool? blocked,
+    $core.Map<$core.String, Datum>? applicationData,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -168,6 +294,9 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (blocked != null) {
       _result.blocked = blocked;
+    }
+    if (applicationData != null) {
+      _result.applicationData.addAll(applicationData);
     }
     return _result;
   }
@@ -334,6 +463,9 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasBlocked() => $_has(16);
   @$pb.TagNumber(17)
   void clearBlocked() => clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.Map<$core.String, Datum> get applicationData => $_getMap(17);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {

@@ -38,6 +38,17 @@ enum VerificationLevel {
   VERIFIED = 2; // we've verified their key fingerprint
 }
 
+// A typed datum
+message Datum {
+  oneof value {
+    string string = 1;
+    double float = 2;
+    int64 int = 3;
+    bool bool = 4;
+    bytes bytes = 5;
+  }
+}
+
 // A contact in the address book
 message Contact {
   ContactId contactId = 1;
@@ -57,6 +68,7 @@ message Contact {
   VerificationLevel verificationLevel = 15; // how well do we know this contact
   string numericFingerprint = 16; // a numeric fingerprint of this contact (depends on our own messenger ID)
   bool blocked = 17; // flag indicating of the contact is blocked
+  map<string, Datum> applicationData = 18; // place for applications to store app-specific data associated with the Contact
 }
 
 // A provisional direct contact that is not yet in the address book. If we receive a Hello from that
