@@ -10,6 +10,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
   late final contactIdController = CustomTextEditingController(
       formKey: _formKey, validator: (value) => validateInput(value));
   var shouldSubmit = false;
+  var noMatch = false;
 
   @override
   void initState() {
@@ -25,9 +26,20 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
 
   void handleButtonPress() async {
     contactIdController.focusNode.unfocus();
+    setState(() => noMatch = false);
     if (_formKey.currentState?.validate() == true) {
-      // TODO: talk to model and add contact
-      // TODO: direct to Conversation view
+      context.loaderOverlay.show();
+      try {
+        // TODO: talk to model and add contact
+      } catch (e) {
+        setState(() => noMatch = true);
+      } finally {
+        context.loaderOverlay.hide();
+        if (!noMatch) {
+          // TODO: mark as pending request
+          // TODO: direct to Conversation view
+        }
+      }
     }
   }
 
@@ -79,7 +91,8 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
                           children: [
                             CTextField(
                               controller: contactIdController,
-                              autovalidateMode: AutovalidateMode.always,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               label: 'contact_id_messenger_id'.i18n,
                               prefixIcon:
                                   const CAssetImage(path: ImagePaths.people),
@@ -93,6 +106,11 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
                     ]),
               ),
             ),
+            if (noMatch)
+              const Expanded(
+                  child: Center(
+                child: Text('[Dev note] Could not find a match'),
+              )),
             Container(
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(

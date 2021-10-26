@@ -75,7 +75,7 @@ class ContactInfo extends StatelessWidget {
                                   ? CText(displayNameController.value.text,
                                       style: tsBody1)
                                   : TextField(
-                                      // TODO: we don't exactly need the UI and the functionality of CTextField but can change
+                                      // we don't exactly need the UI and the functionality of CTextField but can change
                                       controller: displayNameController,
                                       style: tsBody1,
                                       focusNode:

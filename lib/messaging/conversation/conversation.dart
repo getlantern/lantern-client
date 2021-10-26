@@ -2,17 +2,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
-import 'package:lantern/messaging/conversation/contact_info_topbar.dart';
-
-import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
-import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
-import 'package:lantern/messaging/conversation/conversation_sticker.dart';
-import 'package:lantern/messaging/conversation/message_bubble.dart';
-import 'package:lantern/messaging/conversation/messaging_emoji_picker.dart';
-import 'package:lantern/messaging/conversation/pulsating_indicator.dart';
-import 'package:lantern/messaging/conversation/stopwatch_timer.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+import 'contact_info_topbar.dart';
+import 'audio/audio_widget.dart';
+import 'audio/message_bar_preview_recording.dart';
+import 'conversation_sticker.dart';
+import 'message_bubble.dart';
+import 'messaging_emoji_picker.dart';
+import 'pulsating_indicator.dart';
+import 'stopwatch_timer.dart';
 import 'audio/voice_recorder.dart';
 import 'call_action.dart';
 import 'date_marker_bubble.dart';

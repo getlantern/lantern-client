@@ -359,21 +359,21 @@ msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
 msgid "add_via_id"
-msgstr "Add via Username or Lantern ID"
+msgstr "Add via Username or Messenger ID"
 
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
 msgid "contact_id_validation_general"
-msgstr "Please enter a valid username or Lantern ID"
+msgstr "Please enter a valid username or Messenger ID"
 
 msgid "contact_id_type"
-msgstr "Type the ID or Username"
+msgstr "Type a username or Messenger ID"
 
 msgid "contact_id_messenger_id"
 msgstr "Username or Messenger ID"
 
-msgid "messenger_id_not_found"
+msgid "messenger_id_invalid"
 msgstr "Invalid Messenger ID"
 
 msgid "username_not_found"
@@ -603,6 +603,9 @@ msgstr "Verify %s"
 
 msgid "verified"
 msgstr "Verified"
+
+msgid "pending_verification"
+msgstr "Pending verification"
 
 msgid "verify_description"
 msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
