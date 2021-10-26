@@ -117,7 +117,7 @@ class FocusedMenuDetails extends StatelessWidget {
     // to handle overflow
     final maxMenuHeight =
         size.height - paddingTop - paddingBottom - mediaQuery.viewPadding.top;
-    final menuHeight = min(maxMenuHeight, menu.height!);
+    final menuHeight = min(maxMenuHeight, menu.height ?? 0);
 
     // always position menu so that we can fit all of it on the screen
     var menuY = max(paddingTop + mediaQuery.viewPadding.top,
