@@ -39,8 +39,6 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 internal const val messageNotificationChannelId = "10001"
@@ -112,12 +110,28 @@ class MessagingHolder {
             if (msg.direction == Model.MessageDirection.OUT) {
                 return@let
             }
-            val contact =
-                messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
+            var numberOfNotificationAttempts = 0L
+            val contact = messaging.addOrUpdateDirectContact(
+                msg.senderId
+            ) { appData ->
+                numberOfNotificationAttempts = appData["notificationAttempts"]?.let { prior ->
+                    (prior as Long)!! + 1
+                } ?: 1
+                appData["notificationAttempts"] = numberOfNotificationAttempts
+            }
+            messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
             contact?.let {
                 if (contact.contactId.id == MessagingModel.currentConversationContact) {
+                    // don't notify if we're currently viewing the relevant conversation
                     return@let
                 }
+                if (contact.verificationLevel <= Model.VerificationLevel.UNACCEPTED &&
+                    numberOfNotificationAttempts > 1
+                ) {
+                    // for unaccepted contacts, only notify once
+                    return@let
+                }
+
                 var notificationId = contactNotificationIds[contact.contactId]
                 if (notificationId == null) {
                     notificationId = nextNotificationId++
@@ -174,6 +188,10 @@ class MessagingHolder {
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {
+            if (contact.verificationLevel <= Model.VerificationLevel.UNACCEPTED) {
+                // don't ring calls from unaccepted contacts
+                return@let
+            }
             val notificationId = nextNotificationId++
             val acceptPendingIntent = acceptIntent(
                 context,
