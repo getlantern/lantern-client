@@ -4,6 +4,7 @@ import 'package:lantern/core/router/tabs/account_tab_router.dart';
 import 'package:lantern/core/router/tabs/developer_tab_router.dart';
 import 'package:lantern/core/router/tabs/message_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
+import 'package:lantern/messaging/contacts/add_contact_identifier.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
 import 'package:lantern/messaging/contacts/contact_info.dart';
@@ -52,6 +53,13 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         page: NewMessage,
         name: 'NewMessage',
         path: 'newMessage',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: AddViaIdentifier,
+        name: 'AddViaIdentifier',
+        path: 'addViaIdentifier',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

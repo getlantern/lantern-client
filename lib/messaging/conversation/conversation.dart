@@ -4,7 +4,7 @@ import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
-import 'package:lantern/messaging/contacts/contact_info_topbar.dart';
+import 'package:lantern/messaging/conversation/contact_info_topbar.dart';
 
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/message_bar_preview_recording.dart';
@@ -334,7 +334,7 @@ class ConversationState extends State<Conversation>
             focusColor: grey3,
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
-            // TODO: I had initially extracted this into its own widget since the designs were reusing it, but thats not the case anymore. We can switch it back.
+            // I had initially extracted this into its own widget since the designs were reusing it, but thats not the case anymore. We can switch it back.
             child: ContactInfoTopBar(contact: contact),
           ),
         ),
