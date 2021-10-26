@@ -472,51 +472,6 @@ msgstr "Message was deleted"
 msgid "close"
 msgstr "Close"
 
-msgid "verify_contact"
-msgstr "Verify %s"
-
-msgid "verified"
-msgstr "Verified"
-
-msgid "verify_description"
-msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
-
-msgid "verify_in_person"
-msgstr "Verify in person"
-
-msgid "verify_via_call"
-msgstr "Verify via voice call"
-
-msgid "dismiss_notification"
-msgstr "Dismiss Notification"
-
-msgid "call_contact"
-msgstr "Call %s ?"
-
-msgid "call"
-msgstr "Call"
-
-msgid "incoming_call"
-msgstr "Incoming Call"
-
-msgid "call_from"
-msgstr "From %s"
-
-msgid "incoming_call_from"
-msgstr "Incoming call from %s"
-
-msgid "touch_here_to_open_call"
-msgstr "Touch here to open call"
-
-msgid "in_call_with"
-msgstr "In call with %s"
-
-msgid "unable_to_complete_call"
-msgstr "Unable to complete call"
-
-msgid "please_try_again"
-msgstr "Please try again"
-
 msgid "dismiss"
 msgstr "Dismiss"
 
@@ -616,5 +571,77 @@ msgstr "Could not render file title"
 msgid "could_not_render_type"
 msgstr "Could not render file type"
 
+msgid "speaker"
+msgstr "Speaker"
+
+msgid "speaker_on"
+msgstr "Speaker On"
+
+msgid "mute"
+msgstr "Mute"
+
+msgid "muted"
+msgstr "Muted"
+
+msgid "end_call"
+msgstr "End Call"
+
 msgid "unnamed_contact"
 msgstr "Unnamed Contact"
+
+msgid "verify_contact"
+msgstr "Verify %s"
+
+msgid "verified"
+msgstr "Verified"
+
+msgid "verify_description"
+msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
+
+msgid "verify_in_person"
+msgstr "Verify in person"
+
+msgid "verify_via_call"
+msgstr "Verify via voice call"
+
+msgid "dismiss_notification"
+msgstr "Dismiss Notification"
+
+msgid "call_contact"
+msgstr "Call %s ?"
+
+msgid "call"
+msgstr "Call"
+
+msgid "incoming_call"
+msgstr "Incoming Call"
+
+msgid "call_from"
+msgstr "From %s"
+
+msgid "incoming_call_from"
+msgstr "Incoming call from %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Touch here to open call"
+
+msgid "in_call_with"
+msgstr "In call with %s"
+
+msgid "unable_to_complete_call"
+msgstr "Unable to complete call"
+
+msgid "undo_verification"
+msgstr "Undo verification"
+
+msgid "undo_verification"
+msgstr "Undo verification"
+
+msgid "mark_as_verified"
+msgstr "Mark as verified"
+
+msgid "verification_panel_success"
+msgstr "Verification success! Your messages with %s are secure."
+
+msgid "verification_panel_pending"
+msgstr "This is your verification number. Check that your number matches %s's exactly before marking them verified."

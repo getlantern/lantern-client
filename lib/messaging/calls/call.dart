@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 import 'signaling.dart';
 
@@ -19,6 +20,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   late Signaling signaling;
   var closed = false;
   var isPanelShowing = false;
+  var isVerified = false;
+  var fragmentStatusMap = {};
 
   @override
   void initState() {
@@ -26,6 +29,12 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
     signaling = widget.model.signaling;
     signaling.addListener(onSignalingStateChange);
+
+    // initialize fragment - status map after breaking down numericFingerprint in groups of 5
+    humanizeVerificationNum(widget.contact.numericFingerprint).asMap().forEach(
+        (key, value) =>
+            fragmentStatusMap[key] = {'fragment': value, 'isConfirmed': false});
+
     if (widget.initialSession != null) {
       session = Future.value(widget.initialSession!);
     } else {
@@ -91,22 +100,41 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     }
   }
 
-  void showVerificationPanel() {
-    setState(() {
-      isPanelShowing = true;
-    });
-    // animate avatar
-    // if verified, change panel text
-    // if verified, change Button text
+  void handleTapping({required int key}) {
+    var _status = fragmentStatusMap[key]['isConfirmed'];
+    markFragments(!_status, key);
+    setState(() => isVerified = fragmentsAreVerified());
   }
 
-  void handleTapping({required String key}) {
-    // strikethrough
-    print('key is $key');
+  void markFragments(bool value, int? key) {
+    // mark one fragment
+    if (key != null) {
+      setState(() {
+        fragmentStatusMap[key]['isConfirmed'] = value;
+      });
+    } else {
+      // mark all fragments
+      setState(() {
+        fragmentStatusMap.updateAll(
+            (key, el) => {'fragment': el['fragment'], 'isConfirmed': value});
+      });
+    }
   }
 
-  void markAsVerified() {
-    // talk to model and mark as verified
+  // returns true if all the fragments have been verified
+  bool fragmentsAreVerified() {
+    return !fragmentStatusMap.entries
+        .any((element) => element.value['isConfirmed'] == false);
+  }
+
+  void handleVerifyButtonPress() {
+    if (isVerified) {
+      markFragments(false, null); // mark all fragments as unverified
+      isVerified = false;
+    } else {
+      markFragments(true, null); // mark all fragments as verified
+      isVerified = true;
+    }
   }
 
   @override
@@ -194,8 +222,14 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                         Icons.close_rounded,
                                         color: white,
                                       ),
-                                      onPressed: () => setState(
-                                          () => isPanelShowing = false),
+                                      onPressed: () {
+                                        setState(() => isPanelShowing = false);
+                                        if (!fragmentsAreVerified() ||
+                                            !isVerified) {
+                                          markFragments(false,
+                                              null); // mark all fragments as unverified since we closed the modal before finishing verification
+                                        }
+                                      },
                                     ),
                                     Padding(
                                       padding: const EdgeInsetsDirectional.only(
@@ -204,26 +238,37 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                           top: 32,
                                           bottom: 24),
                                       child: CText(
-                                          'This is your verification number. Check that your number matches Effe’s exactly before marking them verified.'
-                                              .i18n,
+                                          isVerified
+                                              ? 'verification_panel_success'
+                                                  .i18n
+                                                  .fill([
+                                                  widget.contact
+                                                      .displayNameOrFallback
+                                                ])
+                                              : 'verification_panel_pending'
+                                                  .i18n
+                                                  .fill([
+                                                  widget.contact
+                                                      .displayNameOrFallback
+                                                ]),
                                           style:
                                               tsBody1.copiedWith(color: grey3)),
                                     ),
                                   ],
                                 ),
+                                /*
+                                * Verification number
+                                */
                                 Container(
                                     padding: const EdgeInsetsDirectional.only(
                                         bottom: 24.0),
                                     child: Wrap(
                                       children: [
-                                        ...humanizeVerificationNum(widget
-                                                .contact.numericFingerprint)
-                                            .asMap()
-                                            .entries
+                                        ...fragmentStatusMap.entries
                                             .map((entry) => GestureDetector(
                                                   key: ValueKey(entry.key),
                                                   onTap: () => handleTapping(
-                                                      key: entry.value),
+                                                      key: entry.key),
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsetsDirectional
@@ -231,10 +276,19 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                                             start: 10.0,
                                                             end: 10.0),
                                                     child: CText(
-                                                        entry.value.toString(),
-                                                        style: tsHeading1
-                                                            .copiedWith(
-                                                                color: white)),
+                                                        entry.value['fragment']
+                                                            .toString(),
+                                                        style: entry.value[
+                                                                'isConfirmed']
+                                                            ? tsHeading1.copiedWith(
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .lineThrough,
+                                                                color: grey4)
+                                                            : tsHeading1
+                                                                .copiedWith(
+                                                                    color:
+                                                                        white)),
                                                   ),
                                                 ))
                                       ],
@@ -245,9 +299,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                   child: Button(
                                     tertiary: true,
                                     width: 200,
-                                    iconPath: ImagePaths.verified_user,
-                                    text: 'Mark as verified'.i18n,
-                                    onPressed: () => markAsVerified(),
+                                    iconPath: isVerified
+                                        ? null
+                                        : ImagePaths.verified_user,
+                                    text: isVerified
+                                        ? 'undo_verification'.i18n
+                                        : 'mark_as_verified'.i18n,
+                                    onPressed: () => handleVerifyButtonPress(),
                                   ),
                                 )
                               ],
@@ -272,7 +330,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                     path: ImagePaths.verified_user,
                                     color: white),
                                 backgroundColor: grey5,
-                                onPressed: () => showVerificationPanel(),
+                                onPressed: () =>
+                                    setState(() => isPanelShowing = true),
                               ),
                               Transform.translate(
                                 offset: const Offset(0.0, 30.0),
@@ -378,18 +437,21 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
         });
   }
 
+  // breaks the numericalFingerpint String into groups of 5
   List<dynamic> humanizeVerificationNum(String verificationNum) {
     final verificationNumList =
         widget.contact.numericFingerprint.characters.toList();
     var verificationFragments = [];
+    // surely we can do this more efficiently but oh well
     for (var i = 0; i < verificationNumList.length; i += 5) {
-      final fragment = verificationNumList.sublist(
-          i,
-          i + 5 > verificationNumList.length
-              ? verificationNumList.length
-              : i + 5);
-      final cleanFragment = fragment.join();
-      verificationFragments.add(cleanFragment);
+      final fragment = verificationNumList
+          .sublist(
+              i,
+              i + 5 > verificationNumList.length
+                  ? verificationNumList.length
+                  : i + 5)
+          .join();
+      verificationFragments.add(fragment);
     }
     return verificationFragments;
   }
