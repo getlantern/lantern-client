@@ -2,11 +2,21 @@ import 'package:lantern/common/common.dart';
 
 void showSnackbar(
     {required BuildContext context,
-    required Widget content,
+    required String content,
     Duration duration = defaultAnimationDuration,
     SnackBarAction? action}) {
   final snackBar = SnackBar(
-    content: content,
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+            child: CText(
+          content,
+          style: tsBody1Color(white),
+          textAlign: TextAlign.start,
+        )),
+      ],
+    ),
     action: action,
     backgroundColor: black,
     duration: duration,

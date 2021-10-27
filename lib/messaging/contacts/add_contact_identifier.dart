@@ -28,7 +28,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
     contactIdController.focusNode.unfocus();
     setState(() => noMatch = false);
     if (_formKey.currentState?.validate() == true) {
-      context.loaderOverlay.show();
+      context.loaderOverlay.show(widget: spinner);
       try {
         // TODO: talk to model and add contact
       } catch (e) {

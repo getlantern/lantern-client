@@ -77,7 +77,7 @@ class ProAccount extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  context.loaderOverlay.show();
+                                  context.loaderOverlay.show(widget: spinner);
                                   sessionModel
                                       .removeDevice(device.id)
                                       .then((value) {

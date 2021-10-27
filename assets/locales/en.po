@@ -205,6 +205,9 @@ msgstr "OK"
 msgid "copied"
 msgstr "Copied!"
 
+msgid "saved"
+msgstr "Saved!"
+
 msgid "new_message"
 msgstr "New Message"
 
@@ -477,6 +480,12 @@ msgstr "Error fetching Message Preview"
 
 msgid "message_was_deleted"
 msgstr "Message was deleted"
+
+msgid "contact_was_deleted"
+msgstr "%s has been deleted from your contacts."
+
+msgid "contact_was_blocked"
+msgstr "%s has been blocked."
 
 msgid "close"
 msgstr "Close"

@@ -39,7 +39,8 @@ class ContactInfoTopBar extends StatelessWidget {
                 maxLines: 1,
                 style: tsHeading3,
               ),
-              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
+              if (contact.verificationLevel ==
+                  VerificationLevel.UNACCEPTED) //TODO: update this
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -54,7 +55,8 @@ class ContactInfoTopBar extends StatelessWidget {
                         style: tsOverline)
                   ],
                 ),
-              if (contact.verificationLevel == VerificationLevel.VERIFIED)
+              if (contact.verificationLevel !=
+                  VerificationLevel.UNACCEPTED) //TODO: update this
                 StatefulBuilder(
                     key: const ValueKey('verification_field'),
                     builder: (context, setState) {

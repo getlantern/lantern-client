@@ -51,7 +51,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 text: 'Submit'.i18n,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    context.loaderOverlay.show();
+                    context.loaderOverlay.show(widget: spinner);
                     sessionModel
                         .authorizeViaEmail(emailController.value.text)
                         .then((result) async {
