@@ -9,7 +9,12 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.db.SnippetConfig
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.dbPath
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
@@ -85,6 +90,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "id" -> Model.ContactSource.APP2
                     else -> Model.ContactSource.UNKNOWN
                 },
+                call.argument("verificationLevel")!!,
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,

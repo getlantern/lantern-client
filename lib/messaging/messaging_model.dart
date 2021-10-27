@@ -34,11 +34,16 @@ class MessagingModel extends Model {
   * CONTACTS 
   */
 
-  Future<Map> addProvisionalContact(String contactId, {String? source}) {
+  Future<Map> addProvisionalContact(
+    String contactId,
+    String? source,
+    VerificationLevel verificationLevel,
+  ) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{
       'unsafeContactId': contactId,
       'source': source,
+      'verificationLevel': verificationLevel
     }).then((value) => value as Map);
   }
 
