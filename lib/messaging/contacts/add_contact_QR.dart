@@ -52,7 +52,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(contactId, source: source);
+    var result = await model.addProvisionalContact(contactId, source,
+        VerificationLevel.UNVERIFIED); //TODO: check verification level
 
     contactNotifier = model.contactNotifier(contactId);
     listener = () async {
