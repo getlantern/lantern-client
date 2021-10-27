@@ -93,8 +93,13 @@ class ContactInfo extends StatelessWidget {
                                 focusColor: grey3,
                                 onTap: () {
                                   setState(() => isEditing = !isEditing);
-                                  // TODO: Save this to model
-                                  // await messagingModel.setMyDisplayName(name);
+                                  if (!isEditing) {
+                                    // TODO: Save this to model
+
+                                    showSnackbar(
+                                        context: context,
+                                        content: 'Saved'.i18n);
+                                  }
                                 },
                                 child: Ink(
                                   padding: const EdgeInsets.all(8),
@@ -300,27 +305,15 @@ class ContactInfo extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 15),
                                       TextButton(
-                                        // TODO: Block
                                         onPressed: () async {
-                                          // context.loaderOverlay.show(
-                                          //     widget: Center(
-                                          //   child: CircularProgressIndicator(
-                                          //     color: white,
-                                          //   ),
-                                          // ));
-                                          // try {
-                                          //   await model.deleteDirectContact(
-                                          //       contact.contactId.id);
-                                          // } catch (e, s) {
-                                          //   showErrorDialog(context,
-                                          //       e: e,
-                                          //       s: s,
-                                          //       des: 'error_delete_contact'
-                                          //           .i18n);
-                                          // } finally {
-                                          //   context.loaderOverlay.hide();
-                                          //   await context.router.pop();
-                                          // }
+                                          // TODO: Block
+                                          showSnackbar(
+                                              context: context,
+                                              content: 'contact_was_blocked'
+                                                  .i18n
+                                                  .fill([
+                                                contact.displayNameOrFallback
+                                              ]));
                                         },
                                         child: CText('block'.i18n.toUpperCase(),
                                             style: confirmBlock
@@ -390,28 +383,28 @@ class ContactInfo extends StatelessWidget {
                                       const SizedBox(width: 15),
                                       TextButton(
                                         onPressed: () async {
-                                          context.loaderOverlay.show(
-                                              widget: Center(
-                                            child: CircularProgressIndicator(
-                                              color: white,
-                                            ),
-                                          ));
-
-                                          // TODO: permanently delete contact + popUntilRoot
-                                          // try {
-                                          //   await model.deleteDirectContact(
-                                          //       contact.contactId.id);
-                                          // } catch (e, s) {
-                                          //   showErrorDialog(context,
-                                          //       e: e,
-                                          //       s: s,
-                                          //       des: 'error_delete_contact'
-                                          //           .i18n);
-                                          // } finally {
-                                          //   context.loaderOverlay.hide();
-                                          //   await context.router.pop();
-                                          // await parentContext.router.popUntilRoot();
-                                          // }
+                                          context.loaderOverlay
+                                              .show(widget: spinner);
+                                          try {
+                                            await model.deleteDirectContact(
+                                                contact.contactId.id);
+                                          } catch (e, s) {
+                                            showErrorDialog(context,
+                                                e: e,
+                                                s: s,
+                                                des: 'error_delete_contact'
+                                                    .i18n);
+                                          } finally {
+                                            showSnackbar(
+                                                context: context,
+                                                content: 'contact_was_deleted'
+                                                    .i18n
+                                                    .fill([
+                                                  contact.displayNameOrFallback
+                                                ]));
+                                            context.loaderOverlay.hide();
+                                            context.router.popUntilRoot();
+                                          }
                                         },
                                         child: CText(
                                             'delete_contact'.i18n.toUpperCase(),

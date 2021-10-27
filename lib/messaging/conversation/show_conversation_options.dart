@@ -26,8 +26,10 @@ Future showConversationOptions(
                   path: ImagePaths.user,
                 ),
                 label: 'view_contact_info'.i18n,
-                onTap: () async => await bottomContext
-                    .pushRoute(ContactInfo(contact: contact)),
+                onTap: () async {
+                  await bottomContext.router.pop();
+                  await bottomContext.pushRoute(ContactInfo(contact: contact));
+                },
               ),
               BottomModalItem(
                 leading: const CAssetImage(
@@ -47,6 +49,7 @@ Future showConversationOptions(
                     0
                   ];
                   var selectedPosition = -1;
+                  await bottomContext.router.pop();
 
                   return showDialog(
                     context: bottomContext,
@@ -287,20 +290,24 @@ Future showConversationOptions(
                 },
               ),
               BottomModalItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.people,
-                ),
-                label: 'introduce_contacts'.i18n,
-                onTap: () async =>
-                    await bottomContext.pushRoute(const Introduce()),
-              ),
+                  leading: const CAssetImage(
+                    path: ImagePaths.people,
+                  ),
+                  label: 'introduce_contacts'.i18n,
+                  onTap: () async {
+                    await bottomContext.router.pop();
+                    await bottomContext.pushRoute(const Introduce());
+                  }),
               BottomModalItem(
                   leading: const CAssetImage(
                     path: ImagePaths.verified_user,
                   ),
                   label: 'contact_verification'.i18n,
-                  onTap: () => showVerificationOptions(
-                      model: model, contact: contact, context: bottomContext)),
+                  onTap: () async {
+                    await bottomContext.router.pop();
+                    showVerificationOptions(
+                        model: model, contact: contact, context: parentContext);
+                  }),
               // BottomModalItem(
               //     leading: const CAssetImage(
               //       path: ImagePaths.delete,

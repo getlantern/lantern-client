@@ -19,9 +19,12 @@ void showVerificationOptions({
         model.me((context, me, child) => BottomModalItem(
               leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
               label: 'verify_in_person'.i18n,
-              onTap: () async => await context.router.push(
-                FullScreenDialogPage(widget: AddViaQR(me: me)),
-              ),
+              onTap: () async {
+                Navigator.pop(context);
+                await context.router.push(
+                  FullScreenDialogPage(widget: AddViaQR(me: me)),
+                );
+              },
               trailing: const CAssetImage(
                 path: ImagePaths.keyboard_arrow_right,
               ),
@@ -44,6 +47,7 @@ void showVerificationOptions({
           leading: const CAssetImage(path: ImagePaths.cancel),
           label: 'dismiss_notification'.i18n,
           onTap: () {
+            Navigator.pop(context);
             showInfoDialog(context,
                 title: 'contact_verification'.i18n,
                 assetPath: ImagePaths.verified_user,

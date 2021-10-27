@@ -168,28 +168,14 @@ class Introductions extends StatelessWidget {
                                                               showSnackbar(
                                                                   context:
                                                                       context,
-                                                                  content: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child:
-                                                                            CText(
-                                                                          'introduction_approved'
-                                                                              .i18n
-                                                                              .fill([
-                                                                            value.introduction.displayNameOrFallback
-                                                                          ]),
-                                                                          style:
-                                                                              tsBody1Color(white),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                  content:
+                                                                      'introduction_approved'
+                                                                          .i18n
+                                                                          .fill([
+                                                                    value
+                                                                        .introduction
+                                                                        .displayNameOrFallback
+                                                                  ]),
                                                                   duration: const Duration(
                                                                       milliseconds:
                                                                           2000),

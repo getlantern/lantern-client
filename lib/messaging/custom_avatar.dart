@@ -4,7 +4,7 @@ class CustomAvatar extends StatelessWidget {
   const CustomAvatar(
       {Key? key,
       required this.messengerId,
-      this.displayName,
+      required this.displayName,
       this.customColor,
       this.radius})
       : super(key: key);

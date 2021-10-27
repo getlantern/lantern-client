@@ -17,15 +17,20 @@ SizedBox renderLongTapMenu(
                 ),
                 showDivider: false,
                 content: 'view_contact_info'.i18n,
-                onTap: () async =>
-                    await context.pushRoute(ContactInfo(contact: contact))),
+                onTap: () async {
+                  await context.router.pop();
+                  await context.pushRoute(ContactInfo(contact: contact));
+                }),
             CListTile(
               leading: const CAssetImage(
                 path: ImagePaths.people,
               ),
               showDivider: false,
               content: 'introduce_contacts'.i18n,
-              onTap: () async => await context.pushRoute(const Introduce()),
+              onTap: () async {
+                await context.router.pop();
+                await context.pushRoute(const Introduce());
+              },
             ),
           ],
         ),

@@ -25,7 +25,7 @@ class CListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return FocusedMenuHolder(
       menu: focusedMenu ?? const SizedBox(),
-      onOpen: () {}, // TODO: maybe needed for keyboard dismissal
+      onOpen: () {},
       menuWidth: MediaQuery.of(context).size.width * 0.8,
       child: Container(
         decoration: BoxDecoration(

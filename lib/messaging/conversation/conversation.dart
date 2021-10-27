@@ -192,7 +192,7 @@ class ConversationState extends State<Conversation>
       return;
     }
 
-    context.loaderOverlay.show();
+    context.loaderOverlay.show(widget: spinner);
     try {
       stopWatchTimer.onExecute.add(StopWatchExecute.stop);
       recording = await model.stopRecordingVoiceMemo();
@@ -216,7 +216,7 @@ class ConversationState extends State<Conversation>
         // user didn't pick any files, don't share anything
         return;
       }
-      context.loaderOverlay.show();
+      context.loaderOverlay.show(widget: spinner);
       for (var i = 0; i < result.files.length; i++) {
         final el = result.files[i];
         // TODO: we might need to sanitize title
@@ -258,7 +258,8 @@ class ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    if (attachments?.isNotEmpty == true) context.loaderOverlay.show();
+    if (attachments?.isNotEmpty == true)
+      context.loaderOverlay.show(widget: spinner);
     try {
       await model.sendToDirectContact(
         widget.contactId.id,

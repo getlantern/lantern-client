@@ -100,22 +100,9 @@ class _IntroduceState extends State<Introduce> {
                                                       selectedContactIds);
                                                   showSnackbar(
                                                     context: context,
-                                                    content: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Expanded(
-                                                            child: CText(
-                                                          'introductions_sent'
-                                                              .i18n,
-                                                          style: tsBody1Color(
-                                                              white),
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                        )),
-                                                      ],
-                                                    ),
+                                                    content:
+                                                        'introductions_sent'
+                                                            .i18n,
                                                   );
                                                   await Future.delayed(
                                                     const Duration(

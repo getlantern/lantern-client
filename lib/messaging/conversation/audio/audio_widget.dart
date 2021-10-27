@@ -89,7 +89,7 @@ class AudioController extends ValueNotifier<AudioValue> {
       return;
     }
 
-    context.loaderOverlay.show();
+    context.loaderOverlay.show(widget: spinner);
     try {
       var bytes = await model.decryptAttachment(attachment);
       await _play(bytes);

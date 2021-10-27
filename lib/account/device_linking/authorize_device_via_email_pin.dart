@@ -48,7 +48,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 length: 6,
                 controller: pinCodeController,
                 onDone: (code) {
-                  context.loaderOverlay.show();
+                  context.loaderOverlay.show(widget: spinner);
                   sessionModel.validateRecoveryCode(code).then((value) {
                     pinCodeController.text = '';
                     context.loaderOverlay.hide();
@@ -67,7 +67,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 margin: const EdgeInsetsDirectional.only(bottom: 32),
                 child: TextButton(
                   onPressed: () {
-                    context.loaderOverlay.show();
+                    context.loaderOverlay.show(widget: spinner);
                     sessionModel.resendRecoveryCode().then((value) {
                       context.loaderOverlay.hide();
                       showDialog(

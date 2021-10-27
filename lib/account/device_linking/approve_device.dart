@@ -56,7 +56,7 @@ class ApproveDevice extends StatelessWidget {
                 length: 6,
                 controller: pinCodeController,
                 onDone: (code) {
-                  context.loaderOverlay.show();
+                  context.loaderOverlay.show(widget: spinner);
                   sessionModel.approveDevice(code).then((value) {
                     pinCodeController.text = '';
                     context.loaderOverlay.hide();

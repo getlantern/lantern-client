@@ -12,3 +12,9 @@ const defaultTransitionDuration =
 const defaultAnimationDuration = Duration(milliseconds: defaultAnimationMillis);
 
 ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();
+
+final spinner = Center(
+  child: CircularProgressIndicator(
+    color: white,
+  ),
+);
