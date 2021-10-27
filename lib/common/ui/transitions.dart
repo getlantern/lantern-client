@@ -6,10 +6,14 @@ const defaultTransitionMillis = 200;
 
 const defaultAnimationMillis = 1000;
 
+const longAnimationMillis = 3000;
+
 const defaultTransitionDuration =
     Duration(milliseconds: defaultTransitionMillis);
 
 const defaultAnimationDuration = Duration(milliseconds: defaultAnimationMillis);
+
+const longAnimationDuration = Duration(milliseconds: longAnimationMillis);
 
 ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();
 

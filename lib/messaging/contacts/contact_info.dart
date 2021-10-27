@@ -28,11 +28,14 @@ class ContactInfo extends StatelessWidget {
       title: contact.displayNameOrFallback,
       actions: [
         CallAction(contact),
-        IconButton(
-            visualDensity: VisualDensity.compact,
-            icon: const CAssetImage(path: ImagePaths.messages),
-            onPressed: () async => await context
-                .pushRoute(Conversation(contactId: contact.contactId)))
+        Container(
+          padding: const EdgeInsetsDirectional.only(end: 16),
+          child: IconButton(
+              visualDensity: VisualDensity.compact,
+              icon: const CAssetImage(path: ImagePaths.messages),
+              onPressed: () async => await context
+                  .pushRoute(Conversation(contactId: contact.contactId))),
+        )
       ],
       body: ListView(
         physics: defaultScrollPhysics,
@@ -95,7 +98,6 @@ class ContactInfo extends StatelessWidget {
                                   setState(() => isEditing = !isEditing);
                                   if (!isEditing) {
                                     // TODO: Save this to model
-
                                     showSnackbar(
                                         context: context,
                                         content: 'Saved'.i18n);
@@ -214,7 +216,9 @@ class ContactInfo extends StatelessWidget {
                           path: ImagePaths.user,
                         ),
                         content: CText(
-                          'block_user'.i18n,
+                          contact.blocked
+                              ? 'unblock_user'.i18n
+                              : 'block_user'.i18n,
                           style: tsSubtitle1Short,
                         ),
                         trailing: InkWell(
@@ -236,7 +240,9 @@ class ContactInfo extends StatelessWidget {
                                           CAssetImage(path: ImagePaths.block),
                                     ),
                                     CText(
-                                        '${'block'.i18n} ${contact.displayNameOrFallback}?',
+                                        contact.blocked
+                                            ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
+                                            : '${'block'.i18n} ${contact.displayNameOrFallback}?',
                                         style: tsBody3),
                                   ],
                                 ),
@@ -247,7 +253,10 @@ class ContactInfo extends StatelessWidget {
                                         padding:
                                             const EdgeInsetsDirectional.all(24),
                                         child: CText(
-                                            'block_info_description'.i18n,
+                                            contact.blocked
+                                                ? 'unblock_info_description'
+                                                    .i18n
+                                                : 'block_info_description'.i18n,
                                             style: tsBody1),
                                       ),
                                       Padding(
@@ -281,7 +290,11 @@ class ContactInfo extends StatelessWidget {
                                                               .width *
                                                           0.6),
                                               child: CText(
-                                                  'block_info_checkbox'.i18n,
+                                                  contact.blocked
+                                                      ? 'unblock_info_checkbox'
+                                                          .i18n
+                                                      : 'block_info_checkbox'
+                                                          .i18n,
                                                   style: tsBody1),
                                             )
                                           ],
@@ -306,19 +319,37 @@ class ContactInfo extends StatelessWidget {
                                       const SizedBox(width: 15),
                                       TextButton(
                                         onPressed: () async {
-                                          // TODO: Block
-                                          showSnackbar(
-                                              context: context,
-                                              content: 'contact_was_blocked'
-                                                  .i18n
-                                                  .fill([
-                                                contact.displayNameOrFallback
-                                              ]));
+                                          if (confirmBlock) {
+                                            contact.blocked
+                                                ? await model
+                                                    .unblockDirectContact(
+                                                        contact.contactId.id)
+                                                : await model
+                                                    .blockDirectContact(
+                                                        contact.contactId.id);
+                                            context.router.popUntilRoot();
+                                            showSnackbar(
+                                                context: context,
+                                                content: contact.blocked
+                                                    ? 'contact_was_unblocked'
+                                                        .i18n
+                                                        .fill([
+                                                        contact
+                                                            .displayNameOrFallback
+                                                      ])
+                                                    : 'contact_was_blocked'
+                                                        .i18n
+                                                        .fill([
+                                                        contact
+                                                            .displayNameOrFallback
+                                                      ]));
+                                          }
                                         },
-                                        child: CText('block'.i18n.toUpperCase(),
-                                            style: confirmBlock
-                                                ? tsButtonPink
-                                                : tsButtonGrey),
+                                        child: CText(
+                                            contact.blocked
+                                                ? 'unblock'.i18n.toUpperCase()
+                                                : 'block'.i18n.toUpperCase(),
+                                            style: tsButtonPink),
                                       )
                                     ],
                                   )
@@ -329,7 +360,9 @@ class ContactInfo extends StatelessWidget {
                           child: Ink(
                             padding: const EdgeInsets.all(8),
                             child: CText(
-                              'block'.i18n.toUpperCase(),
+                              contact.blocked
+                                  ? 'unblock'.i18n.toUpperCase()
+                                  : 'block'.i18n.toUpperCase(),
                               style: tsButtonPink,
                             ),
                           ),

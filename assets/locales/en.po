@@ -232,17 +232,32 @@ msgstr "More options"
 msgid "block_user"
 msgstr "Block user"
 
+msgid "unblock_user"
+msgstr "Unblock user"
+
 msgid "block"
 msgstr "Block"
+
+msgid "unblock"
+msgstr "Unblock"
 
 msgid "block_info_title"
 msgstr "Block %s ?"
 
+msgid "unblock_info_title"
+msgstr "Unblock %s ?"
+
 msgid "block_info_description"
 msgstr "Blocking this user will delete the message history, and prevent them from contacting you in the future. You can unblock users from the settings menu."
 
+msgid "unblock_info_description"
+msgstr "Are you sure you want to unblock this contact?"
+
 msgid "block_info_checkbox"
-msgstr "I understand that this will delete all message history"
+msgstr "I understand that this will delete all message history."
+
+msgid "unblock_info_checkbox"
+msgstr "I confirm I want to unblock this contact."
 
 msgid "delete_permanently"
 msgstr "Delete user permanently"
@@ -486,6 +501,9 @@ msgstr "%s has been deleted from your contacts."
 
 msgid "contact_was_blocked"
 msgstr "%s has been blocked."
+
+msgid "contact_was_unblocked"
+msgstr "%s has been unblocked."
 
 msgid "close"
 msgstr "Close"

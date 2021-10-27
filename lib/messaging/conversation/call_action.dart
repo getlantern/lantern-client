@@ -28,10 +28,26 @@ class CallAction extends StatelessWidget {
                 label: 'call'.i18n,
                 onTap: () async {
                   Navigator.pop(context);
-                  await context.pushRoute(
+                  await context
+                      .pushRoute(
                     FullScreenDialogPage(
                         widget: Call(contact: contact, model: model)),
-                  );
+                  )
+                      .then((value) {
+                    if (value != null) {
+                      var isVerified = value as bool;
+                      if (isVerified) {
+                        //             if (widget.showVerificationAnimation!) {
+                        //   showSnackbar(
+                        //       context: context,
+                        //       duration: longAnimationDuration,
+                        //       content: 'verification_panel_success'
+                        //           .i18n
+                        //           .fill([widget.verifiedContactDisplayName!]));
+                        // }
+                      }
+                    }
+                  });
                 },
               ),
               BottomModalItem(

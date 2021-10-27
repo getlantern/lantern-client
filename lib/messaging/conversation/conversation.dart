@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
+import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'contact_info_topbar.dart';
@@ -48,6 +49,8 @@ class ConversationState extends State<Conversation>
   var messageCount = 0;
   PathAndValue<StoredMessage>? storedMessage;
   final scrollController = ItemScrollController();
+  var seenVerificationAlert = true;
+  var showVerificationAnimation = false;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -258,8 +261,9 @@ class ConversationState extends State<Conversation>
       {List<Uint8List>? attachments,
       String? replyToSenderId,
       String? replyToId}) async {
-    if (attachments?.isNotEmpty == true)
+    if (attachments?.isNotEmpty == true) {
       context.loaderOverlay.show(widget: spinner);
+    }
     try {
       await model.sendToDirectContact(
         widget.contactId.id,
@@ -332,8 +336,10 @@ class ConversationState extends State<Conversation>
             focusColor: grey3,
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
-            // I had initially extracted this into its own widget since the designs were reusing it, but thats not the case anymore. We can switch it back.
-            child: ContactInfoTopBar(contact: contact),
+            child: ContactInfoTopBar(
+                contact: contact,
+                showVerificationAnimation:
+                    showVerificationAnimation), // TODO: this should listen to changes in Verification status as well
           ),
         ),
         actions: [
@@ -341,18 +347,23 @@ class ConversationState extends State<Conversation>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // TODO: Verification - only show once (?)
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => showVerificationOptions(
-                        model: model,
-                        contact: contact,
-                        context: bottomModalContext),
-                    icon: const CAssetImage(
-                      path: ImagePaths.verification_alert,
+                  if (seenVerificationAlert &&
+                      contact.verificationLevel != VerificationLevel.VERIFIED)
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () {
+                        // TODO: store seenVerificationAlert in DB
+                        showVerificationOptions(
+                            model: model,
+                            contact: contact,
+                            context: bottomModalContext);
+                      },
+                      icon: const CAssetImage(
+                        path: ImagePaths.verification_alert,
+                      ),
                     ),
-                  ),
-                  CallAction(contact),
+                  showCallMenu(
+                      contact), // we are only using a function as opposed to widget because we want the snackbar and animation to show after eventual verification
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     icon: const CAssetImage(path: ImagePaths.more_vert),
@@ -432,6 +443,57 @@ class ConversationState extends State<Conversation>
         ),
       );
     });
+  }
+
+  Widget showCallMenu(Contact contact) {
+    return model.singleContact(
+      context,
+      contact,
+      (context, contact, child) => IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: () => showBottomModal(
+            context: context,
+            title: CText(
+                'call_contact'.i18n.fill([contact.displayNameOrFallback]),
+                maxLines: 1,
+                style: tsSubtitle1),
+            children: [
+              BottomModalItem(
+                leading: const CAssetImage(path: ImagePaths.phone),
+                label: 'call'.i18n,
+                onTap: () async {
+                  Navigator.pop(context);
+                  await context
+                      .pushRoute(
+                    FullScreenDialogPage(
+                        widget: Call(contact: contact, model: model)),
+                  )
+                      .then((value) {
+                    if (value != null) {
+                      var isVerified = value as bool;
+                      setState(() => showVerificationAnimation = isVerified);
+                      if (showVerificationAnimation) {
+                        // TODO: this should listen to changes in Verification status as well
+                        showSnackbar(
+                            context: context,
+                            duration: longAnimationDuration,
+                            content: 'verification_panel_success'
+                                .i18n
+                                .fill([contact.displayNameOrFallback]));
+                      }
+                    }
+                  });
+                },
+              ),
+              BottomModalItem(
+                leading: const CAssetImage(path: ImagePaths.cancel),
+                label: 'cancel'.i18n,
+                onTap: () => Navigator.pop(context),
+              ),
+            ]),
+        icon: const CAssetImage(path: ImagePaths.phone),
+      ),
+    );
   }
 
   Widget buildList(Contact contact) {
