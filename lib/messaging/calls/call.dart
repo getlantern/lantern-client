@@ -63,10 +63,10 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     signaling.bye(await session);
   }
 
-  void onSignalingStateChange() {
+  void onSignalingStateChange() async {
     if (signaling.value.callState == CallState.Bye) {
       if (!closed) {
-        Navigator.pop(context);
+        Navigator.pop(context, isVerified);
         closed = true;
       }
     }
@@ -104,6 +104,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     var _status = fragmentStatusMap[key]['isConfirmed'];
     markFragments(!_status, key);
     setState(() => isVerified = fragmentsAreVerified());
+    if (isVerified) {
+      markAsVerified();
+    }
   }
 
   // returns true if all the fragments have been verified
@@ -112,14 +115,20 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
         .any((element) => element.value['isConfirmed'] == false);
   }
 
-  void handleVerifyButtonPress() {
+  void handleVerifyButtonPress() async {
     if (isVerified) {
       markFragments(false, null); // mark all fragments as unverified
       isVerified = false;
     } else {
       markFragments(true, null); // mark all fragments as verified
       isVerified = true;
+      markAsVerified();
     }
+  }
+
+  void markAsVerified() async {
+    var model = context.watch<MessagingModel>();
+    await model.markDirectContactVerified(widget.contact.contactId.id);
   }
 
   void markFragments(bool value, int? key) {

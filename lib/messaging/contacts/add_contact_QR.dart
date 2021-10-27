@@ -28,7 +28,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   ValueNotifier<Contact?>? contactNotifier;
   void Function()? listener;
 
+  // Helper functions
   final closeOnce = once();
+  final addOnce = once<Future<void>>();
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -44,18 +46,16 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
   }
 
-  final addProvisionalContactOnce = once<Future<void>>();
-
-  Future<void> addProvisionalContact(
-      MessagingModel model, String contactId, String source) async {
+  Future<void> addViaQR(
+      MessagingModel model, String unsafeId, String source) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(contactId, source,
+    var result = await model.addProvisionalContact(unsafeId, source,
         VerificationLevel.UNVERIFIED); //TODO: check verification level
 
-    contactNotifier = model.contactNotifier(contactId);
+    contactNotifier = model.contactNotifier(unsafeId);
     listener = () async {
       var updatedContact = contactNotifier!.value;
       if (updatedContact != null &&
@@ -63,14 +63,11 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               result['mostRecentHelloTsMillis']) {
         countdownController.stop(canceled: true);
         /* 
-        * VERIFICATION SUCCESS
+        * MARK VERIFIED
         */
-        // TODO: navigate to Conversation
-        // TODO: mark as verified
-        // TODO: show snackbar
-        // TODO: color animation for "Verified" status
-        // go back to New Message with the updatedContact info
-        closeOnce(() => Navigator.pop(context, updatedContact));
+        await model.markDirectContactVerified(unsafeId);
+        closeOnce(() => context
+            .pushRoute(Conversation(contactId: updatedContact.contactId)));
       }
     };
     contactNotifier!.addListener(listener!);
@@ -80,7 +77,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
     final int expiresAt = result['expiresAtMillis'];
     (expiresAt > 0)
-        ? _onCountdownTriggered(expiresAt, contactId)
+        ? _onCountdownTriggered(expiresAt, unsafeId)
         : _onNoCountdown();
   }
 
@@ -116,8 +113,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     });
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        await addProvisionalContactOnce(() {
-          return addProvisionalContact(model, scanData.code, 'qr');
+        await addOnce(() {
+          return addViaQR(model, scanData.code, 'qr');
         });
       } catch (e, s) {
         setState(() {

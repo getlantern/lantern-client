@@ -6,19 +6,17 @@ import '../messaging.dart';
 
 class ContactInfoTopBar extends StatelessWidget {
   final Contact contact;
+  final bool showVerificationAnimation;
+
   const ContactInfoTopBar({
     required this.contact,
+    this.showVerificationAnimation = false,
   }) : super();
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
     final title = contact.displayNameOrFallback;
-    // TODO: only trigger when we have come from Conversation with a verified status
-    var verifiedColor =
-        contact.verificationLevel == VerificationLevel.UNVERIFIED
-            ? indicatorGreen
-            : black;
+    var verifiedColor = showVerificationAnimation ? indicatorGreen : black;
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -39,8 +37,7 @@ class ContactInfoTopBar extends StatelessWidget {
                 maxLines: 1,
                 style: tsHeading3,
               ),
-              if (contact.verificationLevel ==
-                  VerificationLevel.UNACCEPTED) //TODO: update this
+              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -55,12 +52,11 @@ class ContactInfoTopBar extends StatelessWidget {
                         style: tsOverline)
                   ],
                 ),
-              if (contact.verificationLevel !=
-                  VerificationLevel.UNACCEPTED) //TODO: update this
+              if (contact.verificationLevel == VerificationLevel.VERIFIED)
                 StatefulBuilder(
                     key: const ValueKey('verification_field'),
                     builder: (context, setState) {
-                      Future.delayed(defaultAnimationDuration,
+                      Future.delayed(longAnimationDuration,
                           () => setState(() => verifiedColor = black));
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
