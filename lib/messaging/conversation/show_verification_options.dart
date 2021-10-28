@@ -20,8 +20,8 @@ void showVerificationOptions({
               leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
               label: 'verify_in_person'.i18n,
               onTap: () async {
-                await bottomModalContext.router.pop();
-                await context
+                await context.router.pop();
+                await bottomModalContext
                     .pushRoute(
                   FullScreenDialogPage(widget: AddViaQR(me: me)),
                 )
@@ -45,7 +45,6 @@ void showVerificationOptions({
           leading: const CAssetImage(path: ImagePaths.phone),
           label: 'verify_via_call'.i18n,
           onTap: () async {
-            await bottomModalContext.router.pop();
             await bottomModalContext
                 .pushRoute(
               FullScreenDialogPage(

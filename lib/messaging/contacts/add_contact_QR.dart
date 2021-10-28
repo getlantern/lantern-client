@@ -117,7 +117,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
   void _onQRViewCreated(QRViewController controller, MessagingModel model) {
     qrController = controller;
-    qrController?.pauseCamera();
+    // qrController?.pauseCamera();
     setState(() {
       scanning = true;
     });
@@ -132,7 +132,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         });
         showErrorDialog(context, e: e, s: s, des: 'qr_error_description'.i18n);
       } finally {
-        await qrController?.pauseCamera();
+        // await qrController?.pauseCamera();
       }
     });
   }
