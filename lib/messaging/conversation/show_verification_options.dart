@@ -5,11 +5,11 @@ import '../messaging.dart';
 
 void showVerificationOptions({
   required MessagingModel model,
-  required BuildContext context,
+  required BuildContext bottomModalContext,
   required Contact contact,
 }) {
   return showBottomModal(
-      context: context,
+      context: bottomModalContext,
       title: CText('verify_contact'.i18n.fill([contact.displayNameOrFallback]),
           maxLines: 1, style: tsSubtitle1),
       subtitle: CText(
@@ -21,9 +21,21 @@ void showVerificationOptions({
               label: 'verify_in_person'.i18n,
               onTap: () async {
                 Navigator.pop(context);
-                await context.router.push(
+                await bottomModalContext
+                    .pushRoute(
                   FullScreenDialogPage(widget: AddViaQR(me: me)),
-                );
+                )
+                    .then((value) {
+                  // * we just successfully verified someone via QR scanning
+                  if (value != null) {
+                    // TODO: show animation
+                    showSnackbar(
+                        context: context,
+                        content: 'verification_panel_success'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]));
+                  }
+                });
               },
               trailing: const CAssetImage(
                 path: ImagePaths.keyboard_arrow_right,
@@ -33,11 +45,23 @@ void showVerificationOptions({
           leading: const CAssetImage(path: ImagePaths.phone),
           label: 'verify_via_call'.i18n,
           onTap: () async {
-            Navigator.pop(context);
-            await context.pushRoute(
+            Navigator.pop(bottomModalContext);
+            await bottomModalContext
+                .pushRoute(
               FullScreenDialogPage(
                   widget: Call(contact: contact, model: model)),
-            );
+            )
+                .then((value) {
+              // * we just successfully verified someone via a Call
+              if (value != null) {
+                // TODO: show animation
+                showSnackbar(
+                    context: bottomModalContext,
+                    content: 'verification_panel_success'
+                        .i18n
+                        .fill([contact.displayNameOrFallback]));
+              }
+            });
           },
           trailing: const CAssetImage(
             path: ImagePaths.keyboard_arrow_right,
@@ -47,8 +71,8 @@ void showVerificationOptions({
           leading: const CAssetImage(path: ImagePaths.cancel),
           label: 'dismiss_notification'.i18n,
           onTap: () {
-            Navigator.pop(context);
-            showInfoDialog(context,
+            Navigator.pop(bottomModalContext);
+            showInfoDialog(bottomModalContext,
                 title: 'contact_verification'.i18n,
                 assetPath: ImagePaths.verified_user,
                 des: 'contact_verification_description'.i18n,

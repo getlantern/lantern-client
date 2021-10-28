@@ -66,6 +66,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void onSignalingStateChange() async {
     if (signaling.value.callState == CallState.Bye) {
       if (!closed) {
+        /*
+        * Popping back to wherever we were by indicating that we have verified the contact 
+        */
         Navigator.pop(context, isVerified);
         closed = true;
       }
@@ -103,9 +106,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void handleTapping({required int key}) {
     var _status = fragmentStatusMap[key]['isConfirmed'];
     markFragments(!_status, key);
-    setState(() => isVerified = fragmentsAreVerified());
-    if (isVerified) {
+    if (fragmentsAreVerified()) {
       markAsVerified();
+      setState(() => isVerified = true);
     }
   }
 

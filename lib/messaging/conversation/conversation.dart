@@ -49,8 +49,7 @@ class ConversationState extends State<Conversation>
   var messageCount = 0;
   PathAndValue<StoredMessage>? storedMessage;
   final scrollController = ItemScrollController();
-  var seenVerificationAlert = true;
-  var showVerificationAnimation = false;
+  var shouldShowVerificationAlert = true;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -336,10 +335,7 @@ class ConversationState extends State<Conversation>
             focusColor: grey3,
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
-            child: ContactInfoTopBar(
-                contact: contact,
-                showVerificationAnimation:
-                    showVerificationAnimation), // TODO: this should listen to changes in Verification status as well
+            child: ContactInfoTopBar(contact: contact),
           ),
         ),
         actions: [
@@ -347,23 +343,22 @@ class ConversationState extends State<Conversation>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (seenVerificationAlert &&
+                  // TODO: handle periodic reminder here
+                  if (shouldShowVerificationAlert &&
                       contact.verificationLevel != VerificationLevel.VERIFIED)
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
-                        // TODO: store seenVerificationAlert in DB
                         showVerificationOptions(
                             model: model,
                             contact: contact,
-                            context: bottomModalContext);
+                            bottomModalContext: bottomModalContext);
                       },
                       icon: const CAssetImage(
                         path: ImagePaths.verification_alert,
                       ),
                     ),
-                  showCallMenu(
-                      contact), // we are only using a function as opposed to widget because we want the snackbar and animation to show after eventual verification
+                  CallAction(contact),
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     icon: const CAssetImage(path: ImagePaths.more_vert),
@@ -443,57 +438,6 @@ class ConversationState extends State<Conversation>
         ),
       );
     });
-  }
-
-  Widget showCallMenu(Contact contact) {
-    return model.singleContact(
-      context,
-      contact,
-      (context, contact, child) => IconButton(
-        visualDensity: VisualDensity.compact,
-        onPressed: () => showBottomModal(
-            context: context,
-            title: CText(
-                'call_contact'.i18n.fill([contact.displayNameOrFallback]),
-                maxLines: 1,
-                style: tsSubtitle1),
-            children: [
-              BottomModalItem(
-                leading: const CAssetImage(path: ImagePaths.phone),
-                label: 'call'.i18n,
-                onTap: () async {
-                  Navigator.pop(context);
-                  await context
-                      .pushRoute(
-                    FullScreenDialogPage(
-                        widget: Call(contact: contact, model: model)),
-                  )
-                      .then((value) {
-                    if (value != null) {
-                      var isVerified = value as bool;
-                      setState(() => showVerificationAnimation = isVerified);
-                      if (showVerificationAnimation) {
-                        // TODO: this should listen to changes in Verification status as well
-                        showSnackbar(
-                            context: context,
-                            duration: longAnimationDuration,
-                            content: 'verification_panel_success'
-                                .i18n
-                                .fill([contact.displayNameOrFallback]));
-                      }
-                    }
-                  });
-                },
-              ),
-              BottomModalItem(
-                leading: const CAssetImage(path: ImagePaths.cancel),
-                label: 'cancel'.i18n,
-                onTap: () => Navigator.pop(context),
-              ),
-            ]),
-        icon: const CAssetImage(path: ImagePaths.phone),
-      ),
-    );
   }
 
   Widget buildList(Contact contact) {
