@@ -1,12 +1,17 @@
 package org.getlantern.lantern.service;
 
+import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 import com.google.gson.JsonObject;
 
@@ -33,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
 
+import io.lantern.messaging.WebRTCSignal;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
