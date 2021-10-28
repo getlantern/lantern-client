@@ -4,19 +4,47 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
 
-class ContactInfoTopBar extends StatelessWidget {
+class ContactInfoTopBar extends StatefulWidget {
   final Contact contact;
-  final bool showVerificationAnimation;
 
   const ContactInfoTopBar({
     required this.contact,
-    this.showVerificationAnimation = false,
   }) : super();
 
   @override
+  _ContactInfoTopBarState createState() => _ContactInfoTopBarState();
+}
+
+class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
+  @override
   Widget build(BuildContext context) {
-    final title = contact.displayNameOrFallback;
-    var verifiedColor = showVerificationAnimation ? indicatorGreen : black;
+    var title = widget.contact.displayNameOrFallback;
+    var verifiedColor = black;
+    var verificationLevel = widget.contact.verificationLevel;
+    ValueNotifier<Contact?>? contactNotifier;
+    var model = context.watch<MessagingModel>();
+
+    // listen to the contact path for changes
+    // will return a Contact if there are any, otherwise null
+    contactNotifier = model.contactNotifier(widget.contact.contactId.id);
+
+    var listener = () async {
+      var updatedContact = contactNotifier!.value;
+      // something changed for this contact, lets get the updates
+      if (updatedContact != null) {
+        setState(() {
+          title = updatedContact.displayNameOrFallback;
+          verificationLevel = updatedContact.verificationLevel;
+        });
+        await Future.delayed(longAnimationDuration,
+            () => setState(() => verifiedColor = indicatorGreen));
+      }
+    };
+    contactNotifier.addListener(listener);
+    // immediately invoke listener in case the contactNotifier already has
+    // an up-to-date contact.
+    listener();
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -24,8 +52,7 @@ class ContactInfoTopBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
-              messengerId: contact.contactId.id,
-              displayName: contact.displayNameOrFallback),
+              messengerId: widget.contact.contactId.id, displayName: title),
         ),
         Expanded(
           child: Column(
@@ -37,7 +64,10 @@ class ContactInfoTopBar extends StatelessWidget {
                 maxLines: 1,
                 style: tsHeading3,
               ),
-              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
+              /* 
+              * Contact is unverified => render pending badge
+              */
+              if (verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -52,31 +82,26 @@ class ContactInfoTopBar extends StatelessWidget {
                         style: tsOverline)
                   ],
                 ),
-              if (contact.verificationLevel == VerificationLevel.VERIFIED)
-                StatefulBuilder(
-                    key: const ValueKey('verification_field'),
-                    builder: (context, setState) {
-                      Future.delayed(longAnimationDuration,
-                          () => setState(() => verifiedColor = black));
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          DisappearingTimerAction(contact),
-                          Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(start: 8.0),
-                            child: CAssetImage(
-                              path: ImagePaths.verified_user,
-                              size: 12.0,
-                              color: verifiedColor,
-                            ),
-                          ),
-                          CText('verified'.i18n.toUpperCase(),
-                              style:
-                                  tsOverline.copiedWith(color: verifiedColor)),
-                        ],
-                      );
-                    }),
+              /* 
+              * Contact is verified => render timer and verified badge
+              */
+              if (verificationLevel == VerificationLevel.VERIFIED)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    DisappearingTimerAction(widget.contact),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 8.0),
+                      child: CAssetImage(
+                        path: ImagePaths.verified_user,
+                        size: 12.0,
+                        color: verifiedColor,
+                      ),
+                    ),
+                    CText('verified'.i18n.toUpperCase(),
+                        style: tsOverline.copiedWith(color: verifiedColor)),
+                  ],
+                ),
             ],
           ),
         ),

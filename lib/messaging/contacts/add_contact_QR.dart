@@ -6,8 +6,10 @@ import 'qr_scanner_border_painter.dart';
 
 class AddViaQR extends StatefulWidget {
   final Contact me;
+  final bool isVerificationMode;
 
-  AddViaQR({Key? key, required this.me}) : super(key: key);
+  AddViaQR({Key? key, required this.me, this.isVerificationMode = true})
+      : super(key: key);
 
   @override
   _AddViaQRState createState() => _AddViaQRState();
@@ -46,28 +48,36 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> addViaQR(
+  Future<void> _addProvisionalContact(
       MessagingModel model, String unsafeId, String source) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(unsafeId, source,
-        VerificationLevel.UNVERIFIED); //TODO: check verification level
 
+    /* 
+    * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding a provisional contact
+    */
+    // TODO: if verifying, don't change displayName
+    var result = await model.addProvisionalContact(
+        unsafeId, source, VerificationLevel.VERIFIED);
+
+    // listen to the contact path for changes
+    // will return a Contact if there are any, otherwise null
     contactNotifier = model.contactNotifier(unsafeId);
+
     listener = () async {
       var updatedContact = contactNotifier!.value;
       if (updatedContact != null &&
           updatedContact.mostRecentHelloTs >
               result['mostRecentHelloTsMillis']) {
         countdownController.stop(canceled: true);
-        /* 
-        * MARK VERIFIED
+
+        /*
+        * Verification success - regardless of whether we are in verifying or face-to-face adding mode, marking this contact as verified
         */
         await model.markDirectContactVerified(unsafeId);
-        closeOnce(() => context
-            .pushRoute(Conversation(contactId: updatedContact.contactId)));
+        closeOnce(() => Navigator.pop(context, updatedContact));
       }
     };
     contactNotifier!.addListener(listener!);
@@ -114,7 +124,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
         await addOnce(() {
-          return addViaQR(model, scanData.code, 'qr');
+          return _addProvisionalContact(model, scanData.code, 'qr');
         });
       } catch (e, s) {
         setState(() {
@@ -162,7 +172,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // icon color
       topColor: grey5,
       title: Center(
-        child: CText('contact_verification'.i18n,
+        child: CText(
+            widget.isVerificationMode
+                ? 'contact_verification'.i18n
+                : 'banner_source_qr'.i18n,
             style: tsHeading3.copiedWith(color: white)),
       ),
       backButton: mirrorLTR(
@@ -193,7 +206,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         : Row(
                             children: [
                               CText(
-                                'qr_info_scan'.i18n,
+                                widget.isVerificationMode
+                                    ? 'qr_info_verification_scan'.i18n
+                                    : 'qr_info_f2f_scan'.i18n,
                                 style: tsBody1Color(white),
                               ),
                               Padding(
@@ -202,8 +217,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () => showInfoDialog(context,
-                                      title: 'qr_info_title'.i18n,
-                                      des: 'qr_info_description'.i18n,
+                                      title: widget.isVerificationMode
+                                          ? 'qr_info_verification_title'.i18n
+                                          : 'qr_info_f2f_title'.i18n,
+                                      des: widget.isVerificationMode
+                                          ? 'qr_info_verification_des'.i18n
+                                          : 'qr_info_f2f_des'.i18n,
                                       assetPath: ImagePaths.qr_code,
                                       buttonText: 'info_dialog_confirm'
                                           .i18n
@@ -294,8 +313,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     );
   }
 }
-
-// TODO: get rid of this as well
 
 class _renderWaitingUI extends StatelessWidget {
   const _renderWaitingUI(

@@ -306,7 +306,9 @@ Future showConversationOptions(
                   onTap: () async {
                     await bottomContext.router.pop();
                     showVerificationOptions(
-                        model: model, contact: contact, context: parentContext);
+                        model: model,
+                        contact: contact,
+                        bottomModalContext: parentContext);
                   }),
               // BottomModalItem(
               //     leading: const CAssetImage(

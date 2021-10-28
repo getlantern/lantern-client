@@ -51,64 +51,56 @@ class _NewMessageState extends State<NewMessage> {
               * Scan QR Code
               */
               CListTile(
-                  leading: const CAssetImage(
-                    path: ImagePaths.qr_code_scanner,
+                leading: const CAssetImage(
+                  path: ImagePaths.qr_code_scanner,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                    CText('add_contact_in_person'.i18n,
+                        style: tsBody1.copiedWith(color: grey5))
+                  ],
+                ),
+                trailing: mirrorLTR(
+                  context: context,
+                  child: const CAssetImage(
+                    path: ImagePaths.keyboard_arrow_right,
                   ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
-                      CText('add_contact_in_person'.i18n,
-                          style: tsBody1.copiedWith(color: grey5))
-                    ],
-                  ),
-                  trailing: mirrorLTR(
-                    context: context,
-                    child: const CAssetImage(
-                      path: ImagePaths.keyboard_arrow_right,
-                    ),
-                  ),
-                  onTap: () async => await context.router.push(
-                        FullScreenDialogPage(widget: AddViaQR(me: me)),
-                      )
-                  // TODO: move to Conversation
-                  //     .then((value) {
-                  //   // we only care about this if it comes back with an updated contact
-                  //   if (value != null) {
-                  //     setState(() {
-                  //       _updatedContact = value as Contact;
-                  //     });
-                  //     showSnackbar(
-                  //         context: context,
-                  //         content: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           crossAxisAlignment: CrossAxisAlignment.end,
-                  //           children: [
-                  //             Expanded(
-                  //               child: CText(
-                  //                 'qr_success_snackbar'.i18n.fill(
-                  //                     [_updatedContact!.displayNameOrFallback]),
-                  //                 overflow: TextOverflow.visible,
-                  //                 style: tsBody1Color(white),
-                  //                 textAlign: TextAlign.start,
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         duration: const Duration(milliseconds: 4000),
-                  //         action: SnackBarAction(
-                  //           textColor: pink3,
-                  //           label: 'start_chat'.i18n.toUpperCase(),
-                  //           onPressed: () async {
-                  //             await context.pushRoute(Conversation(
-                  //                 contactId: _updatedContact!.contactId));
-                  //           },
-                  //         ));
-                  //   }
-                  // }),
-                  ),
+                ),
+                onTap: () async => await context
+                    .pushRoute(
+                  FullScreenDialogPage(
+                      widget: AddViaQR(
+                    me: me,
+                    isVerificationMode: false,
+                  )),
+                )
+                    .then((value) {
+                  // * we just successfully added someone in person
+                  if (value != null) {
+                    setState(() {
+                      _updatedContact = value as Contact;
+                    });
+                    showSnackbar(
+                        context: context,
+                        content: 'qr_success_snackbar'
+                            .i18n
+                            .fill([_updatedContact!.displayNameOrFallback]),
+                        duration: const Duration(milliseconds: 4000),
+                        action: SnackBarAction(
+                          textColor: pink3,
+                          label: 'start_chat'.i18n.toUpperCase(),
+                          onPressed: () async {
+                            await context.pushRoute(Conversation(
+                                contactId: _updatedContact!.contactId));
+                          },
+                        ));
+                  }
+                }),
+              ),
               /*
               * Add via Username or ID
               */

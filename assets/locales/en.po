@@ -355,14 +355,23 @@ msgstr "Contact verification is always available from the message menu in the to
 msgid "qr_error_description"
 msgstr "Something went wrong while scanning this QR code."
 
-msgid "qr_info_title"
+msgid "qr_info_verification_title"
 msgstr "In Person Contact Verification"
 
-msgid "qr_info_description"
+msgid "qr_info_f2f_title"
+msgstr "QR Code Scanning"
+
+msgid "qr_info_verification_des"
 msgstr "To verify your contact, scan each other's QR codes.\n\nThis process ensures the privacy and end-to-end encryption of your conversations."
 
-msgid "qr_info_scan"
+msgid "qr_info_f2f_des"
+msgstr "To add your friend as a contact, scan each other's QR codes.\n\nThis process ensures the privacy and end-to-end encryption of your conversations."
+
+msgid "qr_info_verification_scan"
 msgstr "Scan each others QR codes to verify."
+
+msgid "qr_info_f2f_scan"
+msgstr "Scan each others QR codes to add a contact."
 
 msgid "qr_success_snackbar"
 msgstr "%s is a Contact"
