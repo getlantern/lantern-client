@@ -220,6 +220,9 @@ msgstr "Display Name:"
 msgid "edit"
 msgstr "Edit"
 
+msgid "save_error"
+msgstr "Something went wrong while saving."
+
 msgid "username"
 msgstr "Username:"
 
