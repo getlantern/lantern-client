@@ -17,6 +17,11 @@ class ContactInfoTopBar extends StatefulWidget {
 
 class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var title = widget.contact.displayNameOrFallback;
     var verifiedColor = black;

@@ -94,13 +94,22 @@ class ContactInfo extends StatelessWidget {
                                     ),
                               trailing: InkWell(
                                 focusColor: grey3,
-                                onTap: () {
+                                onTap: () async {
                                   setState(() => isEditing = !isEditing);
                                   if (!isEditing) {
-                                    // TODO: Save this to model
-                                    showSnackbar(
-                                        context: context,
-                                        content: 'Saved'.i18n);
+                                    try {
+                                      await model.addProvisionalContact(
+                                          contact.contactId.id,
+                                          displayNameController.text,
+                                          contact.verificationLevel);
+
+                                      showSnackbar(
+                                          context: context,
+                                          content: 'Saved'.i18n);
+                                    } catch (e, s) {
+                                      showErrorDialog(context,
+                                          e: e, s: s, des: 'save_error'.i18n);
+                                    }
                                   }
                                 },
                                 child: Ink(
