@@ -22,7 +22,8 @@ class MessagingModel extends Model {
       switch (call.method) {
         case 'onSignal':
           var args = call.arguments as Map;
-          signaling.onMessage(args['senderId'], args['content']);
+          signaling.onMessage(
+              args['senderId'], args['content'], args['acceptedCall']);
           break;
         default:
           break;
