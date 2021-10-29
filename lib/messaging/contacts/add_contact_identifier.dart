@@ -11,6 +11,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
       formKey: _formKey, validator: (value) => validateInput(value));
   var shouldSubmit = false;
   var noMatch = false;
+  var identifierToAdd = '';
 
   @override
   void initState() {
@@ -24,21 +25,23 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
     super.dispose();
   }
 
-  void handleButtonPress() async {
+  void handleButtonPress(MessagingModel model) async {
     contactIdController.focusNode.unfocus();
     setState(() => noMatch = false);
     if (_formKey.currentState?.validate() == true) {
-      context.loaderOverlay.show(widget: spinner);
       try {
-        // TODO: talk to model and add contact
+        // TODO: search for a contact with this messenger ID
+        context.loaderOverlay.show(widget: spinner);
       } catch (e) {
         setState(() => noMatch = true);
       } finally {
         context.loaderOverlay.hide();
-        if (!noMatch) {
-          // TODO: mark as pending request
-          // TODO: direct to Conversation view
-        }
+      }
+
+      if (!noMatch) {
+        await model.addProvisionalContact(
+            identifierToAdd, 'id', VerificationLevel.UNVERIFIED);
+        // TODO: direct to Conversation view
       }
     }
   }
@@ -69,6 +72,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
 
   @override
   Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
     return BaseScreen(
       title: 'add_contact'.i18n,
       body: Container(
@@ -116,7 +120,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
               child: Button(
                 width: 200,
                 text: 'start_chat'.i18n,
-                onPressed: () => handleButtonPress(),
+                onPressed: () => handleButtonPress(model),
                 disabled: !shouldSubmit,
               ),
             ),

@@ -89,7 +89,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    "username" -> Model.ContactSource.APP3
                     else -> Model.ContactSource.UNKNOWN
                 },
                 call.argument("verificationLevel")!!,
