@@ -41,6 +41,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
           title = updatedContact.displayNameOrFallback;
           verificationLevel = updatedContact.verificationLevel;
         });
+        // TODO: this needs to be disposed of properly
         await Future.delayed(longAnimationDuration,
             () => setState(() => verifiedColor = indicatorGreen));
       }
