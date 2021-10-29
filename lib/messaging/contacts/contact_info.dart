@@ -98,10 +98,10 @@ class ContactInfo extends StatelessWidget {
                                   setState(() => isEditing = !isEditing);
                                   if (!isEditing) {
                                     try {
-                                      await model.addProvisionalContact(
+                                      await model.addOrUpdateDirectContact(
                                           contact.contactId.id,
-                                          displayNameController.text,
-                                          contact.verificationLevel);
+                                          displayName:
+                                              displayNameController.text);
 
                                       showSnackbar(
                                           context: context,

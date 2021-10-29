@@ -48,6 +48,25 @@ class MessagingModel extends Model {
     }).then((value) => value as Map);
   }
 
+  Future<Map> addOrUpdateDirectContact(
+    String contactId, {
+    String? displayName,
+    String? source,
+    Map<int, String>? applicationIds,
+    VerificationLevel? verificationLevel,
+    Map<String, dynamic>? updateApplicationData,
+  }) {
+    return methodChannel
+        .invokeMethod('addProvisionalContact', <String, dynamic>{
+      'unsafeContactId': contactId,
+      'displayName': displayName,
+      'source': source,
+      'applicationIds': applicationIds,
+      'verificationLevel': verificationLevel,
+      'updateApplicationData': updateApplicationData,
+    }).then((value) => value as Map);
+  }
+
   Future<void> deleteProvisionalContact(String contactId) {
     return methodChannel.invokeMethod('deleteProvisionalContact',
         <String, dynamic>{'unsafeContactId': contactId});

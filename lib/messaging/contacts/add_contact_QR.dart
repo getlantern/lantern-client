@@ -58,9 +58,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     /* 
     * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding a provisional contact
     */
-    // TODO: if verifying, don't change displayName
     var result = await model.addProvisionalContact(
-        unsafeId, source, VerificationLevel.VERIFIED);
+        unsafeId, source, VerificationLevel.UNVERIFIED);
 
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null
@@ -117,7 +116,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
   void _onQRViewCreated(QRViewController controller, MessagingModel model) {
     qrController = controller;
-    // qrController?.pauseCamera();
+    qrController?.pauseCamera();
     setState(() {
       scanning = true;
     });
@@ -132,7 +131,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         });
         showErrorDialog(context, e: e, s: s, des: 'qr_error_description'.i18n);
       } finally {
-        // await qrController?.pauseCamera();
+        await qrController?.pauseCamera();
       }
     });
   }
