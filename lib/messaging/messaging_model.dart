@@ -57,7 +57,7 @@ class MessagingModel extends Model {
     Map<String, dynamic>? updateApplicationData,
   }) {
     return methodChannel
-        .invokeMethod('addProvisionalContact', <String, dynamic>{
+        .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
       'unsafeContactId': contactId,
       'displayName': displayName,
       'source': source,
