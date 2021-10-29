@@ -343,12 +343,18 @@ class ConversationState extends State<Conversation>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // TODO: handle periodic reminder here
                   if (shouldShowVerificationAlert &&
                       contact.verificationLevel != VerificationLevel.VERIFIED)
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
+                        // send the current timestamp via updateApplicationData Map
+                        // TODO: test this
+                        model.addOrUpdateDirectContact(contact.contactId.id,
+                            updateApplicationData: {
+                              'tsSeenVerificationAlert':
+                                  DateTime.now().millisecondsSinceEpoch
+                            });
                         showVerificationOptions(
                             model: model,
                             contact: contact,
