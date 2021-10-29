@@ -29,7 +29,7 @@ class CListTile extends StatelessWidget {
       menuWidth: MediaQuery.of(context).size.width * 0.8,
       child: Container(
         decoration: BoxDecoration(
-          color: transparent,
+          color: white,
           borderRadius: const BorderRadius.all(
             Radius.circular(8.0),
           ),
