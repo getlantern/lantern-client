@@ -364,7 +364,8 @@ class ConversationState extends State<Conversation>
                       onPressed: () {
                         // send the current timestamp via updateApplicationData Map
                         // TODO: test this
-                        model.addOrUpdateDirectContact(contact.contactId.id,
+                        model.addOrUpdateDirectContact(
+                            contact.contactId.id, contact.verificationLevel,
                             updateApplicationData: {
                               'tsSeenVerificationAlert':
                                   DateTime.now().millisecondsSinceEpoch

@@ -100,6 +100,7 @@ class ContactInfo extends StatelessWidget {
                                     try {
                                       await model.addOrUpdateDirectContact(
                                           contact.contactId.id,
+                                          contact.verificationLevel,
                                           displayName:
                                               displayNameController.text);
 
