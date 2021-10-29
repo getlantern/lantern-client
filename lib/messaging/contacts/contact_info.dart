@@ -176,7 +176,7 @@ class _ContactInfoState extends State<ContactInfo> {
                     Container(
                       margin: const EdgeInsetsDirectional.only(
                           start: 8, top: 21, bottom: 3),
-                      child: CText('username - DEPRECATD'.toUpperCase(),
+                      child: CText('username - DEPRECATED'.toUpperCase(),
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
