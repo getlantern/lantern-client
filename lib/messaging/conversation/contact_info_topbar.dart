@@ -100,7 +100,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               /* 
               * Contact is verified => render timer and verified badge
               */
-              if (newVerificationLevel == VerificationLevel.VERIFIED)
+              if (_verificationLevel == VerificationLevel.VERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
