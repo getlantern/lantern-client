@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
+	github.com/getlantern/auth-server v0.0.0-20211027201306-eafc0ff32b09 // indirect
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
 	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
 	github.com/getlantern/errors v1.0.1
@@ -25,8 +26,7 @@ require (
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/mobile v0.0.0-20210831184057-f7a629369e7a // indirect
 	golang.org/x/mod v0.5.0 // indirect
-	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
-	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
+	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f
 	golang.org/x/tools v0.1.5 // indirect
 	nhooyr.io/websocket v1.8.7
 )
