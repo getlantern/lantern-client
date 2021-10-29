@@ -49,7 +49,6 @@ class ConversationState extends State<Conversation>
   var messageCount = 0;
   PathAndValue<StoredMessage>? storedMessage;
   final scrollController = ItemScrollController();
-  var shouldShowVerificationAlert = true;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -325,6 +324,21 @@ class ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
+      var shouldShowVerificationAlert = true;
+      var tsSeenVerificationAlert =
+          contact.applicationData['tsSeenVerificationAlert'] as int?;
+
+      if (tsSeenVerificationAlert != null) {
+        final reminderPeriod = DateTime.now().millisecondsSinceEpoch +
+            14 *
+                24 *
+                60 *
+                60 *
+                1000; // in 14d * 24h * 60m * 60s * 1000 from now
+        shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch >
+            tsSeenVerificationAlert + reminderPeriod;
+      }
+
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
