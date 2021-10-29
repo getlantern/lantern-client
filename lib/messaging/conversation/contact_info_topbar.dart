@@ -16,39 +16,44 @@ class ContactInfoTopBar extends StatefulWidget {
 }
 
 class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
+  ValueNotifier<Contact?>? contactNotifier;
+  var verifiedColor = black;
+  var updatedContact;
+  void Function()? listener;
+
   @override
   void dispose() {
+    if (listener != null) {
+      contactNotifier?.removeListener(listener!);
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var title = widget.contact.displayNameOrFallback;
-    var verifiedColor = black;
-    var verificationLevel = widget.contact.verificationLevel;
-    ValueNotifier<Contact?>? contactNotifier;
     var model = context.watch<MessagingModel>();
+    var title = widget.contact.displayNameOrFallback;
+    var verificationLevel = widget.contact.verificationLevel;
 
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null
     contactNotifier = model.contactNotifier(widget.contact.contactId.id);
 
     var listener = () async {
-      var updatedContact = contactNotifier!.value;
       // something changed for this contact, lets get the updates
+      updatedContact = contactNotifier!.value as Contact;
       if (updatedContact != null) {
         setState(() {
           title = updatedContact.displayNameOrFallback;
           verificationLevel = updatedContact.verificationLevel;
         });
-        // TODO: this needs to be disposed of properly
-        await Future.delayed(longAnimationDuration,
-            () => setState(() => verifiedColor = indicatorGreen));
+        if (mounted) {
+          await Future.delayed(longAnimationDuration,
+              () => setState(() => verifiedColor = indicatorGreen));
+        }
       }
     };
-    contactNotifier.addListener(listener);
-    // immediately invoke listener in case the contactNotifier already has
-    // an up-to-date contact.
+    contactNotifier!.addListener(listener);
     listener();
 
     return Row(
