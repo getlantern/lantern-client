@@ -38,7 +38,7 @@ class MessagingModel extends Model {
   Future<Map> addProvisionalContact(
     String contactId,
     String? source,
-    VerificationLevel verificationLevel,
+    String verificationLevel,
   ) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{
@@ -50,10 +50,10 @@ class MessagingModel extends Model {
 
   Future<Map> addOrUpdateDirectContact(
     String unsafeId,
-    VerificationLevel verificationLevel, {
+    String verificationLevel, {
     String? displayName,
     String? source,
-    Map<int, String>? applicationIds,
+    Map<String, dynamic>? applicationIds,
     Map<String, dynamic>? updateApplicationData,
   }) {
     return methodChannel
@@ -138,16 +138,6 @@ class MessagingModel extends Model {
       return StoredMessage.fromBuffer(serialized);
     });
   }
-
-  /*
-  Returns the Contact corresponding to a displayName. Not in use until we implement AUTH.
-  */
-  // Future<Contact> getContactFromUsername<T>(String username) async {
-  //   return methodChannel
-  //       .invokeMethod('getContactFromUsername', <String, dynamic>{
-  //     'username': username,
-  //   }).then((value) => value as Contact);
-  // }
 
   Widget contactsByActivity(
       {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {

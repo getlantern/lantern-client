@@ -56,10 +56,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
 
     /* 
-    * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding a provisional contact
+    * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding an unverified provisional contact
     */
-    var result = await model.addProvisionalContact(
-        unsafeId, source, VerificationLevel.UNVERIFIED);
+    var result =
+        await model.addProvisionalContact(unsafeId, source, 'UNVERIFIED');
 
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null

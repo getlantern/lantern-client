@@ -91,7 +91,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "id" -> Model.ContactSource.APP2
                     else -> Model.ContactSource.UNKNOWN
                 },
-                call.argument("verificationLevel")!!,
+                when (call.argument<Any>("verificationLevel")!!) {
+                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
+                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
+                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
+                    else -> Model.VerificationLevel.UNRECOGNIZED
+                },
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
@@ -103,7 +108,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 displayName = call.argument("displayName"),
                 source = call.argument("source"),
                 applicationIds = call.argument("applicationIds"),
-                minimumVerificationLevel = call.argument("verificationLevel")!!,
+                when (call.argument<Any>("verificationLevel")!!) {
+                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
+                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
+                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
+                    else -> Model.VerificationLevel.UNRECOGNIZED
+                },
                 updateApplicationData = call.argument("updateApplicationData"),
             )
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(

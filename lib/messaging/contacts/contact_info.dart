@@ -4,37 +4,77 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
 
-class ContactInfo extends StatelessWidget {
+class ContactInfo extends StatefulWidget {
   final Contact contact;
-  final formKey = GlobalKey<FormState>();
-  late final displayNameController = CustomTextEditingController(
-      formKey: formKey, text: contact.displayNameOrFallback);
 
-  ContactInfo({Key? key, required this.contact}) : super(key: key) {
-    displayNameController.focusNode.requestFocus();
+  ContactInfo({Key? key, required this.contact}) : super();
+
+  @override
+  _ContactInfoState createState() => _ContactInfoState();
+}
+
+class _ContactInfoState extends State<ContactInfo> {
+  final formKey = GlobalKey<FormState>();
+  var textCopied = false;
+  var confirmBlock = false;
+  var isEditing = false;
+  late final displayNameController = CustomTextEditingController(
+      formKey: formKey, text: widget.contact.displayNameOrFallback);
+  ValueNotifier<Contact?>? contactNotifier;
+  void Function()? listener;
+  Contact? updatedContact;
+  var title;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    displayNameController.dispose();
+    if (listener != null) {
+      contactNotifier?.removeListener(listener!);
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    var textCopied = false;
-    var confirmBlock = false;
-    var isEditing = false;
+
+    // listen to the contact path for changes
+    // will return a Contact if there are any, otherwise null
+    contactNotifier = model.contactNotifier(widget.contact.contactId.id);
+
+    var listener = () async {
+      // something changed for this contact, lets get the updates
+      updatedContact = contactNotifier!.value as Contact;
+      if (updatedContact != null) {
+        if (mounted) {
+          setState(() {
+            title = updatedContact!.displayNameOrFallback;
+          });
+        }
+      }
+    };
+    contactNotifier!.addListener(listener);
+    listener();
 
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       centerTitle: true,
       padHorizontal: false,
-      title: contact.displayNameOrFallback,
+      title: title ?? widget.contact.displayNameOrFallback,
       actions: [
-        CallAction(contact),
+        CallAction(widget.contact),
         Container(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: IconButton(
               visualDensity: VisualDensity.compact,
               icon: const CAssetImage(path: ImagePaths.messages),
-              onPressed: () async => await context
-                  .pushRoute(Conversation(contactId: contact.contactId))),
+              onPressed: () async => await context.pushRoute(
+                  Conversation(contactId: widget.contact.contactId))),
         )
       ],
       body: ListView(
@@ -53,8 +93,8 @@ class ContactInfo extends StatelessWidget {
                   padding:
                       const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                   child: CustomAvatar(
-                      messengerId: contact.contactId.id,
-                      displayName: contact.displayNameOrFallback,
+                      messengerId: widget.contact.contactId.id,
+                      displayName: widget.contact.displayNameOrFallback,
                       radius: 64),
                 ),
                 /*
@@ -69,61 +109,62 @@ class ContactInfo extends StatelessWidget {
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
-                    StatefulBuilder(
-                        builder: (context, setState) => CListTile(
-                              leading: const CAssetImage(
-                                path: ImagePaths.user,
-                              ),
-                              content: !isEditing
-                                  ? CText(displayNameController.value.text,
-                                      style: tsBody1)
-                                  : TextField(
-                                      // we don't exactly need the UI and the functionality of CTextField but can change
-                                      controller: displayNameController,
-                                      style: tsBody1,
-                                      focusNode:
-                                          displayNameController.focusNode,
-                                      decoration: InputDecoration(
-                                          filled: isEditing,
-                                          fillColor:
-                                              isEditing ? grey1 : transparent,
-                                          border: const OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                          )),
-                                      keyboardType: TextInputType.text,
-                                    ),
-                              trailing: InkWell(
-                                focusColor: grey3,
-                                onTap: () async {
-                                  setState(() => isEditing = !isEditing);
-                                  if (!isEditing) {
-                                    try {
-                                      await model.addOrUpdateDirectContact(
-                                          contact.contactId.id,
-                                          contact.verificationLevel,
-                                          displayName:
-                                              displayNameController.text);
+                    CListTile(
+                      leading: const CAssetImage(
+                        path: ImagePaths.user,
+                      ),
+                      content: !isEditing
+                          ? CText(displayNameController.value.text,
+                              style: tsBody1)
+                          : TextField(
+                              // we don't exactly need the UI and the functionality of CTextField but can change
+                              controller: displayNameController,
+                              style: tsBody1,
+                              focusNode: displayNameController.focusNode,
+                              decoration: InputDecoration(
+                                  filled: isEditing,
+                                  fillColor: isEditing ? grey1 : transparent,
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                  )),
+                              keyboardType: TextInputType.text,
+                            ),
+                      trailing: InkWell(
+                        focusColor: grey3,
+                        onTap: () async {
+                          setState(() => isEditing = !isEditing);
+                          if (isEditing) {
+                            displayNameController.focusNode.requestFocus();
+                          }
+                          var notifyModel = displayNameController.text !=
+                              widget.contact.displayNameOrFallback;
+                          if (notifyModel) {
+                            try {
+                              await model.addOrUpdateDirectContact(
+                                  widget.contact.contactId.id,
+                                  widget.contact.verificationLevel.name
+                                      .toString(),
+                                  displayName: displayNameController.text);
 
-                                      showSnackbar(
-                                          context: context,
-                                          content: 'Saved'.i18n);
-                                    } catch (e, s) {
-                                      showErrorDialog(context,
-                                          e: e, s: s, des: 'save_error'.i18n);
-                                    }
-                                  }
-                                },
-                                child: Ink(
-                                  padding: const EdgeInsets.all(8),
-                                  child: CText(
-                                    isEditing
-                                        ? 'save'.i18n.toUpperCase()
-                                        : 'edit'.i18n.toUpperCase(),
-                                    style: tsButtonPink,
-                                  ),
-                                ),
-                              ),
-                            )),
+                              showSnackbar(
+                                  context: context, content: 'Saved'.i18n);
+                            } catch (e, s) {
+                              showErrorDialog(context,
+                                  e: e, s: s, des: 'save_error'.i18n);
+                            }
+                          }
+                        },
+                        child: Ink(
+                          padding: const EdgeInsets.all(8),
+                          child: CText(
+                            isEditing
+                                ? 'save'.i18n.toUpperCase()
+                                : 'edit'.i18n.toUpperCase(),
+                            style: tsButtonPink,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 /*
@@ -144,7 +185,7 @@ class ContactInfo extends StatelessWidget {
                                 path: ImagePaths.user,
                               ),
                               content: CText(
-                                '@${contact.displayNameOrFallback}', // TODO: this should be username
+                                '@${widget.contact.displayNameOrFallback}', // TODO: this should be username
                                 style: tsSubtitle1Short,
                               ),
                               trailing: InkWell(
@@ -152,7 +193,7 @@ class ContactInfo extends StatelessWidget {
                                 onTap: () {
                                   copyText(
                                       context,
-                                      contact
+                                      widget.contact
                                           .displayNameOrFallback); // TODO: this should be username
                                   setState(() => textCopied = true);
                                   Future.delayed(defaultAnimationDuration,
@@ -185,13 +226,14 @@ class ContactInfo extends StatelessWidget {
                                 path: ImagePaths.user,
                               ),
                               content: CText(
-                                contact.contactId.id,
+                                widget.contact.contactId.id,
                                 style: tsSubtitle1Short,
                               ),
                               trailing: InkWell(
                                 focusColor: grey3,
                                 onTap: () {
-                                  copyText(context, contact.contactId.id);
+                                  copyText(
+                                      context, widget.contact.contactId.id);
                                   setState(() => textCopied = true);
                                   Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
@@ -226,7 +268,7 @@ class ContactInfo extends StatelessWidget {
                           path: ImagePaths.user,
                         ),
                         content: CText(
-                          contact.blocked
+                          widget.contact.blocked
                               ? 'unblock_user'.i18n
                               : 'block_user'.i18n,
                           style: tsSubtitle1Short,
@@ -250,9 +292,9 @@ class ContactInfo extends StatelessWidget {
                                           CAssetImage(path: ImagePaths.block),
                                     ),
                                     CText(
-                                        contact.blocked
-                                            ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
-                                            : '${'block'.i18n} ${contact.displayNameOrFallback}?',
+                                        widget.contact.blocked
+                                            ? '${'unblock'.i18n} ${widget.contact.displayNameOrFallback}?'
+                                            : '${'block'.i18n} ${widget.contact.displayNameOrFallback}?',
                                         style: tsBody3),
                                   ],
                                 ),
@@ -263,7 +305,7 @@ class ContactInfo extends StatelessWidget {
                                         padding:
                                             const EdgeInsetsDirectional.all(24),
                                         child: CText(
-                                            contact.blocked
+                                            widget.contact.blocked
                                                 ? 'unblock_info_description'
                                                     .i18n
                                                 : 'block_info_description'.i18n,
@@ -300,7 +342,7 @@ class ContactInfo extends StatelessWidget {
                                                               .width *
                                                           0.6),
                                               child: CText(
-                                                  contact.blocked
+                                                  widget.contact.blocked
                                                       ? 'unblock_info_checkbox'
                                                           .i18n
                                                       : 'block_info_checkbox'
@@ -330,33 +372,33 @@ class ContactInfo extends StatelessWidget {
                                       TextButton(
                                         onPressed: () async {
                                           if (confirmBlock) {
-                                            contact.blocked
+                                            widget.contact.blocked
                                                 ? await model
-                                                    .unblockDirectContact(
-                                                        contact.contactId.id)
+                                                    .unblockDirectContact(widget
+                                                        .contact.contactId.id)
                                                 : await model
-                                                    .blockDirectContact(
-                                                        contact.contactId.id);
+                                                    .blockDirectContact(widget
+                                                        .contact.contactId.id);
                                             context.router.popUntilRoot();
                                             showSnackbar(
                                                 context: context,
-                                                content: contact.blocked
+                                                content: widget.contact.blocked
                                                     ? 'contact_was_unblocked'
                                                         .i18n
                                                         .fill([
-                                                        contact
+                                                        widget.contact
                                                             .displayNameOrFallback
                                                       ])
                                                     : 'contact_was_blocked'
                                                         .i18n
                                                         .fill([
-                                                        contact
+                                                        widget.contact
                                                             .displayNameOrFallback
                                                       ]));
                                           }
                                         },
                                         child: CText(
-                                            contact.blocked
+                                            widget.contact.blocked
                                                 ? 'unblock'.i18n.toUpperCase()
                                                 : 'block'.i18n.toUpperCase(),
                                             style: tsButtonPink),
@@ -370,7 +412,7 @@ class ContactInfo extends StatelessWidget {
                           child: Ink(
                             padding: const EdgeInsets.all(8),
                             child: CText(
-                              contact.blocked
+                              widget.contact.blocked
                                   ? 'unblock'.i18n.toUpperCase()
                                   : 'block'.i18n.toUpperCase(),
                               style: tsButtonPink,
@@ -430,7 +472,7 @@ class ContactInfo extends StatelessWidget {
                                               .show(widget: spinner);
                                           try {
                                             await model.deleteDirectContact(
-                                                contact.contactId.id);
+                                                widget.contact.contactId.id);
                                           } catch (e, s) {
                                             showErrorDialog(context,
                                                 e: e,
@@ -443,7 +485,8 @@ class ContactInfo extends StatelessWidget {
                                                 content: 'contact_was_deleted'
                                                     .i18n
                                                     .fill([
-                                                  contact.displayNameOrFallback
+                                                  widget.contact
+                                                      .displayNameOrFallback
                                                 ]));
                                             context.loaderOverlay.hide();
                                             context.router.popUntilRoot();

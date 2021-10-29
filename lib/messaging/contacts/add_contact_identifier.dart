@@ -39,8 +39,7 @@ class _AddViaIdentifierState extends State<AddViaIdentifier> {
       }
 
       if (!noMatch) {
-        await model.addProvisionalContact(
-            identifierToAdd, 'id', VerificationLevel.UNVERIFIED);
+        await model.addProvisionalContact(identifierToAdd, 'id', 'UNVERIFIED');
         // TODO: direct to Conversation view
       }
     }
