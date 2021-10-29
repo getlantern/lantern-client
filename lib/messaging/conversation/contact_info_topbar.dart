@@ -20,7 +20,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   Contact? updatedContact;
   void Function()? listener;
   var newDisplayName;
-  var newVerificationLevel;
+  VerificationLevel? newVerificationLevel;
   var verifiedColor = black;
 
   @override
@@ -47,16 +47,12 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
           newDisplayName = updatedContact!.displayNameOrFallback;
           newVerificationLevel = updatedContact!.verificationLevel;
         });
-        Future.delayed(longAnimationDuration,
-            () => setState(() => verifiedColor = indicatorGreen));
+        // Future.delayed(longAnimationDuration,
+        //     () => setState(() => verifiedColor = indicatorGreen));
       }
     };
     contactNotifier!.addListener(listener);
     listener();
-
-    // we either use the current verification level
-    var _verificationLevel =
-        newVerificationLevel ?? widget.contact.verificationLevel;
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -82,7 +78,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               /* 
               * Contact is unverified => render pending badge
               */
-              if (_verificationLevel == VerificationLevel.UNVERIFIED)
+              if (newVerificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -100,7 +96,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               /* 
               * Contact is verified => render timer and verified badge
               */
-              if (_verificationLevel == VerificationLevel.VERIFIED)
+              if (newVerificationLevel == VerificationLevel.VERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -115,6 +111,22 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                     ),
                     CText('verified'.i18n.toUpperCase(),
                         style: tsOverline.copiedWith(color: verifiedColor)),
+                    // TESTING ONLY
+                    // quick test to see if changing the verification status and the contact name work
+                    // TESTING ONLY
+                    GestureDetector(
+                        onTap: () async {
+                          await model.addOrUpdateDirectContact(
+                              widget.contact.contactId.id,
+                              DateTime.now().second.isEven
+                                  ? 'VERIFIED'
+                                  : 'UNVERIFIED',
+                              displayName: DateTime.now().second.toString());
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: CText('TESTING - tap here', style: tsOverline),
+                        )),
                   ],
                 ),
             ],
