@@ -49,16 +49,16 @@ class MessagingModel extends Model {
   }
 
   Future<Map> addOrUpdateDirectContact(
-    String contactId, {
+    String unsafeId,
+    VerificationLevel verificationLevel, {
     String? displayName,
     String? source,
     Map<int, String>? applicationIds,
-    VerificationLevel? verificationLevel,
     Map<String, dynamic>? updateApplicationData,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
-      'unsafeContactId': contactId,
+      'unsafeId': unsafeId,
       'displayName': displayName,
       'source': source,
       'applicationIds': applicationIds,

@@ -18,7 +18,7 @@ class ContactInfoTopBar extends StatefulWidget {
 class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   ValueNotifier<Contact?>? contactNotifier;
   var verifiedColor = black;
-  var updatedContact;
+  Contact? updatedContact;
   void Function()? listener;
 
   @override
@@ -44,8 +44,8 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
       updatedContact = contactNotifier!.value as Contact;
       if (updatedContact != null) {
         setState(() {
-          title = updatedContact.displayNameOrFallback;
-          verificationLevel = updatedContact.verificationLevel;
+          title = updatedContact!.displayNameOrFallback;
+          verificationLevel = updatedContact!.verificationLevel;
         });
         if (mounted) {
           await Future.delayed(longAnimationDuration,

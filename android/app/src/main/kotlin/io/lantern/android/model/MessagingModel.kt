@@ -99,12 +99,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 )
             }
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
-                call.argument("unsafeContactId")!!,
-                call.argument("displayName")!!,
-                call.argument("source")!!,
-                call.argument("applicationIds")!!,
-                call.argument("verificationLevel")!!,
-                call.argument("updateApplicationData")!!,
+                unsafeId = call.argument("unsafeId")!!,
+                displayName = call.argument("displayName"),
+                source = call.argument("source"),
+                applicationIds = call.argument("applicationIds"),
+                minimumVerificationLevel = call.argument("verificationLevel")!!,
+                updateApplicationData = call.argument("updateApplicationData"),
             )
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
                 call.argument("contactId")!!
