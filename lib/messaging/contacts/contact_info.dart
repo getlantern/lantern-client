@@ -23,7 +23,7 @@ class _ContactInfoState extends State<ContactInfo> {
   ValueNotifier<Contact?>? contactNotifier;
   void Function()? listener;
   Contact? updatedContact;
-  var title;
+  var newDisplayName;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _ContactInfoState extends State<ContactInfo> {
       if (updatedContact != null) {
         if (mounted) {
           setState(() {
-            title = updatedContact!.displayNameOrFallback;
+            newDisplayName = updatedContact!.displayNameOrFallback;
           });
         }
       }
@@ -65,7 +65,7 @@ class _ContactInfoState extends State<ContactInfo> {
       resizeToAvoidBottomInset: false,
       centerTitle: true,
       padHorizontal: false,
-      title: title ?? widget.contact.displayNameOrFallback,
+      title: newDisplayName ?? widget.contact.displayNameOrFallback,
       actions: [
         CallAction(widget.contact),
         Container(
@@ -94,7 +94,8 @@ class _ContactInfoState extends State<ContactInfo> {
                       const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                   child: CustomAvatar(
                       messengerId: widget.contact.contactId.id,
-                      displayName: widget.contact.displayNameOrFallback,
+                      displayName: newDisplayName ??
+                          widget.contact.displayNameOrFallback,
                       radius: 64),
                 ),
                 /*
@@ -175,7 +176,7 @@ class _ContactInfoState extends State<ContactInfo> {
                     Container(
                       margin: const EdgeInsetsDirectional.only(
                           start: 8, top: 21, bottom: 3),
-                      child: CText('username'.i18n.toUpperCase(),
+                      child: CText('username - DEPRECATD'.toUpperCase(),
                           maxLines: 1, style: tsOverline),
                     ),
                     const CDivider(),
@@ -185,7 +186,7 @@ class _ContactInfoState extends State<ContactInfo> {
                                 path: ImagePaths.user,
                               ),
                               content: CText(
-                                '@${widget.contact.displayNameOrFallback}', // TODO: this should be username
+                                '@${newDisplayName ?? widget.contact.displayNameOrFallback}',
                                 style: tsSubtitle1Short,
                               ),
                               trailing: InkWell(
@@ -193,8 +194,9 @@ class _ContactInfoState extends State<ContactInfo> {
                                 onTap: () {
                                   copyText(
                                       context,
-                                      widget.contact
-                                          .displayNameOrFallback); // TODO: this should be username
+                                      newDisplayName ??
+                                          widget.contact
+                                              .displayNameOrFallback); // TODO: this should be username
                                   setState(() => textCopied = true);
                                   Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
