@@ -20,6 +20,8 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   var verifiedColor = black;
   Contact? updatedContact;
   void Function()? listener;
+  var title;
+  var currentVerificationLevel;
 
   @override
   void dispose() {
@@ -32,22 +34,21 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    var title = widget.contact.displayNameOrFallback;
-    var verificationLevel = widget.contact.verificationLevel;
 
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null
     contactNotifier = model.contactNotifier(widget.contact.contactId.id);
 
+    // TODO: we probably can extract this into its own function
     var listener = () async {
       // something changed for this contact, lets get the updates
       updatedContact = contactNotifier!.value as Contact;
       if (updatedContact != null) {
-        setState(() {
-          title = updatedContact!.displayNameOrFallback;
-          verificationLevel = updatedContact!.verificationLevel;
-        });
         if (mounted) {
+          setState(() {
+            title = updatedContact!.displayNameOrFallback;
+            currentVerificationLevel = updatedContact!.verificationLevel;
+          });
           await Future.delayed(longAnimationDuration,
               () => setState(() => verifiedColor = indicatorGreen));
         }
@@ -56,6 +57,9 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
     contactNotifier!.addListener(listener);
     listener();
 
+    var _verificationLevel =
+        currentVerificationLevel ?? widget.contact.verificationLevel;
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +67,8 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
-              messengerId: widget.contact.contactId.id, displayName: title),
+              messengerId: widget.contact.contactId.id,
+              displayName: title ?? widget.contact.displayNameOrFallback),
         ),
         Expanded(
           child: Column(
@@ -78,7 +83,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               /* 
               * Contact is unverified => render pending badge
               */
-              if (verificationLevel == VerificationLevel.UNVERIFIED)
+              if (_verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -96,7 +101,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               /* 
               * Contact is verified => render timer and verified badge
               */
-              if (verificationLevel == VerificationLevel.VERIFIED)
+              if (currentVerificationLevel == VerificationLevel.VERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

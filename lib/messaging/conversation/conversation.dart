@@ -363,13 +363,15 @@ class ConversationState extends State<Conversation>
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
                         // send the current timestamp via updateApplicationData Map
-                        // TODO: test this
                         model.addOrUpdateDirectContact(
-                            contact.contactId.id, contact.verificationLevel,
-                            updateApplicationData: {
-                              'tsSeenVerificationAlert':
-                                  DateTime.now().millisecondsSinceEpoch
-                            });
+                          contact.contactId.id,
+                          contact.verificationLevel.name.toString(),
+                          // TODO: send this as a number
+                          // updateApplicationData: {
+                          //   'tsSeenVerificationAlert':
+                          //       DateTime.now().millisecondsSinceEpoch
+                          // }
+                        );
                         showVerificationOptions(
                             model: model,
                             contact: contact,
