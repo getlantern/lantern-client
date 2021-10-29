@@ -43,6 +43,7 @@ class _ContactInfoState extends State<ContactInfo> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
+    // TODO: we probably can extract this into its own function since we are using it in 3 different places
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null
     contactNotifier = model.contactNotifier(widget.contact.contactId.id);
@@ -50,12 +51,10 @@ class _ContactInfoState extends State<ContactInfo> {
     var listener = () async {
       // something changed for this contact, lets get the updates
       updatedContact = contactNotifier!.value as Contact;
-      if (updatedContact != null) {
-        if (mounted) {
-          setState(() {
-            newDisplayName = updatedContact!.displayNameOrFallback;
-          });
-        }
+      if (updatedContact != null && mounted) {
+        setState(() {
+          newDisplayName = updatedContact!.displayNameOrFallback;
+        });
       }
     };
     contactNotifier!.addListener(listener);
