@@ -9,6 +9,7 @@ void showBottomModal({
 }) {
   showModalBottomSheet(
       context: context,
+      backgroundColor: white,
       isDismissible: isDismissible,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

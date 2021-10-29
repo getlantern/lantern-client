@@ -146,12 +146,12 @@ class _ContactInfoState extends State<ContactInfo> {
                                   widget.contact.verificationLevel.name
                                       .toString(),
                                   displayName: displayNameController.text);
-
-                              showSnackbar(
-                                  context: context, content: 'Saved'.i18n);
                             } catch (e, s) {
                               showErrorDialog(context,
                                   e: e, s: s, des: 'save_error'.i18n);
+                            } finally {
+                              showSnackbar(
+                                  context: context, content: 'Saved'.i18n);
                             }
                           }
                         },
