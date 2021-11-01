@@ -366,11 +366,11 @@ class ConversationState extends State<Conversation>
                         model.addOrUpdateDirectContact(
                           contact.contactId.id,
                           contact.verificationLevel.name.toString(),
-                          // TODO: send this as a number
+                          // TODO: update this
                           // updateApplicationData: {
                           //   'tsSeenVerificationAlert':
                           //       DateTime.now().millisecondsSinceEpoch
-                          // }
+                          // },
                         );
                         showVerificationOptions(
                             model: model,

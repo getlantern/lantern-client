@@ -30,7 +30,7 @@ void showVerificationOptions({
                   if (value != null) {
                     // TODO: show animation
                     showSnackbar(
-                        context: context,
+                        context: bottomModalContext,
                         content: 'verification_panel_success'
                             .i18n
                             .fill([contact.displayNameOrFallback]));

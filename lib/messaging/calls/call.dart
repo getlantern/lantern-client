@@ -103,11 +103,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     }
   }
 
-  void handleTapping({required int key}) {
+  void handleTapping(MessagingModel model, {required int key}) async {
     var _status = fragmentStatusMap[key]['isConfirmed'];
     markFragments(!_status, key);
     if (fragmentsAreVerified()) {
-      markAsVerified();
+      await model.markDirectContactVerified(widget.contact.contactId.id);
       setState(() => isVerified = true);
     }
   }
@@ -118,20 +118,15 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
         .any((element) => element.value['isConfirmed'] == false);
   }
 
-  void handleVerifyButtonPress() async {
+  void handleVerifyButtonPress(MessagingModel model) async {
     if (isVerified) {
       markFragments(false, null); // mark all fragments as unverified
       isVerified = false;
     } else {
       markFragments(true, null); // mark all fragments as verified
       isVerified = true;
-      markAsVerified();
+      await model.markDirectContactVerified(widget.contact.contactId.id);
     }
-  }
-
-  void markAsVerified() async {
-    var model = context.watch<MessagingModel>();
-    await model.markDirectContactVerified(widget.contact.contactId.id);
   }
 
   void markFragments(bool value, int? key) {
@@ -151,6 +146,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
     return ValueListenableBuilder(
         valueListenable: signaling,
         builder: (BuildContext context, SignalingState signalingState,
@@ -280,6 +276,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                             .map((entry) => GestureDetector(
                                                   key: ValueKey(entry.key),
                                                   onTap: () => handleTapping(
+                                                      model,
                                                       key: entry.key),
                                                   child: Padding(
                                                     padding:
@@ -317,7 +314,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                     text: isVerified
                                         ? 'undo_verification'.i18n
                                         : 'mark_as_verified'.i18n,
-                                    onPressed: () => handleVerifyButtonPress(),
+                                    onPressed: () =>
+                                        handleVerifyButtonPress(model),
                                   ),
                                 )
                               ],

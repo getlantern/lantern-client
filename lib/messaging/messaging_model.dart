@@ -53,8 +53,8 @@ class MessagingModel extends Model {
     String verificationLevel, {
     String? displayName,
     String? source,
-    Map<String, dynamic>? applicationIds,
-    Map<String, dynamic>? updateApplicationData,
+    Map<int, String>? applicationIds,
+    Function? updateApplicationData,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
@@ -64,7 +64,17 @@ class MessagingModel extends Model {
       'applicationIds': applicationIds,
       'verificationLevel': verificationLevel,
       'updateApplicationData': updateApplicationData,
-    }).then((value) => value as Map);
+    }).then((value) {
+      final result = {
+        'unsafeId': value,
+        'displayName': value,
+        'source': Contact.fromBuffer(value),
+        'applicationIds': value,
+        'verificationLevel': Contact.fromBuffer(value),
+        'updateApplicationData': value,
+      };
+      return result;
+    });
   }
 
   Future<void> deleteProvisionalContact(String contactId) {
