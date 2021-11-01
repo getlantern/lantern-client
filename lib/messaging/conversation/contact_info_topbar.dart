@@ -35,7 +35,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
 
-    // TODO: we probably can extract this into its own function since we are using it in 3 different places
+    // TODO: repeated pattern
     // listen to the contact path for changes
     // will return a Contact if there are any, otherwise null
     contactNotifier = model.contactNotifier(widget.contact.contactId.id);
@@ -111,22 +111,6 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                     ),
                     CText('verified'.i18n.toUpperCase(),
                         style: tsOverline.copiedWith(color: verifiedColor)),
-                    // TESTING ONLY
-                    // quick test to see if changing the verification status and the contact name work
-                    // TESTING ONLY
-                    GestureDetector(
-                        onTap: () async {
-                          await model.addOrUpdateDirectContact(
-                              widget.contact.contactId.id,
-                              DateTime.now().second.isEven
-                                  ? 'VERIFIED'
-                                  : 'UNVERIFIED',
-                              displayName: DateTime.now().second.toString());
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: CText('TESTING - tap here', style: tsOverline),
-                        )),
                   ],
                 ),
             ],

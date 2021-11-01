@@ -106,7 +106,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
                 unsafeId = call.argument("unsafeId")!!,
                 displayName = call.argument("displayName"),
-                source = call.argument("source"),
+                when (call.argument<Any>("source")) {
+                    "qr" -> Model.ContactSource.APP1
+                    "id" -> Model.ContactSource.APP2
+                    else -> Model.ContactSource.UNKNOWN
+                },
                 applicationIds = call.argument("applicationIds"),
                 when (call.argument<Any>("verificationLevel")!!) {
                     "VERIFIED" -> Model.VerificationLevel.VERIFIED

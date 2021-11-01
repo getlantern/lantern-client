@@ -20,6 +20,7 @@ class ConversationSticker extends StatelessWidget {
     //     source = 'banner_source_intro'.i18n;
     //     break;
     // }
+    final model = context.watch<MessagingModel>();
 
     return Container(
       height: calculateStickerHeight(context, messageCount),
@@ -94,10 +95,11 @@ class ConversationSticker extends StatelessWidget {
                                 : CText('banner_messages_persist'.i18n,
                                     style: tsBody2.copiedWith(color: grey5)),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: CText(contact.applicationIds.toString(),
+                                style: tsBody2.copiedWith(color: grey5)),
+                          ),
                         ],
                       ),
                     ],
@@ -106,6 +108,21 @@ class ConversationSticker extends StatelessWidget {
               ),
             ),
           ),
+          /* 
+          * TESTING ONLY 
+          */
+          GestureDetector(
+              onTap: () async {
+                await model.addOrUpdateDirectContact(
+                    contact.contactId.id, contact.verificationLevel.name,
+                    displayName:
+                        DateTime.now().millisecondsSinceEpoch.toString(),
+                    applicationIds: {0: 'tsSeenVerificationAlert'},
+                    updateApplicationData: (appData) =>
+                        appData['tsSeenVerificationAlert'] =
+                            DateTime.now().millisecondsSinceEpoch);
+              },
+              child: CText('TESTING BUTTON', style: tsBody1)),
         ],
       ),
     );
