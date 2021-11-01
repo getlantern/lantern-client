@@ -1,6 +1,14 @@
-# Lantern Android
+# Lantern Android - Feature: Replica Mobile
 
 Lantern Android is an app that uses the [VpnService][https://developer.android.com/reference/android/net/VpnService] API to intercept and reroute all device traffic to the Lantern circumvention tool.
+
+- This feature aims to integrate the Replica File Sharing project in Android
+- It is forked from the Messaging feature located in [ox/messaging](https://github.com/getlantern/android-lantern/tree/ox/messaging)
+- Maintainers: @soltzen
+- Initial discussion: https://github.com/getlantern/lantern-internal/issues/5010
+- Task Board:
+  - https://github.com/orgs/getlantern/projects/9#column-16581691
+  - and sporadic tasks in https://github.com/orgs/getlantern/projects/5
 
 ## Usage
 
