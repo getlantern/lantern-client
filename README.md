@@ -61,7 +61,7 @@ Or, run it from Android Studio if you're using that.
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
 It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
-Package the AAR with `make android-lib ANDROID_ARCH=all`
+Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib-prod` for a production release (i.e., one that has symbols stripped, etc.))
 
 ### Testing
 
