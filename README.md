@@ -9,6 +9,7 @@ Lantern Android is an app that uses the [VpnService][https://developer.android.c
 - Task Board:
   - https://github.com/orgs/getlantern/projects/9#column-16581691
   - and sporadic tasks in https://github.com/orgs/getlantern/projects/5
+  - All tickets should have the [replica-mobile](https://github.com/getlantern/lantern-internal/labels/replica-mobile) label
 
 ## Usage
 
