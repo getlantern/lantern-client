@@ -19,7 +19,6 @@ export 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:i18n_extension/i18n_widget.dart';
 export 'package:loader_overlay/loader_overlay.dart';
-export 'package:pedantic/pedantic.dart';
 export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';

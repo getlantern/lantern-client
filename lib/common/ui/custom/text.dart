@@ -207,32 +207,33 @@ class CTextStyle extends TextStyle {
     );
   }
 
-  @override
-  TextStyle copyWith(
-      {bool? inherit,
-      Color? color,
-      Color? backgroundColor,
-      String? fontFamily,
-      List<String>? fontFamilyFallback,
-      double? fontSize,
-      FontWeight? fontWeight,
-      FontStyle? fontStyle,
-      double? letterSpacing,
-      double? wordSpacing,
-      TextBaseline? textBaseline,
-      double? height,
-      TextLeadingDistribution? leadingDistribution,
-      Locale? locale,
-      Paint? foreground,
-      Paint? background,
-      List<Shadow>? shadows,
-      List<FontFeature>? fontFeatures,
-      TextDecoration? decoration,
-      Color? decorationColor,
-      TextDecorationStyle? decorationStyle,
-      double? decorationThickness,
-      String? debugLabel}) {
-    assert(false, 'copyWith not supported, use copiedWith');
-    return this;
-  }
+  // commenting this out for now since it throws errors for Flutter 2.5.3
+  // @override
+  // TextStyle copyWith(
+  //     {bool? inherit,
+  //     Color? color,
+  //     Color? backgroundColor,
+  //     String? fontFamily,
+  //     List<String>? fontFamilyFallback,
+  //     double? fontSize,
+  //     FontWeight? fontWeight,
+  //     FontStyle? fontStyle,
+  //     double? letterSpacing,
+  //     double? wordSpacing,
+  //     TextBaseline? textBaseline,
+  //     double? height,
+  //     TextLeadingDistribution? leadingDistribution,
+  //     Locale? locale,
+  //     Paint? foreground,
+  //     Paint? background,
+  //     List<Shadow>? shadows,
+  //     List<FontFeature>? fontFeatures,
+  //     TextDecoration? decoration,
+  //     Color? decorationColor,
+  //     TextDecorationStyle? decorationStyle,
+  //     double? decorationThickness,
+  //     String? debugLabel}) {
+  //   assert(false, 'copyWith not supported, use copiedWith');
+  //   return this;
+  // }
 }
