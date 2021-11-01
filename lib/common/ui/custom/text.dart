@@ -207,7 +207,6 @@ class CTextStyle extends TextStyle {
     );
   }
 
-  // commenting this out for now since it throws errors for Flutter 2.5.3
   // @override
   // TextStyle copyWith(
   //     {bool? inherit,
