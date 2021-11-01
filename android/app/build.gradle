@@ -33,7 +33,6 @@ apply plugin: 'com.google.protobuf'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-
     ndkVersion "23.0.7599858"
 
     bundle {
@@ -96,6 +95,15 @@ android {
     }
 
     defaultConfig {
+        // Ensure all ABIs are included
+        ndk { abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64' }
+        // Include this CMakeLists.txt file in the build pipeline
+        externalNativeBuild {
+            cmake {
+                cppFlags ''
+                arguments '-DANDROID_STL=c++_shared'
+            }
+        }
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -118,6 +126,13 @@ android {
             versionName "3.0.0"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('cmake/CMakeLists.txt')
+            version '3.10.2'
+        }
     }
 
     compileOptions {
@@ -341,7 +356,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: '*.jar')
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     // The below aar is built from https://github.com/getlantern/FinestWebView-Android
     implementation(name:'finestwebview', ext: 'aar')
@@ -409,6 +424,7 @@ dependencies {
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.1'
+    androidTestImplementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     testImplementation 'junit:junit:4.13.1'
 
