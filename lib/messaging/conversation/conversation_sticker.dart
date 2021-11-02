@@ -95,11 +95,21 @@ class ConversationSticker extends StatelessWidget {
                                 : CText('banner_messages_persist'.i18n,
                                     style: tsBody2.copiedWith(color: grey5)),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: CText(contact.applicationIds.toString(),
-                                style: tsBody2.copiedWith(color: grey5)),
-                          ),
+                          // TODO: used for testing purposes, remove
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          //   child: CText(
+                          //       contact.applicationData[
+                          //                   'tsVerificationReminder'] !=
+                          //               null
+                          //           ? contact
+                          //               .applicationData[
+                          //                   'tsVerificationReminder']!
+                          //               .int_3
+                          //               .toString()
+                          //           : 'never dismissed reminder',
+                          //       style: tsBody2.copiedWith(color: grey5)),
+                          // ),
                         ],
                       ),
                     ],
@@ -108,21 +118,17 @@ class ConversationSticker extends StatelessWidget {
               ),
             ),
           ),
-          /* 
-          * TESTING ONLY 
-          */
-          GestureDetector(
-              onTap: () async {
-                await model.addOrUpdateDirectContact(
-                    contact.contactId.id, contact.verificationLevel.name,
-                    displayName:
-                        DateTime.now().millisecondsSinceEpoch.toString(),
-                    applicationIds: {0: 'tsSeenVerificationAlert'},
-                    updateApplicationData: (appData) =>
-                        appData['tsSeenVerificationAlert'] =
-                            DateTime.now().millisecondsSinceEpoch);
-              },
-              child: CText('TESTING BUTTON', style: tsBody1)),
+          // TODO: used for testing purposes, remove
+          // GestureDetector(
+          //     onTap: () async {
+          //       await model.addOrUpdateDirectContact(
+          //           contact.contactId.id, contact.verificationLevel.name,
+          //           displayName:
+          //               DateTime.now().millisecondsSinceEpoch.toString(),
+          //           tsVerificationReminder:
+          //               DateTime.now().millisecondsSinceEpoch);
+          //     },
+          //     child: CText('TESTING BUTTON', style: tsBody1)),
         ],
       ),
     );

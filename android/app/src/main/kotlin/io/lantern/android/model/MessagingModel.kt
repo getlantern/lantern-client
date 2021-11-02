@@ -103,23 +103,32 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "expiresAtMillis" to result.expiresAtMillis
                 )
             }
-            "addOrUpdateDirectContact" -> messaging.addOrUpdateDirectContact(
-                unsafeId = call.argument("unsafeId")!!,
-                displayName = call.argument("displayName"),
-                when (call.argument<Any>("source")) {
+            "addOrUpdateDirectContact" -> {
+                val unsafeId = call.argument<String>("unsafeId")!!
+                val displayName = call.argument<String>("displayName")
+                val source = when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
                     else -> Model.ContactSource.UNKNOWN
-                },
-                applicationIds = call.argument("applicationIds"),
-                when (call.argument<Any>("verificationLevel")!!) {
+                }
+                val verificationLevel = when (call.argument<Any>("verificationLevel")!!) {
                     "VERIFIED" -> Model.VerificationLevel.VERIFIED
                     "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
                     "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
                     else -> Model.VerificationLevel.UNRECOGNIZED
-                },
-                updateApplicationData = call.argument("updateApplicationData"),
-            )
+                }
+                val applicationIds = mapOf(0 to "tsVerificationReminder")
+                val updateApplicationData =
+                    { appData: MutableMap<String, Any> -> appData["tsVerificationReminder"] = call.argument<Any>("tsVerificationReminder")!! }
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId,
+                    displayName,
+                    source,
+                    applicationIds,
+                    verificationLevel,
+                    updateApplicationData,
+                )
+            }
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
                 call.argument("contactId")!!
             )

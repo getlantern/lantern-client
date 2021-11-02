@@ -48,32 +48,20 @@ class MessagingModel extends Model {
     }).then((value) => value as Map);
   }
 
-  Future<Map> addOrUpdateDirectContact(
+  Future<void> addOrUpdateDirectContact(
     String unsafeId,
     String verificationLevel, {
     String? displayName,
     String? source,
-    Map<int, String>? applicationIds,
-    Function? updateApplicationData,
+    int? tsVerificationReminder,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
       'unsafeId': unsafeId,
       'displayName': displayName,
       'source': source,
-      'applicationIds': applicationIds,
       'verificationLevel': verificationLevel,
-      'updateApplicationData': updateApplicationData,
-    }).then((value) {
-      final result = {
-        'unsafeId': value,
-        'displayName': value,
-        'source': Contact.fromBuffer(value),
-        'applicationIds': value,
-        'verificationLevel': Contact.fromBuffer(value),
-        'updateApplicationData': value,
-      };
-      return result;
+      'tsVerificationReminder': tsVerificationReminder,
     });
   }
 
