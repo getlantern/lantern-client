@@ -388,14 +388,16 @@ class _ContactInfoState extends State<ContactInfo> {
                                                     ? 'contact_was_unblocked'
                                                         .i18n
                                                         .fill([
-                                                        widget.contact
-                                                            .displayNameOrFallback
+                                                        newDisplayName ??
+                                                            widget.contact
+                                                                .displayNameOrFallback
                                                       ])
                                                     : 'contact_was_blocked'
                                                         .i18n
                                                         .fill([
-                                                        widget.contact
-                                                            .displayNameOrFallback
+                                                        newDisplayName ??
+                                                            widget.contact
+                                                                .displayNameOrFallback
                                                       ]));
                                           }
                                         },

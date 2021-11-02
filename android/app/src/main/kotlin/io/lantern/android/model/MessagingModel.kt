@@ -134,7 +134,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 )
             }
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
-                call.argument("contactId")!!
+                call.argument("unsafeContactId")!!
             )
             "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)

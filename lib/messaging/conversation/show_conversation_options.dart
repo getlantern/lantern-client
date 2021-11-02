@@ -298,18 +298,19 @@ Future showConversationOptions(
                     await bottomContext.router.pop();
                     await bottomContext.pushRoute(const Introduce());
                   }),
-              BottomModalItem(
-                  leading: const CAssetImage(
-                    path: ImagePaths.verified_user,
-                  ),
-                  label: 'contact_verification'.i18n,
-                  onTap: () async {
-                    await bottomContext.router.pop();
-                    showVerificationOptions(
-                        model: model,
-                        contact: contact,
-                        bottomModalContext: parentContext);
-                  }),
+              if (contact.verificationLevel != VerificationLevel.VERIFIED)
+                BottomModalItem(
+                    leading: const CAssetImage(
+                      path: ImagePaths.verified_user,
+                    ),
+                    label: 'contact_verification'.i18n,
+                    onTap: () async {
+                      await bottomContext.router.pop();
+                      showVerificationOptions(
+                          model: model,
+                          contact: contact,
+                          bottomModalContext: parentContext);
+                    }),
             ],
           ));
 }
