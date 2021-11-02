@@ -15,6 +15,9 @@ const defaultAnimationDuration = Duration(milliseconds: defaultAnimationMillis);
 
 const longAnimationDuration = Duration(milliseconds: longAnimationMillis);
 
+const twoWeeksInMillis =
+    14 * 24 * 60 * 60 * 1000; // in 14d * 24h * 60m * 60s * 1000 from now
+
 ScrollPhysics get defaultScrollPhysics => const BouncingScrollPhysics();
 
 final spinner = Center(

@@ -409,6 +409,8 @@ class MessageBubble extends StatelessWidget {
                     setState(() {
                       textCopied = true;
                     });
+                    Future.delayed(defaultAnimationDuration,
+                        () => setState(() => textCopied = false));
                   },
                 ),
               ),

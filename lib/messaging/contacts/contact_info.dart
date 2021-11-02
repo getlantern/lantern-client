@@ -191,14 +191,14 @@ class _ContactInfoState extends State<ContactInfo> {
                               ),
                               trailing: InkWell(
                                 focusColor: grey3,
-                                onTap: () {
+                                onTap: () async {
                                   copyText(
                                       context,
                                       newDisplayName ??
                                           widget.contact
-                                              .displayNameOrFallback); // TODO: this should be username
+                                              .displayNameOrFallback); // TODO: this will change
                                   setState(() => textCopied = true);
-                                  Future.delayed(defaultAnimationDuration,
+                                  await Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
                                 },
                                 child: CAssetImage(
@@ -233,11 +233,11 @@ class _ContactInfoState extends State<ContactInfo> {
                               ),
                               trailing: InkWell(
                                 focusColor: grey3,
-                                onTap: () {
+                                onTap: () async {
                                   copyText(
                                       context, widget.contact.contactId.id);
                                   setState(() => textCopied = true);
-                                  Future.delayed(defaultAnimationDuration,
+                                  await Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
                                 },
                                 child: Padding(

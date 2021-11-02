@@ -2,7 +2,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
-import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'contact_info_topbar.dart';
@@ -49,6 +48,8 @@ class ConversationState extends State<Conversation>
   var messageCount = 0;
   PathAndValue<StoredMessage>? storedMessage;
   final scrollController = ItemScrollController();
+  var verifiedColor = black;
+  var shouldShowVerificationAlert = true;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -255,10 +256,12 @@ class ConversationState extends State<Conversation>
   }
 
   // handles backend send message logic
-  Future<void> sendMessage(String text,
-      {List<Uint8List>? attachments,
-      String? replyToSenderId,
-      String? replyToId}) async {
+  Future<void> sendMessage(
+    String text, {
+    List<Uint8List>? attachments,
+    String? replyToSenderId,
+    String? replyToId,
+  }) async {
     if (attachments?.isNotEmpty == true) {
       context.loaderOverlay.show(widget: spinner);
     }
@@ -324,16 +327,10 @@ class ConversationState extends State<Conversation>
         : unawaited(model.clearCurrentConversationContact());
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
-      var shouldShowVerificationAlert = true;
+      // determine if we will show the verification warning badge
       var tsSeenVerificationAlert =
           contact.applicationData['tsVerificationReminder']?.int_3;
-
       if (tsSeenVerificationAlert != null) {
-        final twoWeeksInMillis = 14 *
-            24 *
-            60 *
-            60 *
-            1000; // in 14d * 24h * 60m * 60s * 1000 from now
         shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch -
                 tsSeenVerificationAlert.toInt() >=
             twoWeeksInMillis;
@@ -342,15 +339,19 @@ class ConversationState extends State<Conversation>
         resizeToAvoidBottomInset: false,
         centerTitle: false,
         padHorizontal: false,
-        // Conversation title (contact name)
+        // * Conversation Title
         title: dismissKeyboardsOnTap(
           InkWell(
             focusColor: grey3,
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
-            child: ContactInfoTopBar(contact: contact),
+            child: ContactInfoTopBar(
+              contact: contact,
+              verifiedColor: verifiedColor,
+            ),
           ),
         ),
+        // * Conversation Actions e.g. Verification alert, Call, Menu
         actions: [
           model.me((bottomModalContext, me, child) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -361,14 +362,22 @@ class ConversationState extends State<Conversation>
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
-                        model.addOrUpdateDirectContact(unsafeId: contact.contactId.id,
-                            verificationLevel: contact.verificationLevel.name.toString(),
+                        model.addOrUpdateDirectContact(
+                            unsafeId: contact.contactId.id,
+                            verificationLevel:
+                                contact.verificationLevel.name.toString(),
                             tsVerificationReminder:
                                 DateTime.now().millisecondsSinceEpoch);
                         showVerificationOptions(
-                            model: model,
-                            contact: contact,
-                            bottomModalContext: bottomModalContext);
+                          model: model,
+                          contact: contact,
+                          bottomModalContext: bottomModalContext,
+                          topbarAnimationCallback: () async {
+                            setState(() => verifiedColor = indicatorGreen);
+                            await Future.delayed(longAnimationDuration,
+                                () => setState(() => verifiedColor = black));
+                          },
+                        );
                       },
                       icon: const CAssetImage(
                         path: ImagePaths.verification_alert,
@@ -379,13 +388,20 @@ class ConversationState extends State<Conversation>
                     visualDensity: VisualDensity.compact,
                     icon: const CAssetImage(path: ImagePaths.more_vert),
                     onPressed: () => showConversationOptions(
-                        model: model,
-                        parentContext: bottomModalContext,
-                        contact: contact),
+                      model: model,
+                      parentContext: bottomModalContext,
+                      contact: contact,
+                      topbarAnimationCallback: () async {
+                        setState(() => verifiedColor = indicatorGreen);
+                        await Future.delayed(longAnimationDuration,
+                            () => setState(() => verifiedColor = black));
+                      },
+                    ),
                   )
                 ],
               )),
         ],
+        // * Conversation body
         body: Padding(
           padding: EdgeInsetsDirectional.only(
               bottom:
@@ -402,7 +418,7 @@ class ConversationState extends State<Conversation>
                     ),
                   ),
                 ),
-                // Reply container
+                // * Reply container
                 if (quotedMessage != null)
                   Reply(
                     model: model,
@@ -417,6 +433,7 @@ class ConversationState extends State<Conversation>
                   height: messageBarHeight,
                   child: buildMessageBar(),
                 ),
+                // * Emoji keyboard
                 Offstage(
                   offstage: keyboardMode != KeyboardMode.emoji &&
                       keyboardMode != KeyboardMode.emojiReaction,
@@ -568,7 +585,7 @@ class ConversationState extends State<Conversation>
     return null;
   }
 
-  // Entry point to audio waveform widget (MessageBarPreviewRecording)
+  //* Entry point to audio waveform widget (MessageBarPreviewRecording)
   Widget buildMessageBar() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -597,8 +614,8 @@ class ConversationState extends State<Conversation>
     );
   }
 
-  // Renders Emoji button, message bar and recording icon
-  // Handles their functionality
+  //* Renders Emoji button, message bar and recording icon
+  //* Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,

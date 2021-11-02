@@ -6,9 +6,11 @@ import '../messaging.dart';
 
 class ContactInfoTopBar extends StatefulWidget {
   final Contact contact;
+  final Color verifiedColor;
 
   const ContactInfoTopBar({
     required this.contact,
+    required this.verifiedColor,
   }) : super();
 
   @override
@@ -21,7 +23,6 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
   void Function()? listener;
   var newDisplayName;
   VerificationLevel? newVerificationLevel;
-  var verifiedColor = black;
 
   @override
   void dispose() {
@@ -47,8 +48,6 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
           newDisplayName = updatedContact!.displayNameOrFallback;
           newVerificationLevel = updatedContact!.verificationLevel;
         });
-        // Future.delayed(longAnimationDuration,
-        //     () => setState(() => verifiedColor = indicatorGreen));
       }
     };
     contactNotifier!.addListener(listener);
@@ -106,11 +105,12 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                       child: CAssetImage(
                         path: ImagePaths.verified_user,
                         size: 12.0,
-                        color: verifiedColor,
+                        color: widget.verifiedColor,
                       ),
                     ),
                     CText('verified'.i18n.toUpperCase(),
-                        style: tsOverline.copiedWith(color: verifiedColor)),
+                        style:
+                            tsOverline.copiedWith(color: widget.verifiedColor)),
                   ],
                 ),
             ],
