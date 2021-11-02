@@ -129,8 +129,7 @@ class _ContactInfoState extends State<ContactInfo> {
                                   )),
                               keyboardType: TextInputType.text,
                             ),
-                      trailing: InkWell(
-                        focusColor: grey3,
+                      trailing: CInkWell(
                         onTap: () async {
                           setState(() => isEditing = !isEditing);
                           if (isEditing) {
@@ -155,7 +154,7 @@ class _ContactInfoState extends State<ContactInfo> {
                             }
                           }
                         },
-                        child: Ink(
+                        child: Container(
                           padding: const EdgeInsets.all(8),
                           child: CText(
                             isEditing
@@ -182,6 +181,11 @@ class _ContactInfoState extends State<ContactInfo> {
                     const CDivider(),
                     StatefulBuilder(
                         builder: (context, setState) => CListTile(
+                              onTap: () async => doCopyText(
+                                  context,
+                                  newDisplayName ??
+                                      widget.contact.displayNameOrFallback,
+                                  setState),
                               leading: const CAssetImage(
                                 path: ImagePaths.user,
                               ),
@@ -189,18 +193,12 @@ class _ContactInfoState extends State<ContactInfo> {
                                 '@${newDisplayName ?? widget.contact.displayNameOrFallback}',
                                 style: tsSubtitle1Short,
                               ),
-                              trailing: InkWell(
-                                focusColor: grey3,
-                                onTap: () async {
-                                  copyText(
-                                      context,
-                                      newDisplayName ??
-                                          widget.contact
-                                              .displayNameOrFallback); // TODO: this will change
-                                  setState(() => textCopied = true);
-                                  await Future.delayed(defaultAnimationDuration,
-                                      () => setState(() => textCopied = false));
-                                },
+                              trailing: CInkWell(
+                                onTap: () async => doCopyText(
+                                    context,
+                                    newDisplayName ??
+                                        widget.contact.displayNameOrFallback,
+                                    setState),
                                 child: CAssetImage(
                                   path: textCopied
                                       ? ImagePaths.check_green
@@ -224,6 +222,8 @@ class _ContactInfoState extends State<ContactInfo> {
                     const CDivider(),
                     StatefulBuilder(
                         builder: (context, setState) => CListTile(
+                              onTap: () async => doCopyText(context,
+                                  widget.contact.contactId.id, setState),
                               leading: const CAssetImage(
                                 path: ImagePaths.user,
                               ),
@@ -231,15 +231,9 @@ class _ContactInfoState extends State<ContactInfo> {
                                 widget.contact.contactId.id,
                                 style: tsSubtitle1Short,
                               ),
-                              trailing: InkWell(
-                                focusColor: grey3,
-                                onTap: () async {
-                                  copyText(
-                                      context, widget.contact.contactId.id);
-                                  setState(() => textCopied = true);
-                                  await Future.delayed(defaultAnimationDuration,
-                                      () => setState(() => textCopied = false));
-                                },
+                              trailing: CInkWell(
+                                onTap: () async => doCopyText(context,
+                                    widget.contact.contactId.id, setState),
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.only(
                                       start: 10.0),
@@ -275,8 +269,7 @@ class _ContactInfoState extends State<ContactInfo> {
                               : 'block_user'.i18n,
                           style: tsSubtitle1Short,
                         ),
-                        trailing: InkWell(
-                          focusColor: grey3,
+                        trailing: CInkWell(
                           onTap: () => showDialog(
                             context: context,
                             barrierDismissible: true,
@@ -413,7 +406,7 @@ class _ContactInfoState extends State<ContactInfo> {
                               );
                             },
                           ),
-                          child: Ink(
+                          child: Container(
                             padding: const EdgeInsets.all(8),
                             child: CText(
                               widget.contact.blocked
@@ -432,8 +425,7 @@ class _ContactInfoState extends State<ContactInfo> {
                           'delete_permanently'.i18n,
                           style: tsSubtitle1Short,
                         ),
-                        trailing: InkWell(
-                          focusColor: grey3,
+                        trailing: CInkWell(
                           onTap: () => showDialog(
                             context: context,
                             barrierDismissible: true,
@@ -506,7 +498,7 @@ class _ContactInfoState extends State<ContactInfo> {
                               );
                             },
                           ),
-                          child: Ink(
+                          child: Container(
                             padding: const EdgeInsets.all(8),
                             child: CText(
                               'delete'.i18n.toUpperCase(),
@@ -522,5 +514,13 @@ class _ContactInfoState extends State<ContactInfo> {
         ],
       ),
     );
+  }
+
+  void doCopyText(
+      BuildContext context, String copyThis, Function setState) async {
+    copyText(context, copyThis);
+    setState(() => textCopied = true);
+    await Future.delayed(
+        defaultAnimationDuration, () => setState(() => textCopied = false));
   }
 }

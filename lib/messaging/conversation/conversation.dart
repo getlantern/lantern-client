@@ -341,8 +341,7 @@ class ConversationState extends State<Conversation>
         padHorizontal: false,
         // * Conversation Title
         title: dismissKeyboardsOnTap(
-          InkWell(
-            focusColor: grey3,
+          CInkWell(
             onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
             child: ContactInfoTopBar(

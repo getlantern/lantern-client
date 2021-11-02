@@ -48,7 +48,7 @@ class SettingsItem extends StatelessWidget {
                 ),
               ),
             if (openInfoDialog != null)
-              InkWell(
+              CInkWell(
                 onTap: () {
                   openInfoDialog!(context);
                 },

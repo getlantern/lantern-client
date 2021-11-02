@@ -35,10 +35,10 @@ class CListTile extends StatelessWidget {
           ),
         ),
         height: height,
-        child: InkWell(
-          focusColor: grey3,
-          onTap: onTap ?? () {},
-          child: Ink(
+        child: Material(
+          color: transparent,
+          child: CInkWell(
+            onTap: onTap ?? () {},
             child: Container(
               decoration: !showDivider
                   ? null
