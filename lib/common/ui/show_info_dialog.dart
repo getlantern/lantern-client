@@ -51,9 +51,8 @@ void showInfoDialog(BuildContext parentContext,
                   onTap: () {
                     childContext.router.pop();
                     parentContext.router.pop();
-                    // TODO: this should pop back to Convo without bottom modal
                   },
-                  child: Ink(
+                  child: Container(
                     padding: const EdgeInsets.all(8),
                     child: CText(
                       buttonText,

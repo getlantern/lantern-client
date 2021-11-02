@@ -34,8 +34,7 @@ class CustomBottomItem extends StatelessWidget {
           Flexible(
             fit: FlexFit.tight,
             flex: 1,
-            child: InkWell(
-              focusColor: grey3,
+            child: CInkWell(
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(
@@ -46,7 +45,7 @@ class CustomBottomItem extends StatelessWidget {
                 ),
               ),
               onTap: onTap,
-              child: Ink(
+              child: Container(
                 decoration: ShapeDecoration(
                   color: position == currentIndex
                       ? selectedTabColor
