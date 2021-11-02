@@ -361,8 +361,8 @@ class ConversationState extends State<Conversation>
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
-                        model.addOrUpdateDirectContact(contact.contactId.id,
-                            contact.verificationLevel.name.toString(),
+                        model.addOrUpdateDirectContact(unsafeId: contact.contactId.id,
+                            verificationLevel: contact.verificationLevel.name.toString(),
                             tsVerificationReminder:
                                 DateTime.now().millisecondsSinceEpoch);
                         showVerificationOptions(

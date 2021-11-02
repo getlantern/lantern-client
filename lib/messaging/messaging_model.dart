@@ -48,12 +48,12 @@ class MessagingModel extends Model {
     }).then((value) => value as Map);
   }
 
-  Future<void> addOrUpdateDirectContact(
-    String unsafeId,
-    String verificationLevel, {
+  Future<void> addOrUpdateDirectContact({
+    required String unsafeId,
     String? displayName,
     String? source,
-    int? tsVerificationReminder,
+    required String verificationLevel,
+    int tsVerificationReminder = 0,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{

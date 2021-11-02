@@ -117,9 +117,13 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
                     else -> Model.VerificationLevel.UNRECOGNIZED
                 }
-                val applicationIds = mapOf(0 to "tsVerificationReminder")
-                val updateApplicationData =
-                    { appData: MutableMap<String, Any> -> appData["tsVerificationReminder"] = call.argument<Any>("tsVerificationReminder")!! }
+                var applicationIds: Map<Int, String>? = null
+                var updateApplicationData: ((MutableMap<String, Any>) -> Unit)? = null
+                if (call.argument<Any>("tsVerificationReminder") != null) {
+                    applicationIds = mapOf(0 to "tsVerificationReminder")
+                    updateApplicationData =
+                        { appData: MutableMap<String, Any> -> appData["tsVerificationReminder"] = call.argument<Any>("tsVerificationReminder")!! }
+                }
                 return messaging.addOrUpdateDirectContact(
                     unsafeId,
                     displayName,
