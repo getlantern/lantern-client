@@ -4,10 +4,12 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import '../messaging.dart';
 import 'show_verification_options.dart';
 
-Future showConversationOptions(
-    {required MessagingModel model,
-    required BuildContext parentContext,
-    required Contact contact}) {
+Future showConversationOptions({
+  required MessagingModel model,
+  required BuildContext parentContext,
+  required Contact contact,
+  Function? topbarAnimationCallback,
+}) {
   // Note: we are using showModalBottomSheet directly here because of the complicated double context handling re:disappearing messages
   return showModalBottomSheet(
       context: parentContext,
@@ -309,7 +311,8 @@ Future showConversationOptions(
                       showVerificationOptions(
                           model: model,
                           contact: contact,
-                          bottomModalContext: parentContext);
+                          bottomModalContext: parentContext,
+                          topbarAnimationCallback: topbarAnimationCallback!);
                     }),
             ],
           ));

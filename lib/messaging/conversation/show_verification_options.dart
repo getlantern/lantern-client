@@ -7,7 +7,18 @@ void showVerificationOptions({
   required MessagingModel model,
   required BuildContext bottomModalContext,
   required Contact contact,
+  Function? topbarAnimationCallback,
 }) {
+  void verificationUX() async {
+    topbarAnimationCallback!();
+    showSnackbar(
+        context: bottomModalContext,
+        duration: longAnimationDuration,
+        content: 'verification_panel_success'
+            .i18n
+            .fill([contact.displayNameOrFallback]));
+  }
+
   return showBottomModal(
       context: bottomModalContext,
       title: CText('verify_contact'.i18n.fill([contact.displayNameOrFallback]),
@@ -25,15 +36,10 @@ void showVerificationOptions({
                     .push(
                   FullScreenDialogPage(widget: AddViaQR(me: me)),
                 )
-                    .then((value) {
-                  // * we just successfully verified someone via QR scanning
+                    .then((value) async {
+                  // * we just successfully verified someone via QR
                   if (value != null) {
-                    // TODO: show animation
-                    showSnackbar(
-                        context: bottomModalContext,
-                        content: 'verification_panel_success'
-                            .i18n
-                            .fill([contact.displayNameOrFallback]));
+                    verificationUX();
                   }
                 });
               },
@@ -50,15 +56,10 @@ void showVerificationOptions({
               FullScreenDialogPage(
                   widget: Call(contact: contact, model: model)),
             )
-                .then((value) {
+                .then((value) async {
               // * we just successfully verified someone via a Call
               if (value != null) {
-                // TODO: show animation
-                showSnackbar(
-                    context: bottomModalContext,
-                    content: 'verification_panel_success'
-                        .i18n
-                        .fill([contact.displayNameOrFallback]));
+                verificationUX();
               }
             });
           },
