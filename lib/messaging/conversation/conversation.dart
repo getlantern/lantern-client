@@ -326,19 +326,18 @@ class ConversationState extends State<Conversation>
         (context, contact, child) {
       var shouldShowVerificationAlert = true;
       var tsSeenVerificationAlert =
-          contact.applicationData['tsSeenVerificationAlert'] as int?;
+          contact.applicationData['tsVerificationReminder']?.int_3;
 
       if (tsSeenVerificationAlert != null) {
-        final reminderPeriod = DateTime.now().millisecondsSinceEpoch +
-            14 *
-                24 *
-                60 *
-                60 *
-                1000; // in 14d * 24h * 60m * 60s * 1000 from now
-        shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch >
-            tsSeenVerificationAlert + reminderPeriod;
+        final twoWeeksInMillis = 14 *
+            24 *
+            60 *
+            60 *
+            1000; // in 14d * 24h * 60m * 60s * 1000 from now
+        shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch -
+                tsSeenVerificationAlert.toInt() >=
+            twoWeeksInMillis;
       }
-
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -362,16 +361,10 @@ class ConversationState extends State<Conversation>
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
-                        // send the current timestamp via updateApplicationData Map
-                        model.addOrUpdateDirectContact(
-                          contact.contactId.id,
-                          contact.verificationLevel.name.toString(),
-                          // TODO: update this
-                          // updateApplicationData: {
-                          //   'tsSeenVerificationAlert':
-                          //       DateTime.now().millisecondsSinceEpoch
-                          // },
-                        );
+                        model.addOrUpdateDirectContact(contact.contactId.id,
+                            contact.verificationLevel.name.toString(),
+                            tsVerificationReminder:
+                                DateTime.now().millisecondsSinceEpoch);
                         showVerificationOptions(
                             model: model,
                             contact: contact,
