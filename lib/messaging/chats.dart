@@ -2,12 +2,12 @@ import 'package:lantern/messaging/introductions/introduction_extension.dart';
 import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
-class Messages extends StatelessWidget {
+class Chats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
-        title: 'messages'.i18n,
+        title: 'chats'.i18n,
         actions: [
           RoundButton(
             onPressed: () async => await showSearch(
@@ -94,7 +94,7 @@ class Messages extends StatelessWidget {
         ),
         actionButton: FloatingActionButton(
           backgroundColor: pink4,
-          onPressed: () async => await context.pushRoute(const NewMessage()),
+          onPressed: () async => await context.pushRoute(const NewChat()),
           child: CAssetImage(path: ImagePaths.add, color: white),
         ));
   }

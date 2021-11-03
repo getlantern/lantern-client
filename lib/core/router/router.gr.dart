@@ -20,13 +20,13 @@ import 'package:lantern/account/pro_account.dart' as _i14;
 import 'package:lantern/account/settings.dart' as _i15;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i3;
+import 'package:lantern/messaging/chats.dart' as _i11;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
 import 'package:lantern/messaging/contacts/contact_info.dart' as _i6;
-import 'package:lantern/messaging/contacts/new_message.dart' as _i7;
+import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messages.dart' as _i11;
 import 'package:lantern/messaging/messaging.dart' as _i22;
 import 'package:lantern/vpn/vpn_tab.dart' as _i12;
 
@@ -77,10 +77,10 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false),
-    NewMessage.name: (routeData) => _i1.CustomPage<void>(
+    NewChat.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i7.NewMessage();
+          return _i7.NewChat();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -145,10 +145,10 @@ class AppRouter extends _i1.RootStackRouter {
         },
         opaque: true,
         barrierDismissible: false),
-    MessagesRoute.name: (routeData) => _i1.CustomPage<void>(
+    ChatsRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i11.Messages();
+          return _i11.Chats();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -278,8 +278,8 @@ class AppRouter extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(Home.name, path: '/', children: [
           _i1.RouteConfig(MessagesRouter.name,
-              path: 'messages',
-              children: [_i1.RouteConfig(MessagesRoute.name, path: '')]),
+              path: 'chats',
+              children: [_i1.RouteConfig(ChatsRoute.name, path: '')]),
           _i1.RouteConfig(VpnRouter.name,
               path: 'vpn', children: [_i1.RouteConfig(Vpn.name, path: '')]),
           _i1.RouteConfig(AccountRouter.name, path: 'account', children: [
@@ -302,7 +302,7 @@ class AppRouter extends _i1.RootStackRouter {
             path: 'fullScreenDialogPage'),
         _i1.RouteConfig(Conversation.name, path: 'conversation'),
         _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
-        _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
+        _i1.RouteConfig(NewChat.name, path: 'newChat'),
         _i1.RouteConfig(AddViaIdentifier.name, path: 'addViaIdentifier'),
         _i1.RouteConfig(Introduce.name, path: 'introduce'),
         _i1.RouteConfig(Introductions.name, path: 'introductions')
@@ -375,10 +375,10 @@ class ContactInfoArgs {
   final _i22.Contact contact;
 }
 
-class NewMessage extends _i1.PageRouteInfo {
-  const NewMessage() : super(name, path: 'newMessage');
+class NewChat extends _i1.PageRouteInfo {
+  const NewChat() : super(name, path: 'newChat');
 
-  static const String name = 'NewMessage';
+  static const String name = 'NewChat';
 }
 
 class AddViaIdentifier extends _i1.PageRouteInfo {
@@ -401,7 +401,7 @@ class Introductions extends _i1.PageRouteInfo {
 
 class MessagesRouter extends _i1.PageRouteInfo {
   const MessagesRouter({List<_i1.PageRouteInfo>? children})
-      : super(name, path: 'messages', initialChildren: children);
+      : super(name, path: 'chats', initialChildren: children);
 
   static const String name = 'MessagesRouter';
 }
@@ -427,10 +427,10 @@ class DeveloperRoute extends _i1.PageRouteInfo {
   static const String name = 'DeveloperRoute';
 }
 
-class MessagesRoute extends _i1.PageRouteInfo {
-  const MessagesRoute() : super(name, path: '');
+class ChatsRoute extends _i1.PageRouteInfo {
+  const ChatsRoute() : super(name, path: '');
 
-  static const String name = 'MessagesRoute';
+  static const String name = 'ChatsRoute';
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {

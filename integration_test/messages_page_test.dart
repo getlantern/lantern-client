@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:lantern/messaging/messages.dart';
+import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/home.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 
@@ -25,7 +25,7 @@ void main() {
     testWidgets('Check if MessagesPages is loaded',
         (WidgetTester tester) async {
       await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
-      expect(find.byType(Messages), findsOneWidget);
+      expect(find.byType(Chats), findsOneWidget);
     });
 
     testWidgets('Check for components loaded correctly on MessagesPages AppBar',

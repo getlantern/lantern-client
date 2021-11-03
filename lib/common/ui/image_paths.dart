@@ -57,6 +57,7 @@ class ImagePaths {
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
+  static const share = 'assets/images/share.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

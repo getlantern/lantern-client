@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:lantern/messaging/messages.dart';
-import 'package:lantern/messaging/contacts/new_message.dart';
+import 'package:lantern/messaging/chats.dart';
+import 'package:lantern/messaging/contacts/new_chat.dart';
 import 'package:lantern/common/common.dart' as common;
 
 import 'action/navigation_action_test.dart';
@@ -21,7 +21,7 @@ void main() {
       await GoTo.navigateTo(tester, to: SCREENS.MESSAGES);
       await GoTo.navigateTo(tester,
           from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
-      expect(find.byType(NewMessage), findsOneWidget);
+      expect(find.byType(NewChat), findsOneWidget);
     });
 
     testWidgets(
@@ -66,7 +66,7 @@ void main() {
       await GoTo.navigateTo(tester,
           from: SCREENS.MESSAGES, to: SCREENS.CONTACTS);
       await GoTo.navigateBack(tester);
-      expect(find.byType(Messages), findsOneWidget);
+      expect(find.byType(Chats), findsOneWidget);
     });
   });
 }
