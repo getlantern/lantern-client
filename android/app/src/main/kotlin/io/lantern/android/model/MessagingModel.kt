@@ -73,6 +73,21 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     }
                 }
             }
+            "findChatNumberByShortNumber" -> {
+                messaging.findChatNumberByShortNumber(
+                    call.argument<String>("shortNumber")!!
+                ) { chatNumber, err ->
+                    if (err != null) {
+                        result.error(
+                            "failed",
+                            err.toString(),
+                            null,
+                        )
+                    } else {
+                        result.success(chatNumber!!.toByteArray())
+                    }
+                }
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -89,14 +104,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    else -> Model.ContactSource.UNKNOWN
+                    else -> null
                 },
-                when (call.argument<Any>("verificationLevel")!!) {
-                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
-                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
-                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
-                    else -> Model.VerificationLevel.UNRECOGNIZED
-                },
+                Model.VerificationLevel.VERIFIED,
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
@@ -104,32 +114,33 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 )
             }
             "addOrUpdateDirectContact" -> {
-                val unsafeId = call.argument<String>("unsafeId")!!
+                val unsafeId = call.argument<String>("unsafeId")
+                val chatNumber = call.argument<ByteArray>("chatNumber")?.let {
+                    Model.ChatNumber.parseFrom(it)
+                }
                 val displayName = call.argument<String>("displayName")
                 val source = when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    else -> Model.ContactSource.UNKNOWN
+                    else -> null
                 }
-                val verificationLevel = when (call.argument<Any>("verificationLevel")!!) {
-                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
-                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
-                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
-                    else -> Model.VerificationLevel.UNRECOGNIZED
-                }
+                val minimumVerificationLevel = Model.VerificationLevel.UNVERIFIED
                 var applicationIds: Map<Int, String>? = null
                 var updateApplicationData: ((MutableMap<String, Any>) -> Unit)? = null
                 if (call.argument<Any>("tsVerificationReminder") != null) {
                     applicationIds = mapOf(0 to "tsVerificationReminder")
-                    updateApplicationData =
-                        { appData: MutableMap<String, Any> -> appData["tsVerificationReminder"] = call.argument<Any>("tsVerificationReminder")!! }
+                    updateApplicationData = { appData ->
+                        appData["tsVerificationReminder"] =
+                            call.argument<Any>("tsVerificationReminder")!!
+                    }
                 }
                 return messaging.addOrUpdateDirectContact(
                     unsafeId,
                     displayName,
                     source,
                     applicationIds,
-                    verificationLevel,
+                    minimumVerificationLevel,
+                    chatNumber,
                     updateApplicationData,
                 )
             }

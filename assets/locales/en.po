@@ -394,14 +394,14 @@ msgstr "Add via Username or Messenger ID"
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "contact_id_validation_general"
+msgid "chat_number_invalid"
 msgstr "Please enter a valid username or Messenger ID"
 
-msgid "contact_id_type"
-msgstr "Type a username or Messenger ID"
+msgid "chat_number_type"
+msgstr "Type a Chat Number"
 
-msgid "contact_id_messenger_id"
-msgstr "Username or Messenger ID"
+msgid "chat_number"
+msgstr "Chat Number"
 
 msgid "messenger_id_invalid"
 msgstr "Invalid Messenger ID"

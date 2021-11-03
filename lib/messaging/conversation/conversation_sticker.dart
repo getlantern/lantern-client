@@ -8,20 +8,6 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var source = 'banner_source_unknown'.i18n;
-    // switch (contact.source) {
-    //   case ContactSource.APP1:
-    //     source = 'banner_source_qr'.i18n;
-    //     break;
-    //   case ContactSource.APP2:
-    //     source = 'banner_source_id'.i18n;
-    //     break;
-    //   case ContactSource.INTRODUCTION:
-    //     source = 'banner_source_intro'.i18n;
-    //     break;
-    // }
-    final model = context.watch<MessagingModel>();
-
     return Container(
       height: calculateStickerHeight(context, messageCount),
       child: Column(

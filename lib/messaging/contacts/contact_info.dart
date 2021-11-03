@@ -141,9 +141,6 @@ class _ContactInfoState extends State<ContactInfo> {
                             try {
                               await model.addOrUpdateDirectContact(
                                   unsafeId: widget.contact.contactId.id,
-                                  verificationLevel: widget
-                                      .contact.verificationLevel.name
-                                      .toString(),
                                   displayName: displayNameController.text);
                             } catch (e, s) {
                               showErrorDialog(context,

@@ -58,8 +58,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     /* 
     * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding an unverified provisional contact
     */
-    var result =
-        await model.addProvisionalContact(unsafeId, source, 'UNVERIFIED');
+    var result = await model.addProvisionalContact(unsafeId, source);
 
     // TODO: repeated pattern
     // listen to the contact path for changes
@@ -72,11 +71,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
           updatedContact.mostRecentHelloTs >
               result['mostRecentHelloTsMillis']) {
         countdownController.stop(canceled: true);
-
-        /*
-        * Verification success - regardless of whether we are in verifying or face-to-face adding mode, marking this contact as verified
-        */
-        await model.markDirectContactVerified(unsafeId);
         closeOnce(() => Navigator.pop(context, updatedContact));
       }
     };

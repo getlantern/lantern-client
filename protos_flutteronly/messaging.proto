@@ -20,6 +20,13 @@ message ContactId {
   string id = 2; // the public IdentityKey for direct contacts, the globally unique group id (type 4 UUID) for groups, both base32 encoded
 }
 
+// A numeric version of the IdentityKey encoded in a phone-number like encoding
+message ChatNumber {
+  string number = 1; // the full contact number (82 or more digits)
+  string shortNumber = 2; // the short version of the number by which the contact is registered with tassis
+  string domain = 3; // the domain on which the short number is registered (e.g. lantern.io)
+}
+
 enum ContactSource {
   UNKNOWN = 0; // source of contact is unknown
   INTRODUCTION = 1; // contact was added through introduction
@@ -69,6 +76,7 @@ message Contact {
   string numericFingerprint = 16; // a numeric fingerprint of this contact (depends on our own messenger ID)
   bool blocked = 17; // flag indicating of the contact is blocked
   map<string, Datum> applicationData = 18; // place for applications to store app-specific data associated with the Contact
+  ChatNumber chatNumber = 19; // for direct contacts, this is their chat number (looks like a phone number)
 }
 
 // A provisional direct contact that is not yet in the address book. If we receive a Hello from that

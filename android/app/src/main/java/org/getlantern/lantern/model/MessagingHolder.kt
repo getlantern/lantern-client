@@ -39,8 +39,6 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 internal const val messageNotificationChannelId = "10001"

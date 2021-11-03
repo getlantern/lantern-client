@@ -20,7 +20,7 @@ import 'package:lantern/account/pro_account.dart' as _i14;
 import 'package:lantern/account/settings.dart' as _i15;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i3;
-import 'package:lantern/messaging/contacts/add_contact_identifier.dart' as _i8;
+import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
 import 'package:lantern/messaging/contacts/contact_info.dart' as _i6;
 import 'package:lantern/messaging/contacts/new_message.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
@@ -90,7 +90,7 @@ class AppRouter extends _i1.RootStackRouter {
     AddViaIdentifier.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i8.AddViaIdentifier();
+          return _i8.AddViaChatNumber();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
