@@ -3,12 +3,12 @@ import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'long_tap_menu.dart';
 
-class NewMessage extends StatefulWidget {
+class NewChat extends StatefulWidget {
   @override
-  _NewMessageState createState() => _NewMessageState();
+  _NewChatState createState() => _NewChatState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _NewChatState extends State<NewChat> {
   var scrollListController = ItemScrollController();
   Contact? _updatedContact;
 
@@ -44,7 +44,7 @@ class _NewMessageState extends State<NewMessage> {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'new_message'.i18n,
+      title: 'new_chat'.i18n,
       actions: [
         RoundButton(
           onPressed: () async => await showSearch(
@@ -69,6 +69,31 @@ class _NewMessageState extends State<NewMessage> {
                     maxLines: 1, style: tsOverline),
               ),
               const CDivider(),
+              /*
+              * Share your Chat Number
+              */
+              CListTile(
+                leading: const CAssetImage(
+                  path: ImagePaths.share,
+                ),
+                content: CText('share_your_chat_number'.i18n,
+                    style: tsSubtitle1Short),
+                trailing: mirrorLTR(
+                  context: context,
+                  child: const CAssetImage(
+                    path: ImagePaths.keyboard_arrow_right,
+                  ),
+                ),
+                onTap: () async => await context
+                    .pushRoute(
+                      FullScreenDialogPage(
+                          widget: AddViaQR(
+                        me: me,
+                        isVerificationMode: false,
+                      )),
+                    )
+                    .then(onContactAdded),
+              ),
               /*
               * Scan QR Code
               */

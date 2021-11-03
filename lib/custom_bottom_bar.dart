@@ -35,7 +35,7 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: CText('messages'.i18n, style: tsFloatingLabel),
+            label: CText('secure_chat'.i18n, style: tsFloatingLabel),
             icon: SvgPicture.asset(
               ImagePaths.messages,
               color:
@@ -45,7 +45,7 @@ class CustomBottomBar extends StatelessWidget {
             onTap: () => onTap!(0),
           ),
           label: '',
-          tooltip: 'messages'.i18n,
+          tooltip: 'chats'.i18n,
         ),
         BottomNavigationBarItem(
           icon: CustomBottomItem(
@@ -81,11 +81,17 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: CText('Account'.i18n, style: tsFloatingLabel),
             onTap: () => onTap!(2),
-            icon: SvgPicture.asset(
-              ImagePaths.account,
-              color:
-                  index == 2 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
+            icon: CBadge(
+              count: 1,
+              // TODO: hide this if the user has saved the recovery key
+              showBadge: true,
+              child: SvgPicture.asset(
+                ImagePaths.account,
+                color: index == 2
+                    ? selectedTabLabelColor
+                    : unselectedTabLabelColor,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           label: '',

@@ -208,8 +208,8 @@ msgstr "Copied!"
 msgid "saved"
 msgstr "Saved!"
 
-msgid "new_message"
-msgstr "New Message"
+msgid "new_chat"
+msgstr "New Chat"
 
 msgid "your_contact_info"
 msgstr "Your Contact Info"
@@ -276,6 +276,9 @@ msgstr "Add new contact:"
 
 msgid "add_contact"
 msgstr "Add Contact"
+
+msgid "share_your_chat_number"
+msgstr "Share your Chat Number"
 
 msgid "scan_qr_code"
 msgstr "Scan QR Code"
@@ -531,6 +534,12 @@ msgstr "Message"
 
 msgid "messages"
 msgstr "Messages"
+
+msgid "chats"
+msgstr "Chats"
+
+msgid "secure_chat"
+msgstr "Secure Chat"
 
 msgid "search"
 msgstr "Search"

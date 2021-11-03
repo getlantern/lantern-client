@@ -1,4 +1,4 @@
-import 'messages.dart';
+import 'chats.dart';
 import 'messaging.dart';
 
 class MessagesTab extends StatefulWidget {
@@ -13,7 +13,7 @@ class _MessagesTabState extends State<MessagesTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Messages();
+    return Chats();
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
-import 'package:lantern/messaging/contacts/new_message.dart';
+import 'package:lantern/messaging/contacts/new_chat.dart';
 
 import 'action/input_test.dart';
 import 'action/navigation_action_test.dart';
@@ -201,7 +201,7 @@ void main() {
       await GoTo.navigateTo(tester,
           from: SCREENS.CONTACTS, to: SCREENS.CONVERSATION);
       await GoTo.navigateBack(tester);
-      expect(find.byType(NewMessage), findsOneWidget);
+      expect(find.byType(NewChat), findsOneWidget);
     });
   });
 }
