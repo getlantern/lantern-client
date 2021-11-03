@@ -541,6 +541,15 @@ msgstr "Chats"
 msgid "secure_chat"
 msgstr "Secure Chat"
 
+msgid "lantern_secure_chat"
+msgstr "Lantern Secure Chat"
+
+msgid "secure_chat_number"
+msgstr "Secure Chat Number"
+
+msgid "recovery"
+msgstr "Secure Chat Number Recovery"
+
 msgid "search"
 msgstr "Search"
 
