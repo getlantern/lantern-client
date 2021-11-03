@@ -363,8 +363,6 @@ class ConversationState extends State<Conversation>
                       onPressed: () {
                         model.addOrUpdateDirectContact(
                             unsafeId: contact.contactId.id,
-                            verificationLevel:
-                                contact.verificationLevel.name.toString(),
                             tsVerificationReminder:
                                 DateTime.now().millisecondsSinceEpoch);
                         showVerificationOptions(

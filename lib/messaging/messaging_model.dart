@@ -35,34 +35,39 @@ class MessagingModel extends Model {
   * CONTACTS 
   */
 
+  Future<ChatNumber> findChatNumberByShortNumber(String shortNumber) {
+    return methodChannel
+        .invokeMethod('findChatNumberByShortNumber', <String, dynamic>{
+      'shortNumber': shortNumber,
+    }).then((value) => ChatNumber.fromBuffer(value));
+  }
+
   Future<Map> addProvisionalContact(
     String contactId,
     String? source,
-    String verificationLevel,
   ) {
     return methodChannel
         .invokeMethod('addProvisionalContact', <String, dynamic>{
       'unsafeContactId': contactId,
       'source': source,
-      'verificationLevel': verificationLevel
     }).then((value) => value as Map);
   }
 
-  Future<void> addOrUpdateDirectContact({
-    required String unsafeId,
+  Future<Contact> addOrUpdateDirectContact({
+    String? unsafeId,
+    ChatNumber? chatNumber,
     String? displayName,
     String? source,
-    required String verificationLevel,
     int tsVerificationReminder = 0,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
       'unsafeId': unsafeId,
+      'chatNumber': chatNumber?.writeToBuffer(),
       'displayName': displayName,
       'source': source,
-      'verificationLevel': verificationLevel,
       'tsVerificationReminder': tsVerificationReminder,
-    });
+    }).then((value) => Contact.fromBuffer(value));
   }
 
   Future<void> deleteProvisionalContact(String contactId) {

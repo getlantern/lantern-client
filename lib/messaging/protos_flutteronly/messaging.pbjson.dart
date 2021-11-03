@@ -70,6 +70,18 @@ const ContactId$json = const {
 
 /// Descriptor for `ContactId`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List contactIdDescriptor = $convert.base64Decode('CglDb250YWN0SWQSJgoEdHlwZRgBIAEoDjISLm1vZGVsLkNvbnRhY3RUeXBlUgR0eXBlEg4KAmlkGAIgASgJUgJpZA==');
+@$core.Deprecated('Use chatNumberDescriptor instead')
+const ChatNumber$json = const {
+  '1': 'ChatNumber',
+  '2': const [
+    const {'1': 'number', '3': 1, '4': 1, '5': 9, '10': 'number'},
+    const {'1': 'shortNumber', '3': 2, '4': 1, '5': 9, '10': 'shortNumber'},
+    const {'1': 'domain', '3': 3, '4': 1, '5': 9, '10': 'domain'},
+  ],
+};
+
+/// Descriptor for `ChatNumber`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List chatNumberDescriptor = $convert.base64Decode('CgpDaGF0TnVtYmVyEhYKBm51bWJlchgBIAEoCVIGbnVtYmVyEiAKC3Nob3J0TnVtYmVyGAIgASgJUgtzaG9ydE51bWJlchIWCgZkb21haW4YAyABKAlSBmRvbWFpbg==');
 @$core.Deprecated('Use datumDescriptor instead')
 const Datum$json = const {
   '1': 'Datum',
@@ -109,6 +121,7 @@ const Contact$json = const {
     const {'1': 'numericFingerprint', '3': 16, '4': 1, '5': 9, '10': 'numericFingerprint'},
     const {'1': 'blocked', '3': 17, '4': 1, '5': 8, '10': 'blocked'},
     const {'1': 'applicationData', '3': 18, '4': 3, '5': 11, '6': '.model.Contact.ApplicationDataEntry', '10': 'applicationData'},
+    const {'1': 'chatNumber', '3': 19, '4': 1, '5': 11, '6': '.model.ChatNumber', '10': 'chatNumber'},
   ],
   '3': const [Contact_ApplicationIdsEntry$json, Contact_ApplicationDataEntry$json],
 };
@@ -134,7 +147,7 @@ const Contact_ApplicationDataEntry$json = const {
 };
 
 /// Descriptor for `Contact`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEkoKDmFwcGxpY2F0aW9uSWRzGA4gAygLMiIubW9kZWwuQ29udGFjdC5BcHBsaWNhdGlvbklkc0VudHJ5Ug5hcHBsaWNhdGlvbklkcxIcCgltZW1iZXJJZHMYAiADKAlSCW1lbWJlcklkcxIgCgtkaXNwbGF5TmFtZRgDIAEoCVILZGlzcGxheU5hbWUSLAoGc291cmNlGA0gASgOMhQubW9kZWwuQ29udGFjdFNvdXJjZVIGc291cmNlEhwKCWNyZWF0ZWRUcxgEIAEoA1IJY3JlYXRlZFRzEjAKE21vc3RSZWNlbnRNZXNzYWdlVHMYBSABKANSE21vc3RSZWNlbnRNZXNzYWdlVHMSVwoabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24YBiABKA4yFy5tb2RlbC5NZXNzYWdlRGlyZWN0aW9uUhptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhI0ChVtb3N0UmVjZW50TWVzc2FnZVRleHQYByABKAlSFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBJCChxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlGAggASgJUhxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlEkQKHW1lc3NhZ2VzRGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAkgASgFUh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxI2ChZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzGAogASgDUhZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzEi4KEmhhc1JlY2VpdmVkTWVzc2FnZRgLIAEoCFISaGFzUmVjZWl2ZWRNZXNzYWdlEiwKEW1vc3RSZWNlbnRIZWxsb1RzGAwgASgDUhFtb3N0UmVjZW50SGVsbG9UcxJGChF2ZXJpZmljYXRpb25MZXZlbBgPIAEoDjIYLm1vZGVsLlZlcmlmaWNhdGlvbkxldmVsUhF2ZXJpZmljYXRpb25MZXZlbBIuChJudW1lcmljRmluZ2VycHJpbnQYECABKAlSEm51bWVyaWNGaW5nZXJwcmludBIYCgdibG9ja2VkGBEgASgIUgdibG9ja2VkEk0KD2FwcGxpY2F0aW9uRGF0YRgSIAMoCzIjLm1vZGVsLkNvbnRhY3QuQXBwbGljYXRpb25EYXRhRW50cnlSD2FwcGxpY2F0aW9uRGF0YRpBChNBcHBsaWNhdGlvbklkc0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EhQKBXZhbHVlGAIgASgJUgV2YWx1ZToCOAEaUAoUQXBwbGljYXRpb25EYXRhRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSIgoFdmFsdWUYAiABKAsyDC5tb2RlbC5EYXR1bVIFdmFsdWU6AjgB');
+final $typed_data.Uint8List contactDescriptor = $convert.base64Decode('CgdDb250YWN0Ei4KCWNvbnRhY3RJZBgBIAEoCzIQLm1vZGVsLkNvbnRhY3RJZFIJY29udGFjdElkEkoKDmFwcGxpY2F0aW9uSWRzGA4gAygLMiIubW9kZWwuQ29udGFjdC5BcHBsaWNhdGlvbklkc0VudHJ5Ug5hcHBsaWNhdGlvbklkcxIcCgltZW1iZXJJZHMYAiADKAlSCW1lbWJlcklkcxIgCgtkaXNwbGF5TmFtZRgDIAEoCVILZGlzcGxheU5hbWUSLAoGc291cmNlGA0gASgOMhQubW9kZWwuQ29udGFjdFNvdXJjZVIGc291cmNlEhwKCWNyZWF0ZWRUcxgEIAEoA1IJY3JlYXRlZFRzEjAKE21vc3RSZWNlbnRNZXNzYWdlVHMYBSABKANSE21vc3RSZWNlbnRNZXNzYWdlVHMSVwoabW9zdFJlY2VudE1lc3NhZ2VEaXJlY3Rpb24YBiABKA4yFy5tb2RlbC5NZXNzYWdlRGlyZWN0aW9uUhptb3N0UmVjZW50TWVzc2FnZURpcmVjdGlvbhI0ChVtb3N0UmVjZW50TWVzc2FnZVRleHQYByABKAlSFW1vc3RSZWNlbnRNZXNzYWdlVGV4dBJCChxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlGAggASgJUhxtb3N0UmVjZW50QXR0YWNobWVudE1pbWVUeXBlEkQKHW1lc3NhZ2VzRGlzYXBwZWFyQWZ0ZXJTZWNvbmRzGAkgASgFUh1tZXNzYWdlc0Rpc2FwcGVhckFmdGVyU2Vjb25kcxI2ChZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzGAogASgDUhZmaXJzdFJlY2VpdmVkTWVzc2FnZVRzEi4KEmhhc1JlY2VpdmVkTWVzc2FnZRgLIAEoCFISaGFzUmVjZWl2ZWRNZXNzYWdlEiwKEW1vc3RSZWNlbnRIZWxsb1RzGAwgASgDUhFtb3N0UmVjZW50SGVsbG9UcxJGChF2ZXJpZmljYXRpb25MZXZlbBgPIAEoDjIYLm1vZGVsLlZlcmlmaWNhdGlvbkxldmVsUhF2ZXJpZmljYXRpb25MZXZlbBIuChJudW1lcmljRmluZ2VycHJpbnQYECABKAlSEm51bWVyaWNGaW5nZXJwcmludBIYCgdibG9ja2VkGBEgASgIUgdibG9ja2VkEk0KD2FwcGxpY2F0aW9uRGF0YRgSIAMoCzIjLm1vZGVsLkNvbnRhY3QuQXBwbGljYXRpb25EYXRhRW50cnlSD2FwcGxpY2F0aW9uRGF0YRIxCgpjaGF0TnVtYmVyGBMgASgLMhEubW9kZWwuQ2hhdE51bWJlclIKY2hhdE51bWJlchpBChNBcHBsaWNhdGlvbklkc0VudHJ5EhAKA2tleRgBIAEoBVIDa2V5EhQKBXZhbHVlGAIgASgJUgV2YWx1ZToCOAEaUAoUQXBwbGljYXRpb25EYXRhRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSIgoFdmFsdWUYAiABKAsyDC5tb2RlbC5EYXR1bVIFdmFsdWU6AjgB');
 @$core.Deprecated('Use provisionalContactDescriptor instead')
 const ProvisionalContact$json = const {
   '1': 'ProvisionalContact',
