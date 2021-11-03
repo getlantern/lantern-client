@@ -84,15 +84,7 @@ class _NewChatState extends State<NewChat> {
                     path: ImagePaths.keyboard_arrow_right,
                   ),
                 ),
-                onTap: () async => await context
-                    .pushRoute(
-                      FullScreenDialogPage(
-                          widget: AddViaQR(
-                        me: me,
-                        isVerificationMode: false,
-                      )),
-                    )
-                    .then(onContactAdded),
+                onTap: () {}, // TODO: Share chat number
               ),
               /*
               * Scan QR Code
