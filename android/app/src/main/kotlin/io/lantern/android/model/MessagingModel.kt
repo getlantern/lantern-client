@@ -39,6 +39,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
             sendSignal(signal, false) // since we have not accepted yet
         }
+
+        messaging
     }
 
     fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
