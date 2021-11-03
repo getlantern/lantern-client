@@ -109,7 +109,8 @@ class _NewMessageState extends State<NewMessage> {
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),
-                content: CText('add_via_id'.i18n, style: tsSubtitle1Short),
+                content:
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
