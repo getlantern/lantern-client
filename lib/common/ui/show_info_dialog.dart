@@ -1,10 +1,13 @@
 import 'package:lantern/common/common.dart';
 
-void showInfoDialog(BuildContext parentContext,
-    {String title = '',
-    String des = '',
-    String assetPath = '',
-    String buttonText = 'OK'}) {
+void showInfoDialog(
+  BuildContext parentContext, {
+  String title = '',
+  String des = '',
+  String assetPath = '',
+  String buttonText = 'OK',
+  bool popParentContext = false,
+}) {
   showDialog(
     context: parentContext,
     builder: (BuildContext childContext) {
@@ -50,7 +53,7 @@ void showInfoDialog(BuildContext parentContext,
                   focusColor: grey3,
                   onTap: () {
                     childContext.router.pop();
-                    parentContext.router.pop();
+                    if (popParentContext) parentContext.router.pop();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),

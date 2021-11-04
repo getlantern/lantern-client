@@ -32,6 +32,20 @@ class ProAccount extends StatelessWidget {
               );
             }),
             SettingsSectionHeader(
+              label: 'backup_recovery_key'.i18n,
+            ),
+            SettingsItem(
+              icon: ImagePaths.lock_outline,
+              iconColor: Colors.black,
+              title: 'recovery_key'.i18n,
+              showArrow: true,
+              child: CBadge(
+                showBadge: true,
+                count: 1,
+              ),
+              onTap: () => context.router.push(RecoveryKey()),
+            ),
+            SettingsSectionHeader(
               label: 'Pro Account Expiration'.i18n,
             ),
             sessionModel.expiryDate(
@@ -54,54 +68,57 @@ class ProAccount extends StatelessWidget {
             var isMyDevice = device.id == myDeviceId;
             var allowRemoval = devices.devices.length > 1 || !isMyDevice;
 
-            return SettingsItem(
-              title: device.name,
-              onTap: !allowRemoval
-                  ? null
-                  : () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: CText('confirm_remove_device'.i18n,
-                                style: tsBody1),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: CText(
-                                  'No'.i18n,
-                                  style: tsButtonGrey,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  context.loaderOverlay.show(widget: spinner);
-                                  sessionModel
-                                      .removeDevice(device.id)
-                                      .then((value) {
-                                    context.loaderOverlay.hide();
+            return Padding(
+              padding: const EdgeInsetsDirectional.only(start: 4),
+              child: SettingsItem(
+                title: device.name,
+                onTap: !allowRemoval
+                    ? null
+                    : () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: CText('confirm_remove_device'.i18n,
+                                  style: tsBody1),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
                                     Navigator.pop(context);
-                                  }).onError((error, stackTrace) {
-                                    context.loaderOverlay.hide();
-                                  });
-                                },
-                                child: CText(
-                                  'Yes'.i18n,
-                                  style: tsButtonPink,
+                                  },
+                                  child: CText(
+                                    'No'.i18n,
+                                    style: tsButtonGrey,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-              child: !allowRemoval
-                  ? null
-                  : CText(
-                      (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                      style: tsButtonPink),
+                                TextButton(
+                                  onPressed: () {
+                                    context.loaderOverlay.show(widget: spinner);
+                                    sessionModel
+                                        .removeDevice(device.id)
+                                        .then((value) {
+                                      context.loaderOverlay.hide();
+                                      Navigator.pop(context);
+                                    }).onError((error, stackTrace) {
+                                      context.loaderOverlay.hide();
+                                    });
+                                  },
+                                  child: CText(
+                                    'Yes'.i18n,
+                                    style: tsButtonPink,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                child: !allowRemoval
+                    ? null
+                    : CText(
+                        (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
+                        style: tsButtonPink),
+              ),
             );
           }));
 
