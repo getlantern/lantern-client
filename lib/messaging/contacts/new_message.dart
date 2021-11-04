@@ -103,7 +103,7 @@ class _NewMessageState extends State<NewMessage> {
                     .then(onContactAdded),
               ),
               /*
-              * Add via Username or ID
+              * Add via Chat Number
               */
               CListTile(
                 leading: const CAssetImage(
@@ -118,7 +118,7 @@ class _NewMessageState extends State<NewMessage> {
                   ),
                 ),
                 onTap: () async => await context
-                    .pushRoute(const AddViaIdentifier())
+                    .pushRoute(const AddViaChatNumber())
                     .then(onContactAdded),
               ),
               /*

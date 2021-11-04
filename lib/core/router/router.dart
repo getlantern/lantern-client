@@ -58,8 +58,8 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: AddViaChatNumber,
-        name: 'AddViaIdentifier',
-        path: 'addViaIdentifier',
+        name: 'AddViaChatNumber',
+        path: 'addViaChatNumber',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

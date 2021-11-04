@@ -87,7 +87,7 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false),
-    AddViaIdentifier.name: (routeData) => _i1.CustomPage<void>(
+    AddViaChatNumber.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
           return _i8.AddViaChatNumber();
@@ -303,7 +303,7 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(Conversation.name, path: 'conversation'),
         _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
         _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
-        _i1.RouteConfig(AddViaIdentifier.name, path: 'addViaIdentifier'),
+        _i1.RouteConfig(AddViaChatNumber.name, path: 'addViaChatNumber'),
         _i1.RouteConfig(Introduce.name, path: 'introduce'),
         _i1.RouteConfig(Introductions.name, path: 'introductions')
       ];
@@ -381,10 +381,10 @@ class NewMessage extends _i1.PageRouteInfo {
   static const String name = 'NewMessage';
 }
 
-class AddViaIdentifier extends _i1.PageRouteInfo {
-  const AddViaIdentifier() : super(name, path: 'addViaIdentifier');
+class AddViaChatNumber extends _i1.PageRouteInfo {
+  const AddViaChatNumber() : super(name, path: 'addViaChatNumber');
 
-  static const String name = 'AddViaIdentifier';
+  static const String name = 'AddViaChatNumber';
 }
 
 class Introduce extends _i1.PageRouteInfo {
