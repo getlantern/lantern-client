@@ -25,6 +25,9 @@ class ImagePaths {
   // static const more_horiz = 'assets/images/more_horiz.svg';
   static const pending = 'assets/images/pending.svg';
   static const arrow_downward = 'assets/images/arrow_downward.svg';
+  static const lock_outline = 'assets/images/lock_outline.svg';
+  static const backup = 'assets/images/backup.svg';
+  static const backup_icon = 'assets/images/backup_icon.svg';
 
   // Messaging
   static const add = 'assets/images/add.svg';

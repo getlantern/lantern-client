@@ -93,8 +93,9 @@ class Chats extends StatelessWidget {
           ],
         ),
         actionButton: FloatingActionButton(
-          backgroundColor: pink4,
-          onPressed: () async => await context.pushRoute(const NewChat()),
+          backgroundColor: blue4,
+          onPressed: () async => await context
+              .pushRoute(const Welcome()), //TODO: testing, revert to NewMessage
           child: CAssetImage(path: ImagePaths.add, color: white),
         ));
   }

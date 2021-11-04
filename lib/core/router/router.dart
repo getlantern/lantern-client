@@ -14,7 +14,7 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number.dart';
-import 'package:lantern/messaging/onboarding/recovery.dart';
+import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -95,9 +95,9 @@ import 'package:lantern/messaging/onboarding/recovery.dart';
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
-        page: Recovery,
-        name: 'Recovery',
-        path: 'recovery',
+        page: SecureNumberRecovery,
+        name: 'SecureNumberRecovery',
+        path: 'secureNumberRecovery',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

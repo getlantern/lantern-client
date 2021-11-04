@@ -58,6 +58,15 @@ Color getCheckboxColor(Set<MaterialState> states) {
   return states.any(interactiveStates.contains) ? white : black;
 }
 
+Color getCheckboxColorGreen(Set<MaterialState> states) {
+  const interactiveStates = <MaterialState>{
+    MaterialState.pressed,
+    MaterialState.hovered,
+    MaterialState.focused,
+  };
+  return states.any(interactiveStates.contains) ? white : indicatorGreen;
+}
+
 Color getIllustrationColor(Contact contact) {
   return getAvatarColor(sha1Hue(contact.contactId.id));
 }

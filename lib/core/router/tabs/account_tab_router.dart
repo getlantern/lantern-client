@@ -8,6 +8,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/pro_account.dart';
 import 'package:lantern/account/settings.dart';
+import 'package:lantern/account/recovery_key.dart';
 
 const account_tab_router = CustomRoute<void>(
   page: EmptyRouterPage,
@@ -67,6 +68,13 @@ const account_tab_router = CustomRoute<void>(
         page: ApproveDevice,
         name: 'ApproveDevice',
         path: 'approveDevice',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: RecoveryKey,
+        name: 'RecoveryKey',
+        path: 'recoveryKey',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
