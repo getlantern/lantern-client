@@ -27,26 +27,28 @@ void showVerificationOptions({
           'verify_description'.i18n.fill([contact.displayNameOrFallback]),
           style: tsBody1.copiedWith(color: grey5)),
       children: [
-        model.me((context, me, child) => BottomModalItem(
-              leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
-              label: 'verify_in_person'.i18n,
-              onTap: () async {
-                await bottomModalContext.router.pop();
-                await context.router
-                    .push(
-                  FullScreenDialogPage(widget: AddViaQR(me: me)),
-                )
-                    .then((value) async {
-                  // * we just successfully verified someone via QR
-                  if (value != null) {
-                    verificationUX();
-                  }
-                });
-              },
-              trailing: const CAssetImage(
-                path: ImagePaths.keyboard_arrow_right,
-              ),
-            )),
+        model.me(
+          (context, me, child) => BottomModalItem(
+            leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
+            label: 'verify_in_person'.i18n,
+            onTap: () async {
+              await bottomModalContext.router.pop();
+              await context.router
+                  .push(
+                FullScreenDialogPage(widget: AddViaQR(me: me)),
+              )
+                  .then((value) async {
+                // * we just successfully verified someone via QR
+                if (value != null) {
+                  verificationUX();
+                }
+              });
+            },
+            trailing: const CAssetImage(
+              path: ImagePaths.keyboard_arrow_right,
+            ),
+          ),
+        ),
         BottomModalItem(
           leading: const CAssetImage(path: ImagePaths.phone),
           label: 'verify_via_call'.i18n,
