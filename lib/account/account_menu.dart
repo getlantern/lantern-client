@@ -61,11 +61,15 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context, Contact me) => [
         SettingsItem(
-          icon: ImagePaths.account,
-          iconColor: Colors.black,
-          title: 'Pro Account Management'.i18n,
-          onTap: () async => await context.pushRoute(ProAccount()),
-        ),
+            icon: ImagePaths.account,
+            iconColor: Colors.black,
+            title: 'Pro Account Management'.i18n,
+            onTap: () async => await context.pushRoute(ProAccount()),
+            child: CBadge(
+              // TODO: if hasCopiedKey == false
+              showBadge: true,
+              count: 1,
+            )),
         SettingsItem(
           icon: ImagePaths.devices,
           title: 'Add Device'.i18n,

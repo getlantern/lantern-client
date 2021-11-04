@@ -32,6 +32,20 @@ class ProAccount extends StatelessWidget {
               );
             }),
             SettingsSectionHeader(
+              label: 'secure_chat_number'.i18n,
+            ),
+            SettingsItem(
+              icon: ImagePaths.lock_outline,
+              iconColor: Colors.black,
+              title:
+                  '63751638576 6541565465871235436245631478569514563258852456784125698001487326545'
+                      .i18n,
+              child: const CAssetImage(
+                path: ImagePaths.arrow_down,
+              ),
+              onTap: () {}, // TODO: expand
+            ),
+            SettingsSectionHeader(
               label: 'backup_recovery_key'.i18n,
             ),
             SettingsItem(
@@ -40,6 +54,7 @@ class ProAccount extends StatelessWidget {
               title: 'recovery_key'.i18n,
               showArrow: true,
               child: CBadge(
+                // TODO: if hasCopiedKey == false
                 showBadge: true,
                 count: 1,
               ),

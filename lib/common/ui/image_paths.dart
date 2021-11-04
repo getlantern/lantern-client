@@ -63,7 +63,7 @@ class ImagePaths {
   static const share = 'assets/images/share.svg';
   static const placeholder = 'assets/images/placeholder.svg';
   static const tag = 'assets/images/tag.svg';
-  static const arrow = 'assets/images/arrow.svg';
+  static const arrow_down = 'assets/images/arrow_down.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

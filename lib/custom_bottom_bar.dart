@@ -83,7 +83,7 @@ class CustomBottomBar extends StatelessWidget {
             onTap: () => onTap!(2),
             icon: CBadge(
               count: 1,
-              // TODO: hide this if the user has saved the recovery key
+              // TODO: if hasCopiedKey == false
               showBadge: true,
               child: SvgPicture.asset(
                 ImagePaths.account,
