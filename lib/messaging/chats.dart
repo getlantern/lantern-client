@@ -57,6 +57,36 @@ class Chats extends StatelessWidget {
                           a.value.mostRecentMessageTs)
                       .toInt();
                 });
+                if (contacts.isEmpty) {
+                  return Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: const CAssetImage(
+                              path: ImagePaths.placeholder, size: 300),
+                        ),
+                        CText(
+                            'You don’t have any contacts yet. Share your chat number or add a contact here!'
+                                .i18n,
+                            style: tsBody1Color(grey5)),
+                        Expanded(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              constraints: const BoxConstraints.expand(),
+                              child: CustomPaint(
+                                painter:
+                                    ArrowPainter(), // TODO: definitely need to fine-tune this in a responsive way once the illustration is ready
+                              )),
+                        ),
+                      ],
+                    ),
+                  );
+                }
                 return ListView.builder(
                   itemCount: contacts.length,
                   physics: defaultScrollPhysics,

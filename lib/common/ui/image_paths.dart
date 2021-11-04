@@ -61,8 +61,9 @@ class ImagePaths {
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
   static const share = 'assets/images/share.svg';
-  static const image_inactive = 'assets/images/image_inactive.svg';
+  static const placeholder = 'assets/images/placeholder.svg';
   static const tag = 'assets/images/tag.svg';
+  static const arrow = 'assets/images/arrow.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';

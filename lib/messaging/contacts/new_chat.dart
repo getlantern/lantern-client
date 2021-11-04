@@ -84,7 +84,7 @@ class _NewChatState extends State<NewChat> {
                     path: ImagePaths.keyboard_arrow_right,
                   ),
                 ),
-                onTap: () {}, // TODO: Share chat number
+                onTap: () {}, // TODO: Trigger native sharing
               ),
               /*
               * Scan QR Code
