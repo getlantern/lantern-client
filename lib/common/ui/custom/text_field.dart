@@ -17,6 +17,7 @@ class CTextField extends StatefulWidget {
   late final int? minLines;
   late final int? maxLines;
   late final AutovalidateMode? autovalidateMode;
+  List<TextInputFormatter>? inputFormatters;
 
   CTextField({
     required this.controller,
@@ -31,6 +32,7 @@ class CTextField extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.autovalidateMode,
+    this.inputFormatters,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -81,6 +83,7 @@ class _CTextFieldState extends State<CTextField> {
             },
             minLines: widget.minLines,
             maxLines: widget.maxLines,
+            inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
                 isDense: true,
                 floatingLabelBehavior: FloatingLabelBehavior.never,

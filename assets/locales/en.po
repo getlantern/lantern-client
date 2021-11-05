@@ -397,14 +397,17 @@ msgstr "Scan complete"
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
-msgid "add_via_id"
-msgstr "Add via Username or Messenger ID"
+msgid "add_via_chat_number"
+msgstr "Add via Chat Number"
 
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "chat_number_invalid"
-msgstr "Please enter a valid username or Messenger ID"
+msgid "chat_number_not_found"
+msgstr "Unable to find chat number, please check the number and try again"
+
+msgid "unable_to_add_contact"
+msgstr "Unexpected error adding contact, please try again later"
 
 msgid "chat_number_type"
 msgstr "Type a Chat Number"

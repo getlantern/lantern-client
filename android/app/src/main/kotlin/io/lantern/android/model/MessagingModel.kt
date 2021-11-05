@@ -39,6 +39,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
             sendSignal(signal, false) // since we have not accepted yet
         }
+
+        messaging
     }
 
     fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
@@ -113,6 +115,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     "expiresAtMillis" to result.expiresAtMillis
                 )
             }
+            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+                call.argument("unsafeContactId")!!
+            )
             "addOrUpdateDirectContact" -> {
                 val unsafeId = call.argument<String>("unsafeId")
                 val chatNumber = call.argument<ByteArray>("chatNumber")?.let {
@@ -125,28 +130,22 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     else -> null
                 }
                 val minimumVerificationLevel = Model.VerificationLevel.UNVERIFIED
-                var applicationIds: Map<Int, String>? = null
-                var updateApplicationData: ((MutableMap<String, Any>) -> Unit)? = null
-                if (call.argument<Any>("tsVerificationReminder") != null) {
-                    applicationIds = mapOf(0 to "tsVerificationReminder")
-                    updateApplicationData = { appData ->
-                        appData["tsVerificationReminder"] =
-                            call.argument<Any>("tsVerificationReminder")!!
-                    }
-                }
                 return messaging.addOrUpdateDirectContact(
                     unsafeId,
                     displayName,
                     source,
-                    applicationIds,
-                    minimumVerificationLevel,
-                    chatNumber,
-                    updateApplicationData,
+                    minimumVerificationLevel = minimumVerificationLevel,
+                    chatNumber = chatNumber,
                 )
             }
-            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
-                call.argument("unsafeContactId")!!
-            )
+            "dismissVerificationReminder" -> {
+                val unsafeId = call.argument<String>("unsafeId")
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId = unsafeId
+                ) { appData ->
+                    appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
+                }
+            }
             "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
             "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)

@@ -75,7 +75,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ContactInfoArgs>();
-          return _i6.ContactInfo(key: args.key, contact: args.contact);
+          return _i6.ContactInfo(model: args.model, contact: args.contact);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -92,7 +92,7 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false),
-    AddViaIdentifier.name: (routeData) => _i1.CustomPage<void>(
+    AddViaChatNumber.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
           return _i8.AddViaChatNumber();
@@ -351,7 +351,7 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(Conversation.name, path: 'conversation'),
         _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
         _i1.RouteConfig(NewChat.name, path: 'newChat'),
-        _i1.RouteConfig(AddViaIdentifier.name, path: 'addViaIdentifier'),
+        _i1.RouteConfig(AddViaChatNumber.name, path: 'addViaChatNumber'),
         _i1.RouteConfig(Introduce.name, path: 'introduce'),
         _i1.RouteConfig(Introductions.name, path: 'introductions'),
         _i1.RouteConfig(Welcome.name, path: 'welcome'),
@@ -410,18 +410,19 @@ class ConversationArgs {
 }
 
 class ContactInfo extends _i1.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({_i26.Key? key, required _i26.Contact contact})
+  ContactInfo(
+      {required _i26.MessagingModel model, required _i26.Contact contact})
       : super(name,
             path: 'contactInfo',
-            args: ContactInfoArgs(key: key, contact: contact));
+            args: ContactInfoArgs(model: model, contact: contact));
 
   static const String name = 'ContactInfo';
 }
 
 class ContactInfoArgs {
-  const ContactInfoArgs({this.key, required this.contact});
+  const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i26.Key? key;
+  final _i26.MessagingModel model;
 
   final _i26.Contact contact;
 }
@@ -432,10 +433,10 @@ class NewChat extends _i1.PageRouteInfo {
   static const String name = 'NewChat';
 }
 
-class AddViaIdentifier extends _i1.PageRouteInfo {
-  const AddViaIdentifier() : super(name, path: 'addViaIdentifier');
+class AddViaChatNumber extends _i1.PageRouteInfo {
+  const AddViaChatNumber() : super(name, path: 'addViaChatNumber');
 
-  static const String name = 'AddViaIdentifier';
+  static const String name = 'AddViaChatNumber';
 }
 
 class Introduce extends _i1.PageRouteInfo {

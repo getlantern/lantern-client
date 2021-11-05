@@ -89,7 +89,7 @@ class MessageBubble extends StatelessWidget {
       menuWidth: maxBubbleWidth(context),
       onOpen: onOpenMenu,
       menu: messageMenu(context, model),
-      child: Column(
+      builder: (menuOpen) => Column(
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
@@ -409,7 +409,7 @@ class MessageBubble extends StatelessWidget {
                     setState(() {
                       textCopied = true;
                     });
-                    Future.delayed(defaultAnimationDuration,
+                    Future.delayed(longAnimationDuration,
                         () => setState(() => textCopied = false));
                   },
                 ),
