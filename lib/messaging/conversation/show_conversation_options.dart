@@ -30,7 +30,8 @@ Future showConversationOptions({
                 label: 'view_contact_info'.i18n,
                 onTap: () async {
                   await bottomContext.router.pop();
-                  await bottomContext.pushRoute(ContactInfo(contact: contact));
+                  await bottomContext
+                      .pushRoute(ContactInfo(model: model, contact: contact));
                 },
               ),
               BottomModalItem(
