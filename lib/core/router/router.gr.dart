@@ -20,7 +20,7 @@ import 'package:lantern/account/pro_account.dart' as _i14;
 import 'package:lantern/account/settings.dart' as _i15;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i3;
-import 'package:lantern/messaging/contacts/add_contact_identifier.dart' as _i8;
+import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
 import 'package:lantern/messaging/contacts/contact_info.dart' as _i6;
 import 'package:lantern/messaging/contacts/new_message.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
@@ -70,7 +70,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ContactInfoArgs>();
-          return _i6.ContactInfo(key: args.key, contact: args.contact);
+          return _i6.ContactInfo(model: args.model, contact: args.contact);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -87,10 +87,10 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false),
-    AddViaIdentifier.name: (routeData) => _i1.CustomPage<void>(
+    AddViaChatNumber.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
-          return _i8.AddViaIdentifier();
+          return _i8.AddViaChatNumber();
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -303,7 +303,7 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(Conversation.name, path: 'conversation'),
         _i1.RouteConfig(ContactInfo.name, path: 'contactInfo'),
         _i1.RouteConfig(NewMessage.name, path: 'newMessage'),
-        _i1.RouteConfig(AddViaIdentifier.name, path: 'addViaIdentifier'),
+        _i1.RouteConfig(AddViaChatNumber.name, path: 'addViaChatNumber'),
         _i1.RouteConfig(Introduce.name, path: 'introduce'),
         _i1.RouteConfig(Introductions.name, path: 'introductions')
       ];
@@ -359,18 +359,19 @@ class ConversationArgs {
 }
 
 class ContactInfo extends _i1.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({_i22.Key? key, required _i22.Contact contact})
+  ContactInfo(
+      {required _i22.MessagingModel model, required _i22.Contact contact})
       : super(name,
             path: 'contactInfo',
-            args: ContactInfoArgs(key: key, contact: contact));
+            args: ContactInfoArgs(model: model, contact: contact));
 
   static const String name = 'ContactInfo';
 }
 
 class ContactInfoArgs {
-  const ContactInfoArgs({this.key, required this.contact});
+  const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i22.Key? key;
+  final _i22.MessagingModel model;
 
   final _i22.Contact contact;
 }
@@ -381,10 +382,10 @@ class NewMessage extends _i1.PageRouteInfo {
   static const String name = 'NewMessage';
 }
 
-class AddViaIdentifier extends _i1.PageRouteInfo {
-  const AddViaIdentifier() : super(name, path: 'addViaIdentifier');
+class AddViaChatNumber extends _i1.PageRouteInfo {
+  const AddViaChatNumber() : super(name, path: 'addViaChatNumber');
 
-  static const String name = 'AddViaIdentifier';
+  static const String name = 'AddViaChatNumber';
 }
 
 class Introduce extends _i1.PageRouteInfo {

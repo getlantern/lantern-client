@@ -70,6 +70,7 @@ export 'ui/labeled_divider.dart';
 export 'ui/play_button.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/path_building.dart';
+export 'ui/list_section_header.dart';
 
 // UI functions
 export 'ui/show_confirmation_dialog.dart';

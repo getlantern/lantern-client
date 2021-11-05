@@ -17,7 +17,7 @@ lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
 
-lib/core/router/router.gr.dart: lib/core/router/router.dart lib/core/router/tabs/*
+lib/core/router/router.gr.dart: $(shell find lib -name \*.dart -print)
 	@flutter packages pub run build_runner build --delete-conflicting-outputs
 
 test:

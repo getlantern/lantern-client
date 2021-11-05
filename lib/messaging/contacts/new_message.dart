@@ -17,6 +17,28 @@ class _NewMessageState extends State<NewMessage> {
     super.initState();
   }
 
+  void onContactAdded(dynamic contact) {
+    if (contact != null) {
+      setState(() {
+        _updatedContact = contact;
+      });
+      showSnackbar(
+          context: context,
+          content: 'qr_success_snackbar'
+              .i18n
+              .fill([_updatedContact!.displayNameOrFallback]),
+          duration: const Duration(milliseconds: 4000),
+          action: SnackBarAction(
+            textColor: pink3,
+            label: 'start_chat'.i18n.toUpperCase(),
+            onPressed: () async {
+              await context.pushRoute(
+                  Conversation(contactId: _updatedContact!.contactId));
+            },
+          ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
@@ -40,12 +62,7 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsetsDirectional.only(
-                    start: 4, top: 21, bottom: 3),
-                child: CText('add_new_contact'.i18n.toUpperCase(),
-                    maxLines: 1, style: tsOverline),
-              ),
+              ListSectionHeader('add_new_contact'.i18n),
               const CDivider(),
               /*
               * Scan QR Code
@@ -72,51 +89,32 @@ class _NewMessageState extends State<NewMessage> {
                 ),
                 onTap: () async => await context
                     .pushRoute(
-                  FullScreenDialogPage(
-                      widget: AddViaQR(
-                    me: me,
-                    isVerificationMode: false,
-                  )),
-                )
-                    .then((value) {
-                  // * we just successfully added someone in person
-                  if (value != null) {
-                    setState(() {
-                      _updatedContact = value as Contact;
-                    });
-                    showSnackbar(
-                        context: context,
-                        content: 'qr_success_snackbar'
-                            .i18n
-                            .fill([_updatedContact!.displayNameOrFallback]),
-                        duration: const Duration(milliseconds: 4000),
-                        action: SnackBarAction(
-                          textColor: pink3,
-                          label: 'start_chat'.i18n.toUpperCase(),
-                          onPressed: () async {
-                            await context.pushRoute(Conversation(
-                                contactId: _updatedContact!.contactId));
-                          },
-                        ));
-                  }
-                }),
+                      FullScreenDialogPage(
+                          widget: AddViaQR(
+                        me: me,
+                        isVerificationMode: false,
+                      )),
+                    )
+                    .then(onContactAdded),
               ),
               /*
-              * Add via Username or ID
+              * Add via Chat Number
               */
               CListTile(
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),
-                content: CText('add_via_id'.i18n, style: tsSubtitle1Short),
+                content:
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
                   ),
                 ),
-                onTap: () async =>
-                    await context.pushRoute(const AddViaIdentifier()),
+                onTap: () async => await context
+                    .pushRoute(const AddViaChatNumber())
+                    .then(onContactAdded),
               ),
               /*
               * Contact List
