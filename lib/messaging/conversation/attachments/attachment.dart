@@ -178,7 +178,7 @@ abstract class VisualAttachment extends StatelessWidget {
           defaultIcon: Icons.image,
           scrimAttachment: true,
           onTap: () async {
-            await context.router.push(
+            await context.pushRoute(
               FullScreenDialogPage(widget: buildViewer(model)),
             );
             await SystemChrome.setPreferredOrientations([

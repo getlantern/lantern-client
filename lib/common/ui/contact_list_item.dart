@@ -15,6 +15,7 @@ class ContactListItem extends StatelessWidget {
     required this.leading,
     this.trailing,
     this.onTap,
+    this.focusedMenu,
     this.showDivider = true,
   }) : super();
 
@@ -26,12 +27,14 @@ class ContactListItem extends StatelessWidget {
   final Widget leading;
   final Widget? trailing;
   final void Function()? onTap;
+  final SizedBox? focusedMenu;
   final bool showDivider;
 
   @override
   Widget build(BuildContext context) => Wrap(
         children: [
           CListTile(
+              focusedMenu: focusedMenu,
               leading: leading,
               content: Column(
                 mainAxisSize: MainAxisSize.min,

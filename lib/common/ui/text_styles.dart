@@ -65,6 +65,11 @@ CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
 
+CTextStyle getTextStyle(bool secondary) {
+  if (secondary) return tsButtonPink;
+  return tsButtonWhite;
+}
+
 /*
 *********
 EMOTICONS

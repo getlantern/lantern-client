@@ -9,19 +9,22 @@ class CTextField extends StatefulWidget {
   late final String? initialValue;
   late final String label;
   late final String? helperText;
-  late final Icon? prefixIcon;
+  late final String? hintText;
+  late final Widget? prefixIcon;
   late final Widget? suffixIcon;
   late final TextInputType? keyboardType;
   late final bool? enabled;
   late final int? minLines;
   late final int? maxLines;
   late final AutovalidateMode? autovalidateMode;
+  List<TextInputFormatter>? inputFormatters;
 
   CTextField({
     required this.controller,
     this.initialValue,
     required this.label,
     this.helperText,
+    this.hintText,
     this.prefixIcon,
     this.suffixIcon,
     this.keyboardType,
@@ -29,6 +32,7 @@ class CTextField extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.autovalidateMode,
+    this.inputFormatters,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -70,17 +74,22 @@ class _CTextFieldState extends State<CTextField> {
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
             validator: (value) {
+              // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
               var result = widget.controller.validate(value);
-              setState(() {});
+              WidgetsBinding.instance?.addPostFrameCallback((_) {
+                setState(() {});
+              });
               return result;
             },
             minLines: widget.minLines,
             maxLines: widget.maxLines,
+            inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 // we handle floating labels using our custom method below
                 labelText: widget.label,
                 helperText: widget.helperText,
+                hintText: widget.hintText,
                 helperMaxLines: 2,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -100,11 +109,16 @@ class _CTextFieldState extends State<CTextField> {
                     color: grey3,
                   ),
                 ),
-                prefixIcon: widget.prefixIcon,
-                suffixIcon: fieldKey.currentState?.mounted == true &&
-                        fieldKey.currentState?.hasError == true
-                    ? CAssetImage(path: ImagePaths.error, color: indicatorRed)
-                    : widget.suffixIcon),
+                prefixIcon:
+                    // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
+                    Transform.scale(scale: 0.5, child: widget.prefixIcon),
+                suffixIcon: Transform.scale(
+                    scale: 0.5,
+                    child: fieldKey.currentState?.mounted == true &&
+                            fieldKey.currentState?.hasError == true
+                        ? CAssetImage(
+                            path: ImagePaths.error, color: indicatorRed)
+                        : widget.suffixIcon)),
           ),
         ),
         Container(

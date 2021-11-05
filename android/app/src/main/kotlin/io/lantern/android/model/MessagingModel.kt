@@ -39,6 +39,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
             sendSignal(signal, false) // since we have not accepted yet
         }
+
+        messaging
     }
 
     fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
@@ -73,12 +75,30 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     }
                 }
             }
+            "findChatNumberByShortNumber" -> {
+                messaging.findChatNumberByShortNumber(
+                    call.argument<String>("shortNumber")!!
+                ) { chatNumber, err ->
+                    if (err != null) {
+                        result.error(
+                            "failed",
+                            err.toString(),
+                            null,
+                        )
+                    } else {
+                        result.success(chatNumber!!.toByteArray())
+                    }
+                }
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+          /*
+          * Contacts
+          */
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
             "addProvisionalContact" -> messaging.addProvisionalContact(
@@ -86,8 +106,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    else -> Model.ContactSource.UNKNOWN
+                    else -> null
                 },
+                Model.VerificationLevel.VERIFIED,
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
@@ -95,8 +116,47 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 )
             }
             "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
-                call.argument("contactId")!!
+                call.argument("unsafeContactId")!!
             )
+            "addOrUpdateDirectContact" -> {
+                val unsafeId = call.argument<String>("unsafeId")
+                val chatNumber = call.argument<ByteArray>("chatNumber")?.let {
+                    Model.ChatNumber.parseFrom(it)
+                }
+                val displayName = call.argument<String>("displayName")
+                val source = when (call.argument<Any>("source")) {
+                    "qr" -> Model.ContactSource.APP1
+                    "id" -> Model.ContactSource.APP2
+                    else -> null
+                }
+                val minimumVerificationLevel = Model.VerificationLevel.UNVERIFIED
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId,
+                    displayName,
+                    source,
+                    minimumVerificationLevel = minimumVerificationLevel,
+                    chatNumber = chatNumber,
+                )
+            }
+            "dismissVerificationReminder" -> {
+                val unsafeId = call.argument<String>("unsafeId")
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId = unsafeId
+                ) { appData ->
+                    appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
+                }
+            }
+            "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
+            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
+            "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)
+            "blockDirectContact" -> messaging.blockDirectContact(call.argument("unsafeId")!!)
+            "unblockDirectContact" -> messaging.unblockDirectContact(call.argument("unsafeId")!!)
+            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+          /*
+          * Messages 
+          */
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
                 call.argument("seconds")!!
@@ -116,10 +176,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
-            "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+          /*
+          * Attachments
+          */
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
@@ -164,6 +223,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "relayTo" -> {
                 return internalsdk.Internalsdk.relayTo(call.arguments as String)
             }
+          /*
+          * Search
+          */
             "searchContacts" ->
                 messaging
                     .searchContacts(

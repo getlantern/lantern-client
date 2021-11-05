@@ -5,11 +5,14 @@ void showBottomModal({
   required List<Widget> children,
   bool isDismissible = true,
   Widget? title,
-  String? subtitle = '',
+  CText? subtitle,
 }) {
   showModalBottomSheet(
       context: context,
+      backgroundColor: white,
       isDismissible: isDismissible,
+      isScrollControlled:
+          true, // this allows the sheet to grow up to full height if necessary
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
@@ -21,11 +24,11 @@ void showBottomModal({
                     padding: const EdgeInsets.all(16),
                     child: Center(child: title),
                   ),
-                  if (subtitle!.isNotEmpty)
+                  if (subtitle != null)
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
-                          start: 16.0, end: 16.0, bottom: 16.0),
-                      child: CText(subtitle, style: tsBody1),
+                          start: 24.0, end: 24.0, bottom: 16.0),
+                      child: subtitle,
                     ),
                   const CDivider(),
                 ],

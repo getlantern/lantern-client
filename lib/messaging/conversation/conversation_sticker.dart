@@ -8,19 +8,6 @@ class ConversationSticker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var source = 'banner_source_unknown'.i18n;
-    // switch (contact.source) {
-    //   case ContactSource.APP1:
-    //     source = 'banner_source_qr'.i18n;
-    //     break;
-    //   case ContactSource.APP2:
-    //     source = 'banner_source_id'.i18n;
-    //     break;
-    //   case ContactSource.INTRODUCTION:
-    //     source = 'banner_source_intro'.i18n;
-    //     break;
-    // }
-
     return Container(
       height: calculateStickerHeight(context, messageCount),
       child: Column(
@@ -94,10 +81,6 @@ class ConversationSticker extends StatelessWidget {
                                 : CText('banner_messages_persist'.i18n,
                                     style: tsBody2.copiedWith(color: grey5)),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          //   child: CText(source, style: tsBody2.copiedWith(color: grey5)),
-                          // ),
                         ],
                       ),
                     ],

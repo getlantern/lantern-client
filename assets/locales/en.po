@@ -56,9 +56,6 @@ msgstr "Desktop version"
 msgid "settings"
 msgstr "Settings"
 
-msgid "display_name"
-msgstr "Display Name: %s"
-
 msgid "proxy_all"
 msgstr "Proxy everything"
 
@@ -203,10 +200,13 @@ msgid "reject"
 msgstr "Reject"
 
 msgid "info_dialog_confirm"
-msgstr "Got it"
+msgstr "OK"
 
 msgid "copied"
 msgstr "Copied!"
+
+msgid "saved"
+msgstr "Saved!"
 
 msgid "new_message"
 msgstr "New Message"
@@ -214,8 +214,74 @@ msgstr "New Message"
 msgid "your_contact_info"
 msgstr "Your Contact Info"
 
+msgid "display_name"
+msgstr "Display Name:"
+
+msgid "edit"
+msgstr "Edit"
+
+msgid "save_error"
+msgstr "Something went wrong while saving."
+
+msgid "username"
+msgstr "Username:"
+
+msgid "messenger_id"
+msgstr "Messenger ID:"
+
+msgid "more_options"
+msgstr "More options"
+
+msgid "block_user"
+msgstr "Block user"
+
+msgid "unblock_user"
+msgstr "Unblock user"
+
+msgid "block"
+msgstr "Block"
+
+msgid "unblock"
+msgstr "Unblock"
+
+msgid "block_info_title"
+msgstr "Block %s ?"
+
+msgid "unblock_info_title"
+msgstr "Unblock %s ?"
+
+msgid "block_info_description"
+msgstr "Blocking this user will delete the message history, and prevent them from contacting you in the future. You can unblock users from the settings menu."
+
+msgid "unblock_info_description"
+msgstr "Are you sure you want to unblock this contact?"
+
+msgid "block_info_checkbox"
+msgstr "I understand that this will delete all message history."
+
+msgid "unblock_info_checkbox"
+msgstr "I confirm I want to unblock this contact."
+
+msgid "delete_permanently"
+msgstr "Delete user permanently"
+
+msgid "delete_contact"
+msgstr "Delete contact"
+
+msgid "delete_info_description"
+msgstr "Once deleted, you will need to scan add their contact information if you want to message them again."
+
+msgid "add_new_contact"
+msgstr "Add new contact:"
+
+msgid "add_contact"
+msgstr "Add Contact"
+
 msgid "scan_qr_code"
-msgstr "Scan Contact QR Code"
+msgstr "Scan QR Code"
+
+msgid "add_contact_in_person"
+msgstr "Add contacts in person"
 
 msgid "start_chat"
 msgstr "Start chat"
@@ -226,14 +292,11 @@ msgstr "All messages will not disappear for you and your contact."
 msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and your contact."
 
-msgid "delete_contact_confirmation"
-msgstr "Once deleted, you will need to scan their QR code or have a mutual friend send an introduction, to message them again."
-
 msgid "delete"
 msgstr "Delete"
 
-msgid "conversation_title_bottomsheet"
-msgstr "Conversation Menu"
+msgid "view_contact_info"
+msgstr "View Contact Info"
 
 msgid "off"
 msgstr "Off"
@@ -283,20 +346,35 @@ msgstr "Introductions Sent!"
 msgid "no_contacts_yet"
 msgstr "No contacts yet"
 
+msgid "contact_verification"
+msgstr "Contact Verification"
+
+msgid "verification"
+msgstr "Verification"
+
+msgid "contact_verification_description"
+msgstr "Contact verification is always available from the message menu in the top right."
+
 msgid "qr_error_description"
-msgstr "Something went wrong while scanning the QR code"
+msgstr "Something went wrong while scanning this QR code."
 
-msgid "qr_scanner"
-msgstr "QR Code"
+msgid "qr_info_verification_title"
+msgstr "In Person Contact Verification"
 
-msgid "qr_info_title"
-msgstr "Scan QR Code"
+msgid "qr_info_f2f_title"
+msgstr "QR Code Scanning"
 
-msgid "qr_info_description"
-msgstr "To start a message with your friend, scan each other's QR code.  This process will verify the security and end-to-end encryption of your conversation."
+msgid "qr_info_verification_des"
+msgstr "To verify your contact, scan each other's QR codes.\n\nThis process ensures the privacy and end-to-end encryption of your conversations."
 
-msgid "qr_info_scan"
-msgstr "Scan each others QR codes, to add a contact"
+msgid "qr_info_f2f_des"
+msgstr "To add your friend as a contact, scan each other's QR codes.\n\nThis process ensures the privacy and end-to-end encryption of your conversations."
+
+msgid "qr_info_verification_scan"
+msgstr "Scan each others QR codes to verify."
+
+msgid "qr_info_f2f_scan"
+msgstr "Scan each others QR codes to add a contact."
 
 msgid "qr_success_snackbar"
 msgstr "%s is a Contact"
@@ -310,20 +388,29 @@ msgstr "Scan complete"
 msgid "qr_for_your_contact"
 msgstr "Your QR Code"
 
-msgid "qr_add_via_id"
-msgstr "Add via Messenger ID"
+msgid "add_via_chat_number"
+msgstr "Add via Chat Number"
 
 msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
-msgid "contact_id_error_description"
-msgstr "Something went wrong while adding this contact"
+msgid "chat_number_not_found"
+msgstr "Unable to find chat number, please check the number and try again"
 
-msgid "contact_id_enter_manually"
-msgstr "Enter your friend's Messenger ID manually"
+msgid "unable_to_add_contact"
+msgstr "Unexpected error adding contact, please try again later"
 
-msgid "contact_id_messenger_id"
-msgstr "Messenger ID"
+msgid "chat_number_type"
+msgstr "Type a Chat Number"
+
+msgid "chat_number"
+msgstr "Chat Number"
+
+msgid "messenger_id_invalid"
+msgstr "Invalid Messenger ID"
+
+msgid "username_not_found"
+msgstr "Username not found"
 
 msgid "contact_id_your_id"
 msgstr "Your Messenger ID"
@@ -424,35 +511,17 @@ msgstr "Error fetching Message Preview"
 msgid "message_was_deleted"
 msgstr "Message was deleted"
 
+msgid "contact_was_deleted"
+msgstr "%s has been deleted from your contacts."
+
+msgid "contact_was_blocked"
+msgstr "%s has been blocked."
+
+msgid "contact_was_unblocked"
+msgstr "%s has been unblocked."
+
 msgid "close"
 msgstr "Close"
-
-msgid "call_contact"
-msgstr "Call %s ?"
-
-msgid "call"
-msgstr "Call"
-
-msgid "incoming_call"
-msgstr "Incoming Call"
-
-msgid "call_from"
-msgstr "From %s"
-
-msgid "incoming_call_from"
-msgstr "Incoming call from %s"
-
-msgid "touch_here_to_open_call"
-msgstr "Touch here to open call"
-
-msgid "in_call_with"
-msgstr "In call with %s"
-
-msgid "unable_to_complete_call"
-msgstr "Unable to complete call"
-
-msgid "please_try_again"
-msgstr "Please try again"
 
 msgid "dismiss"
 msgstr "Dismiss"
@@ -570,3 +639,63 @@ msgstr "End Call"
 
 msgid "unnamed_contact"
 msgstr "Unnamed Contact"
+
+msgid "verify_contact"
+msgstr "Verify %s"
+
+msgid "verified"
+msgstr "Verified"
+
+msgid "pending_verification"
+msgstr "Pending verification"
+
+msgid "verify_description"
+msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
+
+msgid "verify_in_person"
+msgstr "Verify in person"
+
+msgid "verify_via_call"
+msgstr "Verify via voice call"
+
+msgid "dismiss_notification"
+msgstr "Dismiss Notification"
+
+msgid "call_contact"
+msgstr "Call %s ?"
+
+msgid "call"
+msgstr "Call"
+
+msgid "incoming_call"
+msgstr "Incoming Call"
+
+msgid "call_from"
+msgstr "From %s"
+
+msgid "incoming_call_from"
+msgstr "Incoming call from %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Touch here to open call"
+
+msgid "in_call_with"
+msgstr "In call with %s"
+
+msgid "unable_to_complete_call"
+msgstr "Unable to complete call"
+
+msgid "undo_verification"
+msgstr "Undo verification"
+
+msgid "undo_verification"
+msgstr "Undo verification"
+
+msgid "mark_as_verified"
+msgstr "Mark as verified"
+
+msgid "verification_panel_success"
+msgstr "Verification success! Your messages with %s are secure."
+
+msgid "verification_panel_pending"
+msgstr "This is your verification number. Check that your number matches %s's exactly before marking them verified."

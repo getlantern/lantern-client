@@ -43,7 +43,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
   @override
   void initState() {
     super.initState();
-    context.loaderOverlay.show();
+    context.loaderOverlay.show(widget: spinner);
     widget.model.decryptVideoForPlayback(widget.attachment).catchError((e) {
       context.loaderOverlay.hide();
     }).then((videoFilename) {

@@ -89,7 +89,7 @@ class MessageBubble extends StatelessWidget {
       menuWidth: maxBubbleWidth(context),
       onOpen: onOpenMenu,
       menu: messageMenu(context, model),
-      child: Column(
+      builder: (menuOpen) => Column(
         crossAxisAlignment:
             isOutbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
@@ -368,7 +368,7 @@ class MessageBubble extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -405,10 +405,12 @@ class MessageBubble extends StatelessWidget {
                       : ImagePaths.content_copy,
                   content: 'copy_text'.i18n,
                   onTap: () {
-                    copyText(context);
+                    copyText(context, message.text);
                     setState(() {
                       textCopied = true;
                     });
+                    Future.delayed(longAnimationDuration,
+                        () => setState(() => textCopied = false));
                   },
                 ),
               ),
@@ -447,24 +449,6 @@ class MessageBubble extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void copyText(BuildContext context) {
-    showSnackbar(
-      context: context,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-              child: CText(
-            'copied'.i18n,
-            style: tsBody1Color(white),
-            textAlign: TextAlign.start,
-          )),
-        ],
-      ),
-    );
-    Clipboard.setData(ClipboardData(text: message.text));
   }
 
   void deleteForMe(BuildContext context, MessagingModel model) {

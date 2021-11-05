@@ -6,8 +6,10 @@ import 'qr_scanner_border_painter.dart';
 
 class AddViaQR extends StatefulWidget {
   final Contact me;
+  final bool isVerificationMode;
 
-  AddViaQR({Key? key, required this.me}) : super(key: key);
+  AddViaQR({Key? key, required this.me, this.isVerificationMode = true})
+      : super(key: key);
 
   @override
   _AddViaQRState createState() => _AddViaQRState();
@@ -19,7 +21,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   int timeoutMillis = 0;
   late AnimationController countdownController;
 
-  bool usingId = false;
+  // bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
   bool scanning = false;
@@ -28,17 +30,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   ValueNotifier<Contact?>? contactNotifier;
   void Function()? listener;
 
+  // Helper functions
   final closeOnce = once();
-
-  final _formKey = GlobalKey<FormState>(debugLabel: 'contactIdInput');
-  late final contactIdController = CustomTextEditingController(
-      formKey: _formKey,
-      validator: (value) => value == null ||
-              value.isEmpty ||
-              value == widget.me.contactId.id ||
-              value.length != widget.me.contactId.id.length
-          ? 'contact_id_error_description'.i18n
-          : null);
+  final addOnce = once<Future<void>>();
 
   // THIS IS ONLY FOR DEBUGGING PURPOSES
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -54,24 +48,29 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
   }
 
-  final addProvisionalContactOnce = once<Future<void>>();
-
-  Future<void> addProvisionalContact(
-      MessagingModel model, String contactId, String source) async {
+  Future<void> _addProvisionalContact(
+      MessagingModel model, String unsafeId, String source) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
     }
-    var result = await model.addProvisionalContact(contactId, source: source);
 
-    contactNotifier = model.contactNotifier(contactId);
+    /* 
+    * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding an unverified provisional contact
+    */
+    var result = await model.addProvisionalContact(unsafeId, source);
+
+    // TODO: repeated pattern
+    // listen to the contact path for changes
+    // will return a Contact if there are any, otherwise null
+    contactNotifier = model.contactNotifier(unsafeId);
+
     listener = () async {
       var updatedContact = contactNotifier!.value;
       if (updatedContact != null &&
           updatedContact.mostRecentHelloTs >
               result['mostRecentHelloTsMillis']) {
         countdownController.stop(canceled: true);
-        // go back to New Message with the updatedContact info
         closeOnce(() => Navigator.pop(context, updatedContact));
       }
     };
@@ -82,12 +81,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
     final int expiresAt = result['expiresAtMillis'];
     (expiresAt > 0)
-        ? _onCountdownTriggered(expiresAt, contactId)
+        ? _onCountdownTriggered(expiresAt, unsafeId)
         : _onNoCountdown();
   }
 
   void _onNoCountdown() {
-    // TODO: we need to show something to the user to indicate that we're
+    // we need to show something to the user to indicate that we're
     // waiting on the other person to scan the QR code, but in this case
     // there is no time limit.
     setState(() {
@@ -118,9 +117,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     });
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
-        await addProvisionalContactOnce(() {
-          contactIdController.text = scanData.code;
-          return addProvisionalContact(model, scanData.code, 'qr');
+        await addOnce(() {
+          return _addProvisionalContact(model, scanData.code, 'qr');
         });
       } catch (e, s) {
         setState(() {
@@ -131,16 +129,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         await qrController?.pauseCamera();
       }
     });
-  }
-
-  void _onContactIdAdd() async {
-    // checking if the input field is not empty
-    if (_formKey.currentState!.validate()) {
-      await addProvisionalContactOnce(() {
-        return addProvisionalContact(
-            model, contactIdController.text.replaceAll('\-', ''), 'id');
-      });
-    }
   }
 
   @override
@@ -154,7 +142,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void dispose() {
     subscription?.cancel();
     qrController?.dispose();
-    contactIdController.dispose();
     countdownController.dispose();
     if (listener != null) {
       contactNotifier?.removeListener(listener!);
@@ -169,7 +156,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     model = context.watch<MessagingModel>();
-    return usingId ? renderIdForm(context) : renderQRScanner(context);
+    return renderQRScanner(context);
   }
 
   Widget renderQRScanner(BuildContext context) {
@@ -179,12 +166,22 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       // icon color
       topColor: grey5,
       title: Center(
-        child: CText('qr_scanner'.i18n,
+        child: CText(
+            widget.isVerificationMode
+                ? 'contact_verification'.i18n
+                : 'banner_source_qr'.i18n,
             style: tsHeading3.copiedWith(color: white)),
       ),
-      onCloseCallback: () => closeOnce(() => Navigator.pop(context, null)),
+      backButton: mirrorLTR(
+          context: context,
+          child: CAssetImage(
+            path: ImagePaths.arrow_back,
+            color: white,
+          )),
+      onBackCallback: () => Navigator.pop(context, null),
       child: Container(
         color: grey5,
+        padding: const EdgeInsetsDirectional.only(bottom: 20),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -204,7 +201,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         : Row(
                             children: [
                               CText(
-                                'qr_info_scan'.i18n,
+                                widget.isVerificationMode
+                                    ? 'qr_info_verification_scan'.i18n
+                                    : 'qr_info_f2f_scan'.i18n,
                                 style: tsBody1Color(white),
                               ),
                               Padding(
@@ -213,9 +212,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () => showInfoDialog(context,
-                                      title: 'qr_info_title'.i18n,
-                                      des: 'qr_info_description'.i18n,
-                                      icon: ImagePaths.qr_code,
+                                      title: widget.isVerificationMode
+                                          ? 'qr_info_verification_title'.i18n
+                                          : 'qr_info_f2f_title'.i18n,
+                                      des: widget.isVerificationMode
+                                          ? 'qr_info_verification_des'.i18n
+                                          : 'qr_info_f2f_des'.i18n,
+                                      assetPath: ImagePaths.qr_code,
                                       buttonText: 'info_dialog_confirm'
                                           .i18n
                                           .toUpperCase()),
@@ -231,11 +234,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              // QR scanner for other contact
+              /* 
+              * QR SCANNER
+              */
               Flexible(
-                flex: 2,
                 child: Container(
-                  margin: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  padding: const EdgeInsetsDirectional.only(
+                      top: 20.0, start: 70, end: 70, bottom: 20.0),
                   child: AspectRatio(
                     aspectRatio: 1,
                     child: Stack(
@@ -275,69 +280,25 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              // my own QR code
+              /* 
+              * YOUR QR CODE
+              */
               CText(
                 'qr_for_your_contact'.i18n,
                 style: tsBody1Color(white),
               ),
               Flexible(
-                flex: 2,
                 child: Container(
-                  margin: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  padding: const EdgeInsetsDirectional.only(
+                      top: 20.0, start: 70, end: 70, bottom: 20.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: QrImage(
                       data: widget.me.contactId.id,
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(16),
                       backgroundColor: white,
                       foregroundColor: black,
                       errorCorrectionLevel: QrErrorCorrectLevel.H,
-                    ),
-                  ),
-                ),
-              ),
-              // Trouble scanning
-              Container(
-                // the margin between the QR code and this section is 27,
-                // which we split into 16 margin on the QR and 11 margin here
-                // to make sure that the QR code ends up exactly the same size
-                // as the QR scanner. If we put the full 27 margin on the QR
-                // code, it would render a little smaller than the scanner.
-                margin: const EdgeInsetsDirectional.only(top: 27 - 16),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      usingId = true;
-                    });
-                    qrController?.pauseCamera();
-                  },
-                  child: Container(
-                    color: black,
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0, 15.0, 0, 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0, 16.0, 0),
-                          child: CText(
-                            'qr_add_via_id'.i18n,
-                            style: tsBody1Color(white),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0, 16.0, 0),
-                          child: mirrorLTR(
-                            context: context,
-                            child: CAssetImage(
-                                path: ImagePaths.keyboard_arrow_right,
-                                color: white),
-                          ),
-                        )
-                      ],
                     ),
                   ),
                 ),
@@ -346,210 +307,6 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       ),
     );
   }
-
-  Widget renderIdForm(BuildContext context) {
-    return showFullscreenDialog(
-      topColor: Colors.white,
-      iconColor: Colors.black,
-      context: context,
-      title: Flex(
-        direction: Axis.horizontal,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CText('qr_add_via_id'.i18n, style: tsHeading3),
-        ],
-      ),
-      backButton: mirrorLTR(
-          context: context,
-          child: const CAssetImage(path: ImagePaths.arrow_back)),
-      onBackCallback: () {
-        setState(() {
-          usingId = false;
-        });
-      },
-      onCloseCallback: () => Navigator.pop(context, null),
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (provisionalContactId == null &&
-                            !proceedWithoutProvisionals)
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(20.0),
-                            child: Wrap(
-                              children: [
-                                CTextField(
-                                    controller: contactIdController,
-                                    autovalidateMode: AutovalidateMode.disabled,
-                                    label: 'contact_id_messenger_id'.i18n,
-                                    helperText:
-                                        'contact_id_enter_manually'.i18n,
-                                    keyboardType: TextInputType.text,
-                                    minLines: 2,
-                                    maxLines: null,
-                                    suffixIcon: mirrorLTR(
-                                      context: context,
-                                      child: const CAssetImage(
-                                          path:
-                                              ImagePaths.keyboard_arrow_right),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        if (provisionalContactId != null ||
-                            proceedWithoutProvisionals)
-                          Expanded(
-                            flex: 0,
-                            child: Container(
-                              margin: const EdgeInsetsDirectional.all(20.0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: grey3,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0)),
-                              ),
-                              child: _renderWaitingUI(
-                                proceedWithoutProvisionals:
-                                    proceedWithoutProvisionals,
-                                countdownController: countdownController,
-                                timeoutMillis: timeoutMillis,
-                                fontColor: black,
-                                infoText: 'qr_info_waiting_id'.i18n,
-                              ),
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                        start: 10),
-                                    child: CText(
-                                      'contact_id_your_id'.i18n.toUpperCase(),
-                                      style: tsOverline,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Divider(thickness: 1, color: grey3),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        showSnackbar(
-                                          context: context,
-                                          content: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                  child: CText(
-                                                'copied'.i18n,
-                                                style: tsBody1Color(white),
-                                                textAlign: TextAlign.start,
-                                              )),
-                                            ],
-                                          ),
-                                        );
-                                        Clipboard.setData(ClipboardData(
-                                            text: widget.me.contactId.id));
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                                start: 10.0, end: 10),
-                                        child: CText(
-                                            humanizeContactId(
-                                                widget.me.contactId.id),
-                                            overflow: TextOverflow.visible,
-                                            style: tsSubtitle1),
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        Clipboard.setData(ClipboardData(
-                                            text: widget.me.contactId.id));
-                                        showSnackbar(
-                                          context: context,
-                                          content: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                  child: CText(
-                                                'copied'.i18n,
-                                                style: tsBody1Color(white),
-                                                textAlign: TextAlign.start,
-                                              )),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      icon: CAssetImage(
-                                        path: ImagePaths.content_copy,
-                                        size: 20,
-                                        color: black,
-                                      ))
-                                ],
-                              ),
-                              Divider(thickness: 1, color: grey3),
-                            ],
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              if (provisionalContactId == null && !proceedWithoutProvisionals)
-                Container(
-                  margin: const EdgeInsetsDirectional.only(bottom: 32),
-                  child: Button(
-                    width: 200,
-                    text: 'Submit'.i18n,
-                    onPressed: () {
-                      _onContactIdAdd();
-                      FocusScope.of(context).unfocus();
-                    },
-                    disabled: provisionalContactId != null ||
-                        proceedWithoutProvisionals,
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-String humanizeContactId(String id) {
-  var humanizedId = id.splitMapJoin(RegExp('.{4}'),
-      onMatch: (m) => '${m[0]}', // (or no onMatch at all)
-      onNonMatch: (n) => '-');
-
-  return humanizedId.substring(1, humanizedId.length - 1);
 }
 
 class _renderWaitingUI extends StatelessWidget {
