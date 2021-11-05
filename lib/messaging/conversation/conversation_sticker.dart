@@ -81,21 +81,6 @@ class ConversationSticker extends StatelessWidget {
                                 : CText('banner_messages_persist'.i18n,
                                     style: tsBody2.copiedWith(color: grey5)),
                           ),
-                          // TODO: used for testing purposes, remove
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          //   child: CText(
-                          //       contact.applicationData[
-                          //                   'tsVerificationReminder'] !=
-                          //               null
-                          //           ? contact
-                          //               .applicationData[
-                          //                   'tsVerificationReminder']!
-                          //               .int_3
-                          //               .toString()
-                          //           : 'never dismissed reminder',
-                          //       style: tsBody2.copiedWith(color: grey5)),
-                          // ),
                         ],
                       ),
                     ],
@@ -104,18 +89,6 @@ class ConversationSticker extends StatelessWidget {
               ),
             ),
           ),
-          // TODO: used for testing purposes, remove
-          // GestureDetector(
-          //     onTap: () async {
-          //       await model.addOrUpdateDirectContact(
-          //           unsafeId: contact.contactId.id,
-          //           verificationLevel: contact.verificationLevel.name,
-          //           displayName:
-          //               DateTime.now().millisecondsSinceEpoch.toString(),
-          //           tsVerificationReminder:
-          //               DateTime.now().millisecondsSinceEpoch);
-          //     },
-          //     child: CText('TESTING BUTTON', style: tsBody1)),
         ],
       ),
     );

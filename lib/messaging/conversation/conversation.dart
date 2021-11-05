@@ -328,13 +328,16 @@ class ConversationState extends State<Conversation>
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
       // determine if we will show the verification warning badge
-      var tsSeenVerificationAlert =
-          contact.applicationData['tsVerificationReminder']?.int_3;
-      if (tsSeenVerificationAlert != null) {
-        shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch -
-                tsSeenVerificationAlert.toInt() >=
-            twoWeeksInMillis;
-      }
+      var verificationReminderLastDismissed = contact
+              .applicationData['verificationReminderLastDismissed']?.int_3
+              .toInt() ??
+          0;
+      final contactUnverified =
+          contact.verificationLevel != VerificationLevel.VERIFIED;
+      shouldShowVerificationAlert = contactUnverified &&
+          DateTime.now().millisecondsSinceEpoch -
+                  verificationReminderLastDismissed >=
+              twoWeeksInMillis;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -356,20 +359,16 @@ class ConversationState extends State<Conversation>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (shouldShowVerificationAlert &&
-                      contact.verificationLevel != VerificationLevel.VERIFIED)
+                  if (shouldShowVerificationAlert)
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () {
-                        model.addOrUpdateDirectContact(
-                            unsafeId: contact.contactId.id,
-                            tsVerificationReminder:
-                                DateTime.now().millisecondsSinceEpoch);
                         showVerificationOptions(
                           model: model,
                           contact: contact,
                           bottomModalContext: bottomModalContext,
-                          topbarAnimationCallback: () async {
+                          showDismissNotification: shouldShowVerificationAlert,
+                          topBarAnimationCallback: () async {
                             setState(() => verifiedColor = indicatorGreen);
                             await Future.delayed(longAnimationDuration,
                                 () => setState(() => verifiedColor = black));

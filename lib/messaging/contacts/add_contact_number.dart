@@ -31,11 +31,11 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
         var chatNumber = ChatNumber.create();
         if (controller.text.length >= 82) {
           // this is a full chat number, use it directly
-          chatNumber.number = controller.text;
+          chatNumber.number = controller.text.withoutWhitespace;
         } else {
           try {
-            chatNumber =
-                await model.findChatNumberByShortNumber(controller.text);
+            chatNumber = await model
+                .findChatNumberByShortNumber(controller.text.withoutWhitespace);
           } catch (e) {
             setState(() => controller.error = 'chat_number_not_found'.i18n);
           }
