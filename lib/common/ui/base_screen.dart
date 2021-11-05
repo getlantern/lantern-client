@@ -47,7 +47,8 @@ class BaseScreen extends StatelessWidget {
                 title: title is String
                     ? CText(
                         title,
-                        style: tsHeading3.copiedWith(color: foregroundColor),
+                        style:
+                            tsHeading3.copiedWith(color: foregroundColor).short,
                       )
                     : title,
                 elevation: 1,

@@ -39,6 +39,8 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
         messaging.subscribeToWebRTCSignals("webrtc") { signal ->
             sendSignal(signal, false) // since we have not accepted yet
         }
+
+        messaging
     }
 
     fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
@@ -73,6 +75,21 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     }
                 }
             }
+            "findChatNumberByShortNumber" -> {
+                messaging.findChatNumberByShortNumber(
+                    call.argument<String>("shortNumber")!!
+                ) { chatNumber, err ->
+                    if (err != null) {
+                        result.error(
+                            "failed",
+                            err.toString(),
+                            null,
+                        )
+                    } else {
+                        result.success(chatNumber!!.toByteArray())
+                    }
+                }
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -89,53 +106,46 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    else -> Model.ContactSource.UNKNOWN
+                    else -> null
                 },
-                when (call.argument<Any>("verificationLevel")!!) {
-                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
-                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
-                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
-                    else -> Model.VerificationLevel.UNRECOGNIZED
-                },
+                Model.VerificationLevel.VERIFIED,
             ).let { result ->
                 mapOf(
                     "mostRecentHelloTsMillis" to result.mostRecentHelloTsMillis,
                     "expiresAtMillis" to result.expiresAtMillis
                 )
             }
+            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
+                call.argument("unsafeContactId")!!
+            )
             "addOrUpdateDirectContact" -> {
-                val unsafeId = call.argument<String>("unsafeId")!!
+                val unsafeId = call.argument<String>("unsafeId")
+                val chatNumber = call.argument<ByteArray>("chatNumber")?.let {
+                    Model.ChatNumber.parseFrom(it)
+                }
                 val displayName = call.argument<String>("displayName")
                 val source = when (call.argument<Any>("source")) {
                     "qr" -> Model.ContactSource.APP1
                     "id" -> Model.ContactSource.APP2
-                    else -> Model.ContactSource.UNKNOWN
+                    else -> null
                 }
-                val verificationLevel = when (call.argument<Any>("verificationLevel")!!) {
-                    "VERIFIED" -> Model.VerificationLevel.VERIFIED
-                    "UNVERIFIED" -> Model.VerificationLevel.UNVERIFIED
-                    "UNACCEPTED" -> Model.VerificationLevel.UNACCEPTED
-                    else -> Model.VerificationLevel.UNRECOGNIZED
-                }
-                var applicationIds: Map<Int, String>? = null
-                var updateApplicationData: ((MutableMap<String, Any>) -> Unit)? = null
-                if (call.argument<Any>("tsVerificationReminder") != null) {
-                    applicationIds = mapOf(0 to "tsVerificationReminder")
-                    updateApplicationData =
-                        { appData: MutableMap<String, Any> -> appData["tsVerificationReminder"] = call.argument<Any>("tsVerificationReminder")!! }
-                }
+                val minimumVerificationLevel = Model.VerificationLevel.UNVERIFIED
                 return messaging.addOrUpdateDirectContact(
                     unsafeId,
                     displayName,
                     source,
-                    applicationIds,
-                    verificationLevel,
-                    updateApplicationData,
+                    minimumVerificationLevel = minimumVerificationLevel,
+                    chatNumber = chatNumber,
                 )
             }
-            "deleteProvisionalContact" -> messaging.deleteProvisionalContact(
-                call.argument("unsafeContactId")!!
-            )
+            "dismissVerificationReminder" -> {
+                val unsafeId = call.argument<String>("unsafeId")
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId = unsafeId
+                ) { appData ->
+                    appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
+                }
+            }
             "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
             "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)

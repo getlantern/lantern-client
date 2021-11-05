@@ -11,6 +11,8 @@ void showBottomModal({
       context: context,
       backgroundColor: white,
       isDismissible: isDismissible,
+      isScrollControlled:
+          true, // this allows the sheet to grow up to full height if necessary
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
