@@ -6,9 +6,10 @@ class SecureNumberRecovery extends StatefulWidget {
 }
 
 class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
-  final _formKey = GlobalKey<FormState>(debugLabel: 'recovery');
+  final _formKey = GlobalKey<FormState>(debugLabel: 'recoveryInput');
   late final controller = CustomTextEditingController(
-      formKey: _formKey, validator: (value) => validateInput(value));
+      formKey: _formKey, validator: (value) => null);
+  var shouldSubmit = false;
 
   @override
   void initState() {
@@ -22,13 +23,21 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
     super.dispose();
   }
 
-  String? validateInput(String? value) {
-    // input is invalid
-    if (value == null || value.length < 82) {
-      return 'recovery_helper_text'.i18n;
+  void handleButtonPress(MessagingModel model) async {
+    controller.focusNode.unfocus();
+    if (_formKey.currentState?.validate() == true) {
+      try {
+        context.loaderOverlay.show(widget: spinner);
+        // await model.recoverAccount(controller.text); // TODO: once we have the recovery backend
+      } catch (e) {
+        setState(() => controller.error =
+            'unable to recover your account'.i18n); // TODO: translate
+      } finally {
+        context.loaderOverlay.hide();
+        await model.markIsOnboarded();
+        context.router.popUntilRoot();
+      }
     }
-    // input is valid
-    return null;
   }
 
   @override
@@ -38,16 +47,21 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
         title: 'secure_chat_number_recovery'.i18n,
         body: PinnedButtonLayout(
             content: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(top: 16.0),
-                child: CTextField(
-                  controller: controller,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  label: 'recovery_label'.i18n,
-                  prefixIcon: null,
-                  suffixIcon: null,
-                  minLines: 5,
-                  maxLines: null,
+              Form(
+                onChanged: () => setState(
+                    () => shouldSubmit = controller.text.length >= 200),
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 16.0),
+                  child: CTextField(
+                    controller: controller,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    label: 'recovery_label'.i18n,
+                    prefixIcon: null,
+                    suffixIcon: null,
+                    minLines: 5,
+                    maxLines: null,
+                  ),
                 ),
               ),
               Padding(
@@ -56,26 +70,9 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
               ),
             ],
             button: Button(
-              text: 'Submit'.i18n,
-              width: 200.0,
-              onPressed: () async {
-                try {
-                  context.loaderOverlay.show(widget: spinner);
-                  // await model.recoverAccount();   // TODO: handle recovery
-                } catch (e, s) {
-                  showErrorDialog(context,
-                      e: e,
-                      s: s,
-                      des:
-                          'Something went wrong with recovering your account.');
-                  await context.router.pop();
-                } finally {
-                  context.loaderOverlay.hide();
-                  await model.markIsOnboarded();
-                  context.router
-                      .popUntilRoot(); //clear MessagesRouter and start again without onboarding
-                }
-              },
-            )));
+                text: 'Submit'.i18n,
+                width: 200.0,
+                onPressed: () => handleButtonPress(model),
+                disabled: !shouldSubmit)));
   }
 }
