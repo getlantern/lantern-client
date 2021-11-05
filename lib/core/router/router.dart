@@ -61,8 +61,8 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: AddViaChatNumber,
-        name: 'AddViaIdentifier',
-        path: 'addViaIdentifier',
+        name: 'AddViaChatNumber',
+        path: 'addViaChatNumber',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

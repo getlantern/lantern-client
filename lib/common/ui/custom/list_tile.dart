@@ -27,7 +27,7 @@ class CListTile extends StatelessWidget {
       menu: focusedMenu ?? const SizedBox(),
       onOpen: () {},
       menuWidth: MediaQuery.of(context).size.width * 0.8,
-      child: Container(
+      builder: (menuOpen) => Container(
         decoration: BoxDecoration(
           color: white,
           borderRadius: const BorderRadius.all(
@@ -40,7 +40,7 @@ class CListTile extends StatelessWidget {
           child: CInkWell(
             onTap: onTap ?? () {},
             child: Container(
-              decoration: !showDivider
+              decoration: !showDivider || menuOpen
                   ? null
                   : BoxDecoration(
                       border:

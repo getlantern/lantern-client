@@ -77,6 +77,7 @@ message Contact {
   bool blocked = 17; // flag indicating of the contact is blocked
   map<string, Datum> applicationData = 18; // place for applications to store app-specific data associated with the Contact
   ChatNumber chatNumber = 19; // for direct contacts, this is their chat number (looks like a phone number)
+  bool isMe = 20; // if true, this contact is the "me" contact (i.e. the contact representing the current user)
 }
 
 // A provisional direct contact that is not yet in the address book. If we receive a Hello from that

@@ -62,12 +62,7 @@ class _NewChatState extends State<NewChat> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsetsDirectional.only(
-                    start: 4, top: 21, bottom: 3),
-                child: CText('add_new_contact'.i18n.toUpperCase(),
-                    maxLines: 1, style: tsOverline),
-              ),
+              ListSectionHeader('add_new_contact'.i18n),
               const CDivider(),
               /*
               * Share your Chat Number
@@ -120,13 +115,14 @@ class _NewChatState extends State<NewChat> {
                     .then(onContactAdded),
               ),
               /*
-              * Add via Username or ID
+              * Add via Chat Number
               */
               CListTile(
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),
-                content: CText('add_via_id'.i18n, style: tsSubtitle1Short),
+                content:
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
@@ -134,7 +130,7 @@ class _NewChatState extends State<NewChat> {
                   ),
                 ),
                 onTap: () async => await context
-                    .pushRoute(const AddViaIdentifier())
+                    .pushRoute(const AddViaChatNumber())
                     .then(onContactAdded),
               ),
               /*

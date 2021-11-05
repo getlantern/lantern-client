@@ -8,7 +8,7 @@ Future showConversationOptions({
   required MessagingModel model,
   required BuildContext parentContext,
   required Contact contact,
-  Function? topbarAnimationCallback,
+  Function? topBarAnimationCallback,
 }) {
   // Note: we are using showModalBottomSheet directly here because of the complicated double context handling re:disappearing messages
   return showModalBottomSheet(
@@ -30,7 +30,8 @@ Future showConversationOptions({
                 label: 'view_contact_info'.i18n,
                 onTap: () async {
                   await bottomContext.router.pop();
-                  await bottomContext.pushRoute(ContactInfo(contact: contact));
+                  await bottomContext
+                      .pushRoute(ContactInfo(model: model, contact: contact));
                 },
               ),
               BottomModalItem(
@@ -291,16 +292,18 @@ Future showConversationOptions({
                   );
                 },
               ),
-              BottomModalItem(
-                  leading: const CAssetImage(
-                    path: ImagePaths.people,
-                  ),
-                  label: 'introduce_contacts'.i18n,
-                  onTap: () async {
-                    await bottomContext.router.pop();
-                    await bottomContext.pushRoute(const Introduce());
-                  }),
-              if (contact.verificationLevel != VerificationLevel.VERIFIED)
+              if (!contact.isMe)
+                BottomModalItem(
+                    leading: const CAssetImage(
+                      path: ImagePaths.people,
+                    ),
+                    label: 'introduce_contacts'.i18n,
+                    onTap: () async {
+                      await bottomContext.router.pop();
+                      await bottomContext.pushRoute(const Introduce());
+                    }),
+              if (!contact.isMe &&
+                  contact.verificationLevel != VerificationLevel.VERIFIED)
                 BottomModalItem(
                     leading: const CAssetImage(
                       path: ImagePaths.verified_user,
@@ -312,7 +315,7 @@ Future showConversationOptions({
                           model: model,
                           contact: contact,
                           bottomModalContext: parentContext,
-                          topbarAnimationCallback: topbarAnimationCallback!);
+                          topBarAnimationCallback: topBarAnimationCallback!);
                     }),
             ],
           ));

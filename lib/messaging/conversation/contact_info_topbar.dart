@@ -4,7 +4,7 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
 
-class ContactInfoTopBar extends StatefulWidget {
+class ContactInfoTopBar extends StatelessWidget {
   final Contact contact;
   final Color verifiedColor;
 
@@ -12,47 +12,8 @@ class ContactInfoTopBar extends StatefulWidget {
     required this.contact,
     required this.verifiedColor,
   }) : super();
-
-  @override
-  _ContactInfoTopBarState createState() => _ContactInfoTopBarState();
-}
-
-class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
-  ValueNotifier<Contact?>? contactNotifier;
-  Contact? updatedContact;
-  void Function()? listener;
-  var newDisplayName;
-  VerificationLevel? newVerificationLevel;
-
-  @override
-  void dispose() {
-    if (listener != null) {
-      contactNotifier?.removeListener(listener!);
-    }
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
-    // TODO: repeated pattern
-    // listen to the contact path for changes
-    // will return a Contact if there are any, otherwise null
-    contactNotifier = model.contactNotifier(widget.contact.contactId.id);
-    var listener = () async {
-      // something changed for this contact, lets get the updates
-      updatedContact = contactNotifier!.value as Contact;
-      if (updatedContact != null && mounted) {
-        setState(() {
-          newDisplayName = updatedContact!.displayNameOrFallback;
-          newVerificationLevel = updatedContact!.verificationLevel;
-        });
-      }
-    };
-    contactNotifier!.addListener(listener);
-    listener();
-
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -60,9 +21,8 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
-              messengerId: widget.contact.contactId.id,
-              displayName:
-                  newDisplayName ?? widget.contact.displayNameOrFallback),
+              messengerId: contact.contactId.id,
+              displayName: contact.displayNameOrFallback),
         ),
         Expanded(
           child: Column(
@@ -70,14 +30,14 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CText(
-                newDisplayName,
+                contact.displayNameOrFallback,
                 maxLines: 1,
                 style: tsHeading3,
               ),
               /* 
               * Contact is unverified => render pending badge
               */
-              if (newVerificationLevel == VerificationLevel.UNVERIFIED)
+              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -89,28 +49,29 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                       ),
                     ),
                     CText('pending_verification'.i18n.toUpperCase(),
-                        style: tsOverline)
+                        style: tsOverline.copiedWith(lineHeight: 14))
                   ],
                 ),
               /* 
               * Contact is verified => render timer and verified badge
               */
-              if (newVerificationLevel == VerificationLevel.VERIFIED)
+              if (contact.verificationLevel == VerificationLevel.VERIFIED)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DisappearingTimerAction(widget.contact),
+                    DisappearingTimerAction(contact),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 8.0),
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 8.0, end: 2.0),
                       child: CAssetImage(
                         path: ImagePaths.verified_user,
                         size: 12.0,
-                        color: widget.verifiedColor,
+                        color: verifiedColor,
                       ),
                     ),
                     CText('verified'.i18n.toUpperCase(),
-                        style:
-                            tsOverline.copiedWith(color: widget.verifiedColor)),
+                        style: tsOverline.copiedWith(
+                            lineHeight: 14, color: verifiedColor)),
                   ],
                 ),
             ],

@@ -328,13 +328,17 @@ class ConversationState extends State<Conversation>
     return model.singleContactById(context, widget.contactId,
         (context, contact, child) {
       // determine if we will show the verification warning badge
-      var tsSeenVerificationAlert =
-          contact.applicationData['tsVerificationReminder']?.int_3;
-      if (tsSeenVerificationAlert != null) {
-        shouldShowVerificationAlert = DateTime.now().millisecondsSinceEpoch -
-                tsSeenVerificationAlert.toInt() >=
-            twoWeeksInMillis;
-      }
+      var verificationReminderLastDismissed = contact
+              .applicationData['verificationReminderLastDismissed']?.int_3
+              .toInt() ??
+          0;
+      final contactUnverified =
+          contact.verificationLevel != VerificationLevel.VERIFIED;
+      shouldShowVerificationAlert = !contact.isMe &&
+          contactUnverified &&
+          DateTime.now().millisecondsSinceEpoch -
+                  verificationReminderLastDismissed >=
+              twoWeeksInMillis;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -342,8 +346,8 @@ class ConversationState extends State<Conversation>
         // * Conversation Title
         title: dismissKeyboardsOnTap(
           CInkWell(
-            onTap: () async =>
-                await context.pushRoute(ContactInfo(contact: contact)),
+            onTap: () async => await context
+                .pushRoute(ContactInfo(model: model, contact: contact)),
             child: ContactInfoTopBar(
               contact: contact,
               verifiedColor: verifiedColor,
@@ -352,51 +356,47 @@ class ConversationState extends State<Conversation>
         ),
         // * Conversation Actions e.g. Verification alert, Call, Menu
         actions: [
-          model.me((bottomModalContext, me, child) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (shouldShowVerificationAlert &&
-                      contact.verificationLevel != VerificationLevel.VERIFIED)
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: () {
-                        model.addOrUpdateDirectContact(
-                            unsafeId: contact.contactId.id,
-                            tsVerificationReminder:
-                                DateTime.now().millisecondsSinceEpoch);
-                        showVerificationOptions(
-                          model: model,
-                          contact: contact,
-                          bottomModalContext: bottomModalContext,
-                          topbarAnimationCallback: () async {
-                            setState(() => verifiedColor = indicatorGreen);
-                            await Future.delayed(longAnimationDuration,
-                                () => setState(() => verifiedColor = black));
-                          },
-                        );
-                      },
-                      icon: const CAssetImage(
-                        path: ImagePaths.verification_alert,
-                      ),
-                    ),
-                  CallAction(contact),
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    icon: const CAssetImage(path: ImagePaths.more_vert),
-                    onPressed: () => showConversationOptions(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (shouldShowVerificationAlert)
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    showVerificationOptions(
                       model: model,
-                      parentContext: bottomModalContext,
                       contact: contact,
-                      topbarAnimationCallback: () async {
+                      bottomModalContext: context,
+                      showDismissNotification: shouldShowVerificationAlert,
+                      topBarAnimationCallback: () async {
                         setState(() => verifiedColor = indicatorGreen);
                         await Future.delayed(longAnimationDuration,
                             () => setState(() => verifiedColor = black));
                       },
-                    ),
-                  )
-                ],
-              )),
+                    );
+                  },
+                  icon: const CAssetImage(
+                    path: ImagePaths.verification_alert,
+                  ),
+                ),
+              if (!contact.isMe) CallAction(contact),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const CAssetImage(path: ImagePaths.more_vert),
+                onPressed: () => showConversationOptions(
+                  model: model,
+                  parentContext: context,
+                  contact: contact,
+                  topBarAnimationCallback: () async {
+                    setState(() => verifiedColor = indicatorGreen);
+                    await Future.delayed(longAnimationDuration,
+                        () => setState(() => verifiedColor = black));
+                  },
+                ),
+              )
+            ],
+          ),
         ],
         // * Conversation body
         body: Padding(
