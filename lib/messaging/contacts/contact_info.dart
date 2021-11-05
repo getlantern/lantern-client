@@ -99,6 +99,7 @@ class _ContactInfoState extends State<ContactInfo> {
                 * Display Name
                 */
               ListSectionHeader('display_name'.i18n),
+              // TODO: the way we build these list tiles is repetitive, and actually overlaps quite a bit with what we do on the existing account and settings screens. Let's factor this into a widget and unify it.
               CListTile(
                 leading: const CAssetImage(
                   path: ImagePaths.user,
@@ -409,6 +410,6 @@ class _ContactInfoState extends State<ContactInfo> {
     copyText(context, copyThis);
     setState(() => textCopied = true);
     await Future.delayed(
-        defaultAnimationDuration, () => setState(() => textCopied = false));
+        longAnimationDuration, () => setState(() => textCopied = false));
   }
 }

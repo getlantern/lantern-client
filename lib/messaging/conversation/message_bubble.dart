@@ -409,7 +409,7 @@ class MessageBubble extends StatelessWidget {
                     setState(() {
                       textCopied = true;
                     });
-                    Future.delayed(defaultAnimationDuration,
+                    Future.delayed(longAnimationDuration,
                         () => setState(() => textCopied = false));
                   },
                 ),
