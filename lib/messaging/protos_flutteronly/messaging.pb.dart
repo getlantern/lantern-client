@@ -295,6 +295,7 @@ class Contact extends $pb.GeneratedMessage {
     ..aOB(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blocked')
     ..m<$core.String, Datum>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationData', protoName: 'applicationData', entryClassName: 'Contact.ApplicationDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: Datum.create, packageName: const $pb.PackageName('model'))
     ..aOM<ChatNumber>(19, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatNumber', protoName: 'chatNumber', subBuilder: ChatNumber.create)
+    ..aOB(20, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isMe', protoName: 'isMe')
     ..hasRequiredFields = false
   ;
 
@@ -319,6 +320,7 @@ class Contact extends $pb.GeneratedMessage {
     $core.bool? blocked,
     $core.Map<$core.String, Datum>? applicationData,
     ChatNumber? chatNumber,
+    $core.bool? isMe,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -377,6 +379,9 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (chatNumber != null) {
       _result.chatNumber = chatNumber;
+    }
+    if (isMe != null) {
+      _result.isMe = isMe;
     }
     return _result;
   }
@@ -557,6 +562,15 @@ class Contact extends $pb.GeneratedMessage {
   void clearChatNumber() => clearField(19);
   @$pb.TagNumber(19)
   ChatNumber ensureChatNumber() => $_ensure(18);
+
+  @$pb.TagNumber(20)
+  $core.bool get isMe => $_getBF(19);
+  @$pb.TagNumber(20)
+  set isMe($core.bool v) { $_setBool(19, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasIsMe() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearIsMe() => clearField(20);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {
