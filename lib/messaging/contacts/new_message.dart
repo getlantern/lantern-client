@@ -62,12 +62,7 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsetsDirectional.only(
-                    start: 4, top: 21, bottom: 3),
-                child: CText('add_new_contact'.i18n.toUpperCase(),
-                    maxLines: 1, style: tsOverline),
-              ),
+              ListSectionHeader('add_new_contact'.i18n),
               const CDivider(),
               /*
               * Scan QR Code

@@ -12,7 +12,7 @@ class ListSectionHeader extends StatelessWidget {
         Row(children: [
           Container(
             margin:
-                const EdgeInsetsDirectional.only(start: 8, top: 21, bottom: 3),
+                const EdgeInsetsDirectional.only(start: 6, top: 21, bottom: 3),
             child: CText(text.toUpperCase(), maxLines: 1, style: tsOverline),
           ),
         ]),
