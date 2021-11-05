@@ -9,6 +9,7 @@ class CBadge extends StatelessWidget {
   final double? end;
   final double? top;
   final Widget? customBadge;
+  final EdgeInsetsGeometry? customPadding;
 
   CBadge(
       {this.count = 0,
@@ -18,15 +19,18 @@ class CBadge extends StatelessWidget {
       this.end = -5,
       this.top = -3,
       this.customBadge,
+      this.customPadding,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Badge(
-      padding: (customBadge != null)
-          ? const EdgeInsets.all(0)
-          : const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: (customPadding != null)
+          ? customPadding!
+          : (customBadge != null)
+              ? const EdgeInsets.all(0)
+              : const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       position: BadgePosition(
         end: end,
         top: top,

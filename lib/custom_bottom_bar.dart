@@ -5,6 +5,8 @@ import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/common/common.dart';
 
+import 'messaging/messaging_model.dart';
+
 class CustomBottomBar extends StatelessWidget {
   final int index;
   final Function(int)? onTap;
@@ -20,6 +22,7 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var vpnModel = context.watch<VpnModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BottomNavigationBar(
       currentIndex: index,
@@ -81,18 +84,18 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: CText('Account'.i18n, style: tsFloatingLabel),
             onTap: () => onTap!(2),
-            icon: CBadge(
-              count: 1,
-              // TODO: if hasCopiedKey == false
-              showBadge: true,
-              child: SvgPicture.asset(
-                ImagePaths.account,
-                color: index == 2
-                    ? selectedTabLabelColor
-                    : unselectedTabLabelColor,
-                fit: BoxFit.contain,
-              ),
-            ),
+            icon: messagingModel.getCopiedRecoveryStatus(
+                (context, hasCopiedRecoveryKey, child) => CBadge(
+                      count: 1,
+                      showBadge: !hasCopiedRecoveryKey,
+                      child: SvgPicture.asset(
+                        ImagePaths.account,
+                        color: index == 2
+                            ? selectedTabLabelColor
+                            : unselectedTabLabelColor,
+                        fit: BoxFit.contain,
+                      ),
+                    )),
           ),
           label: '',
           tooltip: 'Account'.i18n,

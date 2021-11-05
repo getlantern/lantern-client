@@ -7,21 +7,24 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'settings_item.dart';
 import 'settings_section_header.dart';
 
-class ProAccount extends StatelessWidget {
-  ProAccount({Key? key}) : super(key: key);
+class AccountManagement extends StatelessWidget {
+  AccountManagement({Key? key, required this.isPro}) : super(key: key);
+  final bool isPro;
 
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
     var messagingModel = context.watch<MessagingModel>();
+    var title =
+        isPro ? 'Pro Account Management'.i18n : 'Account Management'.i18n;
 
     return BaseScreen(
-      title: 'Pro Account Management'.i18n,
+      title: title,
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         return sessionModel
             .devices((BuildContext context, Devices devices, Widget? child) {
-          var items = [
+          var proItems = [
             SettingsSectionHeader(
               label: 'Email'.i18n,
             ),
@@ -33,35 +36,6 @@ class ProAccount extends StatelessWidget {
                 title: emailAddress,
               );
             }),
-            SettingsSectionHeader(
-              label: 'secure_chat_number'.i18n,
-            ),
-            messagingModel.me(
-                (BuildContext context, Contact me, Widget? child) =>
-                    SettingsItem(
-                      icon: ImagePaths.lock_outline,
-                      iconColor: Colors.black,
-                      title: me.chatNumber.number,
-                      child: const CAssetImage(
-                        path: ImagePaths.arrow_down,
-                      ),
-                      onTap: () {}, // TODO: expand
-                    )),
-            SettingsSectionHeader(
-              label: 'backup_recovery_key'.i18n,
-            ),
-            SettingsItem(
-              icon: ImagePaths.lock_outline,
-              iconColor: Colors.black,
-              title: 'recovery_key'.i18n,
-              showArrow: true,
-              child: CBadge(
-                // TODO: if hasCopiedKey == false
-                showBadge: true,
-                count: 1,
-              ),
-              onTap: () => context.router.push(RecoveryKey()),
-            ),
             SettingsSectionHeader(
               label: 'Pro Account Expiration'.i18n,
             ),
@@ -81,7 +55,7 @@ class ProAccount extends StatelessWidget {
             )
           ];
 
-          items.addAll(devices.devices.map((device) {
+          proItems.addAll(devices.devices.map((device) {
             var isMyDevice = device.id == myDeviceId;
             var allowRemoval = devices.devices.length > 1 || !isMyDevice;
 
@@ -140,7 +114,7 @@ class ProAccount extends StatelessWidget {
           }));
 
           if (devices.devices.length < 3) {
-            items.add(SettingsItem(
+            proItems.add(SettingsItem(
               title: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               child:
@@ -149,11 +123,52 @@ class ProAccount extends StatelessWidget {
           }
 
           return ListView(
-            padding: const EdgeInsetsDirectional.only(
-              bottom: 8,
-            ),
-            children: items,
-          );
+              padding: const EdgeInsetsDirectional.only(
+                bottom: 8,
+              ),
+              children: [
+                SettingsSectionHeader(
+                  label: 'secure_chat_number'.i18n,
+                ),
+                messagingModel.me(
+                    (BuildContext context, Contact me, Widget? child) =>
+                        SettingsItem(
+                          icon: ImagePaths.chatNumber,
+                          iconColor: Colors.black,
+                          title: me.chatNumber.shortNumber,
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsetsDirectional.only(end: 16.0),
+                                child: CAssetImage(
+                                  path: ImagePaths.content_copy,
+                                ),
+                              ),
+                              const CAssetImage(
+                                path: ImagePaths.arrow_down,
+                              ),
+                            ],
+                          ),
+                          onTap: () {}, // TODO: expand
+                        )),
+                SettingsSectionHeader(
+                  label: 'backup_recovery_key'.i18n,
+                ),
+                messagingModel.getCopiedRecoveryStatus((BuildContext context,
+                        bool hasCopiedRecoveryKey, Widget? child) =>
+                    SettingsItem(
+                      icon: ImagePaths.lock_outline,
+                      iconColor: Colors.black,
+                      title: 'recovery_key'.i18n,
+                      showArrow: true,
+                      child: CBadge(
+                        showBadge: !hasCopiedRecoveryKey,
+                        count: 1,
+                      ),
+                      onTap: () => context.router.push(RecoveryKey()),
+                    )),
+                if (isPro) ...proItems
+              ]);
         });
       }),
     );

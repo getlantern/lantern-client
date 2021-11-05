@@ -14,18 +14,6 @@ class OnboardingHandler extends StatelessWidget {
         }
       });
       return Container();
-
-      // * TESTING PURPOSES
-      // return Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     Button(
-      //       text: 'complete onboarding',
-      //       onPressed: () => model.markIsOnboarded(),
-      //     ),
-      //     CText(isOnboarded.toString(), style: tsCodeDisplay1)
-      //   ],
-      // );
     });
   }
 }
