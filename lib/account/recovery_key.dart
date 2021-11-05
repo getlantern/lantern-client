@@ -72,8 +72,11 @@ class RecoveryKey extends StatelessWidget {
                   text: 'copy_recovery_key'.i18n,
                   width: 200.0,
                   onPressed: () {
-                    // TODO: this should be recovery key
-                    copyText(context, me.chatNumber.number);
+                    model.markCopiedRecoveryKey();
+                    copyText(
+                        context,
+                        me.chatNumber
+                            .number); // TODO: this should be recovery key
                     context.router.pop();
                   },
                 ))));

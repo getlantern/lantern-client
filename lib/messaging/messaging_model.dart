@@ -80,15 +80,6 @@ class MessagingModel extends Model {
     }).then((value) => Contact.fromBuffer(value));
   }
 
-  Future<void> markIsOnboarded<T>() async {
-    return methodChannel.invokeMethod('markIsOnboarded');
-  }
-
-  Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/onBoarding_status',
-        defaultValue: false, builder: builder);
-  }
-
   Future<void> acceptDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
         'acceptDirectContact', <String, dynamic>{'unsafeId': unsafeId});
@@ -400,4 +391,26 @@ class MessagingModel extends Model {
       .split(RegExp(r'\s'))
       .map((s) => '"${s.replaceAll('\"', '')}"')
       .join(' ');
+
+  /*
+  * REMINDERS 
+  */
+
+  Future<void> markIsOnboarded<T>() async {
+    return methodChannel.invokeMethod('markIsOnboarded');
+  }
+
+  Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/onBoarding_status',
+        defaultValue: false, builder: builder);
+  }
+
+  Future<void> markCopiedRecoveryKey<T>() async {
+    return methodChannel.invokeMethod('markCopiedRecoveryKey');
+  }
+
+  Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/copiedRecovery_status',
+        defaultValue: false, builder: builder);
+  }
 }

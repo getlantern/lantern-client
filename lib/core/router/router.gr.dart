@@ -6,6 +6,7 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
+import 'package:lantern/account/account_management.dart' as _i18;
 import 'package:lantern/account/account_tab.dart' as _i17;
 import 'package:lantern/account/developer_settings.dart' as _i26;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i24;
@@ -16,7 +17,6 @@ import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart'
     as _i23;
 import 'package:lantern/account/language.dart' as _i20;
-import 'package:lantern/account/pro_account.dart' as _i18;
 import 'package:lantern/account/recovery_key.dart' as _i25;
 import 'package:lantern/account/settings.dart' as _i19;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
@@ -222,12 +222,11 @@ class AppRouter extends _i1.RootStackRouter {
         reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false),
-    ProAccount.name: (routeData) => _i1.CustomPage<void>(
+    AccountManagement.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (data) {
-          final args =
-              data.argsAs<ProAccountArgs>(orElse: () => const ProAccountArgs());
-          return _i18.ProAccount(key: args.key);
+          final args = data.argsAs<AccountManagementArgs>();
+          return _i18.AccountManagement(key: args.key, isPro: args.isPro);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -347,7 +346,7 @@ class AppRouter extends _i1.RootStackRouter {
               path: 'vpn', children: [_i1.RouteConfig(Vpn.name, path: '')]),
           _i1.RouteConfig(AccountRouter.name, path: 'account', children: [
             _i1.RouteConfig(Account.name, path: ''),
-            _i1.RouteConfig(ProAccount.name, path: 'proAccount'),
+            _i1.RouteConfig(AccountManagement.name, path: 'accountManagement'),
             _i1.RouteConfig(Settings.name, path: 'settings'),
             _i1.RouteConfig(Language.name, path: 'language'),
             _i1.RouteConfig(AuthorizePro.name, path: 'authorizePro'),
@@ -540,17 +539,21 @@ class Account extends _i1.PageRouteInfo {
   static const String name = 'Account';
 }
 
-class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
-  ProAccount({_i27.Key? key})
-      : super(name, path: 'proAccount', args: ProAccountArgs(key: key));
+class AccountManagement extends _i1.PageRouteInfo<AccountManagementArgs> {
+  AccountManagement({_i27.Key? key, required bool isPro})
+      : super(name,
+            path: 'accountManagement',
+            args: AccountManagementArgs(key: key, isPro: isPro));
 
-  static const String name = 'ProAccount';
+  static const String name = 'AccountManagement';
 }
 
-class ProAccountArgs {
-  const ProAccountArgs({this.key});
+class AccountManagementArgs {
+  const AccountManagementArgs({this.key, required this.isPro});
 
   final _i27.Key? key;
+
+  final bool isPro;
 }
 
 class Settings extends _i1.PageRouteInfo<SettingsArgs> {

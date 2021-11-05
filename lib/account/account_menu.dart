@@ -26,18 +26,20 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(
       BuildContext context, SessionModel sessionModel, Contact me) {
+    final messagingModel = context.watch<MessagingModel>();
     return [
-      // TODO: adding this here since I can't make myself Pro on LG
-      SettingsItem(
-          icon: ImagePaths.account,
-          iconColor: Colors.black,
-          title: 'Account Management'.i18n,
-          onTap: () async => await context.pushRoute(ProAccount()),
-          child: CBadge(
-            // TODO: if has not copied key
-            showBadge: true,
-            count: 1,
-          )),
+      messagingModel.getCopiedRecoveryStatus(
+          (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
+              SettingsItem(
+                  icon: ImagePaths.account,
+                  iconColor: Colors.black,
+                  title: 'Account Management'.i18n,
+                  onTap: () async =>
+                      await context.pushRoute(AccountManagement(isPro: false)),
+                  child: CBadge(
+                    showBadge: !hasCopiedRecoveryKey,
+                    count: 1,
+                  ))),
       SettingsItem(
         icon: ImagePaths.pro_icon_black,
         title: 'Upgrade to Lantern Pro'.i18n,
@@ -70,40 +72,45 @@ class AccountMenu extends StatelessWidget {
     ];
   }
 
-  List<Widget> proItems(BuildContext context, Contact me) => [
-        SettingsItem(
-            icon: ImagePaths.account,
-            iconColor: Colors.black,
-            title: 'Pro Account Management'.i18n,
-            onTap: () async => await context.pushRoute(ProAccount()),
-            child: CBadge(
-              // TODO: if has not copied key
-              showBadge: true,
-              count: 1,
-            )),
-        SettingsItem(
-          icon: ImagePaths.devices,
-          title: 'Add Device'.i18n,
-          onTap: () async => await context.pushRoute(ApproveDevice()),
-        ),
-        SettingsItem(
-          icon: ImagePaths.star,
-          title: 'Invite Friends'.i18n,
-          onTap: inviteFriends,
-        ),
-        SettingsItem(
-          icon: ImagePaths.desktop,
-          title: 'desktop_version'.i18n,
-          onTap: openDesktopVersion,
-        ),
-        SettingsItem(
-          icon: ImagePaths.settings,
-          title: 'settings'.i18n,
-          onTap: () {
-            openSettings(context);
-          },
-        ),
-      ];
+  List<Widget> proItems(BuildContext context, Contact me) {
+    final messagingModel = context.watch<MessagingModel>();
+    return [
+      messagingModel.getCopiedRecoveryStatus(
+          (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
+              SettingsItem(
+                  icon: ImagePaths.account,
+                  iconColor: Colors.black,
+                  title: 'Account Management'.i18n,
+                  onTap: () async =>
+                      await context.pushRoute(AccountManagement(isPro: true)),
+                  child: CBadge(
+                    showBadge: !hasCopiedRecoveryKey,
+                    count: 1,
+                  ))),
+      SettingsItem(
+        icon: ImagePaths.devices,
+        title: 'Add Device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
+      SettingsItem(
+        icon: ImagePaths.star,
+        title: 'Invite Friends'.i18n,
+        onTap: inviteFriends,
+      ),
+      SettingsItem(
+        icon: ImagePaths.desktop,
+        title: 'desktop_version'.i18n,
+        onTap: openDesktopVersion,
+      ),
+      SettingsItem(
+        icon: ImagePaths.settings,
+        title: 'settings'.i18n,
+        onTap: () {
+          openSettings(context);
+        },
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
