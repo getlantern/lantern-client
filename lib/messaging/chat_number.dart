@@ -38,4 +38,6 @@ extension ChatNumberFormat on String {
     }
     return result.toString();
   }
+
+  String get withoutWhitespace => replaceAll(whitespace, '');
 }

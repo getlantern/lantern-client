@@ -53,12 +53,16 @@ class MessagingModel extends Model {
     }).then((value) => value as Map);
   }
 
+  Future<void> deleteProvisionalContact(String contactId) {
+    return methodChannel.invokeMethod('deleteProvisionalContact',
+        <String, dynamic>{'unsafeContactId': contactId});
+  }
+
   Future<Contact> addOrUpdateDirectContact({
     String? unsafeId,
     ChatNumber? chatNumber,
     String? displayName,
     String? source,
-    int tsVerificationReminder = 0,
   }) {
     return methodChannel
         .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
@@ -66,13 +70,14 @@ class MessagingModel extends Model {
       'chatNumber': chatNumber?.writeToBuffer(),
       'displayName': displayName,
       'source': source,
-      'tsVerificationReminder': tsVerificationReminder,
     }).then((value) => Contact.fromBuffer(value));
   }
 
-  Future<void> deleteProvisionalContact(String contactId) {
-    return methodChannel.invokeMethod('deleteProvisionalContact',
-        <String, dynamic>{'unsafeContactId': contactId});
+  Future<void> dismissVerificationReminder(String unsafeId) {
+    return methodChannel
+        .invokeMethod('dismissVerificationReminder', <String, dynamic>{
+      'unsafeId': unsafeId,
+    }).then((value) => Contact.fromBuffer(value));
   }
 
   Future<void> acceptDirectContact(String unsafeId) {

@@ -7,10 +7,11 @@ void showVerificationOptions({
   required MessagingModel model,
   required BuildContext bottomModalContext,
   required Contact contact,
-  Function? topbarAnimationCallback,
+  bool showDismissNotification = false,
+  Function? topBarAnimationCallback,
 }) {
   void verificationUX() async {
-    topbarAnimationCallback!();
+    topBarAnimationCallback!();
     showSnackbar(
         context: bottomModalContext,
         duration: longAnimationDuration,
@@ -69,17 +70,21 @@ void showVerificationOptions({
             path: ImagePaths.keyboard_arrow_right,
           ),
         ),
-        BottomModalItem(
-          leading: const CAssetImage(path: ImagePaths.cancel),
-          label: 'dismiss_notification'.i18n,
-          onTap: () async {
-            await bottomModalContext.router.pop();
-            showInfoDialog(bottomModalContext,
+        if (showDismissNotification)
+          BottomModalItem(
+            leading: const CAssetImage(path: ImagePaths.cancel),
+            label: 'dismiss_notification'.i18n,
+            onTap: () async {
+              await model.dismissVerificationReminder(contact.contactId.id);
+              await bottomModalContext.router.pop();
+              showInfoDialog(
+                bottomModalContext,
                 title: 'contact_verification'.i18n,
                 assetPath: ImagePaths.verified_user,
                 des: 'contact_verification_description'.i18n,
-                buttonText: 'info_dialog_confirm'.i18n);
-          },
-        ),
+                buttonText: 'info_dialog_confirm'.i18n,
+              );
+            },
+          ),
       ]);
 }

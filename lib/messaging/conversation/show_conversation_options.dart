@@ -312,7 +312,7 @@ Future showConversationOptions({
                           model: model,
                           contact: contact,
                           bottomModalContext: parentContext,
-                          topbarAnimationCallback: topbarAnimationCallback!);
+                          topBarAnimationCallback: topbarAnimationCallback!);
                     }),
             ],
           ));
