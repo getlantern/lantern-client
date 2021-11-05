@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging.dart';
 SizedBox renderLongTapMenu(
         {required Contact contact, required BuildContext context}) =>
     SizedBox(
-      height: 150,
+      height: 78 + (!contact.isMe ? 72 : 0),
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 4),
         child: Column(
@@ -20,20 +20,22 @@ SizedBox renderLongTapMenu(
                 onTap: () async {
                   await context.router.pop();
                   await context.pushRoute(ContactInfo(
-                      model: context.watch<MessagingModel>(),
+                      model:
+                          Provider.of<MessagingModel>(context, listen: false),
                       contact: contact));
                 }),
-            CListTile(
-              leading: const CAssetImage(
-                path: ImagePaths.people,
+            if (!contact.isMe)
+              CListTile(
+                leading: const CAssetImage(
+                  path: ImagePaths.people,
+                ),
+                showDivider: false,
+                content: 'introduce_contacts'.i18n,
+                onTap: () async {
+                  await context.router.pop();
+                  await context.pushRoute(const Introduce());
+                },
               ),
-              showDivider: false,
-              content: 'introduce_contacts'.i18n,
-              onTap: () async {
-                await context.router.pop();
-                await context.pushRoute(const Introduce());
-              },
-            ),
           ],
         ),
       ),
