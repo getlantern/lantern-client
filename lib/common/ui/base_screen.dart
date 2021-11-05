@@ -15,6 +15,7 @@ class BaseScreen extends StatelessWidget {
   final bool showAppBar;
   late final Color foregroundColor;
   late final Color backgroundColor;
+  final bool automaticallyImplyLeading;
 
   BaseScreen(
       {this.title,
@@ -29,6 +30,7 @@ class BaseScreen extends StatelessWidget {
       Color? foregroundColor,
       Color? backgroundColor,
       this.showAppBar = true,
+      this.automaticallyImplyLeading = true,
       Key? key})
       : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
@@ -44,6 +46,7 @@ class BaseScreen extends StatelessWidget {
         appBar: !showAppBar
             ? null
             : AppBar(
+                automaticallyImplyLeading: automaticallyImplyLeading,
                 title: title is String
                     ? CText(
                         title,

@@ -125,7 +125,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  fonts:
+  - family: RobotoMono
+    fonts:
+      - asset: assets/fonts/RobotoMono.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -136,6 +139,7 @@ flutter:
     - assets/images/
     - assets/images/countdown_stopwatch/
     - assets/locales/
+    - assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

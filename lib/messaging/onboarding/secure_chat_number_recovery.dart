@@ -25,15 +25,15 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   String? validateInput(String? value) {
     // input is invalid
     if (value == null || value.length < 82) {
-      return 'recovery_helper_text'.i18n; // TODO: confirm recovery length
+      return 'recovery_helper_text'.i18n;
     }
-    // TODO: remove dashes
     // input is valid
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<MessagingModel>();
     return BaseScreen(
         title: 'secure_chat_number_recovery'.i18n,
         body: PinnedButtonLayout(
@@ -58,7 +58,24 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
             button: Button(
               text: 'Submit'.i18n,
               width: 200.0,
-              onPressed: () => {}, // TODO: handle recovery
+              onPressed: () async {
+                try {
+                  context.loaderOverlay.show(widget: spinner);
+                  // await model.recoverAccount();   // TODO: handle recovery
+                } catch (e, s) {
+                  showErrorDialog(context,
+                      e: e,
+                      s: s,
+                      des:
+                          'Something went wrong with recovering your account.');
+                  await context.router.pop();
+                } finally {
+                  context.loaderOverlay.hide();
+                  await model.markIsOnboarded();
+                  context.router
+                      .popUntilRoot(); //clear MessagesRouter and start again without onboarding
+                }
+              },
             )));
   }
 }

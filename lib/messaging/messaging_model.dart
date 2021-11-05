@@ -80,6 +80,15 @@ class MessagingModel extends Model {
     }).then((value) => Contact.fromBuffer(value));
   }
 
+  Future<void> markIsOnboarded<T>() async {
+    return methodChannel.invokeMethod('markIsOnboarded');
+  }
+
+  Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/onBoarding_status',
+        defaultValue: false, builder: builder);
+  }
+
   Future<void> acceptDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
         'acceptDirectContact', <String, dynamic>{'unsafeId': unsafeId});
