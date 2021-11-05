@@ -334,7 +334,8 @@ class ConversationState extends State<Conversation>
           0;
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
-      shouldShowVerificationAlert = contactUnverified &&
+      shouldShowVerificationAlert = !contact.isMe &&
+          contactUnverified &&
           DateTime.now().millisecondsSinceEpoch -
                   verificationReminderLastDismissed >=
               twoWeeksInMillis;
@@ -355,47 +356,47 @@ class ConversationState extends State<Conversation>
         ),
         // * Conversation Actions e.g. Verification alert, Call, Menu
         actions: [
-          model.me((bottomModalContext, me, child) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (shouldShowVerificationAlert)
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: () {
-                        showVerificationOptions(
-                          model: model,
-                          contact: contact,
-                          bottomModalContext: bottomModalContext,
-                          showDismissNotification: shouldShowVerificationAlert,
-                          topBarAnimationCallback: () async {
-                            setState(() => verifiedColor = indicatorGreen);
-                            await Future.delayed(longAnimationDuration,
-                                () => setState(() => verifiedColor = black));
-                          },
-                        );
-                      },
-                      icon: const CAssetImage(
-                        path: ImagePaths.verification_alert,
-                      ),
-                    ),
-                  CallAction(contact),
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    icon: const CAssetImage(path: ImagePaths.more_vert),
-                    onPressed: () => showConversationOptions(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (shouldShowVerificationAlert)
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    showVerificationOptions(
                       model: model,
-                      parentContext: bottomModalContext,
                       contact: contact,
-                      topbarAnimationCallback: () async {
+                      bottomModalContext: context,
+                      showDismissNotification: shouldShowVerificationAlert,
+                      topBarAnimationCallback: () async {
                         setState(() => verifiedColor = indicatorGreen);
                         await Future.delayed(longAnimationDuration,
                             () => setState(() => verifiedColor = black));
                       },
-                    ),
-                  )
-                ],
-              )),
+                    );
+                  },
+                  icon: const CAssetImage(
+                    path: ImagePaths.verification_alert,
+                  ),
+                ),
+              if (!contact.isMe) CallAction(contact),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const CAssetImage(path: ImagePaths.more_vert),
+                onPressed: () => showConversationOptions(
+                  model: model,
+                  parentContext: context,
+                  contact: contact,
+                  topBarAnimationCallback: () async {
+                    setState(() => verifiedColor = indicatorGreen);
+                    await Future.delayed(longAnimationDuration,
+                        () => setState(() => verifiedColor = black));
+                  },
+                ),
+              )
+            ],
+          ),
         ],
         // * Conversation body
         body: Padding(
