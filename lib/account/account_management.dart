@@ -162,6 +162,8 @@ class AccountManagement extends StatelessWidget {
                       title: 'recovery_key'.i18n,
                       showArrow: true,
                       child: CBadge(
+                        customPadding: const EdgeInsets.all(6.0),
+                        fontSize: 14,
                         showBadge: !hasCopiedRecoveryKey,
                         count: 1,
                       ),

@@ -37,6 +37,8 @@ class AccountMenu extends StatelessWidget {
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: false)),
                   child: CBadge(
+                    customPadding: const EdgeInsets.all(6.0),
+                    fontSize: 14,
                     showBadge: !hasCopiedRecoveryKey,
                     count: 1,
                   ))),
@@ -84,6 +86,8 @@ class AccountMenu extends StatelessWidget {
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: true)),
                   child: CBadge(
+                    customPadding: const EdgeInsets.all(6.0),
+                    fontSize: 14,
                     showBadge: !hasCopiedRecoveryKey,
                     count: 1,
                   ))),
