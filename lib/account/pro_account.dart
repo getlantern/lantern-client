@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'settings_item.dart';
@@ -12,6 +13,7 @@ class ProAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
       title: 'Pro Account Management'.i18n,
@@ -34,17 +36,17 @@ class ProAccount extends StatelessWidget {
             SettingsSectionHeader(
               label: 'secure_chat_number'.i18n,
             ),
-            SettingsItem(
-              icon: ImagePaths.lock_outline,
-              iconColor: Colors.black,
-              title:
-                  '63751638576 6541565465871235436245631478569514563258852456784125698001487326545'
-                      .i18n,
-              child: const CAssetImage(
-                path: ImagePaths.arrow_down,
-              ),
-              onTap: () {}, // TODO: expand
-            ),
+            messagingModel.me(
+                (BuildContext context, Contact me, Widget? child) =>
+                    SettingsItem(
+                      icon: ImagePaths.lock_outline,
+                      iconColor: Colors.black,
+                      title: me.chatNumber.number,
+                      child: const CAssetImage(
+                        path: ImagePaths.arrow_down,
+                      ),
+                      onTap: () {}, // TODO: expand
+                    )),
             SettingsSectionHeader(
               label: 'backup_recovery_key'.i18n,
             ),

@@ -5,6 +5,7 @@ class Welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'lantern_secure_chat'.i18n,
+      automaticallyImplyLeading: false,
       body: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: WrapAlignment.center,

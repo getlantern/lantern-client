@@ -27,6 +27,17 @@ class AccountMenu extends StatelessWidget {
   List<Widget> freeItems(
       BuildContext context, SessionModel sessionModel, Contact me) {
     return [
+      // TODO: adding this here since I can't make myself Pro on LG
+      SettingsItem(
+          icon: ImagePaths.account,
+          iconColor: Colors.black,
+          title: 'Account Management'.i18n,
+          onTap: () async => await context.pushRoute(ProAccount()),
+          child: CBadge(
+            // TODO: if has not copied key
+            showBadge: true,
+            count: 1,
+          )),
       SettingsItem(
         icon: ImagePaths.pro_icon_black,
         title: 'Upgrade to Lantern Pro'.i18n,
@@ -66,7 +77,7 @@ class AccountMenu extends StatelessWidget {
             title: 'Pro Account Management'.i18n,
             onTap: () async => await context.pushRoute(ProAccount()),
             child: CBadge(
-              // TODO: if hasCopiedKey == false
+              // TODO: if has not copied key
               showBadge: true,
               count: 1,
             )),

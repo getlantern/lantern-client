@@ -146,6 +146,11 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
                 }
             }
+            "markIsOnboarded" -> {
+                db.mutate { tx ->
+                    tx.put("/onBoarding_status", true)
+                }
+            }
             "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
             "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)

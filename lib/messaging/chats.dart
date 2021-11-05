@@ -6,6 +6,7 @@ class Chats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
+
     return BaseScreen(
         title: 'chats'.i18n,
         actions: [
@@ -59,8 +60,8 @@ class Chats extends StatelessWidget {
                 });
                 if (contacts.isEmpty) {
                   return Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 8.0, end: 8.0, top: 16.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,8 +125,7 @@ class Chats extends StatelessWidget {
         ),
         actionButton: FloatingActionButton(
           backgroundColor: blue4,
-          onPressed: () async => await context
-              .pushRoute(const Welcome()), //TODO: testing, revert to NewMessage
+          onPressed: () async => await context.pushRoute(const NewChat()),
           child: CAssetImage(path: ImagePaths.add, color: white),
         ));
   }
