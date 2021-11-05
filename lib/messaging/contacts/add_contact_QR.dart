@@ -181,6 +181,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       onBackCallback: () => Navigator.pop(context, null),
       child: Container(
         color: grey5,
+        padding: const EdgeInsetsDirectional.only(bottom: 20),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -289,7 +290,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
               Flexible(
                 child: Container(
                   padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 70, end: 70, bottom: 74.0),
+                      top: 20.0, start: 70, end: 70, bottom: 20.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: QrImage(

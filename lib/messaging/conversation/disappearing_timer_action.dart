@@ -13,7 +13,7 @@ class DisappearingTimerAction extends StatelessWidget {
       context,
       contact,
       (context, contact, child) =>
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(
           Icons.timer,
           size: 12,
