@@ -9,5 +9,6 @@ export 'notifications.dart';
 export 'custom_avatar.dart';
 export 'display_name.dart';
 export 'package:lantern/messaging/contacts/contacts_extension.dart';
+export 'chat_number.dart';
 
 final messagingModel = MessagingModel();

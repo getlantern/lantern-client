@@ -85,6 +85,23 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
                               hintText: 'chat_number_type'.i18n,
                               keyboardType: TextInputType.number,
                               maxLines: null,
+                              inputFormatters: [
+                                TextInputFormatter.withFunction(
+                                    (oldValue, newValue) {
+                                  final original = newValue.text;
+                                  final formatted =
+                                      original.formattedChatNumber;
+                                  var selection = newValue.selection;
+                                  if (formatted != original) {
+                                    final offset = formatted.characters.length;
+                                    selection = selection.copyWith(
+                                        baseOffset: offset,
+                                        extentOffset: offset);
+                                  }
+                                  return newValue.copyWith(
+                                      text: formatted, selection: selection);
+                                }),
+                              ],
                             ),
                           ],
                         ),
