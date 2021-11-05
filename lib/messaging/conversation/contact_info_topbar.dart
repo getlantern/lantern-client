@@ -89,7 +89,7 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                       ),
                     ),
                     CText('pending_verification'.i18n.toUpperCase(),
-                        style: tsOverline)
+                        style: tsOverline.copiedWith(lineHeight: 14))
                   ],
                 ),
               /* 
@@ -97,11 +97,12 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
               */
               if (newVerificationLevel == VerificationLevel.VERIFIED)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DisappearingTimerAction(widget.contact),
                     Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 8.0),
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 8.0, end: 2.0),
                       child: CAssetImage(
                         path: ImagePaths.verified_user,
                         size: 12.0,
@@ -109,8 +110,8 @@ class _ContactInfoTopBarState extends State<ContactInfoTopBar> {
                       ),
                     ),
                     CText('verified'.i18n.toUpperCase(),
-                        style:
-                            tsOverline.copiedWith(color: widget.verifiedColor)),
+                        style: tsOverline.copiedWith(
+                            lineHeight: 14, color: widget.verifiedColor)),
                   ],
                 ),
             ],
