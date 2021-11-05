@@ -345,8 +345,8 @@ class ConversationState extends State<Conversation>
         // * Conversation Title
         title: dismissKeyboardsOnTap(
           CInkWell(
-            onTap: () async =>
-                await context.pushRoute(ContactInfo(contact: contact)),
+            onTap: () async => await context
+                .pushRoute(ContactInfo(model: model, contact: contact)),
             child: ContactInfoTopBar(
               contact: contact,
               verifiedColor: verifiedColor,

@@ -19,7 +19,9 @@ SizedBox renderLongTapMenu(
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
-                  await context.pushRoute(ContactInfo(contact: contact));
+                  await context.pushRoute(ContactInfo(
+                      model: context.watch<MessagingModel>(),
+                      contact: contact));
                 }),
             CListTile(
               leading: const CAssetImage(

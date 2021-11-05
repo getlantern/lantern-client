@@ -70,7 +70,7 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<ContactInfoArgs>();
-          return _i6.ContactInfo(key: args.key, contact: args.contact);
+          return _i6.ContactInfo(model: args.model, contact: args.contact);
         },
         transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
@@ -359,18 +359,19 @@ class ConversationArgs {
 }
 
 class ContactInfo extends _i1.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({_i22.Key? key, required _i22.Contact contact})
+  ContactInfo(
+      {required _i22.MessagingModel model, required _i22.Contact contact})
       : super(name,
             path: 'contactInfo',
-            args: ContactInfoArgs(key: key, contact: contact));
+            args: ContactInfoArgs(model: model, contact: contact));
 
   static const String name = 'ContactInfo';
 }
 
 class ContactInfoArgs {
-  const ContactInfoArgs({this.key, required this.contact});
+  const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i22.Key? key;
+  final _i22.MessagingModel model;
 
   final _i22.Contact contact;
 }
