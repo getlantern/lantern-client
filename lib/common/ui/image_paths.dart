@@ -16,6 +16,7 @@ class ImagePaths {
   static const desktop = 'assets/images/desktop.svg';
   static const settings = 'assets/images/settings.svg';
   static const qr_code = 'assets/images/qr_code.svg';
+  static const qr_code_scanner = 'assets/images/qr_code_scanner.svg';
   static const number_1 = 'assets/images/number_1.svg';
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
@@ -33,6 +34,7 @@ class ImagePaths {
   static const phone = 'assets/images/phone.svg';
   static const speaker = 'assets/images/speaker.svg';
   static const mute = 'assets/images/mute.svg';
+  static const block = 'assets/images/block.svg';
   static const hangup = 'assets/images/hangup.svg';
   static const reply = 'assets/images/reply.svg';
   static const check_green_large = 'assets/images/check_green_large.svg';
@@ -55,10 +57,10 @@ class ImagePaths {
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
-  static const timer = 'assets/images/timer.svg';
 
   // Commonly used
   static const content_copy = 'assets/images/content_copy.svg';
+  static const content_copy_outline = 'assets/images/content_copy_outline.svg';
   static const check_green = 'assets/images/check_green.svg';
   static const check_black = 'assets/images/check_black.svg';
   static const check_circle_outline = 'assets/images/check_circle_outline.svg';
@@ -68,6 +70,11 @@ class ImagePaths {
   static const cancel = 'assets/images/cancel.svg';
   static const delete = 'assets/images/delete.svg';
   static const done_all = 'assets/images/done_all.svg';
+  static const timer = 'assets/images/timer.svg';
+  static const verification_alert = 'assets/images/verification_alert.svg';
+  static const verified_user = 'assets/images/verified_user.svg';
+  static const user = 'assets/images/user.svg';
+  static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

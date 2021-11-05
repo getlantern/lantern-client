@@ -15,6 +15,7 @@ class CallAction extends StatelessWidget {
       context,
       contact,
       (context, contact, child) => IconButton(
+        visualDensity: VisualDensity.compact,
         onPressed: () => showBottomModal(
             context: context,
             title: CText(
@@ -39,7 +40,6 @@ class CallAction extends StatelessWidget {
                 onTap: () => Navigator.pop(context),
               ),
             ]),
-        padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8, start: 8),
         icon: const CAssetImage(path: ImagePaths.phone),
       ),
     );

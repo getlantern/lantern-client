@@ -70,6 +70,7 @@ export 'ui/labeled_divider.dart';
 export 'ui/play_button.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/path_building.dart';
+export 'ui/list_section_header.dart';
 
 // UI functions
 export 'ui/show_confirmation_dialog.dart';
@@ -79,6 +80,7 @@ export 'ui/show_bottom_modal.dart';
 export 'ui/show_fullscreen_dialog.dart';
 export 'ui/show_snackbar.dart';
 export 'ui/show_bottom_modal.dart';
+export 'ui/copy_text.dart';
 
 // custom UI elements
 export 'ui/custom/asset_image.dart';
@@ -88,3 +90,4 @@ export 'ui/custom/text.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/custom/list_tile.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
+export 'ui/custom/ink_well.dart';

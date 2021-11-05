@@ -8,6 +8,7 @@ class CListTile extends StatelessWidget {
   final double endPadding;
   final bool showDivider;
   final void Function()? onTap;
+  final SizedBox? focusedMenu;
 
   CListTile({
     this.leading,
@@ -17,18 +18,29 @@ class CListTile extends StatelessWidget {
     this.endPadding = 8,
     this.showDivider = true,
     this.onTap,
+    this.focusedMenu,
   }) : super();
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => SizedBox(
+    return FocusedMenuHolder(
+      menu: focusedMenu ?? const SizedBox(),
+      onOpen: () {},
+      menuWidth: MediaQuery.of(context).size.width * 0.8,
+      builder: (menuOpen) => Container(
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
         height: height,
-        child: InkWell(
-          onTap: onTap ?? () {},
-          child: Ink(
+        child: Material(
+          color: transparent,
+          child: CInkWell(
+            onTap: onTap ?? () {},
             child: Container(
-              decoration: !showDivider
+              decoration: !showDivider || menuOpen
                   ? null
                   : BoxDecoration(
                       border:

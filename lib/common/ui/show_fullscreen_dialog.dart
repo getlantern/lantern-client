@@ -7,7 +7,7 @@ Widget showFullscreenDialog(
     required Widget title,
     Widget? backButton,
     Function? onBackCallback,
-    required Function onCloseCallback,
+    Function? onCloseCallback,
     required Widget child}) {
   return Container(
       height: MediaQuery.of(context).size.height,
@@ -33,17 +33,18 @@ Widget showFullscreenDialog(
                   alignment: Alignment.center,
                   child: title,
                 ),
-                Container(
-                  padding: const EdgeInsetsDirectional.only(top: 25),
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.close_rounded,
-                      color: iconColor,
+                if (onCloseCallback != null)
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(top: 25),
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: iconColor,
+                      ),
+                      onPressed: () => onCloseCallback(),
                     ),
-                    onPressed: () => onCloseCallback(),
                   ),
-                ),
               ],
             ),
           ),

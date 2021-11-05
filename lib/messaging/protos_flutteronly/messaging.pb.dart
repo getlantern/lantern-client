@@ -75,6 +75,81 @@ class ContactId extends $pb.GeneratedMessage {
   void clearId() => clearField(2);
 }
 
+class ChatNumber extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ChatNumber', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'model'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'number')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'shortNumber', protoName: 'shortNumber')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'domain')
+    ..hasRequiredFields = false
+  ;
+
+  ChatNumber._() : super();
+  factory ChatNumber({
+    $core.String? number,
+    $core.String? shortNumber,
+    $core.String? domain,
+  }) {
+    final _result = create();
+    if (number != null) {
+      _result.number = number;
+    }
+    if (shortNumber != null) {
+      _result.shortNumber = shortNumber;
+    }
+    if (domain != null) {
+      _result.domain = domain;
+    }
+    return _result;
+  }
+  factory ChatNumber.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChatNumber.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChatNumber clone() => ChatNumber()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChatNumber copyWith(void Function(ChatNumber) updates) => super.copyWith((message) => updates(message as ChatNumber)) as ChatNumber; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ChatNumber create() => ChatNumber._();
+  ChatNumber createEmptyInstance() => create();
+  static $pb.PbList<ChatNumber> createRepeated() => $pb.PbList<ChatNumber>();
+  @$core.pragma('dart2js:noInline')
+  static ChatNumber getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChatNumber>(create);
+  static ChatNumber? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get number => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set number($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNumber() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNumber() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get shortNumber => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set shortNumber($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasShortNumber() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearShortNumber() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get domain => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set domain($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDomain() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDomain() => clearField(3);
+}
+
 enum Datum_Value {
   string, 
   float, 
@@ -219,6 +294,8 @@ class Contact extends $pb.GeneratedMessage {
     ..aOS(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'numericFingerprint', protoName: 'numericFingerprint')
     ..aOB(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blocked')
     ..m<$core.String, Datum>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationData', protoName: 'applicationData', entryClassName: 'Contact.ApplicationDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: Datum.create, packageName: const $pb.PackageName('model'))
+    ..aOM<ChatNumber>(19, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatNumber', protoName: 'chatNumber', subBuilder: ChatNumber.create)
+    ..aOB(20, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isMe', protoName: 'isMe')
     ..hasRequiredFields = false
   ;
 
@@ -242,6 +319,8 @@ class Contact extends $pb.GeneratedMessage {
     $core.String? numericFingerprint,
     $core.bool? blocked,
     $core.Map<$core.String, Datum>? applicationData,
+    ChatNumber? chatNumber,
+    $core.bool? isMe,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -297,6 +376,12 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (applicationData != null) {
       _result.applicationData.addAll(applicationData);
+    }
+    if (chatNumber != null) {
+      _result.chatNumber = chatNumber;
+    }
+    if (isMe != null) {
+      _result.isMe = isMe;
     }
     return _result;
   }
@@ -466,6 +551,26 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(18)
   $core.Map<$core.String, Datum> get applicationData => $_getMap(17);
+
+  @$pb.TagNumber(19)
+  ChatNumber get chatNumber => $_getN(18);
+  @$pb.TagNumber(19)
+  set chatNumber(ChatNumber v) { setField(19, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasChatNumber() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearChatNumber() => clearField(19);
+  @$pb.TagNumber(19)
+  ChatNumber ensureChatNumber() => $_ensure(18);
+
+  @$pb.TagNumber(20)
+  $core.bool get isMe => $_getBF(19);
+  @$pb.TagNumber(20)
+  set isMe($core.bool v) { $_setBool(19, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasIsMe() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearIsMe() => clearField(20);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {

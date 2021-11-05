@@ -1,13 +1,13 @@
 import 'package:lantern/common/common.dart';
 
-void showInfoDialog(BuildContext context,
+void showInfoDialog(BuildContext parentContext,
     {String title = '',
     String des = '',
-    String icon = '',
+    String assetPath = '',
     String buttonText = 'OK'}) {
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
+    context: parentContext,
+    builder: (BuildContext childContext) {
       return AlertDialog(
         contentPadding: const EdgeInsetsDirectional.only(
             start: 20, end: 20, top: 20, bottom: 12),
@@ -22,7 +22,7 @@ void showInfoDialog(BuildContext context,
             mainAxisSize: MainAxisSize.min,
             children: [
               CAssetImage(
-                path: icon,
+                path: assetPath,
               ),
               const SizedBox(
                 height: 8,
@@ -47,10 +47,12 @@ void showInfoDialog(BuildContext context,
               Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
+                  focusColor: grey3,
                   onTap: () {
-                    Navigator.pop(context);
+                    childContext.router.pop();
+                    parentContext.router.pop();
                   },
-                  child: Ink(
+                  child: Container(
                     padding: const EdgeInsets.all(8),
                     child: CText(
                       buttonText,

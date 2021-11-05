@@ -8,8 +8,7 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // TODO make InkWell ripple effect works with BoxDecoration
+    return CInkWell(
       onTap: () {
         LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
       }, // Handle your callback

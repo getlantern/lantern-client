@@ -12,7 +12,7 @@ class Settings extends StatelessWidget {
     showInfoDialog(context,
         title: 'proxy_all'.i18n,
         des: 'description_proxy_all_dialog'.i18n,
-        icon: ImagePaths.key,
+        assetPath: ImagePaths.key,
         buttonText: 'OK'.i18n);
   }
 

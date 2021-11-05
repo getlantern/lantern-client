@@ -28,7 +28,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
         ),
         Container(
           transform: Matrix4.translationValues(0.0, 2.0, 0.0),
-          child: InkWell(
+          child: CInkWell(
             onTap: _onTap,
             child: Icon(
               Icons.info_outline_rounded,

@@ -7,7 +7,7 @@ import 'package:lantern/common/common.dart';
 /// Forked version of https://github.com/retroportalstudio/focused_menu that
 /// always displays the focused child at the top of the page
 class FocusedMenuHolder extends StatefulWidget {
-  final Widget child;
+  final Widget Function(bool) builder;
   final SizedBox menu;
   final double menuWidth;
   final void Function()? onOpen;
@@ -17,7 +17,7 @@ class FocusedMenuHolder extends StatefulWidget {
 
   const FocusedMenuHolder({
     Key? key,
-    required this.child,
+    required this.builder,
     required this.menu,
     this.onOpen,
     required this.menuWidth,
@@ -54,7 +54,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
           widget.onOpen?.call();
           await openMenu(context);
         },
-        child: widget.child);
+        child: widget.builder(false));
   }
 
   Future openMenu(BuildContext context) async {
@@ -74,7 +74,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
                     paddingTop: widget.paddingTop,
                     paddingBottom: widget.paddingBottom,
                     menu: widget.menu,
-                    child: widget.child,
+                    child: widget.builder(true),
                   ));
             },
             fullscreenDialog: true,
@@ -117,7 +117,7 @@ class FocusedMenuDetails extends StatelessWidget {
     // to handle overflow
     final maxMenuHeight =
         size.height - paddingTop - paddingBottom - mediaQuery.viewPadding.top;
-    final menuHeight = min(maxMenuHeight, menu.height!);
+    final menuHeight = min(maxMenuHeight, menu.height ?? 0);
 
     // always position menu so that we can fit all of it on the screen
     var menuY = max(paddingTop + mediaQuery.viewPadding.top,

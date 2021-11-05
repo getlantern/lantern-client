@@ -124,7 +124,7 @@ class Introductions extends StatelessWidget {
                                                                               .i18n,
                                                                           des: 'introductions_error_description'
                                                                               .i18n,
-                                                                          icon: ImagePaths
+                                                                          assetPath: ImagePaths
                                                                               .alert,
                                                                           buttonText:
                                                                               'OK'.i18n);
@@ -159,7 +159,7 @@ class Introductions extends StatelessWidget {
                                                                   des:
                                                                       'introductions_error_description_accepting'
                                                                           .i18n,
-                                                                  icon:
+                                                                  assetPath:
                                                                       ImagePaths
                                                                           .alert,
                                                                   buttonText:
@@ -168,28 +168,14 @@ class Introductions extends StatelessWidget {
                                                               showSnackbar(
                                                                   context:
                                                                       context,
-                                                                  content: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child:
-                                                                            CText(
-                                                                          'introduction_approved'
-                                                                              .i18n
-                                                                              .fill([
-                                                                            value.introduction.displayNameOrFallback
-                                                                          ]),
-                                                                          style:
-                                                                              tsBody1Color(white),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                  content:
+                                                                      'introduction_approved'
+                                                                          .i18n
+                                                                          .fill([
+                                                                    value
+                                                                        .introduction
+                                                                        .displayNameOrFallback
+                                                                  ]),
                                                                   duration: const Duration(
                                                                       milliseconds:
                                                                           2000),

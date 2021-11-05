@@ -2,11 +2,14 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
+import 'show_verification_options.dart';
 
-Future showConversationOptions(
-    {required MessagingModel model,
-    required BuildContext parentContext,
-    required Contact contact}) {
+Future showConversationOptions({
+  required MessagingModel model,
+  required BuildContext parentContext,
+  required Contact contact,
+  Function? topBarAnimationCallback,
+}) {
   // Note: we are using showModalBottomSheet directly here because of the complicated double context handling re:disappearing messages
   return showModalBottomSheet(
       context: parentContext,
@@ -22,7 +25,18 @@ Future showConversationOptions(
             children: [
               BottomModalItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.clock,
+                  path: ImagePaths.user,
+                ),
+                label: 'view_contact_info'.i18n,
+                onTap: () async {
+                  await bottomContext.router.pop();
+                  await bottomContext
+                      .pushRoute(ContactInfo(model: model, contact: contact));
+                },
+              ),
+              BottomModalItem(
+                leading: const CAssetImage(
+                  path: ImagePaths.timer,
                 ),
                 label: 'disappearing_messages'.i18n,
                 onTap: () async {
@@ -38,6 +52,7 @@ Future showConversationOptions(
                     0
                   ];
                   var selectedPosition = -1;
+                  await bottomContext.router.pop();
 
                   return showDialog(
                     context: bottomContext,
@@ -277,91 +292,31 @@ Future showConversationOptions(
                   );
                 },
               ),
-              BottomModalItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.people,
-                ),
-                label: 'introduce_contacts'.i18n,
-                onTap: () async =>
-                    await bottomContext.pushRoute(const Introduce()),
-              ),
-              BottomModalItem(
-                  leading: const CAssetImage(
-                    path: ImagePaths.delete,
-                  ),
-                  label: 'delete_contact_name'
-                      .i18n
-                      .fill([contact.displayNameOrFallback]),
-                  onTap: () => showDialog<void>(
-                        context: bottomContext,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CAssetImage(path: ImagePaths.delete),
-                                ),
-                                CText('delete_contact'.i18n.toUpperCase(),
-                                    style: tsBody3),
-                              ],
-                            ),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  CText('delete_contact_confirmation'.i18n,
-                                      style: tsBody1)
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () async => context.router.pop(),
-                                    child: CText('cancel'.i18n.toUpperCase(),
-                                        style: tsButtonGrey),
-                                  ),
-                                  const SizedBox(width: 15),
-                                  TextButton(
-                                    onPressed: () async {
-                                      context.loaderOverlay.show(
-                                          widget: Center(
-                                        child: CircularProgressIndicator(
-                                          color: white,
-                                        ),
-                                      ));
-                                      try {
-                                        await model.deleteDirectContact(
-                                            contact.contactId.id);
-                                      } catch (e, s) {
-                                        showErrorDialog(context,
-                                            e: e,
-                                            s: s,
-                                            des: 'error_delete_contact'.i18n);
-                                      } finally {
-                                        context.loaderOverlay.hide();
-                                        // In order to be capable to return to the root screen, we need to pop the bottom sheet
-                                        // and then pop the root screen.
-                                        context.router.popUntilRoot();
-                                        parentContext.router.popUntilRoot();
-                                      }
-                                    },
-                                    child: CText(
-                                        'delete_contact'.i18n.toUpperCase(),
-                                        style: tsButtonPink),
-                                  )
-                                ],
-                              )
-                            ],
-                          );
-                        },
-                      )),
+              if (!contact.isMe)
+                BottomModalItem(
+                    leading: const CAssetImage(
+                      path: ImagePaths.people,
+                    ),
+                    label: 'introduce_contacts'.i18n,
+                    onTap: () async {
+                      await bottomContext.router.pop();
+                      await bottomContext.pushRoute(const Introduce());
+                    }),
+              if (!contact.isMe &&
+                  contact.verificationLevel != VerificationLevel.VERIFIED)
+                BottomModalItem(
+                    leading: const CAssetImage(
+                      path: ImagePaths.verified_user,
+                    ),
+                    label: 'contact_verification'.i18n,
+                    onTap: () async {
+                      await bottomContext.router.pop();
+                      showVerificationOptions(
+                          model: model,
+                          contact: contact,
+                          bottomModalContext: parentContext,
+                          topBarAnimationCallback: topBarAnimationCallback!);
+                    }),
             ],
           ));
 }

@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'long_tap_menu.dart';
 
 class NewMessage extends StatefulWidget {
   @override
@@ -14,6 +15,28 @@ class _NewMessageState extends State<NewMessage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void onContactAdded(dynamic contact) {
+    if (contact != null) {
+      setState(() {
+        _updatedContact = contact;
+      });
+      showSnackbar(
+          context: context,
+          content: 'qr_success_snackbar'
+              .i18n
+              .fill([_updatedContact!.displayNameOrFallback]),
+          duration: const Duration(milliseconds: 4000),
+          action: SnackBarAction(
+            textColor: pink3,
+            label: 'start_chat'.i18n.toUpperCase(),
+            onPressed: () async {
+              await context.pushRoute(
+                  Conversation(contactId: _updatedContact!.contactId));
+            },
+          ));
+    }
   }
 
   @override
@@ -39,72 +62,63 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ListSectionHeader('add_new_contact'.i18n),
+              const CDivider(),
+              /*
+              * Scan QR Code
+              */
               CListTile(
-                leading: Icon(
-                  Icons.qr_code,
-                  color: black,
+                leading: const CAssetImage(
+                  path: ImagePaths.qr_code_scanner,
                 ),
-                content: CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
+                    CText('add_contact_in_person'.i18n,
+                        style: tsBody1.copiedWith(color: grey5))
+                  ],
+                ),
                 trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
                   ),
                 ),
-                onTap: () async => await context.router
-                    .push(
-                  FullScreenDialogPage(widget: AddViaQR(me: me)),
-                )
-                    .then((value) {
-                  // we only care about this if it comes back with an updated contact
-                  if (value != null) {
-                    setState(() {
-                      _updatedContact = value as Contact;
-                    });
-                    showSnackbar(
-                        context: context,
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: CText(
-                                'qr_success_snackbar'.i18n.fill(
-                                    [_updatedContact!.displayNameOrFallback]),
-                                overflow: TextOverflow.visible,
-                                style: tsBody1Color(white),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ],
-                        ),
-                        duration: const Duration(milliseconds: 4000),
-                        action: SnackBarAction(
-                          textColor: pink3,
-                          label: 'start_chat'.i18n.toUpperCase(),
-                          onPressed: () async {
-                            await context.pushRoute(Conversation(
-                                contactId: _updatedContact!.contactId));
-                          },
-                        ));
-                  }
-                }),
+                onTap: () async => await context
+                    .pushRoute(
+                      FullScreenDialogPage(
+                          widget: AddViaQR(
+                        me: me,
+                        isVerificationMode: false,
+                      )),
+                    )
+                    .then(onContactAdded),
               ),
+              /*
+              * Add via Chat Number
+              */
               CListTile(
-                leading: Icon(
-                  Icons.people,
-                  color: black,
+                leading: const CAssetImage(
+                  path: ImagePaths.person_add_alt_1,
                 ),
                 content:
-                    CText('introduce_contacts'.i18n, style: tsSubtitle1Short),
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailing: mirrorLTR(
                   context: context,
                   child: const CAssetImage(
                     path: ImagePaths.keyboard_arrow_right,
                   ),
                 ),
-                onTap: () async => await context.pushRoute(const Introduce()),
+                onTap: () async => await context
+                    .pushRoute(const AddViaChatNumber())
+                    .then(onContactAdded),
               ),
+              /*
+              * Contact List
+              */
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts.toList();
@@ -138,7 +152,10 @@ class _NewMessageState extends State<NewMessage> {
                             displayName: contact.displayNameOrFallback),
                         onTapCallback: (Contact contact) async =>
                             await context.pushRoute(
-                                Conversation(contactId: contact.contactId)))
+                                Conversation(contactId: contact.contactId)),
+                        focusMenuCallback: (Contact contact) =>
+                            renderLongTapMenu(
+                                contact: contact, context: context))
                     : Container(
                         alignment: AlignmentDirectional.center,
                         padding: const EdgeInsetsDirectional.all(16.0),

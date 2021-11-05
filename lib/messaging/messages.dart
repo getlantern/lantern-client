@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
+import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
 class Messages extends StatelessWidget {
@@ -64,6 +65,8 @@ class Messages extends StatelessWidget {
                     return Column(
                       children: [
                         ContactListItem(
+                          focusedMenu: renderLongTapMenu(
+                              contact: contact.value, context: context),
                           contact: contact.value,
                           index: index,
                           leading: CustomAvatar(

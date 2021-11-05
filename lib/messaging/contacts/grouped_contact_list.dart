@@ -10,6 +10,7 @@ ScrollablePositionedList groupedContactListGenerator({
   Function? leadingCallback,
   Function? trailingCallback,
   Function? onTapCallback,
+  Function? focusMenuCallback,
 }) {
   return ScrollablePositionedList.builder(
     itemScrollController: scrollListController,
@@ -32,18 +33,23 @@ ScrollablePositionedList groupedContactListGenerator({
           ),
           const CDivider(),
           if (itemsPerKey.isNotEmpty)
-            ...itemsPerKey.map((contact) => ContactListItem(
-                  contact: contact.value,
-                  index: index,
-                  leading: leadingCallback!(contact.value),
-                  title: contact.value.displayNameOrFallback,
-                  trailing: trailingCallback != null
-                      ? trailingCallback(index, contact.value)
-                      : null,
-                  onTap: onTapCallback != null
-                      ? () => onTapCallback(contact.value)
-                      : null,
-                ))
+            ...itemsPerKey.map(
+              (contact) => ContactListItem(
+                focusedMenu: (focusMenuCallback != null)
+                    ? focusMenuCallback(contact.value)
+                    : const SizedBox(),
+                contact: contact.value,
+                index: index,
+                leading: leadingCallback!(contact.value),
+                title: contact.value.displayNameOrFallback,
+                trailing: trailingCallback != null
+                    ? trailingCallback(index, contact.value)
+                    : null,
+                onTap: onTapCallback != null
+                    ? () => onTapCallback(contact.value)
+                    : null,
+              ),
+            )
         ],
       );
     },
