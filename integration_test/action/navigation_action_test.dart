@@ -35,13 +35,13 @@ class GoTo {
       case SCREENS.CONVERSATION:
         if (from == SCREENS.MESSAGES) {
           await tester
-              .tap(find.widgetWithText(ContactListItem, 'Note to self'));
+              .tap(find.widgetWithText(ListItemFactory, 'Note to self'));
           await awaitFor(tester, duration: const Duration(seconds: 1));
-          find.widgetWithText(ContactListItem, 'Note to self');
+          find.widgetWithText(ListItemFactory, 'Note to self');
         }
         if (from == SCREENS.CONTACTS) {
           await tester
-              .tap(find.widgetWithText(ContactListItem, 'Note to self'));
+              .tap(find.widgetWithText(ListItemFactory, 'Note to self'));
           await awaitFor(tester, duration: const Duration(seconds: 1));
         }
         break;

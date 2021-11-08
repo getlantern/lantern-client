@@ -56,7 +56,7 @@ void main() {
       print('Flush the widget tree');
       await tester.pumpAndSettle();
       var contactElement =
-          find.widgetWithText(common.ContactListItem, 'Note to self');
+          find.widgetWithText(common.ListItemFactory, 'Note to self');
       expect(contactElement, findsOneWidget);
     });
 

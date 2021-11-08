@@ -112,9 +112,9 @@ class ContactConnectionCard extends StatelessWidget {
         subtitle: CText('introductions_info'.i18n,
             style: tsBody1.copiedWith(color: grey5)),
         children: [
-          BottomModalItem(
+          ListItemFactory.isBottomItem(
               leading: const CAssetImage(path: ImagePaths.check_black),
-              label: 'accept'.i18n,
+              content: 'accept'.i18n,
               onTap: () async {
                 try {
                   // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
@@ -131,9 +131,9 @@ class ContactConnectionCard extends StatelessWidget {
                       .pushRoute(Conversation(contactId: introduction.to));
                 }
               }),
-          BottomModalItem(
+          ListItemFactory.isBottomItem(
               leading: const CAssetImage(path: ImagePaths.cancel),
-              label: 'reject'.i18n,
+              content: 'reject'.i18n,
               onTap: () => showConfirmationDialog(
                   context: context,
                   title: 'introductions_reject_title'.i18n,

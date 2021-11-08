@@ -23,9 +23,9 @@ class CallAction extends StatelessWidget {
                 maxLines: 1,
                 style: tsSubtitle1),
             children: [
-              BottomModalItem(
+              ListItemFactory.isBottomItem(
                 leading: const CAssetImage(path: ImagePaths.phone),
-                label: 'call'.i18n,
+                content: 'call'.i18n,
                 onTap: () async {
                   Navigator.pop(context);
                   await context.pushRoute(
@@ -34,9 +34,9 @@ class CallAction extends StatelessWidget {
                   );
                 },
               ),
-              BottomModalItem(
+              ListItemFactory.isBottomItem(
                 leading: const CAssetImage(path: ImagePaths.cancel),
-                label: 'cancel'.i18n,
+                content: 'cancel'.i18n,
                 onTap: () => Navigator.pop(context),
               ),
             ]),

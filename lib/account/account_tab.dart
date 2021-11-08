@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 
-import 'account_menu.dart';
+import 'account.dart';
 
 class AccountTab extends StatelessWidget {
   @override

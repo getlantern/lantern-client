@@ -1,11 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-
-import 'settings_item.dart';
-import 'settings_section_header.dart';
 
 class AccountManagement extends StatelessWidget {
   AccountManagement({Key? key, required this.isPro}) : super(key: key);
@@ -25,34 +22,28 @@ class AccountManagement extends StatelessWidget {
         return sessionModel
             .devices((BuildContext context, Devices devices, Widget? child) {
           var proItems = [
-            SettingsSectionHeader(
-              label: 'Email'.i18n,
-            ),
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {
-              return SettingsItem(
-                icon: ImagePaths.email,
-                iconColor: Colors.black,
-                title: emailAddress,
+              return ListItemFactory.isSettingsItem(
+                header: 'Email'.i18n,
+                leading: CAssetImage(path: ImagePaths.email, color: black),
+                content: emailAddress,
               );
             }),
-            SettingsSectionHeader(
-              label: 'Pro Account Expiration'.i18n,
-            ),
             sessionModel.expiryDate(
                 (BuildContext context, String expirationDate, Widget? child) {
-              return SettingsItem(
-                icon: ImagePaths.clock,
-                title: expirationDate,
+              return ListItemFactory.isSettingsItem(
+                header: 'Pro Account Expiration'.i18n,
+                leading: CAssetImage(path: ImagePaths.clock, color: black),
+                content: expirationDate,
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
                 },
-                child: CText('Renew'.i18n.toUpperCase(), style: tsButtonPink),
+                trailingArray: [
+                  CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
+                ],
               );
             }),
-            SettingsSectionHeader(
-              label: 'pro_devices_header'.i18n,
-            )
           ];
 
           proItems.addAll(devices.devices.map((device) {
@@ -61,8 +52,9 @@ class AccountManagement extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsetsDirectional.only(start: 4),
-              child: SettingsItem(
-                title: device.name,
+              child: ListItemFactory.isSettingsItem(
+                header: 'pro_devices_header'.i18n,
+                content: device.name,
                 onTap: !allowRemoval
                     ? null
                     : () {
@@ -104,21 +96,26 @@ class AccountManagement extends StatelessWidget {
                           },
                         );
                       },
-                child: !allowRemoval
-                    ? null
-                    : CText(
-                        (isMyDevice ? 'Log Out' : 'Remove').i18n.toUpperCase(),
-                        style: tsButtonPink),
+                trailingArray: !allowRemoval
+                    ? []
+                    : [
+                        CText(
+                            (isMyDevice ? 'Log Out' : 'Remove')
+                                .i18n
+                                .toUpperCase(),
+                            style: tsButtonPink)
+                      ],
               ),
             );
           }));
 
           if (devices.devices.length < 3) {
-            proItems.add(SettingsItem(
-              title: '',
+            proItems.add(ListItemFactory.isSettingsItem(
+              content: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
-              child:
-                  CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink),
+              trailingArray: [
+                CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink)
+              ],
             ));
           }
 
@@ -127,46 +124,44 @@ class AccountManagement extends StatelessWidget {
                 bottom: 8,
               ),
               children: [
-                SettingsSectionHeader(
-                  label: 'secure_chat_number'.i18n,
-                ),
                 messagingModel.me(
                     (BuildContext context, Contact me, Widget? child) =>
-                        SettingsItem(
-                          icon: ImagePaths.chatNumber,
-                          iconColor: Colors.black,
-                          title: me.chatNumber.shortNumber,
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsetsDirectional.only(end: 16.0),
-                                child: CAssetImage(
-                                  path: ImagePaths.content_copy,
-                                ),
+                        ListItemFactory.isSettingsItem(
+                          header: 'secure_chat_number'.i18n,
+                          leading: CAssetImage(
+                              path: ImagePaths.chatNumber, color: black),
+                          content: me.chatNumber.shortNumber,
+                          trailingArray: [
+                            const Padding(
+                              padding: EdgeInsetsDirectional.only(end: 16.0),
+                              child: CAssetImage(
+                                path: ImagePaths.content_copy,
                               ),
-                              const CAssetImage(
-                                path: ImagePaths.arrow_down,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const CAssetImage(
+                              path: ImagePaths.arrow_down,
+                            ),
+                          ],
                           onTap: () {}, // TODO: expand
                         )),
-                SettingsSectionHeader(
-                  label: 'backup_recovery_key'.i18n,
-                ),
                 messagingModel.getCopiedRecoveryStatus((BuildContext context,
                         bool hasCopiedRecoveryKey, Widget? child) =>
-                    SettingsItem(
-                      icon: ImagePaths.lock_outline,
-                      iconColor: Colors.black,
-                      title: 'recovery_key'.i18n,
-                      showArrow: true,
-                      child: CBadge(
-                        customPadding: const EdgeInsets.all(6.0),
-                        fontSize: 14,
-                        showBadge: !hasCopiedRecoveryKey,
-                        count: 1,
+                    ListItemFactory.isSettingsItem(
+                      header: 'backup_recovery_key'.i18n,
+                      leading: CAssetImage(
+                        path: ImagePaths.lock_outline,
+                        color: black,
                       ),
+                      content: 'recovery_key'.i18n,
+                      showTrailing: true,
+                      trailingArray: [
+                        CBadge(
+                          customPadding: const EdgeInsets.all(6.0),
+                          fontSize: 14,
+                          showBadge: !hasCopiedRecoveryKey,
+                          count: 1,
+                        )
+                      ],
                       onTap: () => context.router.push(RecoveryKey()),
                     )),
                 if (isPro) ...proItems
