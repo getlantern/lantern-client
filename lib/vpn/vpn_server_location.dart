@@ -23,7 +23,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
         CText(
           'Server Location'.i18n + ': ',
           style: tsBody1.copiedWith(
-            color: unselectedTabLabelColor,
+            color: unselectedTabIconColor,
           ),
         ),
         Container(
@@ -32,7 +32,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
             onTap: _onTap,
             child: Icon(
               Icons.info_outline_rounded,
-              color: unselectedTabLabelColor,
+              color: unselectedTabIconColor,
               size: 16,
             ),
           ),

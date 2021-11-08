@@ -38,12 +38,12 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
-            label: CText('secure_chat'.i18n, style: tsFloatingLabel),
-            icon: SvgPicture.asset(
-              ImagePaths.messages,
-              color:
-                  index == 0 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
+            label: CText('secure_chat'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                    color: index == 0 ? black : grey5)),
+            icon: CAssetImage(
+              path: ImagePaths.messages,
+              color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
             ),
             onTap: () => onTap!(0),
           ),
@@ -55,22 +55,25 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 1,
             total: isDevelop ? 4 : 3,
-            label: CText('VPN'.i18n, style: tsFloatingLabel),
-            icon: SvgPicture.asset(
-              ImagePaths.key,
-              color:
-                  index == 1 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
+            label: CText('VPN'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                    color: index == 1 ? black : grey5)),
+            icon: CAssetImage(
+              path: ImagePaths.key,
+              color: index == 1 ? selectedTabIconColor : unselectedTabIconColor,
             ),
             onTap: () => onTap!(1),
             iconWidget: vpnModel.vpnStatus(
-              (context, value, child) => CircleAvatar(
-                maxRadius: activeIconSize - 4,
-                backgroundColor: (value.toLowerCase() ==
-                            'Disconnecting'.i18n.toLowerCase() ||
-                        value == 'connected'.i18n.toLowerCase())
-                    ? indicatorGreen
-                    : indicatorRed,
+              (context, value, child) => Padding(
+                padding: const EdgeInsetsDirectional.only(start: 4.0),
+                child: CircleAvatar(
+                  maxRadius: activeIconSize - 4,
+                  backgroundColor: (value.toLowerCase() ==
+                              'Disconnecting'.i18n.toLowerCase() ||
+                          value == 'connected'.i18n.toLowerCase())
+                      ? indicatorGreen
+                      : indicatorRed,
+                ),
               ),
             ),
           ),
@@ -82,18 +85,19 @@ class CustomBottomBar extends StatelessWidget {
             currentIndex: index,
             position: 2,
             total: isDevelop ? 4 : 3,
-            label: CText('Account'.i18n, style: tsFloatingLabel),
+            label: CText('Account'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                    color: index == 2 ? black : grey5)),
             onTap: () => onTap!(2),
             icon: messagingModel.getCopiedRecoveryStatus(
                 (context, hasCopiedRecoveryKey, child) => CBadge(
                       count: 1,
                       showBadge: !hasCopiedRecoveryKey,
-                      child: SvgPicture.asset(
-                        ImagePaths.account,
+                      child: CAssetImage(
+                        path: ImagePaths.account,
                         color: index == 2
-                            ? selectedTabLabelColor
-                            : unselectedTabLabelColor,
-                        fit: BoxFit.contain,
+                            ? selectedTabIconColor
+                            : unselectedTabIconColor,
                       ),
                     )),
           ),
@@ -106,13 +110,13 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('Developer'.i18n, style: tsFloatingLabel),
-              icon: SvgPicture.asset(
-                ImagePaths.devices,
-                color: index == 3
-                    ? selectedTabLabelColor
-                    : unselectedTabLabelColor,
-                fit: BoxFit.contain,
+              label: CText('Developer'.i18n,
+                  style: tsFloatingLabel.copiedWith(
+                      color: index == 3 ? black : grey5)),
+              icon: CAssetImage(
+                path: ImagePaths.devices,
+                color:
+                    index == 3 ? selectedTabIconColor : unselectedTabIconColor,
               ),
               onTap: () => onTap!(3),
             ),

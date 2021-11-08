@@ -102,8 +102,8 @@ Color snippetShadowColor = black.withOpacity(0.18);
 Color selectedTabColor = white;
 Color unselectedTabColor = grey1;
 
-Color selectedTabLabelColor = black;
-Color unselectedTabLabelColor = grey5;
+Color selectedTabIconColor = black;
+Color unselectedTabIconColor = grey5;
 
 Color borderColor = grey3;
 

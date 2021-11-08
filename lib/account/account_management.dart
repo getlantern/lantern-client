@@ -120,7 +120,7 @@ class AccountManagement extends StatelessWidget {
               ],
             ));
           }
-          var isChatNumberExpanded = true;
+          var isChatNumberExpanded = false;
           return ListView(
               padding: const EdgeInsetsDirectional.only(
                 bottom: 8,
@@ -140,8 +140,10 @@ class AccountManagement extends StatelessWidget {
                                         children: [
                                           CText(me.chatNumber.number,
                                               style: tsBody2.copiedWith(
-                                                  color: blue4)),
+                                                  color:
+                                                      blue4)), // TODO: color differently
                                           GestureDetector(
+                                            // TODO: this is getting a bit too cramped
                                             onTap: () => showInfoDialog(context,
                                                 assetPath:
                                                     ImagePaths.chatNumber,
