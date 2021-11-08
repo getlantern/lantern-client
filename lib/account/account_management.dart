@@ -28,6 +28,7 @@ class AccountManagement extends StatelessWidget {
                 header: 'Email'.i18n,
                 leading: CAssetImage(path: ImagePaths.email, color: black),
                 content: emailAddress,
+                trailingArray: [],
               );
             }),
             sessionModel.expiryDate(
@@ -49,11 +50,12 @@ class AccountManagement extends StatelessWidget {
           proItems.addAll(devices.devices.map((device) {
             var isMyDevice = device.id == myDeviceId;
             var allowRemoval = devices.devices.length > 1 || !isMyDevice;
+            var index = devices.devices.indexWhere((d) => d == device);
 
             return Padding(
               padding: const EdgeInsetsDirectional.only(start: 4),
               child: ListItemFactory.isSettingsItem(
-                header: 'pro_devices_header'.i18n,
+                header: index == 0 ? 'pro_devices_header'.i18n : null,
                 content: device.name,
                 onTap: !allowRemoval
                     ? null
@@ -114,36 +116,71 @@ class AccountManagement extends StatelessWidget {
               content: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               trailingArray: [
-                CText('Add Device'.i18n.toUpperCase(), style: tsButtonPink)
+                CText('Link Device'.i18n.toUpperCase(), style: tsButtonPink)
               ],
             ));
           }
-
+          var isChatNumberExpanded = true;
           return ListView(
               padding: const EdgeInsetsDirectional.only(
                 bottom: 8,
               ),
               children: [
                 messagingModel.me(
-                    (BuildContext context, Contact me, Widget? child) =>
-                        ListItemFactory.isSettingsItem(
-                          header: 'secure_chat_number'.i18n,
-                          leading: CAssetImage(
-                              path: ImagePaths.chatNumber, color: black),
-                          content: me.chatNumber.shortNumber,
-                          trailingArray: [
-                            const Padding(
-                              padding: EdgeInsetsDirectional.only(end: 16.0),
-                              child: CAssetImage(
-                                path: ImagePaths.content_copy,
-                              ),
-                            ),
-                            const CAssetImage(
-                              path: ImagePaths.arrow_down,
-                            ),
-                          ],
-                          onTap: () {}, // TODO: expand
-                        )),
+                  (BuildContext context, Contact me, Widget? child) =>
+                      StatefulBuilder(
+                          builder: (context, setState) =>
+                              ListItemFactory.isSettingsItem(
+                                header: 'secure_chat_number'.i18n,
+                                leading: CAssetImage(
+                                    path: ImagePaths.chatNumber, color: black),
+                                content: !isChatNumberExpanded
+                                    ? me.chatNumber.shortNumber
+                                    : Wrap(
+                                        children: [
+                                          CText(me.chatNumber.number,
+                                              style: tsBody2.copiedWith(
+                                                  color: blue4)),
+                                          GestureDetector(
+                                            onTap: () => showInfoDialog(context,
+                                                assetPath:
+                                                    ImagePaths.chatNumber,
+                                                title:
+                                                    'secure_chat_number'.i18n,
+                                                des:
+                                                    'secure_chat_number_description'
+                                                        .i18n),
+                                            child: const Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.only(
+                                                      start: 4.0),
+                                              child: CAssetImage(
+                                                path: ImagePaths.info,
+                                                size: 12,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                trailingArray: [
+                                  const Padding(
+                                    padding: EdgeInsetsDirectional.only(
+                                        start: 16.0, end: 16.0),
+                                    child: CAssetImage(
+                                      path: ImagePaths.content_copy,
+                                    ),
+                                  ),
+                                  CAssetImage(
+                                    path: !isChatNumberExpanded
+                                        ? ImagePaths.arrow_down
+                                        : ImagePaths.arrow_up,
+                                  ),
+                                ],
+                                onTap: () => setState(() =>
+                                    isChatNumberExpanded =
+                                        !isChatNumberExpanded), // TODO: expand
+                              )),
+                ),
                 messagingModel.getCopiedRecoveryStatus((BuildContext context,
                         bool hasCopiedRecoveryKey, Widget? child) =>
                     ListItemFactory.isSettingsItem(
@@ -153,7 +190,6 @@ class AccountManagement extends StatelessWidget {
                         color: black,
                       ),
                       content: 'recovery_key'.i18n,
-                      showTrailing: true,
                       trailingArray: [
                         CBadge(
                           customPadding: const EdgeInsets.all(6.0),
