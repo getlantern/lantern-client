@@ -42,7 +42,7 @@ void showInfoDialog(
                   ),
                   child: CText(
                     des,
-                    style: tsBody1Color(unselectedTabLabelColor),
+                    style: tsBody1Color(unselectedTabIconColor),
                   ),
                 ),
               ),
