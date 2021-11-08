@@ -293,7 +293,7 @@ class ListItemFactory extends StatelessWidget {
     double? endPadding,
   }) {
     return Container(
-      padding: EdgeInsetsDirectional.only(end: endPadding ?? 0),
+      padding: EdgeInsetsDirectional.only(end: endPadding ?? 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
