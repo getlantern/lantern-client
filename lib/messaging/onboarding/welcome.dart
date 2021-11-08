@@ -24,7 +24,7 @@ class Welcome extends StatelessWidget {
             child: Button(
               text: 'get_started'.i18n,
               width: 200.0,
-              onPressed: () => context.router.push(const SecureChatNumber()),
+              onPressed: () => context.router.push(const Chats()),
             ),
           ),
           Padding(
