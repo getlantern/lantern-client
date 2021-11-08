@@ -24,7 +24,8 @@ class SecureChatNumber extends StatelessWidget {
                       const CDivider(),
                       //* Your Secure Chat Number
                       StatefulBuilder(
-                          builder: (context, setState) => CListTile(
+                          builder: (context, setState) =>
+                              ListItemFactory.isSettingsItem(
                                 onTap: () async {
                                   copyText(context, me.chatNumber.shortNumber);
                                   setState(() => textCopied = true);
@@ -41,22 +42,24 @@ class SecureChatNumber extends StatelessWidget {
                                       lineHeight:
                                           24), // small hack to fix vertical offset, size it like leading/trailing icon
                                 ),
-                                trailing: CInkWell(
-                                  onTap: () async {
-                                    copyText(
-                                        context, me.chatNumber.shortNumber);
-                                    setState(() => textCopied = true);
-                                    await Future.delayed(
-                                        defaultAnimationDuration,
-                                        () =>
-                                            setState(() => textCopied = false));
-                                  },
-                                  child: CAssetImage(
-                                    path: textCopied
-                                        ? ImagePaths.check_green
-                                        : ImagePaths.content_copy,
-                                  ),
-                                ),
+                                trailingArray: [
+                                  CInkWell(
+                                    onTap: () async {
+                                      copyText(
+                                          context, me.chatNumber.shortNumber);
+                                      setState(() => textCopied = true);
+                                      await Future.delayed(
+                                          defaultAnimationDuration,
+                                          () => setState(
+                                              () => textCopied = false));
+                                    },
+                                    child: CAssetImage(
+                                      path: textCopied
+                                          ? ImagePaths.check_green
+                                          : ImagePaths.content_copy,
+                                    ),
+                                  )
+                                ],
                               )),
                     ],
                   ),

@@ -185,13 +185,11 @@ class SuggestionBuilder extends StatelessWidget {
           var suggestion = suggestions[index];
 
           if (suggestion is SearchResult<Contact>) {
-            return ContactListItem(
-              contact: suggestion.value,
-              index: index,
+            return ListItemFactory.isMessagingItem(
               leading: CustomAvatar(
                   messengerId: suggestion.value.contactId.id,
                   displayName: suggestion.value.displayNameOrFallback),
-              title: suggestion.snippet,
+              content: suggestion.snippet,
               onTap: () async => await context.pushRoute(
                   Conversation(contactId: suggestion.value.contactId)),
               showDivider: false,
@@ -205,14 +203,12 @@ class SuggestionBuilder extends StatelessWidget {
                   Widget? child) {
                 final initialScrollIndex = messageRecords.toList().indexWhere(
                     (element) => element.value.id == suggestion.value.id);
-                return ContactListItem(
-                  contact: contact,
-                  index: index,
+                return ListItemFactory.isMessagingItem(
                   leading: CustomAvatar(
                       messengerId: suggestion.value.contactId.id,
                       displayName: contact.displayNameOrFallback),
-                  title: contact.displayNameOrFallback,
-                  subTitle: suggestion.snippet,
+                  content: contact.displayNameOrFallback,
+                  subtitle: suggestion.snippet,
                   onTap: () async => await context.pushRoute(Conversation(
                       contactId: suggestion.value.contactId,
                       initialScrollIndex: initialScrollIndex)),

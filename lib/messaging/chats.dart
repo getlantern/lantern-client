@@ -28,7 +28,7 @@ class Chats extends StatelessWidget {
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
                     (introductions.getPending().isNotEmpty)
-                        ? CListTile(
+                        ? ListItemFactory.isMessagingItem(
                             leading: CBadge(
                               count: introductions.getPending().length,
                               showBadge: true,
@@ -39,10 +39,12 @@ class Chats extends StatelessWidget {
                             ),
                             content: CText('introductions'.i18n,
                                 style: tsSubtitle1Short),
-                            trailing: const CAssetImage(
-                              path: ImagePaths.keyboard_arrow_right,
-                              size: iconSize,
-                            ),
+                            trailingArray: [
+                              const CAssetImage(
+                                path: ImagePaths.keyboard_arrow_right,
+                                size: iconSize,
+                              )
+                            ],
                             onTap: () async =>
                                 await context.pushRoute(const Introductions()),
                           )
@@ -95,25 +97,26 @@ class Chats extends StatelessWidget {
                     var contact = contacts[index];
                     return Column(
                       children: [
-                        ContactListItem(
+                        ListItemFactory.isMessagingItem(
                           focusedMenu: renderLongTapMenu(
                               contact: contact.value, context: context),
-                          contact: contact.value,
-                          index: index,
                           leading: CustomAvatar(
                               messengerId: contact.value.contactId.id,
                               displayName: contact.value.displayNameOrFallback),
-                          title: contact.value.displayNameOrFallback,
-                          subTitle:
+                          content:
+                              contact.value.displayNameOrFallback.toString(),
+                          subtitle:
                               '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
                                   .i18n,
                           onTap: () async => await context.pushRoute(
                               Conversation(contactId: contact.value.contactId)),
-                          trailing: HumanizedDate.fromMillis(
-                            contact.value.mostRecentMessageTs.toInt(),
-                            builder: (context, date) => CText(date,
-                                style: tsBody2.copiedWith(color: grey5)),
-                          ),
+                          trailingArray: [
+                            HumanizedDate.fromMillis(
+                              contact.value.mostRecentMessageTs.toInt(),
+                              builder: (context, date) => CText(date,
+                                  style: tsBody2.copiedWith(color: grey5)),
+                            )
+                          ],
                         ),
                       ],
                     );

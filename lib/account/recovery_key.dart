@@ -1,4 +1,4 @@
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class RecoveryKey extends StatelessWidget {
@@ -29,7 +29,8 @@ class RecoveryKey extends StatelessWidget {
                   ),
                   const CDivider(),
                   StatefulBuilder(
-                      builder: (context, setState) => CListTile(
+                      builder: (context, setState) =>
+                          ListItemFactory.isSettingsItem(
                             onTap: () => showInfoDialog(
                               context,
                               title: 'automated_backup'.i18n,
@@ -57,15 +58,18 @@ class RecoveryKey extends StatelessWidget {
                                 )
                               ],
                             ),
-                            trailing: Checkbox(
-                              checkColor: Colors.white,
-                              fillColor: MaterialStateProperty.resolveWith(
-                                  getCheckboxColorGreen),
-                              value: doBackup,
-                              shape: const CircleBorder(side: BorderSide.none),
-                              onChanged: (bool? value) =>
-                                  setState(() => doBackup = value!),
-                            ),
+                            trailingArray: [
+                              Checkbox(
+                                checkColor: Colors.white,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                    getCheckboxColorGreen),
+                                value: doBackup,
+                                shape:
+                                    const CircleBorder(side: BorderSide.none),
+                                onChanged: (bool? value) =>
+                                    setState(() => doBackup = value!),
+                              )
+                            ],
                           )),
                 ],
                 button: Button(

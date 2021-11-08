@@ -1,6 +1,4 @@
-import 'package:lantern/account/account.dart';
-
-import 'settings_item.dart';
+import 'package:lantern/common/common.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
@@ -25,66 +23,72 @@ class DeveloperSettingsTab extends StatelessWidget {
             margin: const EdgeInsetsDirectional.only(bottom: 16.0),
             child: CText('dev_payment_mode'.i18n, style: tsBody3),
           ),
-          SettingsItem(
-            title: 'Payment Test Mode'.i18n,
-            child: sessionModel.paymentTestMode(
-                (BuildContext context, bool value, Widget? child) {
-              return FlutterSwitch(
-                width: 44.0,
-                height: 24.0,
-                valueFontSize: 12.0,
-                padding: 2,
-                toggleSize: 18.0,
-                value: value,
-                onToggle: (bool newValue) {
-                  sessionModel.setPaymentTestMode(newValue);
-                },
-              );
-            }),
+          ListItemFactory.isSettingsItem(
+            content: 'Payment Test Mode'.i18n,
+            trailingArray: [
+              sessionModel.paymentTestMode(
+                  (BuildContext context, bool value, Widget? child) {
+                return FlutterSwitch(
+                  width: 44.0,
+                  height: 24.0,
+                  valueFontSize: 12.0,
+                  padding: 2,
+                  toggleSize: 18.0,
+                  value: value,
+                  onToggle: (bool newValue) {
+                    sessionModel.setPaymentTestMode(newValue);
+                  },
+                );
+              })
+            ],
           ),
-          SettingsItem(
-            title: 'Play Version'.i18n,
-            child: sessionModel
-                .playVersion((BuildContext context, bool value, Widget? child) {
-              return FlutterSwitch(
-                width: 44.0,
-                height: 24.0,
-                valueFontSize: 12.0,
-                padding: 2,
-                toggleSize: 18.0,
-                value: value,
-                onToggle: (bool newValue) {
-                  sessionModel.setPlayVersion(newValue);
-                },
-              );
-            }),
+          ListItemFactory.isSettingsItem(
+            content: 'Play Version'.i18n,
+            trailingArray: [
+              sessionModel.playVersion(
+                  (BuildContext context, bool value, Widget? child) {
+                return FlutterSwitch(
+                  width: 44.0,
+                  height: 24.0,
+                  valueFontSize: 12.0,
+                  padding: 2,
+                  toggleSize: 18.0,
+                  value: value,
+                  onToggle: (bool newValue) {
+                    sessionModel.setPlayVersion(newValue);
+                  },
+                );
+              })
+            ],
           ),
-          SettingsItem(
-            title: 'Force Country'.i18n,
-            child: sessionModel.forceCountry(
-                (BuildContext context, String value, Widget? child) {
-              return DropdownButton<String>(
-                value: value,
-                icon: const CAssetImage(path: ImagePaths.arrow_downward),
-                iconSize: iconSize,
-                elevation: 16,
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: (String? newValue) {
-                  sessionModel
-                      .setForceCountry(newValue == '' ? null : newValue);
-                },
-                items: <String>['', 'CN', 'IR', 'US']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: CText(value, style: tsBody1),
-                  );
-                }).toList(),
-              );
-            }),
+          ListItemFactory.isSettingsItem(
+            content: 'Force Country'.i18n,
+            trailingArray: [
+              sessionModel.forceCountry(
+                  (BuildContext context, String value, Widget? child) {
+                return DropdownButton<String>(
+                  value: value,
+                  icon: const CAssetImage(path: ImagePaths.arrow_downward),
+                  iconSize: iconSize,
+                  elevation: 16,
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? newValue) {
+                    sessionModel
+                        .setForceCountry(newValue == '' ? null : newValue);
+                  },
+                  items: <String>['', 'CN', 'IR', 'US']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: CText(value, style: tsBody1),
+                    );
+                  }).toList(),
+                );
+              })
+            ],
           ),
         ],
       ),

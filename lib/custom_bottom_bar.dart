@@ -34,7 +34,7 @@ class CustomBottomBar extends StatelessWidget {
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: CustomBottomItem(
+          icon: CustomBottomBarItem(
             currentIndex: index,
             position: 0,
             total: isDevelop ? 4 : 3,
@@ -51,7 +51,7 @@ class CustomBottomBar extends StatelessWidget {
           tooltip: 'chats'.i18n,
         ),
         BottomNavigationBarItem(
-          icon: CustomBottomItem(
+          icon: CustomBottomBarItem(
             currentIndex: index,
             position: 1,
             total: isDevelop ? 4 : 3,
@@ -78,7 +78,7 @@ class CustomBottomBar extends StatelessWidget {
           tooltip: 'VPN'.i18n,
         ),
         BottomNavigationBarItem(
-          icon: CustomBottomItem(
+          icon: CustomBottomBarItem(
             currentIndex: index,
             position: 2,
             total: isDevelop ? 4 : 3,
@@ -102,7 +102,7 @@ class CustomBottomBar extends StatelessWidget {
         ),
         if (isDevelop)
           BottomNavigationBarItem(
-            icon: CustomBottomItem(
+            icon: CustomBottomBarItem(
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
