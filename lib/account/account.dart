@@ -92,8 +92,21 @@ class AccountMenu extends StatelessWidget {
                     )
                   ])),
       ListItemFactory.isSettingsItem(
+          leading: CAssetImage(path: ImagePaths.account, color: black),
+          content: 'Account Management'.i18n,
+          onTap: () async =>
+              await context.pushRoute(AccountManagement(isPro: true)),
+          trailingArray: [
+            CBadge(
+              customPadding: const EdgeInsets.all(6.0),
+              fontSize: 14,
+              showBadge: true,
+              count: 1,
+            )
+          ]),
+      ListItemFactory.isSettingsItem(
         leading: CAssetImage(path: ImagePaths.devices, color: black),
-        content: 'Add Device'.i18n,
+        content: 'Link Device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
       ),
       ListItemFactory.isSettingsItem(

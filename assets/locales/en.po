@@ -47,8 +47,8 @@ msgstr "Backup Recovery Key"
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "Add Device"
-msgstr "Add Device"
+msgid "Link Device"
+msgstr "Link Device"
 
 msgid "Upgrade to Lantern Pro"
 msgstr "Upgrade to Lantern Pro"
@@ -573,6 +573,9 @@ msgstr "Secure Chat Number"
 
 msgid "your_secure_chat_number"
 msgstr "Your Secure Chat Number"
+
+msgid "secure_chat_number_descriptionr"
+msgstr "This is the full version of your Secure Chat Number.\n\nLantern provides the shortened Secure Chat Number to make sharing contacts easier.When you share the full version of the number Lantern’s servers are not required for look up."
 
 msgid "secure_chat_number_recovery"
 msgstr "Secure Chat Number Recovery"

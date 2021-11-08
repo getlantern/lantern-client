@@ -12,7 +12,6 @@ class ListItemFactory extends StatelessWidget {
   final void Function()? onTap;
   final SizedBox? focusedMenu;
   final bool? hasCopiedRecoveryKey;
-  final bool? showTrailing;
 
   late final _Typology typeToRender;
 
@@ -20,7 +19,6 @@ class ListItemFactory extends StatelessWidget {
     Key? key,
     this.leading,
     this.content,
-    this.showTrailing,
     this.onTap,
     this.trailingArray,
     this.header,
@@ -38,7 +36,6 @@ class ListItemFactory extends StatelessWidget {
     Key? key,
     this.leading,
     this.content,
-    this.showTrailing,
     this.onTap,
     this.trailingArray,
     this.header,
@@ -56,7 +53,6 @@ class ListItemFactory extends StatelessWidget {
     Key? key,
     this.leading,
     this.content,
-    this.showTrailing,
     this.onTap,
     this.trailingArray,
     this.header,
@@ -75,7 +71,6 @@ class ListItemFactory extends StatelessWidget {
     Key? key,
     this.leading,
     this.content,
-    this.showTrailing,
     this.onTap,
     this.trailingArray,
     this.header,
@@ -128,16 +123,14 @@ class ListItemFactory extends StatelessWidget {
                 height: 56,
                 onTap: onTap,
                 content: content,
-                trailingArray: showTrailing == true
-                    ? [
-                        mirrorLTR(
-                          context: context,
-                          child: const CAssetImage(
-                            path: ImagePaths.keyboard_arrow_right,
-                          ),
-                        )
-                      ]
-                    : []),
+                trailingArray: [
+                  mirrorLTR(
+                    context: context,
+                    child: const CAssetImage(
+                      path: ImagePaths.keyboard_arrow_right,
+                    ),
+                  )
+                ]),
           );
         }
       case _Typology.isFocusMenuItem:
