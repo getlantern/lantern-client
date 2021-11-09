@@ -334,11 +334,6 @@ class ConversationState extends State<Conversation>
           0;
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
-      shouldShowVerificationAlert = !contact.isMe &&
-          contactUnverified &&
-          DateTime.now().millisecondsSinceEpoch -
-                  verificationReminderLastDismissed >=
-              twoWeeksInMillis;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -360,26 +355,39 @@ class ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (shouldShowVerificationAlert)
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () {
-                    showVerificationOptions(
-                      model: model,
-                      contact: contact,
-                      bottomModalContext: context,
-                      showDismissNotification: shouldShowVerificationAlert,
-                      topBarAnimationCallback: () async {
-                        setState(() => verifiedColor = indicatorGreen);
-                        await Future.delayed(longAnimationDuration,
-                            () => setState(() => verifiedColor = black));
-                      },
-                    );
-                  },
-                  icon: const CAssetImage(
-                    path: ImagePaths.verification_alert,
-                  ),
-                ),
+              // * show Verification alert badge, resurface every 2 weeks
+              NowBuilder(
+                  calculate: (now) =>
+                      now.millisecondsSinceEpoch -
+                          verificationReminderLastDismissed >=
+                      twoWeeksInMillis,
+                  builder: (BuildContext context, bool value) {
+                    if (!contact.isMe && contactUnverified && value) {
+                      return IconButton(
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () async {
+                          await model.dismissVerificationReminder(
+                              contact.contactId.id);
+                          showVerificationOptions(
+                            model: model,
+                            contact: contact,
+                            bottomModalContext: context,
+                            showDismissNotification:
+                                shouldShowVerificationAlert,
+                            topBarAnimationCallback: () async {
+                              setState(() => verifiedColor = indicatorGreen);
+                              await Future.delayed(longAnimationDuration,
+                                  () => setState(() => verifiedColor = black));
+                            },
+                          );
+                        },
+                        icon: const CAssetImage(
+                          path: ImagePaths.verification_alert,
+                        ),
+                      );
+                    }
+                    return Container();
+                  }),
               if (!contact.isMe) CallAction(contact),
               IconButton(
                 visualDensity: VisualDensity.compact,
