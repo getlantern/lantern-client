@@ -87,6 +87,7 @@ class ListItemFactory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (typeToRender) {
+      // * SETTINGS ITEM
       case _Typology.isSettingsItem:
         {
           return Column(
@@ -97,7 +98,7 @@ class ListItemFactory extends StatelessWidget {
               buildBase(
                 leading: leading,
                 content: content,
-                trailingArray: trailingArray ?? [const ContinueArrow()],
+                trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
                 disableSplash: true,
@@ -105,6 +106,7 @@ class ListItemFactory extends StatelessWidget {
             ],
           );
         }
+      // * BOTTOM MODAL ITEM
       case _Typology.isBottomItem:
         {
           return Container(
@@ -133,6 +135,7 @@ class ListItemFactory extends StatelessWidget {
                 ]),
           );
         }
+      // * FOCUS ITEM
       case _Typology.isFocusMenuItem:
         {
           return buildBase(
@@ -143,6 +146,7 @@ class ListItemFactory extends StatelessWidget {
               content: content,
               trailingArray: []);
         }
+      // * MESSAGING ITEM
       case _Typology.isMessagingItem:
         {
           return Column(

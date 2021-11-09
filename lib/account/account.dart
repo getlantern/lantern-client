@@ -34,24 +34,15 @@ class AccountMenu extends StatelessWidget {
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: false)),
                   trailingArray: [
-                    CBadge(
-                      customPadding: const EdgeInsets.all(6.0),
-                      fontSize: 14,
-                      showBadge: !hasCopiedRecoveryKey,
-                      count: 1,
-                    )
+                    if (!hasCopiedRecoveryKey)
+                      const CAssetImage(
+                        path: ImagePaths.badge,
+                      ),
                   ])),
       ListItemFactory.isSettingsItem(
         leading: CAssetImage(path: ImagePaths.pro_icon_black, color: black),
         content: 'Upgrade to Lantern Pro'.i18n,
         onTap: upgradeToLanternPro,
-      ),
-      ListItemFactory.isSettingsItem(
-        leading: CAssetImage(path: ImagePaths.devices, color: black),
-        content: 'Authorize Device for Pro'.i18n,
-        onTap: () {
-          authorizeDeviceForPro(context);
-        },
       ),
       ListItemFactory.isSettingsItem(
         leading: CAssetImage(path: ImagePaths.star, color: black),
@@ -62,6 +53,13 @@ class AccountMenu extends StatelessWidget {
         leading: CAssetImage(path: ImagePaths.desktop, color: black),
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
+      ),
+      ListItemFactory.isSettingsItem(
+        leading: CAssetImage(path: ImagePaths.devices, color: black),
+        content: 'Authorize Device for Pro'.i18n,
+        onTap: () {
+          authorizeDeviceForPro(context);
+        },
       ),
       ListItemFactory.isSettingsItem(
         leading: CAssetImage(path: ImagePaths.settings, color: black),
@@ -84,26 +82,11 @@ class AccountMenu extends StatelessWidget {
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: true)),
                   trailingArray: [
-                    CBadge(
-                      customPadding: const EdgeInsets.all(6.0),
-                      fontSize: 14,
-                      showBadge: !hasCopiedRecoveryKey,
-                      count: 1,
-                    )
+                    if (!hasCopiedRecoveryKey)
+                      const CAssetImage(
+                        path: ImagePaths.badge,
+                      ),
                   ])),
-      ListItemFactory.isSettingsItem(
-          leading: CAssetImage(path: ImagePaths.account, color: black),
-          content: 'Account Management'.i18n,
-          onTap: () async =>
-              await context.pushRoute(AccountManagement(isPro: true)),
-          trailingArray: [
-            CBadge(
-              customPadding: const EdgeInsets.all(6.0),
-              fontSize: 14,
-              showBadge: true,
-              count: 1,
-            )
-          ]),
       ListItemFactory.isSettingsItem(
         leading: CAssetImage(path: ImagePaths.devices, color: black),
         content: 'Link Device'.i18n,

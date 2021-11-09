@@ -236,10 +236,10 @@ class _ContactInfoState extends State<ContactInfo> {
                                             builder: (context, setState) =>
                                                 Checkbox(
                                                     checkColor: Colors.white,
-                                                    fillColor:
-                                                        MaterialStateProperty
-                                                            .resolveWith(
-                                                                getCheckboxColor),
+                                                    fillColor: MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            getCheckboxFillColor(
+                                                                black, states)),
                                                     value: confirmBlock,
                                                     onChanged: (bool? value) {
                                                       setState(() =>
