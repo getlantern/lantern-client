@@ -11,6 +11,8 @@ import 'package:lantern/event_extension.dart';
 import 'package:lantern/event_manager.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
+import 'messaging/messaging_model.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -90,24 +92,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _context = context;
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
     return sessionModel.developmentMode(
       (BuildContext context, bool developmentMode, Widget? child) {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return AutoTabsScaffold(
-              routes: [
-                const MessagesRouter(),
-                const VpnRouter(),
-                const AccountRouter(),
-                if (developmentMode) const DeveloperRoute(),
-              ],
-              bottomNavigationBuilder: (context, tabsRouter) => CustomBottomBar(
-                onTap: tabsRouter.setActiveIndex,
-                index: tabsRouter.activeIndex,
-                isDevelop: developmentMode,
-              ),
-            );
+            return messagingModel.getOnBoardingStatus(
+                (context, isOnboarded, child) => AutoTabsScaffold(
+                      routes: [
+                        isOnboarded
+                            ? const MessagesRouter()
+                            : const OnboardingRouter(),
+                        const VpnRouter(),
+                        const AccountRouter(),
+                        if (developmentMode) const DeveloperRoute(),
+                      ],
+                      bottomNavigationBuilder: (context, tabsRouter) =>
+                          CustomBottomBar(
+                        onTap: tabsRouter.setActiveIndex,
+                        index: tabsRouter.activeIndex,
+                        isDevelop: developmentMode,
+                      ),
+                    ));
           },
         );
       },
