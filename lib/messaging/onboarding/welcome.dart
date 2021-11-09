@@ -3,7 +3,6 @@ import '../messaging.dart';
 class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
     return BaseScreen(
       title: 'lantern_secure_chat'.i18n,
       automaticallyImplyLeading: false,
@@ -27,8 +26,7 @@ class Welcome extends StatelessWidget {
             Button(
               text: 'get_started'.i18n,
               width: 200.0,
-              onPressed: () =>
-                  context.router.push(const SecureChatNumberMessaging()),
+              onPressed: () => context.router.push(const Chats()),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
