@@ -400,6 +400,11 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
+  Future<void> overrideOnBoarded(bool newValue) {
+    return methodChannel.invokeMethod(
+        'overrideOnBoarded', <String, dynamic>{'newValue': newValue});
+  }
+
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/onBoarding_status',
         defaultValue: false, builder: builder);

@@ -60,6 +60,7 @@ class Chats extends StatelessWidget {
                           a.value.mostRecentMessageTs)
                       .toInt();
                 });
+                // * EMPTY STATE
                 if (contacts.isEmpty) {
                   return Padding(
                     padding: const EdgeInsetsDirectional.only(
@@ -82,10 +83,25 @@ class Chats extends StatelessWidget {
                               width: MediaQuery.of(context).size.width,
                               constraints: const BoxConstraints.expand(),
                               child: CustomPaint(
-                                painter:
-                                    ArrowPainter(), // TODO: definitely need to fine-tune this in a responsive way once the illustration is ready
+                                painter: ArrowPainter(),
                               )),
                         ),
+                        // // *
+                        // // * DEV
+                        // // *
+                        // model.getOnBoardingStatus(
+                        //     (context, value, child) => Padding(
+                        //           padding: const EdgeInsets.all(8.0),
+                        //           child: Button(
+                        //             tertiary: true,
+                        //             text: 'DEV - toggle value'.i18n,
+                        //             width: 200.0,
+                        //             onPressed: () async {
+                        //               await model.overrideOnBoarded(!value);
+                        //               context.router.popUntilRoot();
+                        //             },
+                        //           ),
+                        //         )),
                       ],
                     ),
                   );
