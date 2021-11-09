@@ -4,16 +4,38 @@ import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-class AccountManagement extends StatelessWidget {
+class AccountManagement extends StatefulWidget {
   AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
+
+  @override
+  State<AccountManagement> createState() => _AccountManagementState();
+}
+
+class _AccountManagementState extends State<AccountManagement>
+    with SingleTickerProviderStateMixin {
+  late final TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
     var messagingModel = context.watch<MessagingModel>();
-    var title =
-        isPro ? 'Pro Account Management'.i18n : 'Account Management'.i18n;
+    var title = widget.isPro
+        ? 'Pro Account Management'.i18n
+        : 'Account Management'.i18n;
+    var textCopied = false;
 
     return BaseScreen(
       title: title,
@@ -21,14 +43,74 @@ class AccountManagement extends StatelessWidget {
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         return sessionModel
             .devices((BuildContext context, Devices devices, Widget? child) {
+          var freeItems = [
+            // * SECURE CHAT NUMBER
+            messagingModel.me((BuildContext context, Contact me,
+                    Widget? child) =>
+                StatefulBuilder(
+                    builder: (context, setState) =>
+                        ListItemFactory.isSettingsItem(
+                          header: 'secure_chat_number'.i18n,
+                          leading: CAssetImage(
+                              path: ImagePaths.chatNumber, color: black),
+                          content:
+                              me.chatNumber.shortNumber.formattedChatNumber,
+                          trailingArray: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 16.0, end: 16.0),
+                              child: CInkWell(
+                                onTap: () async {
+                                  copyText(context, me.chatNumber.shortNumber);
+                                  setState(() => textCopied = true);
+                                  await Future.delayed(defaultAnimationDuration,
+                                      () => setState(() => textCopied = false));
+                                },
+                                child: CAssetImage(
+                                  path: textCopied
+                                      ? ImagePaths.check_green
+                                      : ImagePaths.content_copy,
+                                ),
+                              ),
+                            ),
+                            const ContinueArrow(),
+                          ],
+                          onTap: () => context.router
+                              .push(const SecureChatNumberAccount()),
+                        ))),
+            // * RECOVERY KEY
+            messagingModel.getCopiedRecoveryStatus((BuildContext context,
+                    bool hasCopiedRecoveryKey, Widget? child) =>
+                ListItemFactory.isSettingsItem(
+                  header: 'backup_recovery_key'.i18n,
+                  leading: CAssetImage(
+                    path: ImagePaths.lock_outline,
+                    color: black,
+                  ),
+                  content: 'recovery_key'.i18n,
+                  trailingArray: [
+                    if (!hasCopiedRecoveryKey)
+                      const Padding(
+                        padding:
+                            EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+                        child: CAssetImage(
+                          path: ImagePaths.badge,
+                        ),
+                      ),
+                    const ContinueArrow()
+                  ],
+                  onTap: () => context.router.push(RecoveryKey()),
+                )),
+          ];
+
           var proItems = [
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {
               return ListItemFactory.isSettingsItem(
-                header: 'Email'.i18n,
+                header: 'lantern_pro_email'.i18n,
                 leading: CAssetImage(path: ImagePaths.email, color: black),
                 content: emailAddress,
-                trailingArray: [const ContinueArrow()],
+                trailingArray: [],
               );
             }),
             sessionModel.expiryDate(
@@ -120,74 +202,56 @@ class AccountManagement extends StatelessWidget {
               ],
             ));
           }
-          var textCopied = false;
-          return ListView(
-              padding: const EdgeInsetsDirectional.only(
-                bottom: 8,
-              ),
-              children: [
-                // * SECURE CHAT NUMBER
-                messagingModel.me((BuildContext context, Contact me,
-                        Widget? child) =>
-                    StatefulBuilder(
-                        builder: (context, setState) =>
-                            ListItemFactory.isSettingsItem(
-                              header: 'secure_chat_number'.i18n,
-                              leading: CAssetImage(
-                                  path: ImagePaths.chatNumber, color: black),
-                              content:
-                                  me.chatNumber.shortNumber.formattedChatNumber,
-                              trailingArray: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      start: 16.0, end: 16.0),
-                                  child: CInkWell(
-                                    onTap: () async {
-                                      copyText(
-                                          context, me.chatNumber.shortNumber);
-                                      setState(() => textCopied = true);
-                                      await Future.delayed(
-                                          defaultAnimationDuration,
-                                          () => setState(
-                                              () => textCopied = false));
-                                    },
-                                    child: CAssetImage(
-                                      path: textCopied
-                                          ? ImagePaths.check_green
-                                          : ImagePaths.content_copy,
-                                    ),
-                                  ),
-                                ),
-                                const ContinueArrow(),
-                              ],
-                              onTap: () => context.router
-                                  .push(const SecureChatNumberAccount()),
-                            ))),
-                // * RECOVERY KEY
-                messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                        bool hasCopiedRecoveryKey, Widget? child) =>
-                    ListItemFactory.isSettingsItem(
-                      header: 'backup_recovery_key'.i18n,
-                      leading: CAssetImage(
-                        path: ImagePaths.lock_outline,
-                        color: black,
+          return widget.isPro
+              // * PRO
+              ? Column(children: [
+                  TabBar(
+                    controller: tabController,
+                    indicator: BoxDecoration(
+                      border: Border(
+                          top: BorderSide.none,
+                          left: BorderSide.none,
+                          right: BorderSide.none,
+                          bottom: BorderSide(width: 2.0, color: pink4)),
+                    ),
+                    labelColor: pink4,
+                    labelStyle: tsSubtitle2,
+                    unselectedLabelColor: grey5,
+                    tabs: [
+                      Tab(
+                        text: 'Lantern Pro'.i18n.toUpperCase(),
                       ),
-                      content: 'recovery_key'.i18n,
-                      trailingArray: [
-                        if (!hasCopiedRecoveryKey)
-                          const Padding(
-                            padding: EdgeInsetsDirectional.only(
-                                start: 16.0, end: 16.0),
-                            child: CAssetImage(
-                              path: ImagePaths.badge,
-                            ),
+                      Tab(
+                        text: 'secure_chat'.i18n.toUpperCase(),
+                      ),
+                    ],
+                  ),
+                  const CDivider(),
+                  Expanded(
+                      child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      // * PRO TAB
+                      ListView(
+                          padding: const EdgeInsetsDirectional.only(
+                            bottom: 8,
                           ),
-                        const ContinueArrow()
-                      ],
-                      onTap: () => context.router.push(RecoveryKey()),
-                    )),
-                if (isPro) ...proItems
-              ]);
+                          children: proItems),
+                      // * SECURE CHAT TAB
+                      ListView(
+                          padding: const EdgeInsetsDirectional.only(
+                            bottom: 8,
+                          ),
+                          children: freeItems),
+                    ],
+                  ))
+                ])
+              // * FREE
+              : ListView(
+                  padding: const EdgeInsetsDirectional.only(
+                    bottom: 8,
+                  ),
+                  children: freeItems);
         });
       }),
     );
