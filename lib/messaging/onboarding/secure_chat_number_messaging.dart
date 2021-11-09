@@ -71,21 +71,6 @@ class SecureChatNumberMessaging extends StatelessWidget {
                     child:
                         CText('secure_text_explanation'.i18n, style: tsBody1),
                   ),
-                  // // *
-                  // // * DEV
-                  // // *
-                  // model.getOnBoardingStatus((context, value, child) => Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Button(
-                  //         tertiary: true,
-                  //         text: 'DEV - toggle value'.i18n,
-                  //         width: 200.0,
-                  //         onPressed: () async {
-                  //           await model.overrideOnBoarded(!value);
-                  //           context.router.popUntilRoot();
-                  //         },
-                  //       ),
-                  //     )),
                 ],
                 button: Button(
                   text: 'Next'.i18n,
