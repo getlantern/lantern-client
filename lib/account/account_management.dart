@@ -73,7 +73,8 @@ class _AccountManagementState extends State<AccountManagement>
                                 ),
                               ),
                             ),
-                            const ContinueArrow(),
+                            mirrorLTR(
+                                context: context, child: const ContinueArrow()),
                           ],
                           onTap: () => context.router
                               .push(const SecureChatNumberAccount()),
@@ -97,7 +98,7 @@ class _AccountManagementState extends State<AccountManagement>
                           path: ImagePaths.badge,
                         ),
                       ),
-                    const ContinueArrow()
+                    mirrorLTR(context: context, child: const ContinueArrow())
                   ],
                   onTap: () => context.router.push(RecoveryKey()),
                 )),
