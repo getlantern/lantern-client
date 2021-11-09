@@ -1,6 +1,6 @@
 import '../messaging.dart';
 
-class SecureChatNumber extends StatelessWidget {
+class SecureChatNumberMessaging extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textCopied = false;
@@ -36,7 +36,7 @@ class SecureChatNumber extends StatelessWidget {
                                   path: ImagePaths.tag,
                                 ),
                                 content: CText(
-                                  me.chatNumber.shortNumber,
+                                  me.chatNumber.shortNumber.formattedChatNumber,
                                   style: tsHeading1.copiedWith(
                                       color: blue4,
                                       lineHeight:

@@ -28,7 +28,7 @@ class AccountManagement extends StatelessWidget {
                 header: 'Email'.i18n,
                 leading: CAssetImage(path: ImagePaths.email, color: black),
                 content: emailAddress,
-                trailingArray: [],
+                trailingArray: [const ContinueArrow()],
               );
             }),
             sessionModel.expiryDate(
@@ -120,69 +120,50 @@ class AccountManagement extends StatelessWidget {
               ],
             ));
           }
-          var isChatNumberExpanded = false;
+          var textCopied = false;
           return ListView(
               padding: const EdgeInsetsDirectional.only(
                 bottom: 8,
               ),
               children: [
-                messagingModel.me(
-                  (BuildContext context, Contact me, Widget? child) =>
-                      StatefulBuilder(
-                          builder: (context, setState) =>
-                              ListItemFactory.isSettingsItem(
-                                header: 'secure_chat_number'.i18n,
-                                leading: CAssetImage(
-                                    path: ImagePaths.chatNumber, color: black),
-                                content: !isChatNumberExpanded
-                                    ? me.chatNumber.shortNumber
-                                    : Wrap(
-                                        children: [
-                                          CText(me.chatNumber.number,
-                                              style: tsBody2.copiedWith(
-                                                  color:
-                                                      blue4)), // TODO: color differently
-                                          GestureDetector(
-                                            // TODO: this is getting a bit too cramped
-                                            onTap: () => showInfoDialog(context,
-                                                assetPath:
-                                                    ImagePaths.chatNumber,
-                                                title:
-                                                    'secure_chat_number'.i18n,
-                                                des:
-                                                    'secure_chat_number_description'
-                                                        .i18n),
-                                            child: const Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.only(
-                                                      start: 4.0),
-                                              child: CAssetImage(
-                                                path: ImagePaths.info,
-                                                size: 12,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                trailingArray: [
-                                  const Padding(
-                                    padding: EdgeInsetsDirectional.only(
-                                        start: 16.0, end: 16.0),
+                // * SECURE CHAT NUMBER
+                messagingModel.me((BuildContext context, Contact me,
+                        Widget? child) =>
+                    StatefulBuilder(
+                        builder: (context, setState) =>
+                            ListItemFactory.isSettingsItem(
+                              header: 'secure_chat_number'.i18n,
+                              leading: CAssetImage(
+                                  path: ImagePaths.chatNumber, color: black),
+                              content:
+                                  me.chatNumber.shortNumber.formattedChatNumber,
+                              trailingArray: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                      start: 16.0, end: 16.0),
+                                  child: CInkWell(
+                                    onTap: () async {
+                                      copyText(
+                                          context, me.chatNumber.shortNumber);
+                                      setState(() => textCopied = true);
+                                      await Future.delayed(
+                                          defaultAnimationDuration,
+                                          () => setState(
+                                              () => textCopied = false));
+                                    },
                                     child: CAssetImage(
-                                      path: ImagePaths.content_copy,
+                                      path: textCopied
+                                          ? ImagePaths.check_green
+                                          : ImagePaths.content_copy,
                                     ),
                                   ),
-                                  CAssetImage(
-                                    path: !isChatNumberExpanded
-                                        ? ImagePaths.arrow_down
-                                        : ImagePaths.arrow_up,
-                                  ),
-                                ],
-                                onTap: () => setState(() =>
-                                    isChatNumberExpanded =
-                                        !isChatNumberExpanded), // TODO: expand
-                              )),
-                ),
+                                ),
+                                const ContinueArrow(),
+                              ],
+                              onTap: () => context.router
+                                  .push(const SecureChatNumberAccount()),
+                            ))),
+                // * RECOVERY KEY
                 messagingModel.getCopiedRecoveryStatus((BuildContext context,
                         bool hasCopiedRecoveryKey, Widget? child) =>
                     ListItemFactory.isSettingsItem(
@@ -193,12 +174,15 @@ class AccountManagement extends StatelessWidget {
                       ),
                       content: 'recovery_key'.i18n,
                       trailingArray: [
-                        CBadge(
-                          customPadding: const EdgeInsets.all(6.0),
-                          fontSize: 14,
-                          showBadge: !hasCopiedRecoveryKey,
-                          count: 1,
-                        )
+                        if (!hasCopiedRecoveryKey)
+                          const Padding(
+                            padding: EdgeInsetsDirectional.only(
+                                start: 16.0, end: 16.0),
+                            child: CAssetImage(
+                              path: ImagePaths.badge,
+                            ),
+                          ),
+                        const ContinueArrow()
                       ],
                       onTap: () => context.router.push(RecoveryKey()),
                     )),

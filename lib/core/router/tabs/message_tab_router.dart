@@ -3,7 +3,7 @@ import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding_handler.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
-import 'package:lantern/messaging/onboarding/secure_chat_number.dart';
+import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
 
 const message_tab_router = CustomRoute<void>(
@@ -32,9 +32,9 @@ const message_tab_router = CustomRoute<void>(
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
-        page: SecureChatNumber,
-        name: 'SecureChatNumber',
-        path: 'secureChatNumber',
+        page: SecureChatNumberMessaging,
+        name: 'SecureChatNumberMessaging',
+        path: 'secureChatNumberMessaging',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

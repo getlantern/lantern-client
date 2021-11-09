@@ -29,6 +29,7 @@ class ImagePaths {
   static const chatNumber = 'assets/images/chatNumber.svg';
   static const backup = 'assets/images/backup.svg';
   static const backup_icon = 'assets/images/backup_icon.svg';
+  static const badge = 'assets/images/badge.svg';
 
   // Messaging
   static const add = 'assets/images/add.svg';
