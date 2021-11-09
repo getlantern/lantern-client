@@ -10,7 +10,6 @@ class Welcome extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: WrapAlignment.center,
         children: [
-          const CAssetImage(path: ImagePaths.placeholder, size: 300),
           Padding(
             padding: const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
             child: CText('welcome_title'.i18n, style: tsHeading1),
@@ -24,8 +23,7 @@ class Welcome extends StatelessWidget {
             child: Button(
               text: 'get_started'.i18n,
               width: 200.0,
-              onPressed: () =>
-                  context.router.push(const SecureChatNumberMessaging()),
+              onPressed: () => context.router.push(const Chats()),
             ),
           ),
           Padding(

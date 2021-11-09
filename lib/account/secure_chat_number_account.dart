@@ -1,4 +1,3 @@
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class SecureChatNumberAccount extends StatelessWidget {
@@ -29,7 +28,8 @@ class SecureChatNumberAccount extends StatelessWidget {
                             children: [
                               const Padding(padding: EdgeInsets.all(4.0)),
                               Expanded(
-                                child: formatChatNumber(me.chatNumber),
+                                child: FullChatNumberWidget(
+                                    context, me.chatNumber),
                               ),
                               const Padding(padding: EdgeInsets.all(4.0)),
                             ],
@@ -62,28 +62,5 @@ class SecureChatNumberAccount extends StatelessWidget {
                 ),
               ],
             )));
-  }
-
-  // TODO: format and color the short number, display the rest unformatted
-  Widget formatChatNumber(ChatNumber chatNumber) {
-    final short = chatNumber.shortNumber.formattedChatNumber;
-    final longRemainder = chatNumber.number.split(chatNumber.shortNumber)[1];
-
-    // APPROACH 1: use a stack and pad the start of the longRemainder string
-    return Stack(children: [
-      CText(short, style: tsBody2.copiedWith(color: blue4)),
-      CText(longRemainder.padLeft(chatNumber.number.formattedChatNumber.length),
-          style: tsBody2),
-    ]);
-
-    // APPROACH 2: use RichText
-    return RichText(
-      text: TextSpan(
-        children: <TextSpan>[
-          TextSpan(text: short, style: tsBody2.copyWith(color: blue4)),
-          TextSpan(text: longRemainder, style: tsBody2),
-        ],
-      ),
-    );
   }
 }
