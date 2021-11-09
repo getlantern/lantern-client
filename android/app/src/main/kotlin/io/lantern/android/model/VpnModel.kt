@@ -7,10 +7,11 @@ import org.getlantern.mobilesdk.Logger
 class VpnModel(
     flutterEngine: FlutterEngine? = null,
     private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
-) : BaseModel("vpn", flutterEngine, masterDB.withSchema("vpn")) {
+) : BaseModel("vpn", flutterEngine, masterDB.withSchema(VPN_SCHEMA)) {
 
     companion object {
         private const val TAG = "VpnModel"
+        const val VPN_SCHEMA = "vpn"
 
         const val PATH_VPN_STATUS = "/vpn_status"
         const val PATH_SERVER_INFO = "/server_info"
