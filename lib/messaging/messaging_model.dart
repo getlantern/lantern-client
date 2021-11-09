@@ -402,7 +402,7 @@ class MessagingModel extends Model {
 
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/onBoarding_status',
-        builder: builder);
+        defaultValue: false, builder: builder);
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
@@ -411,6 +411,6 @@ class MessagingModel extends Model {
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/copiedRecovery_status',
-        builder: builder);
+        defaultValue: false, builder: builder);
   }
 }
