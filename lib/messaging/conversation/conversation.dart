@@ -622,152 +622,141 @@ class ConversationState extends State<Conversation>
   //* Renders Emoji button, message bar and recording icon
   //* Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
+    final leading = isRecording
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: PulsatingIndicator(),
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: StopwatchTimer(
+                    stopWatchTimer: stopWatchTimer,
+                    style: tsSubtitle1.copiedWith(color: indicatorRed).short,
+                  ),
+                ),
+              ),
+            ],
+          )
+        : IconButton(
+            onPressed: () {
+              {
+                if (keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction) {
+                  keyboardMode = KeyboardMode.native;
+                  showNativeKeyboard();
+                } else {
+                  showEmojiKeyboard(false);
+                }
+              }
+            },
+            icon: keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction
+                ? const CAssetImage(path: ImagePaths.keyboard)
+                : const CAssetImage(path: ImagePaths.insert_emoticon),
+          );
+
+    final content = Stack(
+      alignment: Alignment.center,
+      children: [
+        TextFormField(
+          autofocus: false,
+          textInputAction: TextInputAction.send,
+          controller: newMessage,
+          onChanged: (value) {
+            final newIsSendIconVisible = value.isNotEmpty;
+            if (newIsSendIconVisible != isSendIconVisible) {
+              setState(() => isSendIconVisible = newIsSendIconVisible);
+            }
+          },
+          focusNode: focusNode,
+          onFieldSubmitted: (value) async =>
+              value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
+          decoration: InputDecoration(
+            // Send icon
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: 'message'.i18n,
+            border: const OutlineInputBorder(),
+          ),
+          style: tsSubtitle1
+              .copiedWith(color: isSendIconVisible ? black : grey5)
+              .short,
+        ),
+        // hide TextFormField while recording by painting over it. this allows
+        // the form field to retain focus to keep the keyboard open and keep
+        // the layout from changing while we're recording.
+        if (isRecording)
+          SizedBox(
+            child: Container(
+              decoration: BoxDecoration(color: grey2),
+            ),
+          ),
+      ],
+    );
+    final trailing = isSendIconVisible && !isRecording
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                child: VerticalDivider(thickness: 1, width: 1, color: grey3),
+              ),
+              IconButton(
+                key: const ValueKey('send_message'),
+                icon: mirrorLTR(
+                  context: context,
+                  child:
+                      CAssetImage(path: ImagePaths.send_rounded, color: pink4),
+                ),
+                onPressed: send,
+              ),
+            ],
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              isRecording
+                  ? const SizedBox()
+                  : IconButton(
+                      onPressed: () async => await selectFilesToShare(),
+                      icon: const CAssetImage(path: ImagePaths.add_circle),
+                    ),
+            ],
+          );
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         Container(
-          height: messageBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(start: 4.0, end: 16.0),
-                child: isRecording
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(start: 16),
-                              child: PulsatingIndicator(),
-                            ),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(start: 16),
-                              child: StopwatchTimer(
-                                stopWatchTimer: stopWatchTimer,
-                                style: tsSubtitle1
-                                    .copiedWith(color: indicatorRed)
-                                    .short,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          {
-                            if (keyboardMode == KeyboardMode.emoji ||
-                                keyboardMode == KeyboardMode.emojiReaction) {
-                              keyboardMode = KeyboardMode.native;
-                              showNativeKeyboard();
-                            } else {
-                              showEmojiKeyboard(false);
-                            }
-                          }
-                        },
-                        icon: keyboardMode == KeyboardMode.emoji ||
-                                keyboardMode == KeyboardMode.emojiReaction
-                            ? const CAssetImage(path: ImagePaths.keyboard)
-                            : const CAssetImage(
-                                path: ImagePaths.insert_emoticon),
-                      ),
-              ),
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      TextFormField(
-                        autofocus: false,
-                        textInputAction: TextInputAction.send,
-                        controller: newMessage,
-                        onChanged: (value) {
-                          final newIsSendIconVisible = value.isNotEmpty;
-                          if (newIsSendIconVisible != isSendIconVisible) {
-                            setState(
-                                () => isSendIconVisible = newIsSendIconVisible);
-                          }
-                        },
-                        focusNode: focusNode,
-                        onFieldSubmitted: (value) async => value.isEmpty
-                            ? null
-                            : await handleMessageBarSubmit(newMessage),
-                        decoration: InputDecoration(
-                          // Send icon
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          hintText: 'message'.i18n,
-                          border: const OutlineInputBorder(),
-                        ),
-                        style: tsSubtitle1
-                            .copiedWith(
-                                color: isSendIconVisible ? black : grey5)
-                            .short,
-                      ),
-                      // hide TextFormField while recording by painting over it. this allows
-                      // the form field to retain focus to keep the keyboard open and keep
-                      // the layout from changing while we're recording.
-                      if (isRecording)
-                        SizedBox(
-                          child: Container(
-                            decoration: BoxDecoration(color: grey2),
-                          ),
-                        ),
-                    ],
+            height: messageBarHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // * Leading
+                leading,
+                // * Content
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    child: content,
                   ),
                 ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsetsDirectional.only(end: isSendIconVisible ? 0 : 48),
-                child: isSendIconVisible && !isRecording
-                    ? Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                                top: 8, bottom: 8),
-                            child: VerticalDivider(
-                                thickness: 1, width: 1, color: grey3),
-                          ),
-                          IconButton(
-                            key: const ValueKey('send_message'),
-                            icon: mirrorLTR(
-                              context: context,
-                              child: CAssetImage(
-                                  path: ImagePaths.send_rounded, color: pink4),
-                            ),
-                            onPressed: send,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          isRecording
-                              ? const SizedBox()
-                              : IconButton(
-                                  onPressed: () async =>
-                                      await selectFilesToShare(),
-                                  icon: const CAssetImage(
-                                      path: ImagePaths.add_circle),
-                                ),
-                        ],
-                      ),
-              ),
-            ],
-          ),
-        ),
+                // * Trailing
+                Padding(
+                  padding: EdgeInsetsDirectional.only(
+                      end: isSendIconVisible ? 0 : 48),
+                  child: trailing,
+                ),
+              ],
+            )),
         if (!isSendIconVisible)
           VoiceRecorder(
             isRecording: isRecording,

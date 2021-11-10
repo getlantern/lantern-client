@@ -125,14 +125,7 @@ class ListItemFactory extends StatelessWidget {
                 height: 56,
                 onTap: onTap,
                 content: content,
-                trailingArray: [
-                  mirrorLTR(
-                    context: context,
-                    child: const CAssetImage(
-                      path: ImagePaths.keyboard_arrow_right,
-                    ),
-                  )
-                ]),
+                trailingArray: trailingArray),
           );
         }
       // * FOCUS ITEM
