@@ -231,7 +231,9 @@ class CTextStyle extends TextStyle {
       Color? decorationColor,
       TextDecorationStyle? decorationStyle,
       double? decorationThickness,
-      String? debugLabel}) {
+      String? debugLabel,
+      TextOverflow? overflow,
+      }) {
     assert(false, 'copyWith not supported, use copiedWith');
     return this;
   }
