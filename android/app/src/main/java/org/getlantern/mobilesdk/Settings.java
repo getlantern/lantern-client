@@ -12,7 +12,6 @@ public class Settings implements internalsdk.Settings {
 
     private static final String TAG = Settings.class.getName();
     private static final String configFileName = "settings.json";
-    private static final long replicaPort = 3223;
 
     @SerializedName("httpProxyHost")
     private String httpProxyHost;
@@ -61,10 +60,6 @@ public class Settings implements internalsdk.Settings {
 
     public long getHttpProxyPort() {
         return httpProxyPort;
-    }
-
-    public long getReplicaPort() {
-        return replicaPort;
     }
 
     public boolean shouldRunReplica() {

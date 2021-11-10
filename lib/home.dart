@@ -1,5 +1,9 @@
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
+import 'dart:typed_data';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/custom_bottom_bar.dart';
@@ -8,7 +12,6 @@ import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
-
 import 'messaging/messaging_model.dart';
 
 class HomePage extends StatefulWidget {
