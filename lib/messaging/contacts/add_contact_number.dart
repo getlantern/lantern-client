@@ -26,30 +26,30 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
   void handleButtonPress(MessagingModel model) async {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
-      try {
-        // context.loaderOverlay.show(widget: spinner);
-        var chatNumber = ChatNumber.create();
-        if (controller.text.length >= 82) {
-          // this is a full chat number, use it directly
-          chatNumber.number = controller.text.withoutWhitespace;
-        } else {
-          try {
-            chatNumber = await model
-                .findChatNumberByShortNumber(controller.text.withoutWhitespace);
-          } catch (e) {
-            setState(() => controller.error = 'chat_number_not_found'.i18n);
-          }
-        }
+      var chatNumber = ChatNumber.create();
+      if (controller.text.length >= 82) {
+        // this is a full chat number, use it directly
+        chatNumber.number = controller.text.withoutWhitespace;
+      } else {
         try {
-          final contact =
-              await model.addOrUpdateDirectContact(chatNumber: chatNumber);
-          await context.pushRoute(Conversation(
-              contactId: contact.contactId, showContactEditingDialog: true));
+          context.loaderOverlay.show(widget: spinner);
+          chatNumber = await model
+              .findChatNumberByShortNumber(controller.text.withoutWhitespace);
         } catch (e) {
-          setState(() => controller.error = 'unable_to_add_contact'.i18n);
+          setState(() => controller.error = 'chat_number_not_found'.i18n);
+          return;
+        } finally {
+          context.loaderOverlay.hide();
         }
-      } finally {
-        // context.loaderOverlay.hide();
+      }
+      try {
+        final contact =
+            await model.addOrUpdateDirectContact(chatNumber: chatNumber);
+        await context.pushRoute(Conversation(
+            contactId: contact.contactId, showContactEditingDialog: true));
+      } catch (e) {
+        setState(() => controller.error = 'unable_to_add_contact'.i18n);
+        return;
       }
     }
   }
