@@ -20,6 +20,9 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
+import 'package:lantern/replica/ui/link_opener_screen.dart';
+import 'package:lantern/replica/ui/unknownscreen.dart';
+import 'package:lantern/replica/ui/videoplayer.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -101,9 +104,23 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
+        page: LinkOpenerScreen,
+        name: 'LinkOpenerScreen',
+        path: 'linkOpenerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
         page: Settings,
         name: 'Settings',
         path: 'settings',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaVideoPlayerScreen,
+        name: 'ReplicaVideoPlayerScreen',
+        path: 'replicaVideoPlayerScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
@@ -160,6 +177,13 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         page: BlockedUsers,
         name: 'BlockedUsers',
         path: 'blockedUsers',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: UnknownItemScreen,
+        name: 'UnknownItemScreen',
+        path: 'unknownItemScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
