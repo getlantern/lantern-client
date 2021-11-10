@@ -75,6 +75,10 @@ abstract class SessionManager(application: Application) : Session {
         get() = if (startResult == null) {
             ""
         } else startResult!!.dnsGrabAddr
+    val replicaAddr: String
+        get() = if (startResult == null) {
+            ""
+        } else startResult!!.replicaAddr
 
     /**
      * isFrom checks if a user is from a particular country or region

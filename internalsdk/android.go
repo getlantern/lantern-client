@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,6 +17,7 @@ import (
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
+	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight"
 	"github.com/getlantern/flashlight/balancer"
@@ -34,10 +34,6 @@ import (
 	"github.com/getlantern/mtime"
 	"github.com/getlantern/netx"
 	"github.com/getlantern/protected"
-	replicaServer "github.com/getlantern/replica/server"
-	replicaService "github.com/getlantern/replica/service"
-	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -54,15 +50,14 @@ var (
 
 	startOnce sync.Once
 
-	cl          = eventual.NewValue()
-	dnsGrabAddr = eventual.NewValue()
-
+	clEventual               = eventual.NewValue()
+	dnsGrabAddrEventual      = eventual.NewValue()
+	replicaAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 )
 
 type Settings interface {
 	StickyConfig() bool
-	GetReplicaPort() int
 	ShouldRunReplica() bool
 	GetHttpProxyHost() string
 	GetHttpProxyPort() int
@@ -341,7 +336,7 @@ func RemoveOverrides() {
 }
 
 func getBalancer(timeout time.Duration) *balancer.Balancer {
-	_cl, ok := cl.Get(timeout)
+	_cl, ok := clEventual.Get(timeout)
 	if !ok {
 		return nil
 	}
@@ -364,6 +359,8 @@ type StartResult struct {
 	HTTPAddr    string
 	SOCKS5Addr  string
 	DNSGrabAddr string
+	// If this value is empty, Replica failed to start
+	ReplicaAddr string
 }
 
 // AdSettings is an interface for retrieving mobile ad settings from the
@@ -420,13 +417,11 @@ func Start(configDir string,
 	})
 
 	startTimeout := time.Duration(settings.TimeoutMillis()) * time.Millisecond
-
 	elapsed := mtime.Stopwatch()
 	addr, ok := client.Addr(startTimeout)
 	if !ok {
 		return nil, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
 	}
-
 	socksAddr, ok := client.Socks5Addr(startTimeout - elapsed())
 	if !ok {
 		err := fmt.Errorf("SOCKS5 Proxy didn't start within %v timeout", startTimeout)
@@ -434,101 +429,31 @@ func Start(configDir string,
 		return nil, err
 	}
 	log.Debugf("Started socks proxy at %s", socksAddr)
-
-	dnsGrabberAddr, ok := dnsGrabAddr.Get(startTimeout - elapsed())
+	da, ok := dnsGrabAddrEventual.Get(startTimeout - elapsed())
 	if !ok {
 		err := fmt.Errorf("dnsgrab didn't start within %v timeout", startTimeout)
 		log.Error(err.Error())
 		return nil, err
 	}
+	replicaAddr := ""
+	if settings.ShouldRunReplica() {
+		v, ok := replicaAddrEventual.Get(startTimeout - elapsed())
+		if ok {
+			replicaAddr = v.(string)
+			log.Debugf("Started Replica at %s", replicaAddr)
+		} else {
+			replicaAddr = ""
+			log.Debugf("Failed to run Replica: will continue without it")
+		}
+	}
 
-	return &StartResult{addr.(string), socksAddr.(string), dnsGrabberAddr.(string)}, nil
+	return &StartResult{addr.(string), socksAddr.(string),
+		da.(string), replicaAddr}, nil
 }
 
 // EnableLogging enables logging.
 func EnableLogging(configDir string) {
 	logging.EnableFileLogging(configDir)
-}
-
-// serveReplica serves 'handler' over localhost with 'port'.
-func serveReplica(handler *replicaServer.HttpHandler, port int) {
-	fmt.Printf("Serving replica over port %v ...\n", port)
-	r := mux.NewRouter()
-	r.PathPrefix("/replica").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("r = %+v\n", r)
-		http.StripPrefix("/replica", handler).ServeHTTP(w, r)
-	})
-	http.Handle("/", r)
-	srv := &http.Server{
-		Handler: r,
-		// Serve over localhost, not for all interfaces, since we don't want
-		// the device to broadcast a Replica server
-		Addr:         "127.0.0.1:" + strconv.Itoa(port),
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
-	srv.ListenAndServe()
-}
-
-// newReplicaHttpHandler constructs a replicaServer.HttpHandler.
-// This function will lazily fetch information from the global yaml config
-// using 'fetchFeatureOptionsFunc' function.
-func newReplicaHttpHandler(
-	configDir string,
-	userConfig *userConfig,
-	// function to lazily fetch config.FeatureOptions for Replica from Flashlight
-	fetchFeatureOptionsFunc func(string, config.FeatureOptions) error,
-) (*replicaServer.HttpHandler, error) {
-	if userConfig == nil {
-		panic(errors.New("userConfig is nil"))
-	}
-	if fetchFeatureOptionsFunc == nil {
-		panic(errors.New("featureOptionsFunc is nil"))
-	}
-
-	fmt.Printf("Starting replica with configDir [%v] and userConfig [%+v]\n", configDir, userConfig)
-	optsFunc := func() *config.ReplicaOptions {
-		var opts config.ReplicaOptions
-		if err := fetchFeatureOptionsFunc(config.FeatureReplica, &opts); err != nil {
-			log.Errorf("Could not fetch replica feature options: %v", err)
-			return nil
-		}
-		return &opts
-	}
-
-	input := replicaServer.NewHttpHandlerInput{}
-	input.SetDefaults()
-	input.RootUploadsDir = configDir
-	input.CacheDir = configDir
-	input.UserConfig = userConfig
-	input.HttpClient = &http.Client{
-		Transport: proxied.AsRoundTripper(
-			func(req *http.Request) (*http.Response, error) {
-				chained, err := proxied.ChainedNonPersistent("")
-				if err != nil {
-					return nil, fmt.Errorf("connecting to proxy: %w", err)
-				}
-				return chained.RoundTrip(req)
-			},
-		),
-	}
-	input.ReplicaServiceClient = replicaService.ServiceClient{
-		HttpClient: input.HttpClient,
-		ReplicaServiceEndpoint: func() *url.URL {
-			// TODO <08-10-21, soltzen> Maybe make this modifiable like lantern-desktop?
-			// Ref: https://github.com/getlantern/lantern-desktop/blob/778f6e600433d0cf6349c04e9738c0673758d76e/desktop/app.go#L587
-			return &url.URL{
-				Scheme: "https",
-				Host:   "replica-search-aws.lantern.io",
-			}
-		},
-	}
-	input.GlobalConfig = optsFunc
-	replicaHandler, err := replicaServer.NewHTTPHandler(input)
-	if err != nil {
-		return nil, errors.Wrap(err, "creating replica http server")
-	}
-	return replicaHandler, nil
 }
 
 func run(configDir, locale string,
@@ -575,7 +500,7 @@ func run(configDir, locale string,
 		log.Errorf("Unable to start dnsgrab: %v", err)
 		return
 	}
-	dnsGrabAddr.Set(grabber.LocalAddr().String())
+	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
 	go func() {
 		serveErr := grabber.Serve()
 		if serveErr != nil {
@@ -643,18 +568,31 @@ func run(configDir, locale string,
 	}
 
 	if settings.ShouldRunReplica() {
-		replicaHandler, err := newReplicaHttpHandler(configDir, userConfig, runner.FeatureOptions)
-		if err != nil {
-			panic(errors.Wrap(err, "Failed to start replica server"))
-		}
-		go serveReplica(replicaHandler, settings.GetReplicaPort())
+		func() {
+			h, err := newReplicaHttpHandler(configDir,
+				userConfig, runner.FeatureOptions)
+			if err != nil {
+				log.Debugf(
+					"Failed to start replica server. Will continue without it. Err: %v", err)
+				return
+			}
+			l, srv, err := NewReplicaServer(h)
+			if err != nil {
+				log.Debugf(
+					"Failed to start replica server. Will continue without it. Err: %v", err)
+				return
+			}
+			replicaAddrEventual.Set("localhost:" +
+				strconv.Itoa(l.Addr().(*net.TCPAddr).Port))
+			go srv.Serve(l)
+		}()
 	}
 
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address
 		"127.0.0.1:0", // listen for SOCKS on random address
 		func(c *client.Client) {
-			cl.Set(c)
+			clEventual.Set(c)
 			afterStart(session)
 		},
 		nil, // onError
