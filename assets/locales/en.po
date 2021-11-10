@@ -415,6 +415,12 @@ msgstr "Contact not found, check the number and try again"
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
 
+msgid "letter_and_numbers_only"
+msgstr "Letters and numbers only"
+
+msgid "name_your_contact"
+msgstr "Name your contact"
+
 msgid "chat_number"
 msgstr "Chat Number"
 

@@ -24,7 +24,6 @@ import 'package:lantern/account/language.dart' as _i18;
 import 'package:lantern/account/recovery_key.dart' as _i23;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i24;
 import 'package:lantern/account/settings.dart' as _i17;
-import 'package:lantern/common/common.dart' as _i27;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/chats.dart' as _i13;
@@ -34,13 +33,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging_model.dart' as _i29;
+import 'package:lantern/messaging/messaging.dart' as _i27;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i12;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i11;
 import 'package:lantern/messaging/onboarding/welcome.dart' as _i10;
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i28;
 import 'package:lantern/vpn/vpn_tab.dart' as _i14;
 
 class AppRouter extends _i9.RootStackRouter {
@@ -71,7 +69,8 @@ class AppRouter extends _i9.RootStackRouter {
           routeData: routeData,
           child: _i3.Conversation(
               contactId: args.contactId,
-              initialScrollIndex: args.initialScrollIndex),
+              initialScrollIndex: args.initialScrollIndex,
+              showContactEditingDialog: args.showContactEditingDialog),
           transitionsBuilder: _i9.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -458,27 +457,37 @@ class FullScreenDialogPageArgs {
 
 /// generated route for [_i3.Conversation]
 class Conversation extends _i9.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i28.ContactId contactId, int? initialScrollIndex})
+  Conversation(
+      {required _i27.ContactId contactId,
+      int? initialScrollIndex,
+      bool? showContactEditingDialog})
       : super(name,
             path: 'conversation',
             args: ConversationArgs(
-                contactId: contactId, initialScrollIndex: initialScrollIndex));
+                contactId: contactId,
+                initialScrollIndex: initialScrollIndex,
+                showContactEditingDialog: showContactEditingDialog));
 
   static const String name = 'Conversation';
 }
 
 class ConversationArgs {
-  const ConversationArgs({required this.contactId, this.initialScrollIndex});
+  const ConversationArgs(
+      {required this.contactId,
+      this.initialScrollIndex,
+      this.showContactEditingDialog});
 
-  final _i28.ContactId contactId;
+  final _i27.ContactId contactId;
 
   final int? initialScrollIndex;
+
+  final bool? showContactEditingDialog;
 }
 
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i9.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i29.MessagingModel model, required _i28.Contact contact})
+      {required _i27.MessagingModel model, required _i27.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -489,9 +498,9 @@ class ContactInfo extends _i9.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i29.MessagingModel model;
+  final _i27.MessagingModel model;
 
-  final _i28.Contact contact;
+  final _i27.Contact contact;
 }
 
 /// generated route for [_i5.NewChat]

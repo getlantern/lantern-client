@@ -27,7 +27,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
       try {
-        context.loaderOverlay.show(widget: spinner);
+        // context.loaderOverlay.show(widget: spinner);
         var chatNumber = ChatNumber.create();
         if (controller.text.length >= 82) {
           // this is a full chat number, use it directly
@@ -43,12 +43,13 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
         try {
           final contact =
               await model.addOrUpdateDirectContact(chatNumber: chatNumber);
-          Navigator.pop(context, contact);
+          await context.pushRoute(Conversation(
+              contactId: contact.contactId, showContactEditingDialog: true));
         } catch (e) {
           setState(() => controller.error = 'unable_to_add_contact'.i18n);
         }
       } finally {
-        context.loaderOverlay.hide();
+        // context.loaderOverlay.hide();
       }
     }
   }

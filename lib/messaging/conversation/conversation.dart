@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
+import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'contact_info_topbar.dart';
@@ -22,8 +23,13 @@ import 'show_verification_options.dart';
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;
+  final bool? showContactEditingDialog;
 
-  Conversation({required this.contactId, this.initialScrollIndex}) : super();
+  Conversation(
+      {required this.contactId,
+      this.initialScrollIndex,
+      this.showContactEditingDialog})
+      : super();
 
   @override
   ConversationState createState() => ConversationState();
@@ -50,6 +56,11 @@ class ConversationState extends State<Conversation>
   final scrollController = ItemScrollController();
   var verifiedColor = black;
   var shouldShowVerificationAlert = true;
+  var _showContactEditingDialog;
+
+  final _contactNameKey = GlobalKey<FormState>(debugLabel: 'contactNameInput');
+  late final contactNameController = CustomTextEditingController(
+      formKey: _contactNameKey, validator: (value) => null);
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -160,6 +171,7 @@ class ConversationState extends State<Conversation>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
+    contactNameController.focusNode.requestFocus();
     subscribeToKeyboardChanges();
   }
 
@@ -172,6 +184,7 @@ class ConversationState extends State<Conversation>
     audioPreviewController?.stop();
     keyboardSubscription?.cancel();
     BackButtonInterceptor.remove(interceptBackButton);
+    contactNameController.dispose();
     super.dispose();
   }
 
@@ -334,6 +347,23 @@ class ConversationState extends State<Conversation>
           0;
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
+
+      // we came here after adding a contact via chat number, show contact name dialog
+      if ((widget.showContactEditingDialog ?? false) &&
+          _showContactEditingDialog == null) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) async {
+          setState(() => _showContactEditingDialog = false);
+          return showDialog(
+              context: context,
+              builder: (context) => ContactNameDialog(
+                  context: context,
+                  formKey: _contactNameKey,
+                  controller: contactNameController,
+                  model: model,
+                  contact: contact));
+        });
+      }
+
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
