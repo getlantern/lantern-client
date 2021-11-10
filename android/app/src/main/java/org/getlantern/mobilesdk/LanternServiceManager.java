@@ -30,6 +30,7 @@ public class LanternServiceManager extends Lantern {
     public static final String HTTP_ADDR = "HTTP_ADDR";
     public static final String SOCKS5_ADDR = "SOCKS5_ADDR";
     public static final String DNSGRAB_ADDR = "DNSGRAB_ADDR";
+    public static final String REPLICA_ADDR = "REPLICA_ADDR";
     public static final String ERROR = "error";
 
     // HandlerThread used to handle broadcasts from service
@@ -64,7 +65,8 @@ public class LanternServiceManager extends Lantern {
                     result.set(new StartResult(
                             intent.getStringExtra(HTTP_ADDR),
                             intent.getStringExtra(SOCKS5_ADDR),
-                            intent.getStringExtra(DNSGRAB_ADDR)
+                            intent.getStringExtra(DNSGRAB_ADDR),
+                            intent.getStringExtra(REPLICA_ADDR)
                     ));
                 } else {
                     Logger.i(TAG, "Notified of failed start");
