@@ -64,7 +64,6 @@ class ImagePaths {
       'assets/images/sticker_figure_foreground.svg';
   static const share = 'assets/images/share.svg';
   static const placeholder = 'assets/images/placeholder.svg';
-  static const tag = 'assets/images/tag.svg';
   static const arrow_down = 'assets/images/arrow_down.svg';
   static const arrow_up = 'assets/images/arrow_up.svg';
   static const empty_search = 'assets/images/empty_search.svg';

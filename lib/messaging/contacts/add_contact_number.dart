@@ -79,11 +79,11 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
                             CTextField(
                               controller: controller,
                               autovalidateMode: AutovalidateMode.disabled,
-                              label: 'chat_number'.i18n,
-                              prefixIcon:
-                                  const CAssetImage(path: ImagePaths.people),
+                              label: 'secure_chat_number'.i18n,
+                              prefixIcon: const CAssetImage(
+                                  path: ImagePaths.chatNumber),
                               hintText: 'chat_number_type'.i18n,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               maxLines: null,
                               inputFormatters: [
                                 TextInputFormatter.withFunction(

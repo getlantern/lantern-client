@@ -21,7 +21,7 @@ class SecureChatNumberAccount extends StatelessWidget {
                                 () => setState(() => textCopied = false));
                           },
                           leading: const CAssetImage(
-                            path: ImagePaths.tag,
+                            path: ImagePaths.chatNumber,
                           ),
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

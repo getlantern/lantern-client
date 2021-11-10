@@ -410,7 +410,7 @@ msgid "chat_number_not_found"
 msgstr "Unable to find chat number, please check the number and try again"
 
 msgid "unable_to_add_contact"
-msgstr "Unexpected error adding contact, please try again later"
+msgstr "Contact not found, check the number and try again"
 
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
