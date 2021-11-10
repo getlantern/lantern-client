@@ -349,6 +349,7 @@ class ConversationState extends State<Conversation>
           contact.verificationLevel != VerificationLevel.VERIFIED;
 
       // we came here after adding a contact via chat number, show contact name dialog
+      // TODO: not very happy with this
       if ((widget.showContactEditingDialog ?? false) &&
           _showContactEditingDialog == null) {
         WidgetsBinding.instance?.addPostFrameCallback((_) async {
