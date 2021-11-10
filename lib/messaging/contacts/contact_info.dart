@@ -57,6 +57,7 @@ class _ContactInfoState extends State<ContactInfo> {
 
   @override
   Widget build(BuildContext context) {
+    var isExpanded = false;
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       centerTitle: true,
@@ -153,41 +154,53 @@ class _ContactInfoState extends State<ContactInfo> {
                 ],
               ),
               StatefulBuilder(
-                builder: (context, setState) => ListItemFactory.isSettingsItem(
-                  header: 'messenger_id'.i18n,
-                  onTap: () async =>
-                      doCopyText(context, contact.contactId.id, setState),
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
-                  content: CText(
-                    contact.contactId.id,
-                    style: tsSubtitle1Short,
-                  ),
-                  trailingArray: [
-                    CInkWell(
-                      onTap: () async =>
-                          doCopyText(context, contact.contactId.id, setState),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 10.0),
-                        child: CAssetImage(
-                          path: textCopied
-                              ? ImagePaths.check_green
-                              : ImagePaths.content_copy_outline,
+                builder: (context, setState) {
+                  return ListItemFactory.isSettingsItem(
+                    header: 'secure_chat_number'.i18n,
+                    // onTap: () async =>
+                    //     doCopyText(context, contact.chatNumber.number, setState),
+                    leading: const CAssetImage(
+                      path: ImagePaths.chatNumber,
+                    ),
+                    content: !isExpanded
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Padding(padding: EdgeInsets.all(8.0)),
+                              Expanded(
+                                child: FullChatNumberWidget(
+                                    context, contact.chatNumber),
+                              ),
+                              const Padding(padding: EdgeInsets.all(8.0)),
+                            ],
+                          )
+                        : CText(
+                            contact.chatNumber.shortNumber.formattedChatNumber,
+                            style: tsSubtitle1Short,
+                          ),
+                    trailingArray: [
+                      CInkWell(
+                        onTap: () => setState(() => isExpanded = !isExpanded),
+                        child: Padding(
+                          padding:
+                              const EdgeInsetsDirectional.only(start: 20.0),
+                          child: CAssetImage(
+                            path: isExpanded
+                                ? ImagePaths.arrow_up
+                                : ImagePaths.arrow_down,
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                      )
+                    ],
+                  );
+                },
               ),
               /*
                 * More Options
                 */
               ListItemFactory.isSettingsItem(
                   header: 'more_options'.i18n,
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
                   content: CText(
                     contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
                     style: tsSubtitle1Short,
@@ -326,9 +339,6 @@ class _ContactInfoState extends State<ContactInfo> {
                     )
                   ]),
               ListItemFactory.isSettingsItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
                 content: CText(
                   'delete_permanently'.i18n,
                   style: tsSubtitle1Short,
