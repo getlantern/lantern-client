@@ -5,7 +5,7 @@ Lantern Android is an app that uses the [VpnService][https://developer.android.c
 - This feature aims to integrate the Replica File Sharing project in Android
 - It is forked from the Messaging feature located in [ox/messaging](https://github.com/getlantern/android-lantern/tree/ox/messaging)
 - Maintainers: @soltzen
-- Initial discussion: https://github.com/getlantern/lantern-internal/issues/5010
+- Story ticket: https://github.com/getlantern/lantern-internal/issues/5080
 - Task Board:
   - https://github.com/orgs/getlantern/projects/9#column-16581691
   - and sporadic tasks in https://github.com/orgs/getlantern/projects/5
