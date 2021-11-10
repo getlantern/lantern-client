@@ -3,6 +3,8 @@ import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:markdown/markdown.dart' as md;
+import 'package:lantern/replica/markdown_link_builder.dart';
 
 import 'mime_type.dart';
 import 'reactions.dart';
@@ -260,6 +262,22 @@ class MessageBubble extends StatelessWidget {
                                             : null,
                                       ),
                                     ),
+                                    builders: {
+                                      'replica':
+                                          ReplicaLinkBuilder((replicaLink) {
+                                        print(
+                                            'Clicked on replica link: $replicaLink');
+                                        // TODO <10-11-21, soltzen> Determine MIME type first
+                                        // context.pushRoute(
+                                        //     ReplicaVideoPlayerScreen(
+                                        //         replicaLink: replicaLink));
+                                      }),
+                                    },
+                                    inlineSyntaxes: <md.InlineSyntax>[
+                                      ReplicaLinkSyntax()
+                                    ],
+                                    extensionSet:
+                                        md.ExtensionSet.gitHubFlavored,
                                   ),
                                 ),
                               ),
