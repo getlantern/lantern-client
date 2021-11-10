@@ -15,7 +15,6 @@ SizedBox renderLongTapMenu(
                 leading: const CAssetImage(
                   path: ImagePaths.user,
                 ),
-                showDivider: false,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
@@ -29,7 +28,6 @@ SizedBox renderLongTapMenu(
                 leading: const CAssetImage(
                   path: ImagePaths.people,
                 ),
-                showDivider: false,
                 content: 'introduce_contacts'.i18n,
                 onTap: () async {
                   await context.router.pop();

@@ -38,9 +38,12 @@ class SecureChatNumberAccount extends StatelessWidget {
                             CInkWell(
                               onTap: () async {
                                 copyText(context, me.chatNumber.number);
-                                setState(() => textCopied = true);
-                                await Future.delayed(defaultAnimationDuration,
-                                    () => setState(() => textCopied = false));
+                                WidgetsBinding.instance
+                                    ?.addPostFrameCallback((_) async {
+                                  setState(() => textCopied = true);
+                                  await Future.delayed(defaultAnimationDuration,
+                                      () => setState(() => textCopied = false));
+                                });
                               },
                               child: Padding(
                                 padding: const EdgeInsetsDirectional.only(
