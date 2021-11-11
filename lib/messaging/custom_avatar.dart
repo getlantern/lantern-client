@@ -50,6 +50,8 @@ extension StringExtensions on String {
         // display name contained spaces and was broken up
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
         // display name is a single string
-        : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);
+        : parts.first.isNotEmpty
+            ? parts.first.substring(0, parts.first.length > 1 ? 2 : 1)
+            : '';
   }
 }
