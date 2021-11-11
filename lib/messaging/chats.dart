@@ -24,7 +24,6 @@ class _ChatsState extends State<Chats> {
 
   void handleReminder(
       Iterable<PathAndValue<Contact>> _contacts, MessagingModel model) async {
-    // TODO: store to DB
     //* Store timestamp to DB and compare to mostRecentMessageTs
     try {
       await model.saveNotificationsTS();
@@ -38,6 +37,7 @@ class _ChatsState extends State<Chats> {
         () => setState(() => customBg = null));
 
     //* Scroll to first unaccepted message
+    // TODO: only do this if the list is actually scrollable?
     if (scrollListController.isAttached) {
       final firstUnaccepted = _contacts.firstWhere((element) =>
           element.value.verificationLevel == VerificationLevel.UNACCEPTED);
@@ -141,16 +141,16 @@ class _ChatsState extends State<Chats> {
             */
             model.contactsByActivity(builder: (context,
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+              // * EMPTY STATE
+              if (_contacts.isEmpty) {
+                return const EmptyChats();
+              }
+
               final reshapedContactList = reshapeContactList(_contacts);
               final unacceptedStartIndex = reshapedContactList.indexWhere(
                   (element) =>
                       element.value.verificationLevel ==
                       VerificationLevel.UNACCEPTED);
-
-              // * EMPTY STATE
-              if (_contacts.isEmpty) {
-                return const EmptyChats();
-              }
 
               return Expanded(
                 child: ScrollablePositionedList.builder(
