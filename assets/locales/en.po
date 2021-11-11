@@ -487,6 +487,9 @@ msgstr "Disappearing Messages"
 msgid "start_of_your_history"
 msgstr "This is the start of your message history with "
 
+msgid "banner_unaccepted"
+msgstr "%s is not on your contacts list. Would you like to accept the chat request?"
+
 msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
 

@@ -14,6 +14,8 @@ class ContactInfoTopBar extends StatelessWidget {
   }) : super();
   @override
   Widget build(BuildContext context) {
+    var isUnaccepted =
+        contact.verificationLevel == VerificationLevel.UNACCEPTED;
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -21,8 +23,11 @@ class ContactInfoTopBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
+              customColor: isUnaccepted ? grey5 : null,
               messengerId: contact.contactId.id,
-              displayName: contact.displayNameOrFallback),
+              displayName: isUnaccepted
+                  ? contact.chatNumber.shortNumber
+                  : contact.displayNameOrFallback),
         ),
         Expanded(
           child: Column(
@@ -30,7 +35,9 @@ class ContactInfoTopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CText(
-                contact.displayNameOrFallback,
+                isUnaccepted
+                    ? contact.chatNumber.shortNumber.formattedChatNumber
+                    : contact.displayNameOrFallback,
                 maxLines: 1,
                 style: tsHeading3,
               ),

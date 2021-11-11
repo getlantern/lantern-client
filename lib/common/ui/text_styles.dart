@@ -71,6 +71,8 @@ CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
 
+CTextStyle tsButtonBlue = tsButton.copiedWith(color: blue4);
+
 CTextStyle getTextStyle(bool secondary) {
   if (secondary) return tsButtonPink;
   return tsButtonWhite;

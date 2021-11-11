@@ -3,6 +3,8 @@ import 'package:lantern/messaging/conversation/call_action.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
+import 'show_block_contact_dialog.dart';
+import 'show_delete_contact_dialog.dart';
 
 class ContactInfo extends StatefulWidget {
   final MessagingModel model;
@@ -22,7 +24,6 @@ class _ContactInfoState extends State<ContactInfo> {
 
   final formKey = GlobalKey<FormState>();
   var textCopied = false;
-  var confirmBlock = false;
   var isEditing = false;
   late final displayNameController =
       CustomTextEditingController(formKey: formKey);
@@ -209,125 +210,10 @@ class _ContactInfoState extends State<ContactInfo> {
                   ),
                   trailingArray: [
                     CInkWell(
-                      onTap: () => showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CAssetImage(path: ImagePaths.block),
-                                ),
-                                CText(
-                                    contact.blocked
-                                        ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
-                                        : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                                    style: tsBody3),
-                              ],
-                            ),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.all(24),
-                                    child: CText(
-                                        contact.blocked
-                                            ? 'unblock_info_description'.i18n
-                                            : 'block_info_description'.i18n,
-                                        style: tsBody1),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                        start: 8.0, end: 8.0),
-                                    child: Row(
-                                      children: [
-                                        StatefulBuilder(
-                                            builder: (context, setState) =>
-                                                Checkbox(
-                                                    checkColor: Colors.white,
-                                                    fillColor: MaterialStateProperty
-                                                        .resolveWith((states) =>
-                                                            getCheckboxFillColor(
-                                                                black, states)),
-                                                    value: confirmBlock,
-                                                    onChanged: (bool? value) {
-                                                      setState(() =>
-                                                          confirmBlock =
-                                                              value!);
-                                                    })),
-                                        Container(
-                                          // not sure why our overflow doesnt work here...
-                                          constraints: BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.6),
-                                          child: CText(
-                                              contact.blocked
-                                                  ? 'unblock_info_checkbox'.i18n
-                                                  : 'block_info_checkbox'.i18n,
-                                              style: tsBody1),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () async => context.router.pop(),
-                                    child: CText('cancel'.i18n.toUpperCase(),
-                                        style: tsButtonGrey),
-                                  ),
-                                  const SizedBox(width: 15),
-                                  TextButton(
-                                    onPressed: () async {
-                                      if (confirmBlock) {
-                                        contact.blocked
-                                            ? await model.unblockDirectContact(
-                                                widget.contact.contactId.id)
-                                            : await model.blockDirectContact(
-                                                widget.contact.contactId.id);
-                                        context.router.popUntilRoot();
-                                        showSnackbar(
-                                            context: context,
-                                            content: contact.blocked
-                                                ? 'contact_was_blocked'
-                                                    .i18n
-                                                    .fill([
-                                                    contact
-                                                        .displayNameOrFallback
-                                                  ])
-                                                : 'contact_was_unblocked'
-                                                    .i18n
-                                                    .fill([
-                                                    contact
-                                                        .displayNameOrFallback
-                                                  ]));
-                                      }
-                                    },
-                                    child: CText(
-                                        contact.blocked
-                                            ? 'unblock'.i18n.toUpperCase()
-                                            : 'block'.i18n.toUpperCase(),
-                                        style: tsButtonPink),
-                                  )
-                                ],
-                              )
-                            ],
-                          );
-                        },
+                      onTap: () async => showBlockContactDialog(
+                        context,
+                        contact,
+                        model,
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -347,68 +233,10 @@ class _ContactInfoState extends State<ContactInfo> {
                 ),
                 trailingArray: [
                   CInkWell(
-                    onTap: () => showDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CAssetImage(path: ImagePaths.delete),
-                              ),
-                              CText('${'delete_contact'.i18n.toUpperCase()}?',
-                                  style: tsBody3),
-                            ],
-                          ),
-                          content: CText('delete_info_description'.i18n,
-                              style: tsBody1),
-                          actions: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  onPressed: () async => context.router.pop(),
-                                  child: CText('cancel'.i18n.toUpperCase(),
-                                      style: tsButtonGrey),
-                                ),
-                                const SizedBox(width: 15),
-                                TextButton(
-                                  onPressed: () async {
-                                    context.loaderOverlay.show(widget: spinner);
-                                    try {
-                                      await model.deleteDirectContact(
-                                          contact.contactId.id);
-                                    } catch (e, s) {
-                                      showErrorDialog(context,
-                                          e: e,
-                                          s: s,
-                                          des: 'error_delete_contact'.i18n);
-                                    } finally {
-                                      showSnackbar(
-                                          context: context,
-                                          content: 'contact_was_deleted'
-                                              .i18n
-                                              .fill([
-                                            contact.displayNameOrFallback
-                                          ]));
-                                      context.loaderOverlay.hide();
-                                      context.router.popUntilRoot();
-                                    }
-                                  },
-                                  child: CText(
-                                      'delete_contact'.i18n.toUpperCase(),
-                                      style: tsButtonPink),
-                                )
-                              ],
-                            )
-                          ],
-                        );
-                      },
+                    onTap: () async => showDeleteContactDialog(
+                      context,
+                      contact,
+                      model,
                     ),
                     child: Container(
                       padding: const EdgeInsets.all(8),
