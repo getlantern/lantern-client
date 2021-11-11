@@ -141,7 +141,7 @@ class _ChatsState extends State<Chats> {
             */
             model.contactsByActivity(builder: (context,
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-              // * EMPTY STATE
+              // * NO CONTACTS
               if (_contacts.isEmpty) {
                 return const EmptyChats();
               }
@@ -214,9 +214,10 @@ class _ChatsState extends State<Chats> {
 
 List<PathAndValue<Contact>> reshapeContactList(
     Iterable<PathAndValue<Contact>> contacts) {
-  // Contacts with message timestamps
+  // Contacts with message timestamps which are not blocked
   var _activeConversations = contacts
-      .where((contact) => contact.value.mostRecentMessageTs > 0)
+      .where((contact) =>
+          contact.value.mostRecentMessageTs > 0 && !contact.value.blocked)
       .toList();
   // Newest -> older
   _activeConversations.sort((a, b) {

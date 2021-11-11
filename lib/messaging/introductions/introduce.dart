@@ -28,7 +28,8 @@ class _IntroduceState extends State<Introduce> {
           var sortedContacts = _contacts
               .where((element) =>
                   element.value.verificationLevel !=
-                  VerificationLevel.UNACCEPTED)
+                      VerificationLevel.UNACCEPTED &&
+                  !element.value.blocked)
               .toList()
               .sortedAlphabetically();
 
