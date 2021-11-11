@@ -270,6 +270,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     tx.put("/copiedRecovery_status", true)
                 }
             }
+            "saveNotificationsTS" -> {
+                val ts = System.currentTimeMillis().toInt()
+                db.mutate { tx ->
+                    tx.put("/lastNotif_ts", ts)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

@@ -43,7 +43,9 @@ class _ContactInfoState extends State<ContactInfo> {
     super.initState();
     contactNotifier = model.contactNotifier(contact.contactId.id);
     contactListener = () async {
-      setState(() => contactChanged(contactNotifier.value!));
+      if (contactNotifier.value != null) {
+        setState(() => contactChanged(contactNotifier.value!));
+      }
     };
     contactNotifier.addListener(contactListener);
   }

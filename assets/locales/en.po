@@ -559,6 +559,9 @@ msgstr "Messages"
 msgid "chats"
 msgstr "Chats"
 
+msgid "new_requests"
+msgstr "New Requests %s"
+
 msgid "secure_chat"
 msgstr "Secure Chat"
 

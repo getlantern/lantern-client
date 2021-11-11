@@ -17,6 +17,11 @@ class _NewChatState extends State<NewChat> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void onContactAdded(dynamic contact) {
     if (contact != null) {
       setState(() {
@@ -143,7 +148,11 @@ class _NewChatState extends State<NewChat> {
               */
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                var contacts = _contacts.toList();
+                var contacts = _contacts
+                    .where((element) =>
+                        element.value.verificationLevel !=
+                        VerificationLevel.UNACCEPTED)
+                    .toList();
 
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedContacts = contacts.sortedAlphabetically();
