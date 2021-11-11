@@ -38,6 +38,9 @@ msgstr "Server Location Info"
 msgid "OK"
 msgstr "OK"
 
+msgid "Done"
+msgstr "Done"
+
 msgid "recovery_key"
 msgstr "Recovery Key"
 
@@ -224,7 +227,7 @@ msgid "your_contact_info"
 msgstr "Your Contact Info"
 
 msgid "display_name"
-msgstr "Display Name:"
+msgstr "Display Name"
 
 msgid "edit"
 msgstr "Edit"
