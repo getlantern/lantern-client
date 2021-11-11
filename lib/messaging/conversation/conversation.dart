@@ -58,10 +58,6 @@ class ConversationState extends State<Conversation>
   var shouldShowVerificationAlert = true;
   var _showContactEditingDialog;
 
-  final _contactNameKey = GlobalKey<FormState>(debugLabel: 'contactNameInput');
-  late final contactNameController = CustomTextEditingController(
-      formKey: _contactNameKey, validator: (value) => null);
-
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
   StreamSubscription<bool>? keyboardSubscription;
@@ -171,7 +167,6 @@ class ConversationState extends State<Conversation>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
-    contactNameController.focusNode.requestFocus();
     subscribeToKeyboardChanges();
   }
 
@@ -184,7 +179,6 @@ class ConversationState extends State<Conversation>
     audioPreviewController?.stop();
     keyboardSubscription?.cancel();
     BackButtonInterceptor.remove(interceptBackButton);
-    contactNameController.dispose();
     super.dispose();
   }
 
@@ -354,14 +348,13 @@ class ConversationState extends State<Conversation>
           _showContactEditingDialog == null) {
         WidgetsBinding.instance?.addPostFrameCallback((_) async {
           setState(() => _showContactEditingDialog = false);
+          showNativeKeyboard();
           return showDialog(
               context: context,
               builder: (context) => ContactNameDialog(
                   context: context,
-                  formKey: _contactNameKey,
-                  controller: contactNameController,
                   model: model,
-                  contact: contact));
+                  contact: contact)).then((value) => dismissNativeKeyboard());
         });
       }
 
