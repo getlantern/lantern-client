@@ -151,7 +151,8 @@ class _NewChatState extends State<NewChat> {
                 var contacts = _contacts
                     .where((element) =>
                         element.value.verificationLevel !=
-                        VerificationLevel.UNACCEPTED)
+                            VerificationLevel.UNACCEPTED &&
+                        !element.value.blocked)
                     .toList();
 
                 // related https://github.com/getlantern/android-lantern/issues/299
