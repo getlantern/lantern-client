@@ -37,7 +37,8 @@ class ContactInfoTopBar extends StatelessWidget {
               /* 
               * Contact is unverified => render pending badge
               */
-              if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
+              if (!contact.isMe &&
+                  contact.verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

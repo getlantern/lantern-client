@@ -1,15 +1,99 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pbenum.dart';
 import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
-class Chats extends StatelessWidget {
+class Chats extends StatefulWidget {
+  @override
+  State<Chats> createState() => _ChatsState();
+}
+
+class _ChatsState extends State<Chats> {
+  var scrollListController = ItemScrollController();
+  Color? customBg;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void handleReminder(
+      Iterable<PathAndValue<Contact>> _contacts, MessagingModel model) async {
+    // TODO: store to DB
+    //* Store timestamp to DB and compare to mostRecentMessageTs
+    try {
+      await model.saveNotificationsTS();
+    } catch (e) {
+      print(e);
+    }
+
+    //* temporary background color change
+    setState(() => customBg = blue1);
+    Future.delayed(const Duration(milliseconds: 500),
+        () => setState(() => customBg = null));
+
+    //* Scroll to first unaccepted message
+    if (scrollListController.isAttached) {
+      final firstUnaccepted = _contacts.firstWhere((element) =>
+          element.value.verificationLevel == VerificationLevel.UNACCEPTED);
+      final scrollTo = _contacts
+          .toList()
+          .indexWhere((element) => element.value == firstUnaccepted.value);
+      await scrollListController.scrollTo(
+          index: scrollTo, duration: const Duration(milliseconds: 500));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-
     return BaseScreen(
         title: 'chats'.i18n,
         actions: [
+          // * Notifications icon
+          model.contactsByActivity(builder: (context,
+              Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+            final acceptedContacts = _contacts
+                .where((element) =>
+                    element.value.verificationLevel ==
+                    VerificationLevel.UNACCEPTED)
+                .toList();
+
+            if (acceptedContacts.isEmpty) {
+              return const SizedBox();
+            }
+
+            // 1. get most recent unaccepted contact
+            // 2. get most recent message TS from that contact
+            final mostRecentUnacceptedTS = acceptedContacts
+                .firstWhere((element) =>
+                    element.value.verificationLevel ==
+                    VerificationLevel.UNACCEPTED)
+                .value
+                .mostRecentMessageTs;
+
+            return model.getLastDismissedNotificationTS((context,
+                    mostRecentNotifTS, child) =>
+                acceptedContacts.isNotEmpty &&
+                        (mostRecentUnacceptedTS > mostRecentNotifTS)
+                    ? RoundButton(
+                        onPressed: () => handleReminder(_contacts, model),
+                        backgroundColor: transparent,
+                        icon: CBadge(
+                          count: acceptedContacts.length,
+                          showBadge: acceptedContacts.isNotEmpty,
+                          child:
+                              const CAssetImage(path: ImagePaths.notifications),
+                        ),
+                      )
+                    : const SizedBox());
+          }),
+          // * Search
           RoundButton(
             onPressed: () async => await showSearch(
               context: context,
@@ -23,6 +107,9 @@ class Chats extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /*
+            * Introductions
+            */
             model.bestIntroductions(
                 builder: (context,
                         Iterable<PathAndValue<StoredMessage>> introductions,
@@ -49,78 +136,53 @@ class Chats extends StatelessWidget {
                                 await context.pushRoute(const Introductions()),
                           )
                         : const SizedBox()),
-            Expanded(
-              child: model.contactsByActivity(builder: (context,
-                  Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                var contacts = _contacts
-                    .where((contact) => contact.value.mostRecentMessageTs > 0)
-                    .toList();
-                contacts.sort((a, b) {
-                  return (b.value.mostRecentMessageTs -
-                          a.value.mostRecentMessageTs)
-                      .toInt();
-                });
-                // * EMPTY STATE
-                if (contacts.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                        start: 8.0, end: 8.0, top: 16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: const CAssetImage(
-                              path: ImagePaths.placeholder, size: 300),
-                        ),
-                        CText(
-                            'You don’t have any contacts yet. Share your chat number or add a contact here!'
-                                .i18n,
-                            style: tsBody1Color(grey5)),
-                        Expanded(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              constraints: const BoxConstraints.expand(),
-                              child: CustomPaint(
-                                painter: ArrowPainter(),
-                              )),
-                        ),
-                        // // *
-                        // // * DEV
-                        // // *
-                        // model.getOnBoardingStatus(
-                        //     (context, value, child) => Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Button(
-                        //             tertiary: true,
-                        //             text: 'DEV - toggle value'.i18n,
-                        //             width: 200.0,
-                        //             onPressed: () async {
-                        //               await model.overrideOnBoarded(!value);
-                        //               context.router.popUntilRoot();
-                        //             },
-                        //           ),
-                        //         )),
-                      ],
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: contacts.length,
+            /*
+            * Messages
+            */
+            model.contactsByActivity(builder: (context,
+                Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+              final reshapedContactList = reshapeContactList(_contacts);
+              final unacceptedStartIndex = reshapedContactList.indexWhere(
+                  (element) =>
+                      element.value.verificationLevel ==
+                      VerificationLevel.UNACCEPTED);
+
+              // * EMPTY STATE
+              if (_contacts.isEmpty) {
+                return const EmptyChats();
+              }
+
+              return Expanded(
+                child: ScrollablePositionedList.builder(
+                  itemScrollController: scrollListController,
+                  itemCount: reshapedContactList.length,
                   physics: defaultScrollPhysics,
                   itemBuilder: (context, index) {
-                    var contact = contacts[index];
+                    var contact = reshapedContactList[index];
+                    var isUnaccepted = contact.value.verificationLevel ==
+                        VerificationLevel.UNACCEPTED;
                     return Column(
                       children: [
                         ListItemFactory.isMessagingItem(
-                          focusedMenu: renderLongTapMenu(
-                              contact: contact.value, context: context),
+                          customBg: isUnaccepted ? customBg : null,
+                          header: unacceptedStartIndex == index
+                              ? 'new_requests'.i18n.fill([
+                                  '(${reshapedContactList.length - unacceptedStartIndex})'
+                                ])
+                              : null,
+                          focusedMenu: !isUnaccepted
+                              ? renderLongTapMenu(
+                                  contact: contact.value, context: context)
+                              : null,
                           leading: CustomAvatar(
+                              customColor: isUnaccepted ? grey5 : null,
                               messengerId: contact.value.contactId.id,
-                              displayName: contact.value.displayNameOrFallback),
-                          content:
-                              contact.value.displayNameOrFallback.toString(),
+                              displayName: isUnaccepted
+                                  ? contact.value.chatNumber.shortNumber
+                                  : contact.value.displayNameOrFallback),
+                          content: isUnaccepted
+                              ? contact.value.chatNumber.shortNumber
+                              : contact.value.displayNameOrFallback,
                           subtitle:
                               '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
                                   .i18n,
@@ -137,9 +199,9 @@ class Chats extends StatelessWidget {
                       ],
                     );
                   },
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ],
         ),
         actionButton: FloatingActionButton(
@@ -147,5 +209,72 @@ class Chats extends StatelessWidget {
           onPressed: () async => await context.pushRoute(const NewChat()),
           child: CAssetImage(path: ImagePaths.add, color: white),
         ));
+  }
+}
+
+List<PathAndValue<Contact>> reshapeContactList(
+    Iterable<PathAndValue<Contact>> contacts) {
+  // Contacts with message timestamps
+  var _activeConversations = contacts
+      .where((contact) => contact.value.mostRecentMessageTs > 0)
+      .toList();
+  // Newest -> older
+  _activeConversations.sort((a, b) {
+    return (b.value.mostRecentMessageTs - a.value.mostRecentMessageTs).toInt();
+  });
+
+  // Either verified or unverified
+  var _acceptedContacts = _activeConversations.where((element) =>
+      element.value.verificationLevel == VerificationLevel.VERIFIED ||
+      element.value.verificationLevel == VerificationLevel.UNVERIFIED);
+
+  // Unaccepted AKA message requests
+  var _unacceptedContacts = _activeConversations.where((element) =>
+      element.value.verificationLevel == VerificationLevel.UNACCEPTED);
+
+  return [
+    ..._acceptedContacts,
+    ..._unacceptedContacts,
+  ];
+}
+
+class EmptyChats extends StatelessWidget {
+  const EmptyChats({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          const EdgeInsetsDirectional.only(start: 8.0, end: 8.0, top: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: CAssetImage(path: ImagePaths.placeholder, size: 210),
+          ),
+          CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
+          // // *
+          // // * DEV
+          // // *
+          // model.getOnBoardingStatus(
+          //     (context, value, child) => Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: Button(
+          //             tertiary: true,
+          //             text: 'DEV - toggle value'.i18n,
+          //             width: 200.0,
+          //             onPressed: () async {
+          //               await model.overrideOnBoarded(!value);
+          //               context.router.popUntilRoot();
+          //             },
+          //           ),
+          //         )),
+        ],
+      ),
+    );
   }
 }

@@ -418,4 +418,13 @@ class MessagingModel extends Model {
     return subscribedSingleValueBuilder<bool>('/copiedRecovery_status',
         defaultValue: false, builder: builder);
   }
+
+  Future<void> saveNotificationsTS<T>() async {
+    return methodChannel.invokeMethod('saveNotificationsTS');
+  }
+
+  Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/lastNotif_ts',
+        defaultValue: 0, builder: builder);
+  }
 }

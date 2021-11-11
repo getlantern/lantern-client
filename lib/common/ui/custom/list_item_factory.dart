@@ -12,6 +12,7 @@ class ListItemFactory extends StatelessWidget {
   late final bool? showDivider;
   late final SizedBox? focusedMenu;
   late final bool? hasCopiedRecoveryKey;
+  late final Color? customBg;
 
   late final _ItemTypology renderAs;
 
@@ -60,6 +61,7 @@ class ListItemFactory extends StatelessWidget {
     this.showDivider = true,
     this.focusedMenu,
     this.hasCopiedRecoveryKey,
+    this.customBg,
   }) : super(key: key) {
     renderAs = _ItemTypology.isMessagingItem;
   }
@@ -139,7 +141,7 @@ class ListItemFactory extends StatelessWidget {
                 menuWidth: MediaQuery.of(context).size.width * 0.8,
                 builder: (menuOpen) => Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: customBg ?? white,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(8.0),
                     ),
