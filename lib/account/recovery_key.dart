@@ -17,13 +17,13 @@ class RecoveryKey extends StatelessWidget {
                     padding: const EdgeInsetsDirectional.only(
                         start: 16.0, end: 16.0, top: 32.0, bottom: 16.0),
                     child: CText(
-                        me.chatNumber.number
+                        'this should be ${me.chatNumber.number}  the recovery key'
                             .toUpperCase(), // TODO: this should be recovery key
                         style: tsCodeDisplay1),
                   ),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                        top: 16.0, bottom: 16.0),
+                        start: 4.0, end: 4.0, top: 16.0, bottom: 16.0),
                     child: CText('recovery_key_account_explanation'.i18n,
                         style: tsBody1.copiedWith(color: grey5)),
                   ),
@@ -60,9 +60,11 @@ class RecoveryKey extends StatelessWidget {
                             ),
                             trailingArray: [
                               Checkbox(
-                                checkColor: Colors.white,
+                                side: BorderSide(color: black, width: 2.0),
+                                checkColor: white,
                                 fillColor: MaterialStateProperty.resolveWith(
-                                    getCheckboxColorGreen),
+                                    (states) => getCheckboxFillColor(
+                                        indicatorGreen, states)),
                                 value: doBackup,
                                 shape:
                                     const CircleBorder(side: BorderSide.none),

@@ -52,7 +52,7 @@ class _ProBannerState extends State<ProBanner> {
                 ),
               ),
             ),
-            const ContinueArrow(),
+            mirrorLTR(context: context, child: const ContinueArrow()),
           ],
         ),
       ),

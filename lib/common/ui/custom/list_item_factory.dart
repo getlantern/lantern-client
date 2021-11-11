@@ -1,52 +1,39 @@
 import 'package:lantern/common/common.dart';
 
 class ListItemFactory extends StatelessWidget {
+  late final String? header;
   final dynamic leading;
   final dynamic content;
-  final String? subtitle;
-  final String? header;
+  late final String? subtitle;
   final List<Widget>? trailingArray;
-  final double? height;
-  final double? endPadding;
-  final bool? showDivider;
   final void Function()? onTap;
-  final SizedBox? focusedMenu;
-  final bool? hasCopiedRecoveryKey;
+  late final double? height;
+  late final double? endPadding;
+  late final bool? showDivider;
+  late final SizedBox? focusedMenu;
+  late final bool? hasCopiedRecoveryKey;
 
-  late final _Typology typeToRender;
+  late final _ItemTypology renderAs;
 
   ListItemFactory.isSettingsItem({
     Key? key,
+    this.header,
     this.leading,
     this.content,
     this.onTap,
     this.trailingArray,
-    this.header,
-    this.subtitle,
-    this.height,
-    this.endPadding,
-    this.showDivider,
-    this.focusedMenu,
-    this.hasCopiedRecoveryKey,
   }) : super(key: key) {
-    typeToRender = _Typology.isSettingsItem;
+    renderAs = _ItemTypology.isSettingsItem;
   }
 
   ListItemFactory.isBottomItem({
     Key? key,
     this.leading,
     this.content,
-    this.onTap,
     this.trailingArray,
-    this.header,
-    this.subtitle,
-    this.height,
-    this.endPadding,
-    this.showDivider,
-    this.focusedMenu,
-    this.hasCopiedRecoveryKey,
+    this.onTap,
   }) : super(key: key) {
-    typeToRender = _Typology.isBottomItem;
+    renderAs = _ItemTypology.isBottomItem;
   }
 
   ListItemFactory.isFocusMenuItem({
@@ -55,25 +42,18 @@ class ListItemFactory extends StatelessWidget {
     this.content,
     this.onTap,
     this.trailingArray,
-    this.header,
-    this.subtitle,
-    this.height,
-    this.endPadding,
-    this.showDivider,
-    this.focusedMenu,
-    this.hasCopiedRecoveryKey,
   }) : super(key: key) {
-    typeToRender = _Typology.isFocusMenuItem;
+    renderAs = _ItemTypology.isFocusMenuItem;
   }
 
   // contacts, messages, search results
   ListItemFactory.isMessagingItem({
     Key? key,
+    this.header,
     this.leading,
     this.content,
     this.onTap,
     this.trailingArray,
-    this.header,
     this.subtitle,
     this.height,
     this.endPadding,
@@ -81,13 +61,15 @@ class ListItemFactory extends StatelessWidget {
     this.focusedMenu,
     this.hasCopiedRecoveryKey,
   }) : super(key: key) {
-    typeToRender = _Typology.isMessagingItem;
+    renderAs = _ItemTypology.isMessagingItem;
   }
 
   @override
   Widget build(BuildContext context) {
-    switch (typeToRender) {
-      case _Typology.isSettingsItem:
+    switch (renderAs) {
+      // * SETTINGS ITEM
+      // Renders in Accounts and Settings
+      case _ItemTypology.isSettingsItem:
         {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -97,7 +79,7 @@ class ListItemFactory extends StatelessWidget {
               buildBase(
                 leading: leading,
                 content: content,
-                trailingArray: trailingArray ?? [const ContinueArrow()],
+                trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
                 disableSplash: true,
@@ -105,7 +87,9 @@ class ListItemFactory extends StatelessWidget {
             ],
           );
         }
-      case _Typology.isBottomItem:
+      // * BOTTOM MODAL ITEM
+      // Renders in bottom modal lists
+      case _ItemTypology.isBottomItem:
         {
           return Container(
             decoration: BoxDecoration(
@@ -115,35 +99,34 @@ class ListItemFactory extends StatelessWidget {
               ),
             ),
             child: buildBase(
-                leading: Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 12.0),
-                  child: leading,
-                ),
-                showDivider: true,
-                height: 56,
-                onTap: onTap,
-                content: content,
-                trailingArray: [
-                  mirrorLTR(
-                    context: context,
-                    child: const CAssetImage(
-                      path: ImagePaths.keyboard_arrow_right,
-                    ),
-                  )
-                ]),
+              leading: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 12.0),
+                child: leading,
+              ),
+              content: content,
+              trailingArray: trailingArray,
+              onTap: onTap,
+              showDivider: true,
+              height: 56,
+            ),
           );
         }
-      case _Typology.isFocusMenuItem:
+      // * FOCUS ITEM
+      // Renders in the FocusableMenu list on long press of specific items
+      case _ItemTypology.isFocusMenuItem:
         {
           return buildBase(
-              leading: leading,
-              showDivider: false,
-              height: 48,
-              onTap: onTap,
-              content: content,
-              trailingArray: []);
+            leading: leading,
+            content: content,
+            trailingArray: [],
+            onTap: onTap,
+            height: 48,
+            showDivider: false,
+          );
         }
-      case _Typology.isMessagingItem:
+      // * MESSAGING ITEM
+      // Anything that contains an avatar, title, subtitle, and trailing actions
+      case _ItemTypology.isMessagingItem:
         {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -169,6 +152,7 @@ class ListItemFactory extends StatelessWidget {
                     showDivider: showDivider! && !menuOpen,
                     onTap: onTap,
                     enableHighlighting: true,
+                    subtitle: subtitle,
                   ),
                 ),
               ),
@@ -177,7 +161,7 @@ class ListItemFactory extends StatelessWidget {
         }
       default:
         {
-          return Container();
+          return const SizedBox();
         }
     }
   }
@@ -192,6 +176,7 @@ class ListItemFactory extends StatelessWidget {
     double? endPadding,
     bool? enableHighlighting,
     bool? disableSplash,
+    String? subtitle,
   }) =>
       Material(
           color: transparent,
@@ -221,6 +206,7 @@ class ListItemFactory extends StatelessWidget {
                     child: Container(
                       child: buildContent(
                           content: content,
+                          subtitle: subtitle,
                           enableHighlighting: enableHighlighting),
                     ),
                   ),
@@ -256,7 +242,7 @@ class ListItemFactory extends StatelessWidget {
 
   Widget buildContent({
     required dynamic content,
-    String? subTitle,
+    String? subtitle,
     bool? enableHighlighting = false,
   }) {
     // we are passing something custom, return as widget
@@ -277,8 +263,8 @@ class ListItemFactory extends StatelessWidget {
               : CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
           if (subtitle != null)
             enableHighlighting != null && enableHighlighting
-                ? TextHighlighter(text: subtitle!, style: tsBody2)
-                : CText(subtitle!,
+                ? TextHighlighter(text: subtitle, style: tsBody2)
+                : CText(subtitle,
                     maxLines: 1, style: tsBody2.copiedWith(color: grey5)),
         ],
       );
@@ -305,7 +291,7 @@ class ListItemFactory extends StatelessWidget {
   }
 }
 
-enum _Typology {
+enum _ItemTypology {
   isSettingsItem,
   isBottomItem,
   isFocusMenuItem,

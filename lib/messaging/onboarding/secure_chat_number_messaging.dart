@@ -1,6 +1,8 @@
+import 'package:lantern/home.dart';
+
 import '../messaging.dart';
 
-class SecureChatNumber extends StatelessWidget {
+class SecureChatNumberMessaging extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textCopied = false;
@@ -33,10 +35,10 @@ class SecureChatNumber extends StatelessWidget {
                                       () => setState(() => textCopied = false));
                                 },
                                 leading: const CAssetImage(
-                                  path: ImagePaths.tag,
+                                  path: ImagePaths.chatNumber,
                                 ),
                                 content: CText(
-                                  me.chatNumber.shortNumber,
+                                  me.chatNumber.shortNumber.formattedChatNumber,
                                   style: tsHeading1.copiedWith(
                                       color: blue4,
                                       lineHeight:
@@ -75,8 +77,7 @@ class SecureChatNumber extends StatelessWidget {
                   width: 200.0,
                   onPressed: () async {
                     await model.markIsOnboarded();
-                    context.router
-                        .popUntilRoot(); //go back to OnboardingHandler
+                    context.router.popUntilRoot();
                   },
                 ))));
   }
