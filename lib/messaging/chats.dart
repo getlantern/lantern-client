@@ -98,6 +98,22 @@ class Chats extends StatelessWidget {
                 );
               }),
             ),
+            // // *
+            // // * DEV
+            // // *
+            // model.getOnBoardingStatus((context, value, child) => Container(
+            //       alignment: Alignment.center,
+            //       padding: const EdgeInsets.all(16.0),
+            //       child: Button(
+            //         tertiary: true,
+            //         text: 'DEV - toggle value'.i18n,
+            //         width: 200.0,
+            //         onPressed: () async {
+            //           await model.overrideOnBoarded(!value);
+            //           context.router.popUntilRoot();
+            //         },
+            //       ),
+            //     )),
           ],
         ),
         actionButton: FloatingActionButton(
@@ -131,22 +147,6 @@ class EmptyChats extends StatelessWidget {
                 size: 210),
           ),
           CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
-          // // *
-          // // * DEV
-          // // *
-          // model.getOnBoardingStatus(
-          //     (context, value, child) => Padding(
-          //           padding: const EdgeInsets.all(8.0),
-          //           child: Button(
-          //             tertiary: true,
-          //             text: 'DEV - toggle value'.i18n,
-          //             width: 200.0,
-          //             onPressed: () async {
-          //               await model.overrideOnBoarded(!value);
-          //               context.router.popUntilRoot();
-          //             },
-          //           ),
-          //         )),
         ],
       ),
     );

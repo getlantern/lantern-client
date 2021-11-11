@@ -29,13 +29,13 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
       try {
         context.loaderOverlay.show(widget: spinner);
         // await model.recoverAccount(controller.text); // TODO: once we have the recovery backend
+        await model.markIsOnboarded();
+        context.router.popUntilRoot();
+        // TODO: show snackbar "You have successfully recovered your Secure Chat Number"
       } catch (e) {
         setState(() => controller.error = 'recovery_error'.i18n);
       } finally {
         context.loaderOverlay.hide();
-        await model.markIsOnboarded();
-        context.router.popUntilRoot();
-        // TODO: show snackbar "You have successfully recovered your Secure Chat Number"
       }
     }
   }
