@@ -21,17 +21,15 @@ class ImagePaths {
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
+
+  // Messaging
   static const more_vert = 'assets/images/more_vert.svg';
-  // static const more_horiz = 'assets/images/more_horiz.svg';
   static const pending = 'assets/images/pending.svg';
-  static const arrow_downward = 'assets/images/arrow_downward.svg';
   static const lock_outline = 'assets/images/lock_outline.svg';
-  static const chatNumber = 'assets/images/chatNumber.svg';
   static const backup = 'assets/images/backup.svg';
   static const backup_icon = 'assets/images/backup_icon.svg';
   static const badge = 'assets/images/badge.svg';
-
-  // Messaging
+  static const chatNumber = 'assets/images/chatNumber.svg';
   static const add = 'assets/images/add.svg';
   static const add_circle = 'assets/images/add_circle.svg';
   static const people = 'assets/images/people.svg';
@@ -58,18 +56,12 @@ class ImagePaths {
   static const lock_clock = 'assets/images/lock_clock.svg';
   static const volume_up = 'assets/images/volume_up.svg';
   static const insert_drive_file = 'assets/images/insert_drive_file.svg';
-  static const sticker_figure_background =
-      'assets/images/sticker_figure_background.svg';
-  static const sticker_figure_foreground =
-      'assets/images/sticker_figure_foreground.svg';
   static const share = 'assets/images/share.svg';
-  static const placeholder = 'assets/images/placeholder.svg';
-  static const tag = 'assets/images/tag.svg';
-  static const arrow_down = 'assets/images/arrow_down.svg';
-  static const arrow_up = 'assets/images/arrow_up.svg';
-  static const empty_search = 'assets/images/empty_search.svg';
+  static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
 
   // Commonly used
+  static const arrow_down = 'assets/images/arrow_down.svg';
+  static const arrow_up = 'assets/images/arrow_up.svg';
   static const content_copy = 'assets/images/content_copy.svg';
   static const content_copy_outline = 'assets/images/content_copy_outline.svg';
   static const check_green = 'assets/images/check_green.svg';
@@ -85,7 +77,16 @@ class ImagePaths {
   static const verification_alert = 'assets/images/verification_alert.svg';
   static const verified_user = 'assets/images/verified_user.svg';
   static const user = 'assets/images/user.svg';
-  static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
+
+  // illustrations
+  static const sticker_figure_background =
+      'assets/images/sticker_figure_background.svg';
+  static const sticker_figure_foreground =
+      'assets/images/sticker_figure_foreground.svg';
+  static const empty_search = 'assets/images/empty_search.svg';
+  static const placeholder = 'assets/images/placeholder.svg';
+  static const empty_chats = 'assets/images/empty_chats.svg';
+  static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';
