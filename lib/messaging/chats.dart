@@ -255,7 +255,11 @@ class EmptyChats extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            child: CAssetImage(path: ImagePaths.placeholder, size: 210),
+            child: CAssetImage(
+                path: Directionality.of(context) == TextDirection.ltr
+                    ? ImagePaths.empty_chats
+                    : ImagePaths.empty_chats_rtl,
+                size: 210),
           ),
           CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
           // // *

@@ -105,8 +105,6 @@ dependencies:
 
   flutter_local_notifications: ^8.1.1+1
 
-  flutter_arrow_path: ^1.1.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

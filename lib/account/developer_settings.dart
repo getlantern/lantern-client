@@ -68,7 +68,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                   (BuildContext context, String value, Widget? child) {
                 return DropdownButton<String>(
                   value: value,
-                  icon: const CAssetImage(path: ImagePaths.arrow_downward),
+                  icon: const CAssetImage(path: ImagePaths.arrow_down),
                   iconSize: iconSize,
                   elevation: 16,
                   underline: Container(
