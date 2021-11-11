@@ -69,7 +69,6 @@ export 'ui/play_button.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/path_building.dart';
 export 'ui/pinned_button_layout.dart';
-export 'ui/arrow_painter.dart';
 export 'ui/list_section_header.dart';
 
 // UI functions

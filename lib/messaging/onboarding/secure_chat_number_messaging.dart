@@ -35,7 +35,7 @@ class SecureChatNumberMessaging extends StatelessWidget {
                                       () => setState(() => textCopied = false));
                                 },
                                 leading: const CAssetImage(
-                                  path: ImagePaths.tag,
+                                  path: ImagePaths.chatNumber,
                                 ),
                                 content: CText(
                                   me.chatNumber.shortNumber.formattedChatNumber,

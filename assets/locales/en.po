@@ -604,6 +604,12 @@ msgstr "This is the full version of your Secure Chat Number; sharing this longer
 msgid "recovery_key_account_explanation"
 msgstr "This is your recovery key, it is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system. Store this in a safe location."
 
+msgid "recovery_error"
+msgstr "Unable to recover your account"
+
+msgid "empty_chats_text"
+msgstr "Share your chat number or add a contact here!."
+
 msgid "next"
 msgstr "Next"
 
