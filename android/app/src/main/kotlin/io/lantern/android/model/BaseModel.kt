@@ -15,6 +15,7 @@ import io.lantern.db.DetailsSubscriber
 import io.lantern.db.RawChangeSet
 import io.lantern.db.RawSubscriber
 import io.lantern.messaging.AttachmentTooBigException
+import io.lantern.messaging.clear
 import io.lantern.secrets.InsecureSecretException
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
@@ -71,6 +72,7 @@ abstract class BaseModel(
                 e.regenerate(dbPasswordLength)
             }
             masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
+            dbPassword.clear()
             insecureDbPassword?.let { insecurePassword ->
                 Logger.debug(TAG, "found old database encrypted with insecure password, migrate data to new secure database")
                 // What made the old password insecure is that it was stored as a String which
