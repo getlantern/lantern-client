@@ -258,6 +258,13 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     tx.put("/onBoarding_status", true)
                 }
             }
+            // for dev purposes
+            "overrideOnBoarded" -> {
+                val newValue = call.argument<Boolean>("newValue")!!
+                db.mutate { tx ->
+                    tx.put("/onBoarding_status", newValue)
+                }
+            }
             "markCopiedRecoveryKey" -> {
                 db.mutate { tx ->
                     tx.put("/copiedRecovery_status", true)

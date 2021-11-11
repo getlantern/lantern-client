@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/account/secure_chat_number_account.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
@@ -75,6 +76,13 @@ const account_tab_router = CustomRoute<void>(
         page: RecoveryKey,
         name: 'RecoveryKey',
         path: 'recoveryKey',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: SecureChatNumberAccount,
+        name: 'SecureChatNumberAccount',
+        path: 'secureChatNumberAccount',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

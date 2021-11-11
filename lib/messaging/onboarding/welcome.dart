@@ -6,11 +6,12 @@ class Welcome extends StatelessWidget {
     return BaseScreen(
       title: 'lantern_secure_chat'.i18n,
       automaticallyImplyLeading: false,
-      body: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        alignment: WrapAlignment.center,
-        children: [
-          const CAssetImage(path: ImagePaths.placeholder, size: 300),
+      body: PinnedButtonLayout(
+        content: [
+          const Padding(
+            padding: EdgeInsetsDirectional.only(top: 16.0),
+            child: CAssetImage(path: ImagePaths.placeholder, size: 300),
+          ),
           Padding(
             padding: const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
             child: CText('welcome_title'.i18n, style: tsHeading1),
@@ -18,18 +19,17 @@ class Welcome extends StatelessWidget {
           Padding(
             padding: const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
             child: CText('welcome_text'.i18n, style: tsBody1),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
-            child: Button(
+          )
+        ],
+        button: Column(
+          children: [
+            Button(
               text: 'get_started'.i18n,
               width: 200.0,
-              onPressed: () => context.router.push(const Chats()),
+              onPressed: () =>
+                  context.router.push(const SecureChatNumberMessaging()),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
-            child: Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
@@ -45,8 +45,8 @@ class Welcome extends StatelessWidget {
                             color: pink4, fontWeight: FontWeight.w500)))
               ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

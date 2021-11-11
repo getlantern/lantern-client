@@ -60,35 +60,9 @@ class Chats extends StatelessWidget {
                           a.value.mostRecentMessageTs)
                       .toInt();
                 });
+                // * EMPTY STATE
                 if (contacts.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                        start: 8.0, end: 8.0, top: 16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: const CAssetImage(
-                              path: ImagePaths.placeholder, size: 300),
-                        ),
-                        CText(
-                            'You don’t have any contacts yet. Share your chat number or add a contact here!'
-                                .i18n,
-                            style: tsBody1Color(grey5)),
-                        Expanded(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              constraints: const BoxConstraints.expand(),
-                              child: CustomPaint(
-                                painter:
-                                    ArrowPainter(), // TODO: definitely need to fine-tune this in a responsive way once the illustration is ready
-                              )),
-                        ),
-                      ],
-                    ),
-                  );
+                  return const EmptyChats();
                 }
                 return ListView.builder(
                   itemCount: contacts.length,
@@ -124,6 +98,22 @@ class Chats extends StatelessWidget {
                 );
               }),
             ),
+            // // *
+            // // * DEV
+            // // *
+            // model.getOnBoardingStatus((context, value, child) => Container(
+            //       alignment: Alignment.center,
+            //       padding: const EdgeInsets.all(16.0),
+            //       child: Button(
+            //         tertiary: true,
+            //         text: 'DEV - toggle value'.i18n,
+            //         width: 200.0,
+            //         onPressed: () async {
+            //           await model.overrideOnBoarded(!value);
+            //           context.router.popUntilRoot();
+            //         },
+            //       ),
+            //     )),
           ],
         ),
         actionButton: FloatingActionButton(
@@ -131,5 +121,34 @@ class Chats extends StatelessWidget {
           onPressed: () async => await context.pushRoute(const NewChat()),
           child: CAssetImage(path: ImagePaths.add, color: white),
         ));
+  }
+}
+
+class EmptyChats extends StatelessWidget {
+  const EmptyChats({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          const EdgeInsetsDirectional.only(start: 8.0, end: 8.0, top: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: CAssetImage(
+                path: Directionality.of(context) == TextDirection.ltr
+                    ? ImagePaths.empty_chats
+                    : ImagePaths.empty_chats_rtl,
+                size: 210),
+          ),
+          CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
+        ],
+      ),
+    );
   }
 }

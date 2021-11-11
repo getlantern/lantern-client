@@ -73,13 +73,6 @@ class MessagingModel extends Model {
     }).then((value) => Contact.fromBuffer(value));
   }
 
-  Future<void> dismissVerificationReminder(String unsafeId) {
-    return methodChannel
-        .invokeMethod('dismissVerificationReminder', <String, dynamic>{
-      'unsafeId': unsafeId,
-    }).then((value) => Contact.fromBuffer(value));
-  }
-
   Future<void> acceptDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
         'acceptDirectContact', <String, dynamic>{'unsafeId': unsafeId});
@@ -396,8 +389,20 @@ class MessagingModel extends Model {
   * REMINDERS 
   */
 
+  Future<void> dismissVerificationReminder(String unsafeId) {
+    return methodChannel
+        .invokeMethod('dismissVerificationReminder', <String, dynamic>{
+      'unsafeId': unsafeId,
+    }).then((value) => Contact.fromBuffer(value));
+  }
+
   Future<void> markIsOnboarded<T>() async {
     return methodChannel.invokeMethod('markIsOnboarded');
+  }
+
+  Future<void> overrideOnBoarded(bool newValue) {
+    return methodChannel.invokeMethod(
+        'overrideOnBoarded', <String, dynamic>{'newValue': newValue});
   }
 
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {

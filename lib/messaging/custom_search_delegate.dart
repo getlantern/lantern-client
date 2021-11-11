@@ -148,9 +148,25 @@ class CustomSearchDelegate extends SearchDelegate {
                                     ),
                                   )
                                 : Center(
-                                    child: CText('search_no_results'.i18n,
-                                        style: tsSubtitle1,
-                                        textAlign: TextAlign.center));
+                                    child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const CAssetImage(
+                                        path: ImagePaths.empty_search,
+                                        size: 130,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.all(
+                                                24.0),
+                                        child: CText('search_no_results'.i18n,
+                                            style: tsSubtitle1,
+                                            textAlign: TextAlign.center),
+                                      ),
+                                    ],
+                                  ));
                           }
                       }
                     })),

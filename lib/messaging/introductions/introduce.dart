@@ -67,7 +67,9 @@ class _IntroduceState extends State<Introduce> {
                                           Checkbox(
                                             checkColor: Colors.white,
                                             fillColor: MaterialStateProperty
-                                                .resolveWith(getCheckboxColor),
+                                                .resolveWith((states) =>
+                                                    getCheckboxFillColor(
+                                                        black, states)),
                                             value: selectedContactIds
                                                 .contains(contact.contactId.id),
                                             shape: const CircleBorder(
