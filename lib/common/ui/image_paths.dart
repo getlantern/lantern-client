@@ -87,6 +87,7 @@ class ImagePaths {
       'assets/images/sticker_figure_foreground.svg';
   static const empty_chats = 'assets/images/empty_chats.svg';
   static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
+  static const empty_search = 'assets/images/empty_search.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';
