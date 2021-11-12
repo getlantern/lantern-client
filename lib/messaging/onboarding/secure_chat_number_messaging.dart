@@ -1,5 +1,3 @@
-import 'package:lantern/home.dart';
-
 import '../messaging.dart';
 
 class SecureChatNumberMessaging extends StatelessWidget {
@@ -27,16 +25,14 @@ class SecureChatNumberMessaging extends StatelessWidget {
                       //* Your Secure Chat Number
                       StatefulBuilder(
                           builder: (context, setState) =>
-                              ListItemFactory.isSettingsItem(
+                              ListItemFactory.settingsItem(
                                 onTap: () async {
                                   copyText(context, me.chatNumber.shortNumber);
                                   setState(() => textCopied = true);
                                   await Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
                                 },
-                                leading: const CAssetImage(
-                                  path: ImagePaths.chatNumber,
-                                ),
+                                icon: ImagePaths.chatNumber,
                                 content: CText(
                                   me.chatNumber.shortNumber.formattedChatNumber,
                                   style: tsHeading1.copiedWith(

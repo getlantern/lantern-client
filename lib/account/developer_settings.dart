@@ -23,7 +23,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             margin: const EdgeInsetsDirectional.only(bottom: 16.0),
             child: CText('dev_payment_mode'.i18n, style: tsBody3),
           ),
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             content: 'Payment Test Mode'.i18n,
             trailingArray: [
               sessionModel.paymentTestMode(
@@ -42,7 +42,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             content: 'Play Version'.i18n,
             trailingArray: [
               sessionModel.playVersion(
@@ -61,7 +61,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             content: 'Force Country'.i18n,
             trailingArray: [
               sessionModel.forceCountry(
