@@ -15,7 +15,7 @@ class ListItemFactory extends StatelessWidget {
 
   late final _ItemTypology renderAs;
 
-  ListItemFactory.isSettingsItem({
+  ListItemFactory.settingsItem({
     Key? key,
     this.header,
     this.leading,
@@ -26,7 +26,7 @@ class ListItemFactory extends StatelessWidget {
     renderAs = _ItemTypology.isSettingsItem;
   }
 
-  ListItemFactory.isBottomItem({
+  ListItemFactory.bottomItem({
     Key? key,
     this.leading,
     this.content,
@@ -36,7 +36,7 @@ class ListItemFactory extends StatelessWidget {
     renderAs = _ItemTypology.isBottomItem;
   }
 
-  ListItemFactory.isFocusMenuItem({
+  ListItemFactory.focusMenuItem({
     Key? key,
     this.leading,
     this.content,
@@ -47,7 +47,7 @@ class ListItemFactory extends StatelessWidget {
   }
 
   // contacts, messages, search results
-  ListItemFactory.isMessagingItem({
+  ListItemFactory.messagingItem({
     Key? key,
     this.header,
     this.leading,

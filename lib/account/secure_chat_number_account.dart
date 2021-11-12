@@ -12,7 +12,7 @@ class SecureChatNumberAccount extends StatelessWidget {
               children: [
                 StatefulBuilder(
                     builder: (context, setState) =>
-                        ListItemFactory.isSettingsItem(
+                        ListItemFactory.settingsItem(
                           header: 'your_secure_chat_number'.i18n.toUpperCase(),
                           onTap: () async {
                             copyText(context, me.chatNumber.number);

@@ -27,7 +27,7 @@ class Settings extends StatelessWidget {
       title: 'settings'.i18n,
       body: ListView(
         children: [
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             leading: ImagePaths.key,
             content: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,7 +64,7 @@ class Settings extends StatelessWidget {
               )
             ],
           ),
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             leading: ImagePaths.translate,
             content: 'language'.i18n,
             onTap: () {
@@ -84,7 +84,7 @@ class Settings extends StatelessWidget {
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
           ),
-          ListItemFactory.isSettingsItem(
+          ListItemFactory.settingsItem(
             leading: ImagePaths.alert,
             content: 'report_issue'.i18n,
             trailingArray: [

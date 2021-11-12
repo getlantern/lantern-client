@@ -58,7 +58,7 @@ class Introductions extends StatelessWidget {
                                                     IntroductionDetails_IntroductionStatus
                                                         .PENDING)
                                                 ? ListItemFactory
-                                                    .isMessagingItem(
+                                                    .messagingItem(
                                                     content: value.introduction
                                                         .displayNameOrFallback,
                                                     leading: CBadge(

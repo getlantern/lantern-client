@@ -29,7 +29,7 @@ class Chats extends StatelessWidget {
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
                     (introductions.getPending().isNotEmpty)
-                        ? ListItemFactory.isMessagingItem(
+                        ? ListItemFactory.messagingItem(
                             leading: CBadge(
                               count: introductions.getPending().length,
                               showBadge: true,
@@ -76,7 +76,7 @@ class Chats extends StatelessWidget {
                         contactItem,
                         (context, contact, child) => Column(
                               children: [
-                                ListItemFactory.isMessagingItem(
+                                ListItemFactory.messagingItem(
                                   focusedMenu: renderLongTapMenu(
                                       contact: contact, context: context),
                                   leading: CustomAvatar(

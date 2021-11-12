@@ -11,7 +11,7 @@ SizedBox renderLongTapMenu(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ListItemFactory.isFocusMenuItem(
+            ListItemFactory.focusMenuItem(
                 leading: const CAssetImage(
                   path: ImagePaths.user,
                 ),
@@ -24,7 +24,7 @@ SizedBox renderLongTapMenu(
                       contact: contact));
                 }),
             if (!contact.isMe)
-              ListItemFactory.isFocusMenuItem(
+              ListItemFactory.focusMenuItem(
                 leading: const CAssetImage(
                   path: ImagePaths.people,
                 ),

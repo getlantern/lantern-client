@@ -384,7 +384,7 @@ class MessageBubble extends StatelessWidget {
             ),
             const CDivider(),
             if (!isConnectionCard)
-              ListItemFactory.isFocusMenuItem(
+              ListItemFactory.focusMenuItem(
                 leading: ImagePaths.reply,
                 content: 'reply'.i18n,
                 onTap: () {
@@ -395,7 +395,7 @@ class MessageBubble extends StatelessWidget {
             if (!isAttachment && !wasRemotelyDeleted && !isConnectionCard)
               StatefulBuilder(
                 key: ValueKey(message.id),
-                builder: (context, setState) => ListItemFactory.isFocusMenuItem(
+                builder: (context, setState) => ListItemFactory.focusMenuItem(
                   leading: textCopied
                       ? ImagePaths.check_green
                       : ImagePaths.content_copy,
@@ -410,13 +410,13 @@ class MessageBubble extends StatelessWidget {
                   },
                 ),
               ),
-            ListItemFactory.isFocusMenuItem(
+            ListItemFactory.focusMenuItem(
               leading: ImagePaths.delete,
               content: 'delete_for_me'.i18n,
               onTap: () => deleteForMe(context, model),
             ),
             if (isOutbound)
-              ListItemFactory.isFocusMenuItem(
+              ListItemFactory.focusMenuItem(
                 leading: ImagePaths.delete,
                 content: 'delete_for_everyone'.i18n,
                 onTap: () => deleteForEveryone(context, model),

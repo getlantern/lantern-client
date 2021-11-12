@@ -23,7 +23,7 @@ Future showConversationOptions({
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              ListItemFactory.isBottomItem(
+              ListItemFactory.bottomItem(
                 leading: const CAssetImage(
                   path: ImagePaths.user,
                 ),
@@ -34,7 +34,7 @@ Future showConversationOptions({
                       .pushRoute(ContactInfo(model: model, contact: contact));
                 },
               ),
-              ListItemFactory.isBottomItem(
+              ListItemFactory.bottomItem(
                 leading: const CAssetImage(
                   path: ImagePaths.timer,
                 ),
@@ -293,7 +293,7 @@ Future showConversationOptions({
                 },
               ),
               if (!contact.isMe)
-                ListItemFactory.isBottomItem(
+                ListItemFactory.bottomItem(
                     leading: const CAssetImage(
                       path: ImagePaths.people,
                     ),
@@ -304,7 +304,7 @@ Future showConversationOptions({
                     }),
               if (!contact.isMe &&
                   contact.verificationLevel != VerificationLevel.VERIFIED)
-                ListItemFactory.isBottomItem(
+                ListItemFactory.bottomItem(
                     leading: const CAssetImage(
                       path: ImagePaths.verified_user,
                     ),
