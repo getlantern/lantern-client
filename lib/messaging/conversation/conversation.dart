@@ -1,24 +1,24 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging.dart';
 
-import 'contact_info_topbar.dart';
 import 'audio/audio_widget.dart';
 import 'audio/message_bar_preview_recording.dart';
+import 'audio/voice_recorder.dart';
+import 'call_action.dart';
+import 'contact_info_topbar.dart';
 import 'conversation_sticker.dart';
+import 'date_marker_bubble.dart';
 import 'message_bubble.dart';
 import 'messaging_emoji_picker.dart';
 import 'pulsating_indicator.dart';
-import 'stopwatch_timer.dart';
-import 'audio/voice_recorder.dart';
-import 'call_action.dart';
-import 'date_marker_bubble.dart';
 import 'reply.dart';
 import 'show_conversation_options.dart';
 import 'show_verification_options.dart';
+import 'stopwatch_timer.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId contactId;
@@ -390,8 +390,6 @@ class ConversationState extends State<Conversation>
                       return IconButton(
                         visualDensity: VisualDensity.compact,
                         onPressed: () async {
-                          await model.dismissVerificationReminder(
-                              contact.contactId.id);
                           showVerificationOptions(
                             model: model,
                             contact: contact,
