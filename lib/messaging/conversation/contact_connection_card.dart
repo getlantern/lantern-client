@@ -112,8 +112,8 @@ class ContactConnectionCard extends StatelessWidget {
         subtitle: CText('introductions_info'.i18n,
             style: tsBody1.copiedWith(color: grey5)),
         children: [
-          ListItemFactory.isBottomItem(
-            leading: const CAssetImage(path: ImagePaths.check_black),
+          ListItemFactory.bottomItem(
+            icon: ImagePaths.check_black,
             content: 'accept'.i18n,
             onTap: () async {
               try {
@@ -140,8 +140,8 @@ class ContactConnectionCard extends StatelessWidget {
               )
             ],
           ),
-          ListItemFactory.isBottomItem(
-            leading: const CAssetImage(path: ImagePaths.cancel),
+          ListItemFactory.bottomItem(
+            icon: ImagePaths.cancel,
             content: 'reject'.i18n,
             onTap: () => showConfirmationDialog(
                 context: context,

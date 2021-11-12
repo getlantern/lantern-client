@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
+
 import 'long_tap_menu.dart';
 
 class NewChat extends StatefulWidget {
@@ -70,7 +71,7 @@ class _NewChatState extends State<NewChat> {
               /*
               * Share your Chat Number
               */
-              ListItemFactory.isMessagingItem(
+              ListItemFactory.messagingItem(
                 header: 'add_new_contact'.i18n,
                 leading: const CAssetImage(
                   path: ImagePaths.share,
@@ -90,7 +91,7 @@ class _NewChatState extends State<NewChat> {
               /*
               * Scan QR Code
               */
-              ListItemFactory.isMessagingItem(
+              ListItemFactory.messagingItem(
                 leading: const CAssetImage(
                   path: ImagePaths.qr_code_scanner,
                 ),
@@ -125,7 +126,7 @@ class _NewChatState extends State<NewChat> {
               /*
               * Add via Chat Number
               */
-              ListItemFactory.isMessagingItem(
+              ListItemFactory.messagingItem(
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),

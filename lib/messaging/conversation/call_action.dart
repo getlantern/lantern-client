@@ -23,8 +23,8 @@ class CallAction extends StatelessWidget {
                 maxLines: 1,
                 style: tsSubtitle1),
             children: [
-              ListItemFactory.isBottomItem(
-                leading: const CAssetImage(path: ImagePaths.phone),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.phone,
                 content: 'call'.i18n,
                 onTap: () async {
                   Navigator.pop(context);
@@ -34,8 +34,8 @@ class CallAction extends StatelessWidget {
                   );
                 },
               ),
-              ListItemFactory.isBottomItem(
-                leading: const CAssetImage(path: ImagePaths.cancel),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.cancel,
                 content: 'cancel'.i18n,
                 onTap: () => Navigator.pop(context),
               ),

@@ -201,7 +201,7 @@ class SuggestionBuilder extends StatelessWidget {
           var suggestion = suggestions[index];
 
           if (suggestion is SearchResult<Contact>) {
-            return ListItemFactory.isMessagingItem(
+            return ListItemFactory.messagingItem(
               leading: CustomAvatar(
                   messengerId: suggestion.value.contactId.id,
                   displayName: suggestion.value.displayNameOrFallback),
@@ -219,7 +219,7 @@ class SuggestionBuilder extends StatelessWidget {
                   Widget? child) {
                 final initialScrollIndex = messageRecords.toList().indexWhere(
                     (element) => element.value.id == suggestion.value.id);
-                return ListItemFactory.isMessagingItem(
+                return ListItemFactory.messagingItem(
                   leading: CustomAvatar(
                       messengerId: suggestion.value.contactId.id,
                       displayName: contact.displayNameOrFallback),

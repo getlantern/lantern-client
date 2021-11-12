@@ -1,11 +1,18 @@
 import 'messaging.dart';
 
 extension ContactDisplayName on Contact {
-  String get displayNameOrFallback => isMe
-      ? 'me'.i18n
-      : displayName.isEmpty
-          ? 'unnamed_contact'.i18n
-          : displayName;
+  String get displayNameOrFallback {
+    if (isMe) {
+      return 'me'.i18n;
+    }
+    if (displayName.isNotEmpty) {
+      return displayName;
+    }
+    if (chatNumber.shortNumber.isNotEmpty) {
+      return chatNumber.shortNumber.formattedChatNumber;
+    }
+    return 'unnamed_contact'.i18n;
+  }
 }
 
 extension IntroductionDisplayName on IntroductionDetails {
