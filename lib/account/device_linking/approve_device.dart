@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/pin_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -37,7 +37,7 @@ class ApproveDevice extends StatelessWidget {
     return sessionModel.emailAddress(
         (BuildContext context, String emailAddress, Widget? child) {
       return BaseScreen(
-        title: 'Add Device'.i18n,
+        title: 'Link Device'.i18n,
         body: Form(
           key: formKey,
           child: Column(

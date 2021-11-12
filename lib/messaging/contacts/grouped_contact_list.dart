@@ -22,29 +22,18 @@ ScrollablePositionedList groupedContactListGenerator({
       var itemsPerKey = groupedSortedList.values.elementAt(index);
       return ListBody(
         children: [
-          Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 0, 4.0),
-                child: CText(key[0].toUpperCase(), style: tsOverline),
-              ),
-            ],
-          ),
-          const CDivider(),
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map(
-              (contact) => ContactListItem(
+              (contact) => ListItemFactory.messagingItem(
+                header: key[0].toUpperCase(),
                 focusedMenu: (focusMenuCallback != null)
                     ? focusMenuCallback(contact.value)
                     : const SizedBox(),
-                contact: contact.value,
-                index: index,
                 leading: leadingCallback!(contact.value),
-                title: contact.value.displayNameOrFallback,
-                trailing: trailingCallback != null
-                    ? trailingCallback(index, contact.value)
-                    : null,
+                content: contact.value.displayNameOrFallback,
+                trailingArray: trailingCallback != null
+                    ? [trailingCallback(index, contact.value)]
+                    : [],
                 onTap: onTapCallback != null
                     ? () => onTapCallback(contact.value)
                     : null,

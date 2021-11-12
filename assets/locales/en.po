@@ -38,11 +38,17 @@ msgstr "Server Location Info"
 msgid "OK"
 msgstr "OK"
 
+msgid "recovery_key"
+msgstr "Recovery Key"
+
+msgid "backup_recovery_key"
+msgstr "Backup Recovery Key"
+
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "Add Device"
-msgstr "Add Device"
+msgid "Link Device"
+msgstr "Link Device"
 
 msgid "Upgrade to Lantern Pro"
 msgstr "Upgrade to Lantern Pro"
@@ -51,7 +57,7 @@ msgid "Invite Friends"
 msgstr "Invite Friends"
 
 msgid "desktop_version"
-msgstr "Desktop version"
+msgstr "Desktop Version"
 
 msgid "settings"
 msgstr "Settings"
@@ -105,6 +111,9 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 
 msgid "Link via Email"
 msgstr "Link via Email"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro Email"
 
 msgid "Email"
 msgstr "Email"
@@ -208,8 +217,8 @@ msgstr "Copied!"
 msgid "saved"
 msgstr "Saved!"
 
-msgid "new_message"
-msgstr "New Message"
+msgid "new_chat"
+msgstr "New Chat"
 
 msgid "your_contact_info"
 msgstr "Your Contact Info"
@@ -276,6 +285,9 @@ msgstr "Add new contact:"
 
 msgid "add_contact"
 msgstr "Add Contact"
+
+msgid "share_your_chat_number"
+msgstr "Share your Chat Number"
 
 msgid "scan_qr_code"
 msgstr "Scan QR Code"
@@ -534,6 +546,84 @@ msgstr "Message"
 
 msgid "messages"
 msgstr "Messages"
+
+msgid "chats"
+msgstr "Chats"
+
+msgid "secure_chat"
+msgstr "Secure Chat"
+
+msgid "lantern_secure_chat"
+msgstr "Lantern Secure Chat"
+
+msgid "welcome_title"
+msgstr "Welcome to Lantern Secure Chat!"
+
+msgid "welcome_text"
+msgstr "Lantern Secure Chat pairs the strongest encryption and security practices with best-in-class blocking resistant technology to ensure your chats are private and always accessible. To start using Lantern chat, click get started below!"
+
+msgid "get_started"
+msgstr "Get started"
+
+msgid "want_to_recover"
+msgstr "Have a Secure Chat Number?"
+
+msgid "recover"
+msgstr "Recover"
+
+msgid "secure_chat_number"
+msgstr "Secure Chat Number"
+
+msgid "your_secure_chat_number"
+msgstr "Your Secure Chat Number"
+
+msgid "secure_chat_number_descriptionr"
+msgstr "This is the full version of your Secure Chat Number.\n\nLantern provides the shortened Secure Chat Number to make sharing contacts easier.When you share the full version of the number Lantern’s servers are not required for look up."
+
+msgid "secure_chat_number_recovery"
+msgstr "Secure Chat Number Recovery"
+
+msgid "recovery_helper_text"
+msgstr "Please enter a valid Recovery Key"
+
+msgid "recovery_button"
+msgstr "Enter your  Recovery Key to restore your Lantern Secure Chat Number."
+
+msgid "recovery_label"
+msgstr "Enter your Recovery Key"
+
+msgid "recovery_key"
+msgstr "Recovery Key"
+
+msgid "secure_text_explanation"
+msgstr "Your Secure Chat Number works like a phone number that your friends can use to contact you on Lantern. Lantern gives you a Secure Chat Number, so you do not have to use your phone number to chat."
+
+msgid "secure_text_explanation_account"
+msgstr "This is the full version of your Secure Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides the shortened Secure Chat Number to make sharing contact information more convenient. "
+
+msgid "recovery_key_account_explanation"
+msgstr "This is your recovery key, it is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system. Store this in a safe location."
+
+msgid "recovery_error"
+msgstr "Unable to recover your account"
+
+msgid "empty_chats_text"
+msgstr "Share your chat number or add a contact here!."
+
+msgid "next"
+msgstr "Next"
+
+msgid "automated_backup"
+msgstr "Automated Backup"
+
+msgid "backup_explanation"
+msgstr "Lantern provides the option to encrypt and backup your contacts to our secure servers. If you forgo backup, you will not be able to recover your contacts using your recovery key.\n\n Lantern cannot read your contact lists when you choose to back them up."
+
+msgid "backup_contacts"
+msgstr "Backup contacts"
+
+msgid "copy_recovery_key"
+msgstr "Copy recovery key"
 
 msgid "search"
 msgstr "Search"

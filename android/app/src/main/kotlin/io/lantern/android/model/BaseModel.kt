@@ -15,9 +15,12 @@ import io.lantern.db.DetailsSubscriber
 import io.lantern.db.RawChangeSet
 import io.lantern.db.RawSubscriber
 import io.lantern.messaging.AttachmentTooBigException
+import io.lantern.messaging.clear
+import io.lantern.secrets.InsecureSecretException
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.SessionManager
 import java.io.File
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
@@ -51,58 +54,57 @@ abstract class BaseModel(
             val start = System.currentTimeMillis()
             val context = LanternApp.getAppContext()
             Logger.debug(TAG, "LanternApp.getAppContext() finished at ${System.currentTimeMillis() - start}")
-            val secretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+            val oldSecretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+            val secretsPreferences = context.getSharedPreferences("secretsv2", Context.MODE_PRIVATE)
             Logger.debug(TAG, "getSharedPreferences() finished at ${System.currentTimeMillis() - start}")
-            val secrets = Secrets("lanternMasterKey", secretsPreferences)
+            val secrets = Secrets("lanternMasterKey", secretsPreferences, oldSecretsPreferences)
             Logger.debug(TAG, "Secrets() finished at ${System.currentTimeMillis() - start}")
-            val dbDir = File(context.filesDir, "masterDB")
+
+            val dbDir = File(context.filesDir, "masterDBv2")
             dbDir.mkdirs()
-            val oldDbDir = File(context.filesDir, ".lantern")
-            // Migrate database from old location. Putting the database in its new location prevents
-            // corruption on older Android devices as described in
-            // https://github.com/getlantern/android-lantern/issues/305
-            var migrated = false
-            // TODO: we can/should remove this logic after a few releases just to avoid any issues
-            // with some future code saving files named db* to the .lantern folder.
-            oldDbDir.listFiles()?.forEach { source ->
-                if (source.name.startsWith("db")) {
-                    val dest = File(dbDir, source.name)
-                    Logger.debug(TAG, "Migrating ${source.absolutePath} to ${dest.absolutePath}")
-                    try {
-                        source.copyTo(dest)
-                        migrated = true
-                    } catch (t: Throwable) {
-                        Logger.error(TAG, "Failed to migrate ${source.absolutePath} to ${dest.absolutePath}", t)
-                    } finally {
-                        if (!source.delete()) {
-                            Logger.error(TAG, "Failed to delete ${source.absolutePath}")
-                        }
-                    }
-                }
-            }
             val dbLocation = File(dbDir, "db").absolutePath
-            val dbPassword = secrets.get(dbPasswordKey, dbPasswordLength)
-            masterDB = try {
-                DB.createOrOpen(context, dbLocation, dbPassword)
-            } catch (e: Exception) {
-                val oldStylePassword = dbPassword.contains("=")
-                // There are two scenarios that seem to cause database corruption on older
-                // Android versions, especially 5.1.x
-                //
-                // 1. Database was created in the .lantern folder
-                // 2. Database was created using a password that contains a line feed
-                val recoverable = (migrated || oldStylePassword)
-                if (!recoverable || e.message?.contains("file is not a database") == false) {
-                    throw e
+            var insecureDbPassword: String? = null
+            val dbPassword = try {
+                secrets.get(dbPasswordKey, dbPasswordLength)
+            } catch (e: InsecureSecretException) {
+                Logger.debug(TAG, "Old database password was stored insecurely, generate a new database password and prepare to copy data")
+                insecureDbPassword = e.secret
+                e.regenerate(dbPasswordLength)
+            }
+            masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
+            dbPassword.clear()
+            insecureDbPassword?.let { insecurePassword ->
+                Logger.debug(TAG, "found old database encrypted with insecure password, migrate data to new secure database")
+                // What made the old password insecure is that it was stored as a String which
+                // tends to stick around for a long time in memory. We only ever used string
+                // passwords prior to the release of messaging, so nothing particularly sensitive
+                // was encrypted with the old password and it's okay to just copy the data to the
+                // new database.
+                val insecureDbDir = File(context.filesDir, "masterDB")
+                val insecureDB = DB.createOrOpen(
+                    context,
+                    File(insecureDbDir, "db").absolutePath,
+                    insecurePassword.toByteArray(Charsets.UTF_8)
+                )
+                var keysMigrated = 0
+                masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA).mutate { tx ->
+                    insecureDB
+                        .withSchema(SessionManager.PREFERENCES_SCHEMA)
+                        .list<Any>("%").forEach {
+                            tx.put(it.path, it.value)
+                            keysMigrated++
+                        }
                 }
-                // Let's recover by recreating the database using a new password. The latest version
-                // of secrets-android omits newlines (and padding) from generated secrets.
-                Logger.debug(TAG, "database was corrupted, error is recoverable, delete and start fresh")
-                val newDbPassword = secrets.generate(dbPasswordLength)
-                secrets.put(dbPasswordKey, newDbPassword)
-                dbDir.deleteRecursively()
-                dbDir.mkdirs()
-                DB.createOrOpen(context, dbLocation, newDbPassword)
+                masterDB.withSchema(VpnModel.VPN_SCHEMA).mutate { tx ->
+                    insecureDB
+                        .withSchema(VpnModel.VPN_SCHEMA)
+                        .list<Any>("%").forEach {
+                            tx.put(it.path, it.value)
+                            keysMigrated++
+                        }
+                }
+                insecureDbDir.deleteRecursively()
+                Logger.debug(TAG, "migrated $keysMigrated keys from insecure database")
             }
             Logger.debug(TAG, "createOrOpen finished at ${System.currentTimeMillis() - start}")
         }

@@ -49,7 +49,7 @@ dependencies:
 
   audioplayers: ^0.19.1
 
-  auto_route: ^2.2.0
+  auto_route: ^3.0.4
 
   bot_toast: ^4.0.1
 
@@ -115,7 +115,7 @@ dev_dependencies:
 
   test: ^1.15.7
   mockito: ^5.0.12
-  auto_route_generator: ^2.1.0
+  auto_route_generator: ^3.0.1 
   build_runner: ^2.0.5
 
 # For information on the generic Dart part of this file, see the
@@ -123,7 +123,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  fonts:
+  - family: RobotoMono
+    fonts:
+      - asset: assets/fonts/RobotoMono.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -134,6 +137,7 @@ flutter:
     - assets/images/
     - assets/images/countdown_stopwatch/
     - assets/locales/
+    - assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

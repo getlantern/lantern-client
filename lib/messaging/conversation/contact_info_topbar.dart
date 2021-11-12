@@ -39,7 +39,6 @@ class ContactInfoTopBar extends StatelessWidget {
               */
               if (contact.verificationLevel == VerificationLevel.UNVERIFIED)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Padding(
                       padding: EdgeInsetsDirectional.only(end: 2.0),
@@ -57,7 +56,6 @@ class ContactInfoTopBar extends StatelessWidget {
               */
               if (contact.verificationLevel == VerificationLevel.VERIFIED)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DisappearingTimerAction(contact),
                     Padding(

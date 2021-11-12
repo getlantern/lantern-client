@@ -109,12 +109,19 @@ abstract class Model {
 }
 
 abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
+  T defaultValue;
   void Function() removeFromCache;
   late void Function() cancel;
   int refCount = 0;
 
-  SubscribedNotifier(T defaultValue, this.removeFromCache)
+  SubscribedNotifier(this.defaultValue, this.removeFromCache)
       : super(defaultValue);
+
+  @override
+  T get value {
+    final val = super.value;
+    return val ?? defaultValue;
+  }
 
   @override
   void addListener(listener) {

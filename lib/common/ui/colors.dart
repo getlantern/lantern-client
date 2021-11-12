@@ -49,13 +49,13 @@ Color indicatorRed = HexColor('#D5001F');
 Color overlayBlack = HexColor('#000000CB');
 
 // Checkbox color helper
-Color getCheckboxColor(Set<MaterialState> states) {
+Color getCheckboxFillColor(Color activeColor, Set<MaterialState> states) {
   const interactiveStates = <MaterialState>{
     MaterialState.pressed,
     MaterialState.hovered,
     MaterialState.focused,
   };
-  return states.any(interactiveStates.contains) ? white : black;
+  return states.any(interactiveStates.contains) ? white : activeColor;
 }
 
 Color getIllustrationColor(Contact contact) {
@@ -93,8 +93,8 @@ Color snippetShadowColor = black.withOpacity(0.18);
 Color selectedTabColor = white;
 Color unselectedTabColor = grey1;
 
-Color selectedTabLabelColor = black;
-Color unselectedTabLabelColor = grey5;
+Color selectedTabIconColor = black;
+Color unselectedTabIconColor = grey5;
 
 Color borderColor = grey3;
 

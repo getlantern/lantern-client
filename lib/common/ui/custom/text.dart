@@ -9,8 +9,8 @@ class CText extends StatelessWidget {
   final int? maxLines;
   final bool? softWrap;
 
-  /// A replacement for Text that includes the ability to auto-scale text
-  /// text and smartly place ellipses for single-line text (workaround for
+  /// A replacement for Text that includes the ability to auto-scale text and
+  /// smartly place ellipses for single-line text (workaround for
   /// Flutter bug https://github.com/flutter/flutter/issues/18761).
   ///
   /// To auto-scale text, make sure to supply a style that includes a

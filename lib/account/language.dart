@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 
 class Language extends StatelessWidget {
   static const languages = [

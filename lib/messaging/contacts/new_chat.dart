@@ -1,14 +1,15 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
+
 import 'long_tap_menu.dart';
 
-class NewMessage extends StatefulWidget {
+class NewChat extends StatefulWidget {
   @override
-  _NewMessageState createState() => _NewMessageState();
+  _NewChatState createState() => _NewChatState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _NewChatState extends State<NewChat> {
   var scrollListController = ItemScrollController();
   Contact? _updatedContact;
 
@@ -44,7 +45,7 @@ class _NewMessageState extends State<NewMessage> {
     var model = context.watch<MessagingModel>();
 
     return BaseScreen(
-      title: 'new_message'.i18n,
+      title: 'new_chat'.i18n,
       actions: [
         RoundButton(
           onPressed: () async => await showSearch(
@@ -62,12 +63,30 @@ class _NewMessageState extends State<NewMessage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListSectionHeader('add_new_contact'.i18n),
-              const CDivider(),
+              /*
+              * Share your Chat Number
+              */
+              ListItemFactory.messagingItem(
+                header: 'add_new_contact'.i18n,
+                leading: const CAssetImage(
+                  path: ImagePaths.share,
+                ),
+                content: CText('share_your_chat_number'.i18n,
+                    style: tsSubtitle1Short),
+                trailingArray: [
+                  mirrorLTR(
+                    context: context,
+                    child: const CAssetImage(
+                      path: ImagePaths.keyboard_arrow_right,
+                    ),
+                  )
+                ],
+                onTap: () {}, // TODO: Trigger native sharing
+              ),
               /*
               * Scan QR Code
               */
-              CListTile(
+              ListItemFactory.messagingItem(
                 leading: const CAssetImage(
                   path: ImagePaths.qr_code_scanner,
                 ),
@@ -81,12 +100,14 @@ class _NewMessageState extends State<NewMessage> {
                         style: tsBody1.copiedWith(color: grey5))
                   ],
                 ),
-                trailing: mirrorLTR(
-                  context: context,
-                  child: const CAssetImage(
-                    path: ImagePaths.keyboard_arrow_right,
-                  ),
-                ),
+                trailingArray: [
+                  mirrorLTR(
+                    context: context,
+                    child: const CAssetImage(
+                      path: ImagePaths.keyboard_arrow_right,
+                    ),
+                  )
+                ],
                 onTap: () async => await context
                     .pushRoute(
                       FullScreenDialogPage(
@@ -100,18 +121,20 @@ class _NewMessageState extends State<NewMessage> {
               /*
               * Add via Chat Number
               */
-              CListTile(
+              ListItemFactory.messagingItem(
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),
                 content:
                     CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
-                trailing: mirrorLTR(
-                  context: context,
-                  child: const CAssetImage(
-                    path: ImagePaths.keyboard_arrow_right,
-                  ),
-                ),
+                trailingArray: [
+                  mirrorLTR(
+                    context: context,
+                    child: const CAssetImage(
+                      path: ImagePaths.keyboard_arrow_right,
+                    ),
+                  )
+                ],
                 onTap: () async => await context
                     .pushRoute(const AddViaChatNumber())
                     .then(onContactAdded),

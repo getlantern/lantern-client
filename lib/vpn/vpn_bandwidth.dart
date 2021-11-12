@@ -19,7 +19,7 @@ class VPNBandwidth extends StatelessWidget {
                     CText(
                       'Daily Data Usage'.i18n,
                       style: tsBody1.copiedWith(
-                        color: unselectedTabLabelColor,
+                        color: unselectedTabIconColor,
                       ),
                     ),
                     Expanded(
