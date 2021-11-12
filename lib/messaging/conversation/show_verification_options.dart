@@ -31,7 +31,7 @@ void showVerificationOptions({
       children: [
         model.me(
           (context, me, child) => ListItemFactory.bottomItem(
-            leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
+            icon: ImagePaths.qr_code_scanner,
             content: 'verify_in_person'.i18n,
             onTap: () async {
               await bottomModalContext.router.pop();
@@ -54,7 +54,7 @@ void showVerificationOptions({
           ),
         ),
         ListItemFactory.bottomItem(
-          leading: const CAssetImage(path: ImagePaths.phone),
+          icon: ImagePaths.phone,
           content: 'verify_via_call'.i18n,
           onTap: () async {
             await bottomModalContext.router
@@ -77,7 +77,7 @@ void showVerificationOptions({
         ),
         if (showDismissNotification)
           ListItemFactory.bottomItem(
-            leading: const CAssetImage(path: ImagePaths.cancel),
+            icon: ImagePaths.cancel,
             content: 'dismiss_notification'.i18n,
             onTap: () async {
               await model.dismissVerificationReminder(contact.contactId.id);

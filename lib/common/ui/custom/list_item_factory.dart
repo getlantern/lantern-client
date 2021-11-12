@@ -7,7 +7,7 @@ class ListItemFactory extends StatelessWidget {
 
   ListItemFactory.settingsItem({
     String? header,
-    dynamic leading,
+    String? icon,
     dynamic content,
     void Function()? onTap,
     List<Widget>? trailingArray,
@@ -18,7 +18,7 @@ class ListItemFactory extends StatelessWidget {
             children: [
               if (header != null) ListSectionHeader(header),
               factory.buildBase(
-                leading: leading,
+                leading: icon,
                 content: content,
                 trailingArray: trailingArray,
                 onTap: onTap,
@@ -30,7 +30,7 @@ class ListItemFactory extends StatelessWidget {
         });
 
   ListItemFactory.bottomItem({
-    dynamic leading,
+    required String icon,
     dynamic content,
     List<Widget>? trailingArray,
     void Function()? onTap,
@@ -43,10 +43,12 @@ class ListItemFactory extends StatelessWidget {
               ),
             ),
             child: factory.buildBase(
-              leading: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 12.0),
-                child: leading,
-              ),
+              leading: icon == null
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 12.0),
+                      child: CAssetImage(path: icon, color: black),
+                    ),
               content: content,
               trailingArray: trailingArray,
               onTap: onTap,
@@ -57,13 +59,13 @@ class ListItemFactory extends StatelessWidget {
         });
 
   ListItemFactory.focusMenuItem({
-    dynamic leading,
+    required String icon,
     dynamic content,
     void Function()? onTap,
     List<Widget>? trailingArray,
   }) : this((BuildContext context, ListItemFactory factory) {
           return factory.buildBase(
-            leading: leading,
+            leading: icon,
             content: content,
             trailingArray: [],
             onTap: onTap,
@@ -190,6 +192,7 @@ class ListItemFactory extends StatelessWidget {
       return CAssetImage(
         path: leading,
         size: 24,
+        color: black,
       );
     }
 

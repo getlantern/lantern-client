@@ -38,9 +38,7 @@ class RecoveryKey extends StatelessWidget {
                               des: 'backup_explanation'.i18n,
                               popParentContext: false,
                             ),
-                            leading: const CAssetImage(
-                              path: ImagePaths.backup_icon,
-                            ),
+                            icon: ImagePaths.backup_icon,
                             content: Row(
                               children: [
                                 CText(

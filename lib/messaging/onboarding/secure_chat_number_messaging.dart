@@ -32,9 +32,7 @@ class SecureChatNumberMessaging extends StatelessWidget {
                                   await Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
                                 },
-                                leading: const CAssetImage(
-                                  path: ImagePaths.chatNumber,
-                                ),
+                                icon: ImagePaths.chatNumber,
                                 content: CText(
                                   me.chatNumber.shortNumber.formattedChatNumber,
                                   style: tsHeading1.copiedWith(

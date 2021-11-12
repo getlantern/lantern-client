@@ -51,8 +51,7 @@ class _AccountManagementState extends State<AccountManagement>
                     builder: (context, setState) =>
                         ListItemFactory.settingsItem(
                           header: 'secure_chat_number'.i18n,
-                          leading: CAssetImage(
-                              path: ImagePaths.chatNumber, color: black),
+                          icon: ImagePaths.chatNumber,
                           content:
                               me.chatNumber.shortNumber.formattedChatNumber,
                           trailingArray: [
@@ -84,10 +83,7 @@ class _AccountManagementState extends State<AccountManagement>
                     bool hasCopiedRecoveryKey, Widget? child) =>
                 ListItemFactory.settingsItem(
                   header: 'backup_recovery_key'.i18n,
-                  leading: CAssetImage(
-                    path: ImagePaths.lock_outline,
-                    color: black,
-                  ),
+                  icon: ImagePaths.lock_outline,
                   content: 'recovery_key'.i18n,
                   trailingArray: [
                     if (!hasCopiedRecoveryKey)
@@ -109,7 +105,7 @@ class _AccountManagementState extends State<AccountManagement>
                 (BuildContext context, String emailAddress, Widget? child) {
               return ListItemFactory.settingsItem(
                 header: 'lantern_pro_email'.i18n,
-                leading: CAssetImage(path: ImagePaths.email, color: black),
+                icon: ImagePaths.email,
                 content: emailAddress,
                 trailingArray: [],
               );
@@ -118,7 +114,7 @@ class _AccountManagementState extends State<AccountManagement>
                 (BuildContext context, String expirationDate, Widget? child) {
               return ListItemFactory.settingsItem(
                 header: 'Pro Account Expiration'.i18n,
-                leading: CAssetImage(path: ImagePaths.clock, color: black),
+                icon: ImagePaths.clock,
                 content: expirationDate,
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
