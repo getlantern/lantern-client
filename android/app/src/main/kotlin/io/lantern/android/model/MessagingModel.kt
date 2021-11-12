@@ -146,6 +146,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
             "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "recover" -> messaging.recover(recoveryCode = call.argument<String>("recoveryCode")!!)
             /*
             * Messages
             */
@@ -273,7 +274,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "saveNotificationsTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/lastNotif_ts", ts)
+                    tx.put("/requestNotificationLastDismissed", ts)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
