@@ -45,7 +45,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
       try {
         final contact =
             await model.addOrUpdateDirectContact(chatNumber: chatNumber);
-        await context.router.popAndPush(Conversation(
+        await context.router.push(Conversation(
             contactId: contact.contactId, showContactEditingDialog: true));
       } catch (e) {
         setState(() => controller.error = 'unable_to_add_contact'.i18n);

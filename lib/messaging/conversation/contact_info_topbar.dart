@@ -25,9 +25,7 @@ class ContactInfoTopBar extends StatelessWidget {
           child: CustomAvatar(
               customColor: isUnaccepted ? grey5 : null,
               messengerId: contact.contactId.id,
-              displayName: isUnaccepted
-                  ? contact.chatNumber.shortNumber
-                  : contact.displayNameOrFallback),
+              displayName: contact.displayNameOrFallback),
         ),
         Expanded(
           child: Column(
@@ -35,9 +33,7 @@ class ContactInfoTopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CText(
-                isUnaccepted
-                    ? contact.chatNumber.shortNumber.formattedChatNumber
-                    : contact.displayNameOrFallback,
+                contact.displayNameOrFallback,
                 maxLines: 1,
                 style: tsHeading3,
               ),

@@ -1,7 +1,6 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
-
 import 'long_tap_menu.dart';
 
 class NewChat extends StatefulWidget {

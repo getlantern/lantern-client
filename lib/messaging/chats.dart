@@ -50,7 +50,9 @@ class _ChatsState extends State<Chats> {
           .toList()
           .indexWhere((element) => element.value == firstUnaccepted.value);
       await scrollListController.scrollTo(
-          index: scrollTo, duration: const Duration(milliseconds: 500));
+        index: scrollTo,
+        duration: const Duration(milliseconds: 500),
+      );
     }
   }
 
@@ -168,12 +170,6 @@ class _ChatsState extends State<Chats> {
                         (context, contact, child) {
                       var isUnaccepted = contact.verificationLevel ==
                           VerificationLevel.UNACCEPTED;
-                      var displayName = isUnaccepted
-                          ? contact.chatNumber.shortNumber.formattedChatNumber
-                          : contact.displayNameOrFallback;
-                      var content = isUnaccepted
-                          ? contact.chatNumber.shortNumber.formattedChatNumber
-                          : contact.displayNameOrFallback;
                       return Column(
                         children: [
                           ListItemFactory.messagingItem(
@@ -190,8 +186,8 @@ class _ChatsState extends State<Chats> {
                             leading: CustomAvatar(
                                 customColor: isUnaccepted ? grey5 : null,
                                 messengerId: contact.contactId.id,
-                                displayName: displayName),
-                            content: content,
+                                displayName: contact.displayNameOrFallback),
+                            content: contact.displayNameOrFallback,
                             subtitle:
                                 '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
                                     .i18n,
@@ -256,40 +252,36 @@ class EmptyChats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          const EdgeInsetsDirectional.only(start: 8.0, end: 8.0, top: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: CAssetImage(
-                path: Directionality.of(context) == TextDirection.ltr
-                    ? ImagePaths.empty_chats
-                    : ImagePaths.empty_chats_rtl,
-                size: 210),
-          ),
-          CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
-          // // *
-          // // * DEV
-          // // *
-          // model.getOnBoardingStatus(
-          //     (context, value, child) => Padding(
-          //           padding: const EdgeInsets.all(8.0),
-          //           child: Button(
-          //             tertiary: true,
-          //             text: 'DEV - toggle value'.i18n,
-          //             width: 200.0,
-          //             onPressed: () async {
-          //               await model.overrideOnBoarded(!value);
-          //               context.router.popUntilRoot();
-          //             },
-          //           ),
-          //         )),
-        ],
-      ),
+    // var model = context.watch<MessagingModel>();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: CAssetImage(
+              path: Directionality.of(context) == TextDirection.ltr
+                  ? ImagePaths.empty_chats
+                  : ImagePaths.empty_chats_rtl,
+              size: 250),
+        ),
+        CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
+        // // *
+        // // * DEV
+        // // *
+        // model.getOnBoardingStatus((context, value, child) => Padding(
+        //       padding: const EdgeInsets.all(8.0),
+        //       child: Button(
+        //         tertiary: true,
+        //         text: 'DEV - toggle value'.i18n,
+        //         width: 200.0,
+        //         onPressed: () async {
+        //           await model.overrideOnBoarded(!value);
+        //           context.router.popUntilRoot();
+        //         },
+        //       ),
+        //     )),
+      ],
     );
   }
 }

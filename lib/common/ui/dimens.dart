@@ -26,5 +26,6 @@ bool shouldScroll({
   var safeHeight = height - padding.top - padding.bottom;
   var topBarHeight = elHeight;
 
+  // TODO: needs to be tested
   return safeHeight - topBarHeight < numElements * elHeight;
 }
