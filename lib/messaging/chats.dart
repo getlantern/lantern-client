@@ -148,7 +148,7 @@ class _ChatsState extends State<Chats> {
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
               // * NO CONTACTS
               if (_contacts.isEmpty) {
-                return const EmptyChats();
+                return const Expanded(child: EmptyChats());
               }
 
               final reshapedContactList = reshapeContactList(_contacts);

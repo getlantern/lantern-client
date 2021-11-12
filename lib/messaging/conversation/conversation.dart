@@ -56,7 +56,7 @@ class ConversationState extends State<Conversation>
   final scrollController = ItemScrollController();
   var verifiedColor = black;
   var shouldShowVerificationAlert = true;
-  var _showContactEditingDialog;
+  var hasSeenContactDialog = false;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -342,19 +342,18 @@ class ConversationState extends State<Conversation>
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
 
-      // we came here after adding a contact via chat number, show contact name dialog
+      // * we came here after adding a contact via chat number, show contact name dialog
       // TODO: not very happy with this
-      if ((widget.showContactEditingDialog ?? false) &&
-          _showContactEditingDialog == null) {
+      if ((widget.showContactEditingDialog ?? false) && !hasSeenContactDialog) {
         WidgetsBinding.instance?.addPostFrameCallback((_) async {
-          setState(() => _showContactEditingDialog = false);
-          showNativeKeyboard();
+          setState(() => hasSeenContactDialog = true);
           return showDialog(
               context: context,
               builder: (context) => ContactNameDialog(
-                  context: context,
-                  model: model,
-                  contact: contact)).then((value) => dismissNativeKeyboard());
+                    context: context,
+                    model: model,
+                    contact: contact,
+                  ));
         });
       }
 

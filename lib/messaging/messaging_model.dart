@@ -230,6 +230,9 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<void> recover(String recoveryCode) async => methodChannel
+      .invokeMethod('recover', <String, dynamic>{'recoveryCode': recoveryCode});
+
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
         ? 'd/${contactId.id}'
@@ -424,7 +427,9 @@ class MessagingModel extends Model {
   }
 
   Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/lastNotif_ts',
-        defaultValue: 0, builder: builder);
+    return subscribedSingleValueBuilder<int>(
+        '/requestNotificationLastDismissed',
+        defaultValue: 0,
+        builder: builder);
   }
 }
