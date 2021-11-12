@@ -386,7 +386,7 @@ abstract class SessionManager(application: Application) : Session {
 
     companion object {
         private val TAG = SessionManager::class.java.name
-        private const val PREFERENCES_SCHEMA = "session"
+        const val PREFERENCES_SCHEMA = "session"
 
         // shared preferences
         protected const val PREF_NAME = "LanternSession"

@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
+
 import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
@@ -28,7 +29,7 @@ class Chats extends StatelessWidget {
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
                     (introductions.getPending().isNotEmpty)
-                        ? ListItemFactory.isMessagingItem(
+                        ? ListItemFactory.messagingItem(
                             leading: CBadge(
                               count: introductions.getPending().length,
                               showBadge: true,
@@ -64,36 +65,42 @@ class Chats extends StatelessWidget {
                 if (contacts.isEmpty) {
                   return const EmptyChats();
                 }
+
                 return ListView.builder(
                   itemCount: contacts.length,
                   physics: defaultScrollPhysics,
                   itemBuilder: (context, index) {
-                    var contact = contacts[index];
-                    return Column(
-                      children: [
-                        ListItemFactory.isMessagingItem(
-                          focusedMenu: renderLongTapMenu(
-                              contact: contact.value, context: context),
-                          leading: CustomAvatar(
-                              messengerId: contact.value.contactId.id,
-                              displayName: contact.value.displayNameOrFallback),
-                          content:
-                              contact.value.displayNameOrFallback.toString(),
-                          subtitle:
-                              '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
-                                  .i18n,
-                          onTap: () async => await context.pushRoute(
-                              Conversation(contactId: contact.value.contactId)),
-                          trailingArray: [
-                            HumanizedDate.fromMillis(
-                              contact.value.mostRecentMessageTs.toInt(),
-                              builder: (context, date) => CText(date,
-                                  style: tsBody2.copiedWith(color: grey5)),
-                            )
-                          ],
-                        ),
-                      ],
-                    );
+                    var contactItem = contacts[index];
+                    return model.contact(
+                        context,
+                        contactItem,
+                        (context, contact, child) => Column(
+                              children: [
+                                ListItemFactory.messagingItem(
+                                  focusedMenu: renderLongTapMenu(
+                                      contact: contact, context: context),
+                                  leading: CustomAvatar(
+                                      messengerId: contact.contactId.id,
+                                      displayName:
+                                          contact.displayNameOrFallback),
+                                  content:
+                                      contact.displayNameOrFallback.toString(),
+                                  subtitle:
+                                      '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'.i18n}',
+                                  onTap: () async => await context.pushRoute(
+                                      Conversation(
+                                          contactId: contact.contactId)),
+                                  trailingArray: [
+                                    HumanizedDate.fromMillis(
+                                      contact.mostRecentMessageTs.toInt(),
+                                      builder: (context, date) => CText(date,
+                                          style:
+                                              tsBody2.copiedWith(color: grey5)),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ));
                   },
                 );
               }),

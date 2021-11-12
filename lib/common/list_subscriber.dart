@@ -103,15 +103,23 @@ class _SubscribedListBuilderState<T>
     var newMap = widget.valueListenable.value;
     var pathsChanged =
         newMap.newPaths.isNotEmpty || newMap.deletedPaths.isNotEmpty;
+    var missingChildNotifier = false;
     if (!pathsChanged) {
       // we can take the optimized path and just notify the children
       newMap.updatedPaths.forEach((path) {
         var newValue = newMap.map[path];
+        var foundChildNotifier = false;
         _childNotifiers[path]?.forEach((notifier) {
           notifier.value = newValue;
+          foundChildNotifier = true;
         });
+        missingChildNotifier = missingChildNotifier || !foundChildNotifier;
       });
-      return;
+      if (!missingChildNotifier) {
+        // Only stop processing if we had notifiers for every updated value.
+        // If not, we'll fall through and update the whole list.
+        return;
+      }
     }
 
     // Need to update the whole thing
@@ -139,7 +147,7 @@ class ListChildValueNotifier<T> extends ValueNotifier<T> {
 }
 
 /// A ValueListenableBuilder that obtains updates by subscribing to a specific
-/// path in a containing SplayTreeMapBuilder.
+/// path in a containing SubscribedListBuilder.
 class ListChildBuilder<T> extends ValueListenableBuilder<T> {
   ListChildBuilder(ValueNotifier<T> notifier, ValueWidgetBuilder<T> builder)
       : super(valueListenable: notifier, builder: builder);
