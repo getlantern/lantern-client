@@ -623,7 +623,7 @@ msgid "recovery_error"
 msgstr "Unable to recover your account"
 
 msgid "empty_chats_text"
-msgstr "Share your chat number or add a contact here!."
+msgstr "Share your chat number or add a contact here!"
 
 msgid "next"
 msgstr "Next"

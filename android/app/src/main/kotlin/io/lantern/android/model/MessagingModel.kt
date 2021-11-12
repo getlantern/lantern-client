@@ -271,7 +271,7 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                 }
             }
             "saveNotificationsTS" -> {
-                val ts = System.currentTimeMillis().toInt()
+                val ts = System.currentTimeMillis()
                 db.mutate { tx ->
                     tx.put("/lastNotif_ts", ts)
                 }

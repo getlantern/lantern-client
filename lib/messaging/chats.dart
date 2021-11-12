@@ -37,8 +37,12 @@ class _ChatsState extends State<Chats> {
         () => setState(() => customBg = null));
 
     //* Scroll to first unaccepted message
-    // TODO: only do this if the list is actually scrollable?
-    if (scrollListController.isAttached) {
+    if (scrollListController.isAttached &&
+        shouldScroll(
+          context: context,
+          numElements: _contacts.length,
+          elHeight: 72.0,
+        )) {
       final firstUnaccepted = _contacts.firstWhere((element) =>
           element.value.verificationLevel == VerificationLevel.UNACCEPTED);
       final scrollTo = _contacts
@@ -58,35 +62,35 @@ class _ChatsState extends State<Chats> {
           // * Notifications icon
           model.contactsByActivity(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            final acceptedContacts = _contacts
+            final requests = _contacts
                 .where((element) =>
                     element.value.verificationLevel ==
                     VerificationLevel.UNACCEPTED)
                 .toList();
 
-            if (acceptedContacts.isEmpty) {
+            if (requests.isEmpty) {
               return const SizedBox();
             }
 
             // 1. get most recent unaccepted contact
             // 2. get most recent message TS from that contact
-            final mostRecentUnacceptedTS = acceptedContacts
+            final mostRecentUnacceptedTS = requests
                 .firstWhere((element) =>
                     element.value.verificationLevel ==
                     VerificationLevel.UNACCEPTED)
                 .value
-                .mostRecentMessageTs;
+                .mostRecentMessageTs
+                .toInt();
 
-            return model.getLastDismissedNotificationTS((context,
-                    mostRecentNotifTS, child) =>
-                acceptedContacts.isNotEmpty &&
+            return model.getLastDismissedNotificationTS(
+                (context, mostRecentNotifTS, child) => requests.isNotEmpty &&
                         (mostRecentUnacceptedTS > mostRecentNotifTS)
                     ? RoundButton(
                         onPressed: () => handleReminder(_contacts, model),
                         backgroundColor: transparent,
                         icon: CBadge(
-                          count: acceptedContacts.length,
-                          showBadge: acceptedContacts.isNotEmpty,
+                          count: requests.length,
+                          showBadge: requests.isNotEmpty,
                           child:
                               const CAssetImage(path: ImagePaths.notifications),
                         ),
@@ -161,9 +165,18 @@ class _ChatsState extends State<Chats> {
                     var contact = reshapedContactList[index];
                     var isUnaccepted = contact.value.verificationLevel ==
                         VerificationLevel.UNACCEPTED;
+                    var displayName = isUnaccepted
+                        ? contact
+                            .value.chatNumber.shortNumber.formattedChatNumber
+                        : contact.value.displayNameOrFallback;
+                    var content = isUnaccepted
+                        ? contact
+                            .value.chatNumber.shortNumber.formattedChatNumber
+                        : contact.value.displayNameOrFallback;
                     return Column(
                       children: [
                         ListItemFactory.isMessagingItem(
+                          key: ValueKey(index),
                           customBg: isUnaccepted ? customBg : null,
                           header: unacceptedStartIndex == index
                               ? 'new_requests'.i18n.fill([
@@ -177,12 +190,8 @@ class _ChatsState extends State<Chats> {
                           leading: CustomAvatar(
                               customColor: isUnaccepted ? grey5 : null,
                               messengerId: contact.value.contactId.id,
-                              displayName: isUnaccepted
-                                  ? contact.value.chatNumber.shortNumber
-                                  : contact.value.displayNameOrFallback),
-                          content: isUnaccepted
-                              ? contact.value.chatNumber.shortNumber
-                              : contact.value.displayNameOrFallback,
+                              displayName: displayName),
+                          content: content,
                           subtitle:
                               '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
                                   .i18n,

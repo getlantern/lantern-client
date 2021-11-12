@@ -165,7 +165,7 @@ class _ContactInfoState extends State<ContactInfo> {
                     leading: const CAssetImage(
                       path: ImagePaths.chatNumber,
                     ),
-                    content: !isExpanded
+                    content: isExpanded
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
