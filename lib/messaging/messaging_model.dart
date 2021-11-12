@@ -409,7 +409,7 @@ class MessagingModel extends Model {
   }
 
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/onBoarding_status',
+    return subscribedSingleValueBuilder<bool>('/onBoardingStatus',
         defaultValue: false, builder: builder);
   }
 
@@ -418,7 +418,7 @@ class MessagingModel extends Model {
   }
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/copiedRecovery_status',
+    return subscribedSingleValueBuilder<bool>('/copiedRecoveryStatus',
         defaultValue: false, builder: builder);
   }
 

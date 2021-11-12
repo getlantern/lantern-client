@@ -24,7 +24,7 @@ ScrollablePositionedList groupedContactListGenerator({
         children: [
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map(
-              (contact) => ListItemFactory.isMessagingItem(
+              (contact) => ListItemFactory.messagingItem(
                 header: key[0].toUpperCase(),
                 focusedMenu: (focusMenuCallback != null)
                     ? focusMenuCallback(contact.value)

@@ -102,11 +102,9 @@ class _ContactInfoState extends State<ContactInfo> {
               /*
                 * Display Name
                 */
-              ListItemFactory.isSettingsItem(
+              ListItemFactory.settingsItem(
                 header: 'display_name'.i18n,
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: !isEditing
                     ? CText(displayNameController.value.text, style: tsBody1)
                     : TextField(
@@ -158,13 +156,11 @@ class _ContactInfoState extends State<ContactInfo> {
               ),
               StatefulBuilder(
                 builder: (context, setState) {
-                  return ListItemFactory.isSettingsItem(
+                  return ListItemFactory.settingsItem(
                     header: 'secure_chat_number'.i18n,
                     // onTap: () async =>
                     //     doCopyText(context, contact.chatNumber.number, setState),
-                    leading: const CAssetImage(
-                      path: ImagePaths.chatNumber,
-                    ),
+                    icon: ImagePaths.chatNumber,
                     content: isExpanded
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -202,7 +198,7 @@ class _ContactInfoState extends State<ContactInfo> {
               /*
                 * More Options
                 */
-              ListItemFactory.isSettingsItem(
+              ListItemFactory.settingsItem(
                   header: 'more_options'.i18n,
                   content: CText(
                     contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
@@ -226,7 +222,7 @@ class _ContactInfoState extends State<ContactInfo> {
                       ),
                     )
                   ]),
-              ListItemFactory.isSettingsItem(
+              ListItemFactory.settingsItem(
                 content: CText(
                   'delete_permanently'.i18n,
                   style: tsSubtitle1Short,
