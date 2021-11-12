@@ -1,6 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
+
 import '../messaging.dart';
 
 void showVerificationOptions({
@@ -29,9 +30,9 @@ void showVerificationOptions({
           style: tsBody1.copiedWith(color: grey5)),
       children: [
         model.me(
-          (context, me, child) => BottomModalItem(
-            leading: const CAssetImage(path: ImagePaths.qr_code_scanner),
-            label: 'verify_in_person'.i18n,
+          (context, me, child) => ListItemFactory.bottomItem(
+            icon: ImagePaths.qr_code_scanner,
+            content: 'verify_in_person'.i18n,
             onTap: () async {
               await bottomModalContext.router.pop();
               await context.router
@@ -45,14 +46,16 @@ void showVerificationOptions({
                 }
               });
             },
-            trailing: const CAssetImage(
-              path: ImagePaths.keyboard_arrow_right,
-            ),
+            trailingArray: [
+              const CAssetImage(
+                path: ImagePaths.keyboard_arrow_right,
+              )
+            ],
           ),
         ),
-        BottomModalItem(
-          leading: const CAssetImage(path: ImagePaths.phone),
-          label: 'verify_via_call'.i18n,
+        ListItemFactory.bottomItem(
+          icon: ImagePaths.phone,
+          content: 'verify_via_call'.i18n,
           onTap: () async {
             await bottomModalContext.router
                 .popAndPush(
@@ -66,14 +69,16 @@ void showVerificationOptions({
               }
             });
           },
-          trailing: const CAssetImage(
-            path: ImagePaths.keyboard_arrow_right,
-          ),
+          trailingArray: [
+            const CAssetImage(
+              path: ImagePaths.keyboard_arrow_right,
+            )
+          ],
         ),
         if (showDismissNotification)
-          BottomModalItem(
-            leading: const CAssetImage(path: ImagePaths.cancel),
-            label: 'dismiss_notification'.i18n,
+          ListItemFactory.bottomItem(
+            icon: ImagePaths.cancel,
+            content: 'dismiss_notification'.i18n,
             onTap: () async {
               await model.dismissVerificationReminder(contact.contactId.id);
               await bottomModalContext.router.pop();

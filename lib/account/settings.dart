@@ -1,9 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/account/account.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
-
-import 'settings_item.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -29,49 +27,69 @@ class Settings extends StatelessWidget {
       title: 'settings'.i18n,
       body: ListView(
         children: [
-          SettingsItem(
+          ListItemFactory.settingsItem(
             icon: ImagePaths.key,
-            title: 'proxy_all'.i18n,
-            openInfoDialog: openInfoProxyAll,
-            child: sessionModel.proxyAll(
-              (BuildContext context, bool proxyAll, Widget? child) =>
-                  FlutterSwitch(
-                width: 44.0,
-                height: 24.0,
-                valueFontSize: 12.0,
-                padding: 2,
-                toggleSize: 18.0,
-                value: proxyAll,
-                activeColor: indicatorGreen,
-                inactiveColor: offSwitchColor,
-                onToggle: (bool newValue) {
-                  sessionModel.setProxyAll(newValue);
-                },
-              ),
+            content: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CText('proxy_all'.i18n, style: tsSubtitle1),
+                GestureDetector(
+                  onTap: () => openInfoProxyAll(context),
+                  child: const Padding(
+                    padding: EdgeInsetsDirectional.only(start: 4.0),
+                    child: CAssetImage(
+                      path: ImagePaths.info,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
+            trailingArray: [
+              sessionModel.proxyAll(
+                (BuildContext context, bool proxyAll, Widget? child) =>
+                    FlutterSwitch(
+                  width: 44.0,
+                  height: 24.0,
+                  valueFontSize: 12.0,
+                  padding: 2,
+                  toggleSize: 18.0,
+                  value: proxyAll,
+                  activeColor: indicatorGreen,
+                  inactiveColor: offSwitchColor,
+                  onToggle: (bool newValue) {
+                    sessionModel.setProxyAll(newValue);
+                  },
+                ),
+              )
+            ],
           ),
-          SettingsItem(
+          ListItemFactory.settingsItem(
             icon: ImagePaths.translate,
-            title: 'language'.i18n,
-            showArrow: true,
+            content: 'language'.i18n,
             onTap: () {
               changeLanguage(context);
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: sessionModel.language(
-                (BuildContext context, String lang, Widget? child) => CText(
-                  toBeginningOfSentenceCase(
-                      lang.displayLanguage(context, lang).toUpperCase())!,
-                  style: tsSubtitle2.copiedWith(color: pink4),
+            trailingArray: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: sessionModel.language(
+                  (BuildContext context, String lang, Widget? child) => CText(
+                    toBeginningOfSentenceCase(
+                        lang.displayLanguage(context, lang).toUpperCase())!,
+                    style: tsSubtitle2.copiedWith(color: pink4),
+                  ),
                 ),
               ),
-            ),
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
           ),
-          SettingsItem(
+          ListItemFactory.settingsItem(
             icon: ImagePaths.alert,
-            title: 'report_issue'.i18n,
-            showArrow: true,
+            content: 'report_issue'.i18n,
+            trailingArray: [
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
             onTap: reportIssue,
           )
         ],

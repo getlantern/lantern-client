@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging.dart';
 SizedBox renderLongTapMenu(
         {required Contact contact, required BuildContext context}) =>
     SizedBox(
-      height: 78 + (!contact.isMe ? 72 : 0),
+      height: contact.isMe ? 48 : 48 * 2,
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 4),
         child: Column(
@@ -11,11 +11,8 @@ SizedBox renderLongTapMenu(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CListTile(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
-                showDivider: false,
+            ListItemFactory.focusMenuItem(
+                icon: ImagePaths.user,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
@@ -25,11 +22,8 @@ SizedBox renderLongTapMenu(
                       contact: contact));
                 }),
             if (!contact.isMe)
-              CListTile(
-                leading: const CAssetImage(
-                  path: ImagePaths.people,
-                ),
-                showDivider: false,
+              ListItemFactory.focusMenuItem(
+                icon: ImagePaths.people,
                 content: 'introduce_contacts'.i18n,
                 onTap: () async {
                   await context.router.pop();

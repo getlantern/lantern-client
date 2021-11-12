@@ -96,9 +96,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-          /*
-          * Contacts
-          */
+            /*
+            * Contacts
+            */
             "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
             "clearCurrentConversationContact" -> currentConversationContact = ""
             "addProvisionalContact" -> messaging.addProvisionalContact(
@@ -138,14 +138,6 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     chatNumber = chatNumber,
                 )
             }
-            "dismissVerificationReminder" -> {
-                val unsafeId = call.argument<String>("unsafeId")
-                return messaging.addOrUpdateDirectContact(
-                    unsafeId = unsafeId
-                ) { appData ->
-                    appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
-                }
-            }
             "acceptDirectContact" -> messaging.acceptDirectContact(call.argument("unsafeId")!!)
             "deleteDirectContact" -> messaging.deleteDirectContact(call.argument<String>("unsafeContactId")!!)
             "markDirectContactVerified" -> messaging.markDirectContactVerified(call.argument("unsafeId")!!)
@@ -154,9 +146,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
             "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
-          /*
-          * Messages 
-          */
+            /*
+            * Messages
+            */
             "setDisappearSettings" -> messaging.setDisappearSettings(
                 call.argument<String>("contactId")!!.directContactPath,
                 call.argument("seconds")!!
@@ -176,9 +168,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
             "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-          /*
-          * Attachments
-          */
+            /*
+            * Attachments
+            */
             "startRecordingVoiceMemo" -> startRecordingVoiceMemo()
             "stopRecordingVoiceMemo" -> {
                 try {
@@ -223,9 +215,9 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
             "relayTo" -> {
                 return internalsdk.Internalsdk.relayTo(call.arguments as String)
             }
-          /*
-          * Search
-          */
+            /*
+            * Search
+            */
             "searchContacts" ->
                 messaging
                     .searchContacts(
@@ -250,6 +242,34 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
                     ).map {
                         mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.value.bytes)
                     }
+            /*
+            * Reminders
+            */
+            "dismissVerificationReminder" -> {
+                val unsafeId = call.argument<String>("unsafeId")
+                return messaging.addOrUpdateDirectContact(
+                    unsafeId = unsafeId
+                ) { appData ->
+                    appData["verificationReminderLastDismissed"] = System.currentTimeMillis()
+                }
+            }
+            "markIsOnboarded" -> {
+                db.mutate { tx ->
+                    tx.put("/onBoardingStatus", true)
+                }
+            }
+            // for dev purposes
+            "overrideOnBoarded" -> {
+                val newValue = call.argument<Boolean>("newValue")!!
+                db.mutate { tx ->
+                    tx.put("/onBoardingStatus", newValue)
+                }
+            }
+            "markCopiedRecoveryKey" -> {
+                db.mutate { tx ->
+                    tx.put("/copiedRecoveryStatus", true)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

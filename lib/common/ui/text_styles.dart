@@ -53,6 +53,12 @@ CTextStyle tsOverline = CTextStyle(fontSize: 10, lineHeight: 16);
 CTextStyle tsOverlineShort =
     tsOverline.copiedWith(lineHeight: tsOverline.fontSize);
 
+CTextStyle tsCodeDisplay1 = CTextStyle(
+  fontFamily: 'RobotoMono',
+  fontSize: 20,
+  lineHeight: 32,
+);
+
 /*
 ******************
 BUTTON VARIATIONS

@@ -112,49 +112,66 @@ class ContactConnectionCard extends StatelessWidget {
         subtitle: CText('introductions_info'.i18n,
             style: tsBody1.copiedWith(color: grey5)),
         children: [
-          BottomModalItem(
-              leading: const CAssetImage(path: ImagePaths.check_black),
-              label: 'accept'.i18n,
-              onTap: () async {
-                try {
-                  // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                  await model.acceptIntroduction(
-                      contact.contactId.id, introduction.to.id);
-                } catch (e, s) {
-                  showErrorDialog(context,
-                      e: e,
-                      s: s,
-                      des: 'introductions_error_description_accepting'.i18n);
-                } finally {
-                  await context.router.pop();
-                  await context
-                      .pushRoute(Conversation(contactId: introduction.to));
-                }
-              }),
-          BottomModalItem(
-              leading: const CAssetImage(path: ImagePaths.cancel),
-              label: 'reject'.i18n,
-              onTap: () => showConfirmationDialog(
-                  context: context,
-                  title: 'introductions_reject_title'.i18n,
-                  explanation: 'introductions_reject_content'.i18n,
-                  dismissText: 'cancel'.i18n,
-                  agreeText: 'reject'.i18n,
-                  agreeAction: () async {
-                    try {
-                      // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                      await model.rejectIntroduction(
-                          contact.contactId.id, introduction.to.id);
-                    } catch (e, s) {
-                      showErrorDialog(context,
-                          e: e,
-                          s: s,
-                          des:
-                              'introductions_error_description_rejecting'.i18n);
-                    } finally {
-                      await context.router.pop();
-                    }
-                  })),
+          ListItemFactory.bottomItem(
+            icon: ImagePaths.check_black,
+            content: 'accept'.i18n,
+            onTap: () async {
+              try {
+                // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                await model.acceptIntroduction(
+                    contact.contactId.id, introduction.to.id);
+              } catch (e, s) {
+                showErrorDialog(context,
+                    e: e,
+                    s: s,
+                    des: 'introductions_error_description_accepting'.i18n);
+              } finally {
+                await context.router.pop();
+                await context
+                    .pushRoute(Conversation(contactId: introduction.to));
+              }
+            },
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const CAssetImage(
+                  path: ImagePaths.keyboard_arrow_right,
+                ),
+              )
+            ],
+          ),
+          ListItemFactory.bottomItem(
+            icon: ImagePaths.cancel,
+            content: 'reject'.i18n,
+            onTap: () => showConfirmationDialog(
+                context: context,
+                title: 'introductions_reject_title'.i18n,
+                explanation: 'introductions_reject_content'.i18n,
+                dismissText: 'cancel'.i18n,
+                agreeText: 'reject'.i18n,
+                agreeAction: () async {
+                  try {
+                    // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                    await model.rejectIntroduction(
+                        contact.contactId.id, introduction.to.id);
+                  } catch (e, s) {
+                    showErrorDialog(context,
+                        e: e,
+                        s: s,
+                        des: 'introductions_error_description_rejecting'.i18n);
+                  } finally {
+                    await context.router.pop();
+                  }
+                }),
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const CAssetImage(
+                  path: ImagePaths.keyboard_arrow_right,
+                ),
+              )
+            ],
+          ),
         ]);
   }
 }

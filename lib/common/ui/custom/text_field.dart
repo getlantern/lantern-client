@@ -85,6 +85,7 @@ class _CTextFieldState extends State<CTextField> {
             maxLines: widget.maxLines,
             inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
+                isDense: true,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 // we handle floating labels using our custom method below
                 labelText: widget.label,
@@ -111,14 +112,18 @@ class _CTextFieldState extends State<CTextField> {
                 ),
                 prefixIcon:
                     // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
-                    Transform.scale(scale: 0.5, child: widget.prefixIcon),
-                suffixIcon: Transform.scale(
-                    scale: 0.5,
-                    child: fieldKey.currentState?.mounted == true &&
-                            fieldKey.currentState?.hasError == true
-                        ? CAssetImage(
-                            path: ImagePaths.error, color: indicatorRed)
-                        : widget.suffixIcon)),
+                    widget.prefixIcon != null
+                        ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
+                        : null,
+                suffixIcon: widget.suffixIcon != null
+                    ? Transform.scale(
+                        scale: 0.5,
+                        child: fieldKey.currentState?.mounted == true &&
+                                fieldKey.currentState?.hasError == true
+                            ? CAssetImage(
+                                path: ImagePaths.error, color: indicatorRed)
+                            : widget.suffixIcon)
+                    : null),
           ),
         ),
         Container(

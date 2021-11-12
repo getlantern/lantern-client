@@ -12,7 +12,7 @@ class VPNStatus extends StatelessWidget {
           CText(
             'VPN Status'.i18n,
             style: tsBody1.copiedWith(
-              color: unselectedTabLabelColor,
+              color: unselectedTabIconColor,
             ),
           ),
           (vpnStatus == 'connecting' || vpnStatus == 'disconnecting')

@@ -384,10 +384,8 @@ class MessageBubble extends StatelessWidget {
             ),
             const CDivider(),
             if (!isConnectionCard)
-              CListTile(
-                height: 48,
-                showDivider: false,
-                leading: ImagePaths.reply,
+              ListItemFactory.focusMenuItem(
+                icon: ImagePaths.reply,
                 content: 'reply'.i18n,
                 onTap: () {
                   Navigator.of(context).pop();
@@ -397,10 +395,8 @@ class MessageBubble extends StatelessWidget {
             if (!isAttachment && !wasRemotelyDeleted && !isConnectionCard)
               StatefulBuilder(
                 key: ValueKey(message.id),
-                builder: (context, setState) => CListTile(
-                  height: 48,
-                  showDivider: false,
-                  leading: textCopied
+                builder: (context, setState) => ListItemFactory.focusMenuItem(
+                  icon: textCopied
                       ? ImagePaths.check_green
                       : ImagePaths.content_copy,
                   content: 'copy_text'.i18n,
@@ -414,18 +410,14 @@ class MessageBubble extends StatelessWidget {
                   },
                 ),
               ),
-            CListTile(
-              height: 48,
-              showDivider: false,
-              leading: ImagePaths.delete,
+            ListItemFactory.focusMenuItem(
+              icon: ImagePaths.delete,
               content: 'delete_for_me'.i18n,
               onTap: () => deleteForMe(context, model),
             ),
             if (isOutbound)
-              CListTile(
-                height: 48,
-                showDivider: false,
-                leading: ImagePaths.delete,
+              ListItemFactory.focusMenuItem(
+                icon: ImagePaths.delete,
                 content: 'delete_for_everyone'.i18n,
                 onTap: () => deleteForEveryone(context, model),
               ),

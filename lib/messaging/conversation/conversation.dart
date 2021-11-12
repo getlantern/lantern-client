@@ -1,23 +1,23 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/common/ui/dimens.dart';
+import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/messaging.dart';
 
-import 'contact_info_topbar.dart';
 import 'audio/audio_widget.dart';
 import 'audio/message_bar_preview_recording.dart';
+import 'audio/voice_recorder.dart';
+import 'call_action.dart';
+import 'contact_info_topbar.dart';
 import 'conversation_sticker.dart';
+import 'date_marker_bubble.dart';
 import 'message_bubble.dart';
 import 'messaging_emoji_picker.dart';
 import 'pulsating_indicator.dart';
-import 'stopwatch_timer.dart';
-import 'audio/voice_recorder.dart';
-import 'call_action.dart';
-import 'date_marker_bubble.dart';
 import 'reply.dart';
 import 'show_conversation_options.dart';
 import 'show_verification_options.dart';
+import 'stopwatch_timer.dart';
 
 class Conversation extends StatefulWidget {
   final ContactId contactId;
@@ -334,11 +334,6 @@ class ConversationState extends State<Conversation>
           0;
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
-      shouldShowVerificationAlert = !contact.isMe &&
-          contactUnverified &&
-          DateTime.now().millisecondsSinceEpoch -
-                  verificationReminderLastDismissed >=
-              twoWeeksInMillis;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -360,26 +355,37 @@ class ConversationState extends State<Conversation>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (shouldShowVerificationAlert)
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () {
-                    showVerificationOptions(
-                      model: model,
-                      contact: contact,
-                      bottomModalContext: context,
-                      showDismissNotification: shouldShowVerificationAlert,
-                      topBarAnimationCallback: () async {
-                        setState(() => verifiedColor = indicatorGreen);
-                        await Future.delayed(longAnimationDuration,
-                            () => setState(() => verifiedColor = black));
-                      },
-                    );
-                  },
-                  icon: const CAssetImage(
-                    path: ImagePaths.verification_alert,
-                  ),
-                ),
+              // * show Verification alert badge, resurface every 2 weeks
+              NowBuilder(
+                  calculate: (now) =>
+                      now.millisecondsSinceEpoch -
+                          verificationReminderLastDismissed >=
+                      twoWeeksInMillis,
+                  builder: (BuildContext context, bool value) {
+                    if (!contact.isMe && contactUnverified && value) {
+                      return IconButton(
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () async {
+                          showVerificationOptions(
+                            model: model,
+                            contact: contact,
+                            bottomModalContext: context,
+                            showDismissNotification:
+                                shouldShowVerificationAlert,
+                            topBarAnimationCallback: () async {
+                              setState(() => verifiedColor = indicatorGreen);
+                              await Future.delayed(longAnimationDuration,
+                                  () => setState(() => verifiedColor = black));
+                            },
+                          );
+                        },
+                        icon: const CAssetImage(
+                          path: ImagePaths.verification_alert,
+                        ),
+                      );
+                    }
+                    return Container();
+                  }),
               if (!contact.isMe) CallAction(contact),
               IconButton(
                 visualDensity: VisualDensity.compact,
@@ -614,128 +620,141 @@ class ConversationState extends State<Conversation>
   //* Renders Emoji button, message bar and recording icon
   //* Handles their functionality
   Widget buildMessageBarRecording(BuildContext context) {
+    final leading = isRecording
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: PulsatingIndicator(),
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: StopwatchTimer(
+                    stopWatchTimer: stopWatchTimer,
+                    style: tsSubtitle1.copiedWith(color: indicatorRed).short,
+                  ),
+                ),
+              ),
+            ],
+          )
+        : IconButton(
+            onPressed: () {
+              {
+                if (keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction) {
+                  keyboardMode = KeyboardMode.native;
+                  showNativeKeyboard();
+                } else {
+                  showEmojiKeyboard(false);
+                }
+              }
+            },
+            icon: keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction
+                ? const CAssetImage(path: ImagePaths.keyboard)
+                : const CAssetImage(path: ImagePaths.insert_emoticon),
+          );
+
+    final content = Stack(
+      alignment: Alignment.center,
+      children: [
+        TextFormField(
+          autofocus: false,
+          textInputAction: TextInputAction.send,
+          controller: newMessage,
+          onChanged: (value) {
+            final newIsSendIconVisible = value.isNotEmpty;
+            if (newIsSendIconVisible != isSendIconVisible) {
+              setState(() => isSendIconVisible = newIsSendIconVisible);
+            }
+          },
+          focusNode: focusNode,
+          onFieldSubmitted: (value) async =>
+              value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
+          decoration: InputDecoration(
+            // Send icon
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: 'message'.i18n,
+            border: const OutlineInputBorder(),
+          ),
+          style: tsSubtitle1
+              .copiedWith(color: isSendIconVisible ? black : grey5)
+              .short,
+        ),
+        // hide TextFormField while recording by painting over it. this allows
+        // the form field to retain focus to keep the keyboard open and keep
+        // the layout from changing while we're recording.
+        if (isRecording)
+          SizedBox(
+            child: Container(
+              decoration: BoxDecoration(color: grey2),
+            ),
+          ),
+      ],
+    );
+    final trailing = isSendIconVisible && !isRecording
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                child: VerticalDivider(thickness: 1, width: 1, color: grey3),
+              ),
+              IconButton(
+                key: const ValueKey('send_message'),
+                icon: mirrorLTR(
+                  context: context,
+                  child:
+                      CAssetImage(path: ImagePaths.send_rounded, color: pink4),
+                ),
+                onPressed: send,
+              ),
+            ],
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              isRecording
+                  ? const SizedBox()
+                  : IconButton(
+                      onPressed: () async => await selectFilesToShare(),
+                      icon: const CAssetImage(path: ImagePaths.add_circle),
+                    ),
+            ],
+          );
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
-        CListTile(
-          height: messageBarHeight,
-          endPadding: isSendIconVisible ? 0 : 48,
-          showDivider: false,
-          leading: isRecording
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: PulsatingIndicator(),
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: StopwatchTimer(
-                          stopWatchTimer: stopWatchTimer,
-                          style:
-                              tsSubtitle1.copiedWith(color: indicatorRed).short,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : IconButton(
-                  onPressed: () {
-                    {
-                      if (keyboardMode == KeyboardMode.emoji ||
-                          keyboardMode == KeyboardMode.emojiReaction) {
-                        keyboardMode = KeyboardMode.native;
-                        showNativeKeyboard();
-                      } else {
-                        showEmojiKeyboard(false);
-                      }
-                    }
-                  },
-                  icon: keyboardMode == KeyboardMode.emoji ||
-                          keyboardMode == KeyboardMode.emojiReaction
-                      ? const CAssetImage(path: ImagePaths.keyboard)
-                      : const CAssetImage(path: ImagePaths.insert_emoticon),
-                ),
-          content: Stack(
-            alignment: Alignment.center,
-            children: [
-              TextFormField(
-                autofocus: false,
-                textInputAction: TextInputAction.send,
-                controller: newMessage,
-                onChanged: (value) {
-                  final newIsSendIconVisible = value.isNotEmpty;
-                  if (newIsSendIconVisible != isSendIconVisible) {
-                    setState(() => isSendIconVisible = newIsSendIconVisible);
-                  }
-                },
-                focusNode: focusNode,
-                onFieldSubmitted: (value) async => value.isEmpty
-                    ? null
-                    : await handleMessageBarSubmit(newMessage),
-                decoration: InputDecoration(
-                  // Send icon
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  hintText: 'message'.i18n,
-                  border: const OutlineInputBorder(),
-                ),
-                style: tsSubtitle1
-                    .copiedWith(color: isSendIconVisible ? black : grey5)
-                    .short,
-              ),
-              // hide TextFormField while recording by painting over it. this allows
-              // the form field to retain focus to keep the keyboard open and keep
-              // the layout from changing while we're recording.
-              if (isRecording)
-                SizedBox(
+        Container(
+            height: messageBarHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // * Leading
+                leading,
+                // * Content
+                Flexible(
+                  fit: FlexFit.tight,
                   child: Container(
-                    decoration: BoxDecoration(color: grey2),
+                    child: content,
                   ),
                 ),
-            ],
-          ),
-          trailing: isSendIconVisible && !isRecording
-              ? Row(
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                      child:
-                          VerticalDivider(thickness: 1, width: 1, color: grey3),
-                    ),
-                    IconButton(
-                      key: const ValueKey('send_message'),
-                      icon: mirrorLTR(
-                        context: context,
-                        child: CAssetImage(
-                            path: ImagePaths.send_rounded, color: pink4),
-                      ),
-                      onPressed: send,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    isRecording
-                        ? const SizedBox()
-                        : IconButton(
-                            onPressed: () async => await selectFilesToShare(),
-                            icon:
-                                const CAssetImage(path: ImagePaths.add_circle),
-                          ),
-                  ],
+                // * Trailing
+                Padding(
+                  padding: EdgeInsetsDirectional.only(
+                      end: isSendIconVisible ? 0 : 48),
+                  child: trailing,
                 ),
-        ),
+              ],
+            )),
         if (!isSendIconVisible)
           VoiceRecorder(
             isRecording: isRecording,

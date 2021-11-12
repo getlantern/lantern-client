@@ -1,16 +1,18 @@
 import 'package:lantern/common/common.dart';
 
-void showInfoDialog(BuildContext parentContext,
-    {String title = '',
-    String des = '',
-    String assetPath = '',
-    String buttonText = 'OK'}) {
+void showInfoDialog(
+  BuildContext parentContext, {
+  String title = '',
+  String des = '',
+  String assetPath = '',
+  String buttonText = 'OK',
+  bool popParentContext = false,
+}) {
   showDialog(
     context: parentContext,
     builder: (BuildContext childContext) {
       return AlertDialog(
-        contentPadding: const EdgeInsetsDirectional.only(
-            start: 20, end: 20, top: 20, bottom: 12),
+        contentPadding: const EdgeInsetsDirectional.all(24.0),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
@@ -40,7 +42,7 @@ void showInfoDialog(BuildContext parentContext,
                   ),
                   child: CText(
                     des,
-                    style: tsBody1Color(unselectedTabLabelColor),
+                    style: tsBody1Color(unselectedTabIconColor),
                   ),
                 ),
               ),
@@ -50,7 +52,7 @@ void showInfoDialog(BuildContext parentContext,
                   focusColor: grey3,
                   onTap: () {
                     childContext.router.pop();
-                    parentContext.router.pop();
+                    if (popParentContext) parentContext.router.pop();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),

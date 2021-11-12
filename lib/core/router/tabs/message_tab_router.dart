@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/ui/transitions.dart';
-import 'package:lantern/messaging/messages.dart';
+import 'package:lantern/messaging/chats.dart';
 
 const message_tab_router = CustomRoute<void>(
   page: EmptyRouterPage,
@@ -8,7 +8,8 @@ const message_tab_router = CustomRoute<void>(
   path: 'messages',
   children: [
     CustomRoute<void>(
-        page: Messages,
+        initial: true,
+        page: Chats,
         path: '',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,

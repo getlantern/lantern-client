@@ -4,11 +4,13 @@ class CInkWell extends StatelessWidget {
   final Widget child;
   final Function onTap;
   final RoundedRectangleBorder? customBorder;
+  final bool disableSplash;
 
   const CInkWell({
     required this.child,
     required this.onTap,
     this.customBorder,
+    this.disableSplash = false,
     Key? key,
   }) : super(key: key);
 
@@ -17,9 +19,9 @@ class CInkWell extends StatelessWidget {
     return Material(
       color: transparent,
       child: InkWell(
-        focusColor: grey4,
-        splashColor: grey4,
-        highlightColor: grey4,
+        focusColor: disableSplash ? transparent : grey4,
+        splashColor: disableSplash ? transparent : grey4,
+        highlightColor: disableSplash ? transparent : grey4,
         borderRadius: const BorderRadius.all(
           Radius.circular(8.0),
         ),

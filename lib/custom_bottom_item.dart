@@ -3,7 +3,7 @@ import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/custom/rounded_rectangle_border.dart';
 
-class CustomBottomItem extends StatelessWidget {
+class CustomBottomBarItem extends StatelessWidget {
   final int currentIndex;
   final int position;
   final int total;
@@ -12,7 +12,7 @@ class CustomBottomItem extends StatelessWidget {
   final Widget icon;
   final VoidCallback onTap;
 
-  const CustomBottomItem({
+  const CustomBottomBarItem({
     required this.currentIndex,
     required this.total,
     required this.icon,

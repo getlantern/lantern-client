@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/account/secure_chat_number_account.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
@@ -6,8 +7,9 @@ import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
-import 'package:lantern/account/pro_account.dart';
+import 'package:lantern/account/account_management.dart';
 import 'package:lantern/account/settings.dart';
+import 'package:lantern/account/recovery_key.dart';
 
 const account_tab_router = CustomRoute<void>(
   page: EmptyRouterPage,
@@ -22,9 +24,9 @@ const account_tab_router = CustomRoute<void>(
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
-        page: ProAccount,
-        name: 'ProAccount',
-        path: 'proAccount',
+        page: AccountManagement,
+        name: 'AccountManagement',
+        path: 'accountManagement',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
@@ -67,6 +69,20 @@ const account_tab_router = CustomRoute<void>(
         page: ApproveDevice,
         name: 'ApproveDevice',
         path: 'approveDevice',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: RecoveryKey,
+        name: 'RecoveryKey',
+        path: 'recoveryKey',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: SecureChatNumberAccount,
+        name: 'SecureChatNumberAccount',
+        path: 'secureChatNumberAccount',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
