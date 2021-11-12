@@ -121,6 +121,11 @@ class _SubscribedListBuilderState<T>
         return;
       }
     }
+
+    // Need to update the whole thing
+    setState(() {
+      value = widget.valueListenable.value;
+    });
   }
 
   @override
