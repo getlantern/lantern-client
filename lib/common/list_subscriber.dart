@@ -73,7 +73,7 @@ class SubscribedListBuilder<T>
 class _SubscribedListBuilderState<T>
     extends State<ValueListenableBuilder<ChangeTrackingList<T>>> {
   late ChangeTrackingList<T> value;
-  final _childNotifiers = HashMap<String, List<ListChildValueNotifier<T?>>>();
+  final _childNotifiers = HashMap<String, ValueNotifier<T?>>();
 
   @override
   void initState() {
@@ -109,10 +109,11 @@ class _SubscribedListBuilderState<T>
       newMap.updatedPaths.forEach((path) {
         var newValue = newMap.map[path];
         var foundChildNotifier = false;
-        _childNotifiers[path]?.forEach((notifier) {
+        var notifier = _childNotifiers[path];
+        if (notifier != null) {
           notifier.value = newValue;
           foundChildNotifier = true;
-        });
+        }
         missingChildNotifier = missingChildNotifier || !foundChildNotifier;
       });
       if (!missingChildNotifier) {
@@ -134,16 +135,17 @@ class _SubscribedListBuilderState<T>
   }
 }
 
-class ListChildValueNotifier<T> extends ValueNotifier<T> {
-  ListChildValueNotifier(BuildContext context, String path, T defaultValue)
-      : super(defaultValue) {
-    var childNotifiers = context
-        .findAncestorStateOfType<_SubscribedListBuilderState>()!
-        ._childNotifiers;
-    var notifiers = childNotifiers[path] ?? <ListChildValueNotifier<T>>[];
-    notifiers.add(this);
-    childNotifiers[path] = notifiers;
+ValueNotifier<T> listChildValueNotifier<T>(
+    BuildContext context, String path, T defaultValue) {
+  var notifiers = context
+      .findAncestorStateOfType<_SubscribedListBuilderState>()!
+      ._childNotifiers;
+  var notifier = notifiers[path];
+  if (notifier == null) {
+    notifier = ValueNotifier<T>(defaultValue);
+    notifiers[path] = notifier;
   }
+  return notifier as ValueNotifier<T>;
 }
 
 /// A ValueListenableBuilder that obtains updates by subscribing to a specific
@@ -182,7 +184,6 @@ class _ListChildBuilderState<T> extends State<ListChildBuilder<T>> {
   @override
   void dispose() {
     widget.valueListenable.removeListener(_valueChanged);
-    listBuilderState?._childNotifiers.remove(widget.valueListenable);
     super.dispose();
   }
 
