@@ -11,10 +11,8 @@ SizedBox renderLongTapMenu(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ListItemFactory.isFocusMenuItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+            ListItemFactory.focusMenuItem(
+                icon: ImagePaths.user,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
@@ -24,10 +22,8 @@ SizedBox renderLongTapMenu(
                       contact: contact));
                 }),
             if (!contact.isMe)
-              ListItemFactory.isFocusMenuItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.people,
-                ),
+              ListItemFactory.focusMenuItem(
+                icon: ImagePaths.people,
                 content: 'introduce_contacts'.i18n,
                 onTap: () async {
                   await context.router.pop();

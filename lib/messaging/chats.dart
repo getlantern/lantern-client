@@ -120,7 +120,7 @@ class _ChatsState extends State<Chats> {
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
                     (introductions.getPending().isNotEmpty)
-                        ? ListItemFactory.isMessagingItem(
+                        ? ListItemFactory.messagingItem(
                             leading: CBadge(
                               count: introductions.getPending().length,
                               showBadge: true,
@@ -176,8 +176,8 @@ class _ChatsState extends State<Chats> {
                           : contact.displayNameOrFallback;
                       return Column(
                         children: [
-                          ListItemFactory.isMessagingItem(
-                            key: ValueKey(index),
+                          ListItemFactory.messagingItem(
+                            // key: ValueKey(index),
                             customBg: isUnaccepted ? customBg : null,
                             header: unacceptedStartIndex == index
                                 ? 'new_requests'.i18n.fill([

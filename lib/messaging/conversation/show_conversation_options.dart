@@ -23,10 +23,8 @@ Future showConversationOptions({
       builder: (bottomContext) => Wrap(
             alignment: WrapAlignment.center,
             children: [
-              ListItemFactory.isBottomItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.user,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await bottomContext.router.pop();
@@ -34,10 +32,8 @@ Future showConversationOptions({
                       .pushRoute(ContactInfo(model: model, contact: contact));
                 },
               ),
-              ListItemFactory.isBottomItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.timer,
-                ),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.timer,
                 content: 'disappearing_messages'.i18n,
                 onTap: () async {
                   final scrollController = ScrollController();
@@ -293,10 +289,8 @@ Future showConversationOptions({
                 },
               ),
               if (!contact.isMe)
-                ListItemFactory.isBottomItem(
-                    leading: const CAssetImage(
-                      path: ImagePaths.people,
-                    ),
+                ListItemFactory.bottomItem(
+                    icon: ImagePaths.people,
                     content: 'introduce_contacts'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();
@@ -304,10 +298,8 @@ Future showConversationOptions({
                     }),
               if (!contact.isMe &&
                   contact.verificationLevel != VerificationLevel.VERIFIED)
-                ListItemFactory.isBottomItem(
-                    leading: const CAssetImage(
-                      path: ImagePaths.verified_user,
-                    ),
+                ListItemFactory.bottomItem(
+                    icon: ImagePaths.verified_user,
                     content: 'contact_verification'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();
