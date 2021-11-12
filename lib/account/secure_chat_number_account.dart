@@ -20,9 +20,7 @@ class SecureChatNumberAccount extends StatelessWidget {
                             await Future.delayed(defaultAnimationDuration,
                                 () => setState(() => textCopied = false));
                           },
-                          leading: const CAssetImage(
-                            path: ImagePaths.chatNumber,
-                          ),
+                          icon: ImagePaths.chatNumber,
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

@@ -113,7 +113,7 @@ class ContactConnectionCard extends StatelessWidget {
             style: tsBody1.copiedWith(color: grey5)),
         children: [
           ListItemFactory.bottomItem(
-            leading: const CAssetImage(path: ImagePaths.check_black),
+            icon: ImagePaths.check_black,
             content: 'accept'.i18n,
             onTap: () async {
               try {
@@ -141,7 +141,7 @@ class ContactConnectionCard extends StatelessWidget {
             ],
           ),
           ListItemFactory.bottomItem(
-            leading: const CAssetImage(path: ImagePaths.cancel),
+            icon: ImagePaths.cancel,
             content: 'reject'.i18n,
             onTap: () => showConfirmationDialog(
                 context: context,

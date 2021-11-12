@@ -100,9 +100,7 @@ class _ContactInfoState extends State<ContactInfo> {
                 */
               ListItemFactory.settingsItem(
                 header: 'display_name'.i18n,
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: !isEditing
                     ? CText(displayNameController.value.text, style: tsBody1)
                     : TextField(
@@ -157,9 +155,7 @@ class _ContactInfoState extends State<ContactInfo> {
                   header: 'messenger_id'.i18n,
                   onTap: () async =>
                       doCopyText(context, contact.contactId.id, setState),
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
+                  icon: ImagePaths.user,
                   content: CText(
                     contact.contactId.id,
                     style: tsSubtitle1Short,
@@ -185,9 +181,7 @@ class _ContactInfoState extends State<ContactInfo> {
                 */
               ListItemFactory.settingsItem(
                   header: 'more_options'.i18n,
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
+                  icon: ImagePaths.user,
                   content: CText(
                     contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
                     style: tsSubtitle1Short,
@@ -326,9 +320,7 @@ class _ContactInfoState extends State<ContactInfo> {
                     )
                   ]),
               ListItemFactory.settingsItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: CText(
                   'delete_permanently'.i18n,
                   style: tsSubtitle1Short,

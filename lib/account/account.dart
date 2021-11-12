@@ -29,7 +29,7 @@ class AccountMenu extends StatelessWidget {
       messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
-                  leading: CAssetImage(path: ImagePaths.account, color: black),
+                  icon: ImagePaths.account,
                   content: 'Account Management'.i18n,
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: false)),
@@ -40,29 +40,29 @@ class AccountMenu extends StatelessWidget {
                       ),
                   ])),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.pro_icon_black, color: black),
+        icon: ImagePaths.pro_icon_black,
         content: 'Upgrade to Lantern Pro'.i18n,
         onTap: upgradeToLanternPro,
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.star, color: black),
+        icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: inviteFriends,
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.desktop, color: black),
+        icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.devices, color: black),
+        icon: ImagePaths.devices,
         content: 'Authorize Device for Pro'.i18n,
         onTap: () {
           authorizeDeviceForPro(context);
         },
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.settings, color: black),
+        icon: ImagePaths.settings,
         content: 'settings'.i18n,
         onTap: () {
           openSettings(context);
@@ -77,7 +77,7 @@ class AccountMenu extends StatelessWidget {
       messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
-                  leading: CAssetImage(path: ImagePaths.account, color: black),
+                  icon: ImagePaths.account,
                   content: 'Account Management'.i18n,
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: true)),
@@ -88,22 +88,22 @@ class AccountMenu extends StatelessWidget {
                       ),
                   ])),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.devices, color: black),
+        icon: ImagePaths.devices,
         content: 'Link Device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.star, color: black),
+        icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: inviteFriends,
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.desktop, color: black),
+        icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
       ListItemFactory.settingsItem(
-        leading: CAssetImage(path: ImagePaths.settings, color: black),
+        icon: ImagePaths.settings,
         content: 'settings'.i18n,
         onTap: () {
           openSettings(context);

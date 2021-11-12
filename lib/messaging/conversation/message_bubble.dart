@@ -385,7 +385,7 @@ class MessageBubble extends StatelessWidget {
             const CDivider(),
             if (!isConnectionCard)
               ListItemFactory.focusMenuItem(
-                leading: ImagePaths.reply,
+                icon: ImagePaths.reply,
                 content: 'reply'.i18n,
                 onTap: () {
                   Navigator.of(context).pop();
@@ -396,7 +396,7 @@ class MessageBubble extends StatelessWidget {
               StatefulBuilder(
                 key: ValueKey(message.id),
                 builder: (context, setState) => ListItemFactory.focusMenuItem(
-                  leading: textCopied
+                  icon: textCopied
                       ? ImagePaths.check_green
                       : ImagePaths.content_copy,
                   content: 'copy_text'.i18n,
@@ -411,13 +411,13 @@ class MessageBubble extends StatelessWidget {
                 ),
               ),
             ListItemFactory.focusMenuItem(
-              leading: ImagePaths.delete,
+              icon: ImagePaths.delete,
               content: 'delete_for_me'.i18n,
               onTap: () => deleteForMe(context, model),
             ),
             if (isOutbound)
               ListItemFactory.focusMenuItem(
-                leading: ImagePaths.delete,
+                icon: ImagePaths.delete,
                 content: 'delete_for_everyone'.i18n,
                 onTap: () => deleteForEveryone(context, model),
               ),

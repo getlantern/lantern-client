@@ -24,9 +24,7 @@ Future showConversationOptions({
             alignment: WrapAlignment.center,
             children: [
               ListItemFactory.bottomItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await bottomContext.router.pop();
@@ -35,9 +33,7 @@ Future showConversationOptions({
                 },
               ),
               ListItemFactory.bottomItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.timer,
-                ),
+                icon: ImagePaths.timer,
                 content: 'disappearing_messages'.i18n,
                 onTap: () async {
                   final scrollController = ScrollController();
@@ -294,9 +290,7 @@ Future showConversationOptions({
               ),
               if (!contact.isMe)
                 ListItemFactory.bottomItem(
-                    leading: const CAssetImage(
-                      path: ImagePaths.people,
-                    ),
+                    icon: ImagePaths.people,
                     content: 'introduce_contacts'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();
@@ -305,9 +299,7 @@ Future showConversationOptions({
               if (!contact.isMe &&
                   contact.verificationLevel != VerificationLevel.VERIFIED)
                 ListItemFactory.bottomItem(
-                    leading: const CAssetImage(
-                      path: ImagePaths.verified_user,
-                    ),
+                    icon: ImagePaths.verified_user,
                     content: 'contact_verification'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();

@@ -12,9 +12,7 @@ SizedBox renderLongTapMenu(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ListItemFactory.focusMenuItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
@@ -25,9 +23,7 @@ SizedBox renderLongTapMenu(
                 }),
             if (!contact.isMe)
               ListItemFactory.focusMenuItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.people,
-                ),
+                icon: ImagePaths.people,
                 content: 'introduce_contacts'.i18n,
                 onTap: () async {
                   await context.router.pop();
