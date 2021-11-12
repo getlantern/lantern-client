@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pbenum.dart';
+
 import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
