@@ -198,15 +198,40 @@ class _ContactInfoState extends State<ContactInfo> {
               /*
                 * More Options
                 */
-              ListItemFactory.settingsItem(
-                  header: 'more_options'.i18n,
+              if (!contact.isMe)
+                ListItemFactory.settingsItem(
+                    header: 'more_options'.i18n,
+                    content: CText(
+                      contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
+                      style: tsSubtitle1Short,
+                    ),
+                    trailingArray: [
+                      CInkWell(
+                        onTap: () async => showBlockContactDialog(
+                          context,
+                          contact,
+                          model,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: CText(
+                            contact.blocked
+                                ? 'unblock'.i18n.toUpperCase()
+                                : 'block'.i18n.toUpperCase(),
+                            style: tsButtonPink,
+                          ),
+                        ),
+                      )
+                    ]),
+              if (!contact.isMe)
+                ListItemFactory.settingsItem(
                   content: CText(
-                    contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
+                    'delete_permanently'.i18n,
                     style: tsSubtitle1Short,
                   ),
                   trailingArray: [
                     CInkWell(
-                      onTap: () async => showBlockContactDialog(
+                      onTap: () async => showDeleteContactDialog(
                         context,
                         contact,
                         model,
@@ -214,36 +239,13 @@ class _ContactInfoState extends State<ContactInfo> {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         child: CText(
-                          contact.blocked
-                              ? 'unblock'.i18n.toUpperCase()
-                              : 'block'.i18n.toUpperCase(),
+                          'delete'.i18n.toUpperCase(),
                           style: tsButtonPink,
                         ),
                       ),
                     )
-                  ]),
-              ListItemFactory.settingsItem(
-                content: CText(
-                  'delete_permanently'.i18n,
-                  style: tsSubtitle1Short,
+                  ],
                 ),
-                trailingArray: [
-                  CInkWell(
-                    onTap: () async => showDeleteContactDialog(
-                      context,
-                      contact,
-                      model,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: CText(
-                        'delete'.i18n.toUpperCase(),
-                        style: tsButtonPink,
-                      ),
-                    ),
-                  )
-                ],
-              ),
             ],
           ),
         ],

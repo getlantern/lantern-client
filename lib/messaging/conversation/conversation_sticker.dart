@@ -36,38 +36,30 @@ class ConversationSticker extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: () async => showDeleteContactDialog(
+                      TextButton(
+                        onPressed: () async => showDeleteContactDialog(
                           context,
                           contact,
                           model,
                         ),
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 4.0, end: 4.0, top: 16.0, bottom: 16.0),
-                          child: CText(
-                            'Delete'.i18n.toUpperCase(),
-                            style: tsButton,
-                          ),
+                        child: CText(
+                          'Delete'.i18n.toUpperCase(),
+                          style: tsButton,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async => showBlockContactDialog(
+                      TextButton(
+                        onPressed: () async => showBlockContactDialog(
                           context,
                           contact,
                           model,
                         ),
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 4.0, end: 4.0, top: 16.0, bottom: 16.0),
-                          child: CText(
-                            'Block'.i18n.toUpperCase(),
-                            style: tsButton,
-                          ),
+                        child: CText(
+                          'Block'.i18n.toUpperCase(),
+                          style: tsButton,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
+                      TextButton(
+                        onPressed: () async {
                           try {
                             final _contact =
                                 await model.addOrUpdateDirectContact(
@@ -82,13 +74,9 @@ class ConversationSticker extends StatelessWidget {
                                         .i18n);
                           }
                         },
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 4.0, end: 4.0, top: 16.0, bottom: 16.0),
-                          child: CText(
-                            'Accept'.i18n.toUpperCase(),
-                            style: tsButtonBlue,
-                          ),
+                        child: CText(
+                          'Accept'.i18n.toUpperCase(),
+                          style: tsButtonBlue,
                         ),
                       ),
                     ],
