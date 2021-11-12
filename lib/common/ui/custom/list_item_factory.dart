@@ -253,14 +253,18 @@ class ListItemFactory extends StatelessWidget {
     // we are passing a String, look for subtitle and return as Column
     if (content is String) {
       var title = content;
+      var firstLineStyle = tsSubtitle1;
+      if (subtitle == null) {
+        firstLineStyle = firstLineStyle.short;
+      }
       return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           enableHighlighting != null && enableHighlighting
-              ? TextHighlighter(text: title, style: tsSubtitle1)
-              : CText(title.toString(), maxLines: 1, style: tsSubtitle1Short),
+              ? TextHighlighter(text: title, style: firstLineStyle)
+              : CText(title.toString(), maxLines: 1, style: firstLineStyle),
           if (subtitle != null)
             enableHighlighting != null && enableHighlighting
                 ? TextHighlighter(text: subtitle, style: tsBody2)
