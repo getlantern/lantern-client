@@ -1,82 +1,23 @@
 import 'package:lantern/common/common.dart';
 
 class ListItemFactory extends StatelessWidget {
-  late final String? header;
-  final dynamic leading;
-  final dynamic content;
-  late final String? subtitle;
-  final List<Widget>? trailingArray;
-  final void Function()? onTap;
-  late final double? height;
-  late final double? endPadding;
-  late final bool? showDivider;
-  late final SizedBox? focusedMenu;
-  late final bool? hasCopiedRecoveryKey;
+  final Widget Function(BuildContext, ListItemFactory) builder;
 
-  late final _ItemTypology renderAs;
+  ListItemFactory(this.builder);
 
   ListItemFactory.settingsItem({
-    Key? key,
-    this.header,
-    this.leading,
-    this.content,
-    this.onTap,
-    this.trailingArray,
-  }) : super(key: key) {
-    renderAs = _ItemTypology.isSettingsItem;
-  }
-
-  ListItemFactory.bottomItem({
-    Key? key,
-    this.leading,
-    this.content,
-    this.trailingArray,
-    this.onTap,
-  }) : super(key: key) {
-    renderAs = _ItemTypology.isBottomItem;
-  }
-
-  ListItemFactory.focusMenuItem({
-    Key? key,
-    this.leading,
-    this.content,
-    this.onTap,
-    this.trailingArray,
-  }) : super(key: key) {
-    renderAs = _ItemTypology.isFocusMenuItem;
-  }
-
-  // contacts, messages, search results
-  ListItemFactory.messagingItem({
-    Key? key,
-    this.header,
-    this.leading,
-    this.content,
-    this.onTap,
-    this.trailingArray,
-    this.subtitle,
-    this.height,
-    this.endPadding,
-    this.showDivider = true,
-    this.focusedMenu,
-    this.hasCopiedRecoveryKey,
-  }) : super(key: key) {
-    renderAs = _ItemTypology.isMessagingItem;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    switch (renderAs) {
-      // * SETTINGS ITEM
-      // Renders in Accounts and Settings
-      case _ItemTypology.isSettingsItem:
-        {
+    String? header,
+    dynamic leading,
+    dynamic content,
+    void Function()? onTap,
+    List<Widget>? trailingArray,
+  }) : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (header != null) ListSectionHeader(header!),
-              buildBase(
+              if (header != null) ListSectionHeader(header),
+              factory.buildBase(
                 leading: leading,
                 content: content,
                 trailingArray: trailingArray,
@@ -86,11 +27,14 @@ class ListItemFactory extends StatelessWidget {
               ),
             ],
           );
-        }
-      // * BOTTOM MODAL ITEM
-      // Renders in bottom modal lists
-      case _ItemTypology.isBottomItem:
-        {
+        });
+
+  ListItemFactory.bottomItem({
+    dynamic leading,
+    dynamic content,
+    List<Widget>? trailingArray,
+    void Function()? onTap,
+  }) : this((BuildContext context, ListItemFactory factory) {
           return Container(
             decoration: BoxDecoration(
               color: white,
@@ -98,7 +42,7 @@ class ListItemFactory extends StatelessWidget {
                 Radius.circular(8.0),
               ),
             ),
-            child: buildBase(
+            child: factory.buildBase(
               leading: Padding(
                 padding: const EdgeInsetsDirectional.only(start: 12.0),
                 child: leading,
@@ -110,12 +54,15 @@ class ListItemFactory extends StatelessWidget {
               height: 56,
             ),
           );
-        }
-      // * FOCUS ITEM
-      // Renders in the FocusableMenu list on long press of specific items
-      case _ItemTypology.isFocusMenuItem:
-        {
-          return buildBase(
+        });
+
+  ListItemFactory.focusMenuItem({
+    dynamic leading,
+    dynamic content,
+    void Function()? onTap,
+    List<Widget>? trailingArray,
+  }) : this((BuildContext context, ListItemFactory factory) {
+          return factory.buildBase(
             leading: leading,
             content: content,
             trailingArray: [],
@@ -123,11 +70,22 @@ class ListItemFactory extends StatelessWidget {
             height: 48,
             showDivider: false,
           );
-        }
-      // * MESSAGING ITEM
-      // Anything that contains an avatar, title, subtitle, and trailing actions
-      case _ItemTypology.isMessagingItem:
-        {
+        });
+
+  // contacts, messages, search results
+  ListItemFactory.messagingItem({
+    dynamic header,
+    dynamic leading,
+    dynamic content,
+    void Function()? onTap,
+    List<Widget>? trailingArray,
+    String? subtitle,
+    double? height,
+    double? endPadding,
+    bool showDivider = true,
+    SizedBox? focusedMenu,
+    bool? hasCopiedRecoveryKey,
+  }) : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,12 +102,12 @@ class ListItemFactory extends StatelessWidget {
                       Radius.circular(8.0),
                     ),
                   ),
-                  child: buildBase(
+                  child: factory.buildBase(
                     height: height,
                     leading: leading,
                     content: content,
                     trailingArray: trailingArray,
-                    showDivider: showDivider! && !menuOpen,
+                    showDivider: showDivider && !menuOpen,
                     onTap: onTap,
                     enableHighlighting: true,
                     subtitle: subtitle,
@@ -158,12 +116,11 @@ class ListItemFactory extends StatelessWidget {
               ),
             ],
           );
-        }
-      default:
-        {
-          return const SizedBox();
-        }
-    }
+        });
+
+  @override
+  Widget build(BuildContext context) {
+    return builder(context, this);
   }
 
   Widget buildBase({
@@ -293,11 +250,4 @@ class ListItemFactory extends StatelessWidget {
       ),
     );
   }
-}
-
-enum _ItemTypology {
-  isSettingsItem,
-  isBottomItem,
-  isFocusMenuItem,
-  isMessagingItem,
 }
