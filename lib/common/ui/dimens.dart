@@ -15,3 +15,16 @@ Widget mirrorLTR({required BuildContext context, required Widget child}) =>
         alignment: Alignment.center,
         transform: Matrix4.rotationY(isLTR(context) ? 0 : pi),
         child: child);
+
+bool shouldScroll({
+  required BuildContext context,
+  required int numElements,
+  required double elHeight,
+}) {
+  var height = MediaQuery.of(context).size.height;
+  var padding = MediaQuery.of(context).padding;
+  var safeHeight = height - padding.top - padding.bottom;
+  var topBarHeight = elHeight;
+
+  return safeHeight - topBarHeight < numElements * elHeight;
+}

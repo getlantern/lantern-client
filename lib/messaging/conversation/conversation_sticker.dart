@@ -72,7 +72,7 @@ class ConversationSticker extends StatelessWidget {
                             final _contact =
                                 await model.addOrUpdateDirectContact(
                                     chatNumber: contact.chatNumber);
-                            await context.pushRoute(Conversation(
+                            await context.router.popAndPush(Conversation(
                                 contactId: _contact.contactId,
                                 showContactEditingDialog: true));
                           } catch (e) {
