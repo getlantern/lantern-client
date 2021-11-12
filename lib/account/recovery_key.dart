@@ -30,7 +30,7 @@ class RecoveryKey extends StatelessWidget {
                   const CDivider(),
                   StatefulBuilder(
                       builder: (context, setState) =>
-                          ListItemFactory.isSettingsItem(
+                          ListItemFactory.settingsItem(
                             onTap: () => showInfoDialog(
                               context,
                               title: 'automated_backup'.i18n,
