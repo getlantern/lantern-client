@@ -177,7 +177,6 @@ class _ChatsState extends State<Chats> {
                       return Column(
                         children: [
                           ListItemFactory.messagingItem(
-                            // key: ValueKey(index),
                             customBg: isUnaccepted ? customBg : null,
                             header: unacceptedStartIndex == index
                                 ? 'new_requests'.i18n.fill([
