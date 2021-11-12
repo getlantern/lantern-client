@@ -98,11 +98,9 @@ class _ContactInfoState extends State<ContactInfo> {
               /*
                 * Display Name
                 */
-              ListItemFactory.isSettingsItem(
+              ListItemFactory.settingsItem(
                 header: 'display_name'.i18n,
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+                icon: ImagePaths.user,
                 content: !isEditing
                     ? CText(displayNameController.value.text, style: tsBody1)
                     : TextField(
@@ -153,13 +151,11 @@ class _ContactInfoState extends State<ContactInfo> {
                 ],
               ),
               StatefulBuilder(
-                builder: (context, setState) => ListItemFactory.isSettingsItem(
+                builder: (context, setState) => ListItemFactory.settingsItem(
                   header: 'messenger_id'.i18n,
                   onTap: () async =>
                       doCopyText(context, contact.contactId.id, setState),
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
+                  icon: ImagePaths.user,
                   content: CText(
                     contact.contactId.id,
                     style: tsSubtitle1Short,
@@ -183,11 +179,9 @@ class _ContactInfoState extends State<ContactInfo> {
               /*
                 * More Options
                 */
-              ListItemFactory.isSettingsItem(
+              ListItemFactory.settingsItem(
                   header: 'more_options'.i18n,
-                  leading: const CAssetImage(
-                    path: ImagePaths.user,
-                  ),
+                  icon: ImagePaths.user,
                   content: CText(
                     contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
                     style: tsSubtitle1Short,
@@ -325,10 +319,8 @@ class _ContactInfoState extends State<ContactInfo> {
                       ),
                     )
                   ]),
-              ListItemFactory.isSettingsItem(
-                leading: const CAssetImage(
-                  path: ImagePaths.user,
-                ),
+              ListItemFactory.settingsItem(
+                icon: ImagePaths.user,
                 content: CText(
                   'delete_permanently'.i18n,
                   style: tsSubtitle1Short,

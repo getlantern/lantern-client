@@ -49,10 +49,9 @@ class _AccountManagementState extends State<AccountManagement>
                     Widget? child) =>
                 StatefulBuilder(
                     builder: (context, setState) =>
-                        ListItemFactory.isSettingsItem(
+                        ListItemFactory.settingsItem(
                           header: 'secure_chat_number'.i18n,
-                          leading: CAssetImage(
-                              path: ImagePaths.chatNumber, color: black),
+                          icon: ImagePaths.chatNumber,
                           content:
                               me.chatNumber.shortNumber.formattedChatNumber,
                           trailingArray: [
@@ -82,12 +81,9 @@ class _AccountManagementState extends State<AccountManagement>
             // * RECOVERY KEY
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
                     bool hasCopiedRecoveryKey, Widget? child) =>
-                ListItemFactory.isSettingsItem(
+                ListItemFactory.settingsItem(
                   header: 'backup_recovery_key'.i18n,
-                  leading: CAssetImage(
-                    path: ImagePaths.lock_outline,
-                    color: black,
-                  ),
+                  icon: ImagePaths.lock_outline,
                   content: 'recovery_key'.i18n,
                   trailingArray: [
                     if (!hasCopiedRecoveryKey)
@@ -107,18 +103,18 @@ class _AccountManagementState extends State<AccountManagement>
           var proItems = [
             sessionModel.emailAddress(
                 (BuildContext context, String emailAddress, Widget? child) {
-              return ListItemFactory.isSettingsItem(
+              return ListItemFactory.settingsItem(
                 header: 'lantern_pro_email'.i18n,
-                leading: CAssetImage(path: ImagePaths.email, color: black),
+                icon: ImagePaths.email,
                 content: emailAddress,
                 trailingArray: [],
               );
             }),
             sessionModel.expiryDate(
                 (BuildContext context, String expirationDate, Widget? child) {
-              return ListItemFactory.isSettingsItem(
+              return ListItemFactory.settingsItem(
                 header: 'Pro Account Expiration'.i18n,
-                leading: CAssetImage(path: ImagePaths.clock, color: black),
+                icon: ImagePaths.clock,
                 content: expirationDate,
                 onTap: () {
                   LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
@@ -137,7 +133,7 @@ class _AccountManagementState extends State<AccountManagement>
 
             return Padding(
               padding: const EdgeInsetsDirectional.only(start: 4),
-              child: ListItemFactory.isSettingsItem(
+              child: ListItemFactory.settingsItem(
                 header: index == 0 ? 'pro_devices_header'.i18n : null,
                 content: device.name,
                 onTap: !allowRemoval
@@ -195,7 +191,7 @@ class _AccountManagementState extends State<AccountManagement>
           }));
 
           if (devices.devices.length < 3) {
-            proItems.add(ListItemFactory.isSettingsItem(
+            proItems.add(ListItemFactory.settingsItem(
               content: '',
               onTap: () async => await context.pushRoute(ApproveDevice()),
               trailingArray: [
