@@ -85,7 +85,6 @@ class ImagePaths {
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
-  static const empty_search = 'assets/images/empty_search.svg';
   static const empty_chats = 'assets/images/empty_chats.svg';
   static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
 
