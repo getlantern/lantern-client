@@ -27,12 +27,15 @@ class CustomAvatar extends StatelessWidget {
       backgroundColor: customColor ?? getAvatarColor(sha1Hue(messengerId)),
       child: Transform.translate(
         offset: Offset(0.0, radius != null ? 10.0 : 0.0),
-        child: Text(displayName.toString().getInitials().toUpperCase(),
-            style: tsBody2.copiedWith(
-              color: white,
-              fontSize:
-                  radius != null ? tsDisplay(white).fontSize : tsBody2.fontSize,
-            )),
+        child: CText(displayName.toString().getInitials().toUpperCase(),
+            style: tsBody2
+                .copiedWith(
+                  color: white,
+                  fontSize: radius != null
+                      ? tsDisplay(white).fontSize
+                      : tsBody2.fontSize,
+                )
+                .short),
       ),
     );
   }
