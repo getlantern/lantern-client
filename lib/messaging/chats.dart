@@ -162,51 +162,57 @@ class _ChatsState extends State<Chats> {
                   itemCount: reshapedContactList.length,
                   physics: defaultScrollPhysics,
                   itemBuilder: (context, index) {
-                    var contact = reshapedContactList[index];
-                    var isUnaccepted = contact.value.verificationLevel ==
+                    var contactItem = reshapedContactList[index];
+                    var isUnaccepted = contactItem.value.verificationLevel ==
                         VerificationLevel.UNACCEPTED;
                     var displayName = isUnaccepted
-                        ? contact
+                        ? contactItem
                             .value.chatNumber.shortNumber.formattedChatNumber
-                        : contact.value.displayNameOrFallback;
+                        : contactItem.value.displayNameOrFallback;
                     var content = isUnaccepted
-                        ? contact
+                        ? contactItem
                             .value.chatNumber.shortNumber.formattedChatNumber
-                        : contact.value.displayNameOrFallback;
-                    return Column(
-                      children: [
-                        ListItemFactory.isMessagingItem(
-                          key: ValueKey(index),
-                          customBg: isUnaccepted ? customBg : null,
-                          header: unacceptedStartIndex == index
-                              ? 'new_requests'.i18n.fill([
-                                  '(${reshapedContactList.length - unacceptedStartIndex})'
-                                ])
-                              : null,
-                          focusedMenu: !isUnaccepted
-                              ? renderLongTapMenu(
-                                  contact: contact.value, context: context)
-                              : null,
-                          leading: CustomAvatar(
-                              customColor: isUnaccepted ? grey5 : null,
-                              messengerId: contact.value.contactId.id,
-                              displayName: displayName),
-                          content: content,
-                          subtitle:
-                              '${contact.value.mostRecentMessageText.isNotEmpty ? contact.value.mostRecentMessageText : 'attachment'}'
-                                  .i18n,
-                          onTap: () async => await context.pushRoute(
-                              Conversation(contactId: contact.value.contactId)),
-                          trailingArray: [
-                            HumanizedDate.fromMillis(
-                              contact.value.mostRecentMessageTs.toInt(),
-                              builder: (context, date) => CText(date,
-                                  style: tsBody2.copiedWith(color: grey5)),
-                            )
-                          ],
-                        ),
-                      ],
-                    );
+                        : contactItem.value.displayNameOrFallback;
+
+                    return model.contact(
+                        context,
+                        contactItem,
+                        (context, contact, child) => Column(
+                              children: [
+                                ListItemFactory.isMessagingItem(
+                                  key: ValueKey(index),
+                                  customBg: isUnaccepted ? customBg : null,
+                                  header: unacceptedStartIndex == index
+                                      ? 'new_requests'.i18n.fill([
+                                          '(${reshapedContactList.length - unacceptedStartIndex})'
+                                        ])
+                                      : null,
+                                  focusedMenu: !isUnaccepted
+                                      ? renderLongTapMenu(
+                                          contact: contact, context: context)
+                                      : null,
+                                  leading: CustomAvatar(
+                                      customColor: isUnaccepted ? grey5 : null,
+                                      messengerId: contact.contactId.id,
+                                      displayName: displayName),
+                                  content: content,
+                                  subtitle:
+                                      '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
+                                          .i18n,
+                                  onTap: () async => await context.pushRoute(
+                                      Conversation(
+                                          contactId: contact.contactId)),
+                                  trailingArray: [
+                                    HumanizedDate.fromMillis(
+                                      contact.mostRecentMessageTs.toInt(),
+                                      builder: (context, date) => CText(date,
+                                          style:
+                                              tsBody2.copiedWith(color: grey5)),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ));
                   },
                 ),
               );
