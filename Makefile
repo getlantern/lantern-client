@@ -138,11 +138,10 @@ ANDROID_KEYSTORE := $(MOBILE_DIR)/app/keystore.release.jks
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
-GO_SOURCES := go.mod go.sum $(shell find . -type f -name "*.go" | grep -v vendor)
-GO_VENDOR_SOURCES := vendor $(shell test -d vendor && find vendor -type f)
+GO_SOURCES := go.mod go.sum $(shell find . -type f -name "*.go")
 MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk")
 
-.PHONY: dumpvars packages vendor android-lib android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
+.PHONY: dumpvars packages android-lib android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
 # dumpvars prints out all variables defined in the Makefile, useful for debugging environment
 dumpvars:
@@ -174,13 +173,6 @@ define build-tags
 	BUILD_TAGS=$$(echo $$BUILD_TAGS | xargs) && echo "Build tags: $$BUILD_TAGS" && \
 	EXTRA_LDFLAGS=$$(echo $$EXTRA_LDFLAGS | xargs) && echo "Extra ldflags: $$EXTRA_LDFLAGS"
 endef
-
-$(GO_VENDOR_SOURCES): go.mod go.sum
-	@echo "Updating vendored libs" && \
-	git config --global url."https://71cee071ea22b7ffb10f68fa330d1130133bbfbd:x-oauth-basic@github.com/".insteadOf "https://github.com/" && \
-	go mod vendor
-
-vendor: $(GO_VENDOR_SOURCES)
 
 .PHONY: tag
 tag: require-version
@@ -375,7 +367,7 @@ android-lib: $(MOBILE_ANDROID_LIB)
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -b $(MOBILE_DIR)/app/build.gradle :app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) lib/model/protos_shared/vpn.pb.dart
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
