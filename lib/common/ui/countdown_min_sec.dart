@@ -6,7 +6,7 @@ class Countdown extends AnimatedWidget {
 
   Countdown({required this.animation, CTextStyle? textStyle})
       : super(listenable: animation) {
-    this.textStyle = textStyle ?? tsDisplay(black);
+    this.textStyle = textStyle ?? tsDisplayBlack;
   }
 
   Countdown.build(

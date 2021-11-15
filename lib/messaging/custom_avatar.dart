@@ -7,12 +7,14 @@ class CustomAvatar extends StatelessWidget {
     required this.displayName,
     this.customColor,
     this.radius = 16,
+    this.textStyle,
   }) : super(key: key);
 
   final String messengerId;
   final String? displayName;
   final Color? customColor;
   final double radius;
+  final CTextStyle? textStyle;
 
   // For some reason, the range of hashCodes seems to fall within
   // 0 to Max Int 32 / 2. It would be nice to have some more insight into what is
@@ -23,19 +25,11 @@ class CustomAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 16,
+      radius: radius,
       backgroundColor: customColor ?? getAvatarColor(sha1Hue(messengerId)),
-      child: Transform.translate(
-        offset: Offset(0.0, radius > 16 ? 10.0 : 0.0),
-        child: CText(displayName.toString().getInitials().toUpperCase(),
-            style: tsBody2
-                .copiedWith(
-                  color: white,
-                  fontSize: radius > 16
-                      ? tsDisplay(white).fontSize
-                      : tsBody2.fontSize,
-                )
-                .short),
+      child: CText(
+        displayName.toString().getInitials().toUpperCase(),
+        style: (textStyle ?? tsBody2).copiedWith(color: white).short,
       ),
     );
   }

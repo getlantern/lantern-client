@@ -93,9 +93,11 @@ class _ContactInfoState extends State<ContactInfo> {
                     padding:
                         const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                     child: CustomAvatar(
-                        messengerId: contact.contactId.id,
-                        displayName: contact.displayNameOrFallback,
-                        radius: 64),
+                      messengerId: contact.contactId.id,
+                      displayName: contact.displayNameOrFallback,
+                      radius: 64,
+                      textStyle: tsDisplayBlack,
+                    ),
                   ),
                 ],
               ),

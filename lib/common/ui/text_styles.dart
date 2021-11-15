@@ -13,6 +13,8 @@ CTextStyle tsDisplay(color) => CTextStyle(
       color: color,
     );
 
+CTextStyle tsDisplayBlack = tsDisplay(black);
+
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
