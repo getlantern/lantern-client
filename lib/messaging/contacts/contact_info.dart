@@ -164,17 +164,10 @@ class _ContactInfoState extends State<ContactInfo> {
                     //     doCopyText(context, contact.chatNumber.number, setState),
                     icon: ImagePaths.chatNumber,
                     content: isExpanded
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Padding(padding: EdgeInsets.all(8.0)),
-                              Expanded(
-                                child: FullChatNumberWidget(
-                                    context, contact.chatNumber),
-                              ),
-                              const Padding(padding: EdgeInsets.all(8.0)),
-                            ],
+                        ? Padding(
+                            padding: const EdgeInsetsDirectional.only(top: 6.0),
+                            child: FullChatNumberWidget(
+                                context, contact.chatNumber),
                           )
                         : CText(
                             contact.chatNumber.shortNumber.formattedChatNumber,
