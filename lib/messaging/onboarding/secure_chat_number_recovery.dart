@@ -29,7 +29,7 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
       if (controller.text.withoutWhitespace.length == 52) {
         try {
           context.loaderOverlay.show(widget: spinner);
-          await model.recover(controller.text);
+          await model.recover(controller.text.withoutWhitespace);
           await model.markIsOnboarded();
           context.router.popUntilRoot();
           showSnackbar(context: context, content: 'recovery_success'.i18n);
