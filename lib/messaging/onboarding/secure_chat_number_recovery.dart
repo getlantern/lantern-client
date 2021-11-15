@@ -52,8 +52,8 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
         body: PinnedButtonLayout(
             content: [
               Form(
-                onChanged: () => setState(
-                    () => shouldSubmit = controller.text.length >= 200),
+                onChanged: () =>
+                    setState(() => shouldSubmit = controller.text.length == 52),
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(top: 16.0),
