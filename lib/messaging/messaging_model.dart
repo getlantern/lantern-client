@@ -243,6 +243,10 @@ class MessagingModel extends Model {
   Future<void> recover(String recoveryCode) async => methodChannel
       .invokeMethod('recover', <String, dynamic>{'recoveryCode': recoveryCode});
 
+  Future<String> getRecoveryCode() => methodChannel
+      .invokeMethod('getRecoveryCode')
+      .then((value) => value as String);
+
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
         ? 'd/${contactId.id}'

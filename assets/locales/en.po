@@ -622,6 +622,12 @@ msgstr "This is your recovery key, it is the only way to recover your Secure Cha
 msgid "recovery_error"
 msgstr "Unable to recover your account"
 
+msgid "recovery_retrieval_error"
+msgstr "Something went wrong while retrieving your recovery key"
+
+msgid "recovery_success"
+msgstr "You have successfully recovered your Secure Chat Number"
+
 msgid "empty_chats_text"
 msgstr "Share your chat number or add a contact here!"
 

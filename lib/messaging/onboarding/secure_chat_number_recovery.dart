@@ -26,12 +26,13 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   void handleButtonPress(MessagingModel model) async {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
+      // TODO: add a check for num of characters
       try {
         context.loaderOverlay.show(widget: spinner);
-        // await model.recoverAccount(controller.text); // TODO: once we have the recovery backend
+        await model.recover(controller.text);
         await model.markIsOnboarded();
         context.router.popUntilRoot();
-        // TODO: show snackbar "You have successfully recovered your Secure Chat Number"
+        showSnackbar(context: context, content: 'recovery_success'.i18n);
       } catch (e) {
         setState(() => controller.error = 'recovery_error'.i18n);
       } finally {
