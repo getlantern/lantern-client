@@ -89,17 +89,25 @@ class CustomBottomBar extends StatelessWidget {
                 style: tsFloatingLabel.copiedWith(
                     color: index == 2 ? black : grey5)),
             onTap: () => onTap!(2),
-            icon: messagingModel.getCopiedRecoveryStatus(
-                (context, hasCopiedRecoveryKey, child) => CBadge(
-                      count: 1,
-                      showBadge: !hasCopiedRecoveryKey,
-                      child: CAssetImage(
+            icon: messagingModel.getOnBoardingStatus(
+                (context, hasBeenOnboarded, child) => hasBeenOnboarded
+                    ? messagingModel.getCopiedRecoveryStatus(
+                        (context, hasCopiedRecoveryKey, child) => CBadge(
+                              count: 1,
+                              showBadge: !hasCopiedRecoveryKey,
+                              child: CAssetImage(
+                                path: ImagePaths.account,
+                                color: index == 2
+                                    ? selectedTabIconColor
+                                    : unselectedTabIconColor,
+                              ),
+                            ))
+                    : CAssetImage(
                         path: ImagePaths.account,
                         color: index == 2
                             ? selectedTabIconColor
                             : unselectedTabIconColor,
-                      ),
-                    )),
+                      )),
           ),
           label: '',
           tooltip: 'Account'.i18n,
