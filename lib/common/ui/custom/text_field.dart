@@ -17,7 +17,7 @@ class CTextField extends StatefulWidget {
   late final int? minLines;
   late final int? maxLines;
   late final AutovalidateMode? autovalidateMode;
-  List<TextInputFormatter>? inputFormatters;
+  late final List<TextInputFormatter>? inputFormatters;
 
   CTextField({
     required this.controller,
