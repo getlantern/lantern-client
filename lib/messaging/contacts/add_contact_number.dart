@@ -6,6 +6,7 @@ class AddViaChatNumber extends StatefulWidget {
 }
 
 class _AddViaChatNumberState extends State<AddViaChatNumber> {
+  static final whitespace = RegExp(r'\s');
   final _formKey = GlobalKey<FormState>(debugLabel: 'chatNumberInput');
   late final controller = CustomTextEditingController(
       formKey: _formKey, validator: (value) => null);
@@ -66,8 +67,8 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
           children: [
             Expanded(
               child: Form(
-                onChanged: () =>
-                    setState(() => shouldSubmit = controller.text.length >= 12),
+                onChanged: () => setState(() => shouldSubmit =
+                    controller.text.replaceAll(whitespace, '').length >= 12),
                 key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
