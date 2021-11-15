@@ -26,19 +26,22 @@ class AccountMenu extends StatelessWidget {
       BuildContext context, SessionModel sessionModel, Contact me) {
     final messagingModel = context.watch<MessagingModel>();
     return [
-      messagingModel.getCopiedRecoveryStatus(
-          (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              ListItemFactory.settingsItem(
-                  icon: ImagePaths.account,
-                  content: 'Account Management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: false)),
-                  trailingArray: [
-                    if (!hasCopiedRecoveryKey)
-                      const CAssetImage(
-                        path: ImagePaths.badge,
-                      ),
-                  ])),
+      messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
+          hasBeenOnboarded
+              ? messagingModel.getCopiedRecoveryStatus((BuildContext context,
+                      bool hasCopiedRecoveryKey, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                      icon: ImagePaths.account,
+                      content: 'Account Management'.i18n,
+                      onTap: () async => await context
+                          .pushRoute(AccountManagement(isPro: false)),
+                      trailingArray: [
+                        if (!hasCopiedRecoveryKey)
+                          const CAssetImage(
+                            path: ImagePaths.badge,
+                          ),
+                      ]))
+              : const SizedBox()),
       ListItemFactory.settingsItem(
         icon: ImagePaths.pro_icon_black,
         content: 'Upgrade to Lantern Pro'.i18n,
@@ -74,19 +77,20 @@ class AccountMenu extends StatelessWidget {
   List<Widget> proItems(BuildContext context, Contact me) {
     final messagingModel = context.watch<MessagingModel>();
     return [
-      messagingModel.getCopiedRecoveryStatus(
-          (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
+      messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
+          messagingModel.getCopiedRecoveryStatus((BuildContext context,
+                  bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
                   icon: ImagePaths.account,
                   content: 'Account Management'.i18n,
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: true)),
                   trailingArray: [
-                    if (!hasCopiedRecoveryKey)
+                    if (!hasCopiedRecoveryKey && hasBeenOnboarded)
                       const CAssetImage(
                         path: ImagePaths.badge,
                       ),
-                  ])),
+                  ]))),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Link Device'.i18n,
