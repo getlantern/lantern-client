@@ -29,3 +29,14 @@ bool shouldScroll({
   // TODO: needs to be tested
   return safeHeight - topBarHeight < numElements * elHeight;
 }
+
+double calculateStickerHeight(BuildContext context, int messageCount) {
+  final conversationInnerHeight = MediaQuery.of(context).size.height -
+      100.0 -
+      100.0; // rough approximation for inner height - top bar height - message bar height
+  final messageHeight =
+      60.0; // rough approximation of how much space a message takes up, including paddings
+  final minStickerHeight = 353.0;
+  return max(minStickerHeight,
+      conversationInnerHeight - ((messageCount - 1) * messageHeight));
+}

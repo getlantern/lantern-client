@@ -620,7 +620,16 @@ msgid "recovery_key_account_explanation"
 msgstr "This is your recovery key, it is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system. Store this in a safe location."
 
 msgid "recovery_error"
-msgstr "Unable to recover your account"
+msgstr "Unable to recover your account."
+
+msgid "recovery_input_error"
+msgstr " Please make sure you are entering a valid recovery key"
+
+msgid "recovery_retrieval_error"
+msgstr "Something went wrong while retrieving your recovery key"
+
+msgid "recovery_success"
+msgstr "You have successfully recovered your Secure Chat Number"
 
 msgid "empty_chats_text"
 msgstr "Share your chat number or add a contact here!"
