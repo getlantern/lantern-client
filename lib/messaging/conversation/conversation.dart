@@ -3,6 +3,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/messaging/conversation/unaccepted_contact_sticker.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'audio/audio_widget.dart';
@@ -440,7 +441,16 @@ class ConversationState extends State<Conversation>
                     Padding(
                       padding:
                           const EdgeInsetsDirectional.only(start: 16, end: 16),
-                      child: buildList(contact),
+                      child: Stack(
+                        children: [
+                          buildList(contact),
+                          if (contact.isUnaccepted())
+                            UnacceptedContactSticker(
+                                messageCount: messageCount,
+                                contact: contact,
+                                model: model),
+                        ],
+                      ),
                     ),
                   ),
                 ),
