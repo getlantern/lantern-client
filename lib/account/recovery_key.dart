@@ -14,13 +14,28 @@ class RecoveryKey extends StatelessWidget {
             body: PinnedButtonLayout(
                 content: [
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                        start: 16.0, end: 16.0, top: 32.0, bottom: 16.0),
-                    child: CText(
-                        'this should be ${me.chatNumber.number}  the recovery key'
-                            .toUpperCase(), // TODO: this should be recovery key
-                        style: tsCodeDisplay1),
-                  ),
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 8.0, end: 8.0, top: 32.0, bottom: 16.0),
+                      child: FutureBuilder(
+                          future: model.getRecoveryCode(),
+                          builder: (context, snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              default:
+                                if (snapshot.hasError) {
+                                  return CText('recovery_retrieval_error'.i18n,
+                                      style: tsCodeDisplay1);
+                                } else {
+                                  return CText(
+                                      humanizeLongString(
+                                              snapshot.data.toString())
+                                          .toString(),
+                                      style: tsCodeDisplay1);
+                                }
+                            }
+                          })),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
                         start: 4.0, end: 4.0, top: 16.0, bottom: 16.0),
