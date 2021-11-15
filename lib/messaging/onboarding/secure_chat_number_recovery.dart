@@ -26,7 +26,7 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   void handleButtonPress(MessagingModel model) async {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
-      if (controller.text.length == 52) {
+      if (controller.text.withoutWhitespace.length == 52) {
         try {
           context.loaderOverlay.show(widget: spinner);
           await model.recover(controller.text);
@@ -52,8 +52,8 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
         body: PinnedButtonLayout(
             content: [
               Form(
-                onChanged: () =>
-                    setState(() => shouldSubmit = controller.text.length == 52),
+                onChanged: () => setState(() => shouldSubmit =
+                    controller.text.withoutWhitespace.length == 52),
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(top: 16.0),
