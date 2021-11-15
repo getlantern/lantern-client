@@ -244,7 +244,7 @@ class EmptyChats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var model = context.watch<MessagingModel>();
+    var model = context.watch<MessagingModel>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,21 +258,21 @@ class EmptyChats extends StatelessWidget {
               size: 250),
         ),
         CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
-        // // *
-        // // * DEV
-        // // *
-        // model.getOnBoardingStatus((context, value, child) => Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: Button(
-        //         tertiary: true,
-        //         text: 'DEV - toggle value'.i18n,
-        //         width: 200.0,
-        //         onPressed: () async {
-        //           await model.overrideOnBoarded(!value);
-        //           context.router.popUntilRoot();
-        //         },
-        //       ),
-        //     )),
+        // *
+        // * DEV
+        // *
+        model.getOnBoardingStatus((context, value, child) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Button(
+                tertiary: true,
+                text: 'DEV - toggle value'.i18n,
+                width: 200.0,
+                onPressed: () async {
+                  await model.overrideOnBoarded(!value);
+                  context.router.popUntilRoot();
+                },
+              ),
+            )),
       ],
     );
   }
