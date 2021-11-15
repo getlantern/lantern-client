@@ -40,4 +40,12 @@ extension ChatNumberFormat on String {
   }
 
   String get withoutWhitespace => replaceAll(whitespace, '');
+
+  String get spaced {
+    final spaced = splitMapJoin(RegExp('.{4}'),
+        onMatch: (m) => '${m[0]}', // (or no onMatch at all)
+        onNonMatch: (n) => ' '); // uses a non-breaking hyphen
+
+    return spaced.substring(1, spaced.length - 1);
+  }
 }
