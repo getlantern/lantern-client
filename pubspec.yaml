@@ -104,6 +104,7 @@ dependencies:
   flutter_markdown: ^0.6.4
 
   flutter_local_notifications: ^8.1.1+1
+  share_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:

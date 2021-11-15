@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
+
 import 'long_tap_menu.dart';
 
 class NewChat extends StatefulWidget {
@@ -85,7 +86,8 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () {}, // TODO: Trigger native sharing
+                onTap: () => Share.share(me.chatNumber.shortNumber
+                    .formattedChatNumber), // TODO: Trigger native sharing
               ),
               /*
               * Scan QR Code
