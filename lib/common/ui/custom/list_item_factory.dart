@@ -224,7 +224,7 @@ class ListItemFactory extends StatelessWidget {
             enableHighlighting
                 ? TextHighlighter(text: title, style: firstLineStyle)
                 : CText(title.toString(), maxLines: 1, style: firstLineStyle),
-            if (subtitle != null)
+            if (subtitle != null && subtitle.isNotEmpty)
               enableHighlighting
                   ? TextHighlighter(text: subtitle, style: secondLineStyle)
                   : CText(subtitle, maxLines: 1, style: secondLineStyle),
