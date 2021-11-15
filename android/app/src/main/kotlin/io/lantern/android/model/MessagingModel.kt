@@ -157,6 +157,7 @@ class MessagingModel constructor(
             "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "recover" -> messaging.recover(recoveryCode = call.argument<String>("recoveryCode")!!)
+            "getRecoveryCode" -> messaging.recoveryCode
             /*
             * Messages
             */
