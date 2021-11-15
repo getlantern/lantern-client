@@ -23,7 +23,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
-class MessagingModel constructor(private val activity: MainActivity, flutterEngine: FlutterEngine, private val messaging: Messaging) : BaseModel("messaging", flutterEngine, messaging.db) {
+class MessagingModel constructor(
+    private val activity: MainActivity,
+    flutterEngine: FlutterEngine,
+    private val messaging: Messaging
+) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
     private val videoFile = File(activity.cacheDir, "_playingvideo") // TODO: would be nice to expose this via a MediaDataSource instead
     private val stopRecording = AtomicReference<Runnable>()
@@ -96,6 +100,12 @@ class MessagingModel constructor(private val activity: MainActivity, flutterEngi
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+            /*
+             * Lifecycle
+             */
+            "start" -> messaging.start()
+            "kill" -> messaging.kill()
+
             /*
             * Contacts
             */

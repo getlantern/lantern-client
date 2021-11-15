@@ -30,6 +30,16 @@ class MessagingModel extends Model {
       }
     });
   }
+  /*
+   * Lifecycle
+   */
+  Future<void> start() {
+    return methodChannel.invokeMethod('start');
+  }
+
+  Future<void> kill() {
+    return methodChannel.invokeMethod('kill');
+  }
 
   /*
   * CONTACTS 
