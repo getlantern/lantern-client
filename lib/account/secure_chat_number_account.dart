@@ -15,7 +15,8 @@ class SecureChatNumberAccount extends StatelessWidget {
                         ListItemFactory.settingsItem(
                           header: 'your_secure_chat_number'.i18n.toUpperCase(),
                           onTap: () async {
-                            copyText(context, me.chatNumber.number);
+                            copyText(context,
+                                me.chatNumber.number.formattedChatNumber);
                             setState(() => textCopied = true);
                             await Future.delayed(defaultAnimationDuration,
                                 () => setState(() => textCopied = false));
@@ -35,7 +36,8 @@ class SecureChatNumberAccount extends StatelessWidget {
                           trailingArray: [
                             CInkWell(
                               onTap: () async {
-                                copyText(context, me.chatNumber.number);
+                                copyText(context,
+                                    me.chatNumber.number.formattedChatNumber);
                                 WidgetsBinding.instance
                                     ?.addPostFrameCallback((_) async {
                                   setState(() => textCopied = true);
