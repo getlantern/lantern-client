@@ -44,8 +44,8 @@ class _ChatsState extends State<Chats> {
           numElements: _contacts.length,
           elHeight: 72.0,
         )) {
-      final firstUnaccepted = _contacts.firstWhere((element) =>
-          element.value.verificationLevel == VerificationLevel.UNACCEPTED);
+      final firstUnaccepted =
+          _contacts.firstWhere((element) => element.value.isUnaccepted());
       final scrollTo = _contacts
           .toList()
           .indexWhere((element) => element.value == firstUnaccepted.value);
@@ -66,9 +66,7 @@ class _ChatsState extends State<Chats> {
           model.contactsByActivity(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             final requests = _contacts
-                .where((element) =>
-                    element.value.verificationLevel ==
-                    VerificationLevel.UNACCEPTED)
+                .where((element) => element.value.isUnaccepted())
                 .toList();
 
             if (requests.isEmpty) {
@@ -78,9 +76,7 @@ class _ChatsState extends State<Chats> {
             // 1. get most recent unaccepted contact
             // 2. get most recent message TS from that contact
             final mostRecentUnacceptedTS = requests
-                .firstWhere((element) =>
-                    element.value.verificationLevel ==
-                    VerificationLevel.UNACCEPTED)
+                .firstWhere((element) => element.value.isUnaccepted())
                 .value
                 .mostRecentMessageTs
                 .toInt();
@@ -154,10 +150,8 @@ class _ChatsState extends State<Chats> {
               }
 
               final reshapedContactList = reshapeContactList(_contacts);
-              final unacceptedStartIndex = reshapedContactList.indexWhere(
-                  (element) =>
-                      element.value.verificationLevel ==
-                      VerificationLevel.UNACCEPTED);
+              final unacceptedStartIndex = reshapedContactList
+                  .indexWhere((element) => element.value.isUnaccepted());
 
               return Expanded(
                 child: ScrollablePositionedList.builder(
@@ -168,8 +162,7 @@ class _ChatsState extends State<Chats> {
                     var contactItem = reshapedContactList[index];
                     return model.contact(context, contactItem,
                         (context, contact, child) {
-                      var isUnaccepted = contact.verificationLevel ==
-                          VerificationLevel.UNACCEPTED;
+                      var isUnaccepted = contact.isUnaccepted();
                       return Column(
                         children: [
                           ListItemFactory.messagingItem(
@@ -231,13 +224,12 @@ List<PathAndValue<Contact>> reshapeContactList(
   });
 
   // Either verified or unverified
-  var _acceptedContacts = _activeConversations.where((element) =>
-      element.value.verificationLevel == VerificationLevel.VERIFIED ||
-      element.value.verificationLevel == VerificationLevel.UNVERIFIED);
+  var _acceptedContacts = _activeConversations.where(
+      (element) => element.value.isVerified() || element.value.isUnverified());
 
   // Unaccepted AKA message requests
-  var _unacceptedContacts = _activeConversations.where((element) =>
-      element.value.verificationLevel == VerificationLevel.UNACCEPTED);
+  var _unacceptedContacts =
+      _activeConversations.where((element) => element.value.isUnaccepted());
 
   return [
     ..._acceptedContacts,

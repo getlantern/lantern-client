@@ -14,8 +14,6 @@ class ContactInfoTopBar extends StatelessWidget {
   }) : super();
   @override
   Widget build(BuildContext context) {
-    var isUnaccepted =
-        contact.verificationLevel == VerificationLevel.UNACCEPTED;
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -23,7 +21,7 @@ class ContactInfoTopBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
-              customColor: isUnaccepted ? grey5 : null,
+              customColor: contact.isUnaccepted() ? grey5 : null,
               messengerId: contact.contactId.id,
               displayName: contact.displayNameOrFallback),
         ),
@@ -40,8 +38,7 @@ class ContactInfoTopBar extends StatelessWidget {
               /* 
               * Contact is unverified => render pending badge
               */
-              if (!contact.isMe &&
-                  contact.verificationLevel == VerificationLevel.UNVERIFIED)
+              if (!contact.isMe && contact.isUnverified())
                 Row(
                   children: [
                     const Padding(
@@ -58,7 +55,7 @@ class ContactInfoTopBar extends StatelessWidget {
               /* 
               * Contact is verified => render timer and verified badge
               */
-              if (contact.verificationLevel == VerificationLevel.VERIFIED)
+              if (contact.isVerified())
                 Row(
                   children: [
                     DisappearingTimerAction(contact),
