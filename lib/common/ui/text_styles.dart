@@ -55,8 +55,8 @@ CTextStyle tsOverlineShort =
 
 CTextStyle tsCodeDisplay1 = CTextStyle(
   fontFamily: 'RobotoMono',
-  fontSize: 20,
-  lineHeight: 32,
+  fontSize: 24,
+  lineHeight: 38,
 );
 
 /*
