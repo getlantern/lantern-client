@@ -72,6 +72,7 @@ class _NewChatState extends State<NewChat> {
               * Add via Chat Number
               */
               ListItemFactory.messagingItem(
+                header: 'add_new_contact'.i18n,
                 leading: const CAssetImage(
                   path: ImagePaths.person_add_alt_1,
                 ),
@@ -128,7 +129,6 @@ class _NewChatState extends State<NewChat> {
               * Share your Chat Number
               */
               ListItemFactory.messagingItem(
-                header: 'add_new_contact'.i18n,
                 leading: const CAssetImage(
                   path: ImagePaths.share,
                 ),
