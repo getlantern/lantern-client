@@ -18,6 +18,8 @@ class CTextField extends StatefulWidget {
   late final int? maxLines;
   late final AutovalidateMode? autovalidateMode;
   late final List<TextInputFormatter>? inputFormatters;
+  late final TextInputAction? textInputAction;
+  late final void Function(String value)? onFieldSubmitted;
 
   CTextField({
     required this.controller,
@@ -33,6 +35,8 @@ class CTextField extends StatefulWidget {
     this.maxLines,
     this.autovalidateMode,
     this.inputFormatters,
+    this.textInputAction,
+    this.onFieldSubmitted,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -84,6 +88,8 @@ class _CTextFieldState extends State<CTextField> {
             onChanged: (value) {
               fieldKey.currentState!.validate();
             },
+            onFieldSubmitted: widget.onFieldSubmitted,
+            textInputAction: widget.textInputAction,
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             inputFormatters: widget.inputFormatters,
