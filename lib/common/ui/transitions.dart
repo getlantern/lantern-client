@@ -25,3 +25,5 @@ final spinner = Center(
     color: white,
   ),
 );
+
+const defaultCurves = Curves.easeInOutCubic;

@@ -313,7 +313,7 @@ class ConversationState extends State<Conversation>
         await scrollController.scrollTo(
             index: 0,
             duration: const Duration(seconds: 1),
-            curve: Curves.easeInOutCubic);
+            curve: defaultCurves);
       }
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
@@ -587,7 +587,7 @@ class ConversationState extends State<Conversation>
             scrollController.scrollTo(
                 index: scrollToIndex,
                 duration: const Duration(seconds: 1),
-                curve: Curves.easeInOutCubic);
+                curve: defaultCurves);
           }
         },
       );
