@@ -46,7 +46,7 @@ class _AccountManagementState extends State<AccountManagement>
           messagingModel.me((BuildContext context, Contact me, Widget? child) =>
               StatefulBuilder(
                   builder: (context, setState) => ListItemFactory.settingsItem(
-                        header: 'secure_chat_number'.i18n,
+                        header: 'your_secure_chat_number'.i18n,
                         icon: ImagePaths.chatNumber,
                         content: me.chatNumber.shortNumber.formattedChatNumber,
                         trailingArray: [

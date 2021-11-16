@@ -66,7 +66,7 @@ class _ContactInfoState extends State<ContactInfo> {
       centerTitle: true,
       title: contact.displayNameOrFallback,
       actions: [
-        CallAction(contact),
+        if (!contact.isMe) CallAction(contact),
         Container(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: IconButton(
@@ -236,7 +236,7 @@ class _ContactInfoState extends State<ContactInfo> {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         child: CText(
-                          'delete'.i18n.toUpperCase(),
+                          'delete_contact'.i18n.toUpperCase(),
                           style: tsButtonPink,
                         ),
                       ),

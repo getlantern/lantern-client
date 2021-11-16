@@ -59,68 +59,53 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
     var model = context.watch<MessagingModel>();
     return BaseScreen(
       title: 'add_contact'.i18n,
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: Form(
-                onChanged: () => setState(() =>
-                    shouldSubmit = controller.text.numbersOnly.length >= 12),
-                key: _formKey,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      body: PinnedButtonLayout(
+          content: [
+            Form(
+              onChanged: () => setState(() =>
+                  shouldSubmit = controller.text.numbersOnly.length >= 12),
+              key: _formKey,
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.all(24.0),
+                  child: Wrap(
                     children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 24.0, top: 60, end: 24.0),
-                        child: Wrap(
-                          children: [
-                            CTextField(
-                              controller: controller,
-                              autovalidateMode: AutovalidateMode.disabled,
-                              label: 'secure_chat_number'.i18n,
-                              prefixIcon: const CAssetImage(
-                                  path: ImagePaths.chatNumber),
-                              hintText: 'chat_number_type'.i18n,
-                              keyboardType: TextInputType.phone,
-                              maxLines: null,
-                              inputFormatters: [
-                                TextInputFormatter.withFunction(
-                                    (oldValue, newValue) {
-                                  final original = newValue.text;
-                                  final formatted =
-                                      original.formattedChatNumber;
-                                  var selection = newValue.selection;
-                                  if (formatted != original) {
-                                    final offset = formatted.characters.length;
-                                    selection = selection.copyWith(
-                                        baseOffset: offset,
-                                        extentOffset: offset);
-                                  }
-                                  return newValue.copyWith(
-                                      text: formatted, selection: selection);
-                                }),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsetsDirectional.only(bottom: 32),
-              child: Button(
-                  width: 200,
-                  text: 'start_chat'.i18n,
-                  onPressed: () => handleButtonPress(model),
-                  disabled: !shouldSubmit),
-            ),
+                      CTextField(
+                        controller: controller,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        label: 'secure_chat_number'.i18n,
+                        prefixIcon:
+                            const CAssetImage(path: ImagePaths.chatNumber),
+                        hintText: 'chat_number_type'.i18n,
+                        keyboardType: TextInputType.phone,
+                        maxLines: null,
+                        inputFormatters: [
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            final original = newValue.text;
+                            final formatted = original.formattedChatNumber;
+                            var selection = newValue.selection;
+                            if (formatted != original) {
+                              final offset = formatted.characters.length;
+                              selection = selection.copyWith(
+                                  baseOffset: offset, extentOffset: offset);
+                            }
+                            return newValue.copyWith(
+                                text: formatted, selection: selection);
+                          }),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ]),
+            )
           ],
-        ),
-      ),
+          button: Button(
+              width: 200,
+              text: 'start_chat'.i18n,
+              onPressed: () => handleButtonPress(model),
+              disabled: !shouldSubmit)),
     );
   }
 }
