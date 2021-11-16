@@ -65,14 +65,23 @@ msgstr "Desktop Version"
 msgid "settings"
 msgstr "Settings"
 
+msgid "general"
+msgstr "General"
+
 msgid "proxy_all"
 msgstr "Proxy everything"
+
+msgid "proxy_everything_is"
+msgstr "Proxy everything is %s"
 
 msgid "language"
 msgstr "Language"
 
 msgid "report_issue"
 msgstr "Report an issue"
+
+msgid "blocked_users"
+msgstr "Blocked Users"
 
 msgid "description_proxy_all_dialog"
 msgstr ""
