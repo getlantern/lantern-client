@@ -142,8 +142,8 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () => Share.share(me.chatNumber.shortNumber
-                    .formattedChatNumber), // TODO: Trigger native sharing
+                onTap: () =>
+                    Share.share(me.chatNumber.shortNumber.formattedChatNumber),
               ),
               /*
               * Contact List
