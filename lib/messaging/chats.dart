@@ -159,44 +159,41 @@ class _ChatsState extends State<Chats> {
                   itemCount: reshapedContactList.length,
                   physics: defaultScrollPhysics,
                   itemBuilder: (context, index) {
-                    var contactItem = reshapedContactList[index];
-                    return model.contact(context, contactItem,
-                        (context, contact, child) {
-                      var isUnaccepted = contact.isUnaccepted();
-                      return Column(
-                        children: [
-                          ListItemFactory.messagingItem(
-                            customBg: isUnaccepted ? customBg : null,
-                            header: unacceptedStartIndex == index
-                                ? 'new_requests'.i18n.fill([
-                                    '(${reshapedContactList.length - unacceptedStartIndex})'
-                                  ])
-                                : null,
-                            focusedMenu: !isUnaccepted
-                                ? renderLongTapMenu(
-                                    contact: contact, context: context)
-                                : null,
-                            leading: CustomAvatar(
-                                customColor: isUnaccepted ? grey5 : null,
-                                messengerId: contact.contactId.id,
-                                displayName: contact.displayNameOrFallback),
-                            content: contact.displayNameOrFallback,
-                            subtitle:
-                                '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
-                                    .i18n,
-                            onTap: () async => await context.pushRoute(
-                                Conversation(contactId: contact.contactId)),
-                            trailingArray: [
-                              HumanizedDate.fromMillis(
-                                contact.mostRecentMessageTs.toInt(),
-                                builder: (context, date) => CText(date,
-                                    style: tsBody2.copiedWith(color: grey5)),
-                              )
-                            ],
-                          ),
-                        ],
-                      );
-                    });
+                    var contact = reshapedContactList[index].value;
+                    var isUnaccepted = contact.isUnaccepted();
+                    return Column(
+                      children: [
+                        ListItemFactory.messagingItem(
+                          customBg: isUnaccepted ? customBg : null,
+                          header: unacceptedStartIndex == index
+                              ? 'new_requests'.i18n.fill([
+                                  '(${reshapedContactList.length - unacceptedStartIndex})'
+                                ])
+                              : null,
+                          focusedMenu: !isUnaccepted
+                              ? renderLongTapMenu(
+                                  contact: contact, context: context)
+                              : null,
+                          leading: CustomAvatar(
+                              customColor: isUnaccepted ? grey5 : null,
+                              messengerId: contact.contactId.id,
+                              displayName: contact.displayNameOrFallback),
+                          content: contact.displayNameOrFallback,
+                          subtitle:
+                              '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
+                                  .i18n,
+                          onTap: () async => await context.pushRoute(
+                              Conversation(contactId: contact.contactId)),
+                          trailingArray: [
+                            HumanizedDate.fromMillis(
+                              contact.mostRecentMessageTs.toInt(),
+                              builder: (context, date) => CText(date,
+                                  style: tsBody2.copiedWith(color: grey5)),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
                   },
                 ),
               );
