@@ -263,13 +263,13 @@ msgid "unblock_info_title"
 msgstr "Unblock %s ?"
 
 msgid "block_info_description"
-msgstr "Blocking this user will delete the message history, and prevent them from contacting you in the future. You can unblock users from the settings menu."
+msgstr "Blocking this user will delete the chat history, and prevent them from contacting you in the future.  You can unblock users from the settings menu."
 
 msgid "unblock_info_description"
 msgstr "Are you sure you want to unblock this contact?"
 
 msgid "block_info_checkbox"
-msgstr "I understand that this will delete all message history."
+msgstr "I understand that this will delete all chat history."
 
 msgid "unblock_info_checkbox"
 msgstr "I confirm I want to unblock this contact."
@@ -281,7 +281,7 @@ msgid "delete_contact"
 msgstr "Delete contact"
 
 msgid "delete_info_description"
-msgstr "Once deleted, you will need to scan add their contact information if you want to message them again."
+msgstr "Once deleted, you will need to add their contact information if you want to chat with them again."
 
 msgid "add_new_contact"
 msgstr "Add new contact:"
@@ -572,10 +572,10 @@ msgid "lantern_secure_chat"
 msgstr "Lantern Secure Chat"
 
 msgid "welcome_title"
-msgstr "Welcome to Lantern Secure Chat!"
+msgstr "Start Using Lantern Secure Chat!"
 
 msgid "welcome_text"
-msgstr "Lantern Secure Chat pairs the strongest encryption and security practices with best-in-class blocking resistant technology to ensure your chats are private and always accessible. To start using Lantern chat, click get started below!"
+msgstr "Lantern Secure Chat pairs the strongest encryption and security practices with best-in-class blocking resistant technology to ensure your chats are private and always accessible."
 
 msgid "get_started"
 msgstr "Get started"
@@ -721,14 +721,14 @@ msgstr "Sorry, there was an error retrieving the search results."
 msgid "search_contacts"
 msgstr "Contacts (%s)"
 
-msgid "search_messages"
-msgstr "Messages (%s)"
+msgid "search_chats"
+msgstr "Chats (%s)"
 
 msgid "search_in_contacts"
 msgstr "Search in Contacts"
 
-msgid "search_in_messages"
-msgstr "Search in Messages and Contacts"
+msgid "search_in_chats"
+msgstr "Search in Chats and Contacts"
 
 msgid "could_not_render_title"
 msgstr "Could not render file title"

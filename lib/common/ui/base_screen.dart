@@ -55,6 +55,7 @@ class BaseScreen extends StatelessWidget {
                       )
                     : title,
                 elevation: 1,
+                shadowColor: grey3,
                 foregroundColor: foregroundColor,
                 backgroundColor: backgroundColor,
                 iconTheme: IconThemeData(color: foregroundColor),

@@ -249,7 +249,7 @@ Future showConversationOptions({
                                                     end: 16)),
                                           ),
                                           onPressed: () async =>
-                                              context.router.pop(),
+                                              bottomContext.router.pop(),
                                           child: CText(
                                               'cancel'.i18n.toUpperCase(),
                                               style: tsButtonGrey),
@@ -269,7 +269,7 @@ Future showConversationOptions({
                                                   contact,
                                                   seconds[selectedPosition]);
                                             }
-                                            await context.router.pop();
+                                            await bottomContext.router.pop();
                                             await parentContext.router.pop();
                                           },
                                           child: CText('set'.i18n.toUpperCase(),
