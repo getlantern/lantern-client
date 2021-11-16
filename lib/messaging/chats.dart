@@ -50,7 +50,8 @@ class _ChatsState extends State<Chats> {
           .indexWhere((element) => element.value == firstUnaccepted.value);
       await scrollListController.scrollTo(
         index: scrollTo,
-        duration: const Duration(milliseconds: 500),
+        duration: defaultAnimationDuration,
+        curve: Curves.easeInCubic,
       );
     }
   }
