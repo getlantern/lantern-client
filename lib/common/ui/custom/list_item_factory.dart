@@ -43,12 +43,10 @@ class ListItemFactory extends StatelessWidget {
               ),
             ),
             child: factory.buildBase(
-              leading: icon == null
-                  ? null
-                  : Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 12.0),
-                      child: CAssetImage(path: icon, color: black),
-                    ),
+              leading: Padding(
+                padding: const EdgeInsetsDirectional.only(start: 12.0),
+                child: CAssetImage(path: icon, color: black),
+              ),
               content: content,
               trailingArray: trailingArray,
               onTap: onTap,
@@ -134,7 +132,7 @@ class ListItemFactory extends StatelessWidget {
     Function()? onTap,
     List<Widget>? trailingArray,
     double? endPadding,
-    bool? enableHighlighting,
+    bool enableHighlighting = false,
     bool? disableSplash,
     String? subtitle,
   }) =>
@@ -204,7 +202,7 @@ class ListItemFactory extends StatelessWidget {
   Widget buildContent({
     required dynamic content,
     String? subtitle,
-    bool? enableHighlighting = false,
+    bool enableHighlighting = false,
   }) {
     // we are passing something custom, return as widget
     if (content is Widget) {
@@ -213,25 +211,25 @@ class ListItemFactory extends StatelessWidget {
 
     // we are passing a String, look for subtitle and return as Column
     if (content is String) {
-      var title = content;
-      var firstLineStyle = tsSubtitle1;
-      if (subtitle == null) {
-        firstLineStyle = firstLineStyle.short;
-      }
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          enableHighlighting != null && enableHighlighting
-              ? TextHighlighter(text: title, style: firstLineStyle)
-              : CText(title.toString(), maxLines: 1, style: firstLineStyle),
-          if (subtitle != null)
-            enableHighlighting != null && enableHighlighting
-                ? TextHighlighter(text: subtitle, style: tsBody2)
-                : CText(subtitle,
-                    maxLines: 1, style: tsBody2.copiedWith(color: grey5)),
-        ],
+      final title = content;
+      final firstLineStyle = tsSubtitle1.short;
+      final secondLineStyle = tsBody1.copiedWith(color: grey5).short;
+      return SizedBox(
+        height: 39,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            enableHighlighting
+                ? TextHighlighter(text: title, style: firstLineStyle)
+                : CText(title.toString(), maxLines: 1, style: firstLineStyle),
+            if (subtitle != null && subtitle.isNotEmpty)
+              enableHighlighting
+                  ? TextHighlighter(text: subtitle, style: secondLineStyle)
+                  : CText(subtitle, maxLines: 1, style: secondLineStyle),
+          ],
+        ),
       );
     }
 

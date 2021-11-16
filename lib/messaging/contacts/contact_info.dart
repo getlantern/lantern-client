@@ -84,8 +84,8 @@ class _ContactInfoState extends State<ContactInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /*
-                * Avatar
-                */
+              * Avatar
+              */
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -93,67 +93,71 @@ class _ContactInfoState extends State<ContactInfo> {
                     padding:
                         const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                     child: CustomAvatar(
-                        messengerId: contact.contactId.id,
-                        displayName: contact.displayNameOrFallback,
-                        radius: 64),
+                      messengerId: contact.contactId.id,
+                      displayName: contact.displayNameOrFallback,
+                      radius: 64,
+                      textStyle: tsDisplayBlack,
+                    ),
                   ),
                 ],
               ),
               /*
-                * Display Name
-                */
-              ListItemFactory.settingsItem(
-                header: 'display_name'.i18n,
-                icon: ImagePaths.user,
-                content: !isEditing
-                    ? CText(displayNameController.value.text, style: tsBody1)
-                    : TextField(
-                        // we don't exactly need the UI and the functionality of CTextField but can change
-                        controller: displayNameController,
-                        style: tsBody1,
-                        focusNode: displayNameController.focusNode,
-                        decoration: InputDecoration(
-                            filled: isEditing,
-                            fillColor: isEditing ? grey1 : transparent,
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            )),
-                        keyboardType: TextInputType.text,
-                      ),
-                trailingArray: [
-                  CInkWell(
-                    onTap: () async {
-                      setState(() => isEditing = !isEditing);
-                      if (isEditing) {
-                        displayNameController.focusNode.requestFocus();
-                      }
-                      var notifyModel = displayNameController.text !=
-                          contact.displayNameOrFallback;
-                      if (notifyModel) {
-                        try {
-                          await model.addOrUpdateDirectContact(
-                              unsafeId: contact.contactId.id,
-                              displayName: displayNameController.text);
-                        } catch (e, s) {
-                          showErrorDialog(context,
-                              e: e, s: s, des: 'save_error'.i18n);
-                        } finally {
-                          showSnackbar(context: context, content: 'Saved'.i18n);
+              * Display Name
+              */
+              if (!contact.isMe)
+                ListItemFactory.settingsItem(
+                  header: 'display_name'.i18n,
+                  icon: ImagePaths.user,
+                  content: !isEditing
+                      ? CText(displayNameController.value.text, style: tsBody1)
+                      : TextField(
+                          // we don't exactly need the UI and the functionality of CTextField but can change
+                          controller: displayNameController,
+                          style: tsBody1,
+                          focusNode: displayNameController.focusNode,
+                          decoration: InputDecoration(
+                              filled: isEditing,
+                              fillColor: isEditing ? grey1 : transparent,
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              )),
+                          keyboardType: TextInputType.text,
+                        ),
+                  trailingArray: [
+                    CInkWell(
+                      onTap: () async {
+                        setState(() => isEditing = !isEditing);
+                        if (isEditing) {
+                          displayNameController.focusNode.requestFocus();
                         }
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: CText(
-                        isEditing
-                            ? 'save'.i18n.toUpperCase()
-                            : 'edit'.i18n.toUpperCase(),
-                        style: tsButtonPink,
+                        var notifyModel = displayNameController.text !=
+                            contact.displayNameOrFallback;
+                        if (notifyModel) {
+                          try {
+                            await model.addOrUpdateDirectContact(
+                                unsafeId: contact.contactId.id,
+                                displayName: displayNameController.text);
+                          } catch (e, s) {
+                            showErrorDialog(context,
+                                e: e, s: s, des: 'save_error'.i18n);
+                          } finally {
+                            showSnackbar(
+                                context: context, content: 'Saved'.i18n);
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        child: CText(
+                          isEditing
+                              ? 'save'.i18n.toUpperCase()
+                              : 'edit'.i18n.toUpperCase(),
+                          style: tsButtonPink,
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
+                    )
+                  ],
+                ),
               StatefulBuilder(
                 builder: (context, setState) {
                   return ListItemFactory.settingsItem(
@@ -162,17 +166,10 @@ class _ContactInfoState extends State<ContactInfo> {
                     //     doCopyText(context, contact.chatNumber.number, setState),
                     icon: ImagePaths.chatNumber,
                     content: isExpanded
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Padding(padding: EdgeInsets.all(8.0)),
-                              Expanded(
-                                child: FullChatNumberWidget(
-                                    context, contact.chatNumber),
-                              ),
-                              const Padding(padding: EdgeInsets.all(8.0)),
-                            ],
+                        ? Padding(
+                            padding: const EdgeInsetsDirectional.only(top: 6.0),
+                            child: FullChatNumberWidget(
+                                context, contact.chatNumber),
                           )
                         : CText(
                             contact.chatNumber.shortNumber.formattedChatNumber,

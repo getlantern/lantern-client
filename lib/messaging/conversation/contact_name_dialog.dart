@@ -35,6 +35,14 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
     super.dispose();
   }
 
+  void submit(BuildContext context, String value) async {
+    if (shouldSubmit) {
+      await widget.model.addOrUpdateDirectContact(
+          unsafeId: widget.contact.contactId.id, displayName: value);
+      await context.router.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -77,6 +85,9 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
                                 helperText: 'letter_and_numbers_only'.i18n,
                                 keyboardType: TextInputType.text,
                                 maxLines: null,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (value) =>
+                                    submit(context, value),
                               ),
                             ],
                           ),
@@ -87,14 +98,7 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
               alignment: Alignment.centerRight,
               child: InkWell(
                 focusColor: grey3,
-                onTap: () async {
-                  if (shouldSubmit) {
-                    await widget.model.addOrUpdateDirectContact(
-                        unsafeId: widget.contact.contactId.id,
-                        displayName: controller.text);
-                    await context.router.pop();
-                  }
-                },
+                onTap: () => submit(context, controller.text),
                 child: Container(
                   padding: const EdgeInsetsDirectional.all(8),
                   child: CText(

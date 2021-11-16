@@ -55,7 +55,10 @@ class _AccountManagementState extends State<AccountManagement>
                                 start: 16.0, end: 16.0),
                             child: CInkWell(
                               onTap: () async {
-                                copyText(context, me.chatNumber.shortNumber);
+                                copyText(
+                                    context,
+                                    me.chatNumber.shortNumber
+                                        .formattedChatNumber);
                                 setState(() => textCopied = true);
                                 await Future.delayed(defaultAnimationDuration,
                                     () => setState(() => textCopied = false));

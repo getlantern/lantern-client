@@ -13,6 +13,10 @@ extension VerificationExtension on Contact {
     return this.verificationLevel == VerificationLevel.UNACCEPTED;
   }
 
+  bool isAccepted() {
+    return !isUnaccepted();
+  }
+
   bool isUnverified() {
     return this.verificationLevel == VerificationLevel.UNVERIFIED;
   }
