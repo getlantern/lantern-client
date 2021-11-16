@@ -43,7 +43,12 @@ class BlockedUsers extends StatelessWidget {
                             ]))
                   ],
                 )
-              : const Text('no blocked contacts');
+              : Center(
+                  child: Padding(
+                  padding: const EdgeInsetsDirectional.all(24.0),
+                  child: CText('no_blocked_users'.i18n,
+                      style: tsSubtitle1, textAlign: TextAlign.center),
+                ));
         }));
   }
 }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
       title: 'settings'.i18n,
@@ -59,15 +61,19 @@ class Settings extends StatelessWidget {
             onTap: reportIssue,
           ),
           //* Blocked
-          ListItemFactory.settingsItem(
-            header: 'chat'.i18n,
-            icon: ImagePaths.block,
-            content: 'blocked_users'.i18n,
-            trailingArray: [
-              mirrorLTR(context: context, child: const ContinueArrow())
-            ],
-            onTap: () => context.pushRoute(BlockedUsers()),
-          ),
+          messagingModel.getOnBoardingStatus(
+              (context, hasBeenOnboarded, child) => hasBeenOnboarded
+                  ? ListItemFactory.settingsItem(
+                      header: 'chat'.i18n,
+                      icon: ImagePaths.block,
+                      content: 'blocked_users'.i18n,
+                      trailingArray: [
+                        mirrorLTR(
+                            context: context, child: const ContinueArrow())
+                      ],
+                      onTap: () => context.pushRoute(BlockedUsers()),
+                    )
+                  : const SizedBox()),
           //* Proxy
           sessionModel.proxyAll(
               (BuildContext context, bool proxyAll, Widget? child) =>
