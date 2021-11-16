@@ -152,9 +152,8 @@ class _NewChatState extends State<NewChat> {
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
                 var contacts = _contacts
                     .where((element) =>
-                        element.value.verificationLevel !=
-                            VerificationLevel.UNACCEPTED &&
-                        !element.value.blocked)
+                        element.value.isAccepted() &&
+                        element.value.isNotBlocked())
                     .toList();
 
                 // related https://github.com/getlantern/android-lantern/issues/299

@@ -327,9 +327,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                   /*
                    * Verify button
                    */
-                  if (!isPanelShowing &&
-                      widget.contact.verificationLevel !=
-                          VerificationLevel.VERIFIED)
+                  if (!isPanelShowing && widget.contact.isUnverified())
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -296,8 +296,7 @@ Future showConversationOptions({
                       await bottomContext.router.pop();
                       await bottomContext.pushRoute(const Introduce());
                     }),
-              if (!contact.isMe &&
-                  contact.verificationLevel != VerificationLevel.VERIFIED)
+              if (!contact.isMe && contact.isUnverified())
                 ListItemFactory.bottomItem(
                     icon: ImagePaths.verified_user,
                     content: 'contact_verification'.i18n,
