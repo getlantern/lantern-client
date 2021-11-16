@@ -38,6 +38,9 @@ msgstr "Server Location Info"
 msgid "OK"
 msgstr "OK"
 
+msgid "Done"
+msgstr "Done"
+
 msgid "recovery_key"
 msgstr "Recovery Key"
 
@@ -224,7 +227,7 @@ msgid "your_contact_info"
 msgstr "Your Contact Info"
 
 msgid "display_name"
-msgstr "Display Name:"
+msgstr "Display Name"
 
 msgid "edit"
 msgstr "Edit"
@@ -410,10 +413,16 @@ msgid "chat_number_not_found"
 msgstr "Unable to find chat number, please check the number and try again"
 
 msgid "unable_to_add_contact"
-msgstr "Unexpected error adding contact, please try again later"
+msgstr "Contact not found, check the number and try again"
 
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
+
+msgid "letter_and_numbers_only"
+msgstr "Letters and numbers only"
+
+msgid "name_your_contact"
+msgstr "Name your contact"
 
 msgid "chat_number"
 msgstr "Chat Number"
@@ -477,6 +486,9 @@ msgstr "Disappearing Messages"
 
 msgid "start_of_your_history"
 msgstr "This is the start of your message history with "
+
+msgid "banner_unaccepted"
+msgstr "%s is not on your contacts list. Would you like to accept the chat request?"
 
 msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
@@ -550,6 +562,9 @@ msgstr "Messages"
 msgid "chats"
 msgstr "Chats"
 
+msgid "new_requests"
+msgstr "New Requests %s"
+
 msgid "secure_chat"
 msgstr "Secure Chat"
 
@@ -605,10 +620,19 @@ msgid "recovery_key_account_explanation"
 msgstr "This is your recovery key, it is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system. Store this in a safe location."
 
 msgid "recovery_error"
-msgstr "Unable to recover your account"
+msgstr "Unable to recover your account."
+
+msgid "recovery_input_error"
+msgstr " Please make sure you are entering a valid recovery key"
+
+msgid "recovery_retrieval_error"
+msgstr "Something went wrong while retrieving your recovery key"
+
+msgid "recovery_success"
+msgstr "You have successfully recovered your Secure Chat Number"
 
 msgid "empty_chats_text"
-msgstr "Share your chat number or add a contact here!."
+msgstr "Share your chat number or add a contact here!"
 
 msgid "next"
 msgstr "Next"

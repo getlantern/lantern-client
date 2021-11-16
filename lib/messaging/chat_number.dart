@@ -1,6 +1,7 @@
 final shortChatNumberRegexOutside = RegExp(r'^(5*)([0-9]*)(5*)$');
 final shortChatNumberRegexInside = RegExp(r'([0-9]{3})([0-9]{1,2}$)?');
 final whitespace = RegExp(r'\s');
+final nonNumeric = RegExp(r'[^0-9]');
 final sep = ' ';
 
 extension ChatNumberFormat on String {
@@ -40,4 +41,14 @@ extension ChatNumberFormat on String {
   }
 
   String get withoutWhitespace => replaceAll(whitespace, '');
+
+  String get numbersOnly => replaceAll(nonNumeric, '');
+
+  String get spaced {
+    final spaced = splitMapJoin(RegExp('.{4}'),
+        onMatch: (m) => '${m[0]}', // (or no onMatch at all)
+        onNonMatch: (n) => ' '); // uses a non-breaking hyphen
+
+    return spaced.substring(1, spaced.length - 1);
+  }
 }

@@ -12,7 +12,6 @@ class CallAction extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return model.singleContact(
-      context,
       contact,
       (context, contact, child) => IconButton(
         visualDensity: VisualDensity.compact,

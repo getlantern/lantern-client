@@ -26,29 +26,30 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
   void handleButtonPress(MessagingModel model) async {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
-      try {
-        context.loaderOverlay.show(widget: spinner);
-        var chatNumber = ChatNumber.create();
-        if (controller.text.length >= 82) {
-          // this is a full chat number, use it directly
-          chatNumber.number = controller.text.withoutWhitespace;
-        } else {
-          try {
-            chatNumber = await model
-                .findChatNumberByShortNumber(controller.text.withoutWhitespace);
-          } catch (e) {
-            setState(() => controller.error = 'chat_number_not_found'.i18n);
-          }
-        }
+      var chatNumber = ChatNumber.create();
+      if (controller.text.length >= 82) {
+        // this is a full chat number, use it directly
+        chatNumber.number = controller.text.numbersOnly;
+      } else {
         try {
-          final contact =
-              await model.addOrUpdateDirectContact(chatNumber: chatNumber);
-          Navigator.pop(context, contact);
+          context.loaderOverlay.show(widget: spinner);
+          chatNumber = await model
+              .findChatNumberByShortNumber(controller.text.withoutWhitespace);
         } catch (e) {
-          setState(() => controller.error = 'unable_to_add_contact'.i18n);
+          setState(() => controller.error = 'chat_number_not_found'.i18n);
+          return;
+        } finally {
+          context.loaderOverlay.hide();
         }
-      } finally {
-        context.loaderOverlay.hide();
+      }
+      try {
+        final contact =
+            await model.addOrUpdateDirectContact(chatNumber: chatNumber);
+        await context.router.replace(Conversation(
+            contactId: contact.contactId, showContactEditingDialog: true));
+      } catch (e) {
+        setState(() => controller.error = 'unable_to_add_contact'.i18n);
+        return;
       }
     }
   }
@@ -65,8 +66,8 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
           children: [
             Expanded(
               child: Form(
-                onChanged: () =>
-                    setState(() => shouldSubmit = controller.text.length >= 12),
+                onChanged: () => setState(() =>
+                    shouldSubmit = controller.text.numbersOnly.length >= 12),
                 key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -79,11 +80,11 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
                             CTextField(
                               controller: controller,
                               autovalidateMode: AutovalidateMode.disabled,
-                              label: 'chat_number'.i18n,
-                              prefixIcon:
-                                  const CAssetImage(path: ImagePaths.people),
+                              label: 'secure_chat_number'.i18n,
+                              prefixIcon: const CAssetImage(
+                                  path: ImagePaths.chatNumber),
                               hintText: 'chat_number_type'.i18n,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               maxLines: null,
                               inputFormatters: [
                                 TextInputFormatter.withFunction(

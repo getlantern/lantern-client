@@ -30,6 +30,7 @@ class MessagingModel extends Model {
       }
     });
   }
+
   /*
    * Lifecycle
    */
@@ -42,7 +43,7 @@ class MessagingModel extends Model {
   }
 
   /*
-  * CONTACTS 
+  * CONTACTS
   */
 
   Future<ChatNumber> findChatNumberByShortNumber(String shortNumber) {
@@ -172,8 +173,7 @@ class MessagingModel extends Model {
         defaultValue: contact.value, builder: builder);
   }
 
-  Widget singleContact(BuildContext context, Contact contact,
-      ValueWidgetBuilder<Contact> builder) {
+  Widget singleContact(Contact contact, ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder(
         '/contacts/${_contactPathSegment(contact.contactId)}',
         builder: builder, deserialize: (Uint8List serialized) {
@@ -184,8 +184,8 @@ class MessagingModel extends Model {
   /*
   Matches a ContactId to a direct or group Contact
   */
-  Widget singleContactById(BuildContext context, ContactId contactId,
-      ValueWidgetBuilder<Contact> builder) {
+  Widget singleContactById(
+      ContactId contactId, ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder(
         '/contacts/${_contactPathSegment(contactId)}',
         builder: builder, deserialize: (Uint8List serialized) {
@@ -240,6 +240,13 @@ class MessagingModel extends Model {
     });
   }
 
+  Future<void> recover(String recoveryCode) async => methodChannel
+      .invokeMethod('recover', <String, dynamic>{'recoveryCode': recoveryCode});
+
+  Future<String> getRecoveryCode() => methodChannel
+      .invokeMethod('getRecoveryCode')
+      .then((value) => value as String);
+
   String _contactPathSegment(ContactId contactId) {
     return contactId.type == ContactType.DIRECT
         ? 'd/${contactId.id}'
@@ -249,7 +256,7 @@ class MessagingModel extends Model {
   String _directContactPath(String contactId) => '/contacts/d/$contactId';
 
   /*
-  * MESSAGES 
+  * MESSAGES
   */
 
   Future<void> sendToDirectContact(
@@ -298,7 +305,7 @@ class MessagingModel extends Model {
   }
 
   /*
-  * ATTACHMENTS 
+  * ATTACHMENTS
   */
 
   Future<bool> startRecordingVoiceMemo() async {
@@ -357,7 +364,7 @@ class MessagingModel extends Model {
   }
 
   /*
-  * SEARCH 
+  * SEARCH
   */
 
   Future<List<SearchResult<Contact>>> searchContacts(
@@ -427,5 +434,16 @@ class MessagingModel extends Model {
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/copiedRecoveryStatus',
         defaultValue: false, builder: builder);
+  }
+
+  Future<void> saveNotificationsTS<T>() async {
+    return methodChannel.invokeMethod('saveNotificationsTS');
+  }
+
+  Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>(
+        '/requestNotificationLastDismissed',
+        defaultValue: 0,
+        builder: builder);
   }
 }

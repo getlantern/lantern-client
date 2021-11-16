@@ -7,14 +7,16 @@ import 'package:lantern/messaging/messaging.dart';
 
 Color transparent = Colors.transparent;
 
-Color blue5 = HexColor('#006163');
+Color blue1 = HexColor('#EFFDFF');
+Color blue3 = HexColor('#00BCD4');
 Color blue4 = HexColor('#007A7C');
-Color pink4 = HexColor('#DB0A5B');
+Color blue5 = HexColor('#006163');
+
+Color yellow3 = HexColor('#FFE600');
 Color yellow4 = HexColor('#FFC107');
 
-Color blue3 = HexColor('#00BCD4');
 Color pink3 = HexColor('#FF4081');
-Color yellow3 = HexColor('#FFE600');
+Color pink4 = HexColor('#DB0A5B');
 
 // Grey scale
 Color white = HexColor('#FFFFFF');

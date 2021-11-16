@@ -7,3 +7,21 @@ extension ContactExtension on List<PathAndValue<Contact>> {
         .compareTo(b.value.displayNameOrFallback.toLowerCase()));
   }
 }
+
+extension VerificationExtension on Contact {
+  bool isUnaccepted() {
+    return this.verificationLevel == VerificationLevel.UNACCEPTED;
+  }
+
+  bool isAccepted() {
+    return !isUnaccepted();
+  }
+
+  bool isUnverified() {
+    return this.verificationLevel == VerificationLevel.UNVERIFIED;
+  }
+
+  bool isVerified() {
+    return this.verificationLevel == VerificationLevel.VERIFIED;
+  }
+}

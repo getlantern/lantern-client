@@ -15,3 +15,28 @@ Widget mirrorLTR({required BuildContext context, required Widget child}) =>
         alignment: Alignment.center,
         transform: Matrix4.rotationY(isLTR(context) ? 0 : pi),
         child: child);
+
+bool shouldScroll({
+  required BuildContext context,
+  required int numElements,
+  required double elHeight,
+}) {
+  var height = MediaQuery.of(context).size.height;
+  var padding = MediaQuery.of(context).padding;
+  var safeHeight = height - padding.top - padding.bottom;
+  var topBarHeight = elHeight;
+
+  // TODO: needs to be tested
+  return safeHeight - topBarHeight < numElements * elHeight;
+}
+
+double calculateStickerHeight(BuildContext context, int messageCount) {
+  final conversationInnerHeight = MediaQuery.of(context).size.height -
+      100.0 -
+      100.0; // rough approximation for inner height - top bar height - message bar height
+  final messageHeight =
+      60.0; // rough approximation of how much space a message takes up, including paddings
+  final minStickerHeight = 353.0;
+  return max(minStickerHeight,
+      conversationInnerHeight - ((messageCount - 1) * messageHeight));
+}

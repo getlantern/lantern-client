@@ -11,7 +11,7 @@ class PinField extends StatelessWidget {
   PinField({
     required this.length,
     required this.controller,
-    this.keyboardType = TextInputType.number,
+    this.keyboardType = TextInputType.phone,
     this.onDone,
   });
 

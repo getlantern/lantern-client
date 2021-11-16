@@ -22,20 +22,25 @@ class MessagingEmojiPicker extends StatelessWidget {
       height: height,
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        return ep.EmojiPicker(
-          key: key,
-          onBackspacePressed: onBackspacePressed,
-          onEmojiSelected: onEmojiSelected,
-          config: ep.Config(
-            initCategory: ep.Category.SMILEYS,
-            columns: constraints.maxWidth ~/ 40.0,
-            iconColor: grey5,
-            iconColorSelected: black,
-            noRecentsStyle: TextStyle(fontSize: 15, color: black),
-            progressIndicatorColor: black,
-            noRecentsText: emptySuggestions,
-            bgColor: white,
-            indicatorColor: grey5,
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
+          child: ep.EmojiPicker(
+            key: key,
+            onBackspacePressed: onBackspacePressed,
+            onEmojiSelected: onEmojiSelected,
+            config: ep.Config(
+              initCategory: ep.Category.SMILEYS,
+              columns: constraints.maxWidth ~/ 40.0,
+              iconColor: grey5,
+              iconColorSelected: black,
+              noRecentsStyle: TextStyle(fontSize: 15, color: black),
+              progressIndicatorColor: black,
+              noRecentsText: emptySuggestions,
+              bgColor: white,
+              indicatorColor: grey5,
+              horizontalSpacing: 8,
+              verticalSpacing: 8,
+            ),
           ),
         );
       }),

@@ -156,6 +156,8 @@ class MessagingModel constructor(
             "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
             "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
             "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "recover" -> messaging.recover(recoveryCode = call.argument<String>("recoveryCode")!!)
+            "getRecoveryCode" -> messaging.recoveryCode
             /*
             * Messages
             */
@@ -278,6 +280,12 @@ class MessagingModel constructor(
             "markCopiedRecoveryKey" -> {
                 db.mutate { tx ->
                     tx.put("/copiedRecoveryStatus", true)
+                }
+            }
+            "saveNotificationsTS" -> {
+                val ts = System.currentTimeMillis()
+                db.mutate { tx ->
+                    tx.put("/requestNotificationLastDismissed", ts)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
