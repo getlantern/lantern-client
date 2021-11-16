@@ -213,7 +213,7 @@ List<PathAndValue<Contact>> reshapeContactList(
   // Contacts with message timestamps which are not blocked
   var _activeConversations = contacts
       .where((contact) =>
-          contact.value.mostRecentMessageTs > 0 && !contact.value.blocked)
+          contact.value.mostRecentMessageTs > 0 && contact.value.isNotBlocked())
       .toList();
   // Newest -> older
   _activeConversations.sort((a, b) {
