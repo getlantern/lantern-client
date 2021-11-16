@@ -51,7 +51,7 @@ class _ChatsState extends State<Chats> {
       await scrollListController.scrollTo(
         index: scrollTo,
         duration: defaultAnimationDuration,
-        curve: Curves.easeInCubic,
+        curve: defaultCurves,
       );
     }
   }
