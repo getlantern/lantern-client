@@ -284,22 +284,43 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                                     padding:
                                                         const EdgeInsetsDirectional
                                                                 .only(
-                                                            start: 10.0,
-                                                            end: 10.0),
-                                                    child: CText(
-                                                        entry.value['fragment']
-                                                            .toString(),
-                                                        style: entry.value[
-                                                                'isConfirmed']
-                                                            ? tsHeading1.copiedWith(
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .lineThrough,
-                                                                color: grey4)
-                                                            : tsHeading1
-                                                                .copiedWith(
+                                                            start: 5.0,
+                                                            end: 10.0,
+                                                            top: 5.0,
+                                                            bottom: 5.0),
+                                                    child: Stack(
+                                                      children: [
+                                                        CText(
+                                                            (entry.key + 1)
+                                                                .toString(),
+                                                            style: entry.value[
+                                                                    'isConfirmed']
+                                                                ? tsOverlineShort
+                                                                    .copiedWith(
+                                                                        color:
+                                                                            grey4)
+                                                                : tsOverlineShort
+                                                                    .copiedWith(
+                                                                        color:
+                                                                            white)),
+                                                        CText(
+                                                            entry.value[
+                                                                    'fragment']
+                                                                .toString(),
+                                                            style: entry.value[
+                                                                    'isConfirmed']
+                                                                ? tsHeading1.copiedWith(
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .lineThrough,
                                                                     color:
-                                                                        white)),
+                                                                        grey4)
+                                                                : tsHeading1
+                                                                    .copiedWith(
+                                                                        color:
+                                                                            white))
+                                                      ],
+                                                    ),
                                                   ),
                                                 ))
                                       ],
