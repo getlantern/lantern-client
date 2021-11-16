@@ -196,7 +196,7 @@ class _ContactInfoState extends State<ContactInfo> {
                 ListItemFactory.settingsItem(
                     header: 'more_options'.i18n,
                     content: CText(
-                      contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
+                      'block_user'.i18n,
                       style: tsSubtitle1Short,
                     ),
                     trailingArray: [
@@ -207,9 +207,7 @@ class _ContactInfoState extends State<ContactInfo> {
                           model,
                         ),
                         child: CText(
-                          contact.blocked
-                              ? 'unblock'.i18n.toUpperCase()
-                              : 'block'.i18n.toUpperCase(),
+                          'block'.i18n.toUpperCase(),
                           style: tsButtonPink,
                         ),
                       )
