@@ -227,10 +227,11 @@ class _AccountManagementState extends State<AccountManagement>
                                   top: BorderSide.none,
                                   left: BorderSide.none,
                                   right: BorderSide.none,
-                                  bottom: BorderSide(width: 2.0, color: pink4)),
+                                  bottom: BorderSide(width: 3.0, color: pink4)),
                             ),
-                            labelColor: pink4,
                             labelStyle: tsSubtitle2,
+                            labelColor: pink4,
+                            unselectedLabelStyle: tsBody1,
                             unselectedLabelColor: grey5,
                             tabs: [
                               Tab(
