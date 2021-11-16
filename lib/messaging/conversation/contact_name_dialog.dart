@@ -35,7 +35,7 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
     super.dispose();
   }
 
-  void submit(String value) async {
+  void submit(BuildContext context, String value) async {
     if (shouldSubmit) {
       await widget.model.addOrUpdateDirectContact(
           unsafeId: widget.contact.contactId.id, displayName: value);
@@ -86,7 +86,8 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
                                 keyboardType: TextInputType.text,
                                 maxLines: null,
                                 textInputAction: TextInputAction.done,
-                                onFieldSubmitted: submit,
+                                onFieldSubmitted: (value) =>
+                                    submit(context, value),
                               ),
                             ],
                           ),
@@ -97,7 +98,7 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
               alignment: Alignment.centerRight,
               child: InkWell(
                 focusColor: grey3,
-                onTap: () => submit(controller.text),
+                onTap: () => submit(context, controller.text),
                 child: Container(
                   padding: const EdgeInsetsDirectional.all(8),
                   child: CText(

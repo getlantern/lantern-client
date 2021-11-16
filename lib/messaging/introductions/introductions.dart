@@ -32,7 +32,6 @@ class Introductions extends StatelessWidget {
                     // match the <ContactId> to the <Contact> of the user who made the introduction
                     return Container(
                       child: model.singleContactById(
-                          context,
                           introductorContactId,
                           (context, introductor, child) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,8 +56,7 @@ class Introductions extends StatelessWidget {
                                                         .introduction.status ==
                                                     IntroductionDetails_IntroductionStatus
                                                         .PENDING)
-                                                ? ListItemFactory
-                                                    .messagingItem(
+                                                ? ListItemFactory.messagingItem(
                                                     content: value.introduction
                                                         .displayNameOrFallback,
                                                     leading: CBadge(

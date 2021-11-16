@@ -212,7 +212,7 @@ class SuggestionBuilder extends StatelessWidget {
             );
           }
           if (suggestion is SearchResult<StoredMessage>) {
-            return model!.singleContactById(context, suggestion.value.contactId,
+            return model!.singleContactById(suggestion.value.contactId,
                 (context, contact, child) {
               return model!.contactMessages(contact, builder: (context,
                   Iterable<PathAndValue<StoredMessage>> messageRecords,
