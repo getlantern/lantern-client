@@ -1,8 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/common/ui/dimens.dart';
-import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
+import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
 import 'package:lantern/messaging/conversation/unaccepted_contact_sticker.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -88,6 +88,10 @@ class ConversationState extends State<Conversation>
   }
 
   void updateKeyboardHeight() {
+    if (keyboardMode != KeyboardMode.native) {
+      return;
+    }
+
     var currentKeyboardHeight = max(
         EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
                 WidgetsBinding.instance!.window.devicePixelRatio)
@@ -433,77 +437,66 @@ class ConversationState extends State<Conversation>
           padding: EdgeInsetsDirectional.only(
               bottom:
                   keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0),
-          child: Stack(children: [
-            Column(
-              children: [
-                Flexible(
-                  child: dismissKeyboardsOnTap(
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(start: 16, end: 16),
-                      child: Stack(
-                        children: [
-                          buildList(contact),
-                          if (contact.isUnaccepted())
-                            UnacceptedContactSticker(
-                                messageCount: messageCount,
-                                contact: contact,
-                                model: model),
-                        ],
-                      ),
-                    ),
+          child: Column(
+            children: [
+              if (contact.isUnaccepted())
+                UnacceptedContactSticker(
+                    messageCount: messageCount, contact: contact, model: model),
+              Flexible(
+                child: dismissKeyboardsOnTap(
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 16, end: 16),
+                    child: buildList(contact),
                   ),
                 ),
-                // * Reply container
-                if (quotedMessage != null)
-                  Reply(
-                    model: model,
-                    contact: contact,
-                    message: quotedMessage!,
-                    onCancelReply: () => setState(() => quotedMessage = null),
-                  ),
-                Divider(height: 1.0, color: grey3),
-                Container(
-                  color: isRecording ? grey2 : white,
-                  width: MediaQuery.of(context).size.width,
-                  height: messageBarHeight,
-                  child: buildMessageBar(),
+              ),
+              // * Reply container
+              if (quotedMessage != null)
+                Reply(
+                  model: model,
+                  contact: contact,
+                  message: quotedMessage!,
+                  onCancelReply: () => setState(() => quotedMessage = null),
                 ),
-                // * Emoji keyboard
-                Offstage(
-                  offstage: keyboardMode != KeyboardMode.emoji &&
-                      keyboardMode != KeyboardMode.emojiReaction,
-                  child: MessagingEmojiPicker(
-                    height: keyboardHeight,
-                    emptySuggestions: 'no_recents'.i18n,
-                    onBackspacePressed: () {
+              Divider(height: 1.0, color: grey3),
+              Container(
+                color: isRecording ? grey2 : white,
+                width: MediaQuery.of(context).size.width,
+                height: messageBarHeight,
+                child: buildMessageBar(),
+              ),
+              // * Emoji keyboard
+              Offstage(
+                offstage: keyboardMode != KeyboardMode.emoji &&
+                    keyboardMode != KeyboardMode.emojiReaction,
+                child: MessagingEmojiPicker(
+                  height: keyboardHeight,
+                  emptySuggestions: 'no_recents'.i18n,
+                  onBackspacePressed: () {
+                    newMessage
+                      ..text = newMessage.text.characters.skipLast(1).toString()
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: newMessage.text.length));
+                  },
+                  onEmojiSelected: (category, emoji) async {
+                    if (mounted && reactingWithEmoji && storedMessage != null) {
+                      await model.react(storedMessage!.value, emoji.emoji);
+                      reactingWithEmoji = false;
+                      storedMessage = null;
+                      dismissAllKeyboards();
+                    } else {
+                      setState(() => isSendIconVisible = true);
                       newMessage
-                        ..text =
-                            newMessage.text.characters.skipLast(1).toString()
+                        ..text += emoji.emoji
                         ..selection = TextSelection.fromPosition(
                             TextPosition(offset: newMessage.text.length));
-                    },
-                    onEmojiSelected: (category, emoji) async {
-                      if (mounted &&
-                          reactingWithEmoji &&
-                          storedMessage != null) {
-                        await model.react(storedMessage!.value, emoji.emoji);
-                        reactingWithEmoji = false;
-                        storedMessage = null;
-                        dismissAllKeyboards();
-                      } else {
-                        setState(() => isSendIconVisible = true);
-                        newMessage
-                          ..text += emoji.emoji
-                          ..selection = TextSelection.fromPosition(
-                              TextPosition(offset: newMessage.text.length));
-                      }
-                    },
-                  ),
+                    }
+                  },
                 ),
-              ],
-            ),
-          ]),
+              ),
+            ],
+          ),
         ),
       );
     });
