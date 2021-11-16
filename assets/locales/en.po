@@ -275,7 +275,7 @@ msgid "block_info_description"
 msgstr "Blocking this user will delete the chat history, and prevent them from contacting you in the future.  You can unblock users from the settings menu."
 
 msgid "unblock_info_description"
-msgstr "Are you sure you want to unblock this contact?"
+msgstr "%s will now be able to message you.  They will not be notified that you unblocked them."
 
 msgid "block_info_checkbox"
 msgstr "I understand that this will delete all chat history."

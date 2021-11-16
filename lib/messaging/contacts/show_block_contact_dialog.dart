@@ -18,15 +18,16 @@ void showBlockContactDialog(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CAssetImage(path: ImagePaths.block),
-                    ),
+                    if (!contact.blocked)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CAssetImage(path: ImagePaths.block),
+                      ),
                     CText(
                         contact.blocked
                             ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
                             : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                        style: tsBody3),
+                        style: tsSubtitle1),
                   ],
                 ),
                 content: SingleChildScrollView(
@@ -36,9 +37,11 @@ void showBlockContactDialog(
                         padding: const EdgeInsetsDirectional.all(24),
                         child: CText(
                             contact.blocked
-                                ? 'unblock_info_description'.i18n
+                                ? 'unblock_info_description'
+                                    .i18n
+                                    .fill([contact.displayNameOrFallback])
                                 : 'block_info_description'.i18n,
-                            style: tsBody1),
+                            style: tsBody1.copiedWith(color: grey5)),
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
