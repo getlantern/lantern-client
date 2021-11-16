@@ -1,0 +1,63 @@
+import 'package:lantern/common/common.dart';
+import '../messaging.dart';
+
+void showDeleteContactDialog(
+  BuildContext context,
+  Contact contact,
+  MessagingModel model,
+) async {
+  await showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CAssetImage(path: ImagePaths.delete),
+            ),
+            CText('${'delete_contact'.i18n.toUpperCase()}?', style: tsBody3),
+          ],
+        ),
+        content: CText('delete_info_description'.i18n, style: tsBody1),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () async => context.router.pop(),
+                child: CText('cancel'.i18n.toUpperCase(), style: tsButtonGrey),
+              ),
+              const SizedBox(width: 15),
+              TextButton(
+                onPressed: () async {
+                  context.loaderOverlay.show(widget: spinner);
+                  try {
+                    await model.deleteDirectContact(contact.contactId.id);
+                  } catch (e, s) {
+                    showErrorDialog(context,
+                        e: e, s: s, des: 'error_delete_contact'.i18n);
+                  } finally {
+                    showSnackbar(
+                        context: context,
+                        content: 'contact_was_deleted'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]));
+                    context.loaderOverlay.hide();
+                    context.router.popUntilRoot();
+                  }
+                },
+                child: CText('delete_contact'.i18n.toUpperCase(),
+                    style: tsButtonPink),
+              )
+            ],
+          )
+        ],
+      );
+    },
+  );
+}

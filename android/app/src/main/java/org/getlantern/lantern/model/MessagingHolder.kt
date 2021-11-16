@@ -414,7 +414,10 @@ class MessagingHolder {
 
     private fun displayName(context: Context, contact: Model.Contact): String =
         if (contact.displayName.isEmpty())
-            context.getString(R.string.unnamed_contact)
+            if (contact.chatNumber.shortNumber.isNotEmpty()) 
+                contact.chatNumber.shortNumber
+            else 
+                context.getString(R.string.unnamed_contact)
         else
             contact.displayName
 

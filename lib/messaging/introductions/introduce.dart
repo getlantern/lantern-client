@@ -25,7 +25,13 @@ class _IntroduceState extends State<Introduce> {
             .fill([selectedContactIds.length]),
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts.toList().sortedAlphabetically();
+          var sortedContacts = _contacts
+              .where((element) =>
+                  element.value.verificationLevel !=
+                      VerificationLevel.UNACCEPTED &&
+                  !element.value.blocked)
+              .toList()
+              .sortedAlphabetically();
 
           var groupedSortedContacts = sortedContacts
               .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
@@ -42,13 +48,24 @@ class _IntroduceState extends State<Introduce> {
                   ),
                 Expanded(
                     child: (sortedContacts.length <= 1)
-                        ? Container(
-                            alignment: AlignmentDirectional.center,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0, vertical: 16.0),
-                            child: CText('need_two_contacts_to_introduce'.i18n,
-                                style: tsBody1),
-                          )
+                        ? Center(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CAssetImage(
+                                path: ImagePaths.empty_search,
+                                size: 130,
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.all(24.0),
+                                child: CText(
+                                    'need_two_contacts_to_introduce'.i18n,
+                                    style: tsSubtitle1,
+                                    textAlign: TextAlign.center),
+                              ),
+                            ],
+                          ))
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,18 +1,20 @@
 import 'messaging.dart';
 
 class CustomAvatar extends StatelessWidget {
-  const CustomAvatar(
-      {Key? key,
-      required this.messengerId,
-      required this.displayName,
-      this.customColor,
-      this.radius})
-      : super(key: key);
+  const CustomAvatar({
+    Key? key,
+    required this.messengerId,
+    required this.displayName,
+    this.customColor,
+    this.radius = 16,
+    this.textStyle,
+  }) : super(key: key);
 
   final String messengerId;
   final String? displayName;
   final Color? customColor;
-  final double? radius;
+  final double radius;
+  final CTextStyle? textStyle;
 
   // For some reason, the range of hashCodes seems to fall within
   // 0 to Max Int 32 / 2. It would be nice to have some more insight into what is
@@ -25,17 +27,9 @@ class CustomAvatar extends StatelessWidget {
     return CircleAvatar(
       radius: radius,
       backgroundColor: customColor ?? getAvatarColor(sha1Hue(messengerId)),
-      child: Transform.translate(
-        offset: Offset(0.0, radius != null ? 10.0 : 0.0),
-        child: CText(displayName.toString().getInitials().toUpperCase(),
-            style: tsBody2
-                .copiedWith(
-                  color: white,
-                  fontSize: radius != null
-                      ? tsDisplay(white).fontSize
-                      : tsBody2.fontSize,
-                )
-                .short),
+      child: CText(
+        displayName.toString().getInitials().toUpperCase(),
+        style: (textStyle ?? tsBody2).copiedWith(color: white).short,
       ),
     );
   }
@@ -53,6 +47,8 @@ extension StringExtensions on String {
         // display name contained spaces and was broken up
         ? '${parts.first.characters.first.toString()}${parts.last.characters.first.toString()}'
         // display name is a single string
-        : parts.first.substring(0, parts.first.length > 1 ? 2 : 1);
+        : parts.first.isNotEmpty
+            ? parts.first.substring(0, parts.first.length > 1 ? 2 : 1)
+            : '';
   }
 }

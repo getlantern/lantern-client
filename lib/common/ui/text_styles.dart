@@ -13,6 +13,8 @@ CTextStyle tsDisplay(color) => CTextStyle(
       color: color,
     );
 
+CTextStyle tsDisplayBlack = tsDisplay(black);
+
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
@@ -70,6 +72,8 @@ CTextStyle tsButtonGrey = tsButton.copiedWith(color: grey5);
 CTextStyle tsButtonPink = tsButton.copiedWith(color: pink4);
 
 CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
+
+CTextStyle tsButtonBlue = tsButton.copiedWith(color: blue4);
 
 CTextStyle getTextStyle(bool secondary) {
   if (secondary) return tsButtonPink;

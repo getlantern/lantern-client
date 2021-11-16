@@ -104,7 +104,7 @@ abstract class Model {
       BuildContext context, String path,
       {required T defaultValue, required ValueWidgetBuilder<T> builder}) {
     return ListChildBuilder(
-        ListChildValueNotifier(context, path, defaultValue), builder);
+        listChildValueNotifier(context, path, defaultValue), builder);
   }
 }
 

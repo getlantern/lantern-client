@@ -17,7 +17,9 @@ class CTextField extends StatefulWidget {
   late final int? minLines;
   late final int? maxLines;
   late final AutovalidateMode? autovalidateMode;
-  List<TextInputFormatter>? inputFormatters;
+  late final List<TextInputFormatter>? inputFormatters;
+  late final TextInputAction? textInputAction;
+  late final void Function(String value)? onFieldSubmitted;
 
   CTextField({
     required this.controller,
@@ -33,6 +35,8 @@ class CTextField extends StatefulWidget {
     this.maxLines,
     this.autovalidateMode,
     this.inputFormatters,
+    this.textInputAction,
+    this.onFieldSubmitted,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -81,49 +85,47 @@ class _CTextFieldState extends State<CTextField> {
               });
               return result;
             },
+            onChanged: (value) {
+              fieldKey.currentState!.validate();
+            },
+            onFieldSubmitted: widget.onFieldSubmitted,
+            textInputAction: widget.textInputAction,
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
-                isDense: true,
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                // we handle floating labels using our custom method below
-                labelText: widget.label,
-                helperText: widget.helperText,
-                hintText: widget.hintText,
-                helperMaxLines: 2,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 2,
-                    color: blue4,
-                  ),
+              isDense: true,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              // we handle floating labels using our custom method below
+              labelText: widget.label,
+              helperText: widget.helperText,
+              hintText: widget.hintText,
+              helperMaxLines: 2,
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2,
+                  color: blue4,
                 ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 2,
-                    color: indicatorRed,
-                  ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2,
+                  color: indicatorRed,
                 ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 1,
-                    color: grey3,
-                  ),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1,
+                  color: grey3,
                 ),
-                prefixIcon:
-                    // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
-                    widget.prefixIcon != null
-                        ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
-                        : null,
-                suffixIcon: widget.suffixIcon != null
-                    ? Transform.scale(
-                        scale: 0.5,
-                        child: fieldKey.currentState?.mounted == true &&
-                                fieldKey.currentState?.hasError == true
-                            ? CAssetImage(
-                                path: ImagePaths.error, color: indicatorRed)
-                            : widget.suffixIcon)
-                    : null),
+              ),
+              prefixIcon:
+                  // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
+                  widget.prefixIcon != null
+                      ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
+                      : null,
+              suffixIcon: renderSuffix(),
+            ),
           ),
         ),
         Container(
@@ -145,6 +147,22 @@ class _CTextFieldState extends State<CTextField> {
         ),
       ],
     );
+  }
+
+  Widget? renderSuffix() {
+    final hasError = fieldKey.currentState?.mounted == true &&
+        fieldKey.currentState?.hasError == true;
+
+    final isEmpty = fieldKey.currentState?.mounted == true &&
+        fieldKey.currentState?.value == '';
+    if (isEmpty) return null;
+    return hasError
+        ? Transform.scale(
+            scale: 0.5,
+            child: CAssetImage(path: ImagePaths.error, color: indicatorRed))
+        : widget.suffixIcon != null
+            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
+            : null;
   }
 }
 

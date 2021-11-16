@@ -18,6 +18,11 @@ class _NewChatState extends State<NewChat> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void onContactAdded(dynamic contact) {
     if (contact != null) {
       setState(() {
@@ -64,15 +69,15 @@ class _NewChatState extends State<NewChat> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /*
-              * Share your Chat Number
+              * Add via Chat Number
               */
               ListItemFactory.messagingItem(
                 header: 'add_new_contact'.i18n,
                 leading: const CAssetImage(
-                  path: ImagePaths.share,
+                  path: ImagePaths.person_add_alt_1,
                 ),
-                content: CText('share_your_chat_number'.i18n,
-                    style: tsSubtitle1Short),
+                content:
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailingArray: [
                   mirrorLTR(
                     context: context,
@@ -81,7 +86,9 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () {}, // TODO: Trigger native sharing
+                onTap: () async => await context
+                    .pushRoute(const AddViaChatNumber())
+                    .then(onContactAdded),
               ),
               /*
               * Scan QR Code
@@ -119,14 +126,14 @@ class _NewChatState extends State<NewChat> {
                     .then(onContactAdded),
               ),
               /*
-              * Add via Chat Number
+              * Share your Chat Number
               */
               ListItemFactory.messagingItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.person_add_alt_1,
+                  path: ImagePaths.share,
                 ),
-                content:
-                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
+                content: CText('share_your_chat_number'.i18n,
+                    style: tsSubtitle1Short),
                 trailingArray: [
                   mirrorLTR(
                     context: context,
@@ -135,16 +142,20 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () async => await context
-                    .pushRoute(const AddViaChatNumber())
-                    .then(onContactAdded),
+                onTap: () =>
+                    Share.share(me.chatNumber.shortNumber.formattedChatNumber),
               ),
               /*
               * Contact List
               */
               Flexible(child: model.contacts(builder: (context,
                   Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-                var contacts = _contacts.toList();
+                var contacts = _contacts
+                    .where((element) =>
+                        element.value.verificationLevel !=
+                            VerificationLevel.UNACCEPTED &&
+                        !element.value.blocked)
+                    .toList();
 
                 // related https://github.com/getlantern/android-lantern/issues/299
                 var sortedContacts = contacts.sortedAlphabetically();

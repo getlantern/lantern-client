@@ -27,7 +27,10 @@ class SecureChatNumberMessaging extends StatelessWidget {
                           builder: (context, setState) =>
                               ListItemFactory.settingsItem(
                                 onTap: () async {
-                                  copyText(context, me.chatNumber.shortNumber);
+                                  copyText(
+                                      context,
+                                      me.chatNumber.shortNumber
+                                          .formattedChatNumber);
                                   setState(() => textCopied = true);
                                   await Future.delayed(defaultAnimationDuration,
                                       () => setState(() => textCopied = false));
@@ -44,7 +47,9 @@ class SecureChatNumberMessaging extends StatelessWidget {
                                   CInkWell(
                                     onTap: () async {
                                       copyText(
-                                          context, me.chatNumber.shortNumber);
+                                          context,
+                                          me.chatNumber.shortNumber
+                                              .formattedChatNumber);
                                       setState(() => textCopied = true);
                                       await Future.delayed(
                                           defaultAnimationDuration,

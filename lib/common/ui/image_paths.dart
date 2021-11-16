@@ -57,6 +57,8 @@ class ImagePaths {
   static const volume_up = 'assets/images/volume_up.svg';
   static const insert_drive_file = 'assets/images/insert_drive_file.svg';
   static const share = 'assets/images/share.svg';
+  static const placeholder = 'assets/images/placeholder.svg';
+  static const notifications = 'assets/images/notifications.svg';
   static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
 
   // Commonly used
@@ -83,10 +85,9 @@ class ImagePaths {
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
       'assets/images/sticker_figure_foreground.svg';
-  static const empty_search = 'assets/images/empty_search.svg';
-  static const placeholder = 'assets/images/placeholder.svg';
   static const empty_chats = 'assets/images/empty_chats.svg';
   static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
+  static const empty_search = 'assets/images/empty_search.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';
