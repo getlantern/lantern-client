@@ -65,40 +65,43 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
               onChanged: () => setState(() =>
                   shouldSubmit = controller.text.numbersOnly.length >= 12),
               key: _formKey,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.all(24.0),
-                  child: Wrap(
-                    children: [
-                      CTextField(
-                        controller: controller,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'secure_chat_number'.i18n,
-                        prefixIcon:
-                            const CAssetImage(path: ImagePaths.chatNumber),
-                        hintText: 'chat_number_type'.i18n,
-                        keyboardType: TextInputType.phone,
-                        maxLines: null,
-                        inputFormatters: [
-                          TextInputFormatter.withFunction((oldValue, newValue) {
-                            final original = newValue.text;
-                            final formatted = original.formattedChatNumber;
-                            var selection = newValue.selection;
-                            if (formatted != original) {
-                              final offset = formatted.characters.length;
-                              selection = selection.copyWith(
-                                  baseOffset: offset, extentOffset: offset);
-                            }
-                            return newValue.copyWith(
-                                text: formatted, selection: selection);
-                          }),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.all(24.0),
+                      child: Wrap(
+                        children: [
+                          CTextField(
+                            controller: controller,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            label: 'secure_chat_number'.i18n,
+                            prefixIcon:
+                                const CAssetImage(path: ImagePaths.chatNumber),
+                            hintText: 'chat_number_type'.i18n,
+                            keyboardType: TextInputType.phone,
+                            maxLines: null,
+                            inputFormatters: [
+                              TextInputFormatter.withFunction(
+                                  (oldValue, newValue) {
+                                final original = newValue.text;
+                                final formatted = original.formattedChatNumber;
+                                var selection = newValue.selection;
+                                if (formatted != original) {
+                                  final offset = formatted.characters.length;
+                                  selection = selection.copyWith(
+                                      baseOffset: offset, extentOffset: offset);
+                                }
+                                return newValue.copyWith(
+                                    text: formatted, selection: selection);
+                              }),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                )
-              ]),
+                    )
+                  ]),
             )
           ],
           button: Button(

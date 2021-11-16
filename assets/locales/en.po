@@ -446,7 +446,7 @@ msgid "introductions_title"
 msgstr "Accept Introduction to %s"
 
 msgid "introductions_info"
-msgstr "Both parties must accept the introduction to message each other. Introductions disappear after 7 days if no action is taken."
+msgstr "Both parties must accept the introduction to chat with each other. Introductions disappear after 7 days if no action is taken."
 
 msgid "introductions_reject_title"
 msgstr "Reject Introductions"

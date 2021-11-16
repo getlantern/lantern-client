@@ -269,8 +269,7 @@ Future showConversationOptions({
                                                   contact,
                                                   seconds[selectedPosition]);
                                             }
-                                            await bottomContext.router.pop();
-                                            await parentContext.router.pop();
+                                            await context.router.pop();
                                           },
                                           child: CText('set'.i18n.toUpperCase(),
                                               style: tsButtonPink),
