@@ -69,15 +69,15 @@ class _NewChatState extends State<NewChat> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /*
-              * Share your Chat Number
+              * Add via Chat Number
               */
               ListItemFactory.messagingItem(
                 header: 'add_new_contact'.i18n,
                 leading: const CAssetImage(
-                  path: ImagePaths.share,
+                  path: ImagePaths.person_add_alt_1,
                 ),
-                content: CText('share_your_chat_number'.i18n,
-                    style: tsSubtitle1Short),
+                content:
+                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
                 trailingArray: [
                   mirrorLTR(
                     context: context,
@@ -86,8 +86,9 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () => Share.share(me.chatNumber.shortNumber
-                    .formattedChatNumber), // TODO: Trigger native sharing
+                onTap: () async => await context
+                    .pushRoute(const AddViaChatNumber())
+                    .then(onContactAdded),
               ),
               /*
               * Scan QR Code
@@ -125,14 +126,14 @@ class _NewChatState extends State<NewChat> {
                     .then(onContactAdded),
               ),
               /*
-              * Add via Chat Number
+              * Share your Chat Number
               */
               ListItemFactory.messagingItem(
                 leading: const CAssetImage(
-                  path: ImagePaths.person_add_alt_1,
+                  path: ImagePaths.share,
                 ),
-                content:
-                    CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
+                content: CText('share_your_chat_number'.i18n,
+                    style: tsSubtitle1Short),
                 trailingArray: [
                   mirrorLTR(
                     context: context,
@@ -141,9 +142,8 @@ class _NewChatState extends State<NewChat> {
                     ),
                   )
                 ],
-                onTap: () async => await context
-                    .pushRoute(const AddViaChatNumber())
-                    .then(onContactAdded),
+                onTap: () =>
+                    Share.share(me.chatNumber.shortNumber.formattedChatNumber),
               ),
               /*
               * Contact List

@@ -10,7 +10,6 @@ class DisappearingTimerAction extends StatelessWidget {
     var model = context.watch<MessagingModel>();
 
     return model.singleContact(
-      context,
       contact,
       (context, contact, child) =>
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [

@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/common/ui/dimens.dart';
-import 'package:lantern/messaging/conversation/contact_name_dialog.dart';
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/conversation/unaccepted_contact_sticker.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -11,6 +11,7 @@ import 'audio/message_bar_preview_recording.dart';
 import 'audio/voice_recorder.dart';
 import 'call_action.dart';
 import 'contact_info_topbar.dart';
+import 'contact_name_dialog.dart';
 import 'conversation_sticker.dart';
 import 'date_marker_bubble.dart';
 import 'message_bubble.dart';
@@ -57,7 +58,6 @@ class ConversationState extends State<Conversation>
   final scrollController = ItemScrollController();
   var verifiedColor = black;
   var shouldShowVerificationAlert = true;
-  var hasSeenContactDialog = false;
 
   // ********************** Keyboard Handling ***************************/
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -88,6 +88,10 @@ class ConversationState extends State<Conversation>
   }
 
   void updateKeyboardHeight() {
+    if (keyboardMode != KeyboardMode.native) {
+      return;
+    }
+
     var currentKeyboardHeight = max(
         EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
                 WidgetsBinding.instance!.window.devicePixelRatio)
@@ -169,6 +173,24 @@ class ConversationState extends State<Conversation>
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
+
+    model = Provider.of<MessagingModel>(context, listen: false);
+    // * we came here after adding a contact via chat number, show contact name dialog
+    if (widget.showContactEditingDialog ?? false) {
+      model.getDirectContact(widget.contactId.id).then((contact) async {
+        // We use Future.delayed instead of addPostFrameCallback because
+        // addPostFrameCallback doesn't work all the time (for some unknown
+        // reason).
+        await Future.delayed(const Duration(milliseconds: 250));
+        await showDialog(
+            context: context,
+            builder: (childContext) => ContactNameDialog(
+                  context: context,
+                  model: model,
+                  contact: contact,
+                ));
+      });
+    }
   }
 
   @override
@@ -322,8 +344,6 @@ class ConversationState extends State<Conversation>
 
   @override
   Widget build(BuildContext context) {
-    model = context.watch<MessagingModel>();
-
     // update keyboard height values
     updateKeyboardHeight();
 
@@ -333,8 +353,7 @@ class ConversationState extends State<Conversation>
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(model.setCurrentConversationContact(widget.contactId.id))
         : unawaited(model.clearCurrentConversationContact());
-    return model.singleContactById(context, widget.contactId,
-        (context, contact, child) {
+    return model.singleContactById(widget.contactId, (context, contact, child) {
       // determine if we will show the verification warning badge
       var verificationReminderLastDismissed = contact
               .applicationData['verificationReminderLastDismissed']?.int_3
@@ -342,21 +361,6 @@ class ConversationState extends State<Conversation>
           0;
       final contactUnverified =
           contact.verificationLevel != VerificationLevel.VERIFIED;
-
-      // * we came here after adding a contact via chat number, show contact name dialog
-      // TODO: not very happy with this
-      if ((widget.showContactEditingDialog ?? false) && !hasSeenContactDialog) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) async {
-          setState(() => hasSeenContactDialog = true);
-          return showDialog(
-              context: context,
-              builder: (context) => ContactNameDialog(
-                    context: context,
-                    model: model,
-                    contact: contact,
-                  ));
-        });
-      }
 
       return BaseScreen(
         resizeToAvoidBottomInset: false,
@@ -433,77 +437,66 @@ class ConversationState extends State<Conversation>
           padding: EdgeInsetsDirectional.only(
               bottom:
                   keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0),
-          child: Stack(children: [
-            Column(
-              children: [
-                Flexible(
-                  child: dismissKeyboardsOnTap(
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(start: 16, end: 16),
-                      child: Stack(
-                        children: [
-                          buildList(contact),
-                          if (contact.isUnaccepted())
-                            UnacceptedContactSticker(
-                                messageCount: messageCount,
-                                contact: contact,
-                                model: model),
-                        ],
-                      ),
-                    ),
+          child: Column(
+            children: [
+              if (contact.isUnaccepted())
+                UnacceptedContactSticker(
+                    messageCount: messageCount, contact: contact, model: model),
+              Flexible(
+                child: dismissKeyboardsOnTap(
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 16, end: 16),
+                    child: buildList(contact),
                   ),
                 ),
-                // * Reply container
-                if (quotedMessage != null)
-                  Reply(
-                    model: model,
-                    contact: contact,
-                    message: quotedMessage!,
-                    onCancelReply: () => setState(() => quotedMessage = null),
-                  ),
-                Divider(height: 1.0, color: grey3),
-                Container(
-                  color: isRecording ? grey2 : white,
-                  width: MediaQuery.of(context).size.width,
-                  height: messageBarHeight,
-                  child: buildMessageBar(),
+              ),
+              // * Reply container
+              if (quotedMessage != null)
+                Reply(
+                  model: model,
+                  contact: contact,
+                  message: quotedMessage!,
+                  onCancelReply: () => setState(() => quotedMessage = null),
                 ),
-                // * Emoji keyboard
-                Offstage(
-                  offstage: keyboardMode != KeyboardMode.emoji &&
-                      keyboardMode != KeyboardMode.emojiReaction,
-                  child: MessagingEmojiPicker(
-                    height: keyboardHeight,
-                    emptySuggestions: 'no_recents'.i18n,
-                    onBackspacePressed: () {
+              Divider(height: 1.0, color: grey3),
+              Container(
+                color: isRecording ? grey2 : white,
+                width: MediaQuery.of(context).size.width,
+                height: messageBarHeight,
+                child: buildMessageBar(),
+              ),
+              // * Emoji keyboard
+              Offstage(
+                offstage: keyboardMode != KeyboardMode.emoji &&
+                    keyboardMode != KeyboardMode.emojiReaction,
+                child: MessagingEmojiPicker(
+                  height: keyboardHeight,
+                  emptySuggestions: 'no_recents'.i18n,
+                  onBackspacePressed: () {
+                    newMessage
+                      ..text = newMessage.text.characters.skipLast(1).toString()
+                      ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: newMessage.text.length));
+                  },
+                  onEmojiSelected: (category, emoji) async {
+                    if (mounted && reactingWithEmoji && storedMessage != null) {
+                      await model.react(storedMessage!.value, emoji.emoji);
+                      reactingWithEmoji = false;
+                      storedMessage = null;
+                      dismissAllKeyboards();
+                    } else {
+                      setState(() => isSendIconVisible = true);
                       newMessage
-                        ..text =
-                            newMessage.text.characters.skipLast(1).toString()
+                        ..text += emoji.emoji
                         ..selection = TextSelection.fromPosition(
                             TextPosition(offset: newMessage.text.length));
-                    },
-                    onEmojiSelected: (category, emoji) async {
-                      if (mounted &&
-                          reactingWithEmoji &&
-                          storedMessage != null) {
-                        await model.react(storedMessage!.value, emoji.emoji);
-                        reactingWithEmoji = false;
-                        storedMessage = null;
-                        dismissAllKeyboards();
-                      } else {
-                        setState(() => isSendIconVisible = true);
-                        newMessage
-                          ..text += emoji.emoji
-                          ..selection = TextSelection.fromPosition(
-                              TextPosition(offset: newMessage.text.length));
-                      }
-                    },
-                  ),
+                    }
+                  },
                 ),
-              ],
-            ),
-          ]),
+              ),
+            ],
+          ),
         ),
       );
     });

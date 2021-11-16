@@ -13,6 +13,8 @@ CTextStyle tsDisplay(color) => CTextStyle(
       color: color,
     );
 
+CTextStyle tsDisplayBlack = tsDisplay(black);
+
 CTextStyle tsHeading1 =
     CTextStyle(fontSize: 24, minFontSize: 18, lineHeight: 39);
 
@@ -55,8 +57,8 @@ CTextStyle tsOverlineShort =
 
 CTextStyle tsCodeDisplay1 = CTextStyle(
   fontFamily: 'RobotoMono',
-  fontSize: 24,
-  lineHeight: 38,
+  fontSize: 20,
+  lineHeight: 32,
 );
 
 /*

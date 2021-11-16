@@ -31,6 +31,8 @@ ScrollablePositionedList groupedContactListGenerator({
                     : const SizedBox(),
                 leading: leadingCallback!(contact.value),
                 content: contact.value.displayNameOrFallback,
+                subtitle:
+                    contact.value.chatNumber.shortNumber.formattedChatNumber,
                 trailingArray: trailingCallback != null
                     ? [trailingCallback(index, contact.value)]
                     : [],

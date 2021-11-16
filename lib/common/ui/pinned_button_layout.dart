@@ -11,14 +11,16 @@ class PinnedButtonLayout extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [...content],
-          ),
+          child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [...content],
+              ),
+            ),
         ),
         Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 32.0),
+          padding: const EdgeInsetsDirectional.only(top: 16, bottom: 32.0),
           child: button,
         ),
       ],

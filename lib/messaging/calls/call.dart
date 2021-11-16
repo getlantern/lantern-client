@@ -67,7 +67,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     if (signaling.value.callState == CallState.Bye) {
       if (!closed) {
         /*
-        * Popping back to wherever we were by indicating that we have verified the contact 
+        * Popping back to wherever we were by indicating that we have verified the contact
         */
         Navigator.pop(context, isVerified);
         closed = true;
@@ -192,11 +192,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 Container(
                                   padding: const EdgeInsetsDirectional.all(8.0),
                                   child: CustomAvatar(
-                                      messengerId: widget.contact.contactId.id,
-                                      displayName:
-                                          widget.contact.displayNameOrFallback,
-                                      customColor: grey5,
-                                      radius: 80),
+                                    messengerId: widget.contact.contactId.id,
+                                    displayName:
+                                        widget.contact.displayNameOrFallback,
+                                    customColor: grey5,
+                                    radius: 80,
+                                    textStyle: tsDisplayBlack,
+                                  ),
                                 ),
                                 renderTitle()
                               ],
