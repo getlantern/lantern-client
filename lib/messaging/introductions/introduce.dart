@@ -3,6 +3,10 @@ import 'package:lantern/messaging/contacts/contacts_extension.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introduce extends StatefulWidget {
+  final bool singleIntro;
+  final Contact? contactToIntro;
+
+  Introduce({required this.singleIntro, this.contactToIntro}) : super();
   @override
   _IntroduceState createState() => _IntroduceState();
 }
@@ -19,13 +23,33 @@ class _IntroduceState extends State<Introduce> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    return BaseScreen(
-        title: 'introduce_contacts_with_count'
+    final title = widget.singleIntro
+        ? 'introduce_contacts'.i18n
+        : 'introduce_contacts_with_count'
             .i18n
-            .fill([selectedContactIds.length]),
+            .fill([selectedContactIds.length]);
+
+    final text = widget.singleIntro
+        ? 'introduce_single_contact'.i18n.fill([
+            widget.contactToIntro != null
+                ? widget.contactToIntro!.displayNameOrFallback
+                : ''
+          ])
+        : 'introduce_contacts_select'.i18n;
+    return BaseScreen(
+        title: title,
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts
+          Iterable<PathAndValue<Contact>> _sortedContacts = [];
+
+          //* remove the contact that is currently being introduced to other contacts
+          _sortedContacts = widget.contactToIntro != null
+              ? _contacts
+                  .where((element) => element.value != widget.contactToIntro)
+              : _contacts;
+
+          //* remove unaccepted, blocked and Me contacts, sort alphabetically
+          var sortedContacts = _sortedContacts
               .where((element) =>
                   element.value.isAccepted() &&
                   !element.value.isMe &&
@@ -33,6 +57,7 @@ class _IntroduceState extends State<Introduce> {
               .toList()
               .sortedAlphabetically();
 
+          //* group by initial character
           var groupedSortedContacts = sortedContacts
               .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
 
@@ -43,8 +68,7 @@ class _IntroduceState extends State<Introduce> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child:
-                        CText('introduce_contacts_select'.i18n, style: tsBody1),
+                    child: CText(text, style: tsBody1),
                   ),
                 Expanded(
                     child: (sortedContacts.length <= 1)
@@ -81,25 +105,34 @@ class _IntroduceState extends State<Introduce> {
                                                   .displayNameOrFallback),
                                       trailingCallback: (int index,
                                               Contact contact) =>
-                                          Checkbox(
-                                            checkColor: Colors.white,
-                                            fillColor: MaterialStateProperty
-                                                .resolveWith((states) =>
-                                                    getCheckboxFillColor(
-                                                        black, states)),
-                                            value: selectedContactIds
-                                                .contains(contact.contactId.id),
-                                            shape: const CircleBorder(
-                                                side: BorderSide.none),
-                                            onChanged: (bool? value) =>
-                                                setState(() {
-                                              value!
-                                                  ? selectedContactIds
-                                                      .add(contact.contactId.id)
-                                                  : selectedContactIds.remove(
-                                                      contact.contactId.id);
-                                            }),
-                                          )),
+                                          widget.singleIntro
+                                              ? mirrorLTR(
+                                                  context: context,
+                                                  child: const CAssetImage(
+                                                      path: ImagePaths
+                                                          .keyboard_arrow_right))
+                                              : Checkbox(
+                                                  checkColor: Colors.white,
+                                                  fillColor: MaterialStateProperty
+                                                      .resolveWith((states) =>
+                                                          getCheckboxFillColor(
+                                                              black, states)),
+                                                  value: selectedContactIds
+                                                      .contains(
+                                                          contact.contactId.id),
+                                                  shape: const CircleBorder(
+                                                      side: BorderSide.none),
+                                                  onChanged: (bool? value) =>
+                                                      setState(() {
+                                                    value!
+                                                        ? selectedContactIds
+                                                            .add(contact
+                                                                .contactId.id)
+                                                        : selectedContactIds
+                                                            .remove(contact
+                                                                .contactId.id);
+                                                  }),
+                                                )),
                                 ),
                                 (selectedContactIds.length >= 2)
                                     ? Container(

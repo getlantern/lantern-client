@@ -110,9 +110,12 @@ class AppRouter extends _i12.RootStackRouter {
           barrierDismissible: false);
     },
     Introduce.name: (routeData) {
+      final args = routeData.argsAs<IntroduceArgs>();
       return _i12.CustomPage<void>(
           routeData: routeData,
-          child: _i7.Introduce(),
+          child: _i7.Introduce(
+              singleIntro: args.singleIntro,
+              contactToIntro: args.contactToIntro),
           transitionsBuilder: _i12.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -552,10 +555,27 @@ class AddViaChatNumber extends _i12.PageRouteInfo<void> {
 }
 
 /// generated route for [_i7.Introduce]
-class Introduce extends _i12.PageRouteInfo<void> {
-  const Introduce() : super(name, path: 'introduce');
+class Introduce extends _i12.PageRouteInfo<IntroduceArgs> {
+  Introduce({required bool singleIntro, _i28.Contact? contactToIntro})
+      : super(name,
+            path: 'introduce',
+            args: IntroduceArgs(
+                singleIntro: singleIntro, contactToIntro: contactToIntro));
 
   static const String name = 'Introduce';
+}
+
+class IntroduceArgs {
+  const IntroduceArgs({required this.singleIntro, this.contactToIntro});
+
+  final bool singleIntro;
+
+  final _i28.Contact? contactToIntro;
+
+  @override
+  String toString() {
+    return 'IntroduceArgs{singleIntro: $singleIntro, contactToIntro: $contactToIntro}';
+  }
 }
 
 /// generated route for [_i8.Introductions]

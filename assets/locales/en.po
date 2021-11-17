@@ -364,6 +364,9 @@ msgstr "Once you have two or more contacts you will be able to create introducti
 msgid "introduce_contacts_select"
 msgstr "Select two or more contacts to introduce. They will be sent introductions to start messaging each other."
 
+msgid "introduce_single_contact"
+msgstr "Select a contact to introduce to %s.  Once they approve the introduction, they will be able to message each other."
+
 msgid "send_introductions"
 msgstr "Send Introductions"
 
