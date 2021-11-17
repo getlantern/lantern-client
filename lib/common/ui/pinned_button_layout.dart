@@ -2,7 +2,7 @@ import 'package:lantern/common/common.dart';
 
 class PinnedButtonLayout extends StatelessWidget {
   final List<Widget> content;
-  final Widget button;
+  final Widget? button;
 
   PinnedButtonLayout({required this.content, required this.button}) : super();
 

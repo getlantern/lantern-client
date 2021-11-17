@@ -352,6 +352,9 @@ msgstr "No Recents"
 msgid "set_display_name"
 msgstr "Set Display Name"
 
+msgid "introduce_contact"
+msgstr "Introduce Contact"
+
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
 
@@ -363,6 +366,9 @@ msgstr "Once you have two or more contacts you will be able to create introducti
 
 msgid "introduce_contacts_select"
 msgstr "Select two or more contacts to introduce. They will be sent introductions to start messaging each other."
+
+msgid "introduce_single_contact"
+msgstr "Select a contact to introduce to %s.  Once they approve the introduction, they will be able to message each other."
 
 msgid "send_introductions"
 msgstr "Send Introductions"
@@ -427,6 +433,9 @@ msgstr "Unable to find chat number, please check the number and try again"
 msgid "unable_to_add_contact"
 msgstr "Contact not found, check the number and try again"
 
+msgid "self_adding"
+msgstr "The chat number you entered belongs to you"
+
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
 
@@ -471,6 +480,9 @@ msgstr "Something went wrong while rejecting this connect request."
 
 msgid "introductions_error_description_accepting"
 msgstr "Something went wrong while accepting this connect request."
+
+msgid "no_introductions"
+msgstr "There are no pending introductions."
 
 msgid "introduction_approved"
 msgstr "Introduction to %s approved!"
@@ -663,6 +675,9 @@ msgstr "Copy recovery key"
 
 msgid "search"
 msgstr "Search"
+
+msgid "account_management"
+msgstr "Account Management"
 
 msgid "introductions"
 msgstr "Introductions"

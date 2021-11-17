@@ -1,8 +1,13 @@
-import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/contacts/contacts_extension.dart';
+import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class Introduce extends StatefulWidget {
+  final bool singleIntro;
+  final Contact? contactToIntro;
+
+  Introduce({required this.singleIntro, this.contactToIntro}) : super();
+
   @override
   _IntroduceState createState() => _IntroduceState();
 }
@@ -19,51 +24,50 @@ class _IntroduceState extends State<Introduce> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
-    return BaseScreen(
-        title: 'introduce_contacts_with_count'
+    final title = widget.singleIntro
+        ? 'introduce_contact'.i18n
+        : 'introduce_contacts_with_count'
             .i18n
-            .fill([selectedContactIds.length]),
+            .fill([selectedContactIds.length]);
+
+    final text = widget.singleIntro
+        ? 'introduce_single_contact'.i18n.fill([
+            widget.contactToIntro != null
+                ? widget.contactToIntro!.displayNameOrFallback
+                : ''
+          ])
+        : 'introduce_contacts_select'.i18n;
+    return BaseScreen(
+        title: title,
         body: model.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-          var sortedContacts = _contacts
+          Iterable<PathAndValue<Contact>> _sortedContacts = [];
+
+          //* remove the contact that is currently being introduced to other contacts
+          _sortedContacts = widget.contactToIntro != null
+              ? _contacts
+                  .where((element) => element.value != widget.contactToIntro)
+              : _contacts;
+
+          //* remove unaccepted, blocked and Me contacts, sort alphabetically
+          var sortedContacts = _sortedContacts
               .where((element) =>
-                  element.value.isAccepted() && element.value.isNotBlocked())
+                  element.value.isAccepted() &&
+                  !element.value.isMe &&
+                  element.value.isNotBlocked())
               .toList()
               .sortedAlphabetically();
 
+          //* group by initial character
           var groupedSortedContacts = sortedContacts
               .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
 
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (sortedContacts.length > 1)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0, vertical: 16.0),
-                    child:
-                        CText('introduce_contacts_select'.i18n, style: tsBody1),
-                  ),
                 Expanded(
                     child: (sortedContacts.length <= 1)
-                        ? Center(
-                            child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const CAssetImage(
-                                path: ImagePaths.empty_search,
-                                size: 130,
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.all(24.0),
-                                child: CText(
-                                    'need_two_contacts_to_introduce'.i18n,
-                                    style: tsSubtitle1,
-                                    textAlign: TextAlign.center),
-                              ),
-                            ],
-                          ))
+                        ? const NotEnoughContacts()
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,70 +75,118 @@ class _IntroduceState extends State<Introduce> {
                                 Expanded(
                                   flex: 2,
                                   child: groupedContactListGenerator(
+                                      headItems: sortedContacts.isEmpty
+                                          ? null
+                                          : [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                            .only(
+                                                        start: 4.0,
+                                                        end: 4.0,
+                                                        top: 16.0,
+                                                        bottom: 16.0),
+                                                child:
+                                                    CText(text, style: tsBody1),
+                                              )
+                                            ],
                                       groupedSortedList: groupedSortedContacts,
                                       leadingCallback: (Contact contact) =>
                                           CustomAvatar(
                                               messengerId: contact.contactId.id,
                                               displayName: contact
                                                   .displayNameOrFallback),
+                                      disableSplash: !widget.singleIntro,
                                       trailingCallback: (int index,
                                               Contact contact) =>
-                                          Checkbox(
-                                            checkColor: Colors.white,
-                                            fillColor: MaterialStateProperty
-                                                .resolveWith((states) =>
-                                                    getCheckboxFillColor(
-                                                        black, states)),
-                                            value: selectedContactIds
-                                                .contains(contact.contactId.id),
-                                            shape: const CircleBorder(
-                                                side: BorderSide.none),
-                                            onChanged: (bool? value) =>
-                                                setState(() {
-                                              value!
-                                                  ? selectedContactIds
-                                                      .add(contact.contactId.id)
-                                                  : selectedContactIds.remove(
-                                                      contact.contactId.id);
-                                            }),
-                                          )),
+                                          widget.singleIntro &&
+                                                  widget.contactToIntro != null
+                                              //* single contact intro
+                                              ? const ContinueArrow()
+                                              //* multiple contact intro
+                                              : Checkbox(
+                                                  checkColor: Colors.white,
+                                                  fillColor: MaterialStateProperty
+                                                      .resolveWith((states) =>
+                                                          getCheckboxFillColor(
+                                                              black, states)),
+                                                  value: selectedContactIds
+                                                      .contains(
+                                                          contact.contactId.id),
+                                                  shape: const CircleBorder(
+                                                      side: BorderSide.none),
+                                                  onChanged: (bool? value) =>
+                                                      setState(() {
+                                                    value!
+                                                        ? selectedContactIds
+                                                            .add(contact
+                                                                .contactId.id)
+                                                        : selectedContactIds
+                                                            .remove(contact
+                                                                .contactId.id);
+                                                  }),
+                                                ),
+                                      onTapCallback: (Contact contact) async {
+                                        if (widget.singleIntro) {
+                                          await model.introduce([
+                                            widget.contactToIntro!.contactId.id,
+                                            contact.contactId.id
+                                          ]);
+                                          showSnackbar(
+                                            context: context,
+                                            content: 'introductions_sent'.i18n,
+                                          );
+                                          await context.router.pop();
+                                        }
+                                      }),
                                 ),
-                                (selectedContactIds.length >= 2)
-                                    ? Container(
-                                        color: white,
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Button(
-                                                width: 200,
-                                                text: 'send_introductions'
-                                                    .i18n
-                                                    .toUpperCase(),
-                                                onPressed: () async {
-                                                  await model.introduce(
-                                                      selectedContactIds);
-                                                  showSnackbar(
-                                                    context: context,
-                                                    content:
-                                                        'introductions_sent'
-                                                            .i18n,
-                                                  );
-                                                  await Future.delayed(
-                                                    const Duration(
-                                                        milliseconds: 1000),
-                                                    () async => await context
-                                                        .router
-                                                        .pop(),
-                                                  );
-                                                },
-                                              ),
-                                            ]),
-                                      )
-                                    : Container()
+                                //* BUTTON
+                                if (!widget.singleIntro)
+                                  Container(
+                                    color: white,
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Button(
+                                            width: 200,
+                                            text: 'send_introductions'
+                                                .i18n
+                                                .toUpperCase(),
+                                            disabled:
+                                                selectedContactIds.length < 2,
+                                            onPressed: () async {
+                                              await model.introduce(
+                                                  selectedContactIds);
+                                              showSnackbar(
+                                                context: context,
+                                                content:
+                                                    'introductions_sent'.i18n,
+                                              );
+                                              await context.router.pop();
+                                            },
+                                          ),
+                                        ]),
+                                  )
                               ]))
               ]);
         }));
+  }
+}
+
+class NotEnoughContacts extends StatelessWidget {
+  const NotEnoughContacts({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsetsDirectional.all(24.0),
+      child: CText('need_two_contacts_to_introduce'.i18n,
+          style: tsSubtitle1, textAlign: TextAlign.center),
+    ));
   }
 }

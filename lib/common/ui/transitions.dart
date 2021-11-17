@@ -4,12 +4,16 @@ const RouteTransitionsBuilder defaultTransition = TransitionsBuilders.fadeIn;
 
 const defaultTransitionMillis = 200;
 
+const shortAnimationMillis = 500;
+
 const defaultAnimationMillis = 1000;
 
 const longAnimationMillis = 3000;
 
 const defaultTransitionDuration =
     Duration(milliseconds: defaultTransitionMillis);
+
+const shortAnimationDuration = Duration(milliseconds: shortAnimationMillis);
 
 const defaultAnimationDuration = Duration(milliseconds: defaultAnimationMillis);
 
