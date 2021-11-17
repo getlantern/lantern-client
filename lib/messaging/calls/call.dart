@@ -285,7 +285,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                                         const EdgeInsetsDirectional
                                                                 .only(
                                                             start: 5.0,
-                                                            end: 10.0,
+                                                            end: 5.0,
                                                             top: 5.0,
                                                             bottom: 5.0),
                                                     child: Column(
