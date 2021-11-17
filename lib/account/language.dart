@@ -37,13 +37,13 @@ class Language extends StatelessWidget {
             var lang = languages[index];
             return RadioListTile<String>(
               activeColor: pink4,
-              selected: true,
+              contentPadding: const EdgeInsets.all(0),
+              tileColor: lang == currentLang ? grey2 : transparent,
+              dense: true,
               title: CText(
                   toBeginningOfSentenceCase(
                       lang.displayLanguage(context, lang))!,
-                  style: lang == currentLang
-                      ? tsBody1.copiedWith(color: pink4)
-                      : tsBody1),
+                  style: tsBody1),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {

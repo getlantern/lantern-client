@@ -313,7 +313,7 @@ class ConversationState extends State<Conversation>
         await scrollController.scrollTo(
             index: 0,
             duration: const Duration(seconds: 1),
-            curve: Curves.easeInOutCubic);
+            curve: defaultCurves);
       }
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
@@ -359,9 +359,6 @@ class ConversationState extends State<Conversation>
               .applicationData['verificationReminderLastDismissed']?.int_3
               .toInt() ??
           0;
-      final contactUnverified =
-          contact.verificationLevel != VerificationLevel.VERIFIED;
-
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         centerTitle: false,
@@ -390,7 +387,7 @@ class ConversationState extends State<Conversation>
                           verificationReminderLastDismissed >=
                       twoWeeksInMillis,
                   builder: (BuildContext context, bool value) {
-                    if (!contact.isMe && contactUnverified && value) {
+                    if (!contact.isMe && contact.isUnverified() && value) {
                       return IconButton(
                         visualDensity: VisualDensity.compact,
                         onPressed: () async {
@@ -587,7 +584,7 @@ class ConversationState extends State<Conversation>
             scrollController.scrollTo(
                 index: scrollToIndex,
                 duration: const Duration(seconds: 1),
-                curve: Curves.easeInOutCubic);
+                curve: defaultCurves);
           }
         },
       );

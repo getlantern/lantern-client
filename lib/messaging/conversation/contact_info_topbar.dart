@@ -35,30 +35,10 @@ class ContactInfoTopBar extends StatelessWidget {
                 maxLines: 1,
                 style: tsHeading3,
               ),
-              /* 
-              * Contact is unverified => render pending badge
-              */
-              if (!contact.isMe && contact.isUnverified())
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsetsDirectional.only(end: 2.0),
-                      child: CAssetImage(
-                        path: ImagePaths.pending,
-                        size: 12.0,
-                      ),
-                    ),
-                    CText('pending_verification'.i18n.toUpperCase(),
-                        style: tsOverline.copiedWith(lineHeight: 14))
-                  ],
-                ),
-              /* 
-              * Contact is verified => render timer and verified badge
-              */
-              if (contact.isVerified())
-                Row(
-                  children: [
-                    DisappearingTimerAction(contact),
+              Row(
+                children: [
+                  DisappearingTimerAction(contact),
+                  if (contact.isVerified())
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
                           start: 8.0, end: 2.0),
@@ -68,11 +48,12 @@ class ContactInfoTopBar extends StatelessWidget {
                         color: verifiedColor,
                       ),
                     ),
+                  if (contact.isVerified())
                     CText('verified'.i18n.toUpperCase(),
                         style: tsOverline.copiedWith(
                             lineHeight: 14, color: verifiedColor)),
-                  ],
-                ),
+                ],
+              ),
             ],
           ),
         ),
