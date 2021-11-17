@@ -21,7 +21,7 @@ msgid "Disconnecting"
 msgstr "Disconnecting..."
 
 msgid "Connecting"
-msgstr "Connecting..."
+msgstr "Calling..."
 
 msgid "Go Pro Title"
 msgstr "Go Pro!"
