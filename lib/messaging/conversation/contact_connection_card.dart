@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/conversation/status_row.dart';
+import 'package:lantern/messaging/introductions/introduction_extension.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class ContactConnectionCard extends StatelessWidget {
@@ -36,9 +37,7 @@ class ContactConnectionCard extends StatelessWidget {
                 start: 16.0, end: 16.0, top: 16.0, bottom: 4.0),
             child: GestureDetector(
               onTap: () async {
-                if (inbound &&
-                    message.introduction.status ==
-                        IntroductionDetails_IntroductionStatus.PENDING) {
+                if (inbound && message.introduction.isPending()) {
                   _showOptions(
                     context,
                     introduction,
@@ -46,8 +45,7 @@ class ContactConnectionCard extends StatelessWidget {
                     contact,
                   );
                 }
-                if (message.introduction.status ==
-                    IntroductionDetails_IntroductionStatus.ACCEPTED) {
+                if (message.introduction.isAccepted()) {
                   await context
                       .pushRoute(Conversation(contactId: introduction.to));
                 }
@@ -73,8 +71,7 @@ class ContactConnectionCard extends StatelessWidget {
                   if (!outbound)
                     Row(
                       children: [
-                        if (message.introduction.status ==
-                            IntroductionDetails_IntroductionStatus.ACCEPTED)
+                        if (message.introduction.isAccepted())
                           CAssetImage(
                             path: ImagePaths.check_black,
                             color:
