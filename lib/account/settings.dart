@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -22,49 +23,15 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
       title: 'settings'.i18n,
       body: ListView(
         children: [
+          //* Language
           ListItemFactory.settingsItem(
-            icon: ImagePaths.key,
-            content: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CText('proxy_all'.i18n, style: tsSubtitle1),
-                GestureDetector(
-                  onTap: () => openInfoProxyAll(context),
-                  child: const Padding(
-                    padding: EdgeInsetsDirectional.only(start: 4.0),
-                    child: CAssetImage(
-                      path: ImagePaths.info,
-                      size: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            trailingArray: [
-              sessionModel.proxyAll(
-                (BuildContext context, bool proxyAll, Widget? child) =>
-                    FlutterSwitch(
-                  width: 44.0,
-                  height: 24.0,
-                  valueFontSize: 12.0,
-                  padding: 2,
-                  toggleSize: 18.0,
-                  value: proxyAll,
-                  activeColor: indicatorGreen,
-                  inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) {
-                    sessionModel.setProxyAll(newValue);
-                  },
-                ),
-              )
-            ],
-          ),
-          ListItemFactory.settingsItem(
+            header: 'general'.i18n,
             icon: ImagePaths.translate,
             content: 'language'.i18n,
             onTap: () {
@@ -84,6 +51,7 @@ class Settings extends StatelessWidget {
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
           ),
+          //* Report
           ListItemFactory.settingsItem(
             icon: ImagePaths.alert,
             content: 'report_issue'.i18n,
@@ -91,7 +59,63 @@ class Settings extends StatelessWidget {
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
             onTap: reportIssue,
-          )
+          ),
+          //* Blocked
+          messagingModel.getOnBoardingStatus(
+              (context, hasBeenOnboarded, child) => hasBeenOnboarded
+                  ? ListItemFactory.settingsItem(
+                      header: 'chat'.i18n,
+                      icon: ImagePaths.block,
+                      content: 'blocked_users'.i18n,
+                      trailingArray: [
+                        mirrorLTR(
+                            context: context, child: const ContinueArrow())
+                      ],
+                      onTap: () => context.pushRoute(BlockedUsers()),
+                    )
+                  : const SizedBox()),
+          //* Proxy
+          sessionModel.proxyAll(
+              (BuildContext context, bool proxyAll, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                    header: 'VPN'.i18n,
+                    icon: ImagePaths.key,
+                    content: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CText(
+                            'proxy_everything_is'
+                                .i18n
+                                .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                            style: tsSubtitle1),
+                        GestureDetector(
+                          onTap: () => openInfoProxyAll(context),
+                          child: const Padding(
+                            padding: EdgeInsetsDirectional.only(start: 4.0),
+                            child: CAssetImage(
+                              path: ImagePaths.info,
+                              size: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailingArray: [
+                      FlutterSwitch(
+                        width: 44.0,
+                        height: 24.0,
+                        valueFontSize: 12.0,
+                        padding: 2,
+                        toggleSize: 18.0,
+                        value: proxyAll,
+                        activeColor: indicatorGreen,
+                        inactiveColor: offSwitchColor,
+                        onToggle: (bool newValue) {
+                          sessionModel.setProxyAll(newValue);
+                        },
+                      ),
+                    ],
+                  )),
         ],
       ),
     );

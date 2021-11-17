@@ -39,6 +39,7 @@ class _AccountManagementState extends State<AccountManagement>
 
     return BaseScreen(
       title: title,
+      padHorizontal: false,
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         var freeItems = [
@@ -103,6 +104,8 @@ class _AccountManagementState extends State<AccountManagement>
             // * FREE
             ListView(
                 padding: const EdgeInsetsDirectional.only(
+                  start: 16,
+                  end: 16,
                   bottom: 8,
                 ),
                 children: freeItems)
@@ -250,12 +253,16 @@ class _AccountManagementState extends State<AccountManagement>
                               // * PRO TAB
                               ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: proItems),
                               // * SECURE CHAT TAB
                               ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: freeItems),
@@ -268,6 +275,8 @@ class _AccountManagementState extends State<AccountManagement>
                             Expanded(
                               child: ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: proItems),
