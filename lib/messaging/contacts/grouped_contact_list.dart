@@ -12,6 +12,7 @@ ScrollablePositionedList groupedContactListGenerator({
   Function? onTapCallback,
   Function? focusMenuCallback,
   List<Widget>? headItems,
+  bool? disableSplash = false,
 }) {
   final numHeadItems = headItems?.length ?? 0;
   return ScrollablePositionedList.builder(
@@ -34,6 +35,7 @@ ScrollablePositionedList groupedContactListGenerator({
                 header: itemsPerKey.indexOf(contact) == 0
                     ? key[0].toUpperCase()
                     : null,
+                disableSplash: disableSplash,
                 focusedMenu: (focusMenuCallback != null)
                     ? focusMenuCallback(contact.value)
                     : const SizedBox(),

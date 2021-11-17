@@ -10,7 +10,7 @@ extension ContactExtension on List<PathAndValue<Contact>> {
 
 extension VerificationExtension on Contact {
   bool isUnaccepted() {
-    return this.verificationLevel == VerificationLevel.UNACCEPTED;
+    return verificationLevel == VerificationLevel.UNACCEPTED;
   }
 
   bool isAccepted() {
@@ -18,15 +18,15 @@ extension VerificationExtension on Contact {
   }
 
   bool isUnverified() {
-    return this.verificationLevel == VerificationLevel.UNVERIFIED;
+    return verificationLevel == VerificationLevel.UNVERIFIED;
   }
 
   bool isVerified() {
-    return this.verificationLevel == VerificationLevel.VERIFIED;
+    return verificationLevel == VerificationLevel.VERIFIED;
   }
 
   // helps in verbocity for complex conditionals
   bool isNotBlocked() {
-    return this.blocked == false;
+    return blocked == false;
   }
 }

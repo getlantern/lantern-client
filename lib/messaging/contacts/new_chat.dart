@@ -130,14 +130,7 @@ class _NewChatState extends State<NewChat> {
         path: ImagePaths.person_add_alt_1,
       ),
       content: CText('add_via_chat_number'.i18n, style: tsSubtitle1Short),
-      trailingArray: [
-        mirrorLTR(
-          context: context,
-          child: const CAssetImage(
-            path: ImagePaths.keyboard_arrow_right,
-          ),
-        )
-      ],
+      trailingArray: [const ContinueArrow()],
       onTap: () async => await context
           .pushRoute(const AddViaChatNumber())
           .then(onContactAdded),
@@ -159,14 +152,7 @@ class _NewChatState extends State<NewChat> {
               style: tsBody1.copiedWith(color: grey5))
         ],
       ),
-      trailingArray: [
-        mirrorLTR(
-          context: context,
-          child: const CAssetImage(
-            path: ImagePaths.keyboard_arrow_right,
-          ),
-        )
-      ],
+      trailingArray: [const ContinueArrow()],
       onTap: () async => await context
           .pushRoute(
             FullScreenDialogPage(
@@ -185,14 +171,7 @@ class _NewChatState extends State<NewChat> {
         path: ImagePaths.share,
       ),
       content: CText('share_your_chat_number'.i18n, style: tsSubtitle1Short),
-      trailingArray: [
-        mirrorLTR(
-          context: context,
-          child: const CAssetImage(
-            path: ImagePaths.keyboard_arrow_right,
-          ),
-        )
-      ],
+      trailingArray: [const ContinueArrow()],
       onTap: () => Share.share(me.chatNumber.shortNumber.formattedChatNumber),
     );
   }
