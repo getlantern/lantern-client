@@ -352,6 +352,9 @@ msgstr "No Recents"
 msgid "set_display_name"
 msgstr "Set Display Name"
 
+msgid "introduce_contact"
+msgstr "Introduce Contact"
+
 msgid "introduce_contacts"
 msgstr "Introduce Contacts"
 
