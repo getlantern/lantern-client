@@ -293,7 +293,8 @@ Future showConversationOptions({
                     content: 'introduce_contacts'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();
-                      await bottomContext.pushRoute(const Introduce());
+                      await bottomContext.pushRoute(Introduce(
+                          singleIntro: true, contactToIntro: contact));
                     }),
               if (!contact.isMe && contact.isUnverified())
                 ListItemFactory.bottomItem(

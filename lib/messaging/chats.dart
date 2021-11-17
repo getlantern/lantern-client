@@ -113,13 +113,19 @@ class _ChatsState extends State<Chats> {
                 (context, me, child) => ListItemFactory.bottomItem(
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async {},
+                  onTap: () async {
+                    await context.router.pop();
+                    // TODO: push Account Management
+                  },
                 ),
               ),
               ListItemFactory.bottomItem(
                 icon: ImagePaths.people,
                 content: 'introduce_contacts'.i18n,
-                onTap: () async => await context.router.push(const Introduce()),
+                onTap: () async {
+                  await context.router.pop();
+                  await context.router.push(Introduce(singleIntro: false));
+                },
               ),
             ]),
             backgroundColor: transparent,

@@ -27,7 +27,8 @@ SizedBox renderLongTapMenu(
                 content: 'introduce_contacts'.i18n,
                 onTap: () async {
                   await context.router.pop();
-                  await context.pushRoute(const Introduce());
+                  await context.pushRoute(
+                      Introduce(singleIntro: true, contactToIntro: contact));
                 },
               ),
           ],
