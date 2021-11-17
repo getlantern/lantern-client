@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/core/router/router_extensions.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/event_extension.dart';
 import 'package:lantern/event_manager.dart';
@@ -73,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     switch (methodCall.method) {
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
-        await _context!.openConversation(contact.contactId);
+        await _context!.router.push(Conversation(contactId: contact.contactId));
         break;
       default:
         return;

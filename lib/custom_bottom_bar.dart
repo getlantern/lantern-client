@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
-import 'package:lantern/common/common.dart';
 
 import 'messaging/messaging_model.dart';
 
