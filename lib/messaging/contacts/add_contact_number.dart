@@ -35,16 +35,17 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
           context.loaderOverlay.show(widget: spinner);
           chatNumber = await model
               .findChatNumberByShortNumber(controller.text.withoutWhitespace);
+
+          if (chatNumber.number == me.chatNumber.number) {
+            setState(() => controller.error = 'self_adding'.i18n);
+            return;
+          }
         } catch (e) {
           setState(() => controller.error = 'chat_number_not_found'.i18n);
           return;
         } finally {
           context.loaderOverlay.hide();
         }
-      }
-      if (chatNumber.number == me.chatNumber.number) {
-        setState(() => controller.error = 'self_adding'.i18n);
-        return;
       }
       try {
         final contact =
