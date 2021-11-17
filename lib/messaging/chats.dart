@@ -106,6 +106,25 @@ class _ChatsState extends State<Chats> {
             backgroundColor: transparent,
             icon: const CAssetImage(path: ImagePaths.search),
           ),
+          // * Bottom modal
+          RoundButton(
+            onPressed: () async => showBottomModal(context: context, children: [
+              model.me(
+                (context, me, child) => ListItemFactory.bottomItem(
+                  icon: ImagePaths.account,
+                  content: 'account_management'.i18n,
+                  onTap: () async {},
+                ),
+              ),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.people,
+                content: 'introduce_contacts'.i18n,
+                onTap: () async => await context.router.push(const Introduce()),
+              ),
+            ]),
+            backgroundColor: transparent,
+            icon: const CAssetImage(path: ImagePaths.more_vert),
+          ),
         ],
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
