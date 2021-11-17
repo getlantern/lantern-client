@@ -131,14 +131,7 @@ class ContactConnectionCard extends StatelessWidget {
                     .pushRoute(Conversation(contactId: introduction.to));
               }
             },
-            trailingArray: [
-              mirrorLTR(
-                context: context,
-                child: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right,
-                ),
-              )
-            ],
+            trailingArray: [const ContinueArrow()],
           ),
           ListItemFactory.bottomItem(
             icon: ImagePaths.cancel,
@@ -163,14 +156,7 @@ class ContactConnectionCard extends StatelessWidget {
                     await context.router.pop();
                   }
                 }),
-            trailingArray: [
-              mirrorLTR(
-                context: context,
-                child: const CAssetImage(
-                  path: ImagePaths.keyboard_arrow_right,
-                ),
-              )
-            ],
+            trailingArray: [const ContinueArrow()],
           ),
         ]);
   }

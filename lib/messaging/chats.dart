@@ -33,8 +33,8 @@ class _ChatsState extends State<Chats> {
 
     //* temporary background color change
     setState(() => customBg = blue1);
-    Future.delayed(const Duration(milliseconds: 500),
-        () => setState(() => customBg = null));
+    Future.delayed(
+        shortAnimationDuration, () => setState(() => customBg = null));
 
     //* Scroll to first unaccepted message
     if (scrollListController.isAttached &&
@@ -154,12 +154,7 @@ class _ChatsState extends State<Chats> {
                             ),
                             content: CText('introductions'.i18n,
                                 style: tsSubtitle1Short),
-                            trailingArray: [
-                              const CAssetImage(
-                                path: ImagePaths.keyboard_arrow_right,
-                                size: iconSize,
-                              )
-                            ],
+                            trailingArray: [const ContinueArrow()],
                             onTap: () async =>
                                 await context.pushRoute(const Introductions()),
                           )
