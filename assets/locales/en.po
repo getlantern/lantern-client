@@ -430,6 +430,9 @@ msgstr "Unable to find chat number, please check the number and try again"
 msgid "unable_to_add_contact"
 msgstr "Contact not found, check the number and try again"
 
+msgid "self_adding"
+msgstr "The chat number you entered belongs to you"
+
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
 
