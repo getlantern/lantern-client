@@ -42,7 +42,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
           context.loaderOverlay.hide();
         }
       }
-      if (chatNumber == me.chatNumber) {
+      if (chatNumber.number == me.chatNumber.number) {
         setState(() => controller.error = 'self_adding'.i18n);
         return;
       }
