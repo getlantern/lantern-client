@@ -124,8 +124,8 @@ class _ContactInfoState extends State<ContactInfo> {
                           keyboardType: TextInputType.text,
                         ),
                   trailingArray: [
-                    CInkWell(
-                      onTap: () async {
+                    TextButton(
+                      onPressed: () async {
                         setState(() => isEditing = !isEditing);
                         if (isEditing) {
                           displayNameController.focusNode.requestFocus();
@@ -146,14 +146,11 @@ class _ContactInfoState extends State<ContactInfo> {
                           }
                         }
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: CText(
-                          isEditing
-                              ? 'save'.i18n.toUpperCase()
-                              : 'edit'.i18n.toUpperCase(),
-                          style: tsButtonPink,
-                        ),
+                      child: CText(
+                        isEditing
+                            ? 'save'.i18n.toUpperCase()
+                            : 'edit'.i18n.toUpperCase(),
+                        style: tsButtonPink,
                       ),
                     )
                   ],
@@ -199,24 +196,19 @@ class _ContactInfoState extends State<ContactInfo> {
                 ListItemFactory.settingsItem(
                     header: 'more_options'.i18n,
                     content: CText(
-                      contact.blocked ? 'unblock_user'.i18n : 'block_user'.i18n,
+                      'block_user'.i18n,
                       style: tsSubtitle1Short,
                     ),
                     trailingArray: [
-                      CInkWell(
-                        onTap: () async => showBlockContactDialog(
+                      TextButton(
+                        onPressed: () async => showBlockContactDialog(
                           context,
                           contact,
                           model,
                         ),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          child: CText(
-                            contact.blocked
-                                ? 'unblock'.i18n.toUpperCase()
-                                : 'block'.i18n.toUpperCase(),
-                            style: tsButtonPink,
-                          ),
+                        child: CText(
+                          'block'.i18n.toUpperCase(),
+                          style: tsButtonPink,
                         ),
                       )
                     ]),
@@ -227,18 +219,15 @@ class _ContactInfoState extends State<ContactInfo> {
                     style: tsSubtitle1Short,
                   ),
                   trailingArray: [
-                    CInkWell(
-                      onTap: () async => showDeleteContactDialog(
+                    TextButton(
+                      onPressed: () async => showDeleteContactDialog(
                         context,
                         contact,
                         model,
                       ),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: CText(
-                          'delete_contact'.i18n.toUpperCase(),
-                          style: tsButtonPink,
-                        ),
+                      child: CText(
+                        'delete_contact'.i18n.toUpperCase(),
+                        style: tsButtonPink,
                       ),
                     )
                   ],
