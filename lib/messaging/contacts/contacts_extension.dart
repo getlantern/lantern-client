@@ -24,4 +24,9 @@ extension VerificationExtension on Contact {
   bool isVerified() {
     return this.verificationLevel == VerificationLevel.VERIFIED;
   }
+
+  // helps in verbocity for complex conditionals
+  bool isNotBlocked() {
+    return this.blocked == false;
+  }
 }

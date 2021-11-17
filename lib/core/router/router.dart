@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/account/blocked_users.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/secure_chat_number_account.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
@@ -92,6 +93,13 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         page: SecureChatNumberAccount,
         name: 'SecureChatNumberAccount',
         path: 'secureChatNumberAccount',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: BlockedUsers,
+        name: 'BlockedUsers',
+        path: 'blockedUsers',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

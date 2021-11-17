@@ -12,6 +12,7 @@ class CustomSearchDelegate extends SearchDelegate {
     return ThemeData(
       appBarTheme: AppBarTheme(
         elevation: 1,
+        shadowColor: grey3,
         color: white,
       ),
       inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
@@ -23,7 +24,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   String get searchFieldLabel =>
-      'search_in_${searchMessages! ? 'messages' : 'contacts'}'.i18n;
+      'search_in_${searchMessages! ? 'chats' : 'contacts'}'.i18n;
 
   @override
   TextStyle get searchFieldStyle => tsSubtitle2.copiedWith(color: grey5);
@@ -130,12 +131,12 @@ class CustomSearchDelegate extends SearchDelegate {
                                             messages.isNotEmpty)
                                           Padding(
                                             padding: const EdgeInsetsDirectional
-                                                .only(top: 20),
+                                                .only(top: 10),
                                             child: CText(
-                                                'search_messages'.i18n.fill([
+                                                'search_chats'.i18n.fill([
                                                   messages.length
                                                 ]).toUpperCase(),
-                                                style: tsSubtitle1),
+                                                style: tsOverline),
                                           ),
                                         if (searchMessages! &&
                                             messages.isNotEmpty)

@@ -50,7 +50,8 @@ class _ChatsState extends State<Chats> {
           .indexWhere((element) => element.value == firstUnaccepted.value);
       await scrollListController.scrollTo(
         index: scrollTo,
-        duration: const Duration(milliseconds: 500),
+        duration: defaultAnimationDuration,
+        curve: defaultCurves,
       );
     }
   }
@@ -212,7 +213,7 @@ List<PathAndValue<Contact>> reshapeContactList(
   // Contacts with message timestamps which are not blocked
   var _activeConversations = contacts
       .where((contact) =>
-          contact.value.mostRecentMessageTs > 0 && !contact.value.blocked)
+          contact.value.mostRecentMessageTs > 0 && contact.value.isNotBlocked())
       .toList();
   // Newest -> older
   _activeConversations.sort((a, b) {
@@ -240,7 +241,6 @@ class EmptyChats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var model = context.watch<MessagingModel>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -254,22 +254,30 @@ class EmptyChats extends StatelessWidget {
               size: 250),
         ),
         CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
-        // // *
-        // // * DEV
-        // // *
-        // model.getOnBoardingStatus((context, value, child) => Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: Button(
-        //         tertiary: true,
-        //         text: 'DEV - toggle value'.i18n,
-        //         width: 200.0,
-        //         onPressed: () async {
-        //           await model.overrideOnBoarded(!value);
-        //           context.router.popUntilRoot();
-        //         },
-        //       ),
-        //     )),
       ],
     );
+  }
+}
+
+class DevButton extends StatelessWidget {
+  const DevButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var model = context.watch<MessagingModel>();
+    return model.getOnBoardingStatus((context, value, child) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Button(
+            tertiary: true,
+            text: 'DEV - toggle value'.i18n,
+            width: 200.0,
+            onPressed: () async {
+              await model.overrideOnBoarded(!value);
+              context.router.popUntilRoot();
+            },
+          ),
+        ));
   }
 }

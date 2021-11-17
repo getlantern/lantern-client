@@ -25,7 +25,9 @@ ScrollablePositionedList groupedContactListGenerator({
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map(
               (contact) => ListItemFactory.messagingItem(
-                header: key[0].toUpperCase(),
+                header: itemsPerKey.indexOf(contact) == 0
+                    ? key[0].toUpperCase()
+                    : null,
                 focusedMenu: (focusMenuCallback != null)
                     ? focusMenuCallback(contact.value)
                     : const SizedBox(),
