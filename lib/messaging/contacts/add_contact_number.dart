@@ -23,7 +23,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
     super.dispose();
   }
 
-  void handleButtonPress(MessagingModel model) async {
+  void handleButtonPress(MessagingModel model, Contact me) async {
     controller.focusNode.unfocus();
     if (_formKey.currentState?.validate() == true) {
       var chatNumber = ChatNumber.create();
@@ -41,6 +41,10 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
         } finally {
           context.loaderOverlay.hide();
         }
+      }
+      if (chatNumber == me.chatNumber) {
+        setState(() => controller.error = 'self_adding'.i18n);
+        return;
       }
       try {
         final contact =
@@ -104,11 +108,11 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
                   ]),
             )
           ],
-          button: Button(
+          button: model.me((context, me, child) => Button(
               width: 200,
               text: 'start_chat'.i18n,
-              onPressed: () => handleButtonPress(model),
-              disabled: !shouldSubmit)),
+              onPressed: () => handleButtonPress(model, me),
+              disabled: !shouldSubmit))),
     );
   }
 }
