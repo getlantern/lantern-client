@@ -270,7 +270,6 @@ Future showConversationOptions({
                                                   seconds[selectedPosition]);
                                             }
                                             await context.router.pop();
-                                            await parentContext.router.pop();
                                           },
                                           child: CText('set'.i18n.toUpperCase(),
                                               style: tsButtonPink),
@@ -296,8 +295,7 @@ Future showConversationOptions({
                       await bottomContext.router.pop();
                       await bottomContext.pushRoute(const Introduce());
                     }),
-              if (!contact.isMe &&
-                  contact.verificationLevel != VerificationLevel.VERIFIED)
+              if (!contact.isMe && contact.isUnverified())
                 ListItemFactory.bottomItem(
                     icon: ImagePaths.verified_user,
                     content: 'contact_verification'.i18n,

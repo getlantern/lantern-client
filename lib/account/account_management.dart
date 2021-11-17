@@ -39,6 +39,7 @@ class _AccountManagementState extends State<AccountManagement>
 
     return BaseScreen(
       title: title,
+      padHorizontal: false,
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         var freeItems = [
@@ -46,7 +47,7 @@ class _AccountManagementState extends State<AccountManagement>
           messagingModel.me((BuildContext context, Contact me, Widget? child) =>
               StatefulBuilder(
                   builder: (context, setState) => ListItemFactory.settingsItem(
-                        header: 'secure_chat_number'.i18n,
+                        header: 'your_secure_chat_number'.i18n,
                         icon: ImagePaths.chatNumber,
                         content: me.chatNumber.shortNumber.formattedChatNumber,
                         trailingArray: [
@@ -103,6 +104,8 @@ class _AccountManagementState extends State<AccountManagement>
             // * FREE
             ListView(
                 padding: const EdgeInsetsDirectional.only(
+                  start: 16,
+                  end: 16,
                   bottom: 8,
                 ),
                 children: freeItems)
@@ -227,10 +230,11 @@ class _AccountManagementState extends State<AccountManagement>
                                   top: BorderSide.none,
                                   left: BorderSide.none,
                                   right: BorderSide.none,
-                                  bottom: BorderSide(width: 2.0, color: pink4)),
+                                  bottom: BorderSide(width: 3.0, color: pink4)),
                             ),
-                            labelColor: pink4,
                             labelStyle: tsSubtitle2,
+                            labelColor: pink4,
+                            unselectedLabelStyle: tsBody1,
                             unselectedLabelColor: grey5,
                             tabs: [
                               Tab(
@@ -249,12 +253,16 @@ class _AccountManagementState extends State<AccountManagement>
                               // * PRO TAB
                               ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: proItems),
                               // * SECURE CHAT TAB
                               ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: freeItems),
@@ -267,6 +275,8 @@ class _AccountManagementState extends State<AccountManagement>
                             Expanded(
                               child: ListView(
                                   padding: const EdgeInsetsDirectional.only(
+                                    start: 16,
+                                    end: 16,
                                     bottom: 8,
                                   ),
                                   children: proItems),
