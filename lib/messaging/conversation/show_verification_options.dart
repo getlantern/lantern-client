@@ -46,11 +46,7 @@ void showVerificationOptions({
                 }
               });
             },
-            trailingArray: [
-              const CAssetImage(
-                path: ImagePaths.keyboard_arrow_right,
-              )
-            ],
+            trailingArray: [const ContinueArrow()],
           ),
         ),
         ListItemFactory.bottomItem(
@@ -69,11 +65,7 @@ void showVerificationOptions({
               }
             });
           },
-          trailingArray: [
-            const CAssetImage(
-              path: ImagePaths.keyboard_arrow_right,
-            )
-          ],
+          trailingArray: [const ContinueArrow()],
         ),
         if (showDismissNotification)
           ListItemFactory.bottomItem(

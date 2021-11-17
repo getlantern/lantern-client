@@ -24,10 +24,11 @@ SizedBox renderLongTapMenu(
             if (!contact.isMe)
               ListItemFactory.focusMenuItem(
                 icon: ImagePaths.people,
-                content: 'introduce_contacts'.i18n,
+                content: 'introduce_contact'.i18n,
                 onTap: () async {
                   await context.router.pop();
-                  await context.pushRoute(const Introduce());
+                  await context.pushRoute(
+                      Introduce(singleIntro: true, contactToIntro: contact));
                 },
               ),
           ],

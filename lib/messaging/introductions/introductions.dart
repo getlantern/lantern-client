@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/messaging/introductions/introduction_extension.dart';
 
 class Introductions extends StatelessWidget {
   @override
@@ -16,19 +17,30 @@ class Introductions extends StatelessWidget {
                 child: CText('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.bestIntroductions(builder: (context,
-                  Iterable<PathAndValue<StoredMessage>> introductionPaths,
+                  Iterable<PathAndValue<StoredMessage>> introductions,
                   Widget? child) {
                 // group by the contactId of the user who made the introduction
                 // these are pointers to StoredMessages, they won't listen to an update to the value of the StoredMessage itself
-                final groupedIntroductionPaths =
-                    introductionPaths.groupBy((intro) => intro.value.contactId);
+                final groupedIntroductions = introductions
+                    .getPending()
+                    .groupBy((intro) => intro.value.contactId);
+
+                if (groupedIntroductions.isEmpty) {
+                  return Center(
+                      child: Padding(
+                    padding: const EdgeInsetsDirectional.all(24.0),
+                    child: CText('no_introductions'.i18n,
+                        style: tsBody1, textAlign: TextAlign.center),
+                  ));
+                }
+
                 return ListView.builder(
-                  itemCount: groupedIntroductionPaths.length,
+                  itemCount: groupedIntroductions.length,
                   itemBuilder: (context, index) {
                     var introductorContactId =
-                        groupedIntroductionPaths.keys.elementAt(index);
+                        groupedIntroductions.keys.elementAt(index);
                     var introductionsPerIntroductor =
-                        groupedIntroductionPaths.values.elementAt(index);
+                        groupedIntroductions.values.elementAt(index);
                     // match the <ContactId> to the <Contact> of the user who made the introduction
                     return Container(
                       child: model.singleContactById(
@@ -52,20 +64,19 @@ class Introductions extends StatelessWidget {
                                         (introMessage) => model.message(
                                             context,
                                             introMessage,
-                                            (context, value, child) => (value
-                                                        .introduction.status ==
-                                                    IntroductionDetails_IntroductionStatus
-                                                        .PENDING)
-                                                ? ListItemFactory.messagingItem(
-                                                    content: value.introduction
-                                                        .displayNameOrFallback,
-                                                    leading: CBadge(
-                                                      showBadge: true,
-                                                      top: 25,
-                                                      // Render the countdown timer for the introduction's expiry
-                                                      // the backend is taking care of assigning a different duration to these messages
-                                                      customBadge:
-                                                          CountdownStopwatch(
+                                            (context, value, child) =>
+                                                (value.introduction.isPending())
+                                                    ? ListItemFactory
+                                                        .messagingItem(
+                                                        content: value
+                                                            .introduction
+                                                            .displayNameOrFallback,
+                                                        leading: CBadge(
+                                                          showBadge: true,
+                                                          top: 25,
+                                                          // Render the countdown timer for the introduction's expiry
+                                                          // the backend is taking care of assigning a different duration to these messages
+                                                          customBadge: CountdownStopwatch(
                                                               startMillis: value
                                                                   .disappearAt
                                                                   .toInt(),
@@ -73,74 +84,66 @@ class Introductions extends StatelessWidget {
                                                                   .disappearAt
                                                                   .toInt(),
                                                               color: black),
-                                                      child: CustomAvatar(
-                                                          messengerId: value
-                                                              .introduction
-                                                              .to
-                                                              .id,
-                                                          displayName: value
-                                                              .introduction
-                                                              .displayNameOrFallback),
-                                                    ),
-                                                    trailingArray: [
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            showConfirmationDialog(
-                                                                context:
-                                                                    context,
-                                                                title:
-                                                                    'introductions_reject_title'
-                                                                        .i18n,
-                                                                explanation:
-                                                                    'introductions_reject_content',
-                                                                // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
-                                                                dismissText:
-                                                                    'cancel'
-                                                                        .i18n,
-                                                                agreeText:
-                                                                    'reject'
-                                                                        .i18n,
-                                                                agreeAction:
-                                                                    () async {
-                                                                  try {
-                                                                    // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                                                    await model.rejectIntroduction(
-                                                                        introductor
-                                                                            .contactId
-                                                                            .id,
-                                                                        value
-                                                                            .introduction
-                                                                            .to
-                                                                            .id);
-                                                                  } catch (e) {
-                                                                    showInfoDialog(
+                                                          child: CustomAvatar(
+                                                              messengerId: value
+                                                                  .introduction
+                                                                  .to
+                                                                  .id,
+                                                              displayName: value
+                                                                  .introduction
+                                                                  .displayNameOrFallback),
+                                                        ),
+                                                        trailingArray: [
+                                                          //* REJECT INTRO
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                showConfirmationDialog(
+                                                                    context:
                                                                         context,
-                                                                        title: 'error'
+                                                                    title:
+                                                                        'introductions_reject_title'
                                                                             .i18n,
-                                                                        des: 'introductions_error_description'
+                                                                    explanation:
+                                                                        'introductions_reject_content'
                                                                             .i18n,
-                                                                        assetPath:
-                                                                            ImagePaths
-                                                                                .alert,
-                                                                        buttonText:
-                                                                            'OK'.i18n);
-                                                                  } finally {
-                                                                    // TODO: pop router if we just went through all the requests
-                                                                  }
-                                                                }),
-                                                        child: CText(
-                                                            'reject'
-                                                                .i18n
-                                                                .toUpperCase(),
-                                                            style:
-                                                                tsButtonGrey),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          try {
-                                                            // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                                            await model
-                                                                .acceptIntroduction(
+                                                                    // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
+                                                                    dismissText:
+                                                                        'cancel'
+                                                                            .i18n,
+                                                                    agreeText:
+                                                                        'reject'
+                                                                            .i18n,
+                                                                    agreeAction:
+                                                                        () async {
+                                                                      try {
+                                                                        // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                                                                        await model.rejectIntroduction(
+                                                                            introductor.contactId.id,
+                                                                            value.introduction.to.id);
+                                                                      } catch (e) {
+                                                                        showInfoDialog(
+                                                                            context,
+                                                                            title:
+                                                                                'error'.i18n,
+                                                                            des: 'introductions_error_description'.i18n,
+                                                                            assetPath: ImagePaths.alert,
+                                                                            buttonText: 'OK'.i18n);
+                                                                      }
+                                                                    }),
+                                                            child: CText(
+                                                                'reject'
+                                                                    .i18n
+                                                                    .toUpperCase(),
+                                                                style:
+                                                                    tsButtonGrey),
+                                                          ),
+                                                          //* ACCEPT INTRO
+                                                          TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              try {
+                                                                // model.acceptIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                                                                await model.acceptIntroduction(
                                                                     introductor
                                                                         .contactId
                                                                         .id,
@@ -148,63 +151,59 @@ class Introductions extends StatelessWidget {
                                                                         .introduction
                                                                         .to
                                                                         .id);
-                                                          } catch (e) {
-                                                            showInfoDialog(
-                                                                context,
-                                                                title: 'error'
-                                                                    .i18n,
-                                                                des:
-                                                                    'introductions_error_description_accepting'
-                                                                        .i18n,
-                                                                assetPath:
-                                                                    ImagePaths
-                                                                        .alert,
-                                                                buttonText:
-                                                                    'OK'.i18n);
-                                                          } finally {
-                                                            showSnackbar(
-                                                                context:
+                                                              } catch (e) {
+                                                                showInfoDialog(
                                                                     context,
-                                                                content:
-                                                                    'introduction_approved'
-                                                                        .i18n
-                                                                        .fill([
-                                                                  value
-                                                                      .introduction
-                                                                      .displayNameOrFallback
-                                                                ]),
-                                                                duration: const Duration(
-                                                                    milliseconds:
-                                                                        2000),
-                                                                action:
-                                                                    SnackBarAction(
-                                                                  textColor:
-                                                                      pink3,
-                                                                  label: 'start_chat'
-                                                                      .i18n
-                                                                      .toUpperCase(),
-                                                                  onPressed:
-                                                                      () async {
-                                                                    await context.pushRoute(Conversation(
-                                                                        contactId: value
-                                                                            .introduction
-                                                                            .to));
-                                                                  },
-                                                                ));
-
-                                                            // TODO: pop router if we just went through all the requests
-                                                          }
-                                                        },
-                                                        child: CText(
-                                                            'accept'
-                                                                .i18n
-                                                                .toUpperCase(),
-                                                            style:
-                                                                tsButtonPink),
+                                                                    title: 'error'
+                                                                        .i18n,
+                                                                    des: 'introductions_error_description_accepting'
+                                                                        .i18n,
+                                                                    assetPath:
+                                                                        ImagePaths
+                                                                            .alert,
+                                                                    buttonText:
+                                                                        'OK'.i18n);
+                                                              } finally {
+                                                                showSnackbar(
+                                                                    context:
+                                                                        context,
+                                                                    content:
+                                                                        'introduction_approved'
+                                                                            .i18n
+                                                                            .fill([
+                                                                      value
+                                                                          .introduction
+                                                                          .displayNameOrFallback
+                                                                    ]),
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            2000),
+                                                                    action:
+                                                                        SnackBarAction(
+                                                                      textColor:
+                                                                          pink3,
+                                                                      label: 'start_chat'
+                                                                          .i18n
+                                                                          .toUpperCase(),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await context.pushRoute(Conversation(
+                                                                            contactId:
+                                                                                value.introduction.to));
+                                                                      },
+                                                                    ));
+                                                              }
+                                                            },
+                                                            child: CText(
+                                                                'accept'
+                                                                    .i18n
+                                                                    .toUpperCase(),
+                                                                style:
+                                                                    tsButtonPink),
+                                                          )
+                                                        ],
                                                       )
-                                                    ],
-                                                  )
-                                                : Container())),
+                                                    : Container())),
                                   ])),
                     );
                   },

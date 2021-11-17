@@ -33,8 +33,8 @@ class _ChatsState extends State<Chats> {
 
     //* temporary background color change
     setState(() => customBg = blue1);
-    Future.delayed(const Duration(milliseconds: 500),
-        () => setState(() => customBg = null));
+    Future.delayed(
+        shortAnimationDuration, () => setState(() => customBg = null));
 
     //* Scroll to first unaccepted message
     if (scrollListController.isAttached &&
@@ -106,6 +106,31 @@ class _ChatsState extends State<Chats> {
             backgroundColor: transparent,
             icon: const CAssetImage(path: ImagePaths.search),
           ),
+          // * Bottom modal
+          RoundButton(
+            onPressed: () async => showBottomModal(context: context, children: [
+              model.me(
+                (context, me, child) => ListItemFactory.bottomItem(
+                  icon: ImagePaths.account,
+                  content: 'account_management'.i18n,
+                  onTap: () async {
+                    await context.router.pop();
+                    // TODO: push Account Management
+                  },
+                ),
+              ),
+              ListItemFactory.bottomItem(
+                icon: ImagePaths.people,
+                content: 'introduce_contacts'.i18n,
+                onTap: () async {
+                  await context.router.pop();
+                  await context.router.push(Introduce(singleIntro: false));
+                },
+              ),
+            ]),
+            backgroundColor: transparent,
+            icon: const CAssetImage(path: ImagePaths.more_vert),
+          ),
         ],
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,12 +154,7 @@ class _ChatsState extends State<Chats> {
                             ),
                             content: CText('introductions'.i18n,
                                 style: tsSubtitle1Short),
-                            trailingArray: [
-                              const CAssetImage(
-                                path: ImagePaths.keyboard_arrow_right,
-                                size: iconSize,
-                              )
-                            ],
+                            trailingArray: [const ContinueArrow()],
                             onTap: () async =>
                                 await context.pushRoute(const Introductions()),
                           )
