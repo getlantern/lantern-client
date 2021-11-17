@@ -290,7 +290,7 @@ Future showConversationOptions({
               if (!contact.isMe)
                 ListItemFactory.bottomItem(
                     icon: ImagePaths.people,
-                    content: 'introduce_contacts'.i18n,
+                    content: 'introduce_contact'.i18n,
                     onTap: () async {
                       await bottomContext.router.pop();
                       await bottomContext.pushRoute(Introduce(
