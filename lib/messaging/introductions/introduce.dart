@@ -183,20 +183,10 @@ class NotEnoughContacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const CAssetImage(
-          path: ImagePaths.empty_search,
-          size: 130,
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.all(24.0),
-          child: CText('need_two_contacts_to_introduce'.i18n,
-              style: tsSubtitle1, textAlign: TextAlign.center),
-        ),
-      ],
+        child: Padding(
+      padding: const EdgeInsetsDirectional.all(24.0),
+      child: CText('need_two_contacts_to_introduce'.i18n,
+          style: tsSubtitle1, textAlign: TextAlign.center),
     ));
   }
 }

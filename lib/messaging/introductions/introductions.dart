@@ -24,6 +24,16 @@ class Introductions extends StatelessWidget {
                 final groupedIntroductions = introductions
                     .getPending()
                     .groupBy((intro) => intro.value.contactId);
+
+                if (groupedIntroductions.isEmpty) {
+                  return Center(
+                      child: Padding(
+                    padding: const EdgeInsetsDirectional.all(24.0),
+                    child: CText('no_introductions'.i18n,
+                        style: tsBody1, textAlign: TextAlign.center),
+                  ));
+                }
+
                 return ListView.builder(
                   itemCount: groupedIntroductions.length,
                   itemBuilder: (context, index) {
@@ -84,6 +94,7 @@ class Introductions extends StatelessWidget {
                                                                   .displayNameOrFallback),
                                                         ),
                                                         trailingArray: [
+                                                          //* REJECT INTRO
                                                           TextButton(
                                                             onPressed: () =>
                                                                 showConfirmationDialog(
@@ -93,7 +104,8 @@ class Introductions extends StatelessWidget {
                                                                         'introductions_reject_title'
                                                                             .i18n,
                                                                     explanation:
-                                                                        'introductions_reject_content',
+                                                                        'introductions_reject_content'
+                                                                            .i18n,
                                                                     // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
                                                                     dismissText:
                                                                         'cancel'
@@ -116,8 +128,6 @@ class Introductions extends StatelessWidget {
                                                                             des: 'introductions_error_description'.i18n,
                                                                             assetPath: ImagePaths.alert,
                                                                             buttonText: 'OK'.i18n);
-                                                                      } finally {
-                                                                        // TODO: pop router if we just went through all the requests
                                                                       }
                                                                     }),
                                                             child: CText(
@@ -127,6 +137,7 @@ class Introductions extends StatelessWidget {
                                                                 style:
                                                                     tsButtonGrey),
                                                           ),
+                                                          //* ACCEPT INTRO
                                                           TextButton(
                                                             onPressed:
                                                                 () async {
@@ -181,8 +192,6 @@ class Introductions extends StatelessWidget {
                                                                                 value.introduction.to));
                                                                       },
                                                                     ));
-
-                                                                // TODO: pop router if we just went through all the requests
                                                               }
                                                             },
                                                             child: CText(
