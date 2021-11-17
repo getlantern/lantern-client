@@ -11,13 +11,19 @@ ScrollablePositionedList groupedContactListGenerator({
   Function? trailingCallback,
   Function? onTapCallback,
   Function? focusMenuCallback,
+  List<Widget>? headItems,
 }) {
+  final numHeadItems = headItems?.length ?? 0;
   return ScrollablePositionedList.builder(
     itemScrollController: scrollListController,
     initialScrollIndex: initialScrollIndex,
     physics: defaultScrollPhysics,
-    itemCount: groupedSortedList!.length,
+    itemCount: groupedSortedList!.length + numHeadItems,
     itemBuilder: (context, index) {
+      if (index < numHeadItems) {
+        return headItems![index];
+      }
+      index -= numHeadItems;
       var key = groupedSortedList.keys.elementAt(index);
       var itemsPerKey = groupedSortedList.values.elementAt(index);
       return ListBody(
