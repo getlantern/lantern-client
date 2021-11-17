@@ -6,7 +6,6 @@ class RecoveryKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var doBackup = true;
     var model = context.watch<MessagingModel>();
     return model.me(
       (BuildContext context, Contact me, Widget? child) => BaseScreen(

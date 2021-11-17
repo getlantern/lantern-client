@@ -158,7 +158,7 @@ class Signaling extends ValueNotifier<SignalingState> {
       // }
     };
 
-    var mediaDevices = await navigator.mediaDevices.enumerateDevices();
+    // var mediaDevices = await navigator.mediaDevices.enumerateDevices();
     final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     // unmute all audio tracks and disable speakerphone by default
     stream.getAudioTracks().forEach((track) {
