@@ -249,7 +249,7 @@ Future showConversationOptions({
                                                     end: 16)),
                                           ),
                                           onPressed: () async =>
-                                              bottomContext.router.pop(),
+                                              context.router.pop(),
                                           child: CText(
                                               'cancel'.i18n.toUpperCase(),
                                               style: tsButtonGrey),

@@ -65,14 +65,23 @@ msgstr "Desktop Version"
 msgid "settings"
 msgstr "Settings"
 
+msgid "general"
+msgstr "General"
+
 msgid "proxy_all"
 msgstr "Proxy everything"
+
+msgid "proxy_everything_is"
+msgstr "Proxy everything is %s"
 
 msgid "language"
 msgstr "Language"
 
 msgid "report_issue"
 msgstr "Report an issue"
+
+msgid "blocked_users"
+msgstr "Blocked Users"
 
 msgid "description_proxy_all_dialog"
 msgstr ""
@@ -259,6 +268,9 @@ msgstr "Unblock"
 msgid "block_info_title"
 msgstr "Block %s ?"
 
+msgid "no_blocked_users"
+msgstr "There are no blocked users."
+
 msgid "unblock_info_title"
 msgstr "Unblock %s ?"
 
@@ -266,7 +278,7 @@ msgid "block_info_description"
 msgstr "Blocking this user will delete the chat history, and prevent them from contacting you in the future.  You can unblock users from the settings menu."
 
 msgid "unblock_info_description"
-msgstr "Are you sure you want to unblock this contact?"
+msgstr "%s will now be able to message you.  They will not be notified that you unblocked them."
 
 msgid "block_info_checkbox"
 msgstr "I understand that this will delete all chat history."
