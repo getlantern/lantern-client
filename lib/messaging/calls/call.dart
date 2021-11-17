@@ -172,10 +172,10 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                 Container(
                                   padding: const EdgeInsetsDirectional.all(8.0),
                                   child: CustomAvatar(
-                                      messengerId: widget.contact.contactId.id,
-                                      displayName:
-                                          widget.contact.displayNameOrFallback,
-                                      customColor: grey5),
+                                    messengerId: widget.contact.contactId.id,
+                                    displayName:
+                                        widget.contact.displayNameOrFallback,
+                                  ),
                                 ),
                                 renderTitle()
                               ],
@@ -188,13 +188,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  color: Colors.blueGrey,
                                   padding: const EdgeInsetsDirectional.all(8.0),
                                   child: CustomAvatar(
                                     messengerId: widget.contact.contactId.id,
                                     displayName:
                                         widget.contact.displayNameOrFallback,
-                                    customColor: grey5,
                                     radius: 64,
                                     textStyle: tsDisplayBlack,
                                   ),
@@ -212,6 +210,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
+                                margin:
+                                    const EdgeInsetsDirectional.only(top: 8.0),
                                 constraints: BoxConstraints(
                                   maxWidth:
                                       MediaQuery.of(context).size.width * 0.9,
@@ -288,7 +288,10 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                                             end: 10.0,
                                                             top: 5.0,
                                                             bottom: 5.0),
-                                                    child: Stack(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         CText(
                                                             (entry.key + 1)
@@ -309,13 +312,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                                                 .toString(),
                                                             style: entry.value[
                                                                     'isConfirmed']
-                                                                ? tsHeading1.copiedWith(
+                                                                ? tsHeading3.copiedWith(
                                                                     decoration:
                                                                         TextDecoration
                                                                             .lineThrough,
                                                                     color:
                                                                         grey4)
-                                                                : tsHeading1
+                                                                : tsHeading3
                                                                     .copiedWith(
                                                                         color:
                                                                             white))
@@ -498,13 +501,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                 widget.contact.displayNameOrFallback.isNotEmpty
                     ? widget.contact.displayNameOrFallback
                     : widget.contact.contactId.id,
-                style: tsHeading1.copiedWith(color: white),
+                style: tsHeading1.copiedWith(color: white).short,
               ),
             ),
             Container(
               child: CText(
                 getCallStatus(signaling.value.callState),
-                style: tsBody1.copiedWith(color: white),
+                style: tsBody2.copiedWith(color: white),
               ),
             ),
           ]);
