@@ -27,7 +27,9 @@ class _IntroduceState extends State<Introduce> {
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           var sortedContacts = _contacts
               .where((element) =>
-                  element.value.isAccepted() && element.value.isNotBlocked())
+                  element.value.isAccepted() &&
+                  !element.value.isMe &&
+                  element.value.isNotBlocked())
               .toList()
               .sortedAlphabetically();
 

@@ -664,6 +664,9 @@ msgstr "Copy recovery key"
 msgid "search"
 msgstr "Search"
 
+msgid "account_management"
+msgstr "Account Management"
+
 msgid "introductions"
 msgstr "Introductions"
 
