@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+
 import '../messaging.dart';
 
 void showDeleteContactDialog(
@@ -19,7 +20,7 @@ void showDeleteContactDialog(
               padding: EdgeInsets.all(8.0),
               child: CAssetImage(path: ImagePaths.delete),
             ),
-            CText('${'delete_contact'.i18n.toUpperCase()}?', style: tsBody3),
+            CText('${'delete_contact'.i18n}?', style: tsBody3),
           ],
         ),
         content: CText('delete_info_description'.i18n, style: tsBody1),
