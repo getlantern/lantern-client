@@ -31,46 +31,10 @@ class ContactConnectionCard extends StatelessWidget {
         LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return Container(
-            width: constraints.maxWidth,
-            padding: const EdgeInsetsDirectional.only(top: 10),
-            child: ListTile(
-              leading: CustomAvatar(
-                  messengerId: contact.contactId.id,
-                  displayName: contact.displayNameOrFallback),
-              title: CText(introduction.displayNameOrFallback,
-                  style: tsBody3.copiedWith(
-                      color: outbound ? outboundMsgColor : inboundMsgColor)),
-              trailing: outbound
-                  ? const SizedBox()
-                  : FittedBox(
-                      child: Row(
-                        children: [
-                          if (message.introduction.status ==
-                              IntroductionDetails_IntroductionStatus.ACCEPTED)
-                            CAssetImage(
-                                path: ImagePaths.check_circle_outline,
-                                color: outbound
-                                    ? outboundMsgColor
-                                    : inboundMsgColor),
-                          mirrorLTR(
-                              context: context,
-                              child: CAssetImage(
-                                  path: (message.introduction.status ==
-                                          IntroductionDetails_IntroductionStatus
-                                              .PENDING)
-                                      ? ImagePaths.info
-                                      : ImagePaths.keyboard_arrow_right,
-                                  size: (message.introduction.status ==
-                                          IntroductionDetails_IntroductionStatus
-                                              .PENDING)
-                                      ? 20.0
-                                      : 30.0,
-                                  color: outbound
-                                      ? outboundMsgColor
-                                      : inboundMsgColor)),
-                        ],
-                      ),
-                    ),
+            width: outbound ? constraints.maxWidth * 0.6 : constraints.maxWidth,
+            padding: const EdgeInsetsDirectional.only(
+                start: 16.0, end: 16.0, top: 16.0, bottom: 4.0),
+            child: GestureDetector(
               onTap: () async {
                 if (inbound &&
                     message.introduction.status ==
@@ -88,12 +52,59 @@ class ContactConnectionCard extends StatelessWidget {
                       .pushRoute(Conversation(contactId: introduction.to));
                 }
               },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomAvatar(
+                      messengerId: contact.contactId.id,
+                      displayName: contact.displayNameOrFallback),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                          start: 8.0, end: 8.0),
+                      child: CText(introduction.displayNameOrFallback,
+                          overflow: TextOverflow.ellipsis,
+                          style: tsBody3.copiedWith(
+                              color: outbound
+                                  ? outboundMsgColor
+                                  : inboundMsgColor)),
+                    ),
+                  ),
+                  if (!outbound)
+                    Row(
+                      children: [
+                        if (message.introduction.status ==
+                            IntroductionDetails_IntroductionStatus.ACCEPTED)
+                          CAssetImage(
+                            path: ImagePaths.check_black,
+                            color:
+                                outbound ? outboundMsgColor : inboundMsgColor,
+                            size: 20,
+                          ),
+                        mirrorLTR(
+                            context: context,
+                            child: CAssetImage(
+                                path: (message.introduction.status ==
+                                        IntroductionDetails_IntroductionStatus
+                                            .PENDING)
+                                    ? ImagePaths.info
+                                    : ImagePaths.keyboard_arrow_right,
+                                color: outbound
+                                    ? outboundMsgColor
+                                    : inboundMsgColor)),
+                      ],
+                    ),
+                ],
+              ),
             ),
           );
         }),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [StatusRow(outbound, message)],
+        Container(
+          padding: const EdgeInsetsDirectional.only(start: 8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [StatusRow(outbound, message)],
+          ),
         )
       ],
     );
@@ -131,7 +142,7 @@ class ContactConnectionCard extends StatelessWidget {
                     .pushRoute(Conversation(contactId: introduction.to));
               }
             },
-            trailingArray: [const ContinueArrow()],
+            trailingArray: [],
           ),
           ListItemFactory.bottomItem(
             icon: ImagePaths.cancel,
@@ -156,7 +167,7 @@ class ContactConnectionCard extends StatelessWidget {
                     await context.router.pop();
                   }
                 }),
-            trailingArray: [const ContinueArrow()],
+            trailingArray: [],
           ),
         ]);
   }
