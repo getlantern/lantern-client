@@ -60,7 +60,7 @@ void showVerificationOptions({
             )
                 .then((value) async {
               // * we just successfully verified someone via a Call
-              if (value != null) {
+              if (value == true) {
                 verificationUX();
               }
             });

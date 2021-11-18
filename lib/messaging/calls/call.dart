@@ -22,6 +22,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   var isPanelShowing = false;
   var isVerified = false;
   var fragmentStatusMap = {};
+  var incoming = false;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
 
     if (widget.initialSession != null) {
       session = Future.value(widget.initialSession!);
+      incoming = true;
     } else {
       session = signaling.call(
         peerId: widget.contact.contactId.id,
@@ -68,9 +70,17 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     if (signaling.value.callState == CallState.Bye) {
       if (!closed) {
         /*
-        * Popping back to wherever we were by indicating that we have verified the contact
+        *
         */
-        Navigator.pop(context, isVerified);
+        if (incoming) {
+          // For incoming calls, open the conversation corresponding to this
+          // the contact with whom we were just on a call.
+          await context.router
+              .replace(Conversation(contactId: widget.contact.contactId));
+        } else {
+          // Pop back to wherever we were, whether or not we've verified the contact.
+          Navigator.pop(context, isVerified);
+        }
         closed = true;
       }
     }
