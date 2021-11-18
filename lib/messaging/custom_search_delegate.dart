@@ -205,7 +205,7 @@ class SuggestionBuilder extends StatelessWidget {
             return ListItemFactory.messagingItem(
               leading: CustomAvatar(
                   messengerId: suggestion.value.contactId.id,
-                  displayName: suggestion.value.displayNameOrFallback),
+                  displayName: suggestion.value.displayName),
               content: suggestion.snippet,
               onTap: () async => await context.pushRoute(
                   Conversation(contactId: suggestion.value.contactId)),
@@ -223,7 +223,7 @@ class SuggestionBuilder extends StatelessWidget {
                 return ListItemFactory.messagingItem(
                   leading: CustomAvatar(
                       messengerId: suggestion.value.contactId.id,
-                      displayName: contact.displayNameOrFallback),
+                      displayName: contact.displayName),
                   content: contact.displayNameOrFallback,
                   subtitle: suggestion.snippet,
                   onTap: () async => await context.pushRoute(Conversation(
