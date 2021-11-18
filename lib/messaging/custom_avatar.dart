@@ -31,7 +31,8 @@ class CustomAvatar extends StatelessWidget {
         (displayName ?? '').isEmpty
             ? '#'
             : displayName.toString().getInitials().toUpperCase(),
-        style: (textStyle ?? tsBody1).copiedWith(color: white, lineHeight: 18),
+        style: (textStyle ?? tsBody1.copiedWith(lineHeight: 18))
+            .copiedWith(color: white),
       ),
     );
   }

@@ -6,6 +6,8 @@ final JsonEncoder _encoder = const JsonEncoder();
 final JsonDecoder _decoder = const JsonDecoder();
 
 class Notifications {
+  static final inCallNotificationId = 0;
+
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final inCallChannel = const NotificationDetails(
     android: AndroidNotificationDetails(
@@ -36,10 +38,14 @@ class Notifications {
 
   Future<void> showInCallNotification(Contact contact) {
     return flutterLocalNotificationsPlugin.show(
-        0,
+        inCallNotificationId,
         'In call with ${contact.displayName}'.i18n,
         'Touch here to open call'.i18n,
         inCallChannel);
+  }
+
+  Future<void> dismissInCallNotification() {
+    return flutterLocalNotificationsPlugin.cancel(inCallNotificationId);
   }
 }
 
