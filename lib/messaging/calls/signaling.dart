@@ -1,3 +1,4 @@
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -116,6 +117,7 @@ class Signaling extends ValueNotifier<SignalingState> {
       {required String peerId,
       required String media,
       required Function() onError}) async {
+    await FlutterRingtonePlayer.playRingtone(asAlarm: true);
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
@@ -130,6 +132,8 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void bye(Session session) {
+    FlutterRingtonePlayer.stop();
+
     _sendBye(session.pid, session.sid);
 
     value.callState = CallState.Bye;
@@ -169,6 +173,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void onMessage(String peerId, String messageJson, bool acceptedCall) async {
+    await FlutterRingtonePlayer.stop();
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {
