@@ -97,7 +97,7 @@ class _NewChatState extends State<NewChat> {
                     scrollListController: scrollListController,
                     leadingCallback: (Contact contact) => CustomAvatar(
                         messengerId: contact.contactId.id,
-                        displayName: contact.displayNameOrFallback),
+                        displayName: contact.displayName),
                     onTapCallback: (Contact contact) async => await context
                         .pushRoute(Conversation(contactId: contact.contactId)),
                     focusMenuCallback: (Contact contact) =>

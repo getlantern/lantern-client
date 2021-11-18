@@ -197,7 +197,7 @@ class _ChatsState extends State<Chats> {
                           leading: CustomAvatar(
                               customColor: isUnaccepted ? grey5 : null,
                               messengerId: contact.contactId.id,
-                              displayName: contact.displayNameOrFallback),
+                              displayName: contact.displayName),
                           content: contact.displayNameOrFallback,
                           subtitle:
                               '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
