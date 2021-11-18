@@ -108,8 +108,6 @@ dependencies:
 
   share_plus: ^3.0.4
 
-  flutter_ringtone_player: ^3.1.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -143,6 +141,7 @@ flutter:
     - assets/images/countdown_stopwatch/
     - assets/locales/
     - assets/fonts/
+    - assets/sounds/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

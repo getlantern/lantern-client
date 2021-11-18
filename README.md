@@ -8,6 +8,11 @@ circumvention tool.
 
 This project is meant to be used inside of the context of a local clone of https://github.com/getlantern/lantern-build.
 
+## Acknowledgements
+
+This application uses ringtone sounds from Mike Koenig available [here](https://soundbible.com/1868-Ringing-Phone.html)
+and licensed under the [Creative Commons Attribution License](https://creativecommons.org/licenses/by/3.0/).
+
 ## Submodules
 This project uses some shared code from a submodule that needs to be initialized with
 

@@ -1,4 +1,4 @@
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -42,8 +42,14 @@ class SignalingState {
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
 class Signaling extends ValueNotifier<SignalingState> {
-  Signaling({required this.model, required this.mc}) : super(SignalingState());
+  Signaling({required this.model, required this.mc}) : super(SignalingState()) {
+    // default to earpiece
+    toggleAudioPlayerEarpieceOrSpeaker();
+  }
 
+  final AudioCache audioCache =
+      AudioCache(prefix: 'assets/sounds/', fixedPlayer: AudioPlayer());
+  bool audioPlayerOnSpeaker = false;
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
   final MethodChannel mc;
@@ -51,6 +57,11 @@ class Signaling extends ValueNotifier<SignalingState> {
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
+
+  void toggleAudioPlayerEarpieceOrSpeaker() async {
+    await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
+    audioPlayerOnSpeaker = !audioPlayerOnSpeaker;
+  }
 
   String get sdpSemantics =>
       WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
@@ -104,6 +115,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void toggleSpeakerphone() {
+    toggleAudioPlayerEarpieceOrSpeaker();
     value.speakerphoneOn = !value.speakerphoneOn;
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
@@ -117,7 +129,7 @@ class Signaling extends ValueNotifier<SignalingState> {
       {required String peerId,
       required String media,
       required Function() onError}) async {
-    await FlutterRingtonePlayer.playRingtone(asAlarm: true);
+    await audioCache.loop('ringing.mp3');
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
@@ -132,7 +144,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void bye(Session session) {
-    FlutterRingtonePlayer.stop();
+    audioCache.fixedPlayer!.stop();
 
     _sendBye(session.pid, session.sid);
 
@@ -173,7 +185,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void onMessage(String peerId, String messageJson, bool acceptedCall) async {
-    await FlutterRingtonePlayer.stop();
+    await audioCache.fixedPlayer?.stop();
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {
