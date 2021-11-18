@@ -18,7 +18,7 @@ class Welcome extends StatelessWidget {
               padding: const EdgeInsetsDirectional.only(top: 16.0),
               child: CAssetImage(
                   path: ImagePaths.welcome_illustration,
-                  size: MediaQuery.of(context).size.height * 0.35),
+                  size: MediaQuery.of(context).size.height),
             ),
           ),
           Flexible(
