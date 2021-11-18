@@ -94,8 +94,7 @@ class _IntroduceState extends State<Introduce> {
                                       leadingCallback: (Contact contact) =>
                                           CustomAvatar(
                                               messengerId: contact.contactId.id,
-                                              displayName: contact
-                                                  .displayNameOrFallback),
+                                              displayName: contact.displayName),
                                       disableSplash: !widget.singleIntro,
                                       trailingCallback: (int index,
                                               Contact contact) =>

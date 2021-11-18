@@ -23,7 +23,7 @@ class ContactInfoTopBar extends StatelessWidget {
           child: CustomAvatar(
               customColor: contact.isUnaccepted() ? grey5 : null,
               messengerId: contact.contactId.id,
-              displayName: contact.displayNameOrFallback),
+              displayName: contact.displayName),
         ),
         Expanded(
           child: Column(
