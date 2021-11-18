@@ -43,13 +43,15 @@ class SignalingState {
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
 class Signaling extends ValueNotifier<SignalingState> {
   Signaling({required this.model, required this.mc}) : super(SignalingState()) {
-    // default to earpiece
-    toggleAudioPlayerEarpieceOrSpeaker();
+    // pre-load ringing file into cache
+    audioCache.load(ringingFile);
   }
 
+  static final ringingFile = 'ringing.mp3';
   final AudioCache audioCache =
       AudioCache(prefix: 'assets/sounds/', fixedPlayer: AudioPlayer());
-  bool audioPlayerOnSpeaker = false;
+  bool audioPlayerOnSpeaker = true;
+  final defaultAudioPlayerToEarPieceOnce = once();
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
   final MethodChannel mc;
@@ -129,7 +131,8 @@ class Signaling extends ValueNotifier<SignalingState> {
       {required String peerId,
       required String media,
       required Function() onError}) async {
-    await audioCache.loop('ringing.mp3');
+    await audioCache.loop(ringingFile);
+    if (audioPlayerOnSpeaker) toggleAudioPlayerEarpieceOrSpeaker();
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
