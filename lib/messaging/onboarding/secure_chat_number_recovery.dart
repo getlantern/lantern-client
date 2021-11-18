@@ -31,6 +31,7 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
           context.loaderOverlay.show(widget: spinner);
           await model.recover(controller.text.withoutWhitespace);
           await model.markIsOnboarded();
+          await model.markCopiedRecoveryKey();
           context.router.popUntilRoot();
           showSnackbar(context: context, content: 'recovery_success'.i18n);
         } catch (e) {
