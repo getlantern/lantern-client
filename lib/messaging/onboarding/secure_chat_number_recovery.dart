@@ -33,7 +33,10 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
           await model.markIsOnboarded();
           await model.markCopiedRecoveryKey();
           context.router.popUntilRoot();
-          showSnackbar(context: context, content: 'recovery_success'.i18n);
+          showSnackbar(
+              context: context,
+              content: 'recovery_success'.i18n,
+              duration: longAnimationDuration);
         } catch (e) {
           setState(() => controller.error = 'recovery_error'.i18n);
         } finally {

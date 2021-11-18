@@ -244,12 +244,6 @@ msgstr "Edit"
 msgid "save_error"
 msgstr "Something went wrong while saving."
 
-msgid "username"
-msgstr "Username:"
-
-msgid "messenger_id"
-msgstr "Messenger ID:"
-
 msgid "more_options"
 msgstr "More options"
 
@@ -296,7 +290,7 @@ msgid "delete_info_description"
 msgstr "Once deleted, you will need to add their contact information if you want to chat with them again."
 
 msgid "add_new_contact"
-msgstr "Add new contact:"
+msgstr "Add new contact"
 
 msgid "add_contact"
 msgstr "Add Contact"
