@@ -518,13 +518,13 @@ msgid "longform_seconds"
 msgstr "%s seconds"
 
 msgid "shortform_seconds"
-msgstr "%s s"
+msgstr "%ss"
 
 msgid "longform_minute"
 msgstr "%s minute"
 
 msgid "shortform_minutes"
-msgstr "%s m"
+msgstr "%sm"
 
 msgid "longform_minutes"
 msgstr "%s minutes"
@@ -533,7 +533,7 @@ msgid "longform_hour"
 msgstr "%s hour"
 
 msgid "shortform_hours"
-msgstr "%s h"
+msgstr "%sh"
 
 msgid "longform_hours"
 msgstr "%s hours"
@@ -542,7 +542,7 @@ msgid "longform_day"
 msgstr "%s day"
 
 msgid "shortform_days"
-msgstr "%s d"
+msgstr "%sd"
 
 msgid "longform_days"
 msgstr "%s days"
@@ -551,7 +551,7 @@ msgid "longform_week"
 msgstr "%s week"
 
 msgid "shortform_weeks"
-msgstr "%s w"
+msgstr "%sw"
 
 msgid "longform_weeks"
 msgstr "%s weeks"
