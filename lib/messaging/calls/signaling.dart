@@ -185,7 +185,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void onMessage(String peerId, String messageJson, bool acceptedCall) async {
-    await audioCache.fixedPlayer?.stop();
+    await audioCache.fixedPlayer!.stop();
     Map<String, dynamic> parsedMessage = _decoder.convert(messageJson);
     var data = parsedMessage['data'];
     switch (parsedMessage['type']) {
