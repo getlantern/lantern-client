@@ -54,8 +54,8 @@ class ContactConnectionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomAvatar(
-                      messengerId: contact.contactId.id,
-                      displayName: contact.displayNameOrFallback),
+                      messengerId: message.introduction.to.id,
+                      displayName: message.introduction.displayName),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsetsDirectional.only(
