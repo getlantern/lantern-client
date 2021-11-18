@@ -378,7 +378,7 @@ class MessagingHolder {
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
-        canvas.drawText(contact.displayName.take(2).toUpperCase(), 125.toFloat(), 250.toFloat(), paintAv)
+        canvas.drawText(contact.displayName.take(2).toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
 
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
