@@ -83,7 +83,8 @@ dependencies:
 
   dotted_border: ^2.0.0
 
-  emoji_picker_flutter: ^1.0.6
+  # Version 1.0.7 seems glitchy, so we're using 1.0.6 explicitly
+  emoji_picker_flutter: 1.0.6
 
   email_validator: '^2.0.1'
 

@@ -173,8 +173,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                   padding: const EdgeInsetsDirectional.all(8.0),
                                   child: CustomAvatar(
                                     messengerId: widget.contact.contactId.id,
-                                    displayName:
-                                        widget.contact.displayNameOrFallback,
+                                    displayName: widget.contact.displayName,
                                   ),
                                 ),
                                 renderTitle()
@@ -191,8 +190,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                   padding: const EdgeInsetsDirectional.all(8.0),
                                   child: CustomAvatar(
                                     messengerId: widget.contact.contactId.id,
-                                    displayName:
-                                        widget.contact.displayNameOrFallback,
+                                    displayName: widget.contact.displayName,
                                     radius: 64,
                                     textStyle: tsDisplayBlack,
                                   ),

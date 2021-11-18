@@ -94,7 +94,7 @@ class _ContactInfoState extends State<ContactInfo> {
                         const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                     child: CustomAvatar(
                       messengerId: contact.contactId.id,
-                      displayName: contact.displayNameOrFallback,
+                      displayName: contact.displayName,
                       radius: 64,
                       textStyle: tsDisplayBlack,
                     ),
