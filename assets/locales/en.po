@@ -512,7 +512,49 @@ msgid "banner_messages_persist"
 msgstr "New messages do not disappear."
 
 msgid "banner_message_retention"
-msgstr "Message retention is set to %s."
+msgstr "Message retention is set to %s"
+
+msgid "longform_seconds"
+msgstr "%s seconds"
+
+msgid "shortform_seconds"
+msgstr "%s s"
+
+msgid "longform_minute"
+msgstr "%s minute"
+
+msgid "shortform_minutes"
+msgstr "%s m"
+
+msgid "longform_minutes"
+msgstr "%s minutes"
+
+msgid "longform_hour"
+msgstr "%s hour"
+
+msgid "shortform_hours"
+msgstr "%s h"
+
+msgid "longform_hours"
+msgstr "%s hours"
+
+msgid "longform_day"
+msgstr "%s day"
+
+msgid "shortform_days"
+msgstr "%s d"
+
+msgid "longform_days"
+msgstr "%s days"
+
+msgid "longform_week"
+msgstr "%s week"
+
+msgid "shortform_weeks"
+msgstr "%s w"
+
+msgid "longform_weeks"
+msgstr "%s weeks"
 
 msgid "banner_source_unknown"
 msgstr "Unknown"
@@ -665,7 +707,7 @@ msgid "backup_contacts"
 msgstr "Backup contacts"
 
 msgid "copy_recovery_key"
-msgstr "Copy recovery key"
+msgstr "Copy Key"
 
 msgid "search"
 msgstr "Search"
