@@ -59,6 +59,7 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
+    var sessionModel = context.watch<SessionModel>();
     return BaseScreen(
         title: 'chats'.i18n,
         actions: [
@@ -110,14 +111,16 @@ class _ChatsState extends State<Chats> {
           RoundButton(
             onPressed: () async => showBottomModal(context: context, children: [
               model.me(
-                (context, me, child) => ListItemFactory.bottomItem(
-                  icon: ImagePaths.account,
-                  content: 'account_management'.i18n,
-                  onTap: () async {
-                    await context.router.pop();
-                    // TODO: push Account Management
-                  },
-                ),
+                (context, me, child) => sessionModel.proUser(
+                    (context, isPro, child) => ListItemFactory.bottomItem(
+                          icon: ImagePaths.account,
+                          content: 'account_management'.i18n,
+                          onTap: () async {
+                            await context.router.pop();
+                            await context.router
+                                .push(AccountManagement(isPro: isPro));
+                          },
+                        )),
               ),
               ListItemFactory.bottomItem(
                 icon: ImagePaths.people,
