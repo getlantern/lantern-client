@@ -403,7 +403,7 @@ class MessagingModel extends Model {
       .join(' ');
 
   /*
-  * REMINDERS 
+  * REMINDERS
   */
 
   Future<void> dismissVerificationReminder(String unsafeId) {
@@ -445,5 +445,11 @@ class MessagingModel extends Model {
         '/requestNotificationLastDismissed',
         defaultValue: 0,
         builder: builder);
+  }
+
+  Future<String> getDefaultRingtoneUri() {
+    return methodChannel
+        .invokeMethod('getDefaultRingtoneUri')
+        .then((v) => v as String);
   }
 }
