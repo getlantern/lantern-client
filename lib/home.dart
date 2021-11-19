@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final eventManager = EventManager('lantern_event_channel');
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
+    // Let back-end know that we're ready to handle navigation
+    navigationChannel.invokeListMethod('ready');
     _cancelEventSubscription =
         eventManager.subscribe(Event.All, (eventName, params) {
       final event = EventParsing.fromValue(eventName);
