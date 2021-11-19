@@ -1,10 +1,6 @@
 package org.getlantern.lantern.model
 
-import android.app.Application
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -24,12 +20,7 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
-import io.lantern.messaging.Schema
-import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.path
+import io.lantern.messaging.*
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -219,23 +210,19 @@ class MessagingHolder {
             )
             val ring = object : Runnable {
                 override fun run() {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                        notificationManager.notify(notificationId, notification)
-                    } else {
-                        playRingtone(context)
-                        notificationManager.notify(notificationId, notification)
-                        // on some phones like Huawei, the heads up notification only stays heads up
-                        // for a few seconds, so we re-notify every second while ringing in order to
-                        // keep it heads up
-                        ringer.schedule(
-                            {
-                                if (incomingCalls.containsKey(signal.senderId)) {
-                                    run()
-                                }
-                            },
-                            2, TimeUnit.SECONDS
-                        )
-                    }
+                    playRingtone(context)
+                    notificationManager.notify(notificationId, notification)
+                    // on some phones like Huawei, the heads up notification only stays heads up
+                    // for a few seconds, so we re-notify every second while ringing in order to
+                    // keep it heads up
+                    ringer.schedule(
+                        {
+                            if (incomingCalls.containsKey(signal.senderId)) {
+                                run()
+                            }
+                        },
+                        2, TimeUnit.SECONDS
+                    )
                 }
             }
             ringer.execute {
@@ -303,26 +290,28 @@ class MessagingHolder {
         )
 
         // Attach RemoteView to builder()
-        builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-        builder.setCustomContentView(
-            incomingCallRemoteView(
-                context,
-                contact,
-                acceptPendingIntent,
-                declinePendingIntent,
-            )
-        )
         builder.setContentTitle(context.getString(R.string.incoming_call))
         builder.setContentText(displayName(context, contact))
         builder.setSmallIcon(R.drawable.status_on)
-        builder.setAutoCancel(false)
         builder.priority = NotificationCompat.PRIORITY_MAX
         builder.setCategory(NotificationCompat.CATEGORY_CALL)
+        builder.setAutoCancel(false)
+        builder.setOnlyAlertOnce(false)
         builder.setTimeoutAfter(30000)
         builder.setDeleteIntent(declinePendingIntent)
         builder.extras.putInt("notificationId", notificationId)
+        builder.setDefaults(NotificationCompat.DEFAULT_ALL)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            builder.setCustomContentView(
+                incomingCallRemoteView(
+                    context,
+                    contact,
+                    acceptPendingIntent,
+                    declinePendingIntent,
+                )
+            )
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(
                 callNotificationChannelId,
@@ -336,8 +325,7 @@ class MessagingHolder {
                 notificationChannel
             )
         } else {
-            // This is a custom action assignment in case the API does not accept remote views
-            // TODO: need to test this
+            // Don't use a custom style
             val declineAction = NotificationCompat.Action.Builder(
                 android.R.drawable.ic_menu_delete,
                 context.getString(R.string.decline),
@@ -351,10 +339,14 @@ class MessagingHolder {
             builder.addAction(declineAction)
             builder.addAction(acceptAction)
 
-            // Need to set vibrate and ringtone on notification itself to make sure it shows up as a
-            // heads up notification
+            // Need to set vibrate on notification itself to make sure it shows up as a heads up
+            // notification
             builder.setVibrate(ringVibrationPattern)
             builder.setSound(ringtoneUri)
+
+            // Hack - set an empty full screen intent to keep the notification up
+            val dummyIntent = PendingIntent.getActivity(context, 0, Intent(), 0)
+            builder.setFullScreenIntent(dummyIntent, true)
         }
 
         return builder.build()
@@ -448,8 +440,12 @@ class MessagingHolder {
         private fun playRingtone(context: Context) {
             if (!playingRingtone) {
                 playingRingtone = true
-                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator!!.vibrate(VibrationEffect.createWaveform(ringVibrationPattern, 0))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                    vibrator!!.vibrate(
+                        VibrationEffect.createWaveform(ringVibrationPattern, 0)
+                    )
+                }
                 ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
                 val rtone = ringtone!!
                 thread {
@@ -464,7 +460,7 @@ class MessagingHolder {
                 playingRingtone = false
                 ringtone!!.stop()
                 ringtone = null
-                vibrator!!.cancel()
+                vibrator?.cancel()
                 vibrator = null
             }
         }
