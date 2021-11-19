@@ -1,6 +1,10 @@
 package org.getlantern.lantern.model
 
-import android.app.*
+import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -20,7 +24,12 @@ import io.lantern.android.model.BaseModel
 import io.lantern.android.model.MessagingModel
 import io.lantern.db.ChangeSet
 import io.lantern.db.Subscriber
-import io.lantern.messaging.*
+import io.lantern.messaging.Messaging
+import io.lantern.messaging.Model
+import io.lantern.messaging.Schema
+import io.lantern.messaging.WebRTCSignal
+import io.lantern.messaging.directContactPath
+import io.lantern.messaging.path
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
@@ -420,9 +429,9 @@ class MessagingHolder {
 
     private fun displayName(context: Context, contact: Model.Contact): String =
         if (contact.displayName.isEmpty())
-            if (contact.chatNumber.shortNumber.isNotEmpty()) 
+            if (contact.chatNumber.shortNumber.isNotEmpty())
                 contact.chatNumber.shortNumber
-            else 
+            else
                 context.getString(R.string.unnamed_contact)
         else
             contact.displayName
