@@ -162,6 +162,11 @@ class MessagingHolder {
                 builder.setAutoCancel(true)
                 builder.setOnlyAlertOnce(true)
                 builder.setContentIntent(openMainActivity)
+                builder.priority = NotificationCompat.PRIORITY_HIGH
+                // Do not remove this, as without it, the notification won't display heads up on
+                // older Android versions.
+                builder.setVibrate(notificationVibrationPattern)
+                builder.setSound(notificationToneUri)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val importance = NotificationManager.IMPORTANCE_HIGH
                     val notificationChannel = NotificationChannel(
@@ -214,19 +219,23 @@ class MessagingHolder {
             )
             val ring = object : Runnable {
                 override fun run() {
-                    playRingtone(context)
-                    notificationManager.notify(notificationId, notification)
-                    // on some phones like Huawei, the heads up notification only stays heads up
-                    // for a few seconds, so we re-notify every second while ringing in order to
-                    // keep it heads up
-                    ringer.schedule(
-                        {
-                            if (incomingCalls.containsKey(signal.senderId)) {
-                                run()
-                            }
-                        },
-                        2, TimeUnit.SECONDS
-                    )
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                        notificationManager.notify(notificationId, notification)
+                    } else {
+                        playRingtone(context)
+                        notificationManager.notify(notificationId, notification)
+                        // on some phones like Huawei, the heads up notification only stays heads up
+                        // for a few seconds, so we re-notify every second while ringing in order to
+                        // keep it heads up
+                        ringer.schedule(
+                            {
+                                if (incomingCalls.containsKey(signal.senderId)) {
+                                    run()
+                                }
+                            },
+                            2, TimeUnit.SECONDS
+                        )
+                    }
                 }
             }
             ringer.execute {
@@ -280,7 +289,7 @@ class MessagingHolder {
         )
     }
 
-    fun incomingCallNotification(
+    private fun incomingCallNotification(
         context: Context,
         notificationManager: NotificationManager,
         notificationId: Int,
@@ -341,6 +350,11 @@ class MessagingHolder {
             ).build()
             builder.addAction(declineAction)
             builder.addAction(acceptAction)
+
+            // Need to set vibrate and ringtone on notification itself to make sure it shows up as a
+            // heads up notification
+            builder.setVibrate(ringVibrationPattern)
+            builder.setSound(ringtoneUri)
         }
 
         return builder.build()
@@ -423,7 +437,9 @@ class MessagingHolder {
 
     companion object {
         private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-        private val vibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
+        private val ringVibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
+        private val notificationToneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        private val notificationVibrationPattern = longArrayOf(0, 10, 200, 10, 0)
         private var playingRingtone = false
         private var ringtone: Ringtone? = null
         private var vibrator: Vibrator? = null
@@ -433,7 +449,7 @@ class MessagingHolder {
             if (!playingRingtone) {
                 playingRingtone = true
                 vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator!!.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
+                vibrator!!.vibrate(VibrationEffect.createWaveform(ringVibrationPattern, 0))
                 ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
                 val rtone = ringtone!!
                 thread {
