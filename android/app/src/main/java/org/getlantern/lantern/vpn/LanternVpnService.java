@@ -5,27 +5,23 @@ package org.getlantern.lantern.vpn;
 
 import internalsdk.Internalsdk;
 import internalsdk.SocketProtector;
+
 import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.IBinder;
-
-import androidx.core.app.NotificationCompat;
 
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
+import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,6 +35,8 @@ public class LanternVpnService extends VpnService implements Runnable {
     private Provider mProvider = null;
 
     private PendingIntent mConfigureIntent;
+
+    private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.service_connected);
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override
@@ -76,6 +74,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         doStop();
         super.onDestroy();
         unbindService(lanternServiceConnection);
+        helper.onDestroy();
     }
 
     @Override
@@ -99,31 +98,8 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private void connect() {
         Logger.d(TAG, "connect");
-        updateForegroundNotification();
+        helper.makeForeground();
         new Thread(this, "VpnService").start();
-    }
-
-    private void updateForegroundNotification() {
-        String channelId = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channelId = createNotificationChannel();
-        } else {
-            // If earlier version channel ID is not used
-            // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-        }
-        Notification notification = new NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.status_on)
-                .setLargeIcon(((BitmapDrawable) getResources().getDrawable(R.drawable.app_icon)).getBitmap())
-                .setContentTitle(getText(R.string.app_name)).setContentText(getText(R.string.service_connected)).setContentIntent(mConfigureIntent).build();
-        startForeground(1, notification);
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private String createNotificationChannel() {
-        String channelId = "lantern_vpn_service";
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.createNotificationChannel(
-                new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT));
-        return channelId;
     }
 
     @Override

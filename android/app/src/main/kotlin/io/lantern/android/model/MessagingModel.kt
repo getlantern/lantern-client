@@ -21,6 +21,7 @@ import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.sql.Timestamp
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -109,8 +110,12 @@ class MessagingModel constructor(
             /*
             * Contacts
             */
-            "setCurrentConversationContact" -> currentConversationContact = (call.arguments as String)
-            "clearCurrentConversationContact" -> currentConversationContact = ""
+            "setCurrentConversationContact" ->
+                currentConversationContact = TimestampedContactId(
+                    System.currentTimeMillis(),
+                    call.arguments as String
+                )
+            "clearCurrentConversationContact" -> currentConversationContact = null
             "addProvisionalContact" -> messaging.addProvisionalContact(
                 call.argument("unsafeContactId")!!,
                 when (call.argument<Any>("source")) {
@@ -346,8 +351,10 @@ class MessagingModel constructor(
     }
 
     companion object {
-        var currentConversationContact = ""
+        var currentConversationContact: TimestampedContactId? = null
 
         val snippetHighlight = "**"
     }
 }
+
+data class TimestampedContactId(val ts: Long, val contactId: String)

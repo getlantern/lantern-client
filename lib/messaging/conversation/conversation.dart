@@ -70,6 +70,8 @@ class ConversationState extends State<Conversation>
   double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
   static var latestKeyboardHeight = 0.0;
 
+  Timer? currentConversationTimer;
+
   void showNativeKeyboard() {
     focusNode.requestFocus();
   }
@@ -158,13 +160,25 @@ class ConversationState extends State<Conversation>
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        model.clearCurrentConversationContact();
+        clearCurrentConversationContact();
         break;
       case AppLifecycleState.resumed:
       default:
         model.setCurrentConversationContact(widget.contactId.id);
+        // repeatedly notify backend of current contact so it knows that it's
+        // fresh
+        currentConversationTimer = Timer.periodic(
+          const Duration(seconds: 1),
+          (_) => model.setCurrentConversationContact(widget.contactId.id),
+        );
         break;
     }
+  }
+
+  void clearCurrentConversationContact() {
+    currentConversationTimer?.cancel();
+    currentConversationTimer = null;
+    model.clearCurrentConversationContact();
   }
 
   @override
@@ -196,6 +210,7 @@ class ConversationState extends State<Conversation>
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
+    clearCurrentConversationContact();
     newMessage.dispose();
     stopWatchTimer.dispose();
     focusNode.dispose();

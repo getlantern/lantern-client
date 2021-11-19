@@ -1,11 +1,7 @@
 package org.getlantern.lantern.service;
 
-import android.app.IntentService;
-import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -38,7 +34,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
 
-import io.lantern.messaging.WebRTCSignal;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
@@ -64,23 +59,17 @@ public class LanternService extends Service implements Runnable {
     public void onCreate() {
         super.onCreate();
         Logger.debug(TAG, "Creating Lantern service");
+        Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
+        helper.makeForeground();
+        Logger.d(TAG, "starting Lantern service thread");
+        thread = new Thread(this, "LanternService");
+        thread.start();
     }
 
+    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Logger.d(TAG, "onBind");
-        synchronized (LanternApp.getSession()) {
-            if (thread == null) {
-                Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
-                helper.makeForeground();
-                Logger.d(TAG, "starting Lantern service thread");
-                thread = new Thread(this, "LanternService");
-                thread.start();
-            } else {
-                Logger.debug(TAG, String.format("Thread state: %s", thread.getState()));
-            }
-        }
-        return new Binder();
+        return null;
     }
 
     @Override
@@ -99,10 +88,6 @@ public class LanternService extends Service implements Runnable {
         } catch (LanternNotRunningException lnre) {
             Logger.e(TAG, "Unable to start LanternService", lnre);
             throw new RuntimeException("Could not start Lantern", lnre);
-        } finally {
-            synchronized (LanternApp.getSession()) {
-                doStop();
-            }
         }
     }
 
@@ -190,35 +175,19 @@ public class LanternService extends Service implements Runnable {
     public void onDestroy() {
         super.onDestroy();
         helper.onDestroy();
+        thread.interrupt();
         try {
             Logger.debug(TAG, "Unregistering screen state receiver");
             createUserHandler.removeCallbacks(createUserRunnable);
         } catch (Exception e) {
             Logger.error(TAG, "Exception", e);
-        } finally {
-            stop();
         }
-    }
 
-    private void stop() {
-        synchronized (LanternApp.getSession()) {
-            if (thread != null) {
-                thread.interrupt();
-            } else {
-                doStop();
-            }
-        }
-    }
-
-    private void doStop() {
-        thread = null;
-        stopSelf();
-    }
-
-    @Override
-    public void onTaskRemoved(Intent intent) {
-        super.onTaskRemoved(intent);
-        Logger.debug(TAG, "Lantern service: onTaskRemoved()");
-        stop();
+        // We want to keep the service running as much as possible to allow receiving messages, so
+        // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("restartservice");
+        broadcastIntent.setClass(this, Restarter.class);
+        this.sendBroadcast(broadcastIntent);
     }
 }
