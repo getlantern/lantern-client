@@ -1,8 +1,13 @@
-import 'package:test/test.dart';
-import 'package:lantern/common/ui/humanize.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:lantern/common/common.dart';
 
 void main() {
-  group('Humanize', () {
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await Localization.loadTranslations();
+  });
+
+  group('humanizeSeconds() tests', () {
     test('Longform seconds - should return 30 seconds', () {
       final result = 30.humanizeSeconds(longForm: true);
       expect(result, '30 seconds');

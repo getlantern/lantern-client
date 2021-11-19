@@ -31,10 +31,10 @@ class RecoveryKey extends StatelessWidget {
                   text: 'copy_recovery_key'.i18n,
                   width: 200.0,
                   disabled: snapshot.hasError,
-                  onPressed: () {
-                    model.markCopiedRecoveryKey();
+                  onPressed: () async {
+                    await model.markCopiedRecoveryKey();
                     copyText(context, snapshot.data.toString());
-                    context.router.pop();
+                    await context.router.pop();
                   },
                 ),
               );

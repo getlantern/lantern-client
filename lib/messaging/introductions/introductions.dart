@@ -16,9 +16,10 @@ class Introductions extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: CText('introductions_info'.i18n, style: tsBody1),
               ),
-              Expanded(child: model.bestIntroductions(builder: (context,
-                  Iterable<PathAndValue<StoredMessage>> introductions,
-                  Widget? child) {
+              Expanded(child: model.bestIntroductions(builder:
+                  (bestIntrosContext,
+                      Iterable<PathAndValue<StoredMessage>> introductions,
+                      Widget? child) {
                 // group by the contactId of the user who made the introduction
                 // these are pointers to StoredMessages, they won't listen to an update to the value of the StoredMessage itself
                 final groupedIntroductions = introductions
@@ -36,7 +37,7 @@ class Introductions extends StatelessWidget {
 
                 return ListView.builder(
                   itemCount: groupedIntroductions.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (listContext, index) {
                     var introductorContactId =
                         groupedIntroductions.keys.elementAt(index);
                     var introductionsPerIntroductor =
@@ -45,7 +46,7 @@ class Introductions extends StatelessWidget {
                     return Container(
                       child: model.singleContactById(
                           introductorContactId,
-                          (context, introductor, child) => Column(
+                          (singleContactContext, introductor, child) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
@@ -62,9 +63,9 @@ class Introductions extends StatelessWidget {
                                     ...introductionsPerIntroductor.map(
                                         // need to subscribe to StoredMessage via model.message() to receive updates about status
                                         (introMessage) => model.message(
-                                            context,
+                                            singleContactContext,
                                             introMessage,
-                                            (context, value, child) =>
+                                            (messageContext, value, child) =>
                                                 (value.introduction.isPending())
                                                     ? ListItemFactory
                                                         .messagingItem(
@@ -175,9 +176,8 @@ class Introductions extends StatelessWidget {
                                                                           .introduction
                                                                           .displayNameOrFallback
                                                                     ]),
-                                                                    duration: const Duration(
-                                                                        milliseconds:
-                                                                            2000),
+                                                                    duration:
+                                                                        longAnimationDuration,
                                                                     action:
                                                                         SnackBarAction(
                                                                       textColor:
@@ -187,9 +187,9 @@ class Introductions extends StatelessWidget {
                                                                           .toUpperCase(),
                                                                       onPressed:
                                                                           () async {
-                                                                        await context.pushRoute(Conversation(
-                                                                            contactId:
-                                                                                value.introduction.to));
+                                                                        await context
+                                                                            .router
+                                                                            .push(Conversation(contactId: value.introduction.to));
                                                                       },
                                                                     ));
                                                               }

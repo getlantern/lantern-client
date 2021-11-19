@@ -98,17 +98,18 @@ class _ChatsState extends State<Chats> {
                     : const SizedBox());
           }),
           // * Search
-          RoundButton(
+          IconButton(
+            visualDensity: VisualDensity.compact,
             onPressed: () async => await showSearch(
               context: context,
               query: '',
               delegate: CustomSearchDelegate(searchMessages: true),
             ),
-            backgroundColor: transparent,
             icon: const CAssetImage(path: ImagePaths.search),
           ),
           // * Bottom modal
-          RoundButton(
+          IconButton(
+            visualDensity: VisualDensity.compact,
             onPressed: () async => showBottomModal(context: context, children: [
               model.me(
                 (_, me, child) => sessionModel
@@ -131,7 +132,6 @@ class _ChatsState extends State<Chats> {
                 },
               ),
             ]),
-            backgroundColor: transparent,
             icon: const CAssetImage(path: ImagePaths.more_vert),
           ),
         ],
