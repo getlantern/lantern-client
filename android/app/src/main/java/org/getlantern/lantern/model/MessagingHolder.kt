@@ -121,10 +121,17 @@ class MessagingHolder {
             }
             messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
             contact?.let {
-                if (contact.contactId.id == MessagingModel.currentConversationContact) {
-                    // don't notify if we're currently viewing the relevant conversation
-                    return@let
+                MessagingModel.currentConversationContact?.let { current ->
+                    if (System.currentTimeMillis() - current.ts < 5000) {
+                        // it's been less than 5 seconds since the currentConversationContact was
+                        // last set, assume it's still valid
+                        if (contact.contactId.id == current.contactId) {
+                            // don't notify since we're currently viewing the relevant conversation
+                            return@notifyMessage
+                        }
+                    }
                 }
+
                 if (contact.verificationLevel <= Model.VerificationLevel.UNACCEPTED &&
                     numberOfNotificationAttempts > 1
                 ) {
@@ -162,6 +169,11 @@ class MessagingHolder {
                 builder.setAutoCancel(true)
                 builder.setOnlyAlertOnce(true)
                 builder.setContentIntent(openMainActivity)
+                builder.priority = NotificationCompat.PRIORITY_HIGH
+                // Do not remove the vibration and sound, as without at least one of them, the
+                // notification won't display heads up on older Android versions.
+                builder.setVibrate(notificationVibrationPattern)
+                builder.setSound(notificationToneUri)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val importance = NotificationManager.IMPORTANCE_HIGH
                     val notificationChannel = NotificationChannel(
@@ -280,7 +292,7 @@ class MessagingHolder {
         )
     }
 
-    fun incomingCallNotification(
+    private fun incomingCallNotification(
         context: Context,
         notificationManager: NotificationManager,
         notificationId: Int,
@@ -293,27 +305,29 @@ class MessagingHolder {
             defaultNotificationChannelId
         )
 
-        // Attach RemoteView to builder()
-        builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-        builder.setCustomContentView(
-            incomingCallRemoteView(
-                context,
-                contact,
-                acceptPendingIntent,
-                declinePendingIntent,
-            )
-        )
         builder.setContentTitle(context.getString(R.string.incoming_call))
         builder.setContentText(displayName(context, contact))
         builder.setSmallIcon(R.drawable.status_on)
-        builder.setAutoCancel(false)
         builder.priority = NotificationCompat.PRIORITY_MAX
         builder.setCategory(NotificationCompat.CATEGORY_CALL)
+        builder.setAutoCancel(false)
+        builder.setOnlyAlertOnce(false)
         builder.setTimeoutAfter(30000)
         builder.setDeleteIntent(declinePendingIntent)
         builder.extras.putInt("notificationId", notificationId)
+        builder.setDefaults(NotificationCompat.DEFAULT_ALL)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Attach RemoteView to builder()
+            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            builder.setCustomContentView(
+                incomingCallRemoteView(
+                    context,
+                    contact,
+                    acceptPendingIntent,
+                    declinePendingIntent,
+                )
+            )
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(
                 callNotificationChannelId,
@@ -327,8 +341,7 @@ class MessagingHolder {
                 notificationChannel
             )
         } else {
-            // This is a custom action assignment in case the API does not accept remote views
-            // TODO: need to test this
+            // Don't use a custom style
             val declineAction = NotificationCompat.Action.Builder(
                 android.R.drawable.ic_menu_delete,
                 context.getString(R.string.decline),
@@ -341,6 +354,14 @@ class MessagingHolder {
             ).build()
             builder.addAction(declineAction)
             builder.addAction(acceptAction)
+
+            // Need to set vibrate on notification itself to make sure it shows up as a heads up
+            // notification
+            builder.setVibrate(ringVibrationPattern)
+
+            // Hack - set an empty full screen intent to keep the notification up
+            val dummyIntent = PendingIntent.getActivity(context, 0, Intent(), 0)
+            builder.setFullScreenIntent(dummyIntent, true)
         }
 
         return builder.build()
@@ -414,16 +435,18 @@ class MessagingHolder {
 
     private fun displayName(context: Context, contact: Model.Contact): String =
         if (contact.displayName.isEmpty())
-            if (contact.chatNumber.shortNumber.isNotEmpty()) 
+            if (contact.chatNumber.shortNumber.isNotEmpty())
                 contact.chatNumber.shortNumber
-            else 
+            else
                 context.getString(R.string.unnamed_contact)
         else
             contact.displayName
 
     companion object {
         private val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-        private val vibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
+        private val ringVibrationPattern = longArrayOf(0, 10, 200, 500, 700, 1000, 300, 200, 50, 10)
+        private val notificationToneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        private val notificationVibrationPattern = longArrayOf(0, 10, 200, 10, 0)
         private var playingRingtone = false
         private var ringtone: Ringtone? = null
         private var vibrator: Vibrator? = null
@@ -432,8 +455,12 @@ class MessagingHolder {
         private fun playRingtone(context: Context) {
             if (!playingRingtone) {
                 playingRingtone = true
-                vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                vibrator!!.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                    vibrator!!.vibrate(
+                        VibrationEffect.createWaveform(ringVibrationPattern, 0)
+                    )
+                }
                 ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
                 val rtone = ringtone!!
                 thread {
@@ -448,7 +475,7 @@ class MessagingHolder {
                 playingRingtone = false
                 ringtone!!.stop()
                 ringtone = null
-                vibrator!!.cancel()
+                vibrator?.cancel()
                 vibrator = null
             }
         }
