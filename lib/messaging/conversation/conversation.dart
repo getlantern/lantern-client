@@ -196,6 +196,7 @@ class ConversationState extends State<Conversation>
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
+    model.clearCurrentConversationContact();
     newMessage.dispose();
     stopWatchTimer.dispose();
     focusNode.dispose();
