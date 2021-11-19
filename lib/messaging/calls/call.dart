@@ -175,7 +175,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     isPanelShowing
                         ? Container(
                             padding: const EdgeInsetsDirectional.only(
-                                start: 40.0, top: 40.0),
+                                start: 16.0, top: 40.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,7 +187,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                     displayName: widget.contact.displayName,
                                   ),
                                 ),
-                                renderTitle()
+                                renderTitle(constraints)
                               ],
                             ),
                           )
@@ -206,7 +206,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                     textStyle: tsDisplayBlack,
                                   ),
                                 ),
-                                renderTitle()
+                                renderTitle(constraints)
                               ],
                             ),
                           ),
@@ -497,7 +497,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     return verificationFragments;
   }
 
-  Column renderTitle() => Column(
+  Column renderTitle(BoxConstraints constraints) => Column(
           mainAxisAlignment: isPanelShowing
               ? MainAxisAlignment.start
               : MainAxisAlignment.center,
@@ -506,11 +506,13 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
               : CrossAxisAlignment.center,
           children: [
             Container(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.7),
               child: CText(
                 widget.contact.displayNameOrFallback.isNotEmpty
                     ? widget.contact.displayNameOrFallback
                     : widget.contact.contactId.id,
                 style: tsHeading1.copiedWith(color: white).short,
+                maxLines: 1,
               ),
             ),
             Container(

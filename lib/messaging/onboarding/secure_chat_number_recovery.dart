@@ -31,8 +31,12 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
           context.loaderOverlay.show(widget: spinner);
           await model.recover(controller.text.withoutWhitespace);
           await model.markIsOnboarded();
+          await model.markCopiedRecoveryKey();
           context.router.popUntilRoot();
-          showSnackbar(context: context, content: 'recovery_success'.i18n);
+          showSnackbar(
+              context: context,
+              content: 'recovery_success'.i18n,
+              duration: longAnimationDuration);
         } catch (e) {
           setState(() => controller.error = 'recovery_error'.i18n);
         } finally {
@@ -63,8 +67,22 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
                     label: 'recovery_label'.i18n,
                     prefixIcon: null,
                     suffixIcon: null,
-                    minLines: 5,
+                    minLines: 2,
                     maxLines: null,
+                    inputFormatters: [
+                      TextInputFormatter.withFunction((oldValue, newValue) {
+                        final original = newValue.text;
+                        final formatted = original.formattedRecoveryKey;
+                        var selection = newValue.selection;
+                        if (formatted != original) {
+                          final offset = formatted.characters.length;
+                          selection = selection.copyWith(
+                              baseOffset: offset, extentOffset: offset);
+                        }
+                        return newValue.copyWith(
+                            text: formatted, selection: selection);
+                      }),
+                    ],
                   ),
                 ),
               ),

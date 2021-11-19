@@ -698,6 +698,7 @@ class ConversationState extends State<Conversation>
             }
           },
           focusNode: focusNode,
+          textCapitalization: TextCapitalization.sentences,
           onFieldSubmitted: (value) async =>
               value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
           decoration: InputDecoration(
