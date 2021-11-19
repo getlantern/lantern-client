@@ -121,10 +121,17 @@ class MessagingHolder {
             }
             messaging.db.get<Model.Contact>(msg.senderId.directContactPath)
             contact?.let {
-                if (contact.contactId.id == MessagingModel.currentConversationContact) {
-                    // don't notify if we're currently viewing the relevant conversation
-                    return@let
+                MessagingModel.currentConversationContact?.let { current ->
+                    if (System.currentTimeMillis() - current.ts < 5000) {
+                        // it's been less than 5 seconds since the currentConversationContact was
+                        // last set, assume it's still valid
+                        if (contact.contactId.id == current.contactId) {
+                            // don't notify since we're currently viewing the relevant conversation
+                            return@notifyMessage
+                        }
+                    }
                 }
+
                 if (contact.verificationLevel <= Model.VerificationLevel.UNACCEPTED &&
                     numberOfNotificationAttempts > 1
                 ) {
