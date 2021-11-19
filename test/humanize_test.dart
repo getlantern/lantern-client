@@ -1,60 +1,81 @@
-import 'package:test/test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:i18n_extension/i18n_extension.dart';
+import 'package:i18n_extension/i18n_widget.dart';
+import 'package:i18n_extension/io/import.dart';
+
 import 'package:lantern/common/ui/humanize.dart';
 
 void main() {
   group('Humanize', () {
-    test('Longform seconds - should return 30 seconds', () {
-      final result = 30.humanizeSeconds(longForm: true);
-      expect(result, '30 seconds');
-    });
-    test('Shortform seconds - should return 30s', () {
-      final result = 30.humanizeSeconds();
-      expect(result, '30s');
+    test('testing localization - should return New messages do not disappear.',
+        () {
+      I18n.define(const Locale('en', 'US'));
+      expect('banner_messages_persist'.i18n, 'New messages do not disappear.');
     });
 
-    test('Longform minutes - should return 30 minutes', () {
-      final result = 1800.humanizeSeconds(longForm: true);
-      expect(result, '30 minutes');
-    });
-    test('Shortform minutes - should return 30m', () {
-      final result = 1800.humanizeSeconds();
-      expect(result, '30m');
-    });
+    // test('Longform seconds - should return 30 seconds', () {
+    //   final result = 30.humanizeSeconds(longForm: true);
+    //   expect(result, '30 seconds');
+    // });
+    // test('Shortform seconds - should return 30s', () {
+    //   final result = 30.humanizeSeconds();
+    //   expect(result, '30s');
+    // });
 
-    test('Longform hours - should return 22 hours', () {
-      final result = 80000.humanizeSeconds(longForm: true);
-      expect(result, '22 hours');
-    });
-    test('Shortform hours - should return 22h', () {
-      final result = 80000.humanizeSeconds();
-      expect(result, '22h');
-    });
+    // test('Longform minutes - should return 30 minutes', () {
+    //   final result = 1800.humanizeSeconds(longForm: true);
+    //   expect(result, '30 minutes');
+    // });
+    // test('Shortform minutes - should return 30m', () {
+    //   final result = 1800.humanizeSeconds();
+    //   expect(result, '30m');
+    // });
 
-    test('Longform days - should return 6 days', () {
-      final result = 600000.humanizeSeconds(longForm: true);
-      expect(result, '6 days');
-    });
-    test('Shortform days - should return 6d', () {
-      final result = 600000.humanizeSeconds();
-      expect(result, '6d');
-    });
+    // test('Longform hours - should return 22 hours', () {
+    //   final result = 80000.humanizeSeconds(longForm: true);
+    //   expect(result, '22 hours');
+    // });
+    // test('Shortform hours - should return 22h', () {
+    //   final result = 80000.humanizeSeconds();
+    //   expect(result, '22h');
+    // });
 
-    test('Longform weeks - should return 4 weeks', () {
-      final result = 2600000.humanizeSeconds(longForm: true);
-      expect(result, '4 weeks');
-    });
-    test('Shortform weeks - should return 4w', () {
-      final result = 2600000.humanizeSeconds();
-      expect(result, '4w');
-    });
+    // test('Longform days - should return 6 days', () {
+    //   final result = 600000.humanizeSeconds(longForm: true);
+    //   expect(result, '6 days');
+    // });
+    // test('Shortform days - should return 6d', () {
+    //   final result = 600000.humanizeSeconds();
+    //   expect(result, '6d');
+    // });
 
-    test('Longform months or years  - should return 50 weeks', () {
-      final result = 30240000.humanizeSeconds(longForm: true);
-      expect(result, '50 weeks');
-    });
-    test('Shortform months or years - should return 350d', () {
-      final result = 30240000.humanizeSeconds();
-      expect(result, '350d');
-    });
+    // test('Longform weeks - should return 4 weeks', () {
+    //   final result = 2600000.humanizeSeconds(longForm: true);
+    //   expect(result, '4 weeks');
+    // });
+    // test('Shortform weeks - should return 4w', () {
+    //   final result = 2600000.humanizeSeconds();
+    //   expect(result, '4w');
+    // });
+
+    // test('Longform months or years  - should return 50 weeks', () {
+    //   final result = 30240000.humanizeSeconds(longForm: true);
+    //   expect(result, '50 weeks');
+    // });
+    // test('Shortform months or years - should return 350d', () {
+    //   final result = 30240000.humanizeSeconds();
+    //   expect(result, '350d');
+    // });
   });
+}
+
+extension Localization on String {
+  static String locale = 'en';
+
+  static Translations translations = Translations(locale);
+
+  String get i18n => localize(this, translations, locale: locale);
+
+  String fill(List<Object> params) => localizeFill(this, params);
 }
