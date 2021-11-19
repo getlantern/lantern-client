@@ -61,6 +61,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     WidgetsBinding.instance!.removeObserver(this);
     signaling.removeListener(onSignalingStateChange);
     signaling.bye(await session);
+    unawaited(notifications.dismissInCallNotification());
   }
 
   void onSignalingStateChange() async {
