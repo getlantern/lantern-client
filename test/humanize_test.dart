@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:i18n_extension/i18n_extension.dart';
-import 'package:i18n_extension/i18n_widget.dart';
-import 'package:i18n_extension/io/import.dart';
-
-import 'package:lantern/common/ui/humanize.dart';
+import 'package:lantern/common/common.dart';
 
 void main() {
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await Localization.loadTranslations();
+  });
+
   group('Humanize', () {
     test('testing localization - should return New messages do not disappear.',
         () {
-      I18n.define(const Locale('en', 'US'));
       expect('banner_messages_persist'.i18n, 'New messages do not disappear.');
     });
 
@@ -68,14 +67,4 @@ void main() {
     //   expect(result, '350d');
     // });
   });
-}
-
-extension Localization on String {
-  static String locale = 'en';
-
-  static Translations translations = Translations(locale);
-
-  String get i18n => localize(this, translations, locale: locale);
-
-  String fill(List<Object> params) => localizeFill(this, params);
 }
