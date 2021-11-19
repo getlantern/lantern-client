@@ -111,8 +111,8 @@ class _ChatsState extends State<Chats> {
           RoundButton(
             onPressed: () async => showBottomModal(context: context, children: [
               model.me(
-                (context, me, child) => sessionModel.proUser(
-                    (context, isPro, child) => ListItemFactory.bottomItem(
+                (_, me, child) => sessionModel
+                    .proUser((_, isPro, child) => ListItemFactory.bottomItem(
                           icon: ImagePaths.account,
                           content: 'account_management'.i18n,
                           onTap: () async {
