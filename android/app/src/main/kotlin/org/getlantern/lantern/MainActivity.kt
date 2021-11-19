@@ -3,18 +3,11 @@ package org.getlantern.lantern
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.VpnService
-import android.os.AsyncTask
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -38,14 +31,8 @@ import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
-import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.model.Utils
-import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.showAlertDialog
@@ -58,8 +45,7 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.Locale
-import kotlin.collections.ArrayList
+import java.util.*
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
@@ -125,8 +111,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
 
         val intent = Intent(this, LanternService_::class.java)
-        bindService(intent, lanternServiceConnection, BIND_AUTO_CREATE)
-        Logger.debug(TAG, "bindService finished at ${System.currentTimeMillis() - start}")
+        context.startService(intent)
+        Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -197,22 +183,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         vpnModel.destroy()
         sessionModel.destroy()
         EventBus.getDefault().unregister(this)
-        try {
-            unbindService(lanternServiceConnection)
-        } catch (t: Throwable) {
-            Logger.e(TAG, "Unable to unbind LanternService", t)
-        }
-    }
-
-    private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName) {
-            Logger.e(TAG, "LanternService disconnected, closing app")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                finishAndRemoveTask()
-            }
-        }
-
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {}
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
