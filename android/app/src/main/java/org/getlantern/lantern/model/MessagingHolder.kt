@@ -163,8 +163,8 @@ class MessagingHolder {
                 builder.setOnlyAlertOnce(true)
                 builder.setContentIntent(openMainActivity)
                 builder.priority = NotificationCompat.PRIORITY_HIGH
-                // Do not remove this, as without it, the notification won't display heads up on
-                // older Android versions.
+                // Do not remove the vibration and sound, as without at least one of them, the
+                // notification won't display heads up on older Android versions.
                 builder.setVibrate(notificationVibrationPattern)
                 builder.setSound(notificationToneUri)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -298,7 +298,6 @@ class MessagingHolder {
             defaultNotificationChannelId
         )
 
-        // Attach RemoteView to builder()
         builder.setContentTitle(context.getString(R.string.incoming_call))
         builder.setContentText(displayName(context, contact))
         builder.setSmallIcon(R.drawable.status_on)
@@ -312,6 +311,7 @@ class MessagingHolder {
         builder.setDefaults(NotificationCompat.DEFAULT_ALL)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Attach RemoteView to builder()
             builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
             builder.setCustomContentView(
                 incomingCallRemoteView(
@@ -351,7 +351,6 @@ class MessagingHolder {
             // Need to set vibrate on notification itself to make sure it shows up as a heads up
             // notification
             builder.setVibrate(ringVibrationPattern)
-            builder.setSound(ringtoneUri)
 
             // Hack - set an empty full screen intent to keep the notification up
             val dummyIntent = PendingIntent.getActivity(context, 0, Intent(), 0)
