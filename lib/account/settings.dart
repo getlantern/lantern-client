@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/package_info.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
@@ -27,7 +28,7 @@ class Settings extends StatelessWidget {
 
     return BaseScreen(
       title: 'settings'.i18n,
-      body: ListView(
+      body: Column(
         children: [
           //* Language
           ListItemFactory.settingsItem(
@@ -116,6 +117,25 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   )),
+          //* Build version
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(bottom: 8.0, end: 8.0),
+                  child: getVersion(),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(bottom: 8.0, end: 8.0),
+                  child: getBuildNumber(),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
