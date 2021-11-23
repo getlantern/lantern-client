@@ -703,6 +703,10 @@ class ConversationState extends State<Conversation>
       alignment: Alignment.center,
       children: [
         TextFormField(
+          expands: true,
+          minLines: null,
+          maxLines: null,
+          textAlignVertical: TextAlignVertical.center,
           autofocus: false,
           textInputAction: TextInputAction.send,
           controller: newMessage,
@@ -769,6 +773,7 @@ class ConversationState extends State<Conversation>
                     ),
             ],
           );
+    // * Stack overlay of [leading, content, trailing] Row and voice recorder
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
