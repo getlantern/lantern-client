@@ -212,7 +212,16 @@ class _ChatsState extends State<Chats> {
                               contact.mostRecentMessageTs.toInt(),
                               builder: (context, date) => CText(date,
                                   style: tsBody2.copiedWith(color: grey5)),
-                            )
+                            ),
+                            if (contact.numUnviewedMessages > 0)
+                              Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                    start: 8.0),
+                                child: CircleAvatar(
+                                  maxRadius: activeIconSize - 4,
+                                  backgroundColor: pink4,
+                                ),
+                              ),
                           ],
                         ),
                       ],

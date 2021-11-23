@@ -296,6 +296,7 @@ class Contact extends $pb.GeneratedMessage {
     ..m<$core.String, Datum>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'applicationData', protoName: 'applicationData', entryClassName: 'Contact.ApplicationDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: Datum.create, packageName: const $pb.PackageName('model'))
     ..aOM<ChatNumber>(19, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatNumber', protoName: 'chatNumber', subBuilder: ChatNumber.create)
     ..aOB(20, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isMe', protoName: 'isMe')
+    ..a<$core.int>(21, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'numUnviewedMessages', $pb.PbFieldType.O3, protoName: 'numUnviewedMessages')
     ..hasRequiredFields = false
   ;
 
@@ -321,6 +322,7 @@ class Contact extends $pb.GeneratedMessage {
     $core.Map<$core.String, Datum>? applicationData,
     ChatNumber? chatNumber,
     $core.bool? isMe,
+    $core.int? numUnviewedMessages,
   }) {
     final _result = create();
     if (contactId != null) {
@@ -382,6 +384,9 @@ class Contact extends $pb.GeneratedMessage {
     }
     if (isMe != null) {
       _result.isMe = isMe;
+    }
+    if (numUnviewedMessages != null) {
+      _result.numUnviewedMessages = numUnviewedMessages;
     }
     return _result;
   }
@@ -571,6 +576,15 @@ class Contact extends $pb.GeneratedMessage {
   $core.bool hasIsMe() => $_has(19);
   @$pb.TagNumber(20)
   void clearIsMe() => clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.int get numUnviewedMessages => $_getIZ(20);
+  @$pb.TagNumber(21)
+  set numUnviewedMessages($core.int v) { $_setSignedInt32(20, v); }
+  @$pb.TagNumber(21)
+  $core.bool hasNumUnviewedMessages() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearNumUnviewedMessages() => clearField(21);
 }
 
 class ProvisionalContact extends $pb.GeneratedMessage {
