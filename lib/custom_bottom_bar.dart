@@ -40,9 +40,14 @@ class CustomBottomBar extends StatelessWidget {
             label: CText('secure_chat'.i18n,
                 style: tsFloatingLabel.copiedWith(
                     color: index == 0 ? black : grey5)),
-            icon: CAssetImage(
-              path: ImagePaths.messages,
-              color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
+            icon: CBadge(
+              showBadge: true,
+              count: 1,
+              child: CAssetImage(
+                path: ImagePaths.messages,
+                color:
+                    index == 0 ? selectedTabIconColor : unselectedTabIconColor,
+              ),
             ),
             onTap: () => onTap!(0),
           ),
