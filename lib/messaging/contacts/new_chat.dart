@@ -170,7 +170,16 @@ class _NewChatState extends State<NewChat> {
       leading: const CAssetImage(
         path: ImagePaths.share,
       ),
-      content: CText('share_your_chat_number'.i18n, style: tsSubtitle1Short),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CText('share_your_chat_number'.i18n, style: tsSubtitle1Short),
+          CText(me.chatNumber.shortNumber.formattedChatNumber,
+              style: tsBody1.copiedWith(color: grey5))
+        ],
+      ),
       trailingArray: [const ContinueArrow()],
       onTap: () => Share.share(me.chatNumber.shortNumber.formattedChatNumber),
     );
