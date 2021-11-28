@@ -3,9 +3,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
-
-import 'messaging/messaging_model.dart';
-import 'messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/messaging_model.dart';
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -41,7 +40,7 @@ class CustomBottomBar extends StatelessWidget {
             label: CText('secure_chat'.i18n,
                 style: tsFloatingLabel.copiedWith(
                     color: index == 0 ? black : grey5)),
-            icon: NumUnreadsWrapper(index: index, model: messagingModel),
+            icon: NumUnviewedWrapper(index: index, model: messagingModel),
             onTap: () => onTap!(0),
           ),
           label: '',
@@ -133,8 +132,8 @@ class CustomBottomBar extends StatelessWidget {
   }
 }
 
-class NumUnreadsWrapper extends StatelessWidget {
-  const NumUnreadsWrapper({
+class NumUnviewedWrapper extends StatelessWidget {
+  const NumUnviewedWrapper({
     Key? key,
     required this.index,
     required this.model,
@@ -145,23 +144,17 @@ class NumUnreadsWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final numUnreads = <String, int>{};
     // iterate over contacts by activity (most recent conversations)
     return model.contactsByActivity(builder:
         (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
-      contacts.forEach((e) => e.value.numUnviewedMessages > 0
-          // create map of <contact id, numUnviewedMessages)
-          ? numUnreads.putIfAbsent(
-              e.value.contactId.id, () => e.value.numUnviewedMessages)
-          : null);
-
-      // iterate over map and count total unreads across all contacts that have any
-      var totalUnreads = numUnreads.isNotEmpty
-          ? numUnreads.values.reduce((value, element) => value + element)
-          : 0;
+      final totalUnviewed = contacts
+          .map((e) => e.value.verificationLevel != VerificationLevel.UNACCEPTED
+              ? e.value.numUnviewedMessages
+              : 0)
+          .reduce((value, element) => value + element);
       return CBadge(
-        showBadge: numUnreads.isNotEmpty,
-        count: totalUnreads,
+        showBadge: totalUnviewed > 0,
+        count: totalUnviewed,
         child: CAssetImage(
           path: ImagePaths.messages,
           color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
