@@ -7,9 +7,11 @@ extension Localization on String {
 
   static TranslationsByLocale translations = Translations.byLocale(locale);
 
-  static Future<void> loadTranslations() async {
-    translations +=
-        await GettextImporter().fromAssetDirectory('assets/locales');
+  static Future<TranslationsByLocale> loadTranslations() {
+    return GettextImporter().fromAssetDirectory('assets/locales').then((value) {
+      translations += value;
+      return translations;
+    });
   }
 
   String get i18n =>
