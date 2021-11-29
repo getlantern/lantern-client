@@ -111,17 +111,16 @@ class _ChatsState extends State<Chats> {
           IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: () async => showBottomModal(context: context, children: [
-              model.me(
-                (_, me, child) => sessionModel
-                    .proUser((_, isPro, child) => ListItemFactory.bottomItem(
-                          icon: ImagePaths.account,
-                          content: 'account_management'.i18n,
-                          onTap: () async {
-                            await context.router.pop();
-                            await context.router
-                                .push(AccountManagement(isPro: isPro));
-                          },
-                        )),
+              model.me((_, me, __) => ShareYourChatNumber(me).bottomItem),
+              sessionModel.proUser(
+                (_, isPro, child) => ListItemFactory.bottomItem(
+                  icon: ImagePaths.account,
+                  content: 'account_management'.i18n,
+                  onTap: () async {
+                    await context.router.pop();
+                    await context.router.push(AccountManagement(isPro: isPro));
+                  },
+                ),
               ),
               ListItemFactory.bottomItem(
                 icon: ImagePaths.people,
