@@ -3,9 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
+
+  final packageInfo = PackageInfo.fromPlatform();
 
   void openInfoProxyAll(BuildContext context) {
     showInfoDialog(context,
@@ -27,7 +30,7 @@ class Settings extends StatelessWidget {
 
     return BaseScreen(
       title: 'settings'.i18n,
-      body: ListView(
+      body: Column(
         children: [
           //* Language
           ListItemFactory.settingsItem(
@@ -116,6 +119,41 @@ class Settings extends StatelessWidget {
                       ),
                     ],
                   )),
+          //* Build version
+          FutureBuilder<PackageInfo>(
+            future: packageInfo,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
+              return Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsetsDirectional.only(
+                          bottom: 8.0, end: 8.0),
+                      child: CText(
+                          'version_number'
+                              .i18n
+                              .fill([snapshot.data?.version ?? '']),
+                          style: tsOverline.copiedWith(color: pink4)),
+                    ),
+                    Container(
+                      padding: const EdgeInsetsDirectional.only(
+                          bottom: 8.0, end: 8.0),
+                      child: CText(
+                          'build_number'
+                              .i18n
+                              .fill([snapshot.data?.buildNumber ?? '']),
+                          style: tsOverline.copiedWith(color: pink4)),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
