@@ -13,7 +13,12 @@ void showBlockContactDialog(
     builder: (BuildContext context) {
       return StatefulBuilder(
           builder: (context, setState) => AlertDialog(
-                contentPadding: const EdgeInsets.all(0),
+                contentPadding: const EdgeInsetsDirectional.all(24.0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,

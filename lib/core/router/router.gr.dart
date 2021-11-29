@@ -35,13 +35,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging_model.dart' as _i30;
+import 'package:lantern/messaging/messaging.dart' as _i29;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i22;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i21;
 import 'package:lantern/messaging/onboarding/welcome.dart' as _i20;
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i29;
 import 'package:lantern/vpn/vpn_tab.dart' as _i24;
 
 class AppRouter extends _i19.RootStackRouter {
@@ -515,7 +514,7 @@ class ConversationArgs {
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i30.MessagingModel model, required _i29.Contact contact})
+      {required _i29.MessagingModel model, required _i29.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -526,7 +525,7 @@ class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i30.MessagingModel model;
+  final _i29.MessagingModel model;
 
   final _i29.Contact contact;
 

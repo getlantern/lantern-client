@@ -12,6 +12,12 @@ void showDeleteContactDialog(
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
+        contentPadding: const EdgeInsetsDirectional.all(24.0),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
