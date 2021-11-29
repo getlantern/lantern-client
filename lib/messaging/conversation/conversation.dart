@@ -730,9 +730,8 @@ class ConversationState extends State<Conversation>
               hintText: 'message'.i18n,
               border: const OutlineInputBorder(),
             ),
-            style: tsSubtitle1
-                .copiedWith(color: isSendIconVisible ? black : grey5)
-                .short,
+            style: tsSubtitle1.copiedWith(
+                color: isSendIconVisible ? black : grey5, lineHeight: 18),
           ),
         // hide TextFormField while recording by painting over it. this allows
         // the form field to retain focus to keep the keyboard open and keep
