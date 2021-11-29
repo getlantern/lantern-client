@@ -165,6 +165,7 @@ class Signaling extends ValueNotifier<SignalingState> {
   Future<MediaStream> createStream() async {
     final mediaConstraints = <String, dynamic>{
       'audio': true,
+      'video': false,
       // 'video': {
       //   'mandatory': {
       //     'minWidth':

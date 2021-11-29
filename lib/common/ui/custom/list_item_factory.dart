@@ -34,6 +34,7 @@ class ListItemFactory extends StatelessWidget {
     dynamic content,
     List<Widget>? trailingArray,
     void Function()? onTap,
+    double? height = 56,
   }) : this((BuildContext context, ListItemFactory factory) {
           return Container(
             decoration: BoxDecoration(
@@ -51,7 +52,7 @@ class ListItemFactory extends StatelessWidget {
               trailingArray: trailingArray,
               onTap: onTap,
               showDivider: true,
-              height: 56,
+              height: height,
             ),
           );
         });
