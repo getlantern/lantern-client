@@ -397,7 +397,7 @@ void showDeleteDataDialog(
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () async {
-                            // TODO: trigger data wipe function in messaging-android
+                            await model.kill();
                             await context.router.pop();
                           },
                           child: CText('Delete'.i18n.toUpperCase(),
