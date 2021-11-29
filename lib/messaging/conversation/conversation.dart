@@ -707,31 +707,38 @@ class ConversationState extends State<Conversation>
       alignment: Alignment.center,
       children: [
         if (!isRecording)
-          TextFormField(
-            minLines: 1,
-            maxLines: 4,
-            autofocus: false,
-            textInputAction: TextInputAction.send,
-            controller: newMessage,
-            onChanged: (value) {
-              final newIsSendIconVisible = value.isNotEmpty;
-              if (newIsSendIconVisible != isSendIconVisible) {
-                setState(() => isSendIconVisible = newIsSendIconVisible);
-              }
-            },
-            focusNode: focusNode,
-            textCapitalization: TextCapitalization.sentences,
-            onFieldSubmitted: (value) async =>
-                value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
-            decoration: InputDecoration(
-              // Send icon
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: 'message'.i18n,
-              border: const OutlineInputBorder(),
+          // using a SingleChildScrollView to reconcile emoji and native keyboard scrolling to latest character which is only possible with maxLines = null
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            reverse: true,
+            child: TextFormField(
+              // minLines: 1,
+              // maxLines: 4,
+              maxLines: null,
+              autofocus: false,
+              textInputAction: TextInputAction.send,
+              controller: newMessage,
+              onChanged: (value) {
+                final newIsSendIconVisible = value.isNotEmpty;
+                if (newIsSendIconVisible != isSendIconVisible) {
+                  setState(() => isSendIconVisible = newIsSendIconVisible);
+                }
+              },
+              focusNode: focusNode,
+              textCapitalization: TextCapitalization.sentences,
+              onFieldSubmitted: (value) async => value.isEmpty
+                  ? null
+                  : await handleMessageBarSubmit(newMessage),
+              decoration: InputDecoration(
+                // Send icon
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                hintText: 'message'.i18n,
+                border: const OutlineInputBorder(),
+              ),
+              style: tsSubtitle1.copiedWith(
+                  color: isSendIconVisible ? black : grey5, lineHeight: 18),
             ),
-            style: tsSubtitle1.copiedWith(
-                color: isSendIconVisible ? black : grey5, lineHeight: 18),
           ),
         // hide TextFormField while recording by painting over it. this allows
         // the form field to retain focus to keep the keyboard open and keep
@@ -790,6 +797,8 @@ class ConversationState extends State<Conversation>
                 Flexible(
                   fit: FlexFit.tight,
                   child: Container(
+                    constraints:
+                        const BoxConstraints(maxHeight: messageBarHeight * 2),
                     child: content,
                   ),
                 ),
