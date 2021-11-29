@@ -3,8 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
-import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -148,9 +147,7 @@ class NumUnviewedWrapper extends StatelessWidget {
     return model.contactsByActivity(builder:
         (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
       final totalUnviewed = contacts
-          .map((e) => e.value.verificationLevel != VerificationLevel.UNACCEPTED
-              ? e.value.numUnviewedMessages
-              : 0)
+          .map((e) => e.value.isUnaccepted() ? e.value.numUnviewedMessages : 0)
           .reduce((value, element) => value + element);
       return CBadge(
         showBadge: totalUnviewed > 0,

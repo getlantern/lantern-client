@@ -21,7 +21,6 @@ class ModelEventChannel extends EventChannel {
           onChanges,
       T Function(Uint8List serialized)? deserialize}) {
     var subscriberID = uuid.v4();
-    developer.log('subscribing with id $subscriberID to $path');
     var arguments = {
       'subscriberID': subscriberID,
       'path': path,
