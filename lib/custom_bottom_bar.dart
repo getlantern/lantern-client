@@ -146,9 +146,12 @@ class NumUnviewedWrapper extends StatelessWidget {
     // iterate over contacts by activity (most recent conversations)
     return model.contactsByActivity(builder:
         (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
-      final totalUnviewed = contacts
-          .map((e) => e.value.isUnaccepted() ? e.value.numUnviewedMessages : 0)
-          .reduce((value, element) => value + element);
+      final totalUnviewed = contacts.isNotEmpty
+          ? contacts
+              .map((e) =>
+                  e.value.isUnaccepted() ? e.value.numUnviewedMessages : 0)
+              .reduce((value, element) => value + element)
+          : 0;
       return CBadge(
         showBadge: totalUnviewed > 0,
         count: totalUnviewed,
