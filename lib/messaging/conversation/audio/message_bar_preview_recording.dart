@@ -51,10 +51,13 @@ class MessageBarPreviewRecording extends StatelessWidget {
       children[0] = deleteButton;
       children[1] = audioWidget;
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: children,
+    return Container(
+      height: messageBarHeight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
     );
   }
 }
