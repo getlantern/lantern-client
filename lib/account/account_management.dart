@@ -317,7 +317,8 @@ void showDeleteDataDialog(
     builder: (BuildContext context) {
       return StatefulBuilder(
           builder: (context, setState) => AlertDialog(
-                contentPadding: const EdgeInsetsDirectional.all(0),
+                contentPadding: const EdgeInsetsDirectional.all(
+                    0), // <--- this padding is different from what we use by default in our showInfoDialog since the checkbox inserts a padding by default, so its best to add individual paddings to the Column children as opposed to a global one
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
@@ -395,7 +396,10 @@ void showDeleteDataDialog(
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () async => await context.router.pop(),
+                          onPressed: () async {
+                            // TODO: trigger data wipe function in messaging-android
+                            await context.router.pop();
+                          },
                           child: CText('Delete'.i18n.toUpperCase(),
                               style:
                                   confirmDelete ? tsButtonPink : tsButtonGrey),
