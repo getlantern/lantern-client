@@ -74,6 +74,12 @@ msgstr "Proxy everything"
 msgid "proxy_everything_is"
 msgstr "Proxy everything is %s"
 
+msgid "version_number"
+msgstr "Version %s"
+
+msgid "build_number"
+msgstr "Build %s"
+
 msgid "language"
 msgstr "Language"
 
