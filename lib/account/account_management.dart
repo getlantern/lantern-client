@@ -395,8 +395,8 @@ void showDeleteDataDialog(
                       const SizedBox(width: 15),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () async {
+                        child: CInkWell(
+                          onTap: () async {
                             await model.kill();
                             await context.router.pop();
                           },
