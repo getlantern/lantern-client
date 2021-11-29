@@ -12,5 +12,6 @@ export 'messaging_model.dart';
 export 'notifications.dart';
 export 'notifications.dart';
 export 'number_and_key_format.dart';
+export 'share_your_chat_number.dart';
 
 final messagingModel = MessagingModel();

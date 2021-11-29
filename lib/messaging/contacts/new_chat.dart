@@ -119,7 +119,7 @@ class _NewChatState extends State<NewChat> {
     return [
       buildAddViaChatNumber(me),
       buildScanQRCode(me),
-      buildShareYourChatNumber(me),
+      ShareYourChatNumber(me).messagingItem,
     ];
   }
 
@@ -162,26 +162,6 @@ class _NewChatState extends State<NewChat> {
             )),
           )
           .then(onContactAdded),
-    );
-  }
-
-  Widget buildShareYourChatNumber(Contact me) {
-    return ListItemFactory.messagingItem(
-      leading: const CAssetImage(
-        path: ImagePaths.share,
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CText('share_your_chat_number'.i18n, style: tsSubtitle1Short),
-          CText(me.chatNumber.shortNumber.formattedChatNumber,
-              style: tsBody1.copiedWith(color: grey5))
-        ],
-      ),
-      trailingArray: [const ContinueArrow()],
-      onTap: () => Share.share(me.chatNumber.shortNumber.formattedChatNumber),
     );
   }
 }
