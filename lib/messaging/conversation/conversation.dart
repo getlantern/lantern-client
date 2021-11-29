@@ -472,11 +472,15 @@ class ConversationState extends State<Conversation>
                   onCancelReply: () => setState(() => quotedMessage = null),
                 ),
               Divider(height: 1.0, color: grey3),
-              Container(
-                color: isRecording ? grey2 : white,
-                width: MediaQuery.of(context).size.width,
-                height: messageBarHeight,
-                child: buildMessageBar(),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: messageBarHeight,
+                ),
+                child: Container(
+                  color: isRecording ? grey2 : white,
+                  width: MediaQuery.of(context).size.width,
+                  child: buildMessageBar(),
+                ),
               ),
               // * Emoji keyboard
               Offstage(
@@ -702,35 +706,34 @@ class ConversationState extends State<Conversation>
     final content = Stack(
       alignment: Alignment.center,
       children: [
-        TextFormField(
-          expands: true,
-          minLines: null,
-          maxLines: null,
-          textAlignVertical: TextAlignVertical.center,
-          autofocus: false,
-          textInputAction: TextInputAction.send,
-          controller: newMessage,
-          onChanged: (value) {
-            final newIsSendIconVisible = value.isNotEmpty;
-            if (newIsSendIconVisible != isSendIconVisible) {
-              setState(() => isSendIconVisible = newIsSendIconVisible);
-            }
-          },
-          focusNode: focusNode,
-          textCapitalization: TextCapitalization.sentences,
-          onFieldSubmitted: (value) async =>
-              value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
-          decoration: InputDecoration(
-            // Send icon
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            hintText: 'message'.i18n,
-            border: const OutlineInputBorder(),
+        if (!isRecording)
+          TextFormField(
+            minLines: 1,
+            maxLines: 4,
+            autofocus: false,
+            textInputAction: TextInputAction.send,
+            controller: newMessage,
+            onChanged: (value) {
+              final newIsSendIconVisible = value.isNotEmpty;
+              if (newIsSendIconVisible != isSendIconVisible) {
+                setState(() => isSendIconVisible = newIsSendIconVisible);
+              }
+            },
+            focusNode: focusNode,
+            textCapitalization: TextCapitalization.sentences,
+            onFieldSubmitted: (value) async =>
+                value.isEmpty ? null : await handleMessageBarSubmit(newMessage),
+            decoration: InputDecoration(
+              // Send icon
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              hintText: 'message'.i18n,
+              border: const OutlineInputBorder(),
+            ),
+            style: tsSubtitle1
+                .copiedWith(color: isSendIconVisible ? black : grey5)
+                .short,
           ),
-          style: tsSubtitle1
-              .copiedWith(color: isSendIconVisible ? black : grey5)
-              .short,
-        ),
         // hide TextFormField while recording by painting over it. this allows
         // the form field to retain focus to keep the keyboard open and keep
         // the layout from changing while we're recording.
@@ -777,8 +780,8 @@ class ConversationState extends State<Conversation>
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
-        Container(
-            height: messageBarHeight,
+        ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: messageBarHeight),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
