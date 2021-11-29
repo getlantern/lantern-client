@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lantern/event_manager.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/session_model.dart';
 import 'package:lantern/common/ui/audio.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/event_manager.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_model.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -17,6 +17,8 @@ final globalRouter = AppRouter(navigatorKey);
 
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);
+
+  final translations = Localization.loadTranslations();
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,11 @@ class LanternApp extends StatelessWidget {
       ],
       // We typically don't use FutureBuilder, but it's okay here
       child: FutureBuilder(
-          future: Localization.loadTranslations(),
+          future: translations,
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
             return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,

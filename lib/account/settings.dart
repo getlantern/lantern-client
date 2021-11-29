@@ -134,13 +134,19 @@ class Settings extends StatelessWidget {
                     Container(
                       padding: const EdgeInsetsDirectional.only(
                           bottom: 8.0, end: 8.0),
-                      child: CText('Version ${snapshot.data?.version}',
+                      child: CText(
+                          'version_number'
+                              .i18n
+                              .fill([snapshot.data?.version ?? '']),
                           style: tsOverline.copiedWith(color: pink4)),
                     ),
                     Container(
                       padding: const EdgeInsetsDirectional.only(
                           bottom: 8.0, end: 8.0),
-                      child: CText('Build ${snapshot.data?.buildNumber}',
+                      child: CText(
+                          'build_number'
+                              .i18n
+                              .fill([snapshot.data?.buildNumber ?? '']),
                           style: tsOverline.copiedWith(color: pink4)),
                     ),
                   ],
