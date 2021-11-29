@@ -148,8 +148,8 @@ class NumUnviewedWrapper extends StatelessWidget {
         (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
       final totalUnviewed = contacts.isNotEmpty
           ? contacts
-              .map((e) =>
-                  e.value.isUnaccepted() ? e.value.numUnviewedMessages : 0)
+              .map(
+                  (e) => e.value.isAccepted() ? e.value.numUnviewedMessages : 0)
               .reduce((value, element) => value + element)
           : 0;
       return CBadge(
