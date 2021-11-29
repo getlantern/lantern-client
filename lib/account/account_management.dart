@@ -81,9 +81,8 @@ class _AccountManagementState extends State<AccountManagement>
           messagingModel.getCopiedRecoveryStatus((BuildContext context,
                   bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
-                header: 'backup_recovery_key'.i18n,
                 icon: ImagePaths.lock_outline,
-                content: 'recovery_key'.i18n,
+                content: 'backup_recovery_key'.i18n,
                 trailingArray: [
                   if (!hasCopiedRecoveryKey)
                     const Padding(
@@ -97,6 +96,23 @@ class _AccountManagementState extends State<AccountManagement>
                 ],
                 onTap: () => context.router.push(RecoveryKey()),
               )),
+          // * Delete all Chat data
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.account_remove,
+            content: 'delete_chat_data'.i18n,
+            trailingArray: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 16.0),
+                child: CInkWell(
+                  onTap: () => showDeleteDataDialog(context, messagingModel),
+                  child: CText(
+                    'Delete'.i18n.toUpperCase(),
+                    style: tsButtonPink,
+                  ),
+                ),
+              ),
+            ],
+          )
         ];
 
         return !widget.isPro
@@ -288,4 +304,107 @@ class _AccountManagementState extends State<AccountManagement>
       }),
     );
   }
+}
+
+void showDeleteDataDialog(
+  BuildContext context,
+  MessagingModel model,
+) async {
+  var confirmDelete = false;
+  await showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+                contentPadding: const EdgeInsetsDirectional.all(0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
+                content: Container(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsetsDirectional.only(
+                            start: 24, end: 24, top: 24.0),
+                        child: CAssetImage(
+                          path: ImagePaths.account_remove,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 16, bottom: 8, start: 24, end: 24),
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: CText('delete_chat_data'.i18n,
+                                style: tsSubtitle1)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 8, bottom: 16, start: 24, end: 24),
+                        child: CText('delete_chat_data_description'.i18n,
+                            style: tsBody1.copiedWith(color: grey5)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 12, end: 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                                visualDensity: VisualDensity.compact,
+                                checkColor: Colors.white,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                    (states) =>
+                                        getCheckboxFillColor(black, states)),
+                                value: confirmDelete,
+                                onChanged: (bool? value) {
+                                  setState(() => confirmDelete = value!);
+                                }),
+                            Container(
+                              constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.6),
+                              child: CText('delete_chat_data_confirmation'.i18n,
+                                  style: tsBody1),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () async => context.router.pop(),
+                          child: CText('cancel'.i18n.toUpperCase(),
+                              style: tsButtonGrey),
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () async => await context.router.pop(),
+                          child: CText('Delete'.i18n.toUpperCase(),
+                              style:
+                                  confirmDelete ? tsButtonPink : tsButtonGrey),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ));
+    },
+  );
 }

@@ -47,6 +47,15 @@ msgstr "Recovery Key"
 msgid "backup_recovery_key"
 msgstr "Backup Recovery Key"
 
+msgid "delete_chat_data"
+msgstr "Delete all Chat Data"
+
+msgid "delete_chat_data_description"
+msgstr "This will delete your Secure chat number, contacts, and messages from this device Without your Backup Recovery Key, you will lose access to your Secure Chat Number."
+
+msgid "delete_chat_data_confirmation"
+msgstr "I Confirm that I want to delete my chat data"
+
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
@@ -713,7 +722,7 @@ msgid "backup_contacts"
 msgstr "Backup contacts"
 
 msgid "copy_recovery_key"
-msgstr "Copy Key"
+msgstr "Copy Recovery Key"
 
 msgid "search"
 msgstr "Search"
