@@ -75,7 +75,6 @@ class SecureChatNumberMessaging extends StatelessWidget {
                 ],
                 button: Button(
                   text: 'Next'.i18n,
-                  width: 200.0,
                   onPressed: () async {
                     await model.markIsOnboarded();
                     context.router.popUntilRoot();
