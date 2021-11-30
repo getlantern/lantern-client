@@ -18,6 +18,18 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   late Future<Session> session;
   late Signaling signaling;
   var closed = false;
+  final callNotifications = Notifications((payloadString) {
+    if (payloadString?.isNotEmpty == true) {
+      var payload = Payload.fromJson(payloadString!);
+      switch (payload.type) {
+        case PayloadType.ringing:
+          Map<String, dynamic> data = payload.data;
+          messagingModel.signaling
+              .onMessage(data['peerId'], data['messageJson'], false);
+          break;
+      }
+    }
+  });
 
   @override
   void initState() {
@@ -69,7 +81,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        notifications.showInCallNotification(widget.contact);
+        callNotifications.flutterLocalNotificationsPlugin.show(
+            0,
+            'In call with ${widget.contact.displayName}'.i18n,
+            'Touch here to open call'.i18n,
+            callNotifications.inCallChannel);
         break;
       case AppLifecycleState.resumed:
         break;
