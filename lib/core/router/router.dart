@@ -21,7 +21,7 @@ import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
-import 'package:lantern/replica/ui/unknownscreen.dart';
+import 'package:lantern/replica/ui/unknown_item_screen.dart';
 import 'package:lantern/replica/ui/videoplayer.dart';
 
 @AdaptiveAutoRouter(

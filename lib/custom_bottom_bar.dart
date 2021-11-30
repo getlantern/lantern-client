@@ -1,5 +1,6 @@
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/logic/common.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -127,7 +128,7 @@ class CustomBottomBar extends StatelessWidget {
           label: '',
           tooltip: 'Account'.i18n,
         ),
-        if (isDevelop)
+        if (ReplicaCommon.isReplicaRunning())
           BottomNavigationBarItem(
             icon: CustomBottomBarItem(
               currentIndex: index,
@@ -142,6 +143,24 @@ class CustomBottomBar extends StatelessWidget {
                     index == 3 ? selectedTabIconColor : unselectedTabIconColor,
               ),
               onTap: () => onTap!(3),
+            ),
+            label: '',
+            tooltip: 'replica'.i18n,
+          ),
+        if (isDevelop)
+          BottomNavigationBarItem(
+            icon: CustomBottomItem(
+              currentIndex: index,
+              position: 4,
+              total: isDevelop ? 4 : 3,
+              label: CText('Developer'.i18n, style: tsFloatingLabel),
+              icon: CAssetImage(
+                path: ImagePaths.devices,
+                color: index == 4
+                    ? selectedTabLabelColor
+                    : unselectedTabLabelColor,
+              ),
+              onTap: () => onTap!(4),
             ),
             label: '',
             tooltip: 'Developer'.i18n,
