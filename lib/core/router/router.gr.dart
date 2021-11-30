@@ -9,6 +9,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i19;
+import 'package:flutter/cupertino.dart' as _i28;
 import 'package:flutter/material.dart' as _i27;
 import 'package:lantern/account/account_management.dart' as _i9;
 import 'package:lantern/account/account_tab.dart' as _i25;
@@ -25,7 +26,6 @@ import 'package:lantern/account/language.dart' as _i11;
 import 'package:lantern/account/recovery_key.dart' as _i16;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i17;
 import 'package:lantern/account/settings.dart' as _i10;
-import 'package:lantern/common/common.dart' as _i28;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/chats.dart' as _i23;

@@ -37,7 +37,7 @@ class Session {
 class SignalingState {
   CallState callState = CallState.New;
   var muted = false;
-  var speakerphoneOn = false;
+  var speakerphoneOn = true;
 }
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
@@ -110,7 +110,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     value.muted = !value.muted;
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
-        track.enabled = !value.muted;
+        Helper.setMicrophoneMute(value.muted, track);
       });
     }
     notifyListeners();
@@ -140,7 +140,7 @@ class Signaling extends ValueNotifier<SignalingState> {
     _sessions[sessionId] = session;
     await _createOffer(session, media);
     value.muted = false;
-    value.speakerphoneOn = false;
+    value.speakerphoneOn = true;
     value.callState = CallState.Ringing;
     notifyListeners();
     return session;
@@ -180,10 +180,11 @@ class Signaling extends ValueNotifier<SignalingState> {
 
     // var mediaDevices = await navigator.mediaDevices.enumerateDevices();
     final stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    // unmute all audio tracks and disable speakerphone by default
+    // unmute all audio tracks
     stream.getAudioTracks().forEach((track) {
       track.enabled = true;
-      track.enableSpeakerphone(false);
+      Helper.setVolume(1, track);
+      track.enableSpeakerphone(true);
     });
     return stream;
   }
@@ -244,7 +245,6 @@ class Signaling extends ValueNotifier<SignalingState> {
           var session = _sessions[sessionId];
 
           value.muted = false;
-          value.speakerphoneOn = false;
           value.callState = CallState.Connected;
           notifyListeners();
 
@@ -441,8 +441,12 @@ class Signaling extends ValueNotifier<SignalingState> {
       var s =
           await session.pc!.createOffer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
+      // Note - we only force opus on the caller side to avoid incompatibilities
+      // between different versions of clients (i.e. if in the future we move
+      // off opus as our default, old clients that preferred opus will still be
+      // able to answer calls from new clients and vice versa).
       await _send(session.pid, 'offer', {
-        'description': {'sdp': s.sdp, 'type': s.type},
+        'description': {'sdp': tuneOpus(s.sdp, force: true), 'type': s.type},
         'session_id': session.sid,
         'media': media,
       });
@@ -457,7 +461,7 @@ class Signaling extends ValueNotifier<SignalingState> {
           await session.pc!.createAnswer(media == 'data' ? _dcConstraints : {});
       await session.pc!.setLocalDescription(s);
       await _send(session.pid, 'answer', {
-        'description': {'sdp': s.sdp, 'type': s.type},
+        'description': {'sdp': tuneOpus(s.sdp, force: false), 'type': s.type},
         'session_id': session.sid,
       });
     } catch (e) {
@@ -504,4 +508,64 @@ class Signaling extends ValueNotifier<SignalingState> {
     _localStream = null;
     await session?.pc?.close();
   }
+}
+
+final rtpmapOpusRegex = RegExp(r'a=rtpmap:([0-9]+) opus.+');
+final audioRegex = RegExp(r'm=audio ([0-9]+) ([^ ]+) .+');
+
+/// Forces use of Opus and tweaks settings for lower bandwidth usage
+/// See https://datatracker.ietf.org/doc/html/rfc7587 for details of using Opus
+/// with RTP.
+String? tuneOpus(String? sdp, {required bool force}) {
+  if (sdp == null) {
+    return null;
+  }
+
+  final opusMatch = rtpmapOpusRegex.firstMatch(sdp);
+  if (opusMatch == null) {
+    return sdp;
+  }
+
+  final audioMatch = audioRegex.firstMatch(sdp);
+  if (audioMatch == null) {
+    return sdp;
+  }
+
+  final opusId = opusMatch.group(1);
+  final audioPort = audioMatch.group(1);
+  final audioProtocol = audioMatch.group(2);
+
+  if (force) {
+    // use only opus
+    sdp = sdp.replaceFirst(
+        audioRegex, 'm=audio $audioPort $audioProtocol $opusId');
+  }
+
+  // Use simple nack feedback/congestion control since we're always running over
+  // TCP anyway. I tried just turning this off completely by removing this line,
+  // but that causes calls to fail. See here for some other possible values:
+  // https://www.iana.org/assignments/sdp-parameters/sdp-parameters.xhtml#sdp-parameters-14
+  sdp =
+      sdp.replaceFirst(RegExp('a=rtcp-fb:$opusId.+'), 'a=rtcp-fb:$opusId nack');
+
+  // set up custom opus parameters (8 KHz sampling, 20 kbps bitrate, mono, no
+  // FEC, no DTX, small audio packet size.
+  // Note - I couldn't get the maxptime parameter to work, it caused crashes.
+  return sdp.replaceFirst(RegExp('a=fmtp:$opusId.+'),
+      'a=fmtp:$opusId maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3');
+}
+
+/// This just removes the a=fmtp line for Opus, used on the receiving end.
+String? removeOpusFMTP(String? sdp) {
+  if (sdp == null) {
+    return null;
+  }
+
+  final opusMatch = rtpmapOpusRegex.firstMatch(sdp);
+  if (opusMatch == null) {
+    return sdp;
+  }
+
+  final opusId = opusMatch.group(1);
+  return sdp.replaceFirst(RegExp('a=fmtp:$opusId.+'), '');
 }
