@@ -93,6 +93,11 @@ class _HomePageState extends State<HomePage> {
     var sessionModel = context.watch<SessionModel>();
     return sessionModel.developmentMode(
       (BuildContext context, bool developmentMode, Widget? child) {
+        if (developmentMode) {
+          Logger.level = Level.verbose;
+        } else {
+          Logger.level = Level.error;
+        }
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
