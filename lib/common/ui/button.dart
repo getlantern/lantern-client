@@ -11,15 +11,16 @@ class Button extends StatelessWidget {
   late final bool disabled;
   late final bool tertiary;
 
-  Button(
-      {required this.text,
-      this.iconPath,
-      this.onPressed,
-      this.width,
-      this.primary = true,
-      this.secondary = false,
-      this.disabled = false,
-      this.tertiary = false});
+  Button({
+    required this.text,
+    this.iconPath,
+    this.onPressed,
+    this.width,
+    this.primary = true,
+    this.secondary = false,
+    this.disabled = false,
+    this.tertiary = false,
+  });
 
   void _handleOnPress() {
     if (disabled) return null;
@@ -30,7 +31,6 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 56,
-      // width: width ?? 200.0,
       constraints: BoxConstraints(minWidth: width ?? 200.0),
       child: OutlinedButton(
         onPressed: _handleOnPress,
@@ -39,7 +39,10 @@ class Button extends StatelessWidget {
               disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
           backgroundColor: getBgColor(secondary, disabled, tertiary),
           padding: const EdgeInsets.symmetric(vertical: 15),
-          side: BorderSide(width: 2, color: getBorderColor(disabled, tertiary)),
+          side: BorderSide(
+            width: 2,
+            color: getBorderColor(disabled, tertiary),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
