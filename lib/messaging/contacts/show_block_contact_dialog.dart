@@ -13,7 +13,12 @@ void showBlockContactDialog(
     builder: (BuildContext context) {
       return StatefulBuilder(
           builder: (context, setState) => AlertDialog(
-                contentPadding: const EdgeInsets.all(0),
+                contentPadding: const EdgeInsetsDirectional.all(24.0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,6 +55,10 @@ void showBlockContactDialog(
                           children: [
                             Checkbox(
                                 checkColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                    side: BorderSide.none,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(2.0))),
                                 fillColor: MaterialStateProperty.resolveWith(
                                     (states) =>
                                         getCheckboxFillColor(black, states)),
@@ -57,11 +66,7 @@ void showBlockContactDialog(
                                 onChanged: (bool? value) {
                                   setState(() => confirmBlock = value!);
                                 }),
-                            Container(
-                              // not sure why our overflow doesnt work here...
-                              constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.6),
+                            Expanded(
                               child: CText(
                                   contact.blocked
                                       ? 'unblock_info_checkbox'.i18n

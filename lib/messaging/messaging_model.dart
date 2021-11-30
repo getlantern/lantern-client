@@ -42,6 +42,10 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('kill');
   }
 
+  Future<void> wipeData() {
+    return methodChannel.invokeMethod('wipeData');
+  }
+
   /*
   * CONTACTS
   */
