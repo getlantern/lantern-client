@@ -81,9 +81,8 @@ class _AccountManagementState extends State<AccountManagement>
           messagingModel.getCopiedRecoveryStatus((BuildContext context,
                   bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
-                header: 'backup_recovery_key'.i18n,
                 icon: ImagePaths.lock_outline,
-                content: 'recovery_key'.i18n,
+                content: 'backup_recovery_key'.i18n,
                 trailingArray: [
                   if (!hasCopiedRecoveryKey)
                     const Padding(
@@ -97,6 +96,24 @@ class _AccountManagementState extends State<AccountManagement>
                 ],
                 onTap: () => context.router.push(RecoveryKey()),
               )),
+          // * Delete all Chat data
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.account_remove,
+            content: 'delete_chat_data'.i18n,
+            trailingArray: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 16.0),
+                child: TextButton(
+                  onPressed: () =>
+                      showDeleteDataDialog(context, messagingModel),
+                  child: CText(
+                    'Delete'.i18n.toUpperCase(),
+                    style: tsButtonPink,
+                  ),
+                ),
+              ),
+            ],
+          )
         ];
 
         return !widget.isPro
@@ -288,4 +305,111 @@ class _AccountManagementState extends State<AccountManagement>
       }),
     );
   }
+}
+
+void showDeleteDataDialog(
+  BuildContext context,
+  MessagingModel model,
+) async {
+  var confirmDelete = false;
+  await showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          contentPadding: const EdgeInsetsDirectional.all(0),
+          // <--- this padding is different from what we use by default in our showInfoDialog since the checkbox inserts a padding by default, so its best to add individual paddings to the Column children as opposed to a global one
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding:
+                      EdgeInsetsDirectional.only(start: 24, end: 24, top: 24.0),
+                  child: CAssetImage(
+                    path: ImagePaths.account_remove,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                      top: 16, bottom: 8, start: 24, end: 24),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child:
+                          CText('delete_chat_data'.i18n, style: tsSubtitle1)),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                      top: 8, bottom: 16, start: 24, end: 24),
+                  child: CText('delete_chat_data_description'.i18n,
+                      style: tsBody1.copiedWith(color: grey5)),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 12, end: 24),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          visualDensity: VisualDensity.compact,
+                          shape: const RoundedRectangleBorder(
+                              side: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2.0))),
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith(
+                              (states) => getCheckboxFillColor(black, states)),
+                          value: confirmDelete,
+                          onChanged: (bool? value) {
+                            setState(() => confirmDelete = value!);
+                          }),
+                      Expanded(
+                        child: CText(
+                          'delete_chat_data_confirmation'.i18n,
+                          style: tsBody1,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 24.0),
+                  child: TextButton(
+                    onPressed: () async => context.router.pop(),
+                    child:
+                        CText('cancel'.i18n.toUpperCase(), style: tsButtonGrey),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 24.0),
+                  child: CInkWell(
+                    onTap: () async {
+                      if (!confirmDelete) return;
+                      await model.wipeData();
+                      await context.router.pop();
+                    },
+                    child: CText('Delete'.i18n.toUpperCase(),
+                        style: confirmDelete ? tsButtonPink : tsButtonGrey),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      );
+    },
+  );
 }
