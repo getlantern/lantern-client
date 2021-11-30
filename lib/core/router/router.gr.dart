@@ -25,11 +25,12 @@ import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
 import 'package:lantern/messaging/messages.dart' as _i12;
-import 'package:lantern/messaging/messaging.dart' as _i23;
-import 'package:lantern/replica/logic/replica_link.dart' as _i24;
+import 'package:lantern/messaging/messaging.dart' as _i24;
+import 'package:lantern/replica/logic/replica_link.dart' as _i25;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i9;
-import 'package:lantern/replica/ui/searchcategory.dart' as _i25;
-import 'package:lantern/replica/ui/unknownscreen.dart' as _i11;
+import 'package:lantern/replica/ui/search_screen.dart' as _i23;
+import 'package:lantern/replica/ui/searchcategory.dart' as _i26;
+import 'package:lantern/replica/ui/unknown_item_screen.dart' as _i11;
 import 'package:lantern/replica/ui/videoplayer.dart' as _i10;
 import 'package:lantern/vpn/vpn_tab.dart' as _i13;
 
@@ -165,6 +166,13 @@ class AppRouter extends _i1.RootStackRouter {
         },
         opaque: true,
         barrierDismissible: false),
+    ReplicaRouter.name: (routeData) => _i1.CustomPage<void>(
+        routeData: routeData,
+        builder: (_) {
+          return const _i1.EmptyRouterPage();
+        },
+        opaque: true,
+        barrierDismissible: false),
     MessagesRoute.name: (routeData) => _i1.CustomPage<void>(
         routeData: routeData,
         builder: (_) {
@@ -291,6 +299,16 @@ class AppRouter extends _i1.RootStackRouter {
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
+        barrierDismissible: false),
+    Replica.name: (routeData) => _i1.CustomPage<String>(
+        routeData: routeData,
+        builder: (_) {
+          return _i23.ReplicaSearchScreen();
+        },
+        transitionsBuilder: _i1.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
+        opaque: true,
         barrierDismissible: false)
   };
 
@@ -316,7 +334,10 @@ class AppRouter extends _i1.RootStackRouter {
           ]),
           _i1.RouteConfig(DeveloperRoute.name,
               path: 'developer',
-              children: [_i1.RouteConfig(DeveloperSettings.name, path: '')])
+              children: [_i1.RouteConfig(DeveloperSettings.name, path: '')]),
+          _i1.RouteConfig(ReplicaRouter.name,
+              path: 'replica',
+              children: [_i1.RouteConfig(Replica.name, path: '')])
         ]),
         _i1.RouteConfig(FullScreenDialogPage.name,
             path: 'fullScreenDialogPage'),
@@ -332,7 +353,7 @@ class AppRouter extends _i1.RootStackRouter {
 }
 
 class Home extends _i1.PageRouteInfo<HomeArgs> {
-  Home({_i23.Key? key, List<_i1.PageRouteInfo>? children})
+  Home({_i24.Key? key, List<_i1.PageRouteInfo>? children})
       : super(name,
             path: '/', args: HomeArgs(key: key), initialChildren: children);
 
@@ -342,11 +363,11 @@ class Home extends _i1.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class FullScreenDialogPage extends _i1.PageRouteInfo<FullScreenDialogPageArgs> {
-  FullScreenDialogPage({required _i23.Widget widget, _i23.Key? key})
+  FullScreenDialogPage({required _i24.Widget widget, _i24.Key? key})
       : super(name,
             path: 'fullScreenDialogPage',
             args: FullScreenDialogPageArgs(widget: widget, key: key));
@@ -357,13 +378,13 @@ class FullScreenDialogPage extends _i1.PageRouteInfo<FullScreenDialogPageArgs> {
 class FullScreenDialogPageArgs {
   const FullScreenDialogPageArgs({required this.widget, this.key});
 
-  final _i23.Widget widget;
+  final _i24.Widget widget;
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
-  Conversation({required _i23.ContactId contactId, int? initialScrollIndex})
+  Conversation({required _i24.ContactId contactId, int? initialScrollIndex})
       : super(name,
             path: 'conversation',
             args: ConversationArgs(
@@ -375,7 +396,7 @@ class Conversation extends _i1.PageRouteInfo<ConversationArgs> {
 class ConversationArgs {
   const ConversationArgs({required this.contactId, this.initialScrollIndex});
 
-  final _i23.ContactId contactId;
+  final _i24.ContactId contactId;
 
   final int? initialScrollIndex;
 }
@@ -399,7 +420,7 @@ class Introductions extends _i1.PageRouteInfo {
 }
 
 class LinkOpenerScreen extends _i1.PageRouteInfo<LinkOpenerScreenArgs> {
-  LinkOpenerScreen({_i23.Key? key, required _i24.ReplicaLink replicaLink})
+  LinkOpenerScreen({_i24.Key? key, required _i25.ReplicaLink replicaLink})
       : super(name,
             path: 'linkOpenerScreen',
             args: LinkOpenerScreenArgs(key: key, replicaLink: replicaLink));
@@ -410,15 +431,15 @@ class LinkOpenerScreen extends _i1.PageRouteInfo<LinkOpenerScreenArgs> {
 class LinkOpenerScreenArgs {
   const LinkOpenerScreenArgs({this.key, required this.replicaLink});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.ReplicaLink replicaLink;
+  final _i25.ReplicaLink replicaLink;
 }
 
 class ReplicaVideoPlayerScreen
     extends _i1.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
-      {_i23.Key? key, required _i24.ReplicaLink replicaLink})
+      {_i24.Key? key, required _i25.ReplicaLink replicaLink})
       : super(name,
             path: 'replicaVideoPlayerScreen',
             args: ReplicaVideoPlayerScreenArgs(
@@ -430,16 +451,16 @@ class ReplicaVideoPlayerScreen
 class ReplicaVideoPlayerScreenArgs {
   const ReplicaVideoPlayerScreenArgs({this.key, required this.replicaLink});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.ReplicaLink replicaLink;
+  final _i25.ReplicaLink replicaLink;
 }
 
 class UnknownItemScreen extends _i1.PageRouteInfo<UnknownItemScreenArgs> {
   UnknownItemScreen(
-      {_i23.Key? key,
-      required _i24.ReplicaLink replicaLink,
-      required _i25.SearchCategory category})
+      {_i24.Key? key,
+      required _i25.ReplicaLink replicaLink,
+      required _i26.SearchCategory category})
       : super(name,
             path: 'unknownItemScreen',
             args: UnknownItemScreenArgs(
@@ -452,11 +473,11 @@ class UnknownItemScreenArgs {
   const UnknownItemScreenArgs(
       {this.key, required this.replicaLink, required this.category});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.ReplicaLink replicaLink;
+  final _i25.ReplicaLink replicaLink;
 
-  final _i25.SearchCategory category;
+  final _i26.SearchCategory category;
 }
 
 class MessagesRouter extends _i1.PageRouteInfo {
@@ -487,6 +508,13 @@ class DeveloperRoute extends _i1.PageRouteInfo {
   static const String name = 'DeveloperRoute';
 }
 
+class ReplicaRouter extends _i1.PageRouteInfo {
+  const ReplicaRouter({List<_i1.PageRouteInfo>? children})
+      : super(name, path: 'replica', initialChildren: children);
+
+  static const String name = 'ReplicaRouter';
+}
+
 class MessagesRoute extends _i1.PageRouteInfo {
   const MessagesRoute() : super(name, path: '');
 
@@ -494,7 +522,7 @@ class MessagesRoute extends _i1.PageRouteInfo {
 }
 
 class Vpn extends _i1.PageRouteInfo<VpnArgs> {
-  Vpn({_i23.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
+  Vpn({_i24.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
 
   static const String name = 'Vpn';
 }
@@ -502,7 +530,7 @@ class Vpn extends _i1.PageRouteInfo<VpnArgs> {
 class VpnArgs {
   const VpnArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class Account extends _i1.PageRouteInfo {
@@ -512,7 +540,7 @@ class Account extends _i1.PageRouteInfo {
 }
 
 class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
-  ProAccount({_i23.Key? key})
+  ProAccount({_i24.Key? key})
       : super(name, path: 'proAccount', args: ProAccountArgs(key: key));
 
   static const String name = 'ProAccount';
@@ -521,11 +549,11 @@ class ProAccount extends _i1.PageRouteInfo<ProAccountArgs> {
 class ProAccountArgs {
   const ProAccountArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class Settings extends _i1.PageRouteInfo<SettingsArgs> {
-  Settings({_i23.Key? key})
+  Settings({_i24.Key? key})
       : super(name, path: 'settings', args: SettingsArgs(key: key));
 
   static const String name = 'Settings';
@@ -534,11 +562,11 @@ class Settings extends _i1.PageRouteInfo<SettingsArgs> {
 class SettingsArgs {
   const SettingsArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class Language extends _i1.PageRouteInfo<LanguageArgs> {
-  Language({_i23.Key? key})
+  Language({_i24.Key? key})
       : super(name, path: 'language', args: LanguageArgs(key: key));
 
   static const String name = 'Language';
@@ -547,11 +575,11 @@ class Language extends _i1.PageRouteInfo<LanguageArgs> {
 class LanguageArgs {
   const LanguageArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class AuthorizePro extends _i1.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({_i23.Key? key})
+  AuthorizePro({_i24.Key? key})
       : super(name, path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
   static const String name = 'AuthorizePro';
@@ -560,11 +588,11 @@ class AuthorizePro extends _i1.PageRouteInfo<AuthorizeProArgs> {
 class AuthorizeProArgs {
   const AuthorizeProArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class AuthorizeDeviceEmail extends _i1.PageRouteInfo<AuthorizeDeviceEmailArgs> {
-  AuthorizeDeviceEmail({_i23.Key? key})
+  AuthorizeDeviceEmail({_i24.Key? key})
       : super(name,
             path: 'authorizeDeviceEmail',
             args: AuthorizeDeviceEmailArgs(key: key));
@@ -575,12 +603,12 @@ class AuthorizeDeviceEmail extends _i1.PageRouteInfo<AuthorizeDeviceEmailArgs> {
 class AuthorizeDeviceEmailArgs {
   const AuthorizeDeviceEmailArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class AuthorizeDeviceEmailPin
     extends _i1.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
-  AuthorizeDeviceEmailPin({_i23.Key? key})
+  AuthorizeDeviceEmailPin({_i24.Key? key})
       : super(name,
             path: 'authorizeDeviceEmailPin',
             args: AuthorizeDeviceEmailPinArgs(key: key));
@@ -591,11 +619,11 @@ class AuthorizeDeviceEmailPin
 class AuthorizeDeviceEmailPinArgs {
   const AuthorizeDeviceEmailPinArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class ApproveDevice extends _i1.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({_i23.Key? key})
+  ApproveDevice({_i24.Key? key})
       : super(name, path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
   static const String name = 'ApproveDevice';
@@ -604,11 +632,11 @@ class ApproveDevice extends _i1.PageRouteInfo<ApproveDeviceArgs> {
 class ApproveDeviceArgs {
   const ApproveDeviceArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 }
 
 class DeveloperSettings extends _i1.PageRouteInfo<DeveloperSettingsArgs> {
-  DeveloperSettings({_i23.Key? key})
+  DeveloperSettings({_i24.Key? key})
       : super(name, path: '', args: DeveloperSettingsArgs(key: key));
 
   static const String name = 'DeveloperSettings';
@@ -617,5 +645,11 @@ class DeveloperSettings extends _i1.PageRouteInfo<DeveloperSettingsArgs> {
 class DeveloperSettingsArgs {
   const DeveloperSettingsArgs({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
+}
+
+class Replica extends _i1.PageRouteInfo {
+  const Replica() : super(name, path: '');
+
+  static const String name = 'Replica';
 }

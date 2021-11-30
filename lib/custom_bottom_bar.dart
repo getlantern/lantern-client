@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/logic/common.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
@@ -36,11 +36,10 @@ class CustomBottomBar extends StatelessWidget {
             position: 0,
             total: isDevelop ? 4 : 3,
             label: CText('messages'.i18n, style: tsFloatingLabel),
-            icon: SvgPicture.asset(
-              ImagePaths.messages,
+            icon: CAssetImage(
+              path: ImagePaths.messages,
               color:
                   index == 0 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
             ),
             onTap: () => onTap!(0),
           ),
@@ -53,11 +52,10 @@ class CustomBottomBar extends StatelessWidget {
             position: 1,
             total: isDevelop ? 4 : 3,
             label: CText('VPN'.i18n, style: tsFloatingLabel),
-            icon: SvgPicture.asset(
-              ImagePaths.key,
+            icon: CAssetImage(
+              path: ImagePaths.key,
               color:
                   index == 1 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
             ),
             onTap: () => onTap!(1),
             iconWidget: vpnModel.vpnStatus(
@@ -81,31 +79,47 @@ class CustomBottomBar extends StatelessWidget {
             total: isDevelop ? 4 : 3,
             label: CText('Account'.i18n, style: tsFloatingLabel),
             onTap: () => onTap!(2),
-            icon: SvgPicture.asset(
-              ImagePaths.account,
+            icon: CAssetImage(
+              path: ImagePaths.account,
               color:
                   index == 2 ? selectedTabLabelColor : unselectedTabLabelColor,
-              fit: BoxFit.contain,
             ),
           ),
           label: '',
           tooltip: 'Account'.i18n,
         ),
-        if (isDevelop)
+        if (ReplicaCommon.isReplicaRunning())
           BottomNavigationBarItem(
             icon: CustomBottomItem(
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('Developer'.i18n, style: tsFloatingLabel),
-              icon: SvgPicture.asset(
-                ImagePaths.devices,
+              label: CText('replica'.i18n, style: tsFloatingLabel),
+              icon: CAssetImage(
+                path: ImagePaths.alert,
                 color: index == 3
                     ? selectedTabLabelColor
                     : unselectedTabLabelColor,
-                fit: BoxFit.contain,
               ),
               onTap: () => onTap!(3),
+            ),
+            label: '',
+            tooltip: 'replica'.i18n,
+          ),
+        if (isDevelop)
+          BottomNavigationBarItem(
+            icon: CustomBottomItem(
+              currentIndex: index,
+              position: 4,
+              total: isDevelop ? 4 : 3,
+              label: CText('Developer'.i18n, style: tsFloatingLabel),
+              icon: CAssetImage(
+                path: ImagePaths.devices,
+                color: index == 4
+                    ? selectedTabLabelColor
+                    : unselectedTabLabelColor,
+              ),
+              onTap: () => onTap!(4),
             ),
             label: '',
             tooltip: 'Developer'.i18n,
