@@ -368,10 +368,6 @@ void showDeleteDataDialog(
                           onChanged: (bool? value) {
                             setState(() => confirmDelete = value!);
                           }),
-                      // CText(
-                      //   'delete_chat_data_confirmation'.i18n,
-                      //   style: tsBody1,
-                      // ),
                       Expanded(
                         child: CText(
                           'delete_chat_data_confirmation'.i18n,
