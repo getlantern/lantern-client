@@ -1,5 +1,4 @@
 import 'package:lantern/replica/logic/replica_link.dart';
-import 'package:lantern/vpn/vpn.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -39,18 +38,6 @@ class ReplicaLinkMarkdownElementBuilder extends MarkdownElementBuilder {
       ),
       textDirection: TextDirection.ltr,
     );
-    // return SelectableText.rich(
-    //   TextSpan(
-    //     // replica:// is stripped during the parsing. Put it back
-    //     text: 'replica://${link.infohash}',
-    //     recognizer: TapGestureRecognizer()
-    //       ..onTap = () {
-    //         runReplicaLink(link);
-    //       },
-    //     style: const TextStyle(color: Colors.blue),
-    //   ),
-    //   textDirection: TextDirection.ltr,
-    // );
   }
 }
 
