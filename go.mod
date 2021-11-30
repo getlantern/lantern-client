@@ -17,12 +17,12 @@ require (
 	github.com/getlantern/netx v0.0.0-20210813193214-fc6827f83767
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
-	github.com/getlantern/replica v0.6.1-0.20211020081401-5c51375e95fb
+	github.com/getlantern/replica v0.6.1-0.20211130124158-9e2a155f81ed
 	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
+	golang.org/x/net v0.0.0-20211020060615-d418f374d309
 	nhooyr.io/websocket v1.8.7
 )
 
