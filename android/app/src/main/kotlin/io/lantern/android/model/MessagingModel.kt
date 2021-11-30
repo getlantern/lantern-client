@@ -1,6 +1,5 @@
 package io.lantern.android.model
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
