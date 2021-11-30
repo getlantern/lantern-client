@@ -9,7 +9,6 @@ require (
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/flashlight v0.0.0-20210922145107-fdcc91512d17
-	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
@@ -19,15 +18,19 @@ require (
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
 	github.com/getlantern/replica v0.6.1-0.20211020081401-5c51375e95fb
-	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
-	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
 	nhooyr.io/websocket v1.8.7
+)
+
+require (
+	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
+	github.com/go-stack/stack v1.8.1 // indirect
+	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
+	golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e // indirect
 )
 
 // replace github.com/getlantern/flashlight => ../flashlight
