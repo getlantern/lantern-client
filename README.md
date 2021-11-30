@@ -11,6 +11,17 @@ Lantern Android is an app that uses the [VpnService][https://developer.android.c
   - and sporadic tasks in https://github.com/orgs/getlantern/projects/5
   - All tickets should have the [replica-mobile](https://github.com/getlantern/lantern-internal/labels/replica-mobile) label
 
+## Overview
+
+**Note** Preview the images below in two ways:
+- Install VSCode and [this extension](https://github.com/hediet/vscode-drawio)
+  - Open this README
+  - Run 'Markdown: Open preview to the side' command
+- Open draw.io in a browser
+  - Copy-paste the `.drawio.svg` files there
+
+![Components](components.drawio.svg)
+
 ## Usage
 
 This project is meant to be used inside of the context of a local clone of https://github.com/getlantern/lantern-build.
@@ -40,14 +51,19 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 ### Dependencies
 
-* [Android Studio](https://developer.android.com/studio?gclid=Cj0KCQjw2NyFBhDoARIsAMtHtZ6iZDqZH5ST7d4xlnwfdMGD8GoquRh0Q6B_KJRmUl-MRyj-OPSPrLwaAgo7EALw_wcB&gclsrc=aw.ds)
+All those dependencies must be in your PATH
+
+* [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
-* Android SDK from 25 up to the latest.
-* [Git LFS](https://git-lfs.github.com) (more information in [Usage](#usage))
-* [Flutter (latest version)](https://flutter.dev/docs/development/tools/sdk/releases?tab=macos)
-* [sentry-cli](https://docs.sentry.io/product/cli/installation/) (This is used for uploading native debug symbols to Sentry)
+  * Android SDK from 25 up to the latest.
+* [Git LFS](https://git-lfs.github.com)
+  - more information in [Usage](#usage)
+* [Flutter (latest version)](https://flutter.dev)
+* [sentry-cli](https://docs.sentry.io/product/cli/installation/)
+  - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
+* [json-server](https://github.com/typicode/json-server)
 
 In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
@@ -82,6 +98,11 @@ Do this the first time your run the project:
 
 Or, run it from Android Studio if you're using that.
 
+#### Flutter Logging
+
+The Flutter component uses [logger](https://pub.dev/packages/logger) package for logging.
+See `home.dart#build()` to know where it's configured.
+
 ### Building the InternalSdk (AKA Lantern Core) as a library
 
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
@@ -99,6 +120,10 @@ Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib
   * **BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!!** When you run the integration tests, you'll need to select a device. If you select a device that already has Lantern installed, that Lantern will be replaced with a new build for the integration test. Consider using an emulator to avoid wiping your data
 * To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
   * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
+
+##### Testing Replica
+A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
+The tests should transparently setup and teardown the dummy server but you need to have `json-server` in your PATH.
 
 #### Java/Kotlin
 
