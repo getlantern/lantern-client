@@ -472,7 +472,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "1f0cf12a3344ac064167252814b40391593be860"
+      resolved-ref: "1bf2cd40af6e8b0c6180c937659051eb157c0a4e"
       url: "git://github.com/getlantern/flutter-webrtc.git"
     source: git
     version: "0.7.1"

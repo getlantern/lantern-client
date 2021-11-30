@@ -37,7 +37,7 @@ class Session {
 class SignalingState {
   CallState callState = CallState.New;
   var muted = false;
-  var speakerphoneOn = true;
+  var speakerphoneOn = false;
 }
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
@@ -60,9 +60,14 @@ class Signaling extends ValueNotifier<SignalingState> {
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
 
-  void toggleAudioPlayerEarpieceOrSpeaker() async {
+  void setAudioPlayerOnSpeaker(bool speaker) async {
+    if (speaker == audioPlayerOnSpeaker) {
+      // no change required
+      return;
+    }
+
     await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
-    audioPlayerOnSpeaker = !audioPlayerOnSpeaker;
+    audioPlayerOnSpeaker = speaker;
   }
 
   String get sdpSemantics =>
@@ -117,8 +122,12 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   void toggleSpeakerphone() {
-    toggleAudioPlayerEarpieceOrSpeaker();
-    value.speakerphoneOn = !value.speakerphoneOn;
+    setSpeakerphoneOn(!value.speakerphoneOn);
+  }
+
+  void setSpeakerphoneOn(bool speakerphoneOn) {
+    value.speakerphoneOn = speakerphoneOn;
+    setAudioPlayerOnSpeaker(value.speakerphoneOn);
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
         track.enableSpeakerphone(value.speakerphoneOn);
@@ -131,8 +140,17 @@ class Signaling extends ValueNotifier<SignalingState> {
       {required String peerId,
       required String media,
       required Function() onError}) async {
+    // The first time we start ringing, the audio cache will not yet be initialized
+    // so we wait to call audioPlayerOnSpeaker.
+    final disableSpeakerImmediately = audioCache.fixedPlayer != null;
+    if (disableSpeakerImmediately) {
+      setAudioPlayerOnSpeaker(false);
+    }
     await audioCache.loop(ringingFile);
-    if (audioPlayerOnSpeaker) toggleAudioPlayerEarpieceOrSpeaker();
+    if (!disableSpeakerImmediately) {
+      setAudioPlayerOnSpeaker(false);
+    }
+
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
@@ -140,8 +158,8 @@ class Signaling extends ValueNotifier<SignalingState> {
     _sessions[sessionId] = session;
     await _createOffer(session, media);
     value.muted = false;
-    value.speakerphoneOn = true;
     value.callState = CallState.Ringing;
+    setSpeakerphoneOn(false);
     notifyListeners();
     return session;
   }
@@ -184,7 +202,6 @@ class Signaling extends ValueNotifier<SignalingState> {
     stream.getAudioTracks().forEach((track) {
       track.enabled = true;
       Helper.setVolume(1, track);
-      track.enableSpeakerphone(true);
     });
     return stream;
   }
