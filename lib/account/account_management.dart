@@ -374,7 +374,7 @@ void showDeleteDataDialog(
                             Container(
                               constraints: BoxConstraints(
                                   maxWidth:
-                                      MediaQuery.of(context).size.width * 0.6),
+                                      MediaQuery.of(context).size.width * 0.5),
                               child: CText('delete_chat_data_confirmation'.i18n,
                                   style: tsBody1),
                             )
@@ -401,6 +401,7 @@ void showDeleteDataDialog(
                         padding: const EdgeInsetsDirectional.only(end: 24.0),
                         child: CInkWell(
                           onTap: () async {
+                            if (!confirmDelete) return;
                             await model.wipeData();
                             await context.router.pop();
                           },
