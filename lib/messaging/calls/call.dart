@@ -342,7 +342,6 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                           top: 24.0, bottom: 24.0),
                                       child: Button(
                                         tertiary: true,
-                                        width: 200,
                                         iconPath: isVerified
                                             ? null
                                             : ImagePaths.verified_user,

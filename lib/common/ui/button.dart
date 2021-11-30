@@ -28,9 +28,10 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 56,
-      width: width,
+      // width: width ?? 200.0,
+      constraints: BoxConstraints(minWidth: width ?? 200.0),
       child: OutlinedButton(
         onPressed: _handleOnPress,
         style: OutlinedButton.styleFrom(
@@ -41,7 +42,7 @@ class Button extends StatelessWidget {
           side: BorderSide(width: 2, color: getBorderColor(disabled, tertiary)),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23),
+          padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -54,11 +55,14 @@ class Button extends StatelessWidget {
                     color: white,
                   ),
                 ),
-              CText(
-                text.toUpperCase(),
-                // style: disabled ? tsButtonGrey : tsButtonWhite,
-                style: getTextStyle(secondary),
-                textAlign: TextAlign.center,
+              Expanded(
+                flex: 0,
+                child: CText(
+                  text.toUpperCase(),
+                  style: getTextStyle(secondary),
+                  overflow: TextOverflow.visible,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
