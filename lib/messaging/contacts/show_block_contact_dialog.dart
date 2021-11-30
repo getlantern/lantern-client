@@ -66,11 +66,7 @@ void showBlockContactDialog(
                                 onChanged: (bool? value) {
                                   setState(() => confirmBlock = value!);
                                 }),
-                            Container(
-                              // not sure why our overflow doesnt work here...
-                              constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.6),
+                            Expanded(
                               child: CText(
                                   contact.blocked
                                       ? 'unblock_info_checkbox'.i18n
