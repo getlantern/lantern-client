@@ -1,9 +1,14 @@
 class ReplicaLink {
   String? displayName;
+  String? exactSource;
   int? fileIndex;
   late String infohash;
 
-  ReplicaLink({required this.infohash, this.displayName, this.fileIndex});
+  ReplicaLink(
+      {required this.infohash,
+      this.displayName,
+      this.fileIndex,
+      this.exactSource});
 
   // A replica link doesn't need to have the prefix 'replica://'
   //
@@ -32,6 +37,7 @@ class ReplicaLink {
         return ReplicaLink(
             infohash: infohash,
             displayName: u.queryParameters['dn'],
+            exactSource: u.queryParameters['xs'],
             fileIndex: so);
       }
       return null;
@@ -56,6 +62,16 @@ class ReplicaLink {
   }
 
   String toMagnetLink() {
-    return Uri.encodeFull('magnet:?xt=urn:btih:$infohash');
+    var s = 'magnet:?xt=urn:btih:$infohash';
+    if (exactSource != null) {
+      s += '&xs=$exactSource';
+    }
+    if (displayName != null) {
+      s += '&dn=$displayName';
+    }
+    if (fileIndex != null) {
+      s += '&so=$fileIndex';
+    }
+    return Uri.encodeFull(s);
   }
 }
