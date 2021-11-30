@@ -1,5 +1,6 @@
 package io.lantern.android.model
 
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
@@ -16,12 +17,12 @@ import io.lantern.messaging.dbPath
 import io.lantern.messaging.directContactPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.restartApp
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
-import java.sql.Timestamp
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -106,7 +107,10 @@ class MessagingModel constructor(
              */
             "start" -> messaging.start()
             "kill" -> messaging.kill()
-
+            "wipeData" -> {
+                messaging.kill()
+                activity.restartApp()
+            }
             /*
             * Contacts
             */

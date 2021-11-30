@@ -397,7 +397,7 @@ void showDeleteDataDialog(
                         alignment: Alignment.centerRight,
                         child: CInkWell(
                           onTap: () async {
-                            await model.kill();
+                            await model.wipeData();
                             await context.router.pop();
                           },
                           child: CText('Delete'.i18n.toUpperCase(),
