@@ -36,6 +36,8 @@ class LinkOpenerScreen extends StatefulWidget {
 
 class _LinkOpenerScreen extends State<LinkOpenerScreen> {
   bool _didFailToInitReplica = false;
+  final ReplicaApi _replicaApi =
+      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
 
   @override
   void initState() {
@@ -52,9 +54,7 @@ class _LinkOpenerScreen extends State<LinkOpenerScreen> {
       }
 
       logger.v('XXX initState(): ReplicaCommon.init() OK');
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!)
-          .fetchCategoryFromReplicaLink(widget.replicaLink)
-          .then((cat) {
+      _replicaApi.fetchCategoryFromReplicaLink(widget.replicaLink).then((cat) {
         logger.v('XXX initState: category is ${cat.toString()}');
         switch (cat) {
           case SearchCategory.Video:
