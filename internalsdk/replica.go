@@ -69,6 +69,9 @@ func newReplicaHttpHandler(
 
 	input := replicaServer.NewHttpHandlerInput{}
 	input.SetDefaults()
+	// XXX <30-11-21, soltzen> Since this is mobile, disable seeding and makes
+	// the dht node passive
+	input.ReadOnlyNode = true
 	input.RootUploadsDir = configDir
 	input.CacheDir = configDir
 	input.UserConfig = userConfig
