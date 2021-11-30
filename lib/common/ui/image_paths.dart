@@ -60,6 +60,7 @@ class ImagePaths {
   static const welcome_illustration = 'assets/images/welcome_illustration.svg';
   static const notifications = 'assets/images/notifications.svg';
   static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
+  static const account_remove = 'assets/images/account_remove.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';
