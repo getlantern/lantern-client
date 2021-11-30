@@ -13,6 +13,8 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'messaging/messaging_model.dart';
+import 'package:lantern/replica/logic/common.dart';
+import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
