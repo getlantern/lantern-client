@@ -103,8 +103,9 @@ class _AccountManagementState extends State<AccountManagement>
             trailingArray: [
               Padding(
                 padding: const EdgeInsetsDirectional.only(start: 16.0),
-                child: CInkWell(
-                  onTap: () => showDeleteDataDialog(context, messagingModel),
+                child: TextButton(
+                  onPressed: () =>
+                      showDeleteDataDialog(context, messagingModel),
                   child: CText(
                     'Delete'.i18n.toUpperCase(),
                     style: tsButtonPink,
@@ -358,6 +359,10 @@ void showDeleteDataDialog(
                           children: [
                             Checkbox(
                                 visualDensity: VisualDensity.compact,
+                                shape: const RoundedRectangleBorder(
+                                    side: BorderSide.none,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(2.0))),
                                 checkColor: Colors.white,
                                 fillColor: MaterialStateProperty.resolveWith(
                                     (states) =>
@@ -384,17 +389,16 @@ void showDeleteDataDialog(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 24.0),
                         child: TextButton(
                           onPressed: () async => context.router.pop(),
                           child: CText('cancel'.i18n.toUpperCase(),
                               style: tsButtonGrey),
                         ),
                       ),
-                      const SizedBox(width: 15),
-                      Align(
-                        alignment: Alignment.centerRight,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 24.0),
                         child: CInkWell(
                           onTap: () async {
                             await model.wipeData();

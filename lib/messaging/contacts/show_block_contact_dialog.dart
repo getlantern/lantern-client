@@ -55,6 +55,10 @@ void showBlockContactDialog(
                           children: [
                             Checkbox(
                                 checkColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                    side: BorderSide.none,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(2.0))),
                                 fillColor: MaterialStateProperty.resolveWith(
                                     (states) =>
                                         getCheckboxFillColor(black, states)),
