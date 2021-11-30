@@ -9,6 +9,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i19;
+import 'package:flutter/cupertino.dart' as _i28;
 import 'package:flutter/material.dart' as _i27;
 import 'package:lantern/account/account_management.dart' as _i9;
 import 'package:lantern/account/account_tab.dart' as _i25;
@@ -25,7 +26,6 @@ import 'package:lantern/account/language.dart' as _i11;
 import 'package:lantern/account/recovery_key.dart' as _i16;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i17;
 import 'package:lantern/account/settings.dart' as _i10;
-import 'package:lantern/common/common.dart' as _i28;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/chats.dart' as _i23;
@@ -35,13 +35,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging_model.dart' as _i30;
+import 'package:lantern/messaging/messaging.dart' as _i29;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i22;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i21;
 import 'package:lantern/messaging/onboarding/welcome.dart' as _i20;
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i29;
 import 'package:lantern/vpn/vpn_tab.dart' as _i24;
 
 class AppRouter extends _i19.RootStackRouter {
@@ -515,7 +514,7 @@ class ConversationArgs {
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i30.MessagingModel model, required _i29.Contact contact})
+      {required _i29.MessagingModel model, required _i29.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -526,7 +525,7 @@ class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i30.MessagingModel model;
+  final _i29.MessagingModel model;
 
   final _i29.Contact contact;
 
