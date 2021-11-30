@@ -378,7 +378,6 @@ void showDeleteDataDialog(
                                               () => confirmDelete = value!);
                                         }),
                                     Container(
-                                      color: pink4,
                                       constraints: BoxConstraints(
                                           maxWidth: constraints.maxWidth * 0.6),
                                       child: CText(
