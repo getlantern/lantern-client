@@ -55,7 +55,7 @@ void showInfoDialog(
                     if (popParentContext) parentContext.router.pop();
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsetsDirectional.all(8),
                     child: CText(
                       buttonText,
                       style: tsButtonPink,
