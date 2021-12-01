@@ -10,7 +10,7 @@ class DateMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -18,7 +18,7 @@ class DateMarker extends StatelessWidget {
             height: 24,
             child: Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsetsDirectional.only(start: 8, end: 8),
               decoration: BoxDecoration(
                 color: black,
                 borderRadius: const BorderRadius.all(Radius.circular(100)),

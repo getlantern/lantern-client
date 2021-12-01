@@ -43,7 +43,8 @@ class RoundButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            padding: MaterialStateProperty.all(EdgeInsets.all(padding)),
+            padding:
+                MaterialStateProperty.all(EdgeInsetsDirectional.all(padding)),
             backgroundColor: MaterialStateProperty.all(backgroundColor),
             shape: MaterialStateProperty.all(const CircleBorder())),
         child: icon,

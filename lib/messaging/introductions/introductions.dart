@@ -13,7 +13,8 @@ class Introductions extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                padding:
+                    const EdgeInsetsDirectional.only(top: 16.0, bottom: 16.0),
                 child: CText('introductions_info'.i18n, style: tsBody1),
               ),
               Expanded(child: model.bestIntroductions(builder:

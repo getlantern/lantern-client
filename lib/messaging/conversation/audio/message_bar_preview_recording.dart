@@ -19,7 +19,7 @@ class MessageBarPreviewRecording extends StatelessWidget {
     final children = [
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(left: 18),
+          padding: const EdgeInsetsDirectional.only(start: 18),
           child: AudioWidget(
             controller: audioController,
             initialColor: Colors.black,

@@ -37,7 +37,7 @@ class Language extends StatelessWidget {
             var lang = languages[index];
             return RadioListTile<String>(
               activeColor: pink4,
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: const EdgeInsetsDirectional.all(0),
               tileColor: lang == currentLang ? grey2 : transparent,
               dense: true,
               title: CText(

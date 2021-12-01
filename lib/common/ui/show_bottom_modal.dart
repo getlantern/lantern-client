@@ -21,7 +21,7 @@ void showBottomModal({
               Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsetsDirectional.all(16),
                     child: Center(child: title),
                   ),
                   if (subtitle != null)

@@ -25,12 +25,14 @@ class SecureChatNumberAccount extends StatelessWidget {
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(padding: EdgeInsets.all(4.0)),
+                              const Padding(
+                                  padding: EdgeInsetsDirectional.all(4.0)),
                               Expanded(
                                 child: FullChatNumberWidget(
                                     context, me.chatNumber),
                               ),
-                              const Padding(padding: EdgeInsets.all(4.0)),
+                              const Padding(
+                                  padding: EdgeInsetsDirectional.all(4.0)),
                             ],
                           ),
                           trailingArray: [
