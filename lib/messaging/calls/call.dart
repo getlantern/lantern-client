@@ -28,6 +28,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    disableBackButton();
     signaling = widget.model.signaling;
     signaling.addListener(onSignalingStateChange);
 
@@ -61,6 +62,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void dispose() async {
     super.dispose();
     WidgetsBinding.instance!.removeObserver(this);
+    enableBackButton();
     signaling.removeListener(onSignalingStateChange);
     signaling.bye(await session);
     unawaited(notifications.dismissInCallNotification());
