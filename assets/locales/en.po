@@ -779,7 +779,7 @@ msgid "attachment"
 msgstr "Attachment"
 
 msgid "error_rendering_message"
-msgstr "Error rendering attachment"
+msgstr "Error rendering message"
 
 msgid "audio"
 msgstr "Audio"

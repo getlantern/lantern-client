@@ -132,7 +132,8 @@ class AttachmentBuilder extends StatelessWidget {
 
   Widget errorIndicator() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 24),
+      padding: const EdgeInsetsDirectional.only(
+          start: 16, end: 16, top: 16, bottom: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

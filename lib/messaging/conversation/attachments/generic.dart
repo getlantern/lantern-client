@@ -17,7 +17,7 @@ class GenericAttachment extends StatelessWidget {
     final title = attachmentTitle ?? 'could_not_render_title'.i18n;
     final fileType = fileExtension ?? '';
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
+      padding: const EdgeInsetsDirectional.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
