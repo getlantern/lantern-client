@@ -150,7 +150,7 @@ class Reply extends StatelessWidget {
               ),
             ),
           ),
-          if (isAttachment)
+          if (isAttachment && !attachmentHasError)
             Container(
               width: 56,
               height: 56,
@@ -187,9 +187,6 @@ class Reply extends StatelessWidget {
   Widget attachmentWidget() {
     final attachment = message.attachments[0]!;
     final mimeType = mimeTypeOf(attachment.attachment.mimeType);
-    if (attachmentHasError) {
-      return const CAssetImage(path: ImagePaths.error_outline);
-    }
     switch (mimeType) {
       case MimeType.AUDIO:
         return const CAssetImage(path: ImagePaths.volume_up);
