@@ -93,7 +93,6 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
             ],
             button: Button(
                 text: 'Submit'.i18n,
-                width: 200.0,
                 onPressed: () => handleButtonPress(model),
                 disabled: !shouldSubmit)));
   }

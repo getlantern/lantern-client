@@ -29,7 +29,6 @@ class RecoveryKey extends StatelessWidget {
                 ],
                 button: Button(
                   text: 'copy_recovery_key'.i18n,
-                  width: 200.0,
                   disabled: snapshot.hasError,
                   onPressed: () async {
                     await model.markCopiedRecoveryKey();
