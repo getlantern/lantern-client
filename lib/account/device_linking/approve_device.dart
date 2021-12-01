@@ -68,7 +68,7 @@ class ApproveDevice extends StatelessWidget {
                 },
               ),
               LabeledDivider(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
               ),
               Container(
                 margin: const EdgeInsetsDirectional.only(bottom: 16),

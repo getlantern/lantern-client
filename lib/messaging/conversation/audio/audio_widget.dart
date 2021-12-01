@@ -156,7 +156,7 @@ class AudioWidget extends StatelessWidget {
             crossAxisAlignment: timeRemainingAlignment!,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 4),
+                padding: const EdgeInsetsDirectional.only(start: 4),
                 child: _buildWaveformRow(value),
               ),
               _getTimeRemaining(value),
@@ -215,7 +215,7 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getTimeRemaining(AudioValue value) => Container(
-        padding: const EdgeInsets.only(bottom: 6.0, top: 2.0),
+        padding: const EdgeInsetsDirectional.only(bottom: 6.0, top: 2.0),
         child: CText(
           (value.duration! - (value.position ?? const Duration()))
               .toString()

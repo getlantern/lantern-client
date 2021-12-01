@@ -25,7 +25,7 @@ void showBlockContactDialog(
                   children: [
                     if (!contact.blocked)
                       const Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsetsDirectional.all(8.0),
                         child: CAssetImage(path: ImagePaths.block),
                       ),
                     CText(

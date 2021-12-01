@@ -64,9 +64,11 @@ class BaseScreen extends StatelessWidget {
                 actions: actions,
               ),
         body: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: padHorizontal ? 16 : 0,
-              vertical: padVertical ? 16 : 0),
+          padding: EdgeInsetsDirectional.only(
+              start: padHorizontal ? 16 : 0,
+              end: padHorizontal ? 16 : 0,
+              top: padVertical ? 16 : 0,
+              bottom: padVertical ? 16 : 0),
           child: body,
         ),
         floatingActionButton: actionButton,

@@ -17,7 +17,7 @@ Widget attachmentWidget(Contact contact, StoredMessage message,
   switch (mimeType) {
     case MimeType.AUDIO:
       return Padding(
-        padding: const EdgeInsets.only(left: 14, top: 10, right: 18),
+        padding: const EdgeInsetsDirectional.only(start: 14, top: 10, end: 18),
         child: AudioAttachment(attachment, inbound),
       );
     case MimeType.IMAGE:

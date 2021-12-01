@@ -42,7 +42,7 @@ class Settings extends StatelessWidget {
             },
             trailingArray: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
                 child: sessionModel.language(
                   (BuildContext context, String lang, Widget? child) => CText(
                     toBeginningOfSentenceCase(

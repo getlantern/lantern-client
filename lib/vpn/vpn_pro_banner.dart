@@ -13,7 +13,7 @@ class _ProBannerState extends State<ProBanner> {
         LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
       }, // Handle your callback
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(
           color: unselectedTabColor,
           border: Border.all(
@@ -33,7 +33,7 @@ class _ProBannerState extends State<ProBanner> {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

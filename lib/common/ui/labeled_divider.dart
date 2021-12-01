@@ -26,7 +26,7 @@ class LabeledDivider extends StatelessWidget {
           if (label != null)
             Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsetsDirectional.only(start: 10, end: 10),
                 color: Colors.white,
                 child: CText(
                   label!,
