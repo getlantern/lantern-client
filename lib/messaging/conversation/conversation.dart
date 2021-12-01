@@ -473,7 +473,7 @@ class ConversationState extends State<Conversation>
                 ),
               Divider(height: 1.0, color: grey3),
               ConstrainedBox(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   minHeight: messageBarHeight,
                 ),
                 child: Container(
