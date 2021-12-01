@@ -46,7 +46,6 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
             Container(
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(
-                width: 200,
                 text: 'Submit'.i18n,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {

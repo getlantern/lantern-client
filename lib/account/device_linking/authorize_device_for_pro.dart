@@ -60,7 +60,6 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           ),
           const Spacer(),
           Button(
-            width: 200,
             text: 'Link via Email'.i18n,
             secondary: true,
             onPressed: () async =>
