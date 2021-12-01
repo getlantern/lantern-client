@@ -303,7 +303,6 @@ class DevButton extends StatelessWidget {
           child: Button(
             tertiary: true,
             text: 'DEV - toggle value'.i18n,
-            width: 200.0,
             onPressed: () async {
               await model.overrideOnBoarded(!value);
               context.router.popUntilRoot();

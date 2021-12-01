@@ -42,7 +42,6 @@ class Welcome extends StatelessWidget {
                 ),
                 Button(
                     text: 'get_started'.i18n,
-                    width: 200.0,
                     onPressed: () async {
                       await model.start();
                       await context.router
