@@ -150,7 +150,6 @@ class _IntroduceState extends State<Introduce> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Button(
-                                            width: 200,
                                             text: 'send_introductions'
                                                 .i18n
                                                 .toUpperCase(),

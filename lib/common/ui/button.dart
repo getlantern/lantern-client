@@ -11,15 +11,16 @@ class Button extends StatelessWidget {
   late final bool disabled;
   late final bool tertiary;
 
-  Button(
-      {required this.text,
-      this.iconPath,
-      this.onPressed,
-      this.width,
-      this.primary = true,
-      this.secondary = false,
-      this.disabled = false,
-      this.tertiary = false});
+  Button({
+    required this.text,
+    this.iconPath,
+    this.onPressed,
+    this.width,
+    this.primary = true,
+    this.secondary = false,
+    this.disabled = false,
+    this.tertiary = false,
+  });
 
   void _handleOnPress() {
     if (disabled) return null;
@@ -28,9 +29,9 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 56,
-      width: width,
+      constraints: BoxConstraints(minWidth: width ?? 200.0),
       child: OutlinedButton(
         onPressed: _handleOnPress,
         style: OutlinedButton.styleFrom(
@@ -54,11 +55,14 @@ class Button extends StatelessWidget {
                     color: white,
                   ),
                 ),
-              CText(
-                text.toUpperCase(),
-                // style: disabled ? tsButtonGrey : tsButtonWhite,
-                style: getTextStyle(secondary),
-                textAlign: TextAlign.center,
+              Expanded(
+                flex: 0,
+                child: CText(
+                  text.toUpperCase(),
+                  style: getTextStyle(secondary),
+                  overflow: TextOverflow.visible,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
