@@ -295,7 +295,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(8.0),
                     child: QrImage(
                       data: widget.me.contactId.id,
-                      padding: const EdgeInsetsDirectional.all(16),
+                      padding: const EdgeInsets.all(16),
                       backgroundColor: white,
                       foregroundColor: black,
                       errorCorrectionLevel: QrErrorCorrectLevel.H,
