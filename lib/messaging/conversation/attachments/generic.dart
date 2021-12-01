@@ -15,7 +15,7 @@ class GenericAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = attachmentTitle ?? 'could_not_render_title'.i18n;
-    final fileType = fileExtension ?? 'could_not_render_type'.i18n;
+    final fileType = fileExtension ?? '';
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
       child: Row(
@@ -33,21 +33,17 @@ class GenericAttachment extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 150.0,
-                child: CText(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  // TODO: move this into text_styles.dart
-                  style: CTextStyle(
-                    color: inbound ? inboundMsgColor : outboundMsgColor,
-                    fontSize: 12,
-                    lineHeight: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+              Row(
+                children: [
+                  CText(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: tsBody3.copiedWith(
+                        color: inbound ? inboundMsgColor : outboundMsgColor),
+                  )
+                ],
               ),
               const Divider(height: 2.0),
               CText(fileType.toUpperCase(),

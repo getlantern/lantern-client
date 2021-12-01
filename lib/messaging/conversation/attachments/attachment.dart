@@ -40,8 +40,8 @@ class AttachmentBuilder extends StatelessWidget {
   final StoredAttachment attachment;
   final bool inbound;
   final bool scrimAttachment;
-  final IconData
-      defaultIcon; // the icon to display while we're waiting to fetch the thumbnail
+  final String?
+      defaultIconPath; // the icon to display while we're waiting to fetch the thumbnail
   final Widget Function(BuildContext context, Uint8List thumbnail) builder;
   final void Function()? onTap;
 
@@ -50,7 +50,7 @@ class AttachmentBuilder extends StatelessWidget {
     required this.attachment,
     required this.inbound,
     this.scrimAttachment = false,
-    required this.defaultIcon,
+    this.defaultIconPath,
     required this.builder,
     this.onTap,
   });
@@ -90,7 +90,8 @@ class AttachmentBuilder extends StatelessWidget {
               }
               return result;
             } else {
-              return Icon(defaultIcon,
+              return CAssetImage(
+                  path: defaultIconPath ?? ImagePaths.error_outline,
                   color: inbound ? inboundMsgColor : outboundMsgColor);
             }
           },
@@ -130,9 +131,32 @@ class AttachmentBuilder extends StatelessWidget {
   }
 
   Widget errorIndicator() {
-    return CAssetImage(
-        path: ImagePaths.error_outline,
-        color: inbound ? inboundMsgColor : outboundMsgColor);
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 16),
+            child: CAssetImage(
+                size: 20,
+                path: ImagePaths.error_outline,
+                color: inbound ? inboundMsgColor : outboundMsgColor),
+          ),
+          CText(
+            'error_rendering_message'.i18n,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            style: tsBody3.copiedWith(
+                color: inbound ? inboundMsgColor : outboundMsgColor,
+                fontStyle: FontStyle.italic),
+          )
+        ],
+      ),
+    );
   }
 
   Widget buildVisualThumbnail(BuildContext context, Uint8List thumbnail,
@@ -175,7 +199,7 @@ abstract class VisualAttachment extends StatelessWidget {
       return AttachmentBuilder(
           attachment: attachment,
           inbound: inbound,
-          defaultIcon: Icons.image,
+          defaultIconPath: ImagePaths.insert_drive_file,
           scrimAttachment: true,
           onTap: () async {
             await context.pushRoute(
