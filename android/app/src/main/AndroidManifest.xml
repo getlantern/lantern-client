@@ -182,8 +182,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:enabled="true" android:name=".receivers.BootUpReceiver"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+        <receiver android:enabled="true" android:name=".service.BootUpReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
