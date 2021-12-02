@@ -369,7 +369,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     //* Verify button
                     if (!isPanelShowing && widget.contact.isUnverified())
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
@@ -396,88 +396,72 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ],
                       ),
                     //* Controls
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 24,
+                        start: 24,
+                        end: 24,
+                      ),
+                      child: Table(
                         children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: CAssetImage(
-                                      path: ImagePaths.speaker,
-                                      color: signalingState.speakerphoneOn
-                                          ? grey5
-                                          : white),
-                                  backgroundColor: signalingState.speakerphoneOn
-                                      ? white
-                                      : grey5,
-                                  onPressed: () {
-                                    session!.toggleSpeakerphone();
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText(
-                                      signalingState.speakerphoneOn
-                                          ? 'speaker_on'.i18n
-                                          : 'speaker'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
+                          TableRow(
+                            children: [
+                              RoundButton(
+                                icon: CAssetImage(
+                                    path: ImagePaths.speaker,
+                                    color: signalingState.speakerphoneOn
+                                        ? grey5
+                                        : white),
+                                backgroundColor: signalingState.speakerphoneOn
+                                    ? white
+                                    : grey5,
+                                onPressed: () {
+                                  session!.toggleSpeakerphone();
+                                },
+                              ),
+                              RoundButton(
+                                icon: CAssetImage(
+                                    path: ImagePaths.mute,
+                                    color:
+                                        signalingState.muted ? grey5 : white),
+                                backgroundColor:
+                                    signalingState.muted ? white : grey5,
+                                onPressed: () {
+                                  session!.toggleMute();
+                                },
+                              ),
+                              RoundButton(
+                                icon:
+                                    const CAssetImage(path: ImagePaths.hangup),
+                                backgroundColor: indicatorRed,
+                                onPressed: () async {
+                                  await signaling.bye(session!);
+                                },
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: CAssetImage(
-                                      path: ImagePaths.mute,
-                                      color:
-                                          signalingState.muted ? grey5 : white),
-                                  backgroundColor:
-                                      signalingState.muted ? white : grey5,
-                                  onPressed: () {
-                                    session!.toggleMute();
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText(
-                                      signalingState.muted
-                                          ? 'muted'.i18n
-                                          : 'mute'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
+                          TableRow(
+                            children: [
+                              CText(
+                                  signalingState.speakerphoneOn
+                                      ? 'speaker_on'.i18n
+                                      : 'speaker'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                              CText(
+                                  signalingState.muted
+                                      ? 'muted'.i18n
+                                      : 'mute'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                              CText('end_call'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: const CAssetImage(
-                                      path: ImagePaths.hangup),
-                                  backgroundColor: indicatorRed,
-                                  onPressed: () async {
-                                    await signaling.bye(session!);
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText('end_call'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]),
+                        ],
+                      ),
+                    ),
                     const Padding(
                         padding: EdgeInsetsDirectional.only(bottom: 40)),
                   ],
