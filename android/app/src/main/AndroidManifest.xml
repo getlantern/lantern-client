@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
@@ -178,6 +179,14 @@
             be available to other apps by default, which is not what we want. We have to explicitly state that it's private within our app -->
             <intent-filter>
                 <action android:name="${applicationId}.intent.DATA_USAGE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:enabled="true" android:name=".receivers.BootUpReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 

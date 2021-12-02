@@ -55,10 +55,15 @@ public class LanternService extends Service implements Runnable {
 
     private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
 
+    private final BootUpReceiver bootUpReceiver = new BootUpReceiver();
+
     @Override
     public void onCreate() {
         super.onCreate();
         Logger.debug(TAG, "Creating Lantern service");
+        Logger.debug(TAG, "boot up Lantern");
+        Intent bootUpIntent = new Intent();
+        bootUpReceiver.onReceive(this, bootUpIntent);
         Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
         helper.makeForeground();
         Logger.d(TAG, "starting Lantern service thread");

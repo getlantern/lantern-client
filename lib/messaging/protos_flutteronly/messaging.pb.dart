@@ -1764,6 +1764,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'disappearSettings', $pb.PbFieldType.OY, protoName: 'disappearSettings')
     ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hello', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'webRTCSignal', $pb.PbFieldType.OY, protoName: 'webRTCSignal')
+    ..aInt64(10000, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sent')
     ..hasRequiredFields = false
   ;
 
@@ -1775,6 +1776,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? disappearSettings,
     $core.List<$core.int>? hello,
     $core.List<$core.int>? webRTCSignal,
+    $fixnum.Int64? sent,
   }) {
     final _result = create();
     if (message != null) {
@@ -1794,6 +1796,9 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     if (webRTCSignal != null) {
       _result.webRTCSignal = webRTCSignal;
+    }
+    if (sent != null) {
+      _result.sent = sent;
     }
     return _result;
   }
@@ -1874,6 +1879,15 @@ class TransferMessage extends $pb.GeneratedMessage {
   $core.bool hasWebRTCSignal() => $_has(5);
   @$pb.TagNumber(6)
   void clearWebRTCSignal() => clearField(6);
+
+  @$pb.TagNumber(10000)
+  $fixnum.Int64 get sent => $_getI64(6);
+  @$pb.TagNumber(10000)
+  set sent($fixnum.Int64 v) { $_setInt64(6, v); }
+  @$pb.TagNumber(10000)
+  $core.bool hasSent() => $_has(6);
+  @$pb.TagNumber(10000)
+  void clearSent() => clearField(10000);
 }
 
 enum OutboundMessage_Content {
