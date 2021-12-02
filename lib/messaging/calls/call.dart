@@ -16,7 +16,7 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> with WidgetsBindingObserver {
-  late Future<Session> session;
+  Session? session;
   late Signaling signaling;
   var closed = false;
   var isPanelShowing = false;
@@ -28,8 +28,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    disableBackButton();
     signaling = widget.model.signaling;
-    signaling.addListener(onSignalingStateChange);
 
     // initialize fragment - status map after breaking down numericFingerprint in groups of 5
     humanizeVerificationNum(widget.contact.numericFingerprint).asMap().forEach(
@@ -37,10 +37,12 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
             fragmentStatusMap[key] = {'fragment': value, 'isConfirmed': false});
 
     if (widget.initialSession != null) {
-      session = Future.value(widget.initialSession!);
       incoming = true;
+      session = widget.initialSession!;
+      session!.addListener(onSignalingStateChange);
     } else {
-      session = signaling.call(
+      signaling
+          .call(
         peerId: widget.contact.contactId.id,
         media: 'audio',
         onError: () {
@@ -50,10 +52,14 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
               explanation: 'please_try_again'.i18n,
               agreeText: 'close'.i18n,
               agreeAction: () async {
-                signaling.bye(await session);
+                await signaling.bye(session!);
               });
         },
-      );
+      )
+          .then((value) {
+        setState(() => session = value);
+        session!.addListener(onSignalingStateChange);
+      });
     }
   }
 
@@ -61,17 +67,17 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   void dispose() async {
     super.dispose();
     WidgetsBinding.instance!.removeObserver(this);
-    signaling.removeListener(onSignalingStateChange);
-    signaling.bye(await session);
+    enableBackButton();
+    if (session != null) {
+      session!.removeListener(onSignalingStateChange);
+      await signaling.bye(session!);
+    }
     unawaited(notifications.dismissInCallNotification());
   }
 
   void onSignalingStateChange() async {
-    if (signaling.value.callState == CallState.Bye) {
+    if (session!.value.callState == CallState.Bye) {
       if (!closed) {
-        /*
-        *
-        */
         if (incoming) {
           // For incoming calls, open the conversation corresponding to this
           // the contact with whom we were just on a call.
@@ -158,9 +164,12 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
+    if (session == null) {
+      return Container();
+    }
     return LayoutBuilder(
         builder: (context, constraints) => ValueListenableBuilder(
-            valueListenable: signaling,
+            valueListenable: session!,
             builder: (BuildContext context, SignalingState signalingState,
                 Widget? child) {
               return Container(
@@ -360,7 +369,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     //* Verify button
                     if (!isPanelShowing && widget.contact.isUnverified())
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
@@ -387,88 +396,72 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                         ],
                       ),
                     //* Controls
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 24,
+                        start: 24,
+                        end: 24,
+                      ),
+                      child: Table(
                         children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: CAssetImage(
-                                      path: ImagePaths.speaker,
-                                      color: signalingState.speakerphoneOn
-                                          ? grey5
-                                          : white),
-                                  backgroundColor: signalingState.speakerphoneOn
-                                      ? white
-                                      : grey5,
-                                  onPressed: () {
-                                    signaling.toggleSpeakerphone();
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText(
-                                      signalingState.speakerphoneOn
-                                          ? 'speaker_on'.i18n
-                                          : 'speaker'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
+                          TableRow(
+                            children: [
+                              RoundButton(
+                                icon: CAssetImage(
+                                    path: ImagePaths.speaker,
+                                    color: signalingState.speakerphoneOn
+                                        ? grey5
+                                        : white),
+                                backgroundColor: signalingState.speakerphoneOn
+                                    ? white
+                                    : grey5,
+                                onPressed: () {
+                                  session!.toggleSpeakerphone();
+                                },
+                              ),
+                              RoundButton(
+                                icon: CAssetImage(
+                                    path: ImagePaths.mute,
+                                    color:
+                                        signalingState.muted ? grey5 : white),
+                                backgroundColor:
+                                    signalingState.muted ? white : grey5,
+                                onPressed: () {
+                                  session!.toggleMute();
+                                },
+                              ),
+                              RoundButton(
+                                icon:
+                                    const CAssetImage(path: ImagePaths.hangup),
+                                backgroundColor: indicatorRed,
+                                onPressed: () async {
+                                  await signaling.bye(session!);
+                                },
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: CAssetImage(
-                                      path: ImagePaths.mute,
-                                      color:
-                                          signalingState.muted ? grey5 : white),
-                                  backgroundColor:
-                                      signalingState.muted ? white : grey5,
-                                  onPressed: () {
-                                    signaling.toggleMute();
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText(
-                                      signalingState.muted
-                                          ? 'muted'.i18n
-                                          : 'mute'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
+                          TableRow(
+                            children: [
+                              CText(
+                                  signalingState.speakerphoneOn
+                                      ? 'speaker_on'.i18n
+                                      : 'speaker'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                              CText(
+                                  signalingState.muted
+                                      ? 'muted'.i18n
+                                      : 'mute'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                              CText('end_call'.i18n,
+                                  textAlign: TextAlign.center,
+                                  style: tsBody1.copiedWith(color: white)),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: const CAssetImage(
-                                      path: ImagePaths.hangup),
-                                  backgroundColor: indicatorRed,
-                                  onPressed: () async {
-                                    signaling.bye(await session);
-                                  },
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText('end_call'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]),
+                        ],
+                      ),
+                    ),
                     const Padding(
                         padding: EdgeInsetsDirectional.only(bottom: 40)),
                   ],
@@ -516,7 +509,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
             ),
             Container(
               child: CText(
-                getCallStatus(signaling.value.callState),
+                getCallStatus(session!.value.callState),
                 style: tsBody2.copiedWith(color: white),
               ),
             ),

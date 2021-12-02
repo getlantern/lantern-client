@@ -38,6 +38,8 @@ export 'model_event_channel.dart';
 export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
+export 'disable_back_button.dart';
+
 // UI elements
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
