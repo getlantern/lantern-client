@@ -59,7 +59,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 },
               ),
               LabeledDivider(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
               ),
               emailSentMessage(emailAddress),
               const Spacer(),

@@ -23,7 +23,7 @@ void showDeleteContactDialog(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsetsDirectional.all(8.0),
               child: CAssetImage(path: ImagePaths.delete),
             ),
             CText('${'delete_contact'.i18n}?', style: tsBody3),

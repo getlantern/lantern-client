@@ -29,8 +29,9 @@ class CBadge extends StatelessWidget {
       padding: (customPadding != null)
           ? customPadding!
           : (customBadge != null)
-              ? const EdgeInsets.all(0)
-              : const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              ? const EdgeInsetsDirectional.all(0)
+              : const EdgeInsetsDirectional.only(
+                  start: 6, end: 6, top: 2, bottom: 2),
       position: BadgePosition(
         end: end,
         top: top,

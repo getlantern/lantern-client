@@ -299,7 +299,7 @@ class DevButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var model = context.watch<MessagingModel>();
     return model.getOnBoardingStatus((context, value, child) => Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsetsDirectional.all(8.0),
           child: Button(
             tertiary: true,
             text: 'DEV - toggle value'.i18n,
