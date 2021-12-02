@@ -73,6 +73,7 @@ class Signaling {
   final AudioCache audioCache =
       AudioCache(prefix: 'assets/sounds/', fixedPlayer: AudioPlayer());
   bool audioPlayerOnSpeaker = true;
+  bool audioPlayerInitialized = false;
   final defaultAudioPlayerToEarPieceOnce = once();
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
@@ -91,8 +92,10 @@ class Signaling {
       return;
     }
 
-    await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
-    audioPlayerOnSpeaker = speaker;
+    if (audioPlayerInitialized) {
+      await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
+      audioPlayerOnSpeaker = speaker;
+    }
   }
 
   String get sdpSemantics =>
@@ -164,6 +167,7 @@ class Signaling {
       setAudioPlayerOnSpeaker(false);
     }
     await audioCache.loop(ringingFile);
+    audioPlayerInitialized = true;
     if (!disableSpeakerImmediately) {
       setAudioPlayerOnSpeaker(false);
     }
