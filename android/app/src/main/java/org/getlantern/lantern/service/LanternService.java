@@ -53,7 +53,7 @@ public class LanternService extends Service implements Runnable {
     // initial number of ms to wait until we try creating a new Pro user
     private final int baseWaitMs = 3000;
 
-    private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
+    private final ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
 
     private final BootUpReceiver bootUpReceiver = new BootUpReceiver();
 
@@ -61,9 +61,12 @@ public class LanternService extends Service implements Runnable {
     public void onCreate() {
         super.onCreate();
         Logger.debug(TAG, "Creating Lantern service");
-        Logger.debug(TAG, "boot up Lantern");
+
+        // call BootUpReceiver that will ensure the app gets launched on device startup
+        Logger.debug(TAG, "wake up Lantern service on launch");
         Intent bootUpIntent = new Intent();
         bootUpReceiver.onReceive(this, bootUpIntent);
+
         Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
         helper.makeForeground();
         Logger.d(TAG, "starting Lantern service thread");
