@@ -94,33 +94,28 @@ class _HomePageState extends State<HomePage> {
     _context = context;
     var sessionModel = context.watch<SessionModel>();
     var messagingModel = context.watch<MessagingModel>();
-    var vpnModel = context.watch<VpnModel>();
     return sessionModel.developmentMode(
       (BuildContext context, bool developmentMode, Widget? child) {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return messagingModel
-                .getOnBoardingStatus((context, isOnboarded, child) {
-              // * switch VPN on if the user is onboarded, in order for messages to come through
-              vpnModel.switchVPN(isOnboarded);
-              return AutoTabsScaffold(
-                routes: [
-                  isOnboarded
-                      ? const MessagesRouter()
-                      : const OnboardingRouter(),
-                  const VpnRouter(),
-                  const AccountRouter(),
-                  if (developmentMode) const DeveloperRoute(),
-                ],
-                bottomNavigationBuilder: (context, tabsRouter) =>
-                    CustomBottomBar(
-                  onTap: tabsRouter.setActiveIndex,
-                  index: tabsRouter.activeIndex,
-                  isDevelop: developmentMode,
-                ),
-              );
-            });
+            return messagingModel.getOnBoardingStatus(
+                (context, isOnboarded, child) => AutoTabsScaffold(
+                      routes: [
+                        isOnboarded
+                            ? const MessagesRouter()
+                            : const OnboardingRouter(),
+                        const VpnRouter(),
+                        const AccountRouter(),
+                        if (developmentMode) const DeveloperRoute(),
+                      ],
+                      bottomNavigationBuilder: (context, tabsRouter) =>
+                          CustomBottomBar(
+                        onTap: tabsRouter.setActiveIndex,
+                        index: tabsRouter.activeIndex,
+                        isDevelop: developmentMode,
+                      ),
+                    ));
           },
         );
       },
