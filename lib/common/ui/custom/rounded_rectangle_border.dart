@@ -100,7 +100,7 @@ class CRoundedRectangleBorder extends ShapeBorder {
 
   @override
   EdgeInsetsGeometry get dimensions {
-    return EdgeInsets.all(biggestWidth);
+    return EdgeInsetsDirectional.all(biggestWidth);
   }
 
   @override

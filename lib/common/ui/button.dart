@@ -38,14 +38,11 @@ class Button extends StatelessWidget {
           splashFactory:
               disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
           backgroundColor: getBgColor(secondary, disabled, tertiary),
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          side: BorderSide(
-            width: 2,
-            color: getBorderColor(disabled, tertiary),
-          ),
+          padding: const EdgeInsetsDirectional.only(top: 15, bottom: 15),
+          side: BorderSide(width: 2, color: getBorderColor(disabled, tertiary)),
         ),
         child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
+          padding: const EdgeInsetsDirectional.only(start: 23, end: 23),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

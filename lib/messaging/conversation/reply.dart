@@ -23,6 +23,10 @@ class Reply extends StatelessWidget {
 
   bool get isAttachment => message.attachments.isNotEmpty;
 
+  bool get attachmentHasError =>
+      message.attachments.isNotEmpty &&
+      message.attachments[0]!.status == StoredAttachment_Status.FAILED;
+
   Color get foregroundColor => isOutbound ? white : black;
 
   @override
@@ -131,7 +135,9 @@ class Reply extends StatelessWidget {
                             .i18n
                             .fill([contact.displayNameOrFallback])
                         : isAttachment
-                            ? attachmentText().i18n
+                            ? !attachmentHasError
+                                ? attachmentText().i18n
+                                : 'error_fetching_preview'.i18n
                             : message.text,
                     maxLines: 1,
                     style: tsSubtitle1.short.copiedWith(
@@ -144,7 +150,7 @@ class Reply extends StatelessWidget {
               ),
             ),
           ),
-          if (isAttachment)
+          if (isAttachment && !attachmentHasError)
             Container(
               width: 56,
               height: 56,

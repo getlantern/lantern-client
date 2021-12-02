@@ -778,6 +778,12 @@ msgstr "Replying to %s"
 msgid "attachment"
 msgstr "Attachment"
 
+msgid "error_rendering_message"
+msgstr "Error rendering message"
+
+msgid "error_fetching_preview"
+msgstr "Error fetching message preview"
+
 msgid "audio"
 msgstr "Audio"
 

@@ -69,7 +69,7 @@ class Reactions extends StatelessWidget {
                   minimumSize: MaterialStateProperty.all<Size>(buttonSize),
                   fixedSize: MaterialStateProperty.all<Size>(buttonSize),
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                    const EdgeInsetsDirectional.all(1),
                   ),
                   elevation: MaterialStateProperty.resolveWith<double?>(
                     (states) {

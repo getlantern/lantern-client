@@ -143,7 +143,8 @@ class _IntroduceState extends State<Introduce> {
                                 if (!widget.singleIntro)
                                   Container(
                                     color: white,
-                                    padding: const EdgeInsets.all(20.0),
+                                    padding:
+                                        const EdgeInsetsDirectional.all(20.0),
                                     child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
