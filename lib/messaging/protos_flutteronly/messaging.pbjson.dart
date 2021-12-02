@@ -404,6 +404,7 @@ const TransferMessage$json = const {
     const {'1': 'disappearSettings', '3': 4, '4': 1, '5': 12, '9': 0, '10': 'disappearSettings'},
     const {'1': 'hello', '3': 5, '4': 1, '5': 12, '9': 0, '10': 'hello'},
     const {'1': 'webRTCSignal', '3': 6, '4': 1, '5': 12, '9': 0, '10': 'webRTCSignal'},
+    const {'1': 'sent', '3': 10000, '4': 1, '5': 3, '10': 'sent'},
   ],
   '8': const [
     const {'1': 'content'},
@@ -411,7 +412,7 @@ const TransferMessage$json = const {
 };
 
 /// Descriptor for `TransferMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USGgoHbWVzc2FnZRgBIAEoDEgAUgdtZXNzYWdlEhwKCHJlYWN0aW9uGAIgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBgDIAEoDEgAUg9kZWxldGVNZXNzYWdlSWQSLgoRZGlzYXBwZWFyU2V0dGluZ3MYBCABKAxIAFIRZGlzYXBwZWFyU2V0dGluZ3MSFgoFaGVsbG8YBSABKAxIAFIFaGVsbG8SJAoMd2ViUlRDU2lnbmFsGAYgASgMSABSDHdlYlJUQ1NpZ25hbEIJCgdjb250ZW50');
+final $typed_data.Uint8List transferMessageDescriptor = $convert.base64Decode('Cg9UcmFuc2Zlck1lc3NhZ2USGgoHbWVzc2FnZRgBIAEoDEgAUgdtZXNzYWdlEhwKCHJlYWN0aW9uGAIgASgMSABSCHJlYWN0aW9uEioKD2RlbGV0ZU1lc3NhZ2VJZBgDIAEoDEgAUg9kZWxldGVNZXNzYWdlSWQSLgoRZGlzYXBwZWFyU2V0dGluZ3MYBCABKAxIAFIRZGlzYXBwZWFyU2V0dGluZ3MSFgoFaGVsbG8YBSABKAxIAFIFaGVsbG8SJAoMd2ViUlRDU2lnbmFsGAYgASgMSABSDHdlYlJUQ1NpZ25hbBITCgRzZW50GJBOIAEoA1IEc2VudEIJCgdjb250ZW50');
 @$core.Deprecated('Use outboundMessageDescriptor instead')
 const OutboundMessage$json = const {
   '1': 'OutboundMessage',

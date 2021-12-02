@@ -218,6 +218,8 @@ message TransferMessage {
     bytes hello = 5; // serialized Hello
     bytes webRTCSignal = 6; // the content of a WebRTCSignal
   }
+
+  int64 sent = 10000; // the unix timestamp in milliseconds of when this TransferMessage was sent
 }
 
 // An outbound Message
