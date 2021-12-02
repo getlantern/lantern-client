@@ -6,7 +6,6 @@ import 'package:lantern/messaging/messaging.dart';
 import 'call.dart';
 
 enum CallState {
-  New,
   Ringing,
   Connected,
   Bye,
@@ -24,25 +23,48 @@ typedef StreamStateCallback = void Function(
     Session? session, MediaStream stream);
 typedef OtherEventCallback = void Function(dynamic event);
 
-class Session {
-  Session({required this.isInitiator, required this.sid, required this.pid});
+class Session extends ValueNotifier<SignalingState> {
+  Session(
+      {required this.signaling,
+      required this.isInitiator,
+      required this.sid,
+      required this.pid})
+      : super(SignalingState());
 
+  Signaling signaling;
   bool isInitiator;
   String pid;
   String sid;
   RTCPeerConnection? pc;
   List<RTCIceCandidate> remoteCandidates = [];
+
+  void toggleMute() {
+    value.muted = !value.muted;
+    signaling.setMute(value.muted);
+    notifyListeners();
+  }
+
+  void toggleSpeakerphone() {
+    value.speakerphoneOn = !value.speakerphoneOn;
+    signaling.setSpeakerphoneOn(value.speakerphoneOn);
+    notifyListeners();
+  }
+
+  void setCallState(CallState callState) {
+    value.callState = callState;
+    notifyListeners();
+  }
 }
 
 class SignalingState {
-  CallState callState = CallState.New;
+  CallState callState = CallState.Ringing;
   var muted = false;
-  var speakerphoneOn = true;
+  var speakerphoneOn = false;
 }
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
-class Signaling extends ValueNotifier<SignalingState> {
-  Signaling({required this.model, required this.mc}) : super(SignalingState()) {
+class Signaling {
+  Signaling({required this.model, required this.mc}) {
     // pre-load ringing file into cache
     audioCache.load(ringingFile);
   }
@@ -51,18 +73,29 @@ class Signaling extends ValueNotifier<SignalingState> {
   final AudioCache audioCache =
       AudioCache(prefix: 'assets/sounds/', fixedPlayer: AudioPlayer());
   bool audioPlayerOnSpeaker = true;
+  bool audioPlayerInitialized = false;
   final defaultAudioPlayerToEarPieceOnce = once();
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
   final MethodChannel mc;
+
+  // Sessions keyed to peerId (this means that currently we only allow one
+  // session per peer).
   final Map<String, Session> _sessions = {};
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
   final MessagingModel model;
 
-  void toggleAudioPlayerEarpieceOrSpeaker() async {
-    await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
-    audioPlayerOnSpeaker = !audioPlayerOnSpeaker;
+  void setAudioPlayerOnSpeaker(bool speaker) async {
+    if (speaker == audioPlayerOnSpeaker) {
+      // no change required
+      return;
+    }
+
+    if (audioPlayerInitialized) {
+      await audioCache.fixedPlayer!.earpieceOrSpeakersToggle();
+      audioPlayerOnSpeaker = speaker;
+    }
   }
 
   String get sdpSemantics =>
@@ -106,58 +139,58 @@ class Signaling extends ValueNotifier<SignalingState> {
     }
   }
 
-  void toggleMute() {
-    value.muted = !value.muted;
+  void setMute(bool muted) {
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
-        Helper.setMicrophoneMute(value.muted, track);
+        Helper.setMicrophoneMute(muted, track);
       });
     }
-    notifyListeners();
   }
 
-  void toggleSpeakerphone() {
-    toggleAudioPlayerEarpieceOrSpeaker();
-    value.speakerphoneOn = !value.speakerphoneOn;
+  void setSpeakerphoneOn(bool speakerphoneOn) {
+    setAudioPlayerOnSpeaker(speakerphoneOn);
     if (_localStream != null) {
       _localStream!.getAudioTracks().forEach((track) {
-        track.enableSpeakerphone(value.speakerphoneOn);
+        track.enableSpeakerphone(speakerphoneOn);
       });
     }
-    notifyListeners();
   }
 
   Future<Session> call(
       {required String peerId,
       required String media,
       required Function() onError}) async {
+    // The first time we start ringing, the audio cache will not yet be initialized
+    // so we wait to call audioPlayerOnSpeaker.
+    final disableSpeakerImmediately = audioCache.fixedPlayer != null;
+    if (disableSpeakerImmediately) {
+      setAudioPlayerOnSpeaker(false);
+    }
     await audioCache.loop(ringingFile);
-    if (audioPlayerOnSpeaker) toggleAudioPlayerEarpieceOrSpeaker();
+    audioPlayerInitialized = true;
+    if (!disableSpeakerImmediately) {
+      setAudioPlayerOnSpeaker(false);
+    }
+
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
         isInitiator: true, peerId: peerId, sessionId: sessionId, media: media);
-    _sessions[sessionId] = session;
+    _sessions[peerId] = session;
     await _createOffer(session, media);
-    value.muted = false;
-    value.speakerphoneOn = true;
-    value.callState = CallState.Ringing;
-    notifyListeners();
+    setSpeakerphoneOn(false);
     return session;
   }
 
-  void bye(Session session) {
-    audioCache.fixedPlayer!.stop();
-
-    _sendBye(session.pid, session.sid);
-
-    value.callState = CallState.Bye;
-    notifyListeners();
-    _closeSession(_sessions[session.sid]);
+  Future<void> bye(Session session) async {
+    await audioCache.fixedPlayer!.stop();
+    await _sendBye(session.pid, session.sid);
+    session.setCallState(CallState.Bye);
+    await _closeSession(_sessions[session.pid]);
   }
 
-  void _sendBye(String peerId, String sessionId) {
-    _send(peerId, 'bye', {
+  Future<void> _sendBye(String peerId, String sessionId) async {
+    await _send(peerId, 'bye', {
       'session_id': sessionId,
     });
   }
@@ -184,7 +217,6 @@ class Signaling extends ValueNotifier<SignalingState> {
     stream.getAudioTracks().forEach((track) {
       track.enabled = true;
       Helper.setVolume(1, track);
-      track.enableSpeakerphone(true);
     });
     return stream;
   }
@@ -200,20 +232,24 @@ class Signaling extends ValueNotifier<SignalingState> {
           var media = data['media'];
           var sessionId = data['session_id'];
 
-          // IMPORTANT - instead of immediately accepting the offer, we first
-          // prompt the user. This prevents the system from transmitting audio
-          // or video without the user's knowledge.
-          var contact = await model.getDirectContact(peerId);
-
+          // Only answer if user accepted call. This prevents the system from
+          // transmitting audio or video without the user's knowledge.
           if (acceptedCall) {
-            // only create session if user accepted call
+            // close sessions from other peers
+            for (var existingSession in _sessions.values) {
+              if (existingSession.pid != peerId) {
+                await bye(existingSession);
+              }
+            }
+
+            // create new session for incoming call
             var newSession = await _createSession(
                 isInitiator: false,
-                session: _sessions[sessionId],
+                session: _sessions[peerId],
                 peerId: peerId,
                 sessionId: sessionId,
                 media: media);
-            _sessions[sessionId] = newSession;
+            _sessions[peerId] = newSession;
             await newSession.pc!.setRemoteDescription(
                 RTCSessionDescription(description['sdp'], description['type']));
             await _createAnswer(newSession, media);
@@ -224,9 +260,9 @@ class Signaling extends ValueNotifier<SignalingState> {
               newSession.remoteCandidates.clear();
             }
 
-            value.callState = CallState.Connected;
-            notifyListeners();
+            newSession.setCallState(CallState.Connected);
 
+            var contact = await model.getDirectContact(peerId);
             await navigatorKey.currentContext?.pushRoute(
               FullScreenDialogPage(
                   widget: Call(
@@ -241,13 +277,8 @@ class Signaling extends ValueNotifier<SignalingState> {
       case 'answer':
         {
           var description = data['description'];
-          var sessionId = data['session_id'];
-          var session = _sessions[sessionId];
-
-          value.muted = false;
-          value.callState = CallState.Connected;
-          notifyListeners();
-
+          var session = _sessions[peerId];
+          session?.setCallState(CallState.Connected);
           await session?.pc?.setRemoteDescription(
               RTCSessionDescription(description['sdp'], description['type']));
         }
@@ -257,7 +288,7 @@ class Signaling extends ValueNotifier<SignalingState> {
           var candidateMap = data['candidate'];
           var candidateString = candidateMap['candidate'] as String;
           var sessionId = data['session_id'];
-          var session = _sessions[sessionId];
+          var session = _sessions[peerId];
           var candidate = RTCIceCandidate(candidateString,
               candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
 
@@ -268,9 +299,12 @@ class Signaling extends ValueNotifier<SignalingState> {
               session.remoteCandidates.add(candidate);
             }
           } else {
-            _sessions[sessionId] =
-                Session(isInitiator: false, pid: peerId, sid: sessionId)
-                  ..remoteCandidates.add(candidate);
+            _sessions[peerId] = Session(
+                signaling: this,
+                isInitiator: false,
+                pid: peerId,
+                sid: sessionId)
+              ..remoteCandidates.add(candidate);
           }
         }
         break;
@@ -282,14 +316,11 @@ class Signaling extends ValueNotifier<SignalingState> {
         break;
       case 'bye':
         {
-          var sessionId = data['session_id'];
-          print('bye: ' + sessionId);
-          var session = _sessions.remove(sessionId);
+          var session = _sessions.remove(peerId);
           if (session != null) {
-            value.callState = CallState.Bye;
-            notifyListeners();
+            session.setCallState(CallState.Bye);
+            await _closeSession(session);
           }
-          unawaited(_closeSession(session));
         }
         break;
       case 'keepalive':
@@ -309,8 +340,13 @@ class Signaling extends ValueNotifier<SignalingState> {
       required String sessionId,
       required String media}) async {
     var newSession = session ??
-        Session(isInitiator: isInitiator, sid: sessionId, pid: peerId);
+        Session(
+            signaling: this,
+            isInitiator: isInitiator,
+            sid: sessionId,
+            pid: peerId);
     _localStream = await createStream();
+
     var pc = await createPeerConnection({
       ..._iceServers,
       ...{
@@ -318,6 +354,7 @@ class Signaling extends ValueNotifier<SignalingState> {
         // 'iceTransportPolicy': 'relay',
       }
     }, _config);
+
     switch (sdpSemantics) {
       case 'plan-b':
         pc.onAddStream = (MediaStream stream) {
@@ -337,50 +374,8 @@ class Signaling extends ValueNotifier<SignalingState> {
           pc.addTrack(track, _localStream!);
         });
         break;
-
-      // Unified-Plan: Simulcast
-      /*
-      await pc.addTransceiver(
-        track: _localStream.getAudioTracks()[0],
-        init: RTCRtpTransceiverInit(
-            direction: TransceiverDirection.SendOnly, streams: [_localStream]),
-      );
-      await pc.addTransceiver(
-        track: _localStream.getVideoTracks()[0],
-        init: RTCRtpTransceiverInit(
-            direction: TransceiverDirection.SendOnly,
-            streams: [
-              _localStream
-            ],
-            sendEncodings: [
-              RTCRtpEncoding(rid: 'f', active: true),
-              RTCRtpEncoding(
-                rid: 'h',
-                active: true,
-                scaleResolutionDownBy: 2.0,
-                maxBitrate: 150000,
-              ),
-              RTCRtpEncoding(
-                rid: 'q',
-                active: true,
-                scaleResolutionDownBy: 4.0,
-                maxBitrate: 100000,
-              ),
-            ]),
-      );*/
-      /*
-        var sender = pc.getSenders().find(s => s.track.kind == "video");
-        var parameters = sender.getParameters();
-        if(!parameters)
-          parameters = {};
-        parameters.encodings = [
-          { rid: "h", active: true, maxBitrate: 900000 },
-          { rid: "m", active: true, maxBitrate: 300000, scaleResolutionDownBy: 2 },
-          { rid: "l", active: true, maxBitrate: 100000, scaleResolutionDownBy: 4 }
-        ];
-        sender.setParameters(parameters);
-      */
     }
+
     pc.onIceCandidate = (candidate) async {
       // Only the initiator transmits candidates
       if (newSession.isInitiator && candidate.candidate != null) {
@@ -393,14 +388,14 @@ class Signaling extends ValueNotifier<SignalingState> {
               .allocateRelayAddress(hostAndPort.replaceFirst(' ', ':'));
           candidateString =
               candidateString.replaceFirst(hostAndPort, relayAddr);
-          unawaited(_send(peerId, 'candidate', {
+          await _send(peerId, 'candidate', {
             'candidate': {
               'sdpMLineIndex': candidate.sdpMlineIndex,
               'sdpMid': candidate.sdpMid,
               'candidate': candidateString,
             },
             'session_id': sessionId,
-          }));
+          });
         }
       }
     };
@@ -480,23 +475,17 @@ class Signaling extends ValueNotifier<SignalingState> {
   }
 
   Future<void> _cleanSessions() async {
-    _sessions.forEach((key, sess) async {
-      await sess.pc?.close();
+    _sessions.values.forEach((session) {
+      session.pc?.close();
     });
     _sessions.clear();
   }
 
   void _closeSessionByPeerId(String peerId) {
-    var session;
-    _sessions.removeWhere((String key, Session sess) {
-      var ids = key.split('-');
-      session = sess;
-      return peerId == ids[0] || peerId == ids[1];
-    });
+    var session = _sessions.remove(peerId);
     if (session != null) {
       _closeSession(session);
-      value.callState = CallState.Bye;
-      notifyListeners();
+      session.setCallState(CallState.Bye);
     }
   }
 
