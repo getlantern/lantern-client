@@ -33,12 +33,15 @@ import org.getlantern.mobilesdk.model.LoConfCallback;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 @EService
 public class LanternService extends Service implements Runnable {
+
+    public static String AUTO_BOOTED = "autoBooted";
 
     private static final int MAX_CREATE_USER_TRIES = 11;
 
@@ -55,23 +58,38 @@ public class LanternService extends Service implements Runnable {
 
     private final ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
 
-    private final BootUpReceiver bootUpReceiver = new BootUpReceiver();
+    private AtomicBoolean started = new AtomicBoolean();
 
     @Override
     public void onCreate() {
-        super.onCreate();
         Logger.debug(TAG, "Creating Lantern service");
+        super.onCreate();
+    }
 
-        // call BootUpReceiver that will ensure the app gets launched on device startup
-        Logger.debug(TAG, "wake up Lantern service on launch");
-        Intent bootUpIntent = new Intent();
-        bootUpReceiver.onReceive(this, bootUpIntent);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean autoBooted = intent.getBooleanExtra(AUTO_BOOTED, false);
+        Logger.debug(TAG, "Called onStartCommand, autoBooted?: " + autoBooted);
+        if (autoBooted) {
+            boolean hasOnboarded = new Boolean(true)
+                    .equals(LanternApp.messaging.messaging.getDb().get("/onBoardingStatus"));
+            if (!hasOnboarded) {
+                Logger.debug(TAG, "Attempted to auto boot but user has not onboarded to messaging, stop service");
+                stopSelf();
+                return START_NOT_STICKY;
+            }
+        }
 
-        Logger.debug(TAG, "run Lantern service in foreground so that message processing continues even when UI is closed");
-        helper.makeForeground();
-        Logger.d(TAG, "starting Lantern service thread");
-        thread = new Thread(this, "LanternService");
-        thread.start();
+        if (started.compareAndSet(false, true)) {
+            Logger.debug(TAG, "Starting Lantern service in foreground so that message processing continues even when UI is closed");
+            helper.makeForeground();
+
+            Logger.d(TAG, "Starting Lantern service thread");
+            thread = new Thread(this, "LanternService");
+            thread.start();
+        }
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable
@@ -181,7 +199,14 @@ public class LanternService extends Service implements Runnable {
 
     @Override
     public void onDestroy() {
+        Logger.debug(TAG, "Destroying LanternService");
         super.onDestroy();
+
+        if (!started.get()) {
+            Logger.debug(TAG, "Service never started, exit immediately");
+            return;
+        }
+
         helper.onDestroy();
         thread.interrupt();
         try {
@@ -195,7 +220,7 @@ public class LanternService extends Service implements Runnable {
         // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartservice");
-        broadcastIntent.setClass(this, Restarter.class);
+        broadcastIntent.setClass(this, AutoStarter.class);
         this.sendBroadcast(broadcastIntent);
     }
 }
