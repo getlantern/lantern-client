@@ -393,19 +393,22 @@ class MessagingHolder {
         val canvas = Canvas(bitmap)
         val paintBg = Paint()
         val paintAv = Paint()
-        val initials: String = contact.displayName.take(2)
+        var initials: String = "#" // initialize as "#"
+        var initialsX: Float = 150.toFloat() // this applies to a single character avatar
         paintAv.isAntiAlias = true
         paintBg.isAntiAlias = true
         paintBg.color = getAvatarBgColor(contact.contactId.id)
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
-        if (contact.displayName.length > 2) {
-            canvas.drawText(initials.toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
+        if (contact.displayName.length >= 2) {
+            initials = contact.displayName.take(2) // take first two initials since there are more than 2
+            initialsX = 95.toFloat() // update X position for two characters
         }
-        else {
-            canvas.drawText(initials.toUpperCase(), 250.toFloat(), 250.toFloat(), paintAv)
+        else if (contact.displayName.length == 1) {
+            initials = contact.displayName // display name is one char long
         }
+        canvas.drawText(initials.toUpperCase(),  initialsX, 250.toFloat(), paintAv)
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
     }
