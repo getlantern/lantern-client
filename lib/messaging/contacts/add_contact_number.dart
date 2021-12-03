@@ -34,7 +34,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
         try {
           context.loaderOverlay.show(widget: spinner);
           chatNumber = await model
-              .findChatNumberByShortNumber(controller.text.withoutWhitespace);
+              .findChatNumberByShortNumber(controller.text.numbersOnly);
 
           if (chatNumber.number == me.chatNumber.number) {
             setState(() => controller.error = 'self_adding'.i18n);
