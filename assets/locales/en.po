@@ -695,7 +695,7 @@ msgid "secure_text_explanation_account"
 msgstr "This is the full version of your Secure Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides the shortened Secure Chat Number to make sharing contact information more convenient. "
 
 msgid "recovery_key_account_explanation"
-msgstr "It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system"
+msgstr "Store this number in a safe place, It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system."
 
 msgid "recovery_error"
 msgstr "Unable to recover your account."
