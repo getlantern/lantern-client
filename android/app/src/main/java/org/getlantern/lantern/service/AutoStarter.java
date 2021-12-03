@@ -7,14 +7,19 @@ import android.os.Build;
 
 import org.getlantern.mobilesdk.Logger;
 
-public class Restarter extends BroadcastReceiver {
-    private static final String TAG = Restarter.class.getName();
+public class AutoStarter extends BroadcastReceiver {
+    private static final String TAG = AutoStarter.class.getName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger.debug(TAG, "LanternService tried to stop, restarting");
+        Logger.debug(TAG, "Automatically starting Lantern Service on: " + intent.getAction());
 
         Intent serviceIntent = new Intent(context, LanternService_.class);
+        serviceIntent.putExtra(
+                LanternService.AUTO_BOOTED,
+                intent.getAction() == Intent.ACTION_BOOT_COMPLETED
+        );
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(serviceIntent);
         } else {
