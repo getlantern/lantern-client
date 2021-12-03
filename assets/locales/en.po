@@ -521,7 +521,7 @@ msgid "disappearing_messages"
 msgstr "Disappearing Messages"
 
 msgid "start_of_your_history"
-msgstr "This is the start of your message history with "
+msgstr "Your chats and voice calls with %s are end-to-end encrypted"
 
 msgid "banner_unaccepted"
 msgstr "%s is not on your contacts list. Would you like to accept the chat request?"
@@ -650,10 +650,10 @@ msgid "lantern_secure_chat"
 msgstr "Lantern Secure Chat"
 
 msgid "welcome_title"
-msgstr "Start Using Lantern Secure Chat!"
+msgstr "Welcome to Lantern Secure Chat!"
 
 msgid "welcome_text"
-msgstr "Lantern Secure Chat pairs the strongest encryption and security practices with best-in-class blocking resistant technology to ensure your chats are private and always accessible."
+msgstr "An encrypted secure chat to protect your privacy paired with best-in-class blocking resistant technology."
 
 msgid "get_started"
 msgstr "Get started"
@@ -689,13 +689,13 @@ msgid "recovery_key"
 msgstr "Recovery Key"
 
 msgid "secure_text_explanation"
-msgstr "Your Secure Chat Number works like a phone number that your friends can use to contact you on Lantern. Lantern gives you a Secure Chat Number, so you do not have to use your phone number to chat."
+msgstr "Your Secure Chat Number works like a phone number that your friends can use to contact you on Lantern."
 
 msgid "secure_text_explanation_account"
 msgstr "This is the full version of your Secure Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides the shortened Secure Chat Number to make sharing contact information more convenient. "
 
 msgid "recovery_key_account_explanation"
-msgstr "This is your recovery key, it is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system. Store this in a safe location."
+msgstr "It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system"
 
 msgid "recovery_error"
 msgstr "Unable to recover your account."

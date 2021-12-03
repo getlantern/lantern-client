@@ -393,14 +393,19 @@ class MessagingHolder {
         val canvas = Canvas(bitmap)
         val paintBg = Paint()
         val paintAv = Paint()
+        val initials: String = contact.displayName.take(2)
         paintAv.isAntiAlias = true
         paintBg.isAntiAlias = true
         paintBg.color = getAvatarBgColor(contact.contactId.id)
         canvas.drawCircle(200.toFloat(), 200.toFloat(), 195.toFloat(), paintBg)
         paintAv.color = Color.WHITE
         paintAv.textSize = 150.toFloat()
-        canvas.drawText(contact.displayName.take(2).toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
-
+        if (contact.displayName.length > 2) {
+            canvas.drawText(initials.toUpperCase(), 100.toFloat(), 250.toFloat(), paintAv)
+        }
+        else {
+            canvas.drawText(initials.toUpperCase(), 250.toFloat(), 250.toFloat(), paintAv)
+        }
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
     }
