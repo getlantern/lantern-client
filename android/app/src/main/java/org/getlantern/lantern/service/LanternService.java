@@ -68,7 +68,7 @@ public class LanternService extends Service implements Runnable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        boolean autoBooted = intent.getBooleanExtra(AUTO_BOOTED, false);
+        boolean autoBooted = intent != null && intent.getBooleanExtra(AUTO_BOOTED, false);
         Logger.debug(TAG, "Called onStartCommand, autoBooted?: " + autoBooted);
         if (autoBooted) {
             boolean hasOnboarded = new Boolean(true)
