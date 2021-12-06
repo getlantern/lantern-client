@@ -32,36 +32,41 @@ class CustomBottomBar extends StatelessWidget {
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: CustomBottomBarItem(
-            currentIndex: index,
-            position: 0,
-            total: isDevelop ? 4 : 3,
-            label: CText('secure_chat'.i18n,
-                style: tsFloatingLabel.copiedWith(
-                    color: index == 0 ? black : grey5)),
-            icon: CBadge(
-              showBadge: true,
-              end: -20,
-              top: -10,
-              customBadge: Container(
-                padding: const EdgeInsetsDirectional.only(
-                    top: 2.0, bottom: 2.0, start: 5.0, end: 5.0),
-                decoration: BoxDecoration(
-                  color: blue3,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(80.0),
-                  ),
-                ),
-                child: Text('new'.i18n.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: white,
-                    )),
-              ),
-              child: NumUnviewedWrapper(index: index, model: messagingModel),
-            ),
-            onTap: () => onTap!(0),
-          ),
+          icon: messagingModel.getFirstAccessedChatTS((context,
+                  firstAccessedChatTS, child) =>
+              CustomBottomBarItem(
+                currentIndex: index,
+                position: 0,
+                total: isDevelop ? 4 : 3,
+                label: CText('secure_chat'.i18n,
+                    style: tsFloatingLabel.copiedWith(
+                        color: index == 0 ? black : grey5)),
+                icon: firstAccessedChatTS > 0
+                    ? CBadge(
+                        showBadge: true,
+                        end: -20,
+                        top: -10,
+                        customBadge: Container(
+                          padding: const EdgeInsetsDirectional.only(
+                              top: 2.0, bottom: 2.0, start: 5.0, end: 5.0),
+                          decoration: BoxDecoration(
+                            color: blue3,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(80.0),
+                            ),
+                          ),
+                          child: Text('new'.i18n.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: white,
+                              )),
+                        ),
+                        child: NumUnviewedWrapper(
+                            index: index, model: messagingModel),
+                      )
+                    : NumUnviewedWrapper(index: index, model: messagingModel),
+                onTap: () => onTap!(0),
+              )),
           label: '',
           tooltip: 'chats'.i18n,
         ),

@@ -296,6 +296,12 @@ class MessagingModel constructor(
                     tx.put("/requestNotificationLastDismissed", ts)
                 }
             }
+             "saveFirstAccessedChatTS" -> {
+                val ts = System.currentTimeMillis()
+                db.mutate { tx ->
+                    tx.put("/firstAccessedChat", ts)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
