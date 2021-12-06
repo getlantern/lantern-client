@@ -5,8 +5,20 @@ msgstr ""
 msgid "app_name"
 msgstr "Lantern"
 
+msgid "introducing"
+msgstr "Introducing Secure Chat"
+
+msgid "introducing_des"
+msgstr "Chat securely with friends using our new blocking resistant & encrypted chat built directly into Lantern!"
+
+msgid "maybe_later"
+msgstr "Maybe Later"
+
+msgid "try"
+msgstr "Try it out"
+
 msgid "Daily Data Usage"
-msgstr "Daily Data Usage: "
+msgstr "Daily Data Usage "
 
 msgid "is"
 msgstr "is"
@@ -110,7 +122,7 @@ msgid "Account"
 msgstr "Account"
 
 msgid "VPN Status"
-msgstr "VPN Status: "
+msgstr "VPN Status "
 
 msgid "VPN"
 msgstr "VPN"
