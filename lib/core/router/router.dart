@@ -10,6 +10,9 @@ import 'package:lantern/home.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
+import 'package:lantern/replica/ui/link_opener_screen.dart';
+import 'package:lantern/replica/ui/unknownscreen.dart';
+import 'package:lantern/replica/ui/videoplayer.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -58,6 +61,27 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         page: Introductions,
         name: 'Introductions',
         path: 'introductions',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: LinkOpenerScreen,
+        name: 'LinkOpenerScreen',
+        path: 'linkOpenerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaVideoPlayerScreen,
+        name: 'ReplicaVideoPlayerScreen',
+        path: 'replicaVideoPlayerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: UnknownItemScreen,
+        name: 'UnknownItemScreen',
+        path: 'unknownItemScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

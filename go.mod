@@ -1,6 +1,6 @@
 module github.com/getlantern/android-lantern
 
-go 1.15
+go 1.16
 
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
@@ -23,7 +23,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
-	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.0
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a

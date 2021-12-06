@@ -89,7 +89,7 @@ dependencies:
 
   pin_code_text_field: ^1.8.0
 
-  styled_text: ^3.0.2
+  styled_text: ^3.0.4+1
 
   back_button_interceptor: ^5.0.0
 
@@ -101,11 +101,15 @@ dependencies:
 
   flutter_webrtc: ^0.6.7
 
-  flutter_ringtone_player: ^3.0.0
+  flutter_ringtone_player: ^3.1.1
 
-  flutter_markdown: ^0.6.4
+  markdown: ^4.0.1
+
+  flutter_markdown: ^0.6.8
 
   flutter_local_notifications: ^8.1.1+1
+
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:

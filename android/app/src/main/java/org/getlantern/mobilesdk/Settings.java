@@ -12,7 +12,6 @@ public class Settings implements internalsdk.Settings {
 
     private static final String TAG = Settings.class.getName();
     private static final String configFileName = "settings.json";
-    private static final long replicaPort = 3223;
 
     @SerializedName("httpProxyHost")
     private String httpProxyHost;
@@ -30,7 +29,7 @@ public class Settings implements internalsdk.Settings {
     // TODO <13-10-21, soltzen> We'll set this to true always in the future,
     // when Replica is ready on mobile. For now, just keep it public and easy
     // to work with
-    public transient boolean shouldRunReplica = false;
+    public transient boolean shouldRunReplica = true;
 
     public static Settings init(final Context context) {
         try {
@@ -61,10 +60,6 @@ public class Settings implements internalsdk.Settings {
 
     public long getHttpProxyPort() {
         return httpProxyPort;
-    }
-
-    public long getReplicaPort() {
-        return replicaPort;
     }
 
     public boolean shouldRunReplica() {

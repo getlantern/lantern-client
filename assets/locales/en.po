@@ -570,3 +570,6 @@ msgstr "End Call"
 
 msgid "unnamed_contact"
 msgstr "Unnamed Contact"
+
+msgid "replica_video_error"
+msgstr "Failed to render video"
