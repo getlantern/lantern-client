@@ -493,4 +493,7 @@
     <string name="new_message">New Message</string>
     <string name="from_sender">From %1$s</string>
     <string name="unnamed_contact">Unnamed Contact</string>
+    <string name="message_notifications_channel">Messages</string>
+    <string name="call_notifications_channel">Calls</string>
+    <string name="lantern_service">Lantern Service</string>
 </resources>

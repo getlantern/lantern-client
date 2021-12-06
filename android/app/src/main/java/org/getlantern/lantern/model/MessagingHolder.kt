@@ -176,9 +176,10 @@ class MessagingHolder {
                 builder.setSound(notificationToneUri)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val importance = NotificationManager.IMPORTANCE_HIGH
+                    val channelName = application.getString(R.string.message_notifications_channel)
                     val notificationChannel = NotificationChannel(
                         messageNotificationChannelId,
-                        "MessageNotificationChannel",
+                        channelName,
                         importance
                     )
                     builder.setChannelId(messageNotificationChannelId)
@@ -194,7 +195,7 @@ class MessagingHolder {
     private fun notifyCall(
         context: Context,
         notificationManager: NotificationManager,
-        signal: WebRTCSignal
+        signal: WebRTCSignal,
     ) {
         val serializedSignal = Json.gson.toJson(signal)
         val contact =
@@ -299,7 +300,7 @@ class MessagingHolder {
         contact: Model.Contact,
         acceptPendingIntent: PendingIntent,
         declinePendingIntent: PendingIntent
-    ): Notification {
+        ): Notification {
         val builder = NotificationCompat.Builder(
             context,
             defaultNotificationChannelId
@@ -329,9 +330,10 @@ class MessagingHolder {
                 )
             )
             val importance = NotificationManager.IMPORTANCE_HIGH
+            val channelName = context.getString(R.string.call_notifications_channel)
             val notificationChannel = NotificationChannel(
                 callNotificationChannelId,
-                "CallNotificationChannel",
+                channelName,
                 importance
             )
             notificationChannel.enableVibration(true)
