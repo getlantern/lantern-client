@@ -1,14 +1,15 @@
 import 'package:lantern/common/common.dart';
 
-Widget showFullscreenDialog(
-    {required Color topColor,
-    required Color iconColor,
-    required BuildContext context,
-    required Widget title,
-    Widget? backButton,
-    Function? onBackCallback,
-    Function? onCloseCallback,
-    required Widget child}) {
+Widget showFullscreenDialog({
+  Color? topColor,
+  Color? iconColor,
+  required BuildContext context,
+  Widget? title,
+  Widget? backButton,
+  Function? onBackCallback,
+  Function? onCloseCallback,
+  required Widget child,
+}) {
   return Container(
       height: MediaQuery.of(context).size.height,
       child: Column(
