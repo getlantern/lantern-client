@@ -874,6 +874,12 @@ msgstr "Incoming Call"
 msgid "call_from"
 msgstr "From %s"
 
+msgid "in_call"
+msgstr "Ongoing Calls"
+
+msgid "in_call_des"
+msgstr "Notification of ongoing call"
+
 msgid "incoming_call_from"
 msgstr "Incoming call from %s"
 

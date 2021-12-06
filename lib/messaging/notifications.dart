@@ -9,9 +9,9 @@ class Notifications {
   static final inCallNotificationId = 0;
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final inCallChannel = const NotificationDetails(
+  final inCallChannel = NotificationDetails(
     android: AndroidNotificationDetails(
-        '10003', 'in_call', 'Notification of ongoing call',
+        '10003', 'in_call'.i18n, 'in_call_des'.i18n,
         importance: Importance.max, priority: Priority.high, showWhen: false),
   );
 
@@ -39,8 +39,8 @@ class Notifications {
   Future<void> showInCallNotification(Contact contact) {
     return flutterLocalNotificationsPlugin.show(
         inCallNotificationId,
-        'In call with ${contact.displayName}'.i18n,
-        'Touch here to open call'.i18n,
+        'in_call_with'.i18n.fill([contact.displayName]),
+        'touch_here_to_open_call'.i18n,
         inCallChannel);
   }
 

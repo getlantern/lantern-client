@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import java.util.concurrent.LinkedBlockingDeque
@@ -55,11 +56,12 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(): String? {
+    private fun createNotificationChannel(): String {
         val channelId = "lantern_service"
+        val channelName =  LanternApp.getAppContext().resources.getString(R.string.lantern_service)
         val mNotificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.createNotificationChannel(
-            NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
         )
         return channelId
     }
