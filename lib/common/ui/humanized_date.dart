@@ -42,26 +42,31 @@ class HumanizedDate extends StatelessWidget {
   }
 
   String past(DateTime now) {
+    // this is within the last minute, display "just now"
     if (now.difference(localDateTime).inSeconds < 60) {
       return 'just_now'.i18n;
     }
     var roughTimeString = _hourMinuteFormat.format(dateTime);
+    // this is within the current day, display time of day with AM/PM
     if (localDateTime.day == now.day &&
         localDateTime.month == now.month &&
         localDateTime.year == now.year) {
       return roughTimeString;
     }
+    // this is within the last day, display "yesterday"
     var yesterday = now.subtract(const Duration(days: 1));
     if (localDateTime.day == yesterday.day &&
         localDateTime.month == now.month &&
         localDateTime.year == now.year) {
       return 'yesterday'.i18n;
     }
+    // if we are less than 4 days of the message, display day name
     if (now.difference(localDateTime).inDays < 4) {
       var weekday = _weekdayFormat.format(localDateTime);
-      return '$weekday, $roughTimeString';
+      return weekday;
     }
-    return '${_ymdFormat.format(dateTime)}, $roughTimeString';
+    // older than 4 days, switch to displaying mm/dd/yyyy date
+    return _ymdFormat.format(dateTime);
   }
 
   String future(DateTime now) {
