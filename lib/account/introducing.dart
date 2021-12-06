@@ -21,7 +21,10 @@ class Introducing extends StatelessWidget {
     final model = context.watch<MessagingModel>();
     return showFullscreenDialog(
       context: context,
-      onCloseCallback: () => context.router.pop(),
+      onCloseCallback: () async {
+        await context.router.pop();
+        await model.markSeenIntroducing();
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,10 +32,11 @@ class Introducing extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Container(
-              padding: const EdgeInsetsDirectional.only(top: 24.0, bottom: 24),
+              padding: const EdgeInsetsDirectional.only(bottom: 24),
               child: CAssetImage(
-                  path: ImagePaths.introducing_illustration,
-                  size: MediaQuery.of(context).size.height),
+                path: ImagePaths.introducing_illustration,
+                size: MediaQuery.of(context).size.width,
+              ),
             ),
           ),
           Flexible(
@@ -40,7 +44,7 @@ class Introducing extends StatelessWidget {
             child: Container(
               color: blue4,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
@@ -51,7 +55,7 @@ class Introducing extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                        start: 40.0, end: 40.0, bottom: 40.0),
+                        start: 40.0, end: 40.0),
                     child: CText(
                       'introducing_des'.i18n,
                       style: tsBody1.copiedWith(color: white),
@@ -60,12 +64,15 @@ class Introducing extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                        start: 40, end: 40, bottom: 16.0),
+                        start: 40, end: 40, top: 36.0, bottom: 16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                            onPressed: () => context.router.pop(),
+                            onPressed: () async {
+                              await context.router.pop();
+                              await model.markSeenIntroducing();
+                            },
                             child: CText(
                               'maybe_later'.i18n.toUpperCase(),
                               style: tsCustomButton.copiedWith(color: white),
@@ -73,6 +80,7 @@ class Introducing extends StatelessWidget {
                         TextButton(
                             onPressed: () async {
                               await model.saveFirstAccessedChatTS();
+                              // TODO: switch to Chats tab
                             },
                             child: CText(
                               'try'.i18n.toUpperCase(),
