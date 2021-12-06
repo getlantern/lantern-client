@@ -4,7 +4,7 @@ import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:lantern/replica/markdown_link_builder.dart';
+import 'package:lantern/replica/ui/markdown_link_builder.dart';
 
 import 'mime_type.dart';
 import 'reactions.dart';
@@ -264,7 +264,8 @@ class MessageBubble extends StatelessWidget {
                                     ),
                                     builders: {
                                       'replica':
-                                          ReplicaLinkBuilder((replicaLink) {
+                                          ReplicaLinkMarkdownElementBuilder(
+                                              (replicaLink) {
                                         print(
                                             'Clicked on replica link: $replicaLink');
                                         // TODO <10-11-21, soltzen> Determine MIME type first
