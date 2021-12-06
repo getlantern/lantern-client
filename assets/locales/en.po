@@ -851,7 +851,7 @@ msgid "pending_verification"
 msgstr "Pending verification"
 
 msgid "verify_description"
-msgstr "To ensure the security and end-to-end encryption of this conversation, we recommend you check that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
+msgstr "As a security best practice, we recommend checking that %s's verification number matches yours.\n\nWould you like to verify in person or via a phone call?"
 
 msgid "verify_in_person"
 msgstr "Verify in person"
