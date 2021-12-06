@@ -113,8 +113,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       case CallState.Connected:
         return 'Connected'.i18n;
       case CallState.Bye:
-        return 'Disconnecting'
-            .i18n; // TODO: this shows up very briefly on start of call (normal?)
+        return 'Disconnecting'.i18n;
       default:
         return 'Calling'.i18n;
     }
