@@ -10,16 +10,18 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.thefinestartist.utils.content.ContextUtil.getApplicationContext
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import java.util.concurrent.LinkedBlockingDeque
 
 class ServiceHelper(private val service: Service, private val largeIcon: Int, private val smallIcon: Int, private val content: Int) {
     fun makeForeground() {
+        var context: Context = getApplicationContext()
         val doIt = {
             var channelId: String? = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                channelId = createNotificationChannel()
+                channelId = createNotificationChannel(context)
             } else {
                 // If earlier version channel ID is not used
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
@@ -55,11 +57,12 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(): String? {
+    private fun createNotificationChannel(context: Context): String {
         val channelId = "lantern_service"
+        val channelName = context.getString(R.string.lantern_service)
         val mNotificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.createNotificationChannel(
-            NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
         )
         return channelId
     }
