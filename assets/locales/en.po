@@ -875,7 +875,7 @@ msgid "call_from"
 msgstr "From %s"
 
 msgid "in_call"
-msgstr "Call Notifications"
+msgstr "Calls"
 
 msgid "in_call_des"
 msgstr "Notification of ongoing call"
