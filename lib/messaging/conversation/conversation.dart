@@ -745,6 +745,7 @@ class ConversationState extends State<Conversation>
         // the layout from changing while we're recording.
         if (isRecording)
           SizedBox(
+            height: messageBarHeight,
             child: Container(
               decoration: BoxDecoration(color: grey2),
             ),
