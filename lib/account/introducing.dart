@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class Introducing extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class Introducing extends StatelessWidget {
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.italic,
     );
+    final model = context.watch<MessagingModel>();
     return showFullscreenDialog(
       context: context,
       onCloseCallback: () => context.router.pop(),
@@ -63,13 +65,15 @@ class Introducing extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () => context.router.pop(),
                             child: CText(
                               'maybe_later'.i18n.toUpperCase(),
                               style: tsCustomButton.copiedWith(color: white),
                             )),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await model.saveFirstAccessedChatTS();
+                            },
                             child: CText(
                               'try'.i18n.toUpperCase(),
                               style: tsCustomButton.copiedWith(color: yellow3),

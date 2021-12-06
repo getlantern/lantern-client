@@ -421,6 +421,7 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
+  // for dev purposes
   Future<void> overrideOnBoarded(bool newValue) {
     return methodChannel.invokeMethod(
         'overrideOnBoarded', <String, dynamic>{'newValue': newValue});
@@ -455,5 +456,14 @@ class MessagingModel extends Model {
     return methodChannel
         .invokeMethod('getDefaultRingtoneUri')
         .then((v) => v as String);
+  }
+
+  Future<void> saveFirstAccessedChatTS<T>() async {
+    return methodChannel.invokeMethod('saveFirstAccessedChatTS');
+  }
+
+  Widget getFirstAccessedChatTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstAccessedChat',
+        defaultValue: 0, builder: builder);
   }
 }
