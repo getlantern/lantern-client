@@ -17,6 +17,9 @@ msgstr "Maybe Later"
 msgid "try"
 msgstr "Try it out"
 
+msgid "new"
+msgstr "New"
+
 msgid "Daily Data Usage"
 msgstr "Daily Data Usage "
 
