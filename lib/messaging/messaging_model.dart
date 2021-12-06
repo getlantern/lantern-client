@@ -466,4 +466,13 @@ class MessagingModel extends Model {
     return subscribedSingleValueBuilder<int>('/firstAccessedChat',
         defaultValue: 0, builder: builder);
   }
+
+  Future<void> markSeenIntroducing<T>() async {
+    return methodChannel.invokeMethod('markSeenIntroducing');
+  }
+
+  Widget getSeenIntroducingStatus(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/hasSeenIntroducingDialog',
+        defaultValue: false, builder: builder);
+  }
 }

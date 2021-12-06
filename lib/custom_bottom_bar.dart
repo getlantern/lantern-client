@@ -41,7 +41,7 @@ class CustomBottomBar extends StatelessWidget {
                 label: CText('secure_chat'.i18n,
                     style: tsFloatingLabel.copiedWith(
                         color: index == 0 ? black : grey5)),
-                icon: firstAccessedChatTS > 0
+                icon: firstAccessedChatTS == 0
                     ? CBadge(
                         showBadge: true,
                         end: -20,
