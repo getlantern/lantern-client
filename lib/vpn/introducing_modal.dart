@@ -106,8 +106,11 @@ class IntroducingModal extends StatelessWidget {
                               onPressed: () async {
                                 await messagingModel.saveFirstAccessedChatTS();
                                 await context.router.pop();
+                                // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
                                 autorouterContext.tabsRouter
                                     .setActiveIndex(0); // index 0 for Chats tab
+                                autorouterContext.innerRouterOf<TabsRouter>(
+                                    SecureNumberRecovery.name);
                               },
                               child: CText(
                                 'try'.i18n.toUpperCase(),
