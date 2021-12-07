@@ -9,11 +9,11 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i19;
-import 'package:flutter/material.dart' as _i28;
+import 'package:flutter/material.dart' as _i27;
 import 'package:lantern/account/account_management.dart' as _i9;
-import 'package:lantern/account/account_tab.dart' as _i26;
+import 'package:lantern/account/account_tab.dart' as _i25;
 import 'package:lantern/account/blocked_users.dart' as _i18;
-import 'package:lantern/account/developer_settings.dart' as _i27;
+import 'package:lantern/account/developer_settings.dart' as _i26;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i15;
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
     as _i12;
@@ -21,12 +21,10 @@ import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
     as _i13;
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart'
     as _i14;
-import 'package:lantern/account/introducing.dart' as _i25;
 import 'package:lantern/account/language.dart' as _i11;
 import 'package:lantern/account/recovery_key.dart' as _i16;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i17;
 import 'package:lantern/account/settings.dart' as _i10;
-import 'package:lantern/common/common.dart' as _i29;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/chats.dart' as _i23;
@@ -36,8 +34,7 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging.dart' as _i30;
-import 'package:lantern/messaging/messaging_model.dart' as _i31;
+import 'package:lantern/messaging/messaging.dart' as _i28;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i22;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
@@ -46,7 +43,7 @@ import 'package:lantern/messaging/onboarding/welcome.dart' as _i20;
 import 'package:lantern/vpn/vpn_tab.dart' as _i24;
 
 class AppRouter extends _i19.RootStackRouter {
-  AppRouter([_i28.GlobalKey<_i28.NavigatorState>? navigatorKey])
+  AppRouter([_i27.GlobalKey<_i27.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -338,20 +335,10 @@ class AppRouter extends _i19.RootStackRouter {
           opaque: true,
           barrierDismissible: false);
     },
-    Introducing.name: (routeData) {
-      return _i19.CustomPage<void>(
-          routeData: routeData,
-          child: _i25.Introducing(),
-          transitionsBuilder: _i19.TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 200,
-          reverseDurationInMilliseconds: 200,
-          opaque: true,
-          barrierDismissible: false);
-    },
     Account.name: (routeData) {
       return _i19.CustomPage<void>(
           routeData: routeData,
-          child: _i26.AccountTab(),
+          child: _i25.AccountTab(),
           transitionsBuilder: _i19.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -363,7 +350,7 @@ class AppRouter extends _i19.RootStackRouter {
           orElse: () => const DeveloperSettingsArgs());
       return _i19.CustomPage<void>(
           routeData: routeData,
-          child: _i27.DeveloperSettingsTab(key: args.key),
+          child: _i26.DeveloperSettingsTab(key: args.key),
           transitionsBuilder: _i19.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -404,9 +391,7 @@ class AppRouter extends _i19.RootStackRouter {
               path: 'vpn',
               parent: Home.name,
               children: [
-                _i19.RouteConfig(Vpn.name, path: '', parent: VpnRouter.name),
-                _i19.RouteConfig(Introducing.name,
-                    path: 'introducing', parent: VpnRouter.name)
+                _i19.RouteConfig(Vpn.name, path: '', parent: VpnRouter.name)
               ]),
           _i19.RouteConfig(AccountRouter.name,
               path: 'account',
@@ -449,7 +434,7 @@ class AppRouter extends _i19.RootStackRouter {
 
 /// generated route for [_i1.HomePage]
 class Home extends _i19.PageRouteInfo<HomeArgs> {
-  Home({_i29.Key? key, List<_i19.PageRouteInfo>? children})
+  Home({_i28.Key? key, List<_i19.PageRouteInfo>? children})
       : super(name,
             path: '/', args: HomeArgs(key: key), initialChildren: children);
 
@@ -459,7 +444,7 @@ class Home extends _i19.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -470,7 +455,7 @@ class HomeArgs {
 /// generated route for [_i2.FullScreenDialog]
 class FullScreenDialogPage
     extends _i19.PageRouteInfo<FullScreenDialogPageArgs> {
-  FullScreenDialogPage({required _i29.Widget widget, _i29.Key? key})
+  FullScreenDialogPage({required _i28.Widget widget, _i28.Key? key})
       : super(name,
             path: 'fullScreenDialogPage',
             args: FullScreenDialogPageArgs(widget: widget, key: key));
@@ -481,9 +466,9 @@ class FullScreenDialogPage
 class FullScreenDialogPageArgs {
   const FullScreenDialogPageArgs({required this.widget, this.key});
 
-  final _i29.Widget widget;
+  final _i28.Widget widget;
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -494,7 +479,7 @@ class FullScreenDialogPageArgs {
 /// generated route for [_i3.Conversation]
 class Conversation extends _i19.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i30.ContactId contactId,
+      {required _i28.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
       : super(name,
@@ -513,7 +498,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i30.ContactId contactId;
+  final _i28.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -528,7 +513,7 @@ class ConversationArgs {
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i31.MessagingModel model, required _i30.Contact contact})
+      {required _i28.MessagingModel model, required _i28.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -539,9 +524,9 @@ class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i31.MessagingModel model;
+  final _i28.MessagingModel model;
 
-  final _i30.Contact contact;
+  final _i28.Contact contact;
 
   @override
   String toString() {
@@ -565,7 +550,7 @@ class AddViaChatNumber extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i7.Introduce]
 class Introduce extends _i19.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i30.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i28.Contact? contactToIntro})
       : super(name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -579,7 +564,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i30.Contact? contactToIntro;
+  final _i28.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -596,7 +581,7 @@ class Introductions extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i9.AccountManagement]
 class AccountManagement extends _i19.PageRouteInfo<AccountManagementArgs> {
-  AccountManagement({_i29.Key? key, required bool isPro})
+  AccountManagement({_i28.Key? key, required bool isPro})
       : super(name,
             path: 'accountManagement',
             args: AccountManagementArgs(key: key, isPro: isPro));
@@ -607,7 +592,7 @@ class AccountManagement extends _i19.PageRouteInfo<AccountManagementArgs> {
 class AccountManagementArgs {
   const AccountManagementArgs({this.key, required this.isPro});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   final bool isPro;
 
@@ -619,7 +604,7 @@ class AccountManagementArgs {
 
 /// generated route for [_i10.Settings]
 class Settings extends _i19.PageRouteInfo<SettingsArgs> {
-  Settings({_i29.Key? key})
+  Settings({_i28.Key? key})
       : super(name, path: 'settings', args: SettingsArgs(key: key));
 
   static const String name = 'Settings';
@@ -628,7 +613,7 @@ class Settings extends _i19.PageRouteInfo<SettingsArgs> {
 class SettingsArgs {
   const SettingsArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -638,7 +623,7 @@ class SettingsArgs {
 
 /// generated route for [_i11.Language]
 class Language extends _i19.PageRouteInfo<LanguageArgs> {
-  Language({_i29.Key? key})
+  Language({_i28.Key? key})
       : super(name, path: 'language', args: LanguageArgs(key: key));
 
   static const String name = 'Language';
@@ -647,7 +632,7 @@ class Language extends _i19.PageRouteInfo<LanguageArgs> {
 class LanguageArgs {
   const LanguageArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -657,7 +642,7 @@ class LanguageArgs {
 
 /// generated route for [_i12.AuthorizeDeviceForPro]
 class AuthorizePro extends _i19.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({_i29.Key? key})
+  AuthorizePro({_i28.Key? key})
       : super(name, path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
   static const String name = 'AuthorizePro';
@@ -666,7 +651,7 @@ class AuthorizePro extends _i19.PageRouteInfo<AuthorizeProArgs> {
 class AuthorizeProArgs {
   const AuthorizeProArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -677,7 +662,7 @@ class AuthorizeProArgs {
 /// generated route for [_i13.AuthorizeDeviceViaEmail]
 class AuthorizeDeviceEmail
     extends _i19.PageRouteInfo<AuthorizeDeviceEmailArgs> {
-  AuthorizeDeviceEmail({_i29.Key? key})
+  AuthorizeDeviceEmail({_i28.Key? key})
       : super(name,
             path: 'authorizeDeviceEmail',
             args: AuthorizeDeviceEmailArgs(key: key));
@@ -688,7 +673,7 @@ class AuthorizeDeviceEmail
 class AuthorizeDeviceEmailArgs {
   const AuthorizeDeviceEmailArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -699,7 +684,7 @@ class AuthorizeDeviceEmailArgs {
 /// generated route for [_i14.AuthorizeDeviceViaEmailPin]
 class AuthorizeDeviceEmailPin
     extends _i19.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
-  AuthorizeDeviceEmailPin({_i29.Key? key})
+  AuthorizeDeviceEmailPin({_i28.Key? key})
       : super(name,
             path: 'authorizeDeviceEmailPin',
             args: AuthorizeDeviceEmailPinArgs(key: key));
@@ -710,7 +695,7 @@ class AuthorizeDeviceEmailPin
 class AuthorizeDeviceEmailPinArgs {
   const AuthorizeDeviceEmailPinArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -720,7 +705,7 @@ class AuthorizeDeviceEmailPinArgs {
 
 /// generated route for [_i15.ApproveDevice]
 class ApproveDevice extends _i19.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({_i29.Key? key})
+  ApproveDevice({_i28.Key? key})
       : super(name, path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
   static const String name = 'ApproveDevice';
@@ -729,7 +714,7 @@ class ApproveDevice extends _i19.PageRouteInfo<ApproveDeviceArgs> {
 class ApproveDeviceArgs {
   const ApproveDeviceArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -739,7 +724,7 @@ class ApproveDeviceArgs {
 
 /// generated route for [_i16.RecoveryKey]
 class RecoveryKey extends _i19.PageRouteInfo<RecoveryKeyArgs> {
-  RecoveryKey({_i29.Key? key})
+  RecoveryKey({_i28.Key? key})
       : super(name, path: 'recoveryKey', args: RecoveryKeyArgs(key: key));
 
   static const String name = 'RecoveryKey';
@@ -748,7 +733,7 @@ class RecoveryKey extends _i19.PageRouteInfo<RecoveryKeyArgs> {
 class RecoveryKeyArgs {
   const RecoveryKeyArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -766,7 +751,7 @@ class SecureChatNumberAccount extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i18.BlockedUsers]
 class BlockedUsers extends _i19.PageRouteInfo<BlockedUsersArgs> {
-  BlockedUsers({_i29.Key? key})
+  BlockedUsers({_i28.Key? key})
       : super(name, path: 'blockedUsers', args: BlockedUsersArgs(key: key));
 
   static const String name = 'BlockedUsers';
@@ -775,7 +760,7 @@ class BlockedUsers extends _i19.PageRouteInfo<BlockedUsersArgs> {
 class BlockedUsersArgs {
   const BlockedUsersArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -854,7 +839,7 @@ class ChatsRoute extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i24.VPNTab]
 class Vpn extends _i19.PageRouteInfo<VpnArgs> {
-  Vpn({_i29.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
+  Vpn({_i28.Key? key}) : super(name, path: '', args: VpnArgs(key: key));
 
   static const String name = 'Vpn';
 }
@@ -862,7 +847,7 @@ class Vpn extends _i19.PageRouteInfo<VpnArgs> {
 class VpnArgs {
   const VpnArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
@@ -870,23 +855,16 @@ class VpnArgs {
   }
 }
 
-/// generated route for [_i25.Introducing]
-class Introducing extends _i19.PageRouteInfo<void> {
-  const Introducing() : super(name, path: 'introducing');
-
-  static const String name = 'Introducing';
-}
-
-/// generated route for [_i26.AccountTab]
+/// generated route for [_i25.AccountTab]
 class Account extends _i19.PageRouteInfo<void> {
   const Account() : super(name, path: '');
 
   static const String name = 'Account';
 }
 
-/// generated route for [_i27.DeveloperSettingsTab]
+/// generated route for [_i26.DeveloperSettingsTab]
 class DeveloperSettings extends _i19.PageRouteInfo<DeveloperSettingsArgs> {
-  DeveloperSettings({_i29.Key? key})
+  DeveloperSettings({_i28.Key? key})
       : super(name, path: '', args: DeveloperSettingsArgs(key: key));
 
   static const String name = 'DeveloperSettings';
@@ -895,7 +873,7 @@ class DeveloperSettings extends _i19.PageRouteInfo<DeveloperSettingsArgs> {
 class DeveloperSettingsArgs {
   const DeveloperSettingsArgs({this.key});
 
-  final _i29.Key? key;
+  final _i28.Key? key;
 
   @override
   String toString() {
