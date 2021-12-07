@@ -8,7 +8,7 @@ const message_tab_router = CustomRoute<void>(
   path: 'messages',
   children: [
     CustomRoute<void>(
-        initial: true,
+        // initial: true,
         page: Chats,
         path: '',
         transitionsBuilder: defaultTransition,

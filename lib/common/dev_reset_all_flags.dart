@@ -12,7 +12,7 @@ class ResetAllFlagsButton extends StatelessWidget {
           padding: const EdgeInsetsDirectional.all(8.0),
           child: Button(
             tertiary: true,
-            text: 'DEV - reset flags to false',
+            text: 'DEV - reset flags+timestamps',
             onPressed: () async {
               await model.resetAllFlagsAndTimestamps();
             },
