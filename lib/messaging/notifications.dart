@@ -1,38 +1,33 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lantern/messaging/messaging.dart';
 
-final notifications = Notifications();
 final JsonEncoder _encoder = const JsonEncoder();
 final JsonDecoder _decoder = const JsonDecoder();
 
 class Notifications {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final inCallChannel = const NotificationDetails(
-    android: AndroidNotificationDetails(
-        '10003', 'in_call', 'Notification of ongoing call',
-        importance: Importance.max, priority: Priority.high, showWhen: false),
+    android: AndroidNotificationDetails('10003', 'in_call',
+        channelDescription: 'Ongoing calls',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false),
+  );
+  final downloadChannel = const NotificationDetails(
+    android: AndroidNotificationDetails('10004', 'download',
+        channelDescription: 'Downloads',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false),
   );
 
-  Notifications() {
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
-    final initializationSettings =
-        const InitializationSettings(android: initializationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (payloadString) {
-      if (payloadString?.isNotEmpty == true) {
-        var payload = Payload.fromJson(payloadString!);
-        switch (payload.type) {
-          case PayloadType.ringing:
-            Map<String, dynamic> data = payload.data;
-            messagingModel.signaling
-                .onMessage(data['peerId'], data['messageJson'], false);
-            break;
-        }
-      }
-      return Future.value(null);
-    });
+  Notifications(this.selectionCallback) {
+    flutterLocalNotificationsPlugin.initialize(
+        const InitializationSettings(
+            android: AndroidInitializationSettings('app_icon')),
+        onSelectNotification: selectionCallback);
   }
+  SelectNotificationCallback? selectionCallback;
 
   Future<void> showInCallNotification(Contact contact) {
     return flutterLocalNotificationsPlugin.show(
@@ -45,6 +40,7 @@ class Notifications {
 
 class PayloadType {
   static const ringing = 'ringing';
+  static const download = 'download';
 }
 
 class Payload {

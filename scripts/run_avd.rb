@@ -24,7 +24,7 @@ module Avd
     system_or_die!("command -v #{@BIN_ADB} >/dev/null 2>&1", 'adb binary not found in Android SDK tools')
     system_or_die!("command -v #{@BIN_EMULATOR} >/dev/null 2>&1", 'emulator binary not found in Android SDK tools')
     system_or_die!("command -v #{@BIN_AVDMANAGER} >/dev/null 2>&1", 'avdmanager binary not found in Android SDK tools')
-    system_or_die!("command -v #{@BIN_SDKMANAGEr} >/dev/null 2>&1", 'sdkmanager binary not found in Android SDK tools')
+    system_or_die!("command -v #{@BIN_SDKMANAGER} >/dev/null 2>&1", 'sdkmanager binary not found in Android SDK tools')
   end
 
   def kill_all_running_emulators!

@@ -3,6 +3,7 @@ import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/tabs/account_tab_router.dart';
 import 'package:lantern/core/router/tabs/developer_tab_router.dart';
 import 'package:lantern/core/router/tabs/message_tab_router.dart';
+import 'package:lantern/core/router/tabs/replica_tab_router.dart';
 import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/contacts/new_message.dart';
@@ -11,7 +12,7 @@ import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
-import 'package:lantern/replica/ui/unknownscreen.dart';
+import 'package:lantern/replica/ui/unknown_item_screen.dart';
 import 'package:lantern/replica/ui/videoplayer.dart';
 
 @AdaptiveAutoRouter(
@@ -27,6 +28,7 @@ import 'package:lantern/replica/ui/videoplayer.dart';
         vpn_tab_router,
         account_tab_router,
         developer_tab_router,
+        replica_tab_router,
       ],
     ),
     CustomRoute<void>(
