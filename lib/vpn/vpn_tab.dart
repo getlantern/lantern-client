@@ -154,7 +154,8 @@ class VPNTab extends StatelessWidget {
                         TextButton(
                             onPressed: () async {
                               await messagingModel.saveFirstAccessedChatTS();
-                              // TODO: switch to Chats tab
+                              context.tabsRouter
+                                  .setActiveIndex(0); // index 0 for Chats tab
                             },
                             child: CText(
                               'try'.i18n.toUpperCase(),
