@@ -41,6 +41,7 @@ class VPNTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               proUser ? Container() : ProBanner(),
+              const ResetAllFlagsButton(),
               VPNSwitch(),
               Container(
                 padding: const EdgeInsetsDirectional.all(16),

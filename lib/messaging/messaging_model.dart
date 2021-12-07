@@ -421,12 +421,6 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
-  // for dev purposes
-  Future<void> overrideOnBoarded(bool newValue) {
-    return methodChannel.invokeMethod(
-        'overrideOnBoarded', <String, dynamic>{'newValue': newValue});
-  }
-
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/onBoardingStatus',
         defaultValue: false, builder: builder);
@@ -474,5 +468,10 @@ class MessagingModel extends Model {
   Widget getSeenIntroducingStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/hasSeenIntroducingDialog',
         defaultValue: false, builder: builder);
+  }
+
+  // for dev purposes
+  Future<void> resetAllFlagsAndTimestamps() {
+    return methodChannel.invokeMethod('resetAllFlagsAndTimestamps');
   }
 }

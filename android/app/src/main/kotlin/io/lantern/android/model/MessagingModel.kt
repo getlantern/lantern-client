@@ -278,13 +278,6 @@ class MessagingModel constructor(
                     tx.put("/onBoardingStatus", true)
                 }
             }
-            // for dev purposes
-            "overrideOnBoarded" -> {
-                val newValue = call.argument<Boolean>("newValue")!!
-                db.mutate { tx ->
-                    tx.put("/onBoardingStatus", newValue)
-                }
-            }
             "markCopiedRecoveryKey" -> {
                 db.mutate { tx ->
                     tx.put("/copiedRecoveryStatus", true)
@@ -305,6 +298,16 @@ class MessagingModel constructor(
             "markSeenIntroducing" -> {
                 db.mutate { tx ->
                     tx.put("/hasSeenIntroducingDialog", true)
+                }
+            }
+            // DEV PURPOSES
+            "resetAllFlagsAndTimestamps" -> {
+                db.mutate { tx ->
+                    tx.put("/onBoardingStatus", false)
+                    tx.put("/hasSeenIntroducingDialog", false)
+                    tx.put("/copiedRecoveryStatus", false)
+                    tx.put("/firstAccessedChat", 0)
+                    tx.put("/requestNotificationLastDismissed", 0)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)

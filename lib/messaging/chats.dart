@@ -289,25 +289,3 @@ class EmptyChats extends StatelessWidget {
     );
   }
 }
-
-class DevButton extends StatelessWidget {
-  const DevButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-    return model.getOnBoardingStatus((context, value, child) => Padding(
-          padding: const EdgeInsetsDirectional.all(8.0),
-          child: Button(
-            tertiary: true,
-            text: 'DEV - toggle value'.i18n,
-            onPressed: () async {
-              await model.overrideOnBoarded(!value);
-              context.router.popUntilRoot();
-            },
-          ),
-        ));
-  }
-}
