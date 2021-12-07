@@ -292,11 +292,9 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-    jcenter()
     google()
     mavenCentral()
     mavenLocal()
-    maven { url  "https://dl.bintray.com/piasy/maven" }
     maven { url "https://www.jitpack.io" }
 }
 
