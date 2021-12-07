@@ -56,10 +56,5 @@ public class ReplicaTest extends BaseTest {
             Response resp = client.newCall(req).execute();
             Assert.assertEquals(200, resp.code());
         }
-
-        // Assert replica's port is in SharedPrefs
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                "FlutterSharedPreferences", Context.MODE_PRIVATE);
-        Assert.assertEquals(replicaPort, sharedPref.getLong(context.getString(R.string.replica_port), 0));
     }
 }
