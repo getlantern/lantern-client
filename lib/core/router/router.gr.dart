@@ -25,6 +25,7 @@ import 'package:lantern/account/language.dart' as _i11;
 import 'package:lantern/account/recovery_key.dart' as _i16;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i17;
 import 'package:lantern/account/settings.dart' as _i10;
+import 'package:lantern/common/common.dart' as _i28;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/chats.dart' as _i23;
@@ -34,12 +35,13 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging.dart' as _i28;
+import 'package:lantern/messaging/messaging_model.dart' as _i30;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i22;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i21;
 import 'package:lantern/messaging/onboarding/welcome.dart' as _i20;
+import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i29;
 import 'package:lantern/vpn/vpn_tab.dart' as _i24;
 
 class AppRouter extends _i19.RootStackRouter {
@@ -479,7 +481,7 @@ class FullScreenDialogPageArgs {
 /// generated route for [_i3.Conversation]
 class Conversation extends _i19.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i28.ContactId contactId,
+      {required _i29.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
       : super(name,
@@ -498,7 +500,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i28.ContactId contactId;
+  final _i29.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -513,7 +515,7 @@ class ConversationArgs {
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i28.MessagingModel model, required _i28.Contact contact})
+      {required _i30.MessagingModel model, required _i29.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -524,9 +526,9 @@ class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i28.MessagingModel model;
+  final _i30.MessagingModel model;
 
-  final _i28.Contact contact;
+  final _i29.Contact contact;
 
   @override
   String toString() {
@@ -550,7 +552,7 @@ class AddViaChatNumber extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i7.Introduce]
 class Introduce extends _i19.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i28.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i29.Contact? contactToIntro})
       : super(name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -564,7 +566,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i28.Contact? contactToIntro;
+  final _i29.Contact? contactToIntro;
 
   @override
   String toString() {
