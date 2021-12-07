@@ -461,13 +461,13 @@ class MessagingModel extends Model {
         defaultValue: 0, builder: builder);
   }
 
-  Future<void> markSeenIntroducing<T>() async {
-    return methodChannel.invokeMethod('markSeenIntroducing');
+  Future<void> saveFirstSeenIntroducingTS<T>() async {
+    return methodChannel.invokeMethod('saveFirstSeenIntroducingTS');
   }
 
-  Widget getSeenIntroducingStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/hasSeenIntroducingDialog',
-        defaultValue: false, builder: builder);
+  Widget getFirstSeenIntroducingTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstSeenIntroducingTS',
+        defaultValue: 0, builder: builder);
   }
 
   // for dev purposes

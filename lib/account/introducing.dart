@@ -23,7 +23,6 @@ class Introducing extends StatelessWidget {
       context: context,
       onCloseCallback: () async {
         await context.router.pop();
-        await model.markSeenIntroducing();
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -71,7 +70,6 @@ class Introducing extends StatelessWidget {
                         TextButton(
                             onPressed: () async {
                               await context.router.pop();
-                              await model.markSeenIntroducing();
                             },
                             child: CText(
                               'maybe_later'.i18n.toUpperCase(),

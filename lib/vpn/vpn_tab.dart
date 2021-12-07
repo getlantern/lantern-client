@@ -24,8 +24,11 @@ class VPNTab extends StatelessWidget {
     var messagingModel = context.watch<MessagingModel>();
 
     return messagingModel
-        .getSeenIntroducingStatus((context, hasSeenIntroducingDialog, child) {
-      if (!hasSeenIntroducingDialog) {
+        .getFirstSeenIntroducingTS((context, firstSeenIntroducingTS, child) {
+      // TODO: better routing
+      // if we have not seen the Intro
+      if (firstSeenIntroducingTS == 0) {
+        messagingModel.saveFirstSeenIntroducingTS();
         context.router.push(const Introducing());
       }
       return sessionModel

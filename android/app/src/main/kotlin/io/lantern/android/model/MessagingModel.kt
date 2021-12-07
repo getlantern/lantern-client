@@ -295,18 +295,19 @@ class MessagingModel constructor(
                     tx.put("/firstAccessedChat", ts)
                 }
             }
-            "markSeenIntroducing" -> {
+             "saveFirstSeenIntroducingTS" -> {
+                val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/hasSeenIntroducingDialog", true)
+                    tx.put("/firstSeenIntroducingTS", ts)
                 }
             }
             // DEV PURPOSES
             "resetAllFlagsAndTimestamps" -> {
                 db.mutate { tx ->
                     tx.put("/onBoardingStatus", false)
-                    tx.put("/hasSeenIntroducingDialog", false)
                     tx.put("/copiedRecoveryStatus", false)
                     tx.put("/firstAccessedChat", 0)
+                    tx.put("/firstSeenIntroducingTS", 0)
                     tx.put("/requestNotificationLastDismissed", 0)
                 }
             }
