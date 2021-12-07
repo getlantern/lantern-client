@@ -96,8 +96,8 @@ class VPNTab extends StatelessWidget {
     return showFullscreenDialog(
       context: context,
       onCloseCallback: () async {
-        await context.router.pop();
         await messagingModel.saveFirstSeenIntroducingTS();
+        await context.router.pop();
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -144,8 +144,8 @@ class VPNTab extends StatelessWidget {
                       children: [
                         TextButton(
                             onPressed: () async {
-                              await context.router.pop();
                               await messagingModel.saveFirstSeenIntroducingTS();
+                              await context.router.pop();
                             },
                             child: CText(
                               'maybe_later'.i18n.toUpperCase(),

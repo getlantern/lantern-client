@@ -286,13 +286,13 @@ class MessagingModel constructor(
             "saveNotificationsTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/requestNotificationLastDismissed", ts)
+                    tx.put("/requestNotificationLastDismissedTS", ts)
                 }
             }
             "saveFirstAccessedChatTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/firstAccessedChat", ts)
+                    tx.put("/firstAccessedChatTS", ts)
                 }
             }
              "saveFirstSeenIntroducingTS" -> {
@@ -306,9 +306,9 @@ class MessagingModel constructor(
                 db.mutate { tx ->
                     tx.put("/onBoardingStatus", false)
                     tx.put("/copiedRecoveryStatus", false)
-                    tx.put("/firstAccessedChat", 0)
+                    tx.put("/firstAccessedChatTS", 0)
                     tx.put("/firstSeenIntroducingTS", 0)
-                    tx.put("/requestNotificationLastDismissed", 0)
+                    tx.put("/requestNotificationLastDismissedTS", 0)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
