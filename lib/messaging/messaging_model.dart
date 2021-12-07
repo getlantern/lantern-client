@@ -441,7 +441,7 @@ class MessagingModel extends Model {
 
   Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>(
-        '/requestNotificationLastDismissed',
+        '/requestNotificationLastDismissedTS',
         defaultValue: 0,
         builder: builder);
   }
@@ -457,7 +457,7 @@ class MessagingModel extends Model {
   }
 
   Widget getFirstAccessedChatTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstAccessedChat',
+    return subscribedSingleValueBuilder<int>('/firstAccessedChatTS',
         defaultValue: 0, builder: builder);
   }
 

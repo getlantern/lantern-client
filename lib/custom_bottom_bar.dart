@@ -36,12 +36,12 @@ class CustomBottomBar extends StatelessWidget {
                   firstAccessedChatTS, child) =>
               messagingModel.getFirstSeenIntroducingTS(
                   (context, firstSeenIntroducingTS, child) => NowBuilder(
-                      // * we only show NEW when the user has not accessed the Chat tab () [firstAccessedChatTS ==0] AND a week has not elapsed since we started counting
+                      // * we only show NEW when the user has not accessed the Chat tab () [firstAccessedChatTS == 0] AND a week has not elapsed since we started counting
                       calculate: (now) =>
                           firstAccessedChatTS == 0 &&
-                          (now.millisecondsSinceEpoch - firstSeenIntroducingTS <
+                          (now.millisecondsSinceEpoch - firstSeenIntroducingTS >=
                               oneWeekInMillis),
-                      builder: (BuildContext context, bool shouldShowLabel) =>
+                      builder: (BuildContext context, bool showBadge) =>
                           CustomBottomBarItem(
                             currentIndex: index,
                             position: 0,
@@ -49,34 +49,31 @@ class CustomBottomBar extends StatelessWidget {
                             label: CText('secure_chat'.i18n,
                                 style: tsFloatingLabel.copiedWith(
                                     color: index == 0 ? black : grey5)),
-                            icon: shouldShowLabel
-                                ? CBadge(
-                                    showBadge: true,
-                                    end: -20,
-                                    top: -10,
-                                    customBadge: Container(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          top: 2.0,
-                                          bottom: 2.0,
-                                          start: 5.0,
-                                          end: 5.0),
-                                      decoration: BoxDecoration(
-                                        color: blue3,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(80.0),
-                                        ),
-                                      ),
-                                      child: Text('new'.i18n.toUpperCase(),
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: white,
-                                          )),
-                                    ),
-                                    child: NumUnviewedWrapper(
-                                        index: index, model: messagingModel),
-                                  )
-                                : NumUnviewedWrapper(
-                                    index: index, model: messagingModel),
+                            icon: CBadge(
+                              showBadge: showBadge,
+                              end: -20,
+                              top: -10,
+                              customBadge: Container(
+                                padding: const EdgeInsetsDirectional.only(
+                                    top: 2.0,
+                                    bottom: 2.0,
+                                    start: 5.0,
+                                    end: 5.0),
+                                decoration: BoxDecoration(
+                                  color: blue3,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(80.0),
+                                  ),
+                                ),
+                                child: Text('new'.i18n.toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: white,
+                                    )),
+                              ),
+                              child: NumUnviewedWrapper(
+                                  index: index, model: messagingModel),
+                            ),
                             onTap: () async {
                               if (firstAccessedChatTS == 0) {
                                 await messagingModel.saveFirstAccessedChatTS();
