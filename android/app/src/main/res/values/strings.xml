@@ -493,5 +493,4 @@
     <string name="new_message">New Message</string>
     <string name="from_sender">From %1$s</string>
     <string name="unnamed_contact">Unnamed Contact</string>
-    <string name="replica_port">flutter.org.getlantern.lantern.replica_port</string>
 </resources>
