@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 
 /// This widget dynamically humanizes a date value, updating the displayed
@@ -10,10 +9,6 @@ import 'package:lantern/common/common.dart';
 /// 4. Else return year/month/day, hour:minute
 ///
 class HumanizedDate extends StatelessWidget {
-  static final _hourMinuteFormat = DateFormat('jm');
-  static final _weekdayFormat = DateFormat('EEEE');
-  static final _ymdFormat = DateFormat('yMd');
-
   final DateTime dateTime;
   final DateTime localDateTime;
   final NowBuild<String> builder;
@@ -31,61 +26,11 @@ class HumanizedDate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NowBuilder<String>(
-      calculate: (now) {
-        if (localDateTime.difference(now).isNegative) {
-          return past(now);
-        }
-        return future(now);
-      },
+      calculate: (now) => humanizePastFuture(
+        now,
+        dateTime,
+      ),
       builder: builder,
     );
-  }
-
-  String past(DateTime now) {
-    if (now.difference(localDateTime).inSeconds < 60) {
-      return 'just_now'.i18n;
-    }
-    var roughTimeString = _hourMinuteFormat.format(dateTime);
-    if (localDateTime.day == now.day &&
-        localDateTime.month == now.month &&
-        localDateTime.year == now.year) {
-      return roughTimeString;
-    }
-    var yesterday = now.subtract(const Duration(days: 1));
-    if (localDateTime.day == yesterday.day &&
-        localDateTime.month == now.month &&
-        localDateTime.year == now.year) {
-      return 'yesterday'.i18n;
-    }
-    if (now.difference(localDateTime).inDays < 4) {
-      var weekday = _weekdayFormat.format(localDateTime);
-      return '$weekday, $roughTimeString';
-    }
-    return '${_ymdFormat.format(dateTime)}, $roughTimeString';
-  }
-
-  String future(DateTime now) {
-    if (localDateTime.difference(now).inSeconds < 60) {
-      return 'within_one_minute'.i18n;
-    }
-    var roughTimeString = _hourMinuteFormat.format(dateTime);
-    if (localDateTime.day == now.day &&
-        localDateTime.month == now.month &&
-        localDateTime.year == now.year) {
-      return 'at_date'.i18n.fill([roughTimeString]);
-    }
-    var yesterday = now.add(const Duration(days: 1));
-    if (localDateTime.day == yesterday.day &&
-        localDateTime.month == now.month &&
-        localDateTime.year == now.year) {
-      return 'tomorrow'.i18n;
-    }
-    if (localDateTime.difference(now).inDays < 4) {
-      var weekday = _weekdayFormat.format(localDateTime);
-      return 'at_date'.i18n.fill(['$weekday, $roughTimeString']);
-    }
-    return 'at_date'
-        .i18n
-        .fill(['${_ymdFormat.format(dateTime)}, $roughTimeString']);
   }
 }

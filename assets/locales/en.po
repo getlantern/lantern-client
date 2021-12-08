@@ -604,6 +604,9 @@ msgstr "just now"
 msgid "within_one_minute"
 msgstr "within one minute"
 
+msgid "on_date"
+msgstr "on %s"
+
 msgid "at_date"
 msgstr "at %s"
 
