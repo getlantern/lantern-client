@@ -65,16 +65,6 @@ void main() {
   });
 
   group('Tests for humanizePastFuture() - past', () {
-    // DateTime DateTime(
-    //   int year, [
-    //   int month = 1,
-    //   int day = 1,
-    //   int hour = 0,
-    //   int minute = 0,
-    //   int second = 0,
-    //   int millisecond = 0,
-    //   int microsecond = 0,
-    // ])
     test('Event was 20 seconds ago', () {
       final now = DateTime.now();
       final dateTime = now.subtract(const Duration(seconds: 20));
@@ -130,16 +120,6 @@ void main() {
   });
 
   group('Tests for humanizePastFuture() - future', () {
-    // DateTime DateTime(
-    //   int year, [
-    //   int month = 1,
-    //   int day = 1,
-    //   int hour = 0,
-    //   int minute = 0,
-    //   int second = 0,
-    //   int millisecond = 0,
-    //   int microsecond = 0,
-    // ])
     test('Event will be within the next minue', () {
       final now = DateTime.now();
       final dateTime = now.add(const Duration(seconds: 30));
