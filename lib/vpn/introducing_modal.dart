@@ -29,6 +29,7 @@ class IntroducingModal extends StatelessWidget {
       children: [
         Container(
           color: white,
+          height: 60,
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
@@ -37,6 +38,7 @@ class IntroducingModal extends StatelessWidget {
                     top: 40), // 24 + 16 from designs
                 alignment: Alignment.centerRight,
                 child: IconButton(
+                  padding: const EdgeInsetsDirectional.all(0),
                   icon: Icon(
                     Icons.close_rounded,
                     color: black,
@@ -51,20 +53,37 @@ class IntroducingModal extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
           child: Column(
             children: [
               Flexible(
-                child: Container(
-                  color: white,
-                  padding: const EdgeInsetsDirectional.only(bottom: 24),
-                  child: CAssetImage(
-                    path: ImagePaths.introducing_illustration,
-                    size: MediaQuery.of(context).size.height,
-                  ),
-                ),
+                flex: 1,
+                child: LayoutBuilder(
+                    builder: (context, constraints) => Container(
+                          color: white,
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          child: GridView.count(
+                            crossAxisCount: 5, // five columns
+                            mainAxisSpacing: 24.0, // space between rows
+                            crossAxisSpacing: 24.0, // space between columns
+                            padding: const EdgeInsetsDirectional.all(36),
+                            clipBehavior: Clip.hardEdge,
+                            children: List.generate(
+                                constraints.maxHeight ~/
+                                    80 * // a rough estimation for each tile size
+                                    5,
+                                (index) => CAssetImage(
+                                      path: index.isEven
+                                          ? ImagePaths
+                                              .introducing_illustration_bubble
+                                          : ImagePaths
+                                              .introducing_illustration_lock,
+                                    )),
+                          ),
+                        )),
               ),
               Flexible(
+                flex: 1,
                 child: Container(
                   color: blue4,
                   child: Column(
@@ -88,7 +107,7 @@ class IntroducingModal extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            start: 40, end: 40, top: 36.0, bottom: 16.0),
+                            start: 40, end: 40, top: 36.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -113,6 +132,7 @@ class IntroducingModal extends StatelessWidget {
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
                                   autorouterContext.tabsRouter.setActiveIndex(
                                       0); // index 0 for Chats tab
+                                  // TODO: fix
                                   autorouterContext.innerRouterOf<TabsRouter>(
                                       SecureNumberRecovery.name);
                                 },
