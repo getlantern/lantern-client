@@ -9,11 +9,13 @@ class CustomBottomBar extends StatelessWidget {
   final int index;
   final Function(int)? onTap;
   final bool isDevelop;
+  final bool isFreshInstall;
 
   const CustomBottomBar(
       {required this.index,
       required this.isDevelop,
       required this.onTap,
+      required this.isFreshInstall,
       Key? key})
       : super(key: key);
 
@@ -34,12 +36,12 @@ class CustomBottomBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: messagingModel.getFirstAccessedChatTS(
               (context, firstAccessedChatTS, child) => NowBuilder(
-                  // * we only show NEW when the user has not accessed the Chat tab () [firstAccessedChatTS == 0] AND a week has not elapsed since we started counting
-                  calculate: (now) =>
-                      firstAccessedChatTS == 0 &&
-                      (now.millisecondsSinceEpoch - firstAccessedChatTS >=
-                          oneWeekInMillis),
-                  builder: (BuildContext context, bool showBadge) =>
+                  calculate: (now) => shouldShowBadge(
+                        firstAccessedChatTS,
+                        now,
+                        isFreshInstall,
+                      ),
+                  builder: (BuildContext context, bool badgeShowing) =>
                       CustomBottomBarItem(
                         currentIndex: index,
                         position: 0,
@@ -48,7 +50,7 @@ class CustomBottomBar extends StatelessWidget {
                             style: tsFloatingLabel.copiedWith(
                                 color: index == 0 ? black : grey5)),
                         icon: CBadge(
-                          showBadge: showBadge,
+                          showBadge: badgeShowing,
                           end: -20,
                           top: -10,
                           customBadge: Container(
@@ -162,6 +164,17 @@ class CustomBottomBar extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  // Returns true when
+  // 1. this is an upgrade (as opposed to fresh install)
+  // 2. the user has not accessed the Chat tab () [firstAccessedChatTS == 0]
+  // 3. a week has not elapsed since we started counting
+  bool shouldShowBadge(
+      int firstAccessedChatTS, DateTime now, bool isFreshInstall) {
+    return !isFreshInstall &&
+        firstAccessedChatTS == 0 &&
+        (now.millisecondsSinceEpoch - firstAccessedChatTS >= oneWeekInMillis);
   }
 }
 

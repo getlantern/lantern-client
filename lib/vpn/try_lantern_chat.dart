@@ -161,7 +161,7 @@ class TryLanternChat extends StatelessWidget {
                                       .saveFirstAccessedChatTS();
                                   await messagingModel
                                       .saveFirstSeenIntroducingTS();
-                                  await context.router.pop();
+                                  context.router.popUntilRoot();
 
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
                                   // and https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
