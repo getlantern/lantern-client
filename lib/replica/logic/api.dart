@@ -1,16 +1,16 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:lantern/replica/logic/replica_link.dart';
-import 'package:lantern/vpn/vpn.dart';
 import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
-import 'package:path/path.dart' as path;
+import 'package:lantern/replica/logic/replica_link.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/ui/searchcategory.dart';
+import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'common.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -151,48 +151,14 @@ class ReplicaApi {
       throw Exception('Permission');
     }
     logger.v('Permission granted');
-    final dir = await getExternalStorageDirectory();
-    if (dir == null) {
-      throw Exception('downloads directory');
-    }
-    final savePath = path.join(dir.path, displayName);
-    logger.v('savePath: $savePath');
-    final u = getDownloadAddr(link);
-    logger.v('XXX downloadAddr: $u');
-    final resp = await dio
-        .download(u, savePath, options: Options(sendTimeout: 10000),
-            onReceiveProgress: (received, total) async {
-      logger.v('received: $received | total: $total');
-      if (total == -1) {
-        return;
-      }
-      await notifications.flutterLocalNotificationsPlugin.show(
-        0,
-        'Lantern',
-        'Downloading "$displayName" ...',
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-                'progress channel', 'progress channel',
-                channelDescription: 'progress channel description',
-                channelShowBadge: false,
-                importance: Importance.max,
-                priority: Priority.high,
-                onlyAlertOnce: true,
-                showProgress: true,
-                maxProgress: 100,
-                progress: (received / total * 100).toInt())),
-      );
-    });
-    logger.v('resp done: ${resp.statusCode}');
-    if (resp.statusCode != 200) {
-      await notifications.flutterLocalNotificationsPlugin
-          .show(0, 'Lantern', 'FAILED', notifications.downloadChannel);
-      throw Exception('download failed');
-    }
-    await notifications.flutterLocalNotificationsPlugin.show(0, 'Lantern',
-        'Done downloading "$displayName"', notifications.downloadChannel,
-        payload: Payload(type: PayloadType.download, data: savePath).toJson());
-    logger.v('displayed 2nd notification');
+    // The download endpoint doesn't return an HTTP response until it's actually
+    // completely downloaded the file from Replica. When used with the download
+    // manager, this causes the system notification to only show up once the
+    // file is downloaded, defeating the purpose of a progress bar.
+    // So instead, we use the view endpoint which starts streaming the data to
+    // the client immediately.
+    final u = getViewAddr(link);
+    await replicaModel.downloadFile(u, displayName);
   }
 
   // Future<void> download(ReplicaLink replicaLink, String displayName) async {
