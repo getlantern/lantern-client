@@ -302,13 +302,17 @@ class MessagingModel constructor(
                 }
             }
             // DEV PURPOSES
-            "resetAllFlagsAndTimestamps" -> {
+            "resetTimestamps" -> {
                 db.mutate { tx ->
-                    tx.put("/onBoardingStatus", false)
-                    tx.put("/copiedRecoveryStatus", false)
                     tx.put("/firstAccessedChatTS", 0)
                     tx.put("/firstSeenIntroducingTS", 0)
                     tx.put("/requestNotificationLastDismissedTS", 0)
+                }
+            }
+            "resetFlags" -> {
+                db.mutate { tx ->
+                    tx.put("/onBoardingStatus", false)
+                    tx.put("/copiedRecoveryStatus", false)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)

@@ -93,11 +93,23 @@ class DeveloperSettingsTab extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
-            content: 'Reset all flags and timestamps',
+            content: 'Reset all timestamps',
             trailingArray: [
               TextButton(
                   onPressed: () async {
-                    await messagingModel.resetAllFlagsAndTimestamps();
+                    await messagingModel.resetTimestamps();
+                  },
+                  child: CText('Reset'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Reset onboarding and recovery key flags',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.resetFlags();
                   },
                   child: CText('Reset'.toUpperCase(),
                       style:
