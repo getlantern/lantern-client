@@ -164,21 +164,28 @@ class TryLanternChat extends StatelessWidget {
                                   await context.router.pop();
 
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
-                                  // This comment looks useful as well https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
+                                  // and https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
 
                                   // 1. update Tab location to Chat
-                                  parentContext.router
-                                      .parent<TabsRouter>()!
-                                      .setActiveIndex(
-                                          0); // * ← index 0 for Chats tab
+                                  final tabsRouter = parentContext.router
+                                      .parent<TabsRouter>()!;
+
+                                  tabsRouter.setActiveIndex(
+                                      0); // * ← index 0 for Chats tab
+
                                   // 2. find Onboarding router
-                                  final onboardingRouter = parentContext.router
-                                      .parent<TabsRouter>()!
+                                  final onboardingRouter = tabsRouter
                                       .innerRouterOf('OnboardingRouter');
 
                                   // 3. navigate to SecureNumberRecovery route
-                                  await onboardingRouter?.navigate(
-                                      const SecureChatNumberMessaging());
+                                  // for some reason it first needs to navigate to Welcome route
+                                  await onboardingRouter
+                                      ?.navigate(const Welcome())
+                                      .then((value) async {
+                                    await messagingModel.start();
+                                    await context.router.push(
+                                        const SecureChatNumberMessaging());
+                                  });
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),

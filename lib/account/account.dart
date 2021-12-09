@@ -124,13 +124,13 @@ class AccountMenu extends StatelessWidget {
     return BaseScreen(
       title: 'Account'.i18n,
       body: sessionModel
-          .proUser((BuildContext context, bool proUser, Widget? child) {
+          .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
         return messagingModel
-            .me((BuildContext context, Contact me, Widget? child) {
+            .me((BuildContext messagingContext, Contact me, Widget? child) {
           return ListView(
             children: proUser
-                ? proItems(context, me)
-                : freeItems(context, sessionModel, me),
+                ? proItems(sessionContext, me)
+                : freeItems(sessionContext, sessionModel, me),
           );
         });
       }),
