@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
@@ -6,6 +7,7 @@ class DeveloperSettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sessionModel = context.watch<SessionModel>();
+    var messagingModel = context.watch<MessagingModel>();
 
     return BaseScreen(
       title: 'Developer Settings'.i18n,
@@ -90,6 +92,18 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
+          ListItemFactory.settingsItem(
+            content: 'Reset all flags and timestamps',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.resetAllFlagsAndTimestamps();
+                  },
+                  child: CText('Reset'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          )
         ],
       ),
     );

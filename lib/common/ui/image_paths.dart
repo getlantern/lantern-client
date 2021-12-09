@@ -57,7 +57,6 @@ class ImagePaths {
   static const volume_up = 'assets/images/volume_up.svg';
   static const insert_drive_file = 'assets/images/insert_drive_file.svg';
   static const share = 'assets/images/share.svg';
-  static const welcome_illustration = 'assets/images/welcome_illustration.svg';
   static const notifications = 'assets/images/notifications.svg';
   static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
   static const account_remove = 'assets/images/account_remove.svg';
@@ -82,6 +81,11 @@ class ImagePaths {
   static const user = 'assets/images/user.svg';
 
   // illustrations
+  static const welcome_illustration = 'assets/images/welcome_illustration.svg';
+  static const introducing_illustration_bubble =
+      'assets/images/introducing_illustration_bubble.svg';
+  static const introducing_illustration_lock =
+      'assets/images/introducing_illustration_lock.svg';
   static const sticker_figure_background =
       'assets/images/sticker_figure_background.svg';
   static const sticker_figure_foreground =
