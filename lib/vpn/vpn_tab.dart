@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/vpn/introducing_modal.dart';
+import 'package:lantern/vpn/try_lantern_chat.dart';
 
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
@@ -74,7 +74,7 @@ class VPNTab extends StatelessWidget {
               // if we have never seen the Intro and we have never clicked on the Chat tab
               if (firstSeenIntroducingTS == 0 && firstAccessedChatTS == 0) {
                 context.pushRoute(FullScreenDialogPage(
-                    widget: IntroducingModal(parentContext: context)));
+                    widget: TryLanternChat(parentContext: context)));
               }
               return renderVPN(sessionModel);
             }));

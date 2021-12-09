@@ -1,9 +1,9 @@
 import 'package:lantern/messaging/messaging.dart';
 
-class IntroducingModal extends StatelessWidget {
+class TryLanternChat extends StatelessWidget {
   final BuildContext parentContext;
 
-  IntroducingModal({
+  TryLanternChat({
     required this.parentContext,
   });
 
