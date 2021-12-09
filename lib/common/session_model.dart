@@ -125,4 +125,9 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<int>('/tabIndex',
         defaultValue: 0, builder: builder);
   }
+
+  Widget isFirstInstall(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/isFreshInstall',
+        defaultValue: false, builder: builder);
+  }
 }

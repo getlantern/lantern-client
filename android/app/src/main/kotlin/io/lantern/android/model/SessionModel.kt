@@ -1,8 +1,10 @@
 package io.lantern.android.model
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.thefinestartist.utils.content.ContextUtil.getApplicationContext
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -98,6 +100,22 @@ class SessionModel(
             "saveTabIndex" -> {
                 db.mutate { tx ->
                     tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
+                }
+            }
+            "isFirstInstall" -> {
+                val context = getApplicationContext()
+                val status = try {
+                    val firstInstallTime: Long = context.packageManager
+                        .getPackageInfo(context.packageName, 0).firstInstallTime
+                    val lastUpdateTime: Long = context.packageManager
+                        .getPackageInfo(context.packageName, 0).lastUpdateTime
+                    firstInstallTime == lastUpdateTime
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                    true
+                }
+                db.mutate { tx ->
+                    tx.put("/isFreshInstall", status)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)

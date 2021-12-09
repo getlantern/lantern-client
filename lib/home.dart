@@ -100,27 +100,27 @@ class _HomePageState extends State<HomePage> {
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
             return messagingModel.getOnBoardingStatus(
-                (context, isOnboarded, child) => AutoTabsScaffold(
-                      routes: [
-                        // TODO: if this is a new install, app opens in Chat
-                        isOnboarded
-                            ? const MessagesRouter()
-                            : const OnboardingRouter(),
-                        // TODO: if this is an upgrade, app opens in VPN
-                        const VpnRouter(),
-                        const AccountRouter(),
-                        if (developmentMode) const DeveloperRoute(),
-                      ],
-                      bottomNavigationBuilder: (context, tabsRouter) =>
-                          CustomBottomBar(
-                        onTap: (val) async {
-                          await sessionModel.saveTabIndex(val);
-                          tabsRouter.setActiveIndex(val);
-                        },
-                        index: tabsRouter.activeIndex,
-                        isDevelop: developmentMode,
-                      ),
-                    ));
+                (context, isOnboarded, child) => sessionModel.isFirstInstall(
+                    (context, firstInstall, child) => AutoTabsScaffold(
+                          homeIndex: firstInstall ? 0 : 1, // * 0: Chat, 1: VPN
+                          routes: [
+                            isOnboarded
+                                ? const MessagesRouter()
+                                : const OnboardingRouter(),
+                            const VpnRouter(),
+                            const AccountRouter(),
+                            if (developmentMode) const DeveloperRoute(),
+                          ],
+                          bottomNavigationBuilder: (context, tabsRouter) =>
+                              CustomBottomBar(
+                            onTap: (val) async {
+                              await sessionModel.saveTabIndex(val);
+                              tabsRouter.setActiveIndex(val);
+                            },
+                            index: tabsRouter.activeIndex,
+                            isDevelop: developmentMode,
+                          ),
+                        )));
           },
         );
       },
