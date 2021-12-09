@@ -34,9 +34,8 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 		Handler: r,
 		// Serve over localhost, not for all interfaces, since we don't want
 		// the device to broadcast a Replica server
-		Addr:         "localhost:" + strconv.Itoa(l.Addr().(*net.TCPAddr).Port),
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Addr:              "localhost:" + strconv.Itoa(l.Addr().(*net.TCPAddr).Port),
+		ReadHeaderTimeout: 15 * time.Second,
 	}
 	return l, srv, nil
 }
