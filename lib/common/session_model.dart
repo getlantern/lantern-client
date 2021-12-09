@@ -114,4 +114,15 @@ class SessionModel extends Model {
     return methodChannel
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
+
+  Future<void> saveTabIndex<T>(int tabIndex) async {
+    return methodChannel.invokeMethod('saveTabIndex', <String, dynamic>{
+      'tabIndex': tabIndex,
+    });
+  }
+
+  Widget getTabIndex(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/tabIndex',
+        defaultValue: 0, builder: builder);
+  }
 }

@@ -295,7 +295,7 @@ class MessagingModel constructor(
                     tx.put("/firstAccessedChatTS", ts)
                 }
             }
-             "saveFirstSeenIntroducingTS" -> {
+            "saveFirstSeenIntroducingTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
                     tx.put("/firstSeenIntroducingTS", ts)
