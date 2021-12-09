@@ -57,30 +57,67 @@ class IntroducingModal extends StatelessWidget {
             children: [
               Flexible(
                 flex: 1,
-                child: LayoutBuilder(
-                    builder: (context, constraints) => Container(
-                          color: white,
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                          child: GridView.count(
-                            crossAxisCount: 5, // five columns
-                            mainAxisSpacing: 24.0, // space between rows
-                            crossAxisSpacing: 24.0, // space between columns
-                            padding: const EdgeInsetsDirectional.all(36),
-                            clipBehavior: Clip.hardEdge,
-                            children: List.generate(
-                                constraints.maxHeight ~/
-                                    80 * // a rough estimation for each tile size
-                                    5,
-                                (index) => CAssetImage(
-                                      path: index.isEven
-                                          ? ImagePaths
-                                              .introducing_illustration_bubble
-                                          : ImagePaths
-                                              .introducing_illustration_lock,
-                                    )),
+                child: Container(
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 40, end: 40, bottom: 32),
+                  color: white,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // This lays out the speech bubble and lock images in
+                      // pairs. The algorithm ensures the following:
+                      //
+                      // - speech bubble and lock are grouped in pairs
+                      // - each row of layout contains at least 2 pairs
+                      // - for wide screens, number of pairs per row grows to fill screen
+                      // - the number of rows is limited to however many fit without clipping vertically
+                      // - pairs and margins are scaled to match proportions from design
+
+                      const bubbleWidth = 49.0;
+                      const bubbleHeight = 44.0;
+                      const lockWidth = 26.0;
+                      const lockHeight = 39.0;
+                      final horizontalMargin = 46.5;
+                      final verticalMargin = 48.35;
+                      final pairWidth =
+                          bubbleWidth + lockWidth + 2 * horizontalMargin;
+                      final pairHeight = bubbleHeight + verticalMargin;
+                      final numColumns =
+                          max(2, constraints.maxWidth ~/ pairWidth);
+                      final scale = constraints.maxWidth /
+                          (numColumns * pairWidth).toDouble();
+                      final numRows =
+                          constraints.maxHeight ~/ (scale * pairHeight);
+                      final count = 2 * numColumns * numRows;
+                      return Container(
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight,
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          spacing: horizontalMargin * scale,
+                          runSpacing: verticalMargin * scale,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: List.generate(
+                            count,
+                            (index) => index.isEven
+                                ? CAssetImage(
+                                    path: ImagePaths
+                                        .introducing_illustration_bubble,
+                                    width: bubbleWidth * scale,
+                                    height: bubbleHeight * scale,
+                                  )
+                                : CAssetImage(
+                                    path: ImagePaths
+                                        .introducing_illustration_lock,
+                                    width: lockWidth * scale,
+                                    height: lockHeight * scale,
+                                  ),
                           ),
-                        )),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
               Flexible(
                 flex: 1,

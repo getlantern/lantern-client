@@ -82,8 +82,6 @@ class ImagePaths {
 
   // illustrations
   static const welcome_illustration = 'assets/images/welcome_illustration.svg';
-  static const introducing_illustration =
-      'assets/images/introducing_illustration.svg';
   static const introducing_illustration_bubble =
       'assets/images/introducing_illustration_bubble.svg';
   static const introducing_illustration_lock =
