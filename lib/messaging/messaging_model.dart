@@ -421,11 +421,6 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
-  Future<void> overrideOnBoarded(bool newValue) {
-    return methodChannel.invokeMethod(
-        'overrideOnBoarded', <String, dynamic>{'newValue': newValue});
-  }
-
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/onBoardingStatus',
         defaultValue: false, builder: builder);
@@ -446,7 +441,7 @@ class MessagingModel extends Model {
 
   Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>(
-        '/requestNotificationLastDismissed',
+        '/requestNotificationLastDismissedTS',
         defaultValue: 0,
         builder: builder);
   }
@@ -455,5 +450,28 @@ class MessagingModel extends Model {
     return methodChannel
         .invokeMethod('getDefaultRingtoneUri')
         .then((v) => v as String);
+  }
+
+  Future<void> saveFirstAccessedChatTS<T>() async {
+    return methodChannel.invokeMethod('saveFirstAccessedChatTS');
+  }
+
+  Widget getFirstAccessedChatTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstAccessedChatTS',
+        defaultValue: 0, builder: builder);
+  }
+
+  Future<void> saveFirstSeenIntroducingTS<T>() async {
+    return methodChannel.invokeMethod('saveFirstSeenIntroducingTS');
+  }
+
+  Widget getFirstSeenIntroducingTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstSeenIntroducingTS',
+        defaultValue: 0, builder: builder);
+  }
+
+  // for dev purposes
+  Future<void> resetAllFlagsAndTimestamps() {
+    return methodChannel.invokeMethod('resetAllFlagsAndTimestamps');
   }
 }

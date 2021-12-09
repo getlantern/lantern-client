@@ -160,152 +160,174 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   }
 
   Widget renderQRScanner(BuildContext context) {
-    return showFullscreenDialog(
-      context: context,
-      iconColor: white,
-      // icon color
-      topColor: grey5,
-      title: Center(
-        child: CText(
-            widget.isVerificationMode
-                ? 'contact_verification'.i18n
-                : 'banner_source_qr'.i18n,
-            style: tsHeading3.copiedWith(color: white)),
-      ),
-      backButton: mirrorLTR(
-          context: context,
-          child: CAssetImage(
-            path: ImagePaths.arrow_back,
-            color: white,
-          )),
-      onBackCallback: () => Navigator.pop(context, null),
-      child: Container(
-        color: grey5,
-        padding: const EdgeInsetsDirectional.only(bottom: 20),
+    return Container(
+        height: MediaQuery.of(context).size.height,
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ((provisionalContactId != null && scanning))
-                        ? PulseAnimation(
-                            CText(
-                              'qr_info_waiting_qr'.i18n,
-                              style: tsBody1Color(white),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Row(
-                            children: [
-                              CText(
-                                widget.isVerificationMode
-                                    ? 'qr_info_verification_scan'.i18n
-                                    : 'qr_info_f2f_scan'.i18n,
-                                style: tsBody1Color(white),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                    start: 4.0),
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () => showInfoDialog(context,
-                                      title: widget.isVerificationMode
-                                          ? 'qr_info_verification_title'.i18n
-                                          : 'qr_info_f2f_title'.i18n,
-                                      des: widget.isVerificationMode
-                                          ? 'qr_info_verification_des'.i18n
-                                          : 'qr_info_f2f_des'.i18n,
-                                      assetPath: ImagePaths.qr_code,
-                                      buttonText: 'info_dialog_confirm'
-                                          .i18n
-                                          .toUpperCase()),
-                                  child: Icon(
-                                    Icons.info,
-                                    size: 14,
-                                    color: white,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                  ],
-                ),
+          children: [
+            Container(
+              color: grey5,
+              height: 100,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(top: 25),
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: mirrorLTR(
+                          context: context,
+                          child: CAssetImage(
+                            path: ImagePaths.arrow_back,
+                            color: white,
+                          )),
+                      onPressed: () => Navigator.pop(context, null),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(top: 25),
+                    alignment: Alignment.center,
+                    child: Center(
+                      child: CText(
+                          widget.isVerificationMode
+                              ? 'contact_verification'.i18n
+                              : 'banner_source_qr'.i18n,
+                          style: tsHeading3.copiedWith(color: white)),
+                    ),
+                  ),
+                ],
               ),
-              /* 
+            ),
+            Expanded(
+                child: Container(
+              color: grey5,
+              padding: const EdgeInsetsDirectional.only(bottom: 20),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ((provisionalContactId != null && scanning))
+                              ? PulseAnimation(
+                                  CText(
+                                    'qr_info_waiting_qr'.i18n,
+                                    style: tsBody1Color(white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              : Row(
+                                  children: [
+                                    CText(
+                                      widget.isVerificationMode
+                                          ? 'qr_info_verification_scan'.i18n
+                                          : 'qr_info_f2f_scan'.i18n,
+                                      style: tsBody1Color(white),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 4.0),
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTap: () => showInfoDialog(context,
+                                            title: widget.isVerificationMode
+                                                ? 'qr_info_verification_title'
+                                                    .i18n
+                                                : 'qr_info_f2f_title'.i18n,
+                                            des: widget.isVerificationMode
+                                                ? 'qr_info_verification_des'
+                                                    .i18n
+                                                : 'qr_info_f2f_des'.i18n,
+                                            assetPath: ImagePaths.qr_code,
+                                            buttonText: 'info_dialog_confirm'
+                                                .i18n
+                                                .toUpperCase()),
+                                        child: Icon(
+                                          Icons.info,
+                                          size: 14,
+                                          color: white,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                        ],
+                      ),
+                    ),
+                    /* 
               * QR SCANNER
               */
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 70, end: 70, bottom: 20.0),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        CustomPaint(
-                          painter: QRScannerBorderPainter(),
-                          child: Container(
-                            padding: const EdgeInsetsDirectional.all(6.0),
-                            child: Opacity(
-                              opacity:
-                                  (provisionalContactId != null && scanning)
-                                      ? 0.5
-                                      : 1,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: QRView(
-                                  key: _qrKey,
-                                  onQRViewCreated: (controller) =>
-                                      _onQRViewCreated(controller, model),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 20.0, start: 70, end: 70, bottom: 20.0),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CustomPaint(
+                                painter: QRScannerBorderPainter(),
+                                child: Container(
+                                  padding: const EdgeInsetsDirectional.all(6.0),
+                                  child: Opacity(
+                                    opacity: (provisionalContactId != null &&
+                                            scanning)
+                                        ? 0.5
+                                        : 1,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: QRView(
+                                        key: _qrKey,
+                                        onQRViewCreated: (controller) =>
+                                            _onQRViewCreated(controller, model),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              if ((provisionalContactId != null && scanning) ||
+                                  proceedWithoutProvisionals)
+                                _renderWaitingUI(
+                                    proceedWithoutProvisionals:
+                                        proceedWithoutProvisionals,
+                                    countdownController: countdownController,
+                                    timeoutMillis: timeoutMillis,
+                                    fontColor: white,
+                                    infoText: ''),
+                            ],
                           ),
                         ),
-                        if ((provisionalContactId != null && scanning) ||
-                            proceedWithoutProvisionals)
-                          _renderWaitingUI(
-                              proceedWithoutProvisionals:
-                                  proceedWithoutProvisionals,
-                              countdownController: countdownController,
-                              timeoutMillis: timeoutMillis,
-                              fontColor: white,
-                              infoText: ''),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              /* 
+                    /* 
               * YOUR QR CODE
               */
-              CText(
-                'qr_for_your_contact'.i18n,
-                style: tsBody1Color(white),
-              ),
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsetsDirectional.only(
-                      top: 20.0, start: 70, end: 70, bottom: 20.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: QrImage(
-                      data: widget.me.contactId.id,
-                      padding: const EdgeInsets.all(16),
-                      backgroundColor: white,
-                      foregroundColor: black,
-                      errorCorrectionLevel: QrErrorCorrectLevel.H,
+                    CText(
+                      'qr_for_your_contact'.i18n,
+                      style: tsBody1Color(white),
                     ),
-                  ),
-                ),
-              ),
-            ]),
-      ),
-    );
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 20.0, start: 70, end: 70, bottom: 20.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: QrImage(
+                            data: widget.me.contactId.id,
+                            padding: const EdgeInsets.all(16),
+                            backgroundColor: white,
+                            foregroundColor: black,
+                            errorCorrectionLevel: QrErrorCorrectLevel.H,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+            ))
+          ],
+        ));
   }
 }
 

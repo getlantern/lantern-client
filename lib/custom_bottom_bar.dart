@@ -32,16 +32,50 @@ class CustomBottomBar extends StatelessWidget {
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: CustomBottomBarItem(
-            currentIndex: index,
-            position: 0,
-            total: isDevelop ? 4 : 3,
-            label: CText('secure_chat'.i18n,
-                style: tsFloatingLabel.copiedWith(
-                    color: index == 0 ? black : grey5)),
-            icon: NumUnviewedWrapper(index: index, model: messagingModel),
-            onTap: () => onTap!(0),
-          ),
+          icon: messagingModel.getFirstAccessedChatTS(
+              (context, firstAccessedChatTS, child) => NowBuilder(
+                  // * we only show NEW when the user has not accessed the Chat tab () [firstAccessedChatTS == 0] AND a week has not elapsed since we started counting
+                  calculate: (now) =>
+                      firstAccessedChatTS == 0 &&
+                      (now.millisecondsSinceEpoch - firstAccessedChatTS >=
+                          oneWeekInMillis),
+                  builder: (BuildContext context, bool showBadge) =>
+                      CustomBottomBarItem(
+                        currentIndex: index,
+                        position: 0,
+                        total: isDevelop ? 4 : 3,
+                        label: CText('secure_chat'.i18n,
+                            style: tsFloatingLabel.copiedWith(
+                                color: index == 0 ? black : grey5)),
+                        icon: CBadge(
+                          showBadge: showBadge,
+                          end: -20,
+                          top: -10,
+                          customBadge: Container(
+                            padding: const EdgeInsetsDirectional.only(
+                                top: 2.0, bottom: 2.0, start: 5.0, end: 5.0),
+                            decoration: BoxDecoration(
+                              color: blue3,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(80.0),
+                              ),
+                            ),
+                            child: Text('new'.i18n.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: white,
+                                )),
+                          ),
+                          child: NumUnviewedWrapper(
+                              index: index, model: messagingModel),
+                        ),
+                        onTap: () async {
+                          if (firstAccessedChatTS == 0) {
+                            await messagingModel.saveFirstAccessedChatTS();
+                          }
+                          onTap!(0);
+                        },
+                      ))),
           label: '',
           tooltip: 'chats'.i18n,
         ),

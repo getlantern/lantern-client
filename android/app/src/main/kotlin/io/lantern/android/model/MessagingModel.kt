@@ -278,13 +278,6 @@ class MessagingModel constructor(
                     tx.put("/onBoardingStatus", true)
                 }
             }
-            // for dev purposes
-            "overrideOnBoarded" -> {
-                val newValue = call.argument<Boolean>("newValue")!!
-                db.mutate { tx ->
-                    tx.put("/onBoardingStatus", newValue)
-                }
-            }
             "markCopiedRecoveryKey" -> {
                 db.mutate { tx ->
                     tx.put("/copiedRecoveryStatus", true)
@@ -293,7 +286,29 @@ class MessagingModel constructor(
             "saveNotificationsTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/requestNotificationLastDismissed", ts)
+                    tx.put("/requestNotificationLastDismissedTS", ts)
+                }
+            }
+            "saveFirstAccessedChatTS" -> {
+                val ts = System.currentTimeMillis()
+                db.mutate { tx ->
+                    tx.put("/firstAccessedChatTS", ts)
+                }
+            }
+             "saveFirstSeenIntroducingTS" -> {
+                val ts = System.currentTimeMillis()
+                db.mutate { tx ->
+                    tx.put("/firstSeenIntroducingTS", ts)
+                }
+            }
+            // DEV PURPOSES
+            "resetAllFlagsAndTimestamps" -> {
+                db.mutate { tx ->
+                    tx.put("/onBoardingStatus", false)
+                    tx.put("/copiedRecoveryStatus", false)
+                    tx.put("/firstAccessedChatTS", 0)
+                    tx.put("/firstSeenIntroducingTS", 0)
+                    tx.put("/requestNotificationLastDismissedTS", 0)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
