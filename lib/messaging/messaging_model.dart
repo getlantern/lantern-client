@@ -470,8 +470,12 @@ class MessagingModel extends Model {
         defaultValue: 0, builder: builder);
   }
 
-  // for dev purposes
-  Future<void> resetAllFlagsAndTimestamps() {
-    return methodChannel.invokeMethod('resetAllFlagsAndTimestamps');
+  // * DEV PURPOSES
+  Future<void> resetTimestamps() {
+    return methodChannel.invokeMethod('resetTimestamps');
+  }
+
+  Future<void> resetFlags() {
+    return methodChannel.invokeMethod('resetFlags');
   }
 }
