@@ -1,5 +1,8 @@
 import 'dart:io';
+
 import 'package:lantern/replica/logic/replica_model.dart';
+
+final replicaModel = ReplicaModel();
 
 // This class works like this:
 // - Always use it in static form. Don't instantiate it
@@ -7,7 +10,7 @@ import 'package:lantern/replica/logic/replica_model.dart';
 // - Then, use any method here you like. An exception will occur if 'await
 //   ReplicaCommon.init()' was never called at least once
 class ReplicaCommon {
-  static final _replicaModel = ReplicaModel();
+  static final _replicaModel = replicaModel;
   static bool _didCallInit = false;
   static String? _replicaAddr;
 
