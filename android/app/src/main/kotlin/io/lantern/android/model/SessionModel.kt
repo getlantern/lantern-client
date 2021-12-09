@@ -102,6 +102,7 @@ class SessionModel(
                     tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
                 }
             }
+            // https://stackoverflow.com/questions/26352881/detect-if-new-install-or-updated-version-android-app/34194960#34194960
             "isFirstInstall" -> {
                 val context = getApplicationContext()
                 val status = try {
