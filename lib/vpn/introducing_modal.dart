@@ -72,15 +72,11 @@ class IntroducingModal extends StatelessWidget {
                       // - the number of rows is limited to however many fit without clipping vertically
                       // - pairs and margins are scaled to match proportions from design
 
-                      const bubbleWidth = 49.0;
-                      const bubbleHeight = 44.0;
-                      const lockWidth = 26.0;
-                      const lockHeight = 39.0;
-                      final horizontalMargin = 46.5;
-                      final verticalMargin = 48.35;
-                      final pairWidth =
-                          bubbleWidth + lockWidth + 2 * horizontalMargin;
-                      final pairHeight = bubbleHeight + verticalMargin;
+                      const iconSize = 48;
+                      final horizontalMargin = 32;
+                      final verticalMargin = 40;
+                      final pairWidth = 2 * iconSize + 2 * horizontalMargin;
+                      final pairHeight = iconSize + verticalMargin;
                       final numColumns =
                           max(2, constraints.maxWidth ~/ pairWidth);
                       final scale = constraints.maxWidth /
@@ -103,14 +99,14 @@ class IntroducingModal extends StatelessWidget {
                                 ? CAssetImage(
                                     path: ImagePaths
                                         .introducing_illustration_bubble,
-                                    width: bubbleWidth * scale,
-                                    height: bubbleHeight * scale,
+                                    width: iconSize * scale,
+                                    height: iconSize * scale,
                                   )
                                 : CAssetImage(
                                     path: ImagePaths
                                         .introducing_illustration_lock,
-                                    width: lockWidth * scale,
-                                    height: lockHeight * scale,
+                                    width: iconSize * scale,
+                                    height: iconSize * scale,
                                   ),
                           ),
                         ),
@@ -168,6 +164,7 @@ class IntroducingModal extends StatelessWidget {
                                   await context.router.pop();
 
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
+                                  // This comment looks useful as well https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
 
                                   // 1. update Tab location to Chat
                                   parentContext.router
