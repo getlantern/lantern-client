@@ -123,10 +123,10 @@ class SessionModel extends Model {
 
   Widget getTabIndex(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>('/tabIndex',
-        defaultValue: 0, builder: builder);
+        defaultValue: -1, builder: builder);
   }
 
-  Widget isFirstInstall(ValueWidgetBuilder<bool> builder) {
+  Widget getInstallOrUpgradeStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/isFreshInstall',
         defaultValue: false, builder: builder);
   }

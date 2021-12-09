@@ -44,7 +44,7 @@ import 'package:lantern/messaging/introductions/introductions.dart';
         page: FullScreenDialog,
         name: 'FullScreenDialogPage',
         path: 'fullScreenDialogPage',
-        transitionsBuilder: defaultTransition,
+        transitionsBuilder: popupTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
