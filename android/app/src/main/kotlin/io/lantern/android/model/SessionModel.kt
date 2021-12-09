@@ -95,6 +95,11 @@ class SessionModel(
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
             }
+            "saveTabIndex" -> {
+                db.mutate { tx ->
+                    tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
