@@ -177,8 +177,8 @@ class IntroducingModal extends StatelessWidget {
                                       .innerRouterOf('OnboardingRouter');
 
                                   // 3. navigate to SecureNumberRecovery route
-                                  await onboardingRouter
-                                      ?.navigate(const SecureNumberRecovery());
+                                  await onboardingRouter?.navigate(
+                                      const SecureChatNumberMessaging());
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),
