@@ -74,7 +74,7 @@ class VPNTab extends StatelessWidget {
               // if we have never seen the Intro and we have never clicked on the Chat tab
               if (firstSeenIntroducingTS == 0 && firstAccessedChatTS == 0) {
                 context.pushRoute(FullScreenDialogPage(
-                    widget: IntroducingModal(autorouterContext: context)));
+                    widget: IntroducingModal(parentContext: context)));
               }
               return renderVPN(sessionModel);
             }));
