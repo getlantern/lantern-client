@@ -1,10 +1,10 @@
 import 'package:lantern/messaging/messaging.dart';
 
 class IntroducingModal extends StatelessWidget {
-  final BuildContext autorouterContext;
+  final BuildContext parentContext;
 
   IntroducingModal({
-    required this.autorouterContext,
+    required this.parentContext,
   });
 
   final tsCustomButton = CTextStyle(
@@ -166,12 +166,22 @@ class IntroducingModal extends StatelessWidget {
                                   await messagingModel
                                       .saveFirstSeenIntroducingTS();
                                   await context.router.pop();
+
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
-                                  autorouterContext.tabsRouter.setActiveIndex(
-                                      0); // index 0 for Chats tab
-                                  // TODO: fix
-                                  autorouterContext.innerRouterOf<TabsRouter>(
-                                      SecureNumberRecovery.name);
+
+                                  // 1. update Tab location to Chat
+                                  parentContext.router
+                                      .parent<TabsRouter>()!
+                                      .setActiveIndex(
+                                          0); // * ← index 0 for Chats tab
+                                  // 2. find Onboarding router
+                                  final onboardingRouter = parentContext.router
+                                      .parent<TabsRouter>()!
+                                      .innerRouterOf('OnboardingRouter');
+
+                                  // 3. navigate to SecureNumberRecovery route
+                                  await onboardingRouter
+                                      ?.navigate(const SecureNumberRecovery());
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),
