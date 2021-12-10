@@ -9,9 +9,7 @@ class CallAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
-    return model.singleContact(
+    return messagingModel.singleContact(
       contact,
       (context, contact, child) => IconButton(
         visualDensity: VisualDensity.compact,
@@ -28,8 +26,7 @@ class CallAction extends StatelessWidget {
                 onTap: () async {
                   Navigator.pop(context);
                   await context.pushRoute(
-                    FullScreenDialogPage(
-                        widget: Call(contact: contact, model: model)),
+                    FullScreenDialogPage(widget: Call(contact: contact)),
                   );
                 },
               ),

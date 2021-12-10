@@ -17,7 +17,6 @@ class ContactConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
     final introduction = message.introduction;
     return Column(
       crossAxisAlignment: isLTR(context)
@@ -41,7 +40,7 @@ class ContactConnectionCard extends StatelessWidget {
                   _showOptions(
                     context,
                     introduction,
-                    model,
+                    messagingModel,
                     contact,
                   );
                 }

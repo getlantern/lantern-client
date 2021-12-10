@@ -30,6 +30,7 @@ export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:share/share.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 
+export 'disable_back_button.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
 export 'lru_cache.dart';
@@ -38,8 +39,6 @@ export 'model_event_channel.dart';
 export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
-export 'disable_back_button.dart';
-
 // UI elements
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
@@ -62,8 +61,8 @@ export 'ui/custom/text_field.dart';
 export 'ui/dimens.dart';
 export 'ui/focused_menu.dart';
 export 'ui/full_screen_dialog.dart';
-export 'ui/humanize_seconds.dart';
 export 'ui/humanize_past_future.dart';
+export 'ui/humanize_seconds.dart';
 export 'ui/humanized_date.dart';
 export 'ui/image_paths.dart';
 export 'ui/labeled_divider.dart';

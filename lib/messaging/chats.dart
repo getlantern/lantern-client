@@ -22,11 +22,10 @@ class _ChatsState extends State<Chats> {
     super.dispose();
   }
 
-  void handleReminder(
-      Iterable<PathAndValue<Contact>> _contacts, MessagingModel model) async {
+  void handleReminder(Iterable<PathAndValue<Contact>> _contacts) async {
     //* Store timestamp to DB and compare to mostRecentMessageTs
     try {
-      await model.saveNotificationsTS();
+      await messagingModel.saveNotificationsTS();
     } catch (e) {
       print(e);
     }
@@ -58,13 +57,11 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-    var sessionModel = context.watch<SessionModel>();
     return BaseScreen(
         title: 'chats'.i18n,
         actions: [
           // * Notifications icon
-          model.contactsByActivity(builder: (context,
+          messagingModel.contactsByActivity(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             final requests = _contacts
                 .where((element) => element.value.isUnaccepted())
@@ -82,11 +79,11 @@ class _ChatsState extends State<Chats> {
                 .mostRecentMessageTs
                 .toInt();
 
-            return model.getLastDismissedNotificationTS(
+            return messagingModel.getLastDismissedNotificationTS(
                 (context, mostRecentNotifTS, child) => requests.isNotEmpty &&
                         (mostRecentUnacceptedTS > mostRecentNotifTS)
                     ? RoundButton(
-                        onPressed: () => handleReminder(_contacts, model),
+                        onPressed: () => handleReminder(_contacts),
                         backgroundColor: transparent,
                         icon: CBadge(
                           count: requests.length,
@@ -111,7 +108,8 @@ class _ChatsState extends State<Chats> {
           IconButton(
             visualDensity: VisualDensity.compact,
             onPressed: () async => showBottomModal(context: context, children: [
-              model.me((_, me, __) => ShareYourChatNumber(me).bottomItem),
+              messagingModel
+                  .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
               sessionModel.proUser(
                 (_, isPro, child) => ListItemFactory.bottomItem(
                   icon: ImagePaths.account,
@@ -140,7 +138,7 @@ class _ChatsState extends State<Chats> {
             /*
             * Introductions
             */
-            model.bestIntroductions(
+            messagingModel.bestIntroductions(
                 builder: (context,
                         Iterable<PathAndValue<StoredMessage>> introductions,
                         Widget? child) =>
@@ -164,7 +162,7 @@ class _ChatsState extends State<Chats> {
             /*
             * Messages
             */
-            model.contactsByActivity(builder: (context,
+            messagingModel.contactsByActivity(builder: (context,
                 Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
               // * NO CONTACTS
               if (_contacts.isEmpty) {

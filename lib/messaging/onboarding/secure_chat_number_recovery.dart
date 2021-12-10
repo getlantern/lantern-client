@@ -50,7 +50,6 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
     return BaseScreen(
         title: 'secure_chat_number_recovery'.i18n,
         body: PinnedButtonLayout(
@@ -93,7 +92,7 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
             ],
             button: Button(
                 text: 'Submit'.i18n,
-                onPressed: () => handleButtonPress(model),
+                onPressed: () => handleButtonPress(messagingModel),
                 disabled: !shouldSubmit)));
   }
 }

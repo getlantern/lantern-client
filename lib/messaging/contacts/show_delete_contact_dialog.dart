@@ -5,7 +5,6 @@ import '../messaging.dart';
 void showDeleteContactDialog(
   BuildContext context,
   Contact contact,
-  MessagingModel model,
 ) async {
   await showDialog(
     context: context,
@@ -44,7 +43,8 @@ void showDeleteContactDialog(
                 onPressed: () async {
                   context.loaderOverlay.show(widget: spinner);
                   try {
-                    await model.deleteDirectContact(contact.contactId.id);
+                    await messagingModel
+                        .deleteDirectContact(contact.contactId.id);
                   } catch (e, s) {
                     showErrorDialog(context,
                         e: e, s: s, des: 'error_delete_contact'.i18n);

@@ -29,8 +29,14 @@ class MessagingModel constructor(
     flutterEngine: FlutterEngine,
     private val messaging: Messaging
 ) : BaseModel("messaging", flutterEngine, messaging.db) {
-    private val voiceMemoFile = File(activity.cacheDir, "_voicememo.opus") // TODO: would be nice not to record the unencrypted voice memo to disk
-    private val videoFile = File(activity.cacheDir, "_playingvideo") // TODO: would be nice to expose this via a MediaDataSource instead
+    private val voiceMemoFile = File(
+        activity.cacheDir,
+        "_voicememo.opus"
+    ) // TODO: would be nice not to record the unencrypted voice memo to disk
+    private val videoFile = File(
+        activity.cacheDir,
+        "_playingvideo"
+    ) // TODO: would be nice to expose this via a MediaDataSource instead
     private val stopRecording = AtomicReference<Runnable>()
 
     init {
@@ -162,8 +168,14 @@ class MessagingModel constructor(
             "blockDirectContact" -> messaging.blockDirectContact(call.argument("unsafeId")!!)
             "unblockDirectContact" -> messaging.unblockDirectContact(call.argument("unsafeId")!!)
             "introduce" -> messaging.introduce(unsafeRecipientIds = call.argument<List<String>>("unsafeRecipientIds")!!)
-            "acceptIntroduction" -> messaging.acceptIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
-            "rejectIntroduction" -> messaging.rejectIntroduction(call.argument<String>("unsafeFromId")!!, call.argument<String>("unsafeToId")!!)
+            "acceptIntroduction" -> messaging.acceptIntroduction(
+                call.argument<String>("unsafeFromId")!!,
+                call.argument<String>("unsafeToId")!!
+            )
+            "rejectIntroduction" -> messaging.rejectIntroduction(
+                call.argument<String>("unsafeFromId")!!,
+                call.argument<String>("unsafeToId")!!
+            )
             "recover" -> messaging.recover(recoveryCode = call.argument<String>("recoveryCode")!!)
             "getRecoveryCode" -> messaging.recoveryCode
             /*
@@ -179,15 +191,37 @@ class MessagingModel constructor(
                     text = call.argument("text"),
                     unsafeReplyToSenderId = call.argument("replyToSenderId"),
                     replyToId = call.argument("replyToId"),
-                    attachments = call.argument<List<ByteArray>>("attachments")?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
+                    attachments = call.argument<List<ByteArray>>("attachments")
+                        ?.map { Model.StoredAttachment.parseFrom(it) }?.toTypedArray(),
                 )
             // "getContactFromUsername" -> messaging.getContactFromUsername(
             //     call.argument("username")!!,
             // )
-            "react" -> messaging.react(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath, call.argument("reaction")!!)
-            "markViewed" -> messaging.markViewed(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "deleteLocally" -> messaging.deleteLocally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
-            "deleteGlobally" -> messaging.deleteGlobally(Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath)
+            "react" -> messaging.react(
+                Model.StoredMessage.parseFrom(call.argument<ByteArray>("msg")!!).dbPath,
+                call.argument("reaction")!!
+            )
+            "markViewed" -> messaging.markViewed(
+                Model.StoredMessage.parseFrom(
+                    call.argument<ByteArray>(
+                        "msg"
+                    )!!
+                ).dbPath
+            )
+            "deleteLocally" -> messaging.deleteLocally(
+                Model.StoredMessage.parseFrom(
+                    call.argument<ByteArray>(
+                        "msg"
+                    )!!
+                ).dbPath
+            )
+            "deleteGlobally" -> messaging.deleteGlobally(
+                Model.StoredMessage.parseFrom(
+                    call.argument<ByteArray>(
+                        "msg"
+                    )!!
+                ).dbPath
+            )
             /*
             * Attachments
             */
@@ -211,7 +245,8 @@ class MessagingModel constructor(
                 return messaging.createAttachment(file, "", metadata).toByteArray()
             }
             "decryptAttachment" -> {
-                val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
+                val attachment =
+                    Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
                 ByteArrayOutputStream(attachment.attachment.plaintextLength.toInt()).use { output ->
                     attachment.inputStream.use { input ->
                         Util.copy(input, output)
@@ -220,7 +255,8 @@ class MessagingModel constructor(
                 }
             }
             "decryptVideoForPlayback" -> {
-                val attachment = Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
+                val attachment =
+                    Model.StoredAttachment.parseFrom(call.argument<ByteArray>("attachment")!!)
                 videoFile.delete()
                 videoFile.outputStream().use { output ->
                     attachment.inputStream.use { input ->
@@ -248,7 +284,11 @@ class MessagingModel constructor(
                             numTokens = call.argument("numTokens")!!
                         )
                     ).map {
-                        mapOf("snippet" to it.snippet, "path" to it.path, "contact" to it.value.bytes)
+                        mapOf(
+                            "snippet" to it.snippet,
+                            "path" to it.path,
+                            "contact" to it.value.bytes
+                        )
                     }
             "searchMessages" ->
                 messaging
@@ -260,7 +300,11 @@ class MessagingModel constructor(
                             numTokens = call.argument("numTokens")!!
                         )
                     ).map {
-                        mapOf("snippet" to it.snippet, "path" to it.path, "message" to it.value.bytes)
+                        mapOf(
+                            "snippet" to it.snippet,
+                            "path" to it.path,
+                            "message" to it.value.bytes
+                        )
                     }
             /*
             * Reminders
@@ -289,28 +333,42 @@ class MessagingModel constructor(
                     tx.put("/requestNotificationLastDismissedTS", ts)
                 }
             }
-            "saveFirstAccessedChatTS" -> {
-                val ts = System.currentTimeMillis()
-                db.mutate { tx ->
-                    tx.put("/firstAccessedChatTS", ts)
+            "shouldShowTryLanternChatModal" -> {
+                // https://stackoverflow.com/questions/26352881/detect-if-new-install-or-updated-version-android-app/34194960#34194960
+                val firstInstallTime: Long = activity.packageManager
+                    .getPackageInfo(activity.packageName, 0).firstInstallTime
+                val lastUpdateTime: Long = activity.packageManager
+                    .getPackageInfo(activity.packageName, 0).lastUpdateTime
+                val appHasBeenUpdated = firstInstallTime != lastUpdateTime
+                if (!appHasBeenUpdated) {
+                    return false
+                }
+
+                val path = "/hasShownTryLanternChatModal"
+                return db.mutate { tx ->
+                    val hasShownModal = tx.get(path) ?: false
+                    if (!hasShownModal) {
+                        tx.put(path, true)
+                        tx.put("/firstShownTryLanternChatModalTS", System.currentTimeMillis())
+                    }
+
+                    val hasOnboarded = tx.get("/onBoardingStatus") ?: false
+                    !hasShownModal && !hasOnboarded
                 }
             }
-            "saveFirstSeenIntroducingTS" -> {
-                val ts = System.currentTimeMillis()
-                db.mutate { tx ->
-                    tx.put("/firstSeenIntroducingTS", ts)
-                }
+            "dismissTryLanternChatBadge" -> {
+                db.mutate { tx -> tx.put("/firstShownTryLanternChatModalTS", 0) }
             }
             // DEV PURPOSES
             "resetTimestamps" -> {
                 db.mutate { tx ->
-                    tx.put("/firstAccessedChatTS", 0)
-                    tx.put("/firstSeenIntroducingTS", 0)
+                    tx.put("/firstShownTryLanternChatModalTS", 0)
                     tx.put("/requestNotificationLastDismissedTS", 0)
                 }
             }
             "resetFlags" -> {
                 db.mutate { tx ->
+                    tx.put("/hasShownTryLanternChatModal", false)
                     tx.put("/onBoardingStatus", false)
                     tx.put("/copiedRecoveryStatus", false)
                 }
@@ -320,7 +378,10 @@ class MessagingModel constructor(
     }
 
     private fun startRecordingVoiceMemo(): Boolean {
-        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && activity.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && activity.checkSelfPermission(
+                android.Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 activity,
                 arrayOf(android.Manifest.permission.RECORD_AUDIO),
@@ -339,7 +400,12 @@ class MessagingModel constructor(
     private fun doStartRecordingVoiceMemo() {
         stopRecording.set(
             OpusRecorder.startRecording(
-                voiceMemoFile.absolutePath, OpusRecorder.OpusApplication.VOIP, 16000, 24000, false, 120000
+                voiceMemoFile.absolutePath,
+                OpusRecorder.OpusApplication.VOIP,
+                16000,
+                24000,
+                false,
+                120000
             ) { audioSessionId ->
                 if (AutomaticGainControl.isAvailable()) {
                     try {

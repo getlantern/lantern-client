@@ -3,7 +3,6 @@ import 'package:lantern/vpn/vpn.dart';
 class VPNSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var vpnModel = context.watch<VpnModel>();
     return Transform.scale(
       scale: 2,
       child: vpnModel

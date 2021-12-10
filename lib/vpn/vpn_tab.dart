@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/vpn/try_lantern_chat.dart';
 
+import 'try_lantern_chat.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -19,7 +19,8 @@ class VPNTab extends StatelessWidget {
         buttonText: 'OK'.i18n);
   }
 
-  Widget renderVPN(SessionModel sessionModel) {
+  @override
+  Widget build(BuildContext context) {
     return sessionModel
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
@@ -36,7 +37,8 @@ class VPNTab extends StatelessWidget {
             Button(
                 text: 'show modal',
                 onPressed: () async {
-                  await messagingModel.resetTimestamps();
+                  await context.router.push(FullScreenDialogPage(
+                      widget: TryLanternChat(parentContext: context)));
                 }),
             VPNSwitch(),
             Container(
@@ -65,49 +67,5 @@ class VPNTab extends StatelessWidget {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
-    return messagingModel.getFirstAccessedChatTS((_, firstAccessedChatTS,
-            child) =>
-        messagingModel.getFirstSeenIntroducingTS((_, firstSeenIntroducingTS,
-                child) =>
-            sessionModel.getInstallOrUpgradeStatus((_, isFreshInstall, child) {
-              if (shouldModalShow(
-                context,
-                firstSeenIntroducingTS,
-                firstAccessedChatTS,
-                isFreshInstall,
-              )) {
-                context.router.push(FullScreenDialogPage(
-                    widget: TryLanternChat(parentContext: context)));
-              }
-              return renderVPN(sessionModel);
-            })));
-  }
-
-  // Returns true when the following are true:
-  // 1. we have never seen the modal
-  // 2. we have never clicked on the Chat tab
-  // 3. we are on VPN tab
-  // 4. this is an upgrade, not a fresh install
-  bool shouldModalShow(
-    BuildContext context,
-    int firstSeenIntroducingTS,
-    int firstAccessedChatTS,
-    bool isFreshInstall,
-  ) {
-    // detects tab index
-    // since FullScreenDialogPage belongs to router which is one level up from VPN router (and hence can appear anywhere in the app)
-    final tabsRouter = context.router.parent<TabsRouter>();
-    final isVPNtab = tabsRouter?.activeIndex == 1;
-    return firstSeenIntroducingTS == 0 &&
-        firstAccessedChatTS == 0 &&
-        isVPNtab &&
-        !isFreshInstall;
   }
 }

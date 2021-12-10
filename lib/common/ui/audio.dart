@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 
+final audio = Audio();
+
 /// Provides a facility for playing back audio using a singleton AudioPlayer.
 class Audio {
   final AudioPlayer _audioPlayer = AudioPlayer();

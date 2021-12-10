@@ -16,7 +16,6 @@ class AddViaQR extends StatefulWidget {
 }
 
 class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
-  late MessagingModel model;
   String? provisionalContactId;
   int timeoutMillis = 0;
   late AnimationController countdownController;
@@ -55,7 +54,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       return;
     }
 
-    /* 
+    /*
     * Add provisional contact - regardless of whether we are in verifying or face-to-face adding mode, adding an unverified provisional contact
     */
     var result = await model.addProvisionalContact(unsafeId, source);
@@ -148,18 +147,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     }
     if (provisionalContactId != null) {
       // when exiting this screen, immediately delete any provisional contact
-      model.deleteProvisionalContact(provisionalContactId!);
+      messagingModel.deleteProvisionalContact(provisionalContactId!);
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    model = context.watch<MessagingModel>();
-    return renderQRScanner(context);
-  }
-
-  Widget renderQRScanner(BuildContext context) {
     return Container(
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -255,7 +249,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
-                    /* 
+                    /*
               * QR SCANNER
               */
                     Flexible(
@@ -281,7 +275,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                       child: QRView(
                                         key: _qrKey,
                                         onQRViewCreated: (controller) =>
-                                            _onQRViewCreated(controller, model),
+                                            _onQRViewCreated(
+                                                controller, messagingModel),
                                       ),
                                     ),
                                   ),
@@ -301,7 +296,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    /* 
+                    /*
               * YOUR QR CODE
               */
                     CText(
