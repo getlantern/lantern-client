@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'common.dart';
 
 class SessionModel extends Model {
@@ -123,11 +124,6 @@ class SessionModel extends Model {
 
   Widget getTabIndex(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>('/tabIndex',
-        defaultValue: -1, builder: builder);
-  }
-
-  Widget getInstallOrUpgradeStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/isFreshInstall',
-        defaultValue: false, builder: builder);
+        defaultValue: 0, builder: builder);
   }
 }

@@ -9,6 +9,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i19;
+import 'package:flutter/cupertino.dart' as _i28;
 import 'package:flutter/material.dart' as _i27;
 import 'package:lantern/account/account_management.dart' as _i9;
 import 'package:lantern/account/account_tab.dart' as _i25;
@@ -34,7 +35,7 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i5;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i3;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i7;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i8;
-import 'package:lantern/messaging/messaging.dart' as _i28;
+import 'package:lantern/messaging/messaging.dart' as _i29;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i22;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
@@ -479,7 +480,7 @@ class FullScreenDialogPageArgs {
 /// generated route for [_i3.Conversation]
 class Conversation extends _i19.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i28.ContactId contactId,
+      {required _i29.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
       : super(name,
@@ -498,7 +499,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i28.ContactId contactId;
+  final _i29.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -513,7 +514,7 @@ class ConversationArgs {
 /// generated route for [_i4.ContactInfo]
 class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
   ContactInfo(
-      {required _i28.MessagingModel model, required _i28.Contact contact})
+      {required _i29.MessagingModel model, required _i29.Contact contact})
       : super(name,
             path: 'contactInfo',
             args: ContactInfoArgs(model: model, contact: contact));
@@ -524,9 +525,9 @@ class ContactInfo extends _i19.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.model, required this.contact});
 
-  final _i28.MessagingModel model;
+  final _i29.MessagingModel model;
 
-  final _i28.Contact contact;
+  final _i29.Contact contact;
 
   @override
   String toString() {
@@ -550,7 +551,7 @@ class AddViaChatNumber extends _i19.PageRouteInfo<void> {
 
 /// generated route for [_i7.Introduce]
 class Introduce extends _i19.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i28.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i29.Contact? contactToIntro})
       : super(name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -564,7 +565,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i28.Contact? contactToIntro;
+  final _i29.Contact? contactToIntro;
 
   @override
   String toString() {

@@ -9,12 +9,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.db.SnippetConfig
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
-import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.dbPath
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.inputStream
+import io.lantern.messaging.*
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.restartApp
 import org.whispersystems.signalservice.internal.util.Util
@@ -295,17 +290,10 @@ class MessagingModel constructor(
                     tx.put("/firstAccessedChatTS", ts)
                 }
             }
-            "saveFirstSeenIntroducingTS" -> {
-                val ts = System.currentTimeMillis()
-                db.mutate { tx ->
-                    tx.put("/firstSeenIntroducingTS", ts)
-                }
-            }
             // DEV PURPOSES
             "resetTimestamps" -> {
                 db.mutate { tx ->
                     tx.put("/firstAccessedChatTS", 0)
-                    tx.put("/firstSeenIntroducingTS", 0)
                     tx.put("/requestNotificationLastDismissedTS", 0)
                 }
             }
@@ -317,6 +305,29 @@ class MessagingModel constructor(
             }
             else -> super.doMethodCall(call, notImplemented)
         }
+    }
+
+    fun shouldShowTryLanternChat(): Boolean {
+        val eligibleToShow = db.mutate { tx ->
+            val path = "/checkedForTryLanternChat"
+            val hasChecked = tx.get(path) ?: false
+            if (!hasChecked) {
+                tx.put(path, true)
+            }
+            // only eligible if we haven't already checked previously and user hasn't onboarded yet
+            !hasChecked && !(tx.get("/onBoardingStatus") ?: false)
+        }
+
+        return eligibleToShow && installedFromUpdate()
+    }
+
+    // https://stackoverflow.com/questions/26352881/detect-if-new-install-or-updated-version-android-app/34194960#34194960
+    private fun installedFromUpdate(): Boolean {
+        val firstInstallTime =
+            activity.packageManager.getPackageInfo(activity.packageName, 0).firstInstallTime
+        val lastUpdateTime =
+            activity.packageManager.getPackageInfo(activity.packageName, 0).lastUpdateTime
+        return firstInstallTime != lastUpdateTime
     }
 
     private fun startRecordingVoiceMemo(): Boolean {

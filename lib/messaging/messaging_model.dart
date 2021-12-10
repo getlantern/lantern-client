@@ -461,15 +461,6 @@ class MessagingModel extends Model {
         defaultValue: 0, builder: builder);
   }
 
-  Future<void> saveFirstSeenIntroducingTS<T>() async {
-    return methodChannel.invokeMethod('saveFirstSeenIntroducingTS');
-  }
-
-  Widget getFirstSeenIntroducingTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstSeenIntroducingTS',
-        defaultValue: 0, builder: builder);
-  }
-
   // * DEV PURPOSES
   Future<void> resetTimestamps() {
     return methodChannel.invokeMethod('resetTimestamps');

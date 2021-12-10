@@ -9,6 +9,7 @@ import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/event_extension.dart';
 import 'package:lantern/event_manager.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/vpn/try_lantern_chat.dart';
 
 import 'messaging/messaging_model.dart';
 
@@ -76,6 +77,14 @@ class _HomePageState extends State<HomePage> {
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
         await _context!.router.push(Conversation(contactId: contact.contactId));
         break;
+      case 'showTryLanternChat':
+        final sessionModel =
+            Provider.of<SessionModel>(_context!, listen: false);
+        await sessionModel.saveTabIndex(1);
+        await _context!.router.push(const VpnRouter());
+        await _context!.router.push(FullScreenDialogPage(
+            widget: TryLanternChat(parentContext: _context!)));
+        break;
       default:
         return;
     }
@@ -99,35 +108,35 @@ class _HomePageState extends State<HomePage> {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) =>
-                sessionModel.getInstallOrUpgradeStatus(
-                    (_, isFreshInstall, child) => sessionModel.getTabIndex(
-                        (_, savedTabIndex, child) => AutoTabsScaffold(
-                              homeIndex: savedTabIndex ==
-                                      -1 // Launching for first time
-                                  ? isFreshInstall
-                                      ? 0 // This is a fresh install, start with Chat,
-                                      : 1 // This not a fresh install, show VPN and popup banner
-                                  : savedTabIndex, // We have been clicking around the tabs, load the last saved index
-                              routes: [
-                                isOnboarded
-                                    ? const MessagesRouter()
-                                    : const OnboardingRouter(),
-                                const VpnRouter(),
-                                const AccountRouter(),
-                                if (developmentMode) const DeveloperRoute(),
-                              ],
-                              bottomNavigationBuilder: (_, tabsRouter) =>
-                                  CustomBottomBar(
-                                onTap: (val) async {
-                                  await sessionModel.saveTabIndex(val);
-                                  tabsRouter.setActiveIndex(val);
-                                },
-                                index: tabsRouter.activeIndex,
-                                isDevelop: developmentMode,
-                                isFreshInstall: isFreshInstall,
-                              ),
-                            ))));
+            return messagingModel.getOnBoardingStatus(
+              (_, isOnboarded, child) => sessionModel.getTabIndex(
+                (_, savedTabIndex, child) => AutoTabsScaffold(
+                  homeIndex: savedTabIndex == -1 // Launching for first time
+                      ? isFreshInstall
+                          ? 0 // This is a fresh install, start with Chat,
+                          : 1 // This not a fresh install, show VPN and popup banner
+                      : savedTabIndex,
+                  // We have been clicking around the tabs, load the last saved index
+                  routes: [
+                    isOnboarded
+                        ? const MessagesRouter()
+                        : const OnboardingRouter(),
+                    const VpnRouter(),
+                    const AccountRouter(),
+                    if (developmentMode) const DeveloperRoute(),
+                  ],
+                  bottomNavigationBuilder: (_, tabsRouter) => CustomBottomBar(
+                    onTap: (val) async {
+                      await sessionModel.saveTabIndex(val);
+                      tabsRouter.setActiveIndex(val);
+                    },
+                    index: tabsRouter.activeIndex,
+                    isDevelop: developmentMode,
+                    isFreshInstall: isFreshInstall,
+                  ),
+                ),
+              ),
+            );
           },
         );
       },

@@ -44,7 +44,6 @@ class TryLanternChat extends StatelessWidget {
                     color: black,
                   ),
                   onPressed: () async {
-                    await messagingModel.saveFirstSeenIntroducingTS();
                     await context.router.pop();
                   },
                 ),
@@ -146,8 +145,6 @@ class TryLanternChat extends StatelessWidget {
                           children: [
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
                                   await context.router.pop();
                                 },
                                 child: CText(
@@ -157,10 +154,6 @@ class TryLanternChat extends StatelessWidget {
                                 )),
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstAccessedChatTS();
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
                                   context.router.popUntilRoot();
 
                                   // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router

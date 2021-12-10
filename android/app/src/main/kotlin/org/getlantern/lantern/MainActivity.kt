@@ -89,10 +89,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         flutterNavigation.setMethodCallHandler { call, _ ->
             if (call.method == "ready") {
-                intent.let { intent ->
-                    // If the user clicks on a message notification and MainActivity opens in
-                    // response, this ensures that we navigate to the corresponding conversation.
-                    navigateForIntent(intent)
+                // If the user clicks on a message notification and MainActivity opens in
+                // response, this ensures that we navigate to the corresponding conversation.
+                if (!navigateForIntent(intent)) {
+                    if (messagingModel.shouldShowTryLanternChat() || true) {
+                        // If we're here, it means that a user using a pre-chat version of Lantern
+                        // just upgraded to the chat version, show the Try Lantern Chat modal.
+                        flutterNavigation.invokeMethod("showTryLanternChat", null)
+                    }
                 }
             }
         }
@@ -122,11 +126,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         navigateForIntent(intent)
     }
 
-    private fun navigateForIntent(intent: Intent) {
+    private fun navigateForIntent(intent: Intent): Boolean {
         // handles text messaging intent
         intent.getByteArrayExtra("contactForConversation")?.let { contact ->
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
+            return true
         }
 
         // handles incoming call intent
@@ -140,7 +145,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 webRTCSignal
             )
             intent.removeExtra("signal")
+            return true
         }
+
+        return false
     }
 
     override fun onStart() {
