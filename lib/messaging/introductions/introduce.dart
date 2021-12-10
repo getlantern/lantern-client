@@ -23,7 +23,6 @@ class _IntroduceState extends State<Introduce> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
     final title = widget.singleIntro
         ? 'introduce_contact'.i18n
         : 'introduce_contacts_with_count'
@@ -39,7 +38,7 @@ class _IntroduceState extends State<Introduce> {
         : 'introduce_contacts_select'.i18n;
     return BaseScreen(
         title: title,
-        body: model.contacts(builder: (context,
+        body: messagingModel.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           Iterable<PathAndValue<Contact>> _sortedContacts = [];
 
@@ -127,7 +126,7 @@ class _IntroduceState extends State<Introduce> {
                                                 ),
                                       onTapCallback: (Contact contact) async {
                                         if (widget.singleIntro) {
-                                          await model.introduce([
+                                          await messagingModel.introduce([
                                             widget.contactToIntro!.contactId.id,
                                             contact.contactId.id
                                           ]);
@@ -156,7 +155,7 @@ class _IntroduceState extends State<Introduce> {
                                             disabled:
                                                 selectedContactIds.length < 2,
                                             onPressed: () async {
-                                              await model.introduce(
+                                              await messagingModel.introduce(
                                                   selectedContactIds);
                                               showSnackbar(
                                                 context: context,

@@ -57,7 +57,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var model = context.watch<MessagingModel>();
     final scrollController = ScrollController();
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -82,9 +81,9 @@ class CustomSearchDelegate extends SearchDelegate {
                 // TODO (maybe) - consider ValueListenableBuilder when/if we display thumbnails
                 : FutureBuilder(
                     future: Future.wait([
-                      model.searchContacts(query, 10),
+                      messagingModel.searchContacts(query, 10),
                       if (searchMessages == true)
-                        model.searchMessages(query, 64)
+                        messagingModel.searchMessages(query, 64)
                     ]),
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
@@ -141,7 +140,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                         if (searchMessages! &&
                                             messages.isNotEmpty)
                                           SuggestionBuilder(
-                                            model: model,
+                                            model: messagingModel,
                                             suggestions: messages,
                                             scrollController: scrollController,
                                           ),

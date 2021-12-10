@@ -4,8 +4,7 @@ class SecureChatNumberAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textCopied = false;
-    final model = context.watch<MessagingModel>();
-    return model
+    return messagingModel
         .me((BuildContext context, Contact me, Widget? child) => BaseScreen(
             title: 'secure_chat_number'.i18n,
             body: Column(

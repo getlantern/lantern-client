@@ -7,11 +7,9 @@ class BlockedUsers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
     return BaseScreen(
         title: 'blocked_users'.i18n,
-        body: model.contacts(builder: (context,
+        body: messagingModel.contacts(builder: (context,
             Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
           final blocked =
               _contacts.where((element) => element.value.blocked).toList();
@@ -33,7 +31,6 @@ class BlockedUsers extends StatelessWidget {
                                 onPressed: () async => showBlockContactDialog(
                                   context,
                                   blockedContact.value,
-                                  model,
                                 ),
                                 child: CText(
                                   'unblock'.i18n.toUpperCase(),

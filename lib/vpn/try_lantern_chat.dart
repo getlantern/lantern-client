@@ -22,7 +22,6 @@ class TryLanternChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var messagingModel = context.watch<MessagingModel>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +43,6 @@ class TryLanternChat extends StatelessWidget {
                     color: black,
                   ),
                   onPressed: () async {
-                    await messagingModel.saveFirstSeenIntroducingTS();
                     await context.router.pop();
                   },
                 ),
@@ -146,8 +144,6 @@ class TryLanternChat extends StatelessWidget {
                           children: [
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
                                   await context.router.pop();
                                 },
                                 child: CText(
@@ -157,30 +153,14 @@ class TryLanternChat extends StatelessWidget {
                                 )),
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstAccessedChatTS();
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
                                   context.router.popUntilRoot();
-
-                                  // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
-                                  // and https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
-
-                                  // 1. update Tab location to Chat
-                                  final tabsRouter = parentContext.router
-                                      .parent<TabsRouter>()!;
-
-                                  tabsRouter.setActiveIndex(
-                                      0); // * ← index 0 for Chats tab
-
-                                  // 2. find Onboarding router
-                                  final onboardingRouter = tabsRouter
-                                      .innerRouterOf('OnboardingRouter');
-
-                                  // 3. navigate to SecureNumberRecovery route
-                                  // for some reason it first needs to navigate to Welcome route
-                                  await onboardingRouter!.navigateNamed(
-                                      '/secureChatNumberMessaging');
+                                  // Switch to Chat tab
+                                  await sessionModel.setTabIndex(
+                                      0); // TODO: use constants or something for the tabs
+                                  // Start onboarding
+                                  await messagingModel.start();
+                                  await context.router
+                                      .push(const SecureChatNumberMessaging());
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),

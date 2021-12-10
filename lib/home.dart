@@ -3,12 +3,18 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lantern/account/account_tab.dart';
+import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/event_extension.dart';
 import 'package:lantern/event_manager.dart';
+import 'package:lantern/messaging/chats.dart';
+import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/vpn/try_lantern_chat.dart';
+import 'package:lantern/vpn/vpn_tab.dart';
 
 import 'messaging/messaging_model.dart';
 
@@ -31,6 +37,20 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    // Figure out where to start with our navigation
+    messagingModel
+        .shouldShowTryLanternChatModal()
+        .then((shouldShowModal) async {
+      if (shouldShowModal) {
+        // open VPN tab
+        await sessionModel.setTabIndex(1);
+        // show Try Lantern Chat dialog
+        await context.router.push(FullScreenDialogPage(
+            widget: TryLanternChat(parentContext: context)));
+      }
+    });
+
     final eventManager = EventManager('lantern_event_channel');
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     // Let back-end know that we're ready to handle navigation
@@ -92,45 +112,45 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
     return sessionModel.developmentMode(
       (BuildContext context, bool developmentMode, Widget? child) {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) =>
-                sessionModel.getInstallOrUpgradeStatus(
-                    (_, isFreshInstall, child) => sessionModel.getTabIndex(
-                        (_, savedTabIndex, child) => AutoTabsScaffold(
-                              homeIndex: savedTabIndex ==
-                                      -1 // Launching for first time
-                                  ? isFreshInstall
-                                      ? 0 // This is a fresh install, start with Chat,
-                                      : 1 // This not a fresh install, show VPN and popup banner
-                                  : savedTabIndex, // We have been clicking around the tabs, load the last saved index
-                              routes: [
-                                isOnboarded
-                                    ? const MessagesRouter()
-                                    : const OnboardingRouter(),
-                                const VpnRouter(),
-                                const AccountRouter(),
-                                if (developmentMode) const DeveloperRoute(),
-                              ],
-                              bottomNavigationBuilder: (_, tabsRouter) =>
-                                  CustomBottomBar(
-                                onTap: (val) async {
-                                  await sessionModel.saveTabIndex(val);
-                                  tabsRouter.setActiveIndex(val);
-                                },
-                                index: tabsRouter.activeIndex,
-                                isDevelop: developmentMode,
-                                isFreshInstall: isFreshInstall,
-                              ),
-                            ))));
+            return sessionModel.tabIndex(
+              (context, tabIndex, child) =>
+                  messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
+                return Scaffold(
+                  body: buildBody(tabIndex, isOnboarded),
+                  bottomNavigationBar: CustomBottomBar(
+                    onTap: (val) async {
+                      await sessionModel.setTabIndex(val);
+                    },
+                    index: tabIndex,
+                    isDevelop: developmentMode,
+                  ),
+                );
+              }),
+            );
           },
         );
       },
     );
+  }
+
+  Widget buildBody(int tabIndex, bool isOnboarded) {
+    switch (tabIndex) {
+      case 0:
+        return isOnboarded ? Chats() : Welcome();
+      case 1:
+        return VPNTab();
+      case 2:
+        return AccountTab();
+      case 3:
+        return DeveloperSettingsTab();
+      default:
+        assert(false, 'unrecognized tab index $tabIndex');
+        return Container();
+    }
   }
 }

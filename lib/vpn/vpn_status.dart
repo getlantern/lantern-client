@@ -3,7 +3,6 @@ import 'package:lantern/vpn/vpn.dart';
 class VPNStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var vpnModel = context.watch<VpnModel>();
     return vpnModel
         .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
       return Row(

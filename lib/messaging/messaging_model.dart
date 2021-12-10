@@ -1,6 +1,8 @@
 import 'calls/signaling.dart';
 import 'messaging.dart';
 
+final messagingModel = MessagingModel();
+
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
   late Signaling signaling;
@@ -16,7 +18,7 @@ class MessagingModel extends Model {
                   .writeToBuffer(),
             }).then((value) => value as Uint8List));
 
-    signaling = Signaling(model: this, mc: methodChannel);
+    signaling = Signaling(methodChannel);
 
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
@@ -452,21 +454,18 @@ class MessagingModel extends Model {
         .then((v) => v as String);
   }
 
-  Future<void> saveFirstAccessedChatTS<T>() async {
-    return methodChannel.invokeMethod('saveFirstAccessedChatTS');
+  Future<bool> shouldShowTryLanternChatModal<T>() async {
+    return methodChannel
+        .invokeMethod('shouldShowTryLanternChatModal')
+        .then((value) => value as bool);
   }
 
-  Widget getFirstAccessedChatTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstAccessedChatTS',
-        defaultValue: 0, builder: builder);
+  Future<void> dismissTryLanternChatBadge<T>() async {
+    return methodChannel.invokeMethod('dismissTryLanternChatBadge');
   }
 
-  Future<void> saveFirstSeenIntroducingTS<T>() async {
-    return methodChannel.invokeMethod('saveFirstSeenIntroducingTS');
-  }
-
-  Widget getFirstSeenIntroducingTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstSeenIntroducingTS',
+  Widget getFirstShownTryLanternChatModalTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstShownTryLanternChatModalTS',
         defaultValue: 0, builder: builder);
   }
 
