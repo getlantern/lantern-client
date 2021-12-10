@@ -1,12 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
 class TryLanternChat extends StatelessWidget {
-  final BuildContext parentContext;
-
-  TryLanternChat({
-    required this.parentContext,
-  });
-
   final tsCustomButton = CTextStyle(
     fontSize: 14,
     lineHeight: 14,
@@ -153,7 +147,6 @@ class TryLanternChat extends StatelessWidget {
                                 )),
                             TextButton(
                                 onPressed: () async {
-                                  context.router.popUntilRoot();
                                   // Switch to Chat tab
                                   await sessionModel.setTabIndex(
                                       0); // TODO: use constants or something for the tabs
