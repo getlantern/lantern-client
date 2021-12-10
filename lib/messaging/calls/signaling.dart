@@ -64,7 +64,7 @@ class SignalingState {
 
 /// Code adapted from https://github.com/flutter-webrtc/flutter-webrtc-demo
 class Signaling {
-  Signaling({required this.model, required this.mc}) {
+  Signaling(this.mc) {
     // pre-load ringing file into cache
     audioCache.load(ringingFile);
   }
@@ -84,7 +84,6 @@ class Signaling {
   final Map<String, Session> _sessions = {};
   MediaStream? _localStream;
   final List<MediaStream> _remoteStreams = <MediaStream>[];
-  final MessagingModel model;
 
   void setAudioPlayerOnSpeaker(bool speaker) async {
     if (speaker == audioPlayerOnSpeaker) {
@@ -262,12 +261,11 @@ class Signaling {
 
             newSession.setCallState(CallState.Connected);
 
-            var contact = await model.getDirectContact(peerId);
+            var contact = await messagingModel.getDirectContact(peerId);
             await navigatorKey.currentContext?.pushRoute(
               FullScreenDialogPage(
                   widget: Call(
                 contact: contact,
-                model: model,
                 initialSession: newSession,
               )),
             );
@@ -384,7 +382,7 @@ class Signaling {
         var match = localTCPCandidateRegExp.firstMatch(candidateString);
         if (match != null) {
           var hostAndPort = match.group(1)!;
-          var relayAddr = await model
+          var relayAddr = await messagingModel
               .allocateRelayAddress(hostAndPort.replaceFirst(' ', ':'));
           candidateString =
               candidateString.replaceFirst(hostAndPort, relayAddr);
@@ -419,7 +417,7 @@ class Signaling {
       var match = remoteTCPCandidateRegExp.firstMatch(candidate.candidate!);
       if (match != null) {
         var relayAddr = match.group(1)!;
-        var localRelayAddr = await model.relayTo(relayAddr);
+        var localRelayAddr = await messagingModel.relayTo(relayAddr);
         var localCandidate = RTCIceCandidate(
           candidate.candidate!
               .replaceFirst(relayAddr, localRelayAddr.replaceFirst(':', ' ')),

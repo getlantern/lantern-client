@@ -6,12 +6,11 @@ class RecoveryKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-    return model.me(
+    return messagingModel.me(
       (BuildContext context, Contact me, Widget? child) => BaseScreen(
         title: 'recovery_key'.i18n,
         body: FutureBuilder<String>(
-            future: model.getRecoveryCode(),
+            future: messagingModel.getRecoveryCode(),
             builder: (context, snapshot) {
               return PinnedButtonLayout(
                 content: [
@@ -31,7 +30,7 @@ class RecoveryKey extends StatelessWidget {
                   text: 'copy_recovery_key'.i18n,
                   disabled: snapshot.hasError,
                   onPressed: () async {
-                    await model.markCopiedRecoveryKey();
+                    await messagingModel.markCopiedRecoveryKey();
                     copyText(context, snapshot.data.toString());
                     await context.router.pop();
                   },

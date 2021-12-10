@@ -30,8 +30,6 @@ class _AccountManagementState extends State<AccountManagement>
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
     var title = widget.isPro
         ? 'Pro Account Management'.i18n
         : 'Account Management'.i18n;

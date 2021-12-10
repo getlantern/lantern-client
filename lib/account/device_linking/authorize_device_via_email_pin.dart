@@ -12,8 +12,6 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-
     Widget emailSentMessage(String emailAddress) {
       return StyledText(
         text: 'recovery_email_sent'

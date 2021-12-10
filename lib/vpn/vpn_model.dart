@@ -1,5 +1,7 @@
 import 'package:lantern/vpn/vpn.dart';
 
+final vpnModel = VpnModel();
+
 class VpnModel extends Model {
   VpnModel() : super('vpn');
 

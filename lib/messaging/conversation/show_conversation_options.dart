@@ -5,7 +5,6 @@ import '../messaging.dart';
 import 'show_verification_options.dart';
 
 Future showConversationOptions({
-  required MessagingModel model,
   required BuildContext parentContext,
   required Contact contact,
   Function? topBarAnimationCallback,
@@ -28,8 +27,7 @@ Future showConversationOptions({
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await bottomContext.router.pop();
-                  await bottomContext
-                      .pushRoute(ContactInfo(model: model, contact: contact));
+                  await bottomContext.pushRoute(ContactInfo(contact: contact));
                 },
               ),
               ListItemFactory.bottomItem(
@@ -265,9 +263,11 @@ Future showConversationOptions({
                                           ),
                                           onPressed: () async {
                                             if (selectedPosition != -1) {
-                                              await model.setDisappearSettings(
-                                                  contact,
-                                                  seconds[selectedPosition]);
+                                              await messagingModel
+                                                  .setDisappearSettings(
+                                                      contact,
+                                                      seconds[
+                                                          selectedPosition]);
                                             }
                                             await context.router.pop();
                                           },
@@ -303,7 +303,6 @@ Future showConversationOptions({
                     onTap: () async {
                       await bottomContext.router.pop();
                       showVerificationOptions(
-                          model: model,
                           contact: contact,
                           bottomModalContext: parentContext,
                           topBarAnimationCallback: topBarAnimationCallback!);

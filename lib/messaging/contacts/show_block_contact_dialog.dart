@@ -1,10 +1,10 @@
 import 'package:lantern/common/common.dart';
+
 import '../messaging.dart';
 
 void showBlockContactDialog(
   BuildContext context,
   Contact contact,
-  MessagingModel model,
 ) async {
   var confirmBlock = false;
   await showDialog(
@@ -94,9 +94,9 @@ void showBlockContactDialog(
                         onPressed: () async {
                           if (confirmBlock) {
                             contact.blocked
-                                ? await model
+                                ? await messagingModel
                                     .unblockDirectContact(contact.contactId.id)
-                                : await model
+                                : await messagingModel
                                     .blockDirectContact(contact.contactId.id);
                             context.router.popUntilRoot();
                             showSnackbar(

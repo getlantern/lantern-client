@@ -11,11 +11,6 @@ import 'package:lantern/account/secure_chat_number_account.dart';
 import 'package:lantern/account/settings.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
-import 'package:lantern/core/router/tabs/account_tab_router.dart';
-import 'package:lantern/core/router/tabs/developer_tab_router.dart';
-import 'package:lantern/core/router/tabs/message_tab_router.dart';
-import 'package:lantern/core/router/tabs/onboarding_router.dart';
-import 'package:lantern/core/router/tabs/vpn_tab_router.dart';
 import 'package:lantern/home.dart';
 import 'package:lantern/messaging/contacts/add_contact_number.dart';
 import 'package:lantern/messaging/contacts/contact_info.dart';
@@ -23,6 +18,8 @@ import 'package:lantern/messaging/contacts/new_chat.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
+import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
+import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -32,14 +29,21 @@ import 'package:lantern/messaging/introductions/introductions.dart';
       name: 'Home',
       page: HomePage,
       path: '/',
-      children: [
-        onboarding_router,
-        message_tab_router,
-        vpn_tab_router,
-        account_tab_router,
-        developer_tab_router,
-      ],
     ),
+    CustomRoute<void>(
+        page: SecureNumberRecovery,
+        name: 'SecureNumberRecovery',
+        path: 'secureNumberRecovery',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: SecureChatNumberMessaging,
+        name: 'SecureChatNumberMessaging',
+        path: 'secureChatNumberMessaging',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: FullScreenDialog,
         name: 'FullScreenDialogPage',

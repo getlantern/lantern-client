@@ -16,10 +16,7 @@ SizedBox renderLongTapMenu(
                 content: 'view_contact_info'.i18n,
                 onTap: () async {
                   await context.router.pop();
-                  await context.pushRoute(ContactInfo(
-                      model:
-                          Provider.of<MessagingModel>(context, listen: false),
-                      contact: contact));
+                  await context.pushRoute(ContactInfo(contact: contact));
                 }),
             if (!contact.isMe)
               ListItemFactory.focusMenuItem(

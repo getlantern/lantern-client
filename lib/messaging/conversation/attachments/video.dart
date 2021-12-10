@@ -8,8 +8,7 @@ class VideoAttachment extends VisualAttachment {
       : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer(MessagingModel model) =>
-      VideoViewer(model, contact, message, attachment);
+  Widget buildViewer() => VideoViewer(contact, message, attachment);
 
   @override
   Widget wrapThumbnail(Widget thumbnail) => Stack(
@@ -25,11 +24,9 @@ class VideoAttachment extends VisualAttachment {
 }
 
 class VideoViewer extends ViewerWidget {
-  final MessagingModel model;
   final StoredAttachment attachment;
 
-  VideoViewer(
-      this.model, Contact contact, StoredMessage message, this.attachment)
+  VideoViewer(Contact contact, StoredMessage message, this.attachment)
       : super(contact, message);
 
   @override
@@ -44,7 +41,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
   void initState() {
     super.initState();
     context.loaderOverlay.show(widget: spinner);
-    widget.model.decryptVideoForPlayback(widget.attachment).catchError((e) {
+    messagingModel.decryptVideoForPlayback(widget.attachment).catchError((e) {
       context.loaderOverlay.hide();
     }).then((videoFilename) {
       context.loaderOverlay.hide();

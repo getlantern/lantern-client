@@ -61,7 +61,6 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
     return BaseScreen(
       title: 'add_contact'.i18n,
       body: PinnedButtonLayout(
@@ -109,10 +108,10 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
                   ]),
             )
           ],
-          button: model.me((context, me, child) => Button(
+          button: messagingModel.me((context, me, child) => Button(
               width: 200,
               text: 'start_chat'.i18n,
-              onPressed: () => handleButtonPress(model, me),
+              onPressed: () => handleButtonPress(messagingModel, me),
               disabled: !shouldSubmit))),
     );
   }
