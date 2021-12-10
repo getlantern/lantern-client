@@ -1,7 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
-import 'try_lantern_chat.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
