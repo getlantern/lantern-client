@@ -92,7 +92,12 @@ Future showConversationOptions({
                                                       seconds[selectedPosition] ==
                                                           0)
                                               ? CText(
-                                                  'message_disappearing'.i18n,
+                                                  'message_disappearing'
+                                                      .i18n
+                                                      .fill([
+                                                    contact
+                                                        .displayNameOrFallback
+                                                  ]),
                                                   style: tsBody1.copiedWith(
                                                       color: grey5),
                                                 )
@@ -108,7 +113,9 @@ Future showConversationOptions({
                                                         : contact
                                                             .messagesDisappearAfterSeconds
                                                             .humanizeSeconds(
-                                                                longForm: true)
+                                                                longForm: true),
+                                                    contact
+                                                        .displayNameOrFallback
                                                   ]),
                                                   style: tsBody1.copiedWith(
                                                       color: grey5),
