@@ -24,7 +24,6 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(
       BuildContext context, SessionModel sessionModel, Contact me) {
-    final messagingModel = context.watch<MessagingModel>();
     return [
       messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
           hasBeenOnboarded
@@ -75,7 +74,6 @@ class AccountMenu extends StatelessWidget {
   }
 
   List<Widget> proItems(BuildContext context, Contact me) {
-    final messagingModel = context.watch<MessagingModel>();
     return [
       messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
           messagingModel.getCopiedRecoveryStatus((BuildContext context,
@@ -118,9 +116,6 @@ class AccountMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'Account'.i18n,
       body: sessionModel

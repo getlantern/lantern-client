@@ -1,10 +1,12 @@
 import '../messaging.dart';
 
 class Welcome extends StatelessWidget {
+  Welcome() : super() {
+    messagingModel.dismissTryLanternChatBadge();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'lantern_secure_chat'.i18n,
       automaticallyImplyLeading: false,
@@ -43,7 +45,7 @@ class Welcome extends StatelessWidget {
                 Button(
                     text: 'get_started'.i18n,
                     onPressed: () async {
-                      await model.start();
+                      await messagingModel.start();
                       await context.router
                           .push(const SecureChatNumberMessaging());
                     }),

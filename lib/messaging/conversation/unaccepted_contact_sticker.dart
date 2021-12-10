@@ -7,12 +7,10 @@ class UnacceptedContactSticker extends StatelessWidget {
     Key? key,
     required this.messageCount,
     required this.contact,
-    required this.model,
   }) : super(key: key);
 
   final int messageCount;
   final Contact contact;
-  final MessagingModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +39,6 @@ class UnacceptedContactSticker extends StatelessWidget {
                 onPressed: () async => showDeleteContactDialog(
                   context,
                   contact,
-                  model,
                 ),
                 child: CText(
                   'Delete'.i18n.toUpperCase(),
@@ -52,7 +49,6 @@ class UnacceptedContactSticker extends StatelessWidget {
                 onPressed: () async => showBlockContactDialog(
                   context,
                   contact,
-                  model,
                 ),
                 child: CText(
                   'Block'.i18n.toUpperCase(),
@@ -62,8 +58,9 @@ class UnacceptedContactSticker extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   try {
-                    final _contact = await model.addOrUpdateDirectContact(
-                        chatNumber: contact.chatNumber);
+                    final _contact =
+                        await messagingModel.addOrUpdateDirectContact(
+                            chatNumber: contact.chatNumber);
                     await context.router.popAndPush(Conversation(
                         contactId: _contact.contactId,
                         showContactEditingDialog: true));

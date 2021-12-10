@@ -6,20 +6,15 @@ class Reactions extends StatelessWidget {
   static final moreEmojis = '•••';
   static final clearReaction = '';
 
-  final MessagingModel model;
   final StoredMessage message;
   final void Function() onEmojiTap;
 
-  Reactions(
-      {required this.message,
-      required this.model,
-      required this.onEmojiTap,
-      Key? key})
+  Reactions({required this.message, required this.onEmojiTap, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return model.me((context, me, child) {
+    return messagingModel.me((context, me, child) {
       return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         final _buttonSize = constraints.maxWidth / 6;
@@ -49,7 +44,7 @@ class Reactions extends StatelessWidget {
                     Navigator.pop(context);
                     return;
                   }
-                  await model.react(
+                  await messagingModel.react(
                       message, isMyReaction ? clearReaction : emoji);
                   Navigator.pop(context);
                 },

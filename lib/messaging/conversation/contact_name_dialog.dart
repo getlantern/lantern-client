@@ -3,13 +3,11 @@ import 'package:lantern/messaging/messaging.dart';
 
 class ContactNameDialog extends StatefulWidget {
   final BuildContext context;
-  final MessagingModel model;
   final Contact contact;
 
   const ContactNameDialog({
     Key? key,
     required this.context,
-    required this.model,
     required this.contact,
   }) : super(key: key);
 
@@ -37,7 +35,7 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
 
   void submit(BuildContext context, String value) async {
     if (shouldSubmit) {
-      await widget.model.addOrUpdateDirectContact(
+      await messagingModel.addOrUpdateDirectContact(
           unsafeId: widget.contact.contactId.id, displayName: value);
       await context.router.pop();
     }

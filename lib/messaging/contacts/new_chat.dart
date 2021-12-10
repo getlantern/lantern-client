@@ -47,8 +47,6 @@ class _NewChatState extends State<NewChat> {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'new_chat'.i18n,
       actions: [
@@ -62,9 +60,9 @@ class _NewChatState extends State<NewChat> {
           icon: const CAssetImage(path: ImagePaths.search),
         ),
       ],
-      body: model.me(
+      body: messagingModel.me(
         (BuildContext context, Contact me, Widget? child) {
-          return model.contacts(builder: (context,
+          return messagingModel.contacts(builder: (context,
               Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
             var contacts = _contacts
                 .where((element) =>

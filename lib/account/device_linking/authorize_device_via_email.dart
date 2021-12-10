@@ -20,8 +20,6 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-
     return BaseScreen(
       title: 'Authorize Device via Email'.i18n,
       body: Form(

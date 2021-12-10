@@ -16,7 +16,6 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var vpnModel = context.watch<VpnModel>();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

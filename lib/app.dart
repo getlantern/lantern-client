@@ -4,12 +4,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/session_model.dart';
-import 'package:lantern/common/ui/audio.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/event_manager.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/vpn/vpn_model.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -24,10 +21,6 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => messagingModel),
-        Provider(create: (context) => VpnModel()),
-        Provider(create: (context) => Audio()),
-        Provider(create: (context) => SessionModel()),
         Provider(create: (context) => EventManager('lantern_event_channel')),
         Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),

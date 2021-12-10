@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
-import com.thefinestartist.utils.content.ContextUtil.getApplicationContext
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -97,33 +96,16 @@ class SessionModel(
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
             }
-            "saveTabIndex" -> {
+            "setTabIndex" -> {
                 db.mutate { tx ->
                     tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
-                }
-            }
-            // https://stackoverflow.com/questions/26352881/detect-if-new-install-or-updated-version-android-app/34194960#34194960
-            "isFirstInstall" -> {
-                val context = getApplicationContext()
-                val status = try {
-                    val firstInstallTime: Long = context.packageManager
-                        .getPackageInfo(context.packageName, 0).firstInstallTime
-                    val lastUpdateTime: Long = context.packageManager
-                        .getPackageInfo(context.packageName, 0).lastUpdateTime
-                    firstInstallTime == lastUpdateTime
-                } catch (e: PackageManager.NameNotFoundException) {
-                    e.printStackTrace()
-                    true
-                }
-                db.mutate { tx ->
-                    tx.put("/isFreshInstall", status)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
 
-    fun saveProxyAll(on: Boolean) {
+    private fun saveProxyAll(on: Boolean) {
         db.mutate { tx ->
             tx.put(PATH_PROXY_ALL, on)
         }

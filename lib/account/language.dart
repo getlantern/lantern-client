@@ -24,8 +24,6 @@ class Language extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-
     return BaseScreen(
       title: 'language'.i18n,
       padVertical: true,

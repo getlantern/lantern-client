@@ -57,8 +57,6 @@ class AttachmentBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
-
     // we are first downloading attachments and then decrypting them by calling _getDecryptedAttachment()
     switch (attachment.status) {
       case StoredAttachment_Status.PENDING:
@@ -73,7 +71,7 @@ class AttachmentBuilder extends StatelessWidget {
       default:
         // successful download/upload, on to decrypting
         return ValueListenableBuilder(
-          valueListenable: model.thumbnail(attachment),
+          valueListenable: messagingModel.thumbnail(attachment),
           builder: (BuildContext context,
               CachedValue<Uint8List> cachedThumbnail, Widget? child) {
             if (cachedThumbnail.loading) {
@@ -193,8 +191,6 @@ abstract class VisualAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
-
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return AttachmentBuilder(
@@ -204,7 +200,7 @@ abstract class VisualAttachment extends StatelessWidget {
           scrimAttachment: true,
           onTap: () async {
             await context.pushRoute(
-              FullScreenDialogPage(widget: buildViewer(model)),
+              FullScreenDialogPage(widget: buildViewer()),
             );
             await SystemChrome.setPreferredOrientations([
               DeviceOrientation.portraitUp,
@@ -233,7 +229,7 @@ abstract class VisualAttachment extends StatelessWidget {
     });
   }
 
-  Widget buildViewer(MessagingModel model);
+  Widget buildViewer();
 
   Widget wrapThumbnail(Widget thumbnail) => thumbnail;
 }

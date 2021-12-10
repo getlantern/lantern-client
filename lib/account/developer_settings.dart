@@ -6,9 +6,6 @@ class DeveloperSettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'Developer Settings'.i18n,
       padVertical: true,

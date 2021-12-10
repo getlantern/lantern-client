@@ -1,5 +1,8 @@
 import 'dart:typed_data';
+
 import 'common.dart';
+
+final sessionModel = SessionModel();
 
 class SessionModel extends Model {
   SessionModel() : super('session');
@@ -115,19 +118,14 @@ class SessionModel extends Model {
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
 
-  Future<void> saveTabIndex<T>(int tabIndex) async {
-    return methodChannel.invokeMethod('saveTabIndex', <String, dynamic>{
+  Future<void> setTabIndex<T>(int tabIndex) async {
+    return methodChannel.invokeMethod('setTabIndex', <String, dynamic>{
       'tabIndex': tabIndex,
     });
   }
 
-  Widget getTabIndex(ValueWidgetBuilder<int> builder) {
+  Widget tabIndex(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>('/tabIndex',
-        defaultValue: -1, builder: builder);
-  }
-
-  Widget getInstallOrUpgradeStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/isFreshInstall',
-        defaultValue: false, builder: builder);
+        defaultValue: 0, builder: builder);
   }
 }
