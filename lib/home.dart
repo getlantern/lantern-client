@@ -46,8 +46,8 @@ class _HomePageState extends State<HomePage> {
         // open VPN tab
         await sessionModel.setTabIndex(1);
         // show Try Lantern Chat dialog
-        await context.router.push(FullScreenDialogPage(
-            widget: TryLanternChat(parentContext: context)));
+        await context.router
+            .push(FullScreenDialogPage(widget: TryLanternChat()));
       }
     });
 

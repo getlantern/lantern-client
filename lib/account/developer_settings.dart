@@ -112,7 +112,31 @@ class DeveloperSettingsTab extends StatelessWidget {
                       style:
                           tsButton.copiedWith(color: Colors.deepPurpleAccent)))
             ],
-          )
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Start app',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.start();
+                  },
+                  child: CText('start'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Kill app',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.kill();
+                  },
+                  child: CText('kill'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
         ],
       ),
     );
