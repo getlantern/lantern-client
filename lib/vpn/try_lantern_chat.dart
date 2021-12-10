@@ -62,7 +62,7 @@ class TryLanternChat extends StatelessWidget {
                       start: 40, end: 40, bottom: 32),
                   color: white,
                   child: LayoutBuilder(
-                    builder: (context, constraints) {
+                    builder: (_, constraints) {
                       // This lays out the speech bubble and lock images in
                       // pairs. The algorithm ensures the following:
                       //

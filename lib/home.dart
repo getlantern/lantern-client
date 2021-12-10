@@ -99,37 +99,35 @@ class _HomePageState extends State<HomePage> {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return messagingModel.getOnBoardingStatus((context, isOnboarded,
-                    child) =>
+            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) =>
                 sessionModel.getInstallOrUpgradeStatus(
-                    (context, isFreshInstall, child) =>
-                        sessionModel.getTabIndex(
-                            (context, savedTabIndex, child) => AutoTabsScaffold(
-                                  homeIndex: savedTabIndex ==
-                                          -1 // Launching for first time
-                                      ? isFreshInstall
-                                          ? 0 // This is a fresh install, start with Chat,
-                                          : 1 // This not a fresh install, show VPN and popup banner
-                                      : savedTabIndex, // We have been clicking around the tabs, load the last saved index
-                                  routes: [
-                                    isOnboarded
-                                        ? const MessagesRouter()
-                                        : const OnboardingRouter(),
-                                    const VpnRouter(),
-                                    const AccountRouter(),
-                                    if (developmentMode) const DeveloperRoute(),
-                                  ],
-                                  bottomNavigationBuilder:
-                                      (context, tabsRouter) => CustomBottomBar(
-                                    onTap: (val) async {
-                                      await sessionModel.saveTabIndex(val);
-                                      tabsRouter.setActiveIndex(val);
-                                    },
-                                    index: tabsRouter.activeIndex,
-                                    isDevelop: developmentMode,
-                                    isFreshInstall: isFreshInstall,
-                                  ),
-                                ))));
+                    (_, isFreshInstall, child) => sessionModel.getTabIndex(
+                        (_, savedTabIndex, child) => AutoTabsScaffold(
+                              homeIndex: savedTabIndex ==
+                                      -1 // Launching for first time
+                                  ? isFreshInstall
+                                      ? 0 // This is a fresh install, start with Chat,
+                                      : 1 // This not a fresh install, show VPN and popup banner
+                                  : savedTabIndex, // We have been clicking around the tabs, load the last saved index
+                              routes: [
+                                isOnboarded
+                                    ? const MessagesRouter()
+                                    : const OnboardingRouter(),
+                                const VpnRouter(),
+                                const AccountRouter(),
+                                if (developmentMode) const DeveloperRoute(),
+                              ],
+                              bottomNavigationBuilder: (_, tabsRouter) =>
+                                  CustomBottomBar(
+                                onTap: (val) async {
+                                  await sessionModel.saveTabIndex(val);
+                                  tabsRouter.setActiveIndex(val);
+                                },
+                                index: tabsRouter.activeIndex,
+                                isDevelop: developmentMode,
+                                isFreshInstall: isFreshInstall,
+                              ),
+                            ))));
           },
         );
       },
