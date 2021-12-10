@@ -50,7 +50,7 @@ class ReplicaLink {
       return null;
     };
 
-    s = Uri.decodeFull(s);
+    s = Uri.decodeQueryComponent(s);
     s = s.replaceAll('replica://', '');
     for (var method in [parseMethod1, parseMethod2]) {
       var rl = method();
@@ -72,6 +72,6 @@ class ReplicaLink {
     if (fileIndex != null) {
       s += '&so=$fileIndex';
     }
-    return Uri.encodeFull(s);
+    return Uri.encodeQueryComponent(s);
   }
 }
