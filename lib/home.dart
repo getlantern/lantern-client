@@ -7,6 +7,7 @@ import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/event_extension.dart';
 import 'package:lantern/event_manager.dart';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         .then((shouldShowModal) async {
       if (shouldShowModal) {
         // open VPN tab
-        await sessionModel.setTabIndex(1);
+        await sessionModel.setTabIndex(lookupTabIndex('VPN'));
         // show Try Lantern Chat dialog
         await context.router
             .push(FullScreenDialogPage(widget: TryLanternChat()));
