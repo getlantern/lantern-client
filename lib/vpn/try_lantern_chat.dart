@@ -179,13 +179,8 @@ class TryLanternChat extends StatelessWidget {
 
                                   // 3. navigate to SecureNumberRecovery route
                                   // for some reason it first needs to navigate to Welcome route
-                                  await onboardingRouter
-                                      ?.navigate(const Welcome())
-                                      .then((value) async {
-                                    await messagingModel.start();
-                                    await context.router.push(
-                                        const SecureChatNumberMessaging());
-                                  });
+                                  await onboardingRouter!.navigateNamed(
+                                      '/secureChatNumberMessaging');
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),
