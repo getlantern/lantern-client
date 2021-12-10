@@ -341,10 +341,10 @@ msgid "start_chat"
 msgstr "Start chat"
 
 msgid "message_disappearing"
-msgstr "All messages will not disappear for you and your contact."
+msgstr "All messages will not disappear for you and %s."
 
 msgid "message_disappearing_description"
-msgstr "All messages will disappear after %s for you and your contact."
+msgstr "All messages will disappear after %s for you and %s."
 
 msgid "delete"
 msgstr "Delete"
@@ -713,7 +713,7 @@ msgid "secure_text_explanation_account"
 msgstr "This is the full version of your Secure Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides the shortened Secure Chat Number to make sharing contact information more convenient. "
 
 msgid "recovery_key_account_explanation"
-msgstr "Store this number in a safe place, It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system."
+msgstr "Store this key in a safe place, and do not share it with anyone. It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system."
 
 msgid "recovery_error"
 msgstr "Unable to recover your account."
