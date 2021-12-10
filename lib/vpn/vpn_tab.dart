@@ -72,23 +72,22 @@ class VPNTab extends StatelessWidget {
     var sessionModel = context.watch<SessionModel>();
     var messagingModel = context.watch<MessagingModel>();
 
-    return messagingModel.getFirstAccessedChatTS(
-        (context, firstAccessedChatTS, child) =>
-            messagingModel.getFirstSeenIntroducingTS(
-                (context, firstSeenIntroducingTS, child) => sessionModel
-                        .getInstallOrUpgradeStatus(
-                            (context, isFreshInstall, child) {
-                      if (shouldModalShow(
-                        context,
-                        firstSeenIntroducingTS,
-                        firstAccessedChatTS,
-                        isFreshInstall,
-                      )) {
-                        context.router.push(FullScreenDialogPage(
-                            widget: TryLanternChat(parentContext: context)));
-                      }
-                      return renderVPN(sessionModel);
-                    })));
+    return messagingModel.getFirstAccessedChatTS((_, firstAccessedChatTS,
+            child) =>
+        messagingModel.getFirstSeenIntroducingTS((_, firstSeenIntroducingTS,
+                child) =>
+            sessionModel.getInstallOrUpgradeStatus((_, isFreshInstall, child) {
+              if (shouldModalShow(
+                context,
+                firstSeenIntroducingTS,
+                firstAccessedChatTS,
+                isFreshInstall,
+              )) {
+                context.router.push(FullScreenDialogPage(
+                    widget: TryLanternChat(parentContext: context)));
+              }
+              return renderVPN(sessionModel);
+            })));
   }
 
   // Returns true when the following are true:
