@@ -34,13 +34,6 @@ class VPNTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             proUser ? Container() : ProBanner(),
-            // TODO: take out
-            Button(
-                text: 'show modal',
-                onPressed: () async {
-                  await context.router
-                      .push(FullScreenDialogPage(widget: TryLanternChat()));
-                }),
             VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
