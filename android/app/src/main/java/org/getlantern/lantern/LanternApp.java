@@ -16,7 +16,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
@@ -76,11 +75,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         super.onCreate();
         Logger.debug(TAG, "super.onCreate() finished at " + (System.currentTimeMillis() - start));
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // Current process is dedicated to LeakCanary for heap analysis.
-            return;
-        }
-
         SentryUtil.enableGoPanicEnrichment(this);
 
         ProdLogger.enable(getApplicationContext());
@@ -117,7 +111,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         updateFirebaseConfig();
         Logger.debug(TAG, "updateFirebaseConfig() finished at " + (System.currentTimeMillis() - start));
 
-        LeakCanary.install(this);
         Logger.debug(TAG, "onCreate() finished at " + (System.currentTimeMillis() - start));
     }
 
