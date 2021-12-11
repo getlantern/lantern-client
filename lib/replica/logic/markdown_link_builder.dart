@@ -1,4 +1,4 @@
-import 'package:lantern/replica/logic/replica_link.dart';
+import 'package:lantern/replica/models/replica_link.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';

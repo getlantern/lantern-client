@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
-import 'package:lantern/replica/logic/replica_link.dart';
-import 'package:lantern/replica/ui/searchcategory.dart';
+import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -61,7 +61,6 @@ class _LinkOpenerScreen extends State<LinkOpenerScreen> {
             logger.v('XXX initState: launching video view');
             return context.replaceRoute(
                 ReplicaVideoPlayerScreen(replicaLink: widget.replicaLink));
-          case SearchCategory.Web:
           case SearchCategory.Image:
           case SearchCategory.Audio:
           case SearchCategory.Document:

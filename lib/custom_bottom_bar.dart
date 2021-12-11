@@ -94,9 +94,9 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('replica'.i18n, style: tsFloatingLabel),
+              label: CText('Discover'.i18n, style: tsFloatingLabel),
               icon: CAssetImage(
-                path: ImagePaths.alert,
+                path: ImagePaths.discover,
                 color: index == 3
                     ? selectedTabLabelColor
                     : unselectedTabLabelColor,
@@ -104,7 +104,7 @@ class CustomBottomBar extends StatelessWidget {
               onTap: () => onTap!(3),
             ),
             label: '',
-            tooltip: 'replica'.i18n,
+            tooltip: 'Discover'.i18n,
           ),
         if (isDevelop)
           BottomNavigationBarItem(

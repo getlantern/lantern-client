@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:lantern/replica/logic/replica_model.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 
 // This class works like this:
 // - Always use it in static form. Don't instantiate it
