@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
-import 'package:lantern/replica/logic/replica_link.dart';
-import 'package:lantern/replica/ui/searchcategory.dart';
+import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -20,21 +20,24 @@ var logger = Logger(
 ///   etc.), show an error and don't proceed; the user is expected to press the
 ///   back button.
 ///
+/// Looks like this docs/replica_link_opener.png
+///
 /// XXX <04-12-21> soltzen: this is the only location we need to check if
 /// Replica is initialized, since we might've come from a deeplink.
 /// In all other widgets, we 100% know the status of Replica since the Replica
 /// tab will not be visible if Replica is not initialized.
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
-class LinkOpenerScreen extends StatefulWidget {
-  LinkOpenerScreen({Key? key, required this.replicaLink}) : super(key: key);
+class ReplicaLinkOpenerScreen extends StatefulWidget {
+  ReplicaLinkOpenerScreen({Key? key, required this.replicaLink})
+      : super(key: key);
   final ReplicaLink replicaLink;
 
   @override
   State<StatefulWidget> createState() => _LinkOpenerScreen();
 }
 
-class _LinkOpenerScreen extends State<LinkOpenerScreen> {
+class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
   bool _didFailToInitReplica = false;
   final ReplicaApi _replicaApi =
       ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
@@ -42,32 +45,29 @@ class _LinkOpenerScreen extends State<LinkOpenerScreen> {
   @override
   void initState() {
     ReplicaCommon.init().then((_) {
-      logger.v('XXX initState(): ReplicaCommon.init() ran');
+      logger.v('initState(): ReplicaCommon.init() ran');
       if (!ReplicaCommon.isReplicaRunning()) {
         if (mounted) {
           setState(() {
-            logger.v('XXX initState(): ReplicaCommon.init() failed');
+            logger.v('initState(): ReplicaCommon.init() failed');
             _didFailToInitReplica = true;
           });
         }
         return;
       }
 
-      logger.v('XXX initState(): ReplicaCommon.init() OK');
+      logger.v('initState(): ReplicaCommon.init() OK');
       _replicaApi.fetchCategoryFromReplicaLink(widget.replicaLink).then((cat) {
-        logger.v('XXX initState: category is ${cat.toString()}');
+        logger.v('initState: category is ${cat.toString()}');
         switch (cat) {
           case SearchCategory.Video:
-            logger.v('XXX initState: launching video view');
             return context.replaceRoute(
                 ReplicaVideoPlayerScreen(replicaLink: widget.replicaLink));
-          case SearchCategory.Web:
           case SearchCategory.Image:
           case SearchCategory.Audio:
           case SearchCategory.Document:
           case SearchCategory.App:
           case SearchCategory.Unknown:
-            logger.v('XXX initState: launching unknown item view');
             return context.replaceRoute(UnknownItemScreen(
                 category: cat, replicaLink: widget.replicaLink));
         }

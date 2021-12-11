@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/replica/ui/search_screen.dart';
 
 Widget boilerplate(Widget child) {
   return MaterialApp(home: Scaffold(body: child));

@@ -72,6 +72,8 @@ class ReplicaLink {
     if (fileIndex != null) {
       s += '&so=$fileIndex';
     }
+    // XXX <13-12-21, soltzen> Don't use Uri.encodeFull: Replica backend only
+    // accepts this
     return Uri.encodeQueryComponent(s);
   }
 }

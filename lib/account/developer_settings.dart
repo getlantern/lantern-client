@@ -4,9 +4,17 @@ import 'package:lantern/replica/logic/replica_link.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:lantern/replica/ui/markdown_link_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:lantern/account/account.dart';
+import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/logic/common.dart';
+import 'package:lantern/replica/logic/markdown_link_builder.dart';
+import 'package:lantern/replica/models/replica_link.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'settings_item.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
+  final replicaApi = ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
+
   DeveloperSettingsTab({Key? key}) : super(key: key);
 
   @override
@@ -157,11 +165,28 @@ class DeveloperSettingsTab extends StatelessWidget {
           ),
           Button(
             width: 200,
-            text: 'Play video',
+            text: 'Play random video',
             secondary: true,
             onPressed: () async => await context.pushRoute(ReplicaVideoPlayerScreen(
                 replicaLink: ReplicaLink.New(
                     'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0')!)),
+          ),
+          Button(
+            width: 200,
+            text: 'Play random audio',
+            secondary: true,
+            onPressed: () async => await context.pushRoute(ReplicaAudioPlayerScreen(
+                replicaLink: ReplicaLink.New(
+                    'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0')!)),
+          ),
+          Button(
+            width: 200,
+            text: 'Download random link',
+            secondary: true,
+            onPressed: () async {
+              await replicaApi.download(ReplicaLink.New(
+                  'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0')!);
+            },
           ),
           MarkdownBody(
             data:
