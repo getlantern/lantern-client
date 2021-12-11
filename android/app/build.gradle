@@ -369,10 +369,7 @@ dependencies {
     implementation group: 'joda-time', name: 'joda-time', version: '2.8.2'
 
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.3'
-    profileImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
