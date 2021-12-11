@@ -43,6 +43,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
+            android:exported="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
@@ -143,6 +144,7 @@
         <activity
             android:name=".activity.UpdateActivity_"
             android:windowSoftInputMode="adjustResize"
+            android:exported="false"
             android:theme="@style/Theme.Blank.Dialog">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -166,6 +168,7 @@
         </provider>
 
         <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
+            android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>
