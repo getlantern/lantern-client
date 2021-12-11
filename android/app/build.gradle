@@ -101,7 +101,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ''
-                arguments '-DANDROID_STL=c++_shared'
+                arguments '-DANDROID_ARM_NEON=TRUE','-DANDROID_STL=c++_shared'
             }
         }
 
