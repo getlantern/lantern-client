@@ -12,8 +12,10 @@ import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
+import 'package:lantern/replica/ui/media_views/audio_player.dart';
+import 'package:lantern/replica/ui/search_screen.dart';
 import 'package:lantern/replica/ui/unknown_item_screen.dart';
-import 'package:lantern/replica/ui/videoplayer.dart';
+import 'package:lantern/replica/ui/media_views/video_player.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -81,9 +83,23 @@ import 'package:lantern/replica/ui/videoplayer.dart';
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
+        page: ReplicaAudioPlayerScreen,
+        name: 'ReplicaAudioPlayerScreen',
+        path: 'replicaAudioPlayerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
         page: UnknownItemScreen,
         name: 'UnknownItemScreen',
         path: 'unknownItemScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaSearchScreen,
+        name: 'ReplicaSearchScreen',
+        path: 'replicaSearchScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
