@@ -37,7 +37,7 @@ class ReplicaApi {
   late Dio dio;
   final _downloaderCallbackPort = ReceivePort();
   static final _downloadeManagerIsolateName = 'downloader_send_port';
-  // This **must** be initialized from bindDownloaderBackgroundIsolate()
+  // This will be initialized from bindDownloaderBackgroundIsolate()
   late Function() _onDownloadError;
   final String replicaHostAddr;
   final _defaultTimeoutDuration = const Duration(seconds: 7);
@@ -159,7 +159,6 @@ class ReplicaApi {
     var displayName = link.displayName ?? link.infohash;
     var taskId = await FlutterDownloader.enqueue(
       url: u,
-      // headers: {"auth": "test_for_sql_encoding"},
       savedDir: downloadsDir,
       showNotification: true,
       fileName: displayName,

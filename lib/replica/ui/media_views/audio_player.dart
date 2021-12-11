@@ -120,7 +120,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
             path: ImagePaths.fast_rewind,
             size: 40,
           ),
-          const SizedBox(width: 20), // give it width
+          const SizedBox(width: 20),
           PlaybackButton(
             onTap: () async {
               _isPlaying ? await _pause() : await _play();
@@ -128,7 +128,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
             path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
             size: 60,
           ),
-          const SizedBox(width: 20), // give it width
+          const SizedBox(width: 20),
           PlaybackButton(
             onTap: () async {
               if (_position == null || _duration == null) {

@@ -178,7 +178,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
           path: ImagePaths.fast_rewind,
           size: 40,
         ),
-        const SizedBox(width: 20), // give it width
+        const SizedBox(width: 20),
         PlaybackButton(
           onTap: () async {
             _isPlaying
@@ -188,7 +188,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
           path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
           size: 60,
         ),
-        const SizedBox(width: 20), // give it width
+        const SizedBox(width: 20),
 
         // Fast forward button
         PlaybackButton(

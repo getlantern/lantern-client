@@ -36,7 +36,6 @@ class _ReplicaAppListItemState extends ReplicaCommonListItemState {
         child: Row(
           children: <Widget>[
             // Render the document icon
-            // TODO Pick the icon based on the mimetype
             const CAssetImage(path: ImagePaths.doc),
             // Render some space
             const Padding(padding: EdgeInsets.symmetric(horizontal: 4.0)),

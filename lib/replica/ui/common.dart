@@ -13,14 +13,6 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-// TODO Replace all usages of this into just api.download
-// getCommonDownloadBtnPressedClosure is a function returning a closure that
-// includes 'item'. This closure handles the most common download task:
-// - queue a download for a Replica link
-// - show a notification at the beginning of the download with a progress bar
-// - show a notification at the end of the download mentionin it is downloaded
-//   successfully
-
 Function() getCommonOnShareBtnPressedClosure(
     BuildContext context, ReplicaLink? link) {
   if (link == null) {

@@ -128,7 +128,6 @@ class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
           child: SizedBox(
             height: 70,
             child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 renderMetadata(),
                 Expanded(

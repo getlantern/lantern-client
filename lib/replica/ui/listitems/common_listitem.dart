@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/i18n/i18n.dart';
 
-// ignore: must_be_immutable
 abstract class ReplicaCommonListItem extends StatefulWidget {
   ReplicaCommonListItem({
     required this.onDownloadBtnPressed,
