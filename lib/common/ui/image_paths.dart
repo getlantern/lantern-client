@@ -61,6 +61,19 @@ class ImagePaths {
   static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
   static const account_remove = 'assets/images/account_remove.svg';
 
+  // Replica
+  static const lantern_logo = 'assets/images/lantern_logo.svg';
+  static const discover = 'assets/images/discover.svg';
+  static const audio = 'assets/images/audio_black.svg';
+  static const doc = 'assets/images/doc_black.svg';
+  static const spreadsheet = 'assets/images/spreadsheet_black.svg';
+  static const share = 'assets/images/share.svg';
+  static const file_download = 'assets/images/file_download.svg';
+  static const pause = 'assets/images/pause.svg';
+  static const play = 'assets/images/play_arrow.svg';
+  static const fast_forward = 'assets/images/fast_forward.svg';
+  static const fast_rewind = 'assets/images/fast_rewind.svg';
+
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';
   static const arrow_up = 'assets/images/arrow_up.svg';
