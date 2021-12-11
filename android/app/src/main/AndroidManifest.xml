@@ -30,6 +30,7 @@
         android:hardwareAccelerated="true"
         tools:replace="allowBackup, label"
         android:allowBackup="false"
+        android:requestLegacyExternalStorage="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:persistent="true"
         android:icon="@drawable/app_icon"
@@ -164,6 +165,17 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Required by flutter_downloader: https://pub.dev/packages/flutter_downloader#android-integration -->
+        <provider
+            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+            android:authorities="org.getlantern.lantern.flutter_downloader.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
         </provider>
 
         <service android:name="org.getlantern.lantern.vpn.LanternVpnService"

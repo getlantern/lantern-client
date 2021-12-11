@@ -20,7 +20,33 @@ Lantern Android is an app that uses the [VpnService][https://developer.android.c
 - Open draw.io in a browser
   - Copy-paste the `.drawio.svg` files there
 
-![Components](components.drawio.svg)
+![Components](./docs/components.drawio.svg)
+
+### Replica Flows
+
+#### Searching
+
+![](./docs/replica_searching.drawio.svg)
+
+#### Downloading
+
+![](./docs/replica_downloading.drawio.svg)
+
+#### Viewing Audio/Video/Images
+
+![](./docs/replica_stream.drawio.svg)
+
+#### Sharing
+
+![](./docs/replica_share.drawio.svg)
+
+#### Uploading
+
+![](./docs/replica_uploading.drawio.svg)
+
+#### Opening a Replica Link
+
+![](./docs/replica_open_link.drawio.svg)
 
 ## Usage
 
@@ -77,6 +103,9 @@ Or, run it from Android Studio if you're using that.
 
 The Flutter component uses [logger](https://pub.dev/packages/logger) package for logging.
 See `home.dart#build()` to know where it's configured.
+
+During development, you'll notice a lot of `GoLog`-tagged code. Feel-free to comment that out during your flutter work.
+A sane termonal command (using [pidcat](https://github.com/JakeWharton/pidcat)) is `pidcat org.getlantern.lantern -i GoLog -i System.out -w 3`.
 
 ### Building the InternalSdk (AKA Lantern Core) as a library
 

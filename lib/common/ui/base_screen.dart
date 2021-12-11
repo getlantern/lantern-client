@@ -14,7 +14,9 @@ class BaseScreen extends StatelessWidget {
   final bool padVertical;
   final bool showAppBar;
   late final Color foregroundColor;
-  late final Color backgroundColor;
+  late final Color appbarBackgroundColor;
+  // Color of the body's background before padding
+  late final Color bodyBackgroundColor;
 
   BaseScreen(
       {this.title,
@@ -27,19 +29,21 @@ class BaseScreen extends StatelessWidget {
       this.padHorizontal = true,
       this.padVertical = false,
       Color? foregroundColor,
-      Color? backgroundColor,
+      Color? appbarBackgroundColor,
+      Color? bodyBackgroundColor,
       this.showAppBar = true,
       Key? key})
       : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
-    this.backgroundColor = backgroundColor ?? white;
+    this.appbarBackgroundColor = appbarBackgroundColor ?? white;
+    this.bodyBackgroundColor =
+        bodyBackgroundColor ?? this.appbarBackgroundColor;
   }
 
   @override
   Widget build(BuildContext context) {
     return testRTL(
       Scaffold(
-        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: !showAppBar
             ? null
@@ -52,17 +56,20 @@ class BaseScreen extends StatelessWidget {
                     : title,
                 elevation: 1,
                 foregroundColor: foregroundColor,
-                backgroundColor: backgroundColor,
+                backgroundColor: appbarBackgroundColor,
                 iconTheme: IconThemeData(color: foregroundColor),
                 centerTitle: centerTitle,
                 titleSpacing: 0,
                 actions: actions,
               ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: padHorizontal ? 16 : 0,
-              vertical: padVertical ? 16 : 0),
-          child: body,
+        body: Container(
+          color: bodyBackgroundColor,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: padHorizontal ? 16 : 0,
+                vertical: padVertical ? 16 : 0),
+            child: body,
+          ),
         ),
         floatingActionButton: actionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,

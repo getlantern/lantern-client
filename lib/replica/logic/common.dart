@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:lantern/replica/logic/replica_model.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 
 final replicaModel = ReplicaModel();
 
