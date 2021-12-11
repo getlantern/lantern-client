@@ -374,7 +374,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.android.billingclient:billing:3.0.1'
     implementation "androidx.constraintlayout:constraintlayout:2.1.0-beta01"
@@ -395,7 +395,43 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    implementation 'com.stripe:stripe-android:16.10.2'
+    // XXX <10-12-21, soltzen> Stripe payments v17 introduced breaking API
+    // changes:
+    // https://github.com/stripe/stripe-android/blob/master/CHANGELOG.md#1700---2021-07-15
+    // These changes break our current implementations and might even require a
+    // design change to use
+    // [CardInputWidget](https://stripe.dev/stripe-android/payments-core/com.stripe.android.view/-card-input-widget/index.html).
+    //
+    // Because of this, I kept the version we have and manually introduced //
+    // [patch #3999](https://github.com/stripe/stripe-android/pull/3999/files) to
+    // accommodate for an Android 12 (API 31) change to [force all
+    // intent-filter](https://developer.android.com/about/versions/12/behavior-changes-12)
+    // users to explicitly add an 'android:exported' attribute.
+    //
+    // When we migrate to Stripe v18 and fix the breaking changes, this AAR is
+    // no longer needed.
+    //
+    // We need compileSdkVersion 31 (i.e., Android 12) to compile
+    // flutter_downloader package (see ./pubspec.yaml).
+    //
+    // Finally, the dependencies in this block are all transitive dependencies
+    // of Stripe's Android SDK that were always included transparently by Gradle:
+    // AARs don't include a dependency list, so I had to add those manually.
+    implementation(name:'stripe-android-16.9.0__patch_3999', ext: 'aar')
+    implementation 'androidx.databinding:viewbinding:4.2.1'
+    implementation 'org.jetbrains.kotlin:kotlin-parcelize-runtime:1.4.32'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.activity:activity-ktx:1.2.3'
+    implementation 'androidx.fragment:fragment-ktx:1.3.4'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.32'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.68'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.8.1'
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
