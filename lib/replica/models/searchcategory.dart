@@ -1,4 +1,4 @@
-enum SearchCategory { Web, Image, Video, Audio, Document, App, Unknown }
+enum SearchCategory { Image, Video, Audio, Document, App, Unknown }
 
 // Taken mostly from here
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
@@ -55,7 +55,6 @@ extension MimeTypes on SearchCategory {
         return 'text+epub+application/pdf+rtf+word+spreadsheet+excel+xml';
       case SearchCategory.App:
         return 'message+www+chemical+model+paleovu+x-world+xgl+multipart+application';
-      case SearchCategory.Web:
       case SearchCategory.Unknown:
         // Web and Unknown don't use mime types
         return '';

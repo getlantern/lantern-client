@@ -145,7 +145,7 @@ class CustomBottomBar extends StatelessWidget {
               onTap: () => onTap!(3),
             ),
             label: '',
-            tooltip: 'replica'.i18n,
+            tooltip: 'Discover'.i18n,
           ),
         if (isDevelop)
           BottomNavigationBarItem(

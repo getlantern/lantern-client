@@ -1,4 +1,4 @@
-import 'package:lantern/replica/logic/replica_link.dart';
+import 'package:lantern/replica/models/replica_link.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -13,7 +13,7 @@ class ReplicaLinkMarkdownElementBuilder extends MarkdownElementBuilder {
 
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    print('XXX Found potential replica link: ${element.textContent}');
+    // print('Found potential replica link: ${element.textContent}');
     var text = element.textContent;
     var link = ReplicaLink.New('replica://$text');
     if (link == null) {
@@ -25,7 +25,7 @@ class ReplicaLinkMarkdownElementBuilder extends MarkdownElementBuilder {
               style: const TextStyle(color: Colors.black)));
     }
 
-    print('XXX Found replica link: ${element.textContent}');
+    // print('Found replica link: ${element.textContent}');
     return SelectableText.rich(
       TextSpan(
         // replica:// is stripped during the parsing. Put it back
