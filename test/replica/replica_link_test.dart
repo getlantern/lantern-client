@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/replica/logic/replica_link.dart';
+import 'package:lantern/replica/models/replica_link.dart';
 
 class TestCase {
   TestCase(
@@ -10,7 +10,7 @@ class TestCase {
 }
 
 void main() {
-  test('value should start at 0', () {
+  test('', () {
     var cases = [
       TestCase(
           title: 'Encoded link',
@@ -59,6 +59,17 @@ void main() {
           title: 'half a hash',
           input: 'replica://magnet:?xt=urn:btih:e380a6c5ae0fb15',
           expectedOutput: null),
+      TestCase(
+        title: 'regression 1',
+        input:
+            'magnet:?xt=urn:btih:7604cc90fb4c8636e574af27708284eef86de797&dn=%5BHD%5DAAA-141%2F%E8%AB%96%E5%A3%87%E6%96%87%E5%AE%A3%2F%E6%84%9B%E5%9C%A8%E9%BB%91%E5%A4%9C%40%E7%84%A1%E9%99%90%E8%A8%8E%E8%AB%96%E5%8D%80+FastZone.ORG.url&so=17',
+        expectedOutput: ReplicaLink(
+          infohash: '7604cc90fb4c8636e574af27708284eef86de797',
+          displayName: Uri.decodeFull(
+              '%5BHD%5DAAA-141/%E8%AB%96%E5%A3%87%E6%96%87%E5%AE%A3/%E6%84%9B%E5%9C%A8%E9%BB%91%E5%A4%9C@%E7%84%A1%E9%99%90%E8%A8%8E%E8%AB%96%E5%8D%80%20FastZone.ORG.url'),
+          fileIndex: 17,
+        ),
+      ),
     ];
 
     for (var c in cases) {

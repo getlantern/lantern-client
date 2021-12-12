@@ -30,6 +30,7 @@
         android:hardwareAccelerated="true"
         tools:replace="allowBackup, label"
         android:allowBackup="false"
+        android:requestLegacyExternalStorage="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:persistent="true"
         android:icon="@drawable/app_icon"
@@ -42,6 +43,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
+            android:exported="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
@@ -142,6 +144,7 @@
         <activity
             android:name=".activity.UpdateActivity_"
             android:windowSoftInputMode="adjustResize"
+            android:exported="false"
             android:theme="@style/Theme.Blank.Dialog">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -164,7 +167,19 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- Required by flutter_downloader: https://pub.dev/packages/flutter_downloader#android-integration -->
+        <provider
+            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+            android:authorities="org.getlantern.lantern.flutter_downloader.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
+            android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>

@@ -45,7 +45,7 @@ dependencies:
 
   loader_overlay: ^2.0.0
 
-  audioplayers: ^0.19.1
+  audioplayers: ^0.20.1
 
   auto_route: ^2.2.0
 
@@ -63,7 +63,7 @@ dependencies:
 
   flutter_keyboard_visibility: ^5.0.3
 
-  video_player: ^2.1.5
+  video_player: ^2.2.7
 
   flutter_svg: ^0.21.0-nullsafety.0
 
@@ -115,7 +115,7 @@ dependencies:
 
   dio: ^4.0.4
 
-  path_provider: ^2.0.7
+  path_provider: ^2.0.8
 
   permission_handler: ^8.3.0
 
@@ -125,13 +125,13 @@ dependencies:
 
   flutter_share: ^2.0.0
 
-  shared_preferences: ^2.0.9
-
   infinite_scroll_pagination: ^3.1.0
 
   logger: ^1.1.0
 
   cached_network_image: ^3.2.0
+
+  android_path_provider: ^0.3.0
 
 dev_dependencies:
   flutter_test:

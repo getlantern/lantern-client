@@ -4,7 +4,7 @@ import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:lantern/replica/ui/markdown_link_builder.dart';
+import 'package:lantern/replica/logic/markdown_link_builder.dart';
 
 import 'mime_type.dart';
 import 'reactions.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/replica/logic/common.dart';
+
 import 'app.dart';
 
 Future<void> main() async {
