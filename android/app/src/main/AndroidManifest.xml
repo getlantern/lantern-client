@@ -167,17 +167,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Required by flutter_downloader: https://pub.dev/packages/flutter_downloader#android-integration -->
-        <provider
-            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-            android:authorities="org.getlantern.lantern.flutter_downloader.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
-
         <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
             android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
