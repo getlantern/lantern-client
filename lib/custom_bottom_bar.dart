@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/common/common.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/messaging/messaging.dart';
 

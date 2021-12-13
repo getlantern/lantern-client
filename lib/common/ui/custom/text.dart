@@ -206,34 +206,4 @@ class CTextStyle extends TextStyle {
       debugLabel: newDebugLabel,
     );
   }
-
-  // @override
-  // TextStyle copyWith(
-  //     {bool? inherit,
-  //     Color? color,
-  //     Color? backgroundColor,
-  //     String? fontFamily,
-  //     List<String>? fontFamilyFallback,
-  //     double? fontSize,
-  //     FontWeight? fontWeight,
-  //     FontStyle? fontStyle,
-  //     double? letterSpacing,
-  //     double? wordSpacing,
-  //     TextBaseline? textBaseline,
-  //     double? height,
-  //     TextLeadingDistribution? leadingDistribution,
-  //     Locale? locale,
-  //     Paint? foreground,
-  //     Paint? background,
-  //     List<Shadow>? shadows,
-  //     List<FontFeature>? fontFeatures,
-  //     TextDecoration? decoration,
-  //     Color? decorationColor,
-  //     TextDecorationStyle? decorationStyle,
-  //     double? decorationThickness,
-  //     String? debugLabel,
-  //     TextOverflow? overflow}) {
-  //   assert(false, 'copyWith not supported, use copiedWith');
-  //   return this;
-  // }
 }

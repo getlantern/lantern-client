@@ -1,8 +1,5 @@
-import 'dart:ui';
-
-import 'package:lantern/common/common.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:crypto/crypto.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 Color transparent = Colors.transparent;

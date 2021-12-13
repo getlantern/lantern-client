@@ -1,4 +1,3 @@
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class RecoveryKey extends StatelessWidget {

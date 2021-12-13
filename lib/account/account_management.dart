@@ -1,8 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:lantern/common/common.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AccountManagement extends StatefulWidget {
   AccountManagement({Key? key, required this.isPro}) : super(key: key);

@@ -1,4 +1,3 @@
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 
