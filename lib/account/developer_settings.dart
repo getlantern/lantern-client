@@ -114,7 +114,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
-            content: 'Start app',
+            content: 'Start messaging',
             trailingArray: [
               TextButton(
                   onPressed: () async {
@@ -126,13 +126,25 @@ class DeveloperSettingsTab extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
-            content: 'Kill app',
+            content: 'Kill messaging',
             trailingArray: [
               TextButton(
                   onPressed: () async {
                     await messagingModel.kill();
                   },
                   child: CText('kill'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Wipe data and restart',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.wipeData();
+                  },
+                  child: CText('Wipe'.toUpperCase(),
                       style:
                           tsButton.copiedWith(color: Colors.deepPurpleAccent)))
             ],
