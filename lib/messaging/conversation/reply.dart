@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/conversation/mime_type.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/vpn/vpn.dart';
 
 class Reply extends StatelessWidget {
   final Contact contact;

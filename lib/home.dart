@@ -1,16 +1,8 @@
-import 'dart:typed_data';
-
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/custom_bottom_bar.dart';
-import 'package:lantern/event_extension.dart';
-import 'package:lantern/event_manager.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';

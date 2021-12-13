@@ -1,5 +1,4 @@
 // based on https://github.com/platelk/dcache
-import 'dart:async';
 import 'dart:collection';
 
 import 'common.dart';
