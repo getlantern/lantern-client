@@ -2,6 +2,8 @@ import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
+import 'viewer.dart';
+
 class VideoAttachment extends VisualAttachment {
   VideoAttachment(Contact contact, StoredMessage message,
       StoredAttachment attachment, bool inbound)
