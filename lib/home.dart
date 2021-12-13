@@ -139,10 +139,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBody(int tabIndex, bool isOnboarded) {
+  Widget buildBody(int tabIndex, bool? isOnboarded) {
     switch (tabIndex) {
       case 0:
-        return isOnboarded ? Chats() : Welcome();
+        return isOnboarded == null
+            // While onboarding status is not yet know, show a white container
+            // that matches the background of our usual pages.
+            ? Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(color: white),
+              )
+            : isOnboarded
+                ? Chats()
+                : Welcome();
       case 1:
         return VPNTab();
       case 2:

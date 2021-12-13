@@ -235,7 +235,7 @@ class _AccountManagementState extends State<AccountManagement>
                       ],
                     ));
                   }
-                  return hasBeenOnboarded
+                  return hasBeenOnboarded == true
                       // * has been onboarded
                       ? Column(children: [
                           TabBar(

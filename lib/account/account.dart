@@ -26,7 +26,7 @@ class AccountMenu extends StatelessWidget {
       BuildContext context, SessionModel sessionModel, Contact me) {
     return [
       messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
-          hasBeenOnboarded
+          hasBeenOnboarded == true
               ? messagingModel.getCopiedRecoveryStatus((BuildContext context,
                       bool hasCopiedRecoveryKey, Widget? child) =>
                   ListItemFactory.settingsItem(
@@ -84,7 +84,7 @@ class AccountMenu extends StatelessWidget {
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: true)),
                   trailingArray: [
-                    if (!hasCopiedRecoveryKey && hasBeenOnboarded)
+                    if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
                         path: ImagePaths.badge,
                       ),

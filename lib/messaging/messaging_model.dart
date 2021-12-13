@@ -423,9 +423,11 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
-  Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/onBoardingStatus',
-        defaultValue: false, builder: builder);
+  Widget getOnBoardingStatus(ValueWidgetBuilder<bool?> builder) {
+    // Note - we use null as a placeholder for "unknown" to indicate when we
+    // haven't yet read the actual onboarding status from the back-end
+    return subscribedSingleValueBuilder<bool?>('/onBoardingStatus',
+        defaultValue: null, builder: builder);
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
