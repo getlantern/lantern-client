@@ -51,6 +51,13 @@ class MessagingModel constructor(
             sendSignal(signal, false) // since we have not accepted yet
         }
 
+        // default onboarding status to false if it hasn't been set yet
+        db.mutate { tx ->
+            if (!db.contains("/onBoardingStatus")) {
+                tx.put("/onBoardingStatus", false)
+            }
+        }
+
         messaging
     }
 

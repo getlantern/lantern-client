@@ -109,7 +109,7 @@ class CustomBottomBar extends StatelessWidget {
                     color: index == 2 ? black : grey5)),
             onTap: () => onTap!(2),
             icon: messagingModel.getOnBoardingStatus(
-                (context, hasBeenOnboarded, child) => hasBeenOnboarded
+                (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                     ? messagingModel.getCopiedRecoveryStatus(
                         (context, hasCopiedRecoveryKey, child) => CBadge(
                               count: 1,
