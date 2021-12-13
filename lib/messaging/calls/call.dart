@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/vpn/vpn.dart';
 
 import 'signaling.dart';
 

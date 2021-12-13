@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'common.dart';
 
 final sessionModel = SessionModel();

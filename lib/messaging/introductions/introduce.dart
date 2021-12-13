@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/contacts/contacts_extension.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 

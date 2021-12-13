@@ -1,6 +1,4 @@
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/conversation/call_action.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
 import 'show_block_contact_dialog.dart';

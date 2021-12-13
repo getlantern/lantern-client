@@ -1,6 +1,4 @@
-import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/conversation/disappearing_timer_action.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 import '../messaging.dart';
 
