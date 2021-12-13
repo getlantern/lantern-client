@@ -23,7 +23,6 @@ import 'package:lantern/account/language.dart' as _i13;
 import 'package:lantern/account/recovery_key.dart' as _i18;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i19;
 import 'package:lantern/account/settings.dart' as _i12;
-import 'package:lantern/common/common.dart' as _i23;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -32,11 +31,11 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
+import 'package:lantern/messaging/messaging.dart' as _i23;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i3;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i2;
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart' as _i24;
 
 class AppRouter extends _i21.RootStackRouter {
   AppRouter([_i22.GlobalKey<_i22.NavigatorState>? navigatorKey])
@@ -298,9 +297,10 @@ class AppRouter extends _i21.RootStackRouter {
       ];
 }
 
-/// generated route for [_i1.HomePage]
+/// generated route for
+/// [_i1.HomePage]
 class Home extends _i21.PageRouteInfo<HomeArgs> {
-  Home({_i23.Key? key}) : super(name, path: '/', args: HomeArgs(key: key));
+  Home({_i23.Key? key}) : super(Home.name, path: '/', args: HomeArgs(key: key));
 
   static const String name = 'Home';
 }
@@ -316,26 +316,31 @@ class HomeArgs {
   }
 }
 
-/// generated route for [_i2.SecureNumberRecovery]
+/// generated route for
+/// [_i2.SecureNumberRecovery]
 class SecureNumberRecovery extends _i21.PageRouteInfo<void> {
-  const SecureNumberRecovery() : super(name, path: 'secureNumberRecovery');
+  const SecureNumberRecovery()
+      : super(SecureNumberRecovery.name, path: 'secureNumberRecovery');
 
   static const String name = 'SecureNumberRecovery';
 }
 
-/// generated route for [_i3.SecureChatNumberMessaging]
+/// generated route for
+/// [_i3.SecureChatNumberMessaging]
 class SecureChatNumberMessaging extends _i21.PageRouteInfo<void> {
   const SecureChatNumberMessaging()
-      : super(name, path: 'secureChatNumberMessaging');
+      : super(SecureChatNumberMessaging.name,
+            path: 'secureChatNumberMessaging');
 
   static const String name = 'SecureChatNumberMessaging';
 }
 
-/// generated route for [_i4.FullScreenDialog]
+/// generated route for
+/// [_i4.FullScreenDialog]
 class FullScreenDialogPage
     extends _i21.PageRouteInfo<FullScreenDialogPageArgs> {
   FullScreenDialogPage({required _i23.Widget widget, _i23.Key? key})
-      : super(name,
+      : super(FullScreenDialogPage.name,
             path: 'fullScreenDialogPage',
             args: FullScreenDialogPageArgs(widget: widget, key: key));
 
@@ -355,13 +360,14 @@ class FullScreenDialogPageArgs {
   }
 }
 
-/// generated route for [_i5.Conversation]
+/// generated route for
+/// [_i5.Conversation]
 class Conversation extends _i21.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i24.ContactId contactId,
+      {required _i23.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
-      : super(name,
+      : super(Conversation.name,
             path: 'conversation',
             args: ConversationArgs(
                 contactId: contactId,
@@ -377,7 +383,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i24.ContactId contactId;
+  final _i23.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -389,10 +395,11 @@ class ConversationArgs {
   }
 }
 
-/// generated route for [_i6.ContactInfo]
+/// generated route for
+/// [_i6.ContactInfo]
 class ContactInfo extends _i21.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i24.Contact contact})
-      : super(name,
+  ContactInfo({required _i23.Contact contact})
+      : super(ContactInfo.name,
             path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
   static const String name = 'ContactInfo';
@@ -401,7 +408,7 @@ class ContactInfo extends _i21.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i24.Contact contact;
+  final _i23.Contact contact;
 
   @override
   String toString() {
@@ -409,24 +416,28 @@ class ContactInfoArgs {
   }
 }
 
-/// generated route for [_i7.NewChat]
+/// generated route for
+/// [_i7.NewChat]
 class NewChat extends _i21.PageRouteInfo<void> {
-  const NewChat() : super(name, path: 'newChat');
+  const NewChat() : super(NewChat.name, path: 'newChat');
 
   static const String name = 'NewChat';
 }
 
-/// generated route for [_i8.AddViaChatNumber]
+/// generated route for
+/// [_i8.AddViaChatNumber]
 class AddViaChatNumber extends _i21.PageRouteInfo<void> {
-  const AddViaChatNumber() : super(name, path: 'addViaChatNumber');
+  const AddViaChatNumber()
+      : super(AddViaChatNumber.name, path: 'addViaChatNumber');
 
   static const String name = 'AddViaChatNumber';
 }
 
-/// generated route for [_i9.Introduce]
+/// generated route for
+/// [_i9.Introduce]
 class Introduce extends _i21.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i24.Contact? contactToIntro})
-      : super(name,
+  Introduce({required bool singleIntro, _i23.Contact? contactToIntro})
+      : super(Introduce.name,
             path: 'introduce',
             args: IntroduceArgs(
                 singleIntro: singleIntro, contactToIntro: contactToIntro));
@@ -439,7 +450,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i24.Contact? contactToIntro;
+  final _i23.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -447,17 +458,19 @@ class IntroduceArgs {
   }
 }
 
-/// generated route for [_i10.Introductions]
+/// generated route for
+/// [_i10.Introductions]
 class Introductions extends _i21.PageRouteInfo<void> {
-  const Introductions() : super(name, path: 'introductions');
+  const Introductions() : super(Introductions.name, path: 'introductions');
 
   static const String name = 'Introductions';
 }
 
-/// generated route for [_i11.AccountManagement]
+/// generated route for
+/// [_i11.AccountManagement]
 class AccountManagement extends _i21.PageRouteInfo<AccountManagementArgs> {
   AccountManagement({_i23.Key? key, required bool isPro})
-      : super(name,
+      : super(AccountManagement.name,
             path: 'accountManagement',
             args: AccountManagementArgs(key: key, isPro: isPro));
 
@@ -477,10 +490,11 @@ class AccountManagementArgs {
   }
 }
 
-/// generated route for [_i12.Settings]
+/// generated route for
+/// [_i12.Settings]
 class Settings extends _i21.PageRouteInfo<SettingsArgs> {
   Settings({_i23.Key? key})
-      : super(name, path: 'settings', args: SettingsArgs(key: key));
+      : super(Settings.name, path: 'settings', args: SettingsArgs(key: key));
 
   static const String name = 'Settings';
 }
@@ -496,10 +510,11 @@ class SettingsArgs {
   }
 }
 
-/// generated route for [_i13.Language]
+/// generated route for
+/// [_i13.Language]
 class Language extends _i21.PageRouteInfo<LanguageArgs> {
   Language({_i23.Key? key})
-      : super(name, path: 'language', args: LanguageArgs(key: key));
+      : super(Language.name, path: 'language', args: LanguageArgs(key: key));
 
   static const String name = 'Language';
 }
@@ -515,10 +530,12 @@ class LanguageArgs {
   }
 }
 
-/// generated route for [_i14.AuthorizeDeviceForPro]
+/// generated route for
+/// [_i14.AuthorizeDeviceForPro]
 class AuthorizePro extends _i21.PageRouteInfo<AuthorizeProArgs> {
   AuthorizePro({_i23.Key? key})
-      : super(name, path: 'authorizePro', args: AuthorizeProArgs(key: key));
+      : super(AuthorizePro.name,
+            path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
   static const String name = 'AuthorizePro';
 }
@@ -534,11 +551,12 @@ class AuthorizeProArgs {
   }
 }
 
-/// generated route for [_i15.AuthorizeDeviceViaEmail]
+/// generated route for
+/// [_i15.AuthorizeDeviceViaEmail]
 class AuthorizeDeviceEmail
     extends _i21.PageRouteInfo<AuthorizeDeviceEmailArgs> {
   AuthorizeDeviceEmail({_i23.Key? key})
-      : super(name,
+      : super(AuthorizeDeviceEmail.name,
             path: 'authorizeDeviceEmail',
             args: AuthorizeDeviceEmailArgs(key: key));
 
@@ -556,11 +574,12 @@ class AuthorizeDeviceEmailArgs {
   }
 }
 
-/// generated route for [_i16.AuthorizeDeviceViaEmailPin]
+/// generated route for
+/// [_i16.AuthorizeDeviceViaEmailPin]
 class AuthorizeDeviceEmailPin
     extends _i21.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({_i23.Key? key})
-      : super(name,
+      : super(AuthorizeDeviceEmailPin.name,
             path: 'authorizeDeviceEmailPin',
             args: AuthorizeDeviceEmailPinArgs(key: key));
 
@@ -578,10 +597,12 @@ class AuthorizeDeviceEmailPinArgs {
   }
 }
 
-/// generated route for [_i17.ApproveDevice]
+/// generated route for
+/// [_i17.ApproveDevice]
 class ApproveDevice extends _i21.PageRouteInfo<ApproveDeviceArgs> {
   ApproveDevice({_i23.Key? key})
-      : super(name, path: 'approveDevice', args: ApproveDeviceArgs(key: key));
+      : super(ApproveDevice.name,
+            path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
   static const String name = 'ApproveDevice';
 }
@@ -597,10 +618,12 @@ class ApproveDeviceArgs {
   }
 }
 
-/// generated route for [_i18.RecoveryKey]
+/// generated route for
+/// [_i18.RecoveryKey]
 class RecoveryKey extends _i21.PageRouteInfo<RecoveryKeyArgs> {
   RecoveryKey({_i23.Key? key})
-      : super(name, path: 'recoveryKey', args: RecoveryKeyArgs(key: key));
+      : super(RecoveryKey.name,
+            path: 'recoveryKey', args: RecoveryKeyArgs(key: key));
 
   static const String name = 'RecoveryKey';
 }
@@ -616,18 +639,21 @@ class RecoveryKeyArgs {
   }
 }
 
-/// generated route for [_i19.SecureChatNumberAccount]
+/// generated route for
+/// [_i19.SecureChatNumberAccount]
 class SecureChatNumberAccount extends _i21.PageRouteInfo<void> {
   const SecureChatNumberAccount()
-      : super(name, path: 'secureChatNumberAccount');
+      : super(SecureChatNumberAccount.name, path: 'secureChatNumberAccount');
 
   static const String name = 'SecureChatNumberAccount';
 }
 
-/// generated route for [_i20.BlockedUsers]
+/// generated route for
+/// [_i20.BlockedUsers]
 class BlockedUsers extends _i21.PageRouteInfo<BlockedUsersArgs> {
   BlockedUsers({_i23.Key? key})
-      : super(name, path: 'blockedUsers', args: BlockedUsersArgs(key: key));
+      : super(BlockedUsers.name,
+            path: 'blockedUsers', args: BlockedUsersArgs(key: key));
 
   static const String name = 'BlockedUsers';
 }
