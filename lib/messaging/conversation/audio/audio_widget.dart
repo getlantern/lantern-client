@@ -1,4 +1,3 @@
-import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/messaging/conversation/audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
 import 'package:lantern/messaging/messaging.dart';

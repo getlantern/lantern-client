@@ -1,6 +1,4 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 class AccountMenu extends StatelessWidget {

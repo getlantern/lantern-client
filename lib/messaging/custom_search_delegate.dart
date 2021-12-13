@@ -1,5 +1,3 @@
-import 'package:lantern/common/common.dart';
-
 import 'messaging.dart';
 
 class CustomSearchDelegate extends SearchDelegate {

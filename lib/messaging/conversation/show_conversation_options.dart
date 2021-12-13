@@ -1,6 +1,3 @@
-import 'package:lantern/common/common.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-
 import '../messaging.dart';
 import 'show_verification_options.dart';
 

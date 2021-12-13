@@ -1,5 +1,4 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart' as ep;
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 
 class MessagingEmojiPicker extends StatelessWidget {

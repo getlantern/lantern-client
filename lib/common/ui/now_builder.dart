@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:lantern/common/common.dart';
 
 /// callback that receives the current time
