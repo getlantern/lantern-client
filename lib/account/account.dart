@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
@@ -22,8 +21,7 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
-  List<Widget> freeItems(
-      BuildContext context, SessionModel sessionModel, Contact me) {
+  List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
       messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
           hasBeenOnboarded == true
@@ -73,7 +71,7 @@ class AccountMenu extends StatelessWidget {
     ];
   }
 
-  List<Widget> proItems(BuildContext context, Contact me) {
+  List<Widget> proItems(BuildContext context) {
     return [
       messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
           messagingModel.getCopiedRecoveryStatus((BuildContext context,
@@ -120,14 +118,11 @@ class AccountMenu extends StatelessWidget {
       title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return messagingModel
-            .me((BuildContext messagingContext, Contact me, Widget? child) {
-          return ListView(
-            children: proUser
-                ? proItems(sessionContext, me)
-                : freeItems(sessionContext, sessionModel, me),
-          );
-        });
+        return ListView(
+          children: proUser
+              ? proItems(sessionContext)
+              : freeItems(sessionContext, sessionModel),
+        );
       }),
     );
   }
