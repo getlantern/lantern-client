@@ -1,6 +1,7 @@
 package io.lantern.android.model
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
@@ -95,11 +96,16 @@ class SessionModel(
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
             }
+            "setTabIndex" -> {
+                db.mutate { tx ->
+                    tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
 
-    fun saveProxyAll(on: Boolean) {
+    private fun saveProxyAll(on: Boolean) {
         db.mutate { tx ->
             tx.put(PATH_PROXY_ALL, on)
         }

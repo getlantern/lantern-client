@@ -3,14 +3,12 @@ import 'package:lantern/messaging/messaging.dart';
 import 'audio_widget.dart';
 
 class MessageBarPreviewRecording extends StatelessWidget {
-  final MessagingModel model;
   final AudioController audioController;
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
   const MessageBarPreviewRecording(
-      {required this.model,
-      required this.audioController,
+      {required this.audioController,
       required this.onCancelRecording,
       required this.onSend});
 

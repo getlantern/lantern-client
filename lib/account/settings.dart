@@ -25,9 +25,6 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'settings'.i18n,
       body: Column(
@@ -65,7 +62,7 @@ class Settings extends StatelessWidget {
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
-              (context, hasBeenOnboarded, child) => hasBeenOnboarded
+              (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                   ? ListItemFactory.settingsItem(
                       header: 'chat'.i18n,
                       icon: ImagePaths.block,

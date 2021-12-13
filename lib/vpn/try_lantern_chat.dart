@@ -1,12 +1,7 @@
+import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class TryLanternChat extends StatelessWidget {
-  final BuildContext parentContext;
-
-  TryLanternChat({
-    required this.parentContext,
-  });
-
   final tsCustomButton = CTextStyle(
     fontSize: 14,
     lineHeight: 14,
@@ -22,7 +17,6 @@ class TryLanternChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var messagingModel = context.watch<MessagingModel>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +38,6 @@ class TryLanternChat extends StatelessWidget {
                     color: black,
                   ),
                   onPressed: () async {
-                    await messagingModel.saveFirstSeenIntroducingTS();
                     await context.router.pop();
                   },
                 ),
@@ -62,7 +55,7 @@ class TryLanternChat extends StatelessWidget {
                       start: 40, end: 40, bottom: 32),
                   color: white,
                   child: LayoutBuilder(
-                    builder: (context, constraints) {
+                    builder: (_, constraints) {
                       // This lays out the speech bubble and lock images in
                       // pairs. The algorithm ensures the following:
                       //
@@ -146,8 +139,6 @@ class TryLanternChat extends StatelessWidget {
                           children: [
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
                                   await context.router.pop();
                                 },
                                 child: CText(
@@ -157,28 +148,13 @@ class TryLanternChat extends StatelessWidget {
                                 )),
                             TextButton(
                                 onPressed: () async {
-                                  await messagingModel
-                                      .saveFirstAccessedChatTS();
-                                  await messagingModel
-                                      .saveFirstSeenIntroducingTS();
-                                  await context.router.pop();
-
-                                  // See https://github.com/Milad-Akarie/auto_route_library#finding-the-right-router
-                                  // This comment looks useful as well https://github.com/Milad-Akarie/auto_route_library/issues/551#issuecomment-844749357
-
-                                  // 1. update Tab location to Chat
-                                  parentContext.router
-                                      .parent<TabsRouter>()!
-                                      .setActiveIndex(
-                                          0); // * ← index 0 for Chats tab
-                                  // 2. find Onboarding router
-                                  final onboardingRouter = parentContext.router
-                                      .parent<TabsRouter>()!
-                                      .innerRouterOf('OnboardingRouter');
-
-                                  // 3. navigate to SecureNumberRecovery route
-                                  await onboardingRouter?.navigate(
-                                      const SecureChatNumberMessaging());
+                                  // Switch to Chat tab
+                                  await sessionModel
+                                      .setTabIndex(lookupTabIndex('Chat'));
+                                  // Start onboarding
+                                  await messagingModel.start();
+                                  await context.router
+                                      .push(const SecureChatNumberMessaging());
                                 },
                                 child: CText(
                                   'try'.i18n.toUpperCase(),

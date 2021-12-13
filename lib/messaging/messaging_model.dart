@@ -1,6 +1,8 @@
 import 'calls/signaling.dart';
 import 'messaging.dart';
 
+final messagingModel = MessagingModel();
+
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
   late Signaling signaling;
@@ -16,7 +18,7 @@ class MessagingModel extends Model {
                   .writeToBuffer(),
             }).then((value) => value as Uint8List));
 
-    signaling = Signaling(model: this, mc: methodChannel);
+    signaling = Signaling(methodChannel);
 
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
@@ -421,9 +423,11 @@ class MessagingModel extends Model {
     return methodChannel.invokeMethod('markIsOnboarded');
   }
 
-  Widget getOnBoardingStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/onBoardingStatus',
-        defaultValue: false, builder: builder);
+  Widget getOnBoardingStatus(ValueWidgetBuilder<bool?> builder) {
+    // Note - we use null as a placeholder for "unknown" to indicate when we
+    // haven't yet read the actual onboarding status from the back-end
+    return subscribedSingleValueBuilder<bool?>('/onBoardingStatus',
+        defaultValue: null, builder: builder);
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
@@ -452,26 +456,27 @@ class MessagingModel extends Model {
         .then((v) => v as String);
   }
 
-  Future<void> saveFirstAccessedChatTS<T>() async {
-    return methodChannel.invokeMethod('saveFirstAccessedChatTS');
+  Future<bool> shouldShowTryLanternChatModal<T>() async {
+    return methodChannel
+        .invokeMethod('shouldShowTryLanternChatModal')
+        .then((value) => value as bool);
   }
 
-  Widget getFirstAccessedChatTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstAccessedChatTS',
+  Future<void> dismissTryLanternChatBadge<T>() async {
+    return methodChannel.invokeMethod('dismissTryLanternChatBadge');
+  }
+
+  Widget getFirstShownTryLanternChatModalTS(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>('/firstShownTryLanternChatModalTS',
         defaultValue: 0, builder: builder);
   }
 
-  Future<void> saveFirstSeenIntroducingTS<T>() async {
-    return methodChannel.invokeMethod('saveFirstSeenIntroducingTS');
+  // * DEV PURPOSES
+  Future<void> resetTimestamps() {
+    return methodChannel.invokeMethod('resetTimestamps');
   }
 
-  Widget getFirstSeenIntroducingTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstSeenIntroducingTS',
-        defaultValue: 0, builder: builder);
-  }
-
-  // for dev purposes
-  Future<void> resetAllFlagsAndTimestamps() {
-    return methodChannel.invokeMethod('resetAllFlagsAndTimestamps');
+  Future<void> resetFlags() {
+    return methodChannel.invokeMethod('resetFlags');
   }
 }

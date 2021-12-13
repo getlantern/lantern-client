@@ -1,11 +1,14 @@
-import '../messaging.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 class SecureChatNumberMessaging extends StatelessWidget {
+  SecureChatNumberMessaging() : super() {
+    messagingModel.dismissTryLanternChatBadge();
+  }
+
   @override
   Widget build(BuildContext context) {
     var textCopied = false;
-    final model = context.watch<MessagingModel>();
-    return model
+    return messagingModel
         .me((BuildContext context, Contact me, Widget? child) => BaseScreen(
             title: 'secure_chat_number'.i18n,
             body: PinnedButtonLayout(
@@ -76,7 +79,7 @@ class SecureChatNumberMessaging extends StatelessWidget {
                 button: Button(
                   text: 'Next'.i18n,
                   onPressed: () async {
-                    await model.markIsOnboarded();
+                    await messagingModel.markIsOnboarded();
                     context.router.popUntilRoot();
                   },
                 ))));

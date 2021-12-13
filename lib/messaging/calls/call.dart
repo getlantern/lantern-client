@@ -5,11 +5,9 @@ import 'signaling.dart';
 
 class Call extends StatefulWidget {
   final Contact contact;
-  final MessagingModel model;
   final Session? initialSession;
 
-  Call({required this.contact, required this.model, this.initialSession})
-      : super();
+  Call({required this.contact, this.initialSession}) : super();
 
   @override
   _CallState createState() => _CallState();
@@ -29,7 +27,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     disableBackButton();
-    signaling = widget.model.signaling;
+    signaling = messagingModel.signaling;
 
     // initialize fragment - status map after breaking down numericFingerprint in groups of 5
     humanizeVerificationNum(widget.contact.numericFingerprint).asMap().forEach(
@@ -119,11 +117,12 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     }
   }
 
-  void handleTapping(MessagingModel model, {required int key}) async {
+  void handleTapping(int key) async {
     var _status = fragmentStatusMap[key]['isConfirmed'];
     markFragments(!_status, key);
     if (fragmentsAreVerified()) {
-      await model.markDirectContactVerified(widget.contact.contactId.id);
+      await messagingModel
+          .markDirectContactVerified(widget.contact.contactId.id);
       setState(() => isVerified = true);
     }
   }
@@ -134,14 +133,15 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
         .any((element) => element.value['isConfirmed'] == false);
   }
 
-  void handleVerifyButtonPress(MessagingModel model) async {
+  void handleVerifyButtonPress() async {
     if (isVerified) {
       markFragments(false, null); // mark all fragments as unverified
       isVerified = false;
     } else {
       markFragments(true, null); // mark all fragments as verified
       isVerified = true;
-      await model.markDirectContactVerified(widget.contact.contactId.id);
+      await messagingModel
+          .markDirectContactVerified(widget.contact.contactId.id);
     }
   }
 
@@ -162,7 +162,6 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<MessagingModel>();
     if (session == null) {
       return Container();
     }
@@ -294,9 +293,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                         ...fragmentStatusMap.entries
                                             .map((entry) => GestureDetector(
                                                   key: ValueKey(entry.key),
-                                                  onTap: () => handleTapping(
-                                                      model,
-                                                      key: entry.key),
+                                                  onTap: () =>
+                                                      handleTapping(entry.key),
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsetsDirectional
@@ -357,7 +355,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                                             ? 'undo_verification'.i18n
                                             : 'mark_as_verified'.i18n,
                                         onPressed: () =>
-                                            handleVerifyButtonPress(model),
+                                            handleVerifyButtonPress(),
                                       ),
                                     )
                                   ],

@@ -7,17 +7,15 @@ import 'show_block_contact_dialog.dart';
 import 'show_delete_contact_dialog.dart';
 
 class ContactInfo extends StatefulWidget {
-  final MessagingModel model;
   final Contact contact;
 
-  ContactInfo({required this.model, required this.contact}) : super();
+  ContactInfo({required this.contact}) : super();
 
   @override
-  _ContactInfoState createState() => _ContactInfoState(model, contact);
+  _ContactInfoState createState() => _ContactInfoState(contact);
 }
 
 class _ContactInfoState extends State<ContactInfo> {
-  final MessagingModel model;
   late Contact contact;
   late ValueNotifier<Contact?> contactNotifier;
   late void Function() contactListener;
@@ -28,7 +26,7 @@ class _ContactInfoState extends State<ContactInfo> {
   late final displayNameController =
       CustomTextEditingController(formKey: formKey);
 
-  _ContactInfoState(this.model, Contact contact) : super() {
+  _ContactInfoState(Contact contact) : super() {
     contactChanged(contact);
   }
 
@@ -42,7 +40,7 @@ class _ContactInfoState extends State<ContactInfo> {
   @override
   void initState() {
     super.initState();
-    contactNotifier = model.contactNotifier(contact.contactId.id);
+    contactNotifier = messagingModel.contactNotifier(contact.contactId.id);
     contactListener = () async {
       if (contactNotifier.value != null) {
         setState(() => contactChanged(contactNotifier.value!));
@@ -134,7 +132,7 @@ class _ContactInfoState extends State<ContactInfo> {
                             contact.displayNameOrFallback;
                         if (notifyModel) {
                           try {
-                            await model.addOrUpdateDirectContact(
+                            await messagingModel.addOrUpdateDirectContact(
                                 unsafeId: contact.contactId.id,
                                 displayName: displayNameController.text);
                           } catch (e, s) {
@@ -204,7 +202,6 @@ class _ContactInfoState extends State<ContactInfo> {
                         onPressed: () async => showBlockContactDialog(
                           context,
                           contact,
-                          model,
                         ),
                         child: CText(
                           'block'.i18n.toUpperCase(),
@@ -223,7 +220,6 @@ class _ContactInfoState extends State<ContactInfo> {
                       onPressed: () async => showDeleteContactDialog(
                         context,
                         contact,
-                        model,
                       ),
                       child: CText(
                         'delete_contact'.i18n.toUpperCase(),

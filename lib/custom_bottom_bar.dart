@@ -19,9 +19,6 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vpnModel = context.watch<VpnModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
     return BottomNavigationBar(
       currentIndex: index,
       elevation: 0.0,
@@ -32,14 +29,11 @@ class CustomBottomBar extends StatelessWidget {
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: messagingModel.getFirstAccessedChatTS(
-              (context, firstAccessedChatTS, child) => NowBuilder(
-                  // * we only show NEW when the user has not accessed the Chat tab () [firstAccessedChatTS == 0] AND a week has not elapsed since we started counting
+          icon: messagingModel.getFirstShownTryLanternChatModalTS(
+              (context, ts, child) => NowBuilder(
                   calculate: (now) =>
-                      firstAccessedChatTS == 0 &&
-                      (now.millisecondsSinceEpoch - firstAccessedChatTS >=
-                          oneWeekInMillis),
-                  builder: (BuildContext context, bool showBadge) =>
+                      (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
+                  builder: (BuildContext context, bool badgeShowing) =>
                       CustomBottomBarItem(
                         currentIndex: index,
                         position: 0,
@@ -48,7 +42,7 @@ class CustomBottomBar extends StatelessWidget {
                             style: tsFloatingLabel.copiedWith(
                                 color: index == 0 ? black : grey5)),
                         icon: CBadge(
-                          showBadge: showBadge,
+                          showBadge: badgeShowing,
                           end: -20,
                           top: -10,
                           customBadge: Container(
@@ -66,13 +60,9 @@ class CustomBottomBar extends StatelessWidget {
                                   color: white,
                                 )),
                           ),
-                          child: NumUnviewedWrapper(
-                              index: index, model: messagingModel),
+                          child: NumUnviewedWrapper(index: index),
                         ),
                         onTap: () async {
-                          if (firstAccessedChatTS == 0) {
-                            await messagingModel.saveFirstAccessedChatTS();
-                          }
                           onTap!(0);
                         },
                       ))),
@@ -119,7 +109,7 @@ class CustomBottomBar extends StatelessWidget {
                     color: index == 2 ? black : grey5)),
             onTap: () => onTap!(2),
             icon: messagingModel.getOnBoardingStatus(
-                (context, hasBeenOnboarded, child) => hasBeenOnboarded
+                (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                     ? messagingModel.getCopiedRecoveryStatus(
                         (context, hasCopiedRecoveryKey, child) => CBadge(
                               count: 1,
@@ -169,16 +159,14 @@ class NumUnviewedWrapper extends StatelessWidget {
   const NumUnviewedWrapper({
     Key? key,
     required this.index,
-    required this.model,
   }) : super(key: key);
 
   final int index;
-  final MessagingModel model;
 
   @override
   Widget build(BuildContext context) {
     // iterate over contacts by activity (most recent conversations)
-    return model.contactsByActivity(builder:
+    return messagingModel.contactsByActivity(builder:
         (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
       final totalUnviewed = contacts.isNotEmpty
           ? contacts

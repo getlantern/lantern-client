@@ -5,7 +5,6 @@ import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import '../messaging.dart';
 
 void showVerificationOptions({
-  required MessagingModel model,
   required BuildContext bottomModalContext,
   required Contact contact,
   bool showDismissNotification = false,
@@ -29,7 +28,7 @@ void showVerificationOptions({
           'verify_description'.i18n.fill([contact.displayNameOrFallback]),
           style: tsBody1.copiedWith(color: grey5)),
       children: [
-        model.me(
+        messagingModel.me(
           (context, me, child) => ListItemFactory.bottomItem(
             icon: ImagePaths.qr_code_scanner,
             content: 'verify_in_person'.i18n,
@@ -55,8 +54,7 @@ void showVerificationOptions({
           onTap: () async {
             await bottomModalContext.router
                 .popAndPush(
-              FullScreenDialogPage(
-                  widget: Call(contact: contact, model: model)),
+              FullScreenDialogPage(widget: Call(contact: contact)),
             )
                 .then((value) async {
               // * we just successfully verified someone via a Call
@@ -72,7 +70,8 @@ void showVerificationOptions({
             icon: ImagePaths.cancel,
             content: 'dismiss_notification'.i18n,
             onTap: () async {
-              await model.dismissVerificationReminder(contact.contactId.id);
+              await messagingModel
+                  .dismissVerificationReminder(contact.contactId.id);
               await bottomModalContext.router.pop();
               showInfoDialog(
                 bottomModalContext,

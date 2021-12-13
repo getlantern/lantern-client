@@ -1,6 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
-import 'package:lantern/messaging/conversation/attachments/generic.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,10 +60,8 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MessagingModel>();
-
     if (message.firstViewedAt == 0) {
-      model.markViewed(message);
+      messagingModel.markViewed(message);
     }
 
     return Row(
@@ -77,7 +74,7 @@ class MessageBubble extends StatelessWidget {
             padding: EdgeInsetsDirectional.only(
                 top: isStartOfBlock || hasReactions ? 8 : 2,
                 bottom: isNewestMessage ? 8 : 0),
-            child: overlayReactions(context, bubble(context, model)),
+            child: overlayReactions(context, bubble(context, messagingModel)),
           ),
         ),
       ],
@@ -207,7 +204,6 @@ class MessageBubble extends StatelessWidget {
                                     bottom: rendersAsText ? 0 : 8),
                                 child: SizedBox(
                                   child: Reply(
-                                    model: model,
                                     contact: contact,
                                     message: replyToMessage,
                                     isOutbound: isOutbound,
@@ -379,7 +375,6 @@ class MessageBubble extends StatelessWidget {
               height: 80,
               child: Reactions(
                 message: message,
-                model: model,
                 onEmojiTap: onEmojiTap,
               ),
             ),

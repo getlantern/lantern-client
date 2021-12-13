@@ -41,7 +41,6 @@ class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   static final dayFormat = intl.DateFormat.yMMMMd();
 
-  late MessagingModel model;
   bool reactingWithEmoji = false;
   bool hasPermission = false;
 
@@ -164,12 +163,13 @@ class ConversationState extends State<Conversation>
         break;
       case AppLifecycleState.resumed:
       default:
-        model.setCurrentConversationContact(widget.contactId.id);
+        messagingModel.setCurrentConversationContact(widget.contactId.id);
         // repeatedly notify backend of current contact so it knows that it's
         // fresh
         currentConversationTimer = Timer.periodic(
           const Duration(seconds: 1),
-          (_) => model.setCurrentConversationContact(widget.contactId.id),
+          (_) =>
+              messagingModel.setCurrentConversationContact(widget.contactId.id),
         );
         break;
     }
@@ -178,7 +178,7 @@ class ConversationState extends State<Conversation>
   void clearCurrentConversationContact() {
     currentConversationTimer?.cancel();
     currentConversationTimer = null;
-    model.clearCurrentConversationContact();
+    messagingModel.clearCurrentConversationContact();
   }
 
   @override
@@ -188,10 +188,11 @@ class ConversationState extends State<Conversation>
     BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
 
-    model = Provider.of<MessagingModel>(context, listen: false);
     // * we came here after adding a contact via chat number, show contact name dialog
     if (widget.showContactEditingDialog ?? false) {
-      model.getDirectContact(widget.contactId.id).then((contact) async {
+      messagingModel
+          .getDirectContact(widget.contactId.id)
+          .then((contact) async {
         // We use Future.delayed instead of addPostFrameCallback because
         // addPostFrameCallback doesn't work all the time (for some unknown
         // reason).
@@ -200,7 +201,6 @@ class ConversationState extends State<Conversation>
             context: context,
             builder: (childContext) => ContactNameDialog(
                   context: context,
-                  model: model,
                   contact: contact,
                 ));
       });
@@ -224,7 +224,7 @@ class ConversationState extends State<Conversation>
     if (isRecording) {
       return;
     }
-    hasPermission = await model.startRecordingVoiceMemo();
+    hasPermission = await messagingModel.startRecordingVoiceMemo();
     if (hasPermission) {
       stopWatchTimer.onExecute.add(StopWatchExecute.reset);
       stopWatchTimer.onExecute.add(StopWatchExecute.start);
@@ -242,7 +242,7 @@ class ConversationState extends State<Conversation>
     context.loaderOverlay.show(widget: spinner);
     try {
       stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-      recording = await model.stopRecordingVoiceMemo();
+      recording = await messagingModel.stopRecordingVoiceMemo();
       var attachment = StoredAttachment.fromBuffer(recording!);
       setState(() {
         isRecording = false;
@@ -275,8 +275,8 @@ class ConversationState extends State<Conversation>
           'title': title,
           'fileExtension': fileExtension,
         };
-        final attachment =
-            await model.filePickerLoadAttachment(el.path.toString(), metadata);
+        final attachment = await messagingModel.filePickerLoadAttachment(
+            el.path.toString(), metadata);
         await sendMessage(newMessage.value.text,
             attachments: [attachment],
             replyToSenderId: quotedMessage?.senderId,
@@ -311,7 +311,7 @@ class ConversationState extends State<Conversation>
       context.loaderOverlay.show(widget: spinner);
     }
     try {
-      await model.sendToDirectContact(
+      await messagingModel.sendToDirectContact(
         widget.contactId.id,
         text: text,
         attachments: attachments,
@@ -366,9 +366,11 @@ class ConversationState extends State<Conversation>
         latestKeyboardHeight > 0 ? latestKeyboardHeight : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
-        ? unawaited(model.setCurrentConversationContact(widget.contactId.id))
-        : unawaited(model.clearCurrentConversationContact());
-    return model.singleContactById(widget.contactId, (context, contact, child) {
+        ? unawaited(
+            messagingModel.setCurrentConversationContact(widget.contactId.id))
+        : unawaited(messagingModel.clearCurrentConversationContact());
+    return messagingModel.singleContactById(widget.contactId,
+        (context, contact, child) {
       // determine if we will show the verification warning badge
       var verificationReminderLastDismissed = contact
               .applicationData['verificationReminderLastDismissed']?.int_3
@@ -381,8 +383,8 @@ class ConversationState extends State<Conversation>
         // * Conversation Title
         title: dismissKeyboardsOnTap(
           CInkWell(
-            onTap: () async => await context
-                .pushRoute(ContactInfo(model: model, contact: contact)),
+            onTap: () async =>
+                await context.pushRoute(ContactInfo(contact: contact)),
             child: ContactInfoTopBar(
               contact: contact,
               verifiedColor: verifiedColor,
@@ -407,7 +409,6 @@ class ConversationState extends State<Conversation>
                         visualDensity: VisualDensity.compact,
                         onPressed: () async {
                           showVerificationOptions(
-                            model: model,
                             contact: contact,
                             bottomModalContext: context,
                             showDismissNotification:
@@ -431,7 +432,6 @@ class ConversationState extends State<Conversation>
                 visualDensity: VisualDensity.compact,
                 icon: const CAssetImage(path: ImagePaths.more_vert),
                 onPressed: () => showConversationOptions(
-                  model: model,
                   parentContext: context,
                   contact: contact,
                   topBarAnimationCallback: () async {
@@ -453,7 +453,7 @@ class ConversationState extends State<Conversation>
             children: [
               if (contact.isUnaccepted())
                 UnacceptedContactSticker(
-                    messageCount: messageCount, contact: contact, model: model),
+                    messageCount: messageCount, contact: contact),
               Flexible(
                 child: dismissKeyboardsOnTap(
                   Padding(
@@ -466,7 +466,6 @@ class ConversationState extends State<Conversation>
               // * Reply container
               if (quotedMessage != null)
                 Reply(
-                  model: model,
                   contact: contact,
                   message: quotedMessage!,
                   onCancelReply: () => setState(() => quotedMessage = null),
@@ -497,7 +496,8 @@ class ConversationState extends State<Conversation>
                   },
                   onEmojiSelected: (category, emoji) async {
                     if (mounted && reactingWithEmoji && storedMessage != null) {
-                      await model.react(storedMessage!.value, emoji.emoji);
+                      await messagingModel.react(
+                          storedMessage!.value, emoji.emoji);
                       reactingWithEmoji = false;
                       storedMessage = null;
                       dismissAllKeyboards();
@@ -519,7 +519,7 @@ class ConversationState extends State<Conversation>
   }
 
   Widget buildList(Contact contact) {
-    return model.contactMessages(contact, builder: (context,
+    return messagingModel.contactMessages(contact, builder: (context,
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
         Widget? child) {
       // Build list that includes original message records as well as date
@@ -574,7 +574,7 @@ class ConversationState extends State<Conversation>
       List<Object> listItems,
       PathAndValue<StoredMessage> messageAndPath,
       int index) {
-    return model.message(context, messageAndPath,
+    return messagingModel.message(context, messageAndPath,
         (BuildContext context, StoredMessage message, Widget? child) {
       return MessageBubble(
         message: message,
@@ -641,7 +641,6 @@ class ConversationState extends State<Conversation>
           audioPreviewController == null
               ? const SizedBox()
               : MessageBarPreviewRecording(
-                  model: model,
                   audioController: audioPreviewController!,
                   onCancelRecording: () async => setState(() {
                     isRecording = false;
@@ -650,7 +649,7 @@ class ConversationState extends State<Conversation>
                     audioPreviewController = null;
                   }),
                   onSend: () {
-                    audioPreviewController!.audio.stop();
+                    audio.stop();
                     send();
                   },
                 ),

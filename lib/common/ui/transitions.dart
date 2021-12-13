@@ -2,6 +2,8 @@ import 'package:lantern/common/common.dart';
 
 const RouteTransitionsBuilder defaultTransition = TransitionsBuilders.fadeIn;
 
+const RouteTransitionsBuilder popupTransition = TransitionsBuilders.slideBottom;
+
 const defaultTransitionMillis = 200;
 
 const shortAnimationMillis = 500;

@@ -6,9 +6,6 @@ class DeveloperSettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
     return BaseScreen(
       title: 'Developer Settings'.i18n,
       padVertical: true,
@@ -93,17 +90,65 @@ class DeveloperSettingsTab extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
-            content: 'Reset all flags and timestamps',
+            content: 'Reset all timestamps',
             trailingArray: [
               TextButton(
                   onPressed: () async {
-                    await messagingModel.resetAllFlagsAndTimestamps();
+                    await messagingModel.resetTimestamps();
                   },
                   child: CText('Reset'.toUpperCase(),
                       style:
                           tsButton.copiedWith(color: Colors.deepPurpleAccent)))
             ],
-          )
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Reset onboarding and recovery key flags',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.resetFlags();
+                  },
+                  child: CText('Reset'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Start messaging',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.start();
+                  },
+                  child: CText('start'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Kill messaging',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.kill();
+                  },
+                  child: CText('kill'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'Wipe data and restart',
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await messagingModel.wipeData();
+                  },
+                  child: CText('Wipe'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
         ],
       ),
     );
