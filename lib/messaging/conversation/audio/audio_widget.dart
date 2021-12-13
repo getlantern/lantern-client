@@ -1,7 +1,7 @@
+import 'package:lantern/common/ui/dimens.dart';
 import 'package:lantern/messaging/conversation/audio/rectangle_slider_thumb_shape.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/common/ui/dimens.dart';
 
 enum PlayerState { stopped, playing, paused }
 
@@ -32,15 +32,10 @@ int percentageOf(int value, int maxValue) =>
 class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
   final StoredAttachment attachment;
-  late MessagingModel model;
-  late Audio audio;
 
   AudioController(
       {required this.context, required this.attachment, Uint8List? thumbnail})
       : super(AudioValue()) {
-    model = Provider.of<MessagingModel>(context, listen: false);
-    audio = Provider.of<Audio>(context, listen: false);
-
     var durationString = attachment.attachment.metadata['duration'];
     if (durationString != null) {
       var milliseconds = (double.tryParse(durationString)! * 1000).toInt();
@@ -51,7 +46,7 @@ class AudioController extends ValueNotifier<AudioValue> {
 
     var thumbnailFuture = thumbnail != null
         ? Future.value(thumbnail)
-        : model.thumbnail(attachment).value.future;
+        : messagingModel.thumbnail(attachment).value.future;
     thumbnailFuture.then((t) {
       value.bars = AudioWaveform.fromBuffer(t).bars;
       notifyListeners();
@@ -91,7 +86,7 @@ class AudioController extends ValueNotifier<AudioValue> {
 
     context.loaderOverlay.show(widget: spinner);
     try {
-      var bytes = await model.decryptAttachment(attachment);
+      var bytes = await messagingModel.decryptAttachment(attachment);
       await _play(bytes);
     } finally {
       context.loaderOverlay.hide();

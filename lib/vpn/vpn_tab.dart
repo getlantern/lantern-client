@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/vpn/try_lantern_chat.dart';
 
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
@@ -19,7 +18,8 @@ class VPNTab extends StatelessWidget {
         buttonText: 'OK'.i18n);
   }
 
-  Widget renderVPN(SessionModel sessionModel) {
+  @override
+  Widget build(BuildContext context) {
     return sessionModel
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
@@ -60,23 +60,5 @@ class VPNTab extends StatelessWidget {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var sessionModel = context.watch<SessionModel>();
-    var messagingModel = context.watch<MessagingModel>();
-
-    return messagingModel.getFirstAccessedChatTS(
-        (context, firstAccessedChatTS, child) => messagingModel
-                .getFirstSeenIntroducingTS(
-                    (context, firstSeenIntroducingTS, child) {
-              // if we have never seen the Intro and we have never clicked on the Chat tab
-              if (firstSeenIntroducingTS == 0 && firstAccessedChatTS == 0) {
-                context.pushRoute(FullScreenDialogPage(
-                    widget: TryLanternChat(parentContext: context)));
-              }
-              return renderVPN(sessionModel);
-            }));
   }
 }

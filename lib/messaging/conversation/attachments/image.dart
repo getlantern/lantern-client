@@ -7,16 +7,13 @@ class ImageAttachment extends VisualAttachment {
       : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer(MessagingModel model) =>
-      ImageViewer(model, contact, message, attachment);
+  Widget buildViewer() => ImageViewer(contact, message, attachment);
 }
 
 class ImageViewer extends ViewerWidget {
-  final MessagingModel model;
   final StoredAttachment attachment;
 
-  ImageViewer(
-      this.model, Contact contact, StoredMessage message, this.attachment)
+  ImageViewer(Contact contact, StoredMessage message, this.attachment)
       : super(contact, message);
 
   @override
@@ -29,7 +26,7 @@ class ImageViewerState extends ViewerState<ImageViewer> {
   @override
   void initState() {
     super.initState();
-    widget.model.decryptAttachment(widget.attachment).then((bytes) {
+    messagingModel.decryptAttachment(widget.attachment).then((bytes) {
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
       newImage.image
           .resolve(const ImageConfiguration())

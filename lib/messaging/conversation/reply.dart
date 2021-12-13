@@ -3,14 +3,12 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class Reply extends StatelessWidget {
-  final MessagingModel model;
   final Contact contact;
   final StoredMessage message;
   final bool isOutbound;
   final void Function()? onCancelReply;
 
   const Reply({
-    required this.model,
     required this.message,
     required this.contact,
     this.isOutbound = false,
@@ -207,7 +205,7 @@ class Reply extends StatelessWidget {
 
   Widget thumbnail(StoredAttachment attachment) {
     return ValueListenableBuilder(
-        valueListenable: model.thumbnail(attachment),
+        valueListenable: messagingModel.thumbnail(attachment),
         builder: (BuildContext context, CachedValue<Uint8List> cachedThumbnail,
             Widget? child) {
           if (cachedThumbnail.value == null) {

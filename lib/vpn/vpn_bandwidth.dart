@@ -3,7 +3,6 @@ import 'package:lantern/vpn/vpn.dart';
 class VPNBandwidth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var vpnModel = context.watch<VpnModel>();
     return vpnModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
       return bandwidth.allowed > 0
