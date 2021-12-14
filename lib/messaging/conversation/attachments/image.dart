@@ -30,15 +30,6 @@ class ImageViewerState extends ViewerState<ImageViewer> {
     super.initState();
     messagingModel.decryptAttachment(widget.attachment).then((bytes) {
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
-      // newImage.image.resolve(const ImageConfiguration()).addListener(
-      //   ImageStreamListener(
-      //     (info, _) {
-      //       if (info.image.width > info.image.height) {
-      //         forceLandscape();
-      //       }
-      //     },
-      //   ),
-      // );
       setState(() => image = newImage);
     });
   }
