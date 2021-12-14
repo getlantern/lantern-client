@@ -50,13 +50,6 @@ class VideoViewerState extends ViewerState<VideoViewer> {
       setState(() {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
-            if (controller!.value.aspectRatio > 1) {
-              // force landscape
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.landscapeRight,
-                DeviceOrientation.landscapeLeft,
-              ]);
-            }
             setState(() {
               controller?.play().then((_) {
                 // update UI after playing stops

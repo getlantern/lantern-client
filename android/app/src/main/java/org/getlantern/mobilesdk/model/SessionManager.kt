@@ -270,6 +270,10 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(PREF_BOOTUP_VPN, boot).apply()
     }
 
+    override fun getAppName(): String {
+        return "Lantern"
+    }
+
     override fun locale(): String {
         return Locale.getDefault().toString()
     }
