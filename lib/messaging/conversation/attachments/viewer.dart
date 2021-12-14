@@ -55,7 +55,6 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    print(orientation);
     return BaseScreen(
       title: CText(
         widget.contact.displayNameOrFallback,

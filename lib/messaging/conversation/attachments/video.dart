@@ -38,6 +38,7 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
+  var fixRotation = false;
 
   @override
   void initState() {
@@ -47,11 +48,14 @@ class VideoViewerState extends ViewerState<VideoViewer> {
       context.loaderOverlay.hide();
     }).then((videoFilename) {
       context.loaderOverlay.hide();
+      final rotationMetadata = widget.attachment.attachment.metadata.entries
+          .firstWhere((element) => element.key == 'orientation');
       setState(() {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
             setState(() {
-              controller?.play().then((_) {
+              fixRotation = rotationMetadata.value == '180';
+              controller?.play().then((_) async {
                 // update UI after playing stops
                 setState(() {});
               });
@@ -102,7 +106,9 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                   AspectRatio(
                     aspectRatio: controller!.value.aspectRatio,
-                    child: VideoPlayer(controller!),
+                    child: Transform.rotate(
+                        angle: fixRotation ? pi : 0,
+                        child: VideoPlayer(controller!)),
                   ),
                   mirrorLTR(
                       context: context,
