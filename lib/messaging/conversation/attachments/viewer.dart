@@ -38,7 +38,6 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
     super.dispose();
   }
 
-  // https://stackoverflow.com/a/67017120
   // didChangeMetrics(): Called when the application's dimensions change. For example, when a phone is rotated.
   @override
   void didChangeMetrics() {
@@ -72,12 +71,12 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
         child: !showInfo && ready()
             ? Align(alignment: Alignment.center, child: body(context))
             : Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: !ready() ? Container() : body(context)),
                   Padding(
-                      padding: const EdgeInsetsDirectional.all(4),
+                      padding:
+                          const EdgeInsetsDirectional.only(start: 8, top: 8),
                       child: StatusRow(
                           widget.message.direction == MessageDirection.OUT,
                           widget.message)),
@@ -85,11 +84,5 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
               ),
       ),
     );
-  }
-
-  void forceLandscape() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-    ]);
   }
 }
