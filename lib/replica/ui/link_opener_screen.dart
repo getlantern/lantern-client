@@ -68,7 +68,7 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
           case SearchCategory.Document:
           case SearchCategory.App:
           case SearchCategory.Unknown:
-            return context.replaceRoute(UnknownItemScreen(
+            return context.replaceRoute(ReplicaUnknownItemScreen(
                 category: cat, replicaLink: widget.replicaLink));
         }
       });

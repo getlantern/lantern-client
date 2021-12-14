@@ -50,7 +50,8 @@ class ReplicaApi {
 
     final resp = await dio.get(s);
     if (resp.statusCode == 200) {
-      logger.v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
+      logger
+          .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
       throw Exception(
