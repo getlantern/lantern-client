@@ -247,6 +247,17 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
   bool showInfo = true;
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -288,11 +299,5 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
               ),
       ),
     );
-  }
-
-  void forceLandscape() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-    ]);
   }
 }
