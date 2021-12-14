@@ -10,6 +10,7 @@ import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
+import 'package:lantern/replica/ui/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'messaging/messaging_model.dart';
@@ -160,6 +161,8 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return AccountTab();
       case 3:
+        return ReplicaTab();
+      case 4:
         return DeveloperSettingsTab();
       default:
         assert(false, 'unrecognized tab index $tabIndex');
