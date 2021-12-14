@@ -48,7 +48,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
-        bodyBackgroundColor: white,
+        backgroundColor: white,
         category: SearchCategory.Image,
         body: Center(
             child: CachedNetworkImage(

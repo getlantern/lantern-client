@@ -1,16 +1,10 @@
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/account/account.dart';
-import 'package:lantern/replica/logic/replica_link.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:lantern/replica/ui/markdown_link_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/account/account.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
-import 'package:markdown/markdown.dart' as md;
-import 'settings_item.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   final replicaApi = ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);

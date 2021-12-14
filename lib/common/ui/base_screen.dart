@@ -28,22 +28,20 @@ class BaseScreen extends StatelessWidget {
       this.padHorizontal = true,
       this.padVertical = false,
       Color? foregroundColor,
-      Color? appbarBackgroundColor,
-      Color? bodyBackgroundColor,
+      Color? backgroundColor,
       this.showAppBar = true,
       this.automaticallyImplyLeading = true,
       Key? key})
       : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
-    this.appbarBackgroundColor = appbarBackgroundColor ?? white;
-    this.bodyBackgroundColor =
-        bodyBackgroundColor ?? this.appbarBackgroundColor;
+    this.backgroundColor = backgroundColor ?? white;
   }
 
   @override
   Widget build(BuildContext context) {
     return testRTL(
       Scaffold(
+        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: !showAppBar
             ? null
@@ -59,7 +57,7 @@ class BaseScreen extends StatelessWidget {
                 elevation: 1,
                 shadowColor: grey3,
                 foregroundColor: foregroundColor,
-                backgroundColor: appbarBackgroundColor,
+                backgroundColor: backgroundColor,
                 iconTheme: IconThemeData(color: foregroundColor),
                 centerTitle: centerTitle,
                 titleSpacing: 0,

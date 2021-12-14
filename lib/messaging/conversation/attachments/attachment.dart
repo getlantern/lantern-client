@@ -279,8 +279,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T> {
       ),
       padHorizontal: false,
       foregroundColor: white,
-      appbarBackgroundColor: black,
-      bodyBackgroundColor: black,
+      backgroundColor: black,
       showAppBar: showInfo,
       body: GestureDetector(
         onTap: () => setState(() => showInfo = !showInfo),
