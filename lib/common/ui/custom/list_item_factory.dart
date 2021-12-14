@@ -1,9 +1,35 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/ui/common.dart';
 
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
 
   ListItemFactory(this.builder);
+
+  ListItemFactory.replicaItem(
+      {Widget? leading,
+      required Widget content,
+      required void Function() onTap,
+      required ReplicaApi api,
+      required ReplicaLink link,
+      double height = 90.0})
+      : this((BuildContext context, ListItemFactory factory) {
+          return FocusedMenuHolder(
+            menu: renderReplicaLongPressMenuItem(api, link),
+            menuWidth: MediaQuery.of(context).size.width * 0.8,
+            builder: (_) {
+              return factory.buildBase(
+                leading: leading,
+                content: content,
+                onTap: onTap,
+                height: height,
+                showDivider: true,
+              );
+            },
+          );
+        });
 
   ListItemFactory.settingsItem({
     String? header,

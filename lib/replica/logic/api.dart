@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:lantern/messaging/notifications.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
-import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'common.dart';
 

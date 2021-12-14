@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/notifications.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
@@ -69,7 +66,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         link: widget.replicaLink,
         category: SearchCategory.Audio,
         mimeType: widget.mimeType,
-        bodyBackgroundColor: grey2,
+        backgroundColor: grey2,
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(30.0),

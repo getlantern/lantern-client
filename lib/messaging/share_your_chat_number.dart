@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ShareYourChatNumber {
   ShareYourChatNumber(this.me);
