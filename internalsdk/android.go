@@ -67,6 +67,7 @@ type Settings interface {
 // thrown from the Java code. If a method interface doesn't include an error, exceptions on the
 // Java side immediately result in a panic from which Go cannot recover.
 type Session interface {
+	GetAppName() string
 	GetDeviceID() (string, error)
 	GetUserID() (int64, error)
 	GetToken() (string, error)
@@ -134,6 +135,10 @@ func panicIfNecessary(err error) {
 // panickingSessionImpl implements panickingSession
 type panickingSessionImpl struct {
 	wrapped Session
+}
+
+func (s *panickingSessionImpl) GetAppName() string {
+	return s.wrapped.GetAppName()
 }
 
 func (s *panickingSessionImpl) GetDeviceID() string {
@@ -268,11 +273,13 @@ type userConfig struct {
 	session panickingSession
 }
 
-func (uc *userConfig) GetDeviceID() string          { return uc.session.GetDeviceID() }
-func (uc *userConfig) GetUserID() int64             { return uc.session.GetUserID() }
-func (uc *userConfig) GetToken() string             { return uc.session.GetToken() }
-func (uc *userConfig) GetLanguage() string          { return uc.session.Locale() }
-func (uc *userConfig) GetTimeZone() (string, error) { return uc.session.GetTimeZone(), nil }
+func (uc *userConfig) GetAppName() string              { return common.DefaultAppName }
+func (uc *userConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
+func (uc *userConfig) GetUserID() int64                { return uc.session.GetUserID() }
+func (uc *userConfig) GetToken() string                { return uc.session.GetToken() }
+func (uc *userConfig) GetEnabledExperiments() []string { return nil }
+func (uc *userConfig) GetLanguage() string             { return uc.session.Locale() }
+func (uc *userConfig) GetTimeZone() (string, error)    { return uc.session.GetTimeZone(), nil }
 func (uc *userConfig) GetInternalHeaders() map[string]string {
 	h := make(map[string]string)
 
@@ -440,7 +447,7 @@ func Start(configDir string,
 
 // EnableLogging enables logging.
 func EnableLogging(configDir string) {
-	logging.EnableFileLogging(configDir)
+	logging.EnableFileLogging(common.DefaultAppName, configDir)
 }
 
 func run(configDir, locale string,
@@ -505,7 +512,7 @@ func run(configDir, locale string,
 	}
 
 	runner, err := flashlight.New(
-		common.AppName,
+		common.DefaultAppName,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
@@ -637,7 +644,7 @@ func DownloadUpdate(url, apkPath string, updater Updater) {
 func buildUpdateCfg() *autoupdate.Config {
 	return &autoupdate.Config{
 		CurrentVersion: common.CompileTimePackageVersion,
-		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.AppName)),
+		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
 		HTTPClient:     updateClient,
 		PublicKey:      []byte(autoupdate.PackagePublicKey),
 	}
