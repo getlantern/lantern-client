@@ -61,20 +61,17 @@ Widget renderReplicaMediaScreen({
         children: [
           CText(
             link.displayName ?? 'Untitled',
-            style: CTextStyle(
-              fontSize: 16,
-              lineHeight: 20.0,
-            ),
+            style: tsHeading3,
           ),
           if (mimeType != null)
             CText(
               mimeType,
-              style: CTextStyle(fontSize: 9, lineHeight: 12.0),
+              style: tsOverline,
             )
           else
             CText(
               category.toShortString(),
-              style: CTextStyle(fontSize: 9, lineHeight: 12.0),
+              style: tsOverline,
             )
         ],
       ),
