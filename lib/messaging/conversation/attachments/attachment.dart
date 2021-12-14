@@ -201,9 +201,6 @@ abstract class VisualAttachment extends StatelessWidget {
             await context.pushRoute(
               FullScreenDialogPage(widget: buildViewer()),
             );
-            await SystemChrome.setPreferredOrientations([
-              DeviceOrientation.portraitUp,
-            ]);
           },
           builder: (BuildContext context, Uint8List thumbnail) {
             return ConstrainedBox(
