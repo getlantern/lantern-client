@@ -241,7 +241,7 @@ func TestAutoUpdate(t *testing.T) {
 	result, err := checkForUpdates(updateCfg)
 	require.NoError(t, err)
 	assert.Contains(t, result, "update_android_arm.bz2")
-	assert.Contains(t, result, strings.ToLower(common.AppName))
+	assert.Contains(t, result, strings.ToLower(common.DefaultAppName))
 
 	// No update available
 	updateCfg.CurrentVersion = "9999.9.9"
