@@ -32,16 +32,6 @@ class ReplicaApi {
   late Dio dio;
   final String replicaHostAddr;
   final _defaultTimeoutDuration = const Duration(seconds: 7);
-  final notifications = Notifications((payloadString) {
-    if (payloadString?.isEmpty == true) {
-      return;
-    }
-    var payload = Payload.fromJson(payloadString!);
-    if (payload.type != PayloadType.download) {
-      return;
-    }
-    OpenFile.open(payload.data);
-  });
 
   Future<List<ReplicaSearchItem>> search(
       String query, SearchCategory category, int page, String lang) async {

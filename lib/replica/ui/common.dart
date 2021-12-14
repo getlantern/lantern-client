@@ -14,13 +14,41 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
+  return SizedBox(
+    height: 96,
+    child: Padding(
+      padding: const EdgeInsetsDirectional.only(start: 4),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ListItemFactory.focusMenuItem(
+              icon: ImagePaths.file_download,
+              content: 'Download'.i18n,
+              onTap: () async {
+                await api.download(link);
+              }),
+          ListItemFactory.focusMenuItem(
+              icon: ImagePaths.share,
+              content: 'Share'.i18n,
+              onTap: () async {
+                await Share.share(link.toMagnetLink());
+              }),
+        ],
+      ),
+    ),
+  );
+}
+
 Widget renderReplicaMediaScreen({
   required BuildContext context,
   required ReplicaApi api,
   required ReplicaLink link,
   required SearchCategory category,
   required Widget body,
-  required Color bodyBackgroundColor,
+  required Color backgroundColor,
   String? mimeType,
 }) {
   return BaseScreen(
@@ -48,7 +76,7 @@ Widget renderReplicaMediaScreen({
             )
         ],
       ),
-      bodyBackgroundColor: bodyBackgroundColor,
+      backgroundColor: backgroundColor,
       actions: [
         IconButton(
             onPressed: () async {
