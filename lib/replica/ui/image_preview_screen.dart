@@ -69,7 +69,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
                             padding: EdgeInsets.symmetric(vertical: 6.0)),
                         CText(
                           'No preview for this type of file'.i18n,
-                          style: CTextStyle(fontSize: 16, lineHeight: 1.0),
+                          style: tsBody1,
                         ),
                       ]);
                 })));
