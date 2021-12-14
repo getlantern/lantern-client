@@ -39,15 +39,23 @@ class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
       pagingController: super.pagingController,
       builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
         animateTransitions: true,
+        noItemsFoundIndicatorBuilder: (context) {
+          return Column(
+            children: [
+              const CAssetImage(
+                path: ImagePaths.unknown,
+                size: 168,
+              ),
+              CText(
+                'Sorry, we couldn’t find anything matching that search'.i18n,
+                style: tsBody1,
+              ),
+            ],
+          );
+        },
         itemBuilder: (context, item, index) {
           return ReplicaAudioListItem(
             item: item,
-            onDownloadBtnPressed: () async {
-              await replicaApi.download(item.replicaLink);
-            },
-            onShareBtnPressed: () async {
-              await Share.share(item.replicaLink.toMagnetLink());
-            },
             onTap: () {
               context.pushRoute(ReplicaAudioPlayerScreen(
                   replicaLink: item.replicaLink,

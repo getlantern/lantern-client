@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:lantern/common/ui/base_screen.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
+import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';
 import 'package:lantern/common/ui/image_paths.dart';
+import 'package:lantern/common/ui/text_styles.dart';
+import 'package:lantern/i18n/i18n.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';

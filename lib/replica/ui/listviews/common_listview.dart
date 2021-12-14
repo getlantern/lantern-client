@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/search_item.dart';
@@ -93,8 +93,9 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
             size: 60,
           ),
           Flexible(
-              child: Text(
+              child: CText(
             'Error: $err',
+            style: tsBody1.copiedWith(color: indicatorRed),
           ))
         ])));
   }

@@ -46,7 +46,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
-        bodyBackgroundColor: white,
+        backgroundColor: white,
         category: widget.category,
         mimeType: widget.mimeType,
         body: Center(
@@ -63,7 +63,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                 const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
                 CText(
                   'No preview for this type of file',
-                  style: CTextStyle(fontSize: 12, lineHeight: 1.0),
+                  style: tsBody1,
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
                 TextButton(
@@ -72,8 +72,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                   },
                   child: CText(
                     'Download',
-                    style: CTextStyle(
-                        fontSize: 12, lineHeight: 1.0, color: indicatorRed),
+                    style: tsButton.copiedWith(color: indicatorRed),
                   ),
                 ),
               ]),

@@ -1,36 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
+import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';
 import 'package:lantern/common/ui/image_paths.dart';
+import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/listitems/common_listitem.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-class ReplicaVideoListItem extends ReplicaCommonListItem {
-  ReplicaVideoListItem({
-    required this.item,
-    required Function() onDownloadBtnPressed,
-    required Function() onShareBtnPressed,
-    required Function() onTap,
-    required this.replicaApi,
-  }) : super(
-          onDownloadBtnPressed: onDownloadBtnPressed,
-          onShareBtnPressed: onShareBtnPressed,
-          onTap: onTap,
-        );
+class ReplicaVideoListItem extends StatefulWidget {
+  ReplicaVideoListItem(
+      {required this.item, required this.onTap, required this.replicaApi});
   final ReplicaSearchItem item;
+  final Function() onTap;
   final ReplicaApi replicaApi;
 
   @override
-  State<StatefulWidget> createState() =>
-      _ReplicaVideoListItemState(replicaApi, item);
+  State<StatefulWidget> createState() => _ReplicaVideoListItem();
 }
 
 // XXX <30-11-2021> soltzen: Fetching metadata for this list item goes like this:
@@ -40,15 +32,13 @@ class ReplicaVideoListItem extends ReplicaCommonListItem {
 //   - During the fetch, a progress indicator is shown
 //   - After a successful fetch, the thumbnail is rendered
 //   - After a failed fetch, a black box is rendered
-class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
-  _ReplicaVideoListItemState(this.replicaApi, this.item);
-  final ReplicaSearchItem item;
+class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
   late Future<double?> _fetchDurationFuture;
-  final ReplicaApi replicaApi;
 
   @override
   void initState() {
-    _fetchDurationFuture = replicaApi.fetchDuration(item.replicaLink);
+    _fetchDurationFuture =
+        widget.replicaApi.fetchDuration(widget.item.replicaLink);
     super.initState();
   }
 
@@ -60,8 +50,8 @@ class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
     return CachedNetworkImage(
         imageBuilder: (context, imageProvider) {
           return SizedBox(
-            width: 100,
-            height: 100,
+            width: 150,
+            height: 110,
             child: Stack(
               children: [
                 ClipRRect(
@@ -76,7 +66,7 @@ class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
             ),
           );
         },
-        imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+        imageUrl: widget.replicaApi.getThumbnailAddr(widget.item.replicaLink),
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             CircularProgressIndicator(value: downloadProgress.progress),
         errorWidget: (context, url, error) {
@@ -114,12 +104,12 @@ class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
         return Positioned(
             bottom: 15,
             left: 5,
-            child: Text(
-              snapshot.data!.toStringAsFixed(2),
-              style: const TextStyle(
-                backgroundColor: Colors.black,
-                fontSize: 10.0,
-                color: Colors.white,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5.0),
+              child: CText(
+                snapshot.data!.toStringAsFixed(2),
+                style:
+                    tsOverline.copiedWith(backgroundColor: black, color: white),
               ),
             ));
       },
@@ -128,32 +118,26 @@ class _ReplicaVideoListItemState extends ReplicaCommonListItemState {
 
   @override
   Widget build(BuildContext context) {
-    return boilerplate(Stack(children: [
-      Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: SizedBox(
-            height: 90,
-            child: Row(
-              children: <Widget>[
-                renderMetadata(),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.all(8.0),
-                    child: CText(
-                      item.displayName,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: CTextStyle(
-                        fontWeight: FontWeight.w500,
-                        lineHeight: 16,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ),
+    return ListItemFactory.replicaItem(
+        height: 100,
+        link: widget.item.replicaLink,
+        api: widget.replicaApi,
+        onTap: widget.onTap,
+        content: Row(
+          children: <Widget>[
+            renderMetadata(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.all(8.0),
+                child: CText(
+                  widget.item.displayName,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: tsBody1Short.copiedWith(color: blue4),
                 ),
-              ],
+              ),
             ),
-          )),
-    ]));
+          ],
+        ));
   }
 }
