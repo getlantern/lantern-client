@@ -73,6 +73,7 @@ class ImagePaths {
   static const fast_forward = 'assets/images/fast_forward.svg';
   static const fast_rewind = 'assets/images/fast_rewind.svg';
   static const unknown = 'assets/images/unknown_black.svg';
+  static const file_upload = 'assets/images/file_upload.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';

@@ -11,6 +11,7 @@ import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -36,7 +37,7 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
               icon: ImagePaths.share,
               content: 'Share'.i18n,
               onTap: () async {
-                await Share.share(link.toMagnetLink());
+                await Share.share('replica://${link.toMagnetLink()}');
               }),
         ],
       ),
@@ -95,4 +96,18 @@ Widget renderReplicaMediaScreen({
             )),
       ],
       body: body);
+}
+
+final String replica_upload_disclaimer_value_shared_prefs_name =
+    'replica_upload_disclaimer_checkbox_value';
+
+Future<bool> getReplicaUploadDisclaimerCheckboxValue() async {
+  var prefs = await SharedPreferences.getInstance();
+  return prefs.getBool(replica_upload_disclaimer_value_shared_prefs_name) ??
+      false;
+}
+
+Future<void> setReplicaUploadDisclaimerCheckboxValue(bool b) async {
+  var prefs = await SharedPreferences.getInstance();
+  await prefs.setBool(replica_upload_disclaimer_value_shared_prefs_name, b);
 }
