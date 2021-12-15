@@ -10,11 +10,10 @@ class ReplicaLink {
       this.fileIndex,
       this.exactSource});
 
-  // A replica link doesn't need to have the prefix 'replica://'
-  //
-  // Only this link type is accepted
+  // Only this link type is accepted:
   // - Prefixed with 'magnet:xt=urn:btih:<40-HEX-CHAR>'
-  //   - magnet:?xt=urn:btih:e380a6c5ae0fb15f296d29964a56250780b05ad7&dn=WillisEarlBeal-BitTorrent/Who_is_Willis_Earl_Beal.pdf&so=6
+  //   - replica://magnet:?xt=urn:btih:e380a6c5ae0fb15f296d29964a56250780b05ad7&dn=WillisEarlBeal-BitTorrent/Who_is_Willis_Earl_Beal.pdf&so=6
+  //     - The 'replica://' prefix is optional
   //
   // XXX <16-12-21, soltzen> There was a discussion to allow
   // 'replica://<40-HEX-CHAR>' as a possible schema. This was removed since clients will not carry expected parameters (e.g., so, dn, xs).

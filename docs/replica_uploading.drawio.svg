@@ -1,13 +1,13 @@
-<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="371px" height="466px" viewBox="-0.5 -0.5 371 466" content="&lt;mxfile&gt;&lt;diagram id=&quot;tb8H2MvZ3lUxXs8tajMu&quot; name=&quot;Page-1&quot;&gt;xZZNj5swEIZ/TbS3FQYM5NrttnupVG1U9Vh5zQSsdTCyTT7662viAeKSVKkaNRewX8Yf8/J4YJE8bfafNWvrL6oEuYijcr9IPi7imKT50t165YBKlFCvVFqUqE3CSvyEIRDVTpRggkCrlLSiDUWumga4DTSmtdqFYWslw1VbVsFMWHEm5+p3UdraqwWNJv0FRFUPK5MIn2zYEIyCqVmpdidS8rxInrRS1rc2+yeQvXuDL37cpwtPx41paOw1A7LYj9gy2WFyuDF7GLKF0iWP3UY17vahthvpesQ1fXgfc3ELKBnVaY5RWYKvjekKMCyjowEOHVAbsPrgYjRIZsU2nJ/hK6zGuClL18BELySdzJJ+haYE7bRXaKXg7MXNuuIaoJnbIaXjrHdhVwsLq5Ydk9o51s85swVtYf9nb+Y544AcMcGDkmF3N0FHBpLqE+CK6AYmpXcig54hI/9HMnDoVyXcyqO7aU4eY1KQPCY0zYo0pYHbhMSPESlolhdpvKSkiMMF/A5xzt+MHTd5ndd05vU3c8SROxjfTW9HDe7atVKxsi9Z7m5FU/Xb4VYoh2n01ll7bLCmD2lxJOvDhYRjkTyZ445Yu1IZOE3pnOv0DNfLW3C9vBPX+Rmui/9V8fI5YANKniwkpDMeqoe1dDSB/uFpAf3QZyi7Sty3IBIaVsQRiRN0Ru3mJbGYuWhq9/X2Z8x0nIMx606eHlTTMP7+xvR9z1sSnrf02g9J9veuue70++Jr4fQXmDz/Ag==&lt;/diagram&gt;&lt;/mxfile&gt;">
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="721px" height="484px" viewBox="-0.5 -0.5 721 484" content="&lt;mxfile&gt;&lt;diagram id=&quot;tb8H2MvZ3lUxXs8tajMu&quot; name=&quot;Page-1&quot;&gt;xZhLc5swEMc/jWfaSwYsA/Y1TppceonbaXuUQUaaCMQIEdv99F09wGDhNg/XPgTQ6rW7/PivnAlaFrsHiSv6VWSET6ZBtpugu8l0GqIkgJu27K1ljkJryCXL3KCDYcV+E2d08/KGZaQeDFRCcMWqoTEVZUlSNbBhKcV2OGwj+HDXCufEM6xSzH3rD5Yp6qKIgoP9kbCctjuHgespcDvYGWqKM7HtmdD9BC2lEMo+Fbsl4Tp5bV7svC8nejvHJCnVaybEUzvjBfPGBeccU/s2WpJB8K5ZihJut1QVHFohPPo7Oidq0cjULREj95awzIkbFkfWppfvTXR+PhBRECX3MEASjhV7GeYeu1eYd+MOUcKDC/RE0MgL+omUGZFgeyIVZyl+hFVXqSSk9NPBOXCms7ClTJFVhU2UW0D9lZl5IVKR3V9jdr3th+K+k9g1twfowpYk2gNuHnw8SUnoJeldZBy93n+jEvmoJMF4ls5PRuQF/b02XKRAxXOt/aIErk3FBc60dsBdsTLXG6eKCeAlWDdKieuCM10MyUHJTeSzs4h8dsJpdIY8Li4jK8mIrMyvJiuJD0+LiaVmw7iBp7bAOK2xgwxln1hpPDN22K9xXTcZlurzVYnqati+hccXo466c4tRu8bFxWg+IkaLS/E0P81TDR6p+mYyjTm4dbsGeOJcmTiPLSsKBwxPtyopcklqq2hSNDnV3sJfKRTbAH1Wy64I3LGCzUZ4QyO8hdE5qp9fCC4CXFvwB8DNLgRc4n9ltvrFuNDvt1zX+la5SogPiqZEj62PMeMBMpKzk8zERyI1f+WBKT4HMvEbCYGY5P5nv/ELGgEUate801EFXWvvWu8kazZSK5NLkTXzyHKypCHKWJ1yzApTAjdCXykrjB85lpktlluKlV5RXwqCy/oYO9tyNXVEGb9Rpuek2BzRNLX1M6sqoqeWZKfXVeCD7sS1sZrDnHYwpSR9XovdVdmO0JDt7tdwXxDj/yaI/omuK0Ymrxnw/bZ6ZKaxNsfDuqN9hciMD1fM+ewo52js0BN0Z+tB1tHbsw7Nw09/09f7Bwq6/wM=&lt;/diagram&gt;&lt;/mxfile&gt;">
     <defs/>
     <g>
-        <path d="M 120 45 L 208.63 45" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
-        <path d="M 213.88 45 L 206.88 48.5 L 208.63 45 L 206.88 41.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
-        <ellipse cx="60" cy="45" rx="60" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 120 63 L 213.63 63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 218.88 63 L 211.88 66.5 L 213.63 63 L 211.88 59.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="60" cy="63" rx="60" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
         <g transform="translate(-0.5 -0.5)">
             <switch>
                 <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 45px; margin-left: 1px;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 63px; margin-left: 1px;">
                         <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
                                 Render ReplicaHomeScreen
@@ -15,63 +15,128 @@
                         </div>
                     </div>
                 </foreignObject>
-                <text x="60" y="49" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                <text x="60" y="67" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
                     Render ReplicaHomeSc...
                 </text>
             </switch>
         </g>
-        <path d="M 273.55 89.39 L 237.02 228.94" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
-        <path d="M 235.69 234.02 L 234.08 226.36 L 237.02 228.94 L 240.85 228.14 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
-        <ellipse cx="285" cy="45" rx="70" ry="45" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 414.87 66.22 L 523.8 70.55" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 529.04 70.76 L 521.91 73.97 L 523.8 70.55 L 522.19 66.98 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="317.5" cy="63" rx="97.5" ry="62.5" fill="#ffffff" stroke="#000000" pointer-events="all"/>
         <g transform="translate(-0.5 -0.5)">
             <switch>
                 <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 45px; margin-left: 216px;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 193px; height: 1px; padding-top: 63px; margin-left: 221px;">
                         <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
-                                User clicks the upload floating action button and picks a file to upload
+                                User clicks the upload floating action button
                             </div>
                         </div>
                     </div>
                 </foreignObject>
-                <text x="285" y="49" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    User clicks the upload...
+                <text x="318" y="67" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User clicks the upload floating...
                 </text>
             </switch>
         </g>
-        <path d="M 225 315 L 225 398.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
-        <path d="M 225 403.88 L 221.5 396.88 L 225 398.63 L 228.5 396.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
-        <ellipse cx="225" cy="275" rx="145" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 166.65 232.93 L 152.43 297.52" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 151.3 302.64 L 149.39 295.05 L 152.43 297.52 L 156.22 296.56 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="175" cy="193" rx="145" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
         <g transform="translate(-0.5 -0.5)">
             <switch>
                 <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 288px; height: 1px; padding-top: 275px; margin-left: 81px;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 288px; height: 1px; padding-top: 193px; margin-left: 31px;">
                         <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
-                                Upload the file using 'flutter_uploader' plugin
+                                Upload the file using ReplicaUploader (in replica/uploader.dart)
                             </div>
                         </div>
                     </div>
                 </foreignObject>
-                <text x="225" y="279" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    Upload the file using 'flutter_uploader' plugin
+                <text x="175" y="197" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Upload the file using ReplicaUploader (in replic...
                 </text>
             </switch>
         </g>
-        <ellipse cx="225" cy="435" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 248.12 391.51 L 355.59 404.8" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 360.8 405.44 L 353.43 408.06 L 355.59 404.8 L 354.28 401.11 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="135" cy="378" rx="115" ry="75" fill="#ffffff" stroke="#000000" pointer-events="all"/>
         <g transform="translate(-0.5 -0.5)">
             <switch>
                 <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 435px; margin-left: 166px;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 228px; height: 1px; padding-top: 378px; margin-left: 21px;">
                         <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
-                                show a successful upload snackbar
+                                Upload starts.
+                                <br/>
+                                <br/>
+                                Show the upload progress through a notification
                             </div>
                         </div>
                     </div>
                 </foreignObject>
-                <text x="225" y="439" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    show a successful up...
+                <text x="135" y="382" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Upload starts....
+                </text>
+            </switch>
+        </g>
+        <path d="M 590 103 L 590 166.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 590 171.88 L 586.5 164.88 L 590 166.63 L 593.5 164.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="590" cy="73" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 73px; margin-left: 531px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User picks a file to upload
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="590" y="77" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User picks a file to...
+                </text>
+            </switch>
+        </g>
+        <path d="M 467.42 223.03 L 326.24 194.27" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 321.1 193.22 L 328.65 191.19 L 326.24 194.27 L 327.26 198.05 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="590" cy="248" rx="130" ry="75" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 258px; height: 1px; padding-top: 248px; margin-left: 461px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Show a disclaimer for him regarding what it means to upload to Replica.
+                                <br/>
+                                This can be skipped next time based on a checkbox
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="590" y="252" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Show a disclaimer for him regarding what it...
+                </text>
+            </switch>
+        </g>
+        <ellipse cx="463.75" cy="418" rx="103.75" ry="65" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 206px; height: 1px; padding-top: 418px; margin-left: 361px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Upload is done.
+                                <br/>
+                                <br/>
+                                Show this in a notification as well
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="464" y="422" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Upload is done....
                 </text>
             </switch>
         </g>

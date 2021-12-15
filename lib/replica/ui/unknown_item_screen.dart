@@ -62,7 +62,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
                 CText(
-                  'No preview for this type of file',
+                  'No preview for this type of file'.i18n,
                   style: tsBody1,
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
@@ -71,7 +71,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                     await replicaApi.download(widget.replicaLink);
                   },
                   child: CText(
-                    'Download',
+                    'Download'.i18n,
                     style: tsButton.copiedWith(color: indicatorRed),
                   ),
                 ),

@@ -110,7 +110,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
             // TODO ValueListenableBuilder may not be necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
                 valueListenable: _searchQueryListener,
