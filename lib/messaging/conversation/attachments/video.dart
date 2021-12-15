@@ -2,6 +2,8 @@ import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
+import 'viewer.dart';
+
 class VideoAttachment extends VisualAttachment {
   VideoAttachment(Contact contact, StoredMessage message,
       StoredAttachment attachment, bool inbound)
@@ -36,6 +38,7 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
+  var fixRotation = false;
 
   @override
   void initState() {
@@ -45,11 +48,13 @@ class VideoViewerState extends ViewerState<VideoViewer> {
       context.loaderOverlay.hide();
     }).then((videoFilename) {
       context.loaderOverlay.hide();
+      final rotation = widget.attachment.attachment.metadata['rotation'];
       setState(() {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
             setState(() {
-              controller?.play().then((_) {
+              fixRotation = rotation == '180';
+              controller?.play().then((_) async {
                 // update UI after playing stops
                 setState(() {});
               });
@@ -100,7 +105,10 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                   AspectRatio(
                     aspectRatio: controller!.value.aspectRatio,
-                    child: VideoPlayer(controller!),
+                    child: fixRotation
+                        ? Transform.rotate(
+                            angle: pi, child: VideoPlayer(controller!))
+                        : VideoPlayer(controller!),
                   ),
                   mirrorLTR(
                       context: context,

@@ -1,6 +1,8 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+import 'viewer.dart';
+
 class ImageAttachment extends VisualAttachment {
   ImageAttachment(Contact contact, StoredMessage message,
       StoredAttachment attachment, bool inbound)
