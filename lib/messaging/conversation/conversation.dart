@@ -1,10 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
-import 'package:lantern/messaging/conversation/mime_type.dart';
 import 'package:lantern/messaging/conversation/unaccepted_contact_sticker.dart';
 import 'package:lantern/messaging/messaging.dart';
-import 'package:flutter_video_info/flutter_video_info.dart';
 
 import 'audio/audio_widget.dart';
 import 'audio/message_bar_preview_recording.dart';
@@ -256,7 +254,6 @@ class ConversationState extends State<Conversation>
   }
 
   Future<void> selectFilesToShare() async {
-    var fileInfo;
     try {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: true);
@@ -271,15 +268,9 @@ class ConversationState extends State<Conversation>
             0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
         final fileExtension =
             el.path.toString().split('file_picker/')[1].split('.')[1];
-
-        if (videoMimes.contains('video/$fileExtension')) {
-          fileInfo = await FlutterVideoInfo().getVideoInfo(el.path.toString());
-        }
-
         final metadata = {
           'title': title,
           'fileExtension': fileExtension,
-          'orientation': fileInfo?.orientation.toString() ?? ''
         };
         final attachment = await messagingModel.filePickerLoadAttachment(
             el.path.toString(), metadata);

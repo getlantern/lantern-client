@@ -48,13 +48,12 @@ class VideoViewerState extends ViewerState<VideoViewer> {
       context.loaderOverlay.hide();
     }).then((videoFilename) {
       context.loaderOverlay.hide();
-      final rotationMetadata =
-          widget.attachment.attachment.metadata['orientation'];
+      final rotation = widget.attachment.attachment.metadata['rotation'];
       setState(() {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
             setState(() {
-              fixRotation = rotationMetadata == '180';
+              fixRotation = rotation == '180';
               controller?.play().then((_) async {
                 // update UI after playing stops
                 setState(() {});
