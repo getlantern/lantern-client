@@ -105,9 +105,10 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                   AspectRatio(
                     aspectRatio: controller!.value.aspectRatio,
-                    child: Transform.rotate(
-                        angle: fixRotation ? pi : 0,
-                        child: VideoPlayer(controller!)),
+                    child: fixRotation
+                        ? Transform.rotate(
+                            angle: pi, child: VideoPlayer(controller!))
+                        : VideoPlayer(controller!),
                   ),
                   mirrorLTR(
                       context: context,
