@@ -39,16 +39,6 @@ void main() {
               displayName:
                   'WillisEarlBeal-BitTorrent/Who_is_Willis_Earl_Beal.pdf',
               fileIndex: 6)),
-      TestCase(
-          title: 'Hash',
-          input: 'e380a6c5ae0fb15f296d29964a56250780b05ad7',
-          expectedOutput: ReplicaLink(
-              infohash: 'e380a6c5ae0fb15f296d29964a56250780b05ad7')),
-      TestCase(
-          title: 'Hash with replica prefix',
-          input: 'replica://e380a6c5ae0fb15f296d29964a56250780b05ad7',
-          expectedOutput: ReplicaLink(
-              infohash: 'e380a6c5ae0fb15f296d29964a56250780b05ad7')),
       TestCase(title: 'Empty', input: '', expectedOutput: null),
       TestCase(
           title: 'Just replica prefix',
