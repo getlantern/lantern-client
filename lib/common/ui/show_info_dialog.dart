@@ -7,6 +7,7 @@ void showInfoDialog(
   String assetPath = '',
   String buttonText = 'OK',
   bool popParentContext = false,
+  bool showCancel = false,
 }) {
   showDialog(
     context: parentContext,
@@ -23,15 +24,20 @@ void showInfoDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CAssetImage(
-                path: assetPath,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              CText(
-                title,
-                style: tsSubtitle1,
+              if (assetPath != '')
+                CAssetImage(
+                  path: assetPath,
+                ),
+              if (assetPath != '')
+                const SizedBox(
+                  height: 8,
+                ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CText(
+                  title,
+                  style: tsSubtitle1,
+                ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -46,23 +52,45 @@ void showInfoDialog(
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  focusColor: grey3,
-                  onTap: () {
-                    childContext.router.pop();
-                    if (popParentContext) parentContext.router.pop();
-                  },
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.all(8),
-                    child: CText(
-                      buttonText,
-                      style: tsButtonPink,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      focusColor: grey3,
+                      onTap: () {
+                        childContext.router.pop();
+                        if (popParentContext) parentContext.router.pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsetsDirectional.all(8),
+                        child: CText(
+                          'cancel'.i18n.toUpperCase(),
+                          style: tsButtonGrey,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      focusColor: grey3,
+                      onTap: () {
+                        childContext.router.pop();
+                        if (popParentContext) parentContext.router.pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsetsDirectional.all(8),
+                        child: CText(
+                          buttonText.toUpperCase(),
+                          style: tsButtonPink,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
