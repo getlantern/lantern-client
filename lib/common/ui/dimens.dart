@@ -40,3 +40,7 @@ double calculateStickerHeight(BuildContext context, int messageCount) {
   return max(minStickerHeight,
       conversationInnerHeight - ((messageCount - 1) * messageHeight));
 }
+
+double appBarHeight = 56.0;
+
+double defaultWarningBarHeight = 30.0;
