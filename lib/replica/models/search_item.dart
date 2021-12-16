@@ -1,5 +1,5 @@
 import 'package:filesize/filesize.dart';
-import 'package:lantern/common/ui/humanize.dart';
+import 'package:lantern/common/ui/humanize_seconds.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';

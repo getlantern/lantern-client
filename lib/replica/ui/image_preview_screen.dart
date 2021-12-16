@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
@@ -48,7 +47,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
-        bodyBackgroundColor: white,
+        backgroundColor: white,
         category: SearchCategory.Image,
         body: Center(
             child: CachedNetworkImage(
@@ -70,7 +69,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
                             padding: EdgeInsets.symmetric(vertical: 6.0)),
                         CText(
                           'No preview for this type of file'.i18n,
-                          style: CTextStyle(fontSize: 16, lineHeight: 1.0),
+                          style: tsBody1,
                         ),
                       ]);
                 })));

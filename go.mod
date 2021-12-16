@@ -3,6 +3,7 @@ module github.com/getlantern/android-lantern
 go 1.16
 
 require (
+	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21 // indirect
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
 	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
@@ -18,7 +19,8 @@ require (
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
-	github.com/getlantern/replica v0.6.1-0.20211130124158-9e2a155f81ed
+	github.com/getlantern/proxy v0.0.0-20210806161026-8f52aabf6214 // indirect
+	github.com/getlantern/replica v0.6.1-0.20211215134003-c61b18554753
 	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect

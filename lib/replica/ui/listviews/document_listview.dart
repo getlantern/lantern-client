@@ -7,7 +7,6 @@ import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:lantern/replica/ui/listitems/document_listitem.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
-import 'package:share_plus/share_plus.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -44,14 +43,9 @@ class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
         itemBuilder: (context, item, index) {
           return ReplicaDocumentListItem(
             item: item,
-            onDownloadBtnPressed: () async {
-              await replicaApi.download(item.replicaLink);
-            },
-            onShareBtnPressed: () async {
-              await Share.share(item.replicaLink.toMagnetLink());
-            },
+            replicaApi: replicaApi,
             onTap: () {
-              context.pushRoute(UnknownItemScreen(
+              context.pushRoute(ReplicaUnknownItemScreen(
                 replicaLink: item.replicaLink,
                 category: SearchCategory.Document,
               ));

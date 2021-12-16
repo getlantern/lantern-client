@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:lantern/messaging/notifications.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
-import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'common.dart';
 
@@ -32,16 +30,6 @@ class ReplicaApi {
   late Dio dio;
   final String replicaHostAddr;
   final _defaultTimeoutDuration = const Duration(seconds: 7);
-  final notifications = Notifications((payloadString) {
-    if (payloadString?.isEmpty == true) {
-      return;
-    }
-    var payload = Payload.fromJson(payloadString!);
-    if (payload.type != PayloadType.download) {
-      return;
-    }
-    OpenFile.open(payload.data);
-  });
 
   Future<List<ReplicaSearchItem>> search(
       String query, SearchCategory category, int page, String lang) async {
@@ -62,7 +50,8 @@ class ReplicaApi {
 
     final resp = await dio.get(s);
     if (resp.statusCode == 200) {
-      logger.v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
+      logger
+          .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
       throw Exception(

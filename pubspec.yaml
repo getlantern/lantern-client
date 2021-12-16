@@ -127,8 +127,6 @@ dependencies:
 
   path: ^1.8.0
 
-  flutter_share: ^2.0.0
-
   infinite_scroll_pagination: ^3.1.0
 
   share_plus: ^3.0.4
@@ -140,8 +138,6 @@ dependencies:
   cached_network_image: ^3.2.0
 
   android_path_provider: ^0.3.0
-
-  share_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:

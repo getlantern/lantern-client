@@ -67,12 +67,12 @@ class ImagePaths {
   static const audio = 'assets/images/audio_black.svg';
   static const doc = 'assets/images/doc_black.svg';
   static const spreadsheet = 'assets/images/spreadsheet_black.svg';
-  static const share = 'assets/images/share.svg';
   static const file_download = 'assets/images/file_download.svg';
   static const pause = 'assets/images/pause.svg';
   static const play = 'assets/images/play_arrow.svg';
   static const fast_forward = 'assets/images/fast_forward.svg';
   static const fast_rewind = 'assets/images/fast_rewind.svg';
+  static const unknown = 'assets/images/unknown_black.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';

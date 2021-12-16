@@ -72,6 +72,15 @@ func newReplicaHttpHandler(
 	// the dht node passive
 	input.ReadOnlyNode = true
 	input.RootUploadsDir = configDir
+
+	// XXX <16-12-21, soltzen> Those three flags make sure that uploads are not
+	// saved to the torrent client, saved locally, or have any metadata
+	// generated for them. This decision is only for android-lantern to protect
+	// the privacy of uploaders
+	input.AddUploadsToTorrentClient = false
+	input.StoreUploadsLocally = false
+	// input.StoreMetainfoFileAndTokenLocally = false
+
 	input.CacheDir = configDir
 	input.UserConfig = userConfig
 	input.HttpClient = &http.Client{

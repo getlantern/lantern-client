@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/ui/listviews/app_listview.dart';
 import 'package:lantern/replica/ui/listviews/audio_listview.dart';
@@ -91,6 +90,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             TabBar(
               controller: _tabController,
               indicatorColor: indicatorRed,
+              isScrollable: true,
               labelStyle: const TextStyle(fontSize: 12.0),
               tabs: <Widget>[
                 Tab(
@@ -110,7 +110,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 5),
             // TODO ValueListenableBuilder may not be necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
                 valueListenable: _searchQueryListener,

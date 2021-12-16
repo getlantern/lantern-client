@@ -12,13 +12,16 @@ class ReplicaLink {
 
   // A replica link doesn't need to have the prefix 'replica://'
   //
-  // Types of acceptable replica links (after url unescaping):
+  // Only this link type is accepted
   // - Prefixed with 'magnet:xt=urn:btih:<40-HEX-CHAR>'
   //   - magnet:?xt=urn:btih:e380a6c5ae0fb15f296d29964a56250780b05ad7&dn=WillisEarlBeal-BitTorrent/Who_is_Willis_Earl_Beal.pdf&so=6
-  // - Is a '<40-HEX-CHAR>'
-  //   - replica://e380a6c5ae0fb15f296d29964a56250780b05ad7
+  //
+  // XXX <16-12-21, soltzen> There was a discussion to allow
+  // 'replica://<40-HEX-CHAR>' as a possible schema. This was removed since clients will not carry expected parameters (e.g., so, dn, xs).
+  // See here for the structure of a replica link:
+  // https://github.com/getlantern/replica-docs/blob/d1c5c3757180eab42d76a7798914bf6049cee4d3/LINKS.md
   static ReplicaLink? New(String s) {
-    var parseMethod1 = () {
+    var parseLink = () {
       var regexp = RegExp(r'^magnet:\?xt=urn:btih:([0-9a-fA-F]{40}).*');
       if (regexp.hasMatch(s)) {
         var u = Uri.parse(s);
@@ -42,21 +45,12 @@ class ReplicaLink {
       }
       return null;
     };
-    var parseMethod2 = () {
-      var regexp = RegExp(r'^[0-9a-fA-F]{40}');
-      if (regexp.hasMatch(s)) {
-        return ReplicaLink(infohash: s);
-      }
-      return null;
-    };
 
     s = Uri.decodeQueryComponent(s);
     s = s.replaceAll('replica://', '');
-    for (var method in [parseMethod1, parseMethod2]) {
-      var rl = method();
-      if (rl != null) {
-        return rl;
-      }
+    var rl = parseLink();
+    if (rl != null) {
+      return rl;
     }
     return null;
   }
