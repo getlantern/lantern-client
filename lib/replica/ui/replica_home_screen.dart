@@ -2,7 +2,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/uploader.dart';
 import 'package:lantern/replica/ui/common.dart';
-import 'package:lantern/replica/ui/replica_upload_disclaimer_alert_dialog.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -129,27 +128,14 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           const Duration(seconds: 2),
           onTimeout: () => false,
         )) {
-          // We're expecting a boolean as the return value from this AlertDialog.
-          // If true, proceed with the upload.
-          // If false, don't.
-          if (!await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return ReplicaUploadDisclaimerAlertDialog(
-                    onCancelPressed: () async {
-                  // Dismiss the dialog
-                  Navigator.of(context).pop(false);
-                }, onResumePressed: (b) async {
-                  // Set the checkbox value and dismiss the dialog to continue
-                  await setReplicaUploadDisclaimerCheckboxValue(b);
-                  Navigator.of(context).pop(true);
-                });
-              })) {
-            return;
-          }
+          showConfirmationDialog(
+            context: context,
+            title: 'replica_upload_confirmation_title'.i18n,
+            explanation: 'replica_upload_confirmation_body'.i18n,
+            agreeText: 'replica_upload_confirmation_agree'.i18n,
+            agreeAction: () => ReplicaUploader.inst.uploadFile(file),
+          );
         }
-        logger.v('XXX Proceeding with the upload');
-        await ReplicaUploader.inst.uploadFile(file);
       },
     );
   }
