@@ -349,6 +349,17 @@ ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make 
 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
 
+##### Source Dump
+Lantern Android source code is made available via source dump tarballs. To create one, run:
+
+```
+VERSION=2.0.0 make sourcedump
+```
+
+This will create a file `lantern-android-sources-2.0.0.tar.gz`.
+
+TODO: once we're confident these are working well, we should automate the upload of these to S3 and GitHub along with the upload of releases.
+
 ## Testing Google Play Payments
 ---
 
