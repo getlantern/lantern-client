@@ -8,6 +8,7 @@ void showInfoDialog(
   String buttonText = 'OK',
   bool popParentContext = false,
   bool showCancel = false,
+  Function? buttonAction,
 }) {
   showDialog(
     context: parentContext,
@@ -79,6 +80,7 @@ void showInfoDialog(
                       onTap: () {
                         childContext.router.pop();
                         if (popParentContext) parentContext.router.pop();
+                        if (buttonAction != null) buttonAction();
                       },
                       child: Container(
                         padding: const EdgeInsetsDirectional.all(8),

@@ -45,24 +45,23 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   late final AnimationController controller;
   late final Animation<double> animation;
   final hasSeenAnimation = true;
-  var showWarning = false;
 
   @override
   void initState() {
     super.initState();
     var dy =
         defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
-    Future.delayed(Duration.zero, () {
-      var screenInfo = MediaQuery.of(context);
-      dy = screenInfo.viewInsets.top + screenInfo.padding.top;
-    });
+    WidgetsBinding.instance?.addPostFrameCallback((_) => () {
+          var screenInfo = MediaQuery.of(context);
+          dy = screenInfo.viewInsets.top + screenInfo.padding.top;
+        });
 
     controller =
         AnimationController(duration: shortAnimationDuration, vsync: this)
           ..addListener(() => setState(() {}));
     animation =
         Tween(begin: hasSeenAnimation ? dy : 0.0, end: dy).animate(controller);
-    controller.forward();
+    if (!hasSeenAnimation) controller.forward();
   }
 
   @override
@@ -87,7 +86,7 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
                   child: Transform.translate(
                     offset: Offset(0.0, verticalCorrection),
                     child: Stack(
-                      fit: StackFit.loose,
+                      fit: StackFit.passthrough,
                       alignment: AlignmentDirectional.topCenter,
                       children: [
                         AppBar(
@@ -161,13 +160,12 @@ class ConnectivityWarning extends StatelessWidget {
       child: GestureDetector(
         onTap: isNetworkError()
             ? null
-            : () => showInfoDialog(
-                  context,
-                  title: 'connection_error'.i18n,
-                  des: 'connection_error_des'.i18n,
-                  buttonText: 'connection_error_button'.i18n,
-                  showCancel: true,
-                ),
+            : () => showInfoDialog(context,
+                title: 'connection_error'.i18n,
+                des: 'connection_error_des'.i18n,
+                buttonText: 'connection_error_button'.i18n,
+                showCancel: true,
+                buttonAction: () => context.router.push(Settings())),
         child: CText(
           (isNetworkError() ? 'no_network_connection' : 'connection_error')
               .i18n
