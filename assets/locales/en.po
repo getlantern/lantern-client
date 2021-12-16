@@ -924,3 +924,13 @@ msgstr "Verification success! Your messages with %s are secure."
 
 msgid "verification_panel_pending"
 msgstr "This is your verification number. Check that your number matches %s's exactly before marking them verified."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Important!"
+
+msgid "replica_upload_confirmation_body"
+msgstr "Files uploaded to the Lantern Network are publicly accessible. They are decentralized and cannot be deleted from the network by anyone.\n\nAvoid personally identifying information in the file content and filename when uploading sensitive content."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Resume Upload"
+

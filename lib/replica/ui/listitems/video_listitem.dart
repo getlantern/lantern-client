@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/list_item_factory.dart';
@@ -17,6 +18,7 @@ var logger = Logger(
 class ReplicaVideoListItem extends StatefulWidget {
   ReplicaVideoListItem(
       {required this.item, required this.onTap, required this.replicaApi});
+
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
@@ -48,45 +50,57 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
   // If there's no thumbnail (i.e., request failed), render a black box
   Widget renderMetadata() {
     return CachedNetworkImage(
-        imageBuilder: (context, imageProvider) {
-          return SizedBox(
-            width: 150,
-            height: 110,
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(5.0),
-                  child: Image(
-                      image: imageProvider, filterQuality: FilterQuality.high),
-                ),
-                renderDurationTextbox(),
-                const Center(
-                    child: CAssetImage(path: ImagePaths.play_circle_filled)),
-              ],
-            ),
-          );
-        },
-        imageUrl: widget.replicaApi.getThumbnailAddr(widget.item.replicaLink),
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(value: downloadProgress.progress),
-        errorWidget: (context, url, error) {
-          // XXX <02-12-2021> soltzen: if an error occurs, show a black box.
-          // This is common in Replica since we just recently deployed a
-          // metadata materialization service
-          // (https://github.com/getlantern/replica-infrastructure/pull/30) and
-          // metadata is not fully available.
-          return Stack(
+      imageBuilder: (context, imageProvider) {
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+          child: Stack(
+            alignment: Alignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(5.0),
-                child: Container(color: Colors.black),
+                borderRadius: BorderRadius.circular(8.0),
+                clipBehavior: Clip.hardEdge,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .45,
+                  height: 100,
+                  child: Image(
+                    image: imageProvider,
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              renderDurationTextbox(),
-              const Center(
-                  child: CAssetImage(path: ImagePaths.play_circle_filled)),
+              Positioned(
+                left: 8,
+                bottom: 4,
+                child: renderDurationTextbox(),
+              ),
+              PlayButton(custom: true),
             ],
-          );
-        });
+          ),
+        );
+      },
+      imageUrl: widget.replicaApi.getThumbnailAddr(widget.item.replicaLink),
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(value: downloadProgress.progress),
+      errorWidget: (context, url, error) {
+        // XXX <02-12-2021> soltzen: if an error occurs, show a black box.
+        // This is common in Replica since we just recently deployed a
+        // metadata materialization service
+        // (https://github.com/getlantern/replica-infrastructure/pull/30) and
+        // metadata is not fully available.
+        return Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5.0),
+              child: Container(color: Colors.black),
+            ),
+            renderDurationTextbox(),
+            const Center(
+                child: CAssetImage(path: ImagePaths.play_circle_filled)),
+          ],
+        );
+      },
+    );
   }
 
   Widget renderDurationTextbox() {
@@ -101,17 +115,23 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
           return const SizedBox.shrink();
         }
 
-        return Positioned(
-            bottom: 15,
-            left: 5,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: CText(
-                snapshot.data!.toStringAsFixed(2),
-                style:
-                    tsOverline.copiedWith(backgroundColor: black, color: white),
-              ),
-            ));
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            padding: const EdgeInsetsDirectional.only(
+              start: 8,
+              end: 8,
+              bottom: 2,
+            ),
+            decoration: BoxDecoration(color: black),
+            child: CText(
+              Duration(seconds: snapshot.data!.toInt())
+                  .toString()
+                  .substring(2, 7),
+              style: tsOverline.copiedWith(color: white),
+            ),
+          ),
+        );
       },
     );
   }
@@ -119,25 +139,27 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
   @override
   Widget build(BuildContext context) {
     return ListItemFactory.replicaItem(
-        height: 100,
-        link: widget.item.replicaLink,
-        api: widget.replicaApi,
-        onTap: widget.onTap,
-        content: Row(
-          children: <Widget>[
-            renderMetadata(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.all(8.0),
-                child: CText(
-                  widget.item.displayName,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: tsBody1Short.copiedWith(color: blue4),
-                ),
+      height: 116,
+      link: widget.item.replicaLink,
+      api: widget.replicaApi,
+      onTap: widget.onTap,
+      content: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          renderMetadata(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.all(8.0),
+              child: CText(
+                widget.item.displayName,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: tsBody1Short.copiedWith(color: blue4),
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
