@@ -44,14 +44,11 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
   }
 
   Widget renderAudioFilename() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(4.0),
-      child: CText(
-        widget.item.displayName,
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: tsSubtitle1Short,
-      ),
+    return CText(
+      widget.item.displayName,
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+      style: tsSubtitle1Short,
     );
   }
 
