@@ -125,9 +125,7 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
             ),
             decoration: BoxDecoration(color: black),
             child: CText(
-              Duration(seconds: snapshot.data!.toInt())
-                  .toString()
-                  .substring(2, 7),
+              snapshot.data!.toMinutesAndSeconds(),
               style: tsOverline.copiedWith(color: white),
             ),
           ),

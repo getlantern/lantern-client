@@ -5,6 +5,7 @@ import 'package:lantern/replica/models/search_item.dart';
 class ReplicaAudioListItem extends StatefulWidget {
   ReplicaAudioListItem(
       {required this.item, required this.onTap, required this.replicaApi});
+
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
@@ -69,13 +70,10 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
             if (snapshot.hasError ||
                 !snapshot.hasData ||
                 snapshot.data == null) {
-              return CText(
-                '??:??',
-                style: tsBody1,
-              );
+              return Container();
             }
             return CText(
-              snapshot.data!.toStringAsFixed(2),
+              snapshot.data!.toMinutesAndSeconds(),
               style: tsBody1,
             );
           },
