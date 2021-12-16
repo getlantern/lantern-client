@@ -198,8 +198,6 @@ class DeveloperSettingsTab extends StatelessWidget {
   replica://bunnyfoofoo
     This link counts
 
-  replica://AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
   replica://magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
     This link counts
 
@@ -209,14 +207,8 @@ class DeveloperSettingsTab extends StatelessWidget {
   magnet://xt=urn:btih:32729D0D089180D1095279069148DDC27323188B&dn=The%20Suicide%20Squad%20(2021)%20%5B1080p%5D%20%5BWEBRip%5D%20%5B5.1%5D%20&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&so=0
     This link does not count because it has the wrong prefix
 
-  replica://AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    This link does count because we accept plain sha1 hexes
-
   http://www.google.com
-    This link does not count
-
-  A link at the end of the text also works
-        replica://BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB''',
+    This link does not count''',
             builders: {
               'replica': ReplicaLinkMarkdownElementBuilder((replicaLink) {
                 context.pushRoute(LinkOpenerScreen(replicaLink: replicaLink));
