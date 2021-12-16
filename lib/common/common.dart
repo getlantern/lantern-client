@@ -63,6 +63,7 @@ export 'ui/full_screen_dialog.dart';
 export 'ui/humanize_past_future.dart';
 export 'ui/humanize_seconds.dart';
 export 'ui/humanized_date.dart';
+export 'ui/humanize_duration.dart';
 export 'ui/image_paths.dart';
 export 'ui/labeled_divider.dart';
 export 'ui/list_section_header.dart';
