@@ -33,6 +33,8 @@ CTextStyle tsSubtitle2 =
 
 CTextStyle tsBody1 = CTextStyle(fontSize: 14, lineHeight: 23);
 
+CTextStyle tsBody1Short = CTextStyle(fontSize: 14, lineHeight: 18);
+
 CTextStyle tsBody1Color(color) => tsBody1.copiedWith(color: color);
 
 CTextStyle tsBody2 = CTextStyle(fontSize: 12, lineHeight: 19);

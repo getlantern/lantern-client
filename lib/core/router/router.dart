@@ -199,8 +199,8 @@ import 'package:lantern/replica/ui/media_views/video_player.dart';
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
         page: ReplicaUnknownItemScreen,
-        name: 'UnknownItemScreen',
-        path: 'unknownItemScreen',
+        name: 'ReplicaUnknownItemScreen',
+        path: 'replicaUnknownItemScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

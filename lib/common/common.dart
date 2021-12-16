@@ -27,7 +27,6 @@ export 'package:lantern/vpn/vpn_model.dart';
 export 'package:loader_overlay/loader_overlay.dart';
 export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-export 'package:share/share.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 
 export 'disable_back_button.dart';

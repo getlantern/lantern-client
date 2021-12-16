@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/search_item.dart';
@@ -80,7 +80,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   }
 
   Widget showError(String err) {
-    logger.v('showError(): $err');
+    logger.e('Error while fetching search results: $err');
     return Expanded(
         child: Center(
             child: Row(
@@ -93,8 +93,10 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
             size: 60,
           ),
           Flexible(
-              child: Text(
-            'Error: $err',
+              child: CText(
+            'Encountered an error while fetching results. Please try again later'
+                .i18n,
+            style: tsBody1.copiedWith(color: indicatorRed),
           ))
         ])));
   }

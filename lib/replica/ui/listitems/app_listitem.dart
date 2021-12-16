@@ -1,96 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/i18n/i18n.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/listitems/common_listitem.dart';
 
-class ReplicaAppListItem extends ReplicaCommonListItem {
-  ReplicaAppListItem({
-    required this.item,
-    required Function() onDownloadBtnPressed,
-    required Function() onShareBtnPressed,
-    required Function() onTap,
-  }) : super(
-          onDownloadBtnPressed: onDownloadBtnPressed,
-          onShareBtnPressed: onShareBtnPressed,
-          onTap: onTap,
-        );
-
+class ReplicaAppListItem extends StatelessWidget {
+  ReplicaAppListItem(
+      {required this.item, required this.onTap, required this.replicaApi});
   final ReplicaSearchItem item;
-
-  @override
-  State<StatefulWidget> createState() => _ReplicaAppListItemState(item);
-}
-
-class _ReplicaAppListItemState extends ReplicaCommonListItemState {
-  final ReplicaSearchItem item;
-  _ReplicaAppListItemState(this.item);
+  final Function() onTap;
+  final ReplicaApi replicaApi;
 
   @override
   Widget build(BuildContext context) {
-    return boilerplate(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            // Render the document icon
-            const CAssetImage(path: ImagePaths.doc),
-            // Render some space
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 4.0)),
-            // Render the text. It should look like
-            //
-            //    DISPLAY_NAME
-            //    FILESIZE document/MIMETYPE
-            //
-            //    where DISPLAY_NAME is the display name of the file,
-            //      taken directly from the 'dn' query parameter of a
-            //      replica link.
-            //    and DURATION is 'hh:mm:ss'
-            //    and MIMETYPE is PDF, txt, etc.
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.all(4.0),
-                    child: Text(
-                      item.displayName,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  ),
-                  // Render the duration and mime types
-                  // If mimetype is nil, just render 'document/unknown'
-                  Row(
-                    children: [
-                      Text(
-                        item.humanizedFileSize,
-                        style: TextStyle(fontSize: 10.0, color: black),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 2.0)),
-                      if (item.primaryMimeType != null)
-                        Text(
-                          item.primaryMimeType!,
-                          style: TextStyle(fontSize: 10.0, color: indicatorRed),
-                        )
-                      else
-                        Text(
-                          'document/unknown'.i18n,
-                          style: TextStyle(fontSize: 10.0, color: indicatorRed),
-                        ),
-                    ],
-                  )
-                ],
+    return ListItemFactory.replicaItem(
+        link: item.replicaLink,
+        api: replicaApi,
+        leading: const CAssetImage(path: ImagePaths.spreadsheet),
+        onTap: onTap,
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          verticalDirection: VerticalDirection.down,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.all(4.0),
+              child: CText(
+                item.displayName,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: tsSubtitle1Short,
               ),
             ),
+            // Render the duration and mime types
+            // If mimetype is nil, just render 'app/unknown'
+            Row(
+              children: [
+                CText(item.humanizedFileSize, style: tsBody1),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 2.0)),
+                if (item.primaryMimeType != null)
+                  CText(
+                    item.primaryMimeType!,
+                    style: tsBody1.copiedWith(color: pink4),
+                  )
+                else
+                  CText(
+                    'app/unknown'.i18n,
+                    style: tsBody1.copiedWith(color: pink4),
+                  ),
+              ],
+            )
           ],
-        )));
+        ));
   }
 }

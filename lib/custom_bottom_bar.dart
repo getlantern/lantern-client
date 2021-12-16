@@ -134,11 +134,11 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('Developer'.i18n,
+              label: CText('Discover'.i18n,
                   style: tsFloatingLabel.copiedWith(
                       color: index == 3 ? black : grey5)),
               icon: CAssetImage(
-                path: ImagePaths.devices,
+                path: ImagePaths.discover,
                 color:
                     index == 3 ? selectedTabIconColor : unselectedTabIconColor,
               ),
@@ -149,16 +149,17 @@ class CustomBottomBar extends StatelessWidget {
           ),
         if (isDevelop)
           BottomNavigationBarItem(
-            icon: CustomBottomItem(
+            icon: CustomBottomBarItem(
               currentIndex: index,
               position: 4,
               total: isDevelop ? 4 : 3,
-              label: CText('Developer'.i18n, style: tsFloatingLabel),
+              label: CText('Developer'.i18n,
+                  style: tsFloatingLabel.copiedWith(
+                      color: index == 4 ? black : grey5)),
               icon: CAssetImage(
                 path: ImagePaths.devices,
-                color: index == 4
-                    ? selectedTabLabelColor
-                    : unselectedTabLabelColor,
+                color:
+                    index == 4 ? selectedTabIconColor : unselectedTabIconColor,
               ),
               onTap: () => onTap!(4),
             ),

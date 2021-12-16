@@ -96,11 +96,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        callNotifications.flutterLocalNotificationsPlugin.show(
-            0,
-            'In call with ${widget.contact.displayName}'.i18n,
-            'Touch here to open call'.i18n,
-            callNotifications.inCallChannel);
+        notifications.showInCallNotification(widget.contact);
         break;
       case AppLifecycleState.resumed:
         break;

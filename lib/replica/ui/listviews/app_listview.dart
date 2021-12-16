@@ -1,13 +1,16 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/custom/asset_image.dart';
+import 'package:lantern/common/ui/custom/text.dart';
+import 'package:lantern/common/ui/image_paths.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/ui/listitems/app_listitem.dart';
 import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
-import 'package:share_plus/share_plus.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -40,17 +43,26 @@ class _ReplicaAppListViewState extends ReplicaCommonListViewState {
       pagingController: super.pagingController,
       builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
         animateTransitions: true,
+        noItemsFoundIndicatorBuilder: (context) {
+          return Column(
+            children: [
+              const CAssetImage(
+                path: ImagePaths.unknown,
+                size: 168,
+              ),
+              CText(
+                'Sorry, we couldn’t find anything matching that search'.i18n,
+                style: tsBody1,
+              ),
+            ],
+          );
+        },
         itemBuilder: (context, item, index) {
           return ReplicaAppListItem(
             item: item,
-            onDownloadBtnPressed: () async {
-              await replicaApi.download(item.replicaLink);
-            },
-            onShareBtnPressed: () async {
-              await Share.share(item.replicaLink.toMagnetLink());
-            },
+            replicaApi: replicaApi,
             onTap: () async {
-              await context.pushRoute(UnknownItemScreen(
+              await context.pushRoute(ReplicaUnknownItemScreen(
                   replicaLink: item.replicaLink, category: SearchCategory.App));
             },
           );

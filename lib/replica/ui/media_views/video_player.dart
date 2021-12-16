@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
@@ -91,7 +88,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
         api: _replicaApi,
         link: widget.replicaLink,
         category: SearchCategory.Video,
-        bodyBackgroundColor: black,
+        backgroundColor: black,
         mimeType: widget.mimeType,
         body: Padding(
           padding: const EdgeInsets.only(top: 8.0),
