@@ -20,7 +20,7 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CText(
-          'Server Location'.i18n + ': ',
+          'Server Location'.i18n,
           style: tsBody1.copiedWith(
             color: unselectedTabIconColor,
           ),

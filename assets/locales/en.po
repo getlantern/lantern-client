@@ -50,8 +50,8 @@ msgstr "Unlock faster speeds, and unlimited data!"
 msgid "Server Location"
 msgstr "Server Location"
 
-msgid "Server Location Infoo"
-msgstr "Server Location Info"
+msgid "Server Location Info"
+msgstr "Lantern uses smart server selection to automatically connect you to our best data centers."
 
 msgid "OK"
 msgstr "OK"
