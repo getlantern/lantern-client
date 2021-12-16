@@ -443,6 +443,9 @@ func Start(configDir string,
 		return nil, err
 	}
 	replicaAddr := ""
+	// XXX <16-12-21, soltzen> From the run() call above, we should by now have
+	// an address for Replica in replicaAddrEventual. If we don't, we failed to
+	// initialize Replica and have to move on without it
 	if settings.ShouldRunReplica() {
 		v, ok := replicaAddrEventual.Get(startTimeout - elapsed())
 		if ok {
