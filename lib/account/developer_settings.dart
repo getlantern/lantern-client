@@ -148,6 +148,20 @@ class DeveloperSettingsTab extends StatelessWidget {
                           tsButton.copiedWith(color: Colors.deepPurpleAccent)))
             ],
           ),
+          ListItemFactory.settingsItem(
+            content: sessionModel.shouldShowConnectivityWarning(
+                (context, value, child) =>
+                    CText('Showing warning: $value', style: tsSubtitle1)),
+            trailingArray: [
+              TextButton(
+                  onPressed: () async {
+                    await sessionModel.toggleWarningVisibility();
+                  },
+                  child: CText('Toggle'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+            ],
+          ),
         ],
       ),
     );

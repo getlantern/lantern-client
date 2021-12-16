@@ -36,3 +36,5 @@ final spinner = Center(
 );
 
 const defaultCurves = Curves.easeInOutCubic;
+
+final ValueNotifier<bool> showWarning = ValueNotifier<bool>(false);
