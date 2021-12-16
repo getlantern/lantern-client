@@ -38,6 +38,18 @@ msgstr "Disconnecting..."
 msgid "Connecting"
 msgstr "Connecting..."
 
+msgid "no_network_connection"
+msgstr "No network connection"
+
+msgid "connection_error"
+msgstr "Connection Error"
+
+msgid "connection_error_des"
+msgstr "Lantern is having issues connecting to our servers.  Please restart the app. If this issue persists, please contact support."
+
+msgid "connection_error_button"
+msgstr "Contact support"
+
 msgid "Calling"
 msgstr "Calling..."
 
