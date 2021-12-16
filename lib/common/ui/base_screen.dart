@@ -45,7 +45,7 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   late final AnimationController controller;
   late final Animation<double> animation;
   final hasSeenAnimation = true;
-  final showWarning = true;
+  var showWarning = false;
 
   @override
   void initState() {
@@ -60,14 +60,8 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
     controller =
         AnimationController(duration: shortAnimationDuration, vsync: this)
           ..addListener(() => setState(() {}));
-    animation = Tween(
-            begin: showWarning
-                ? hasSeenAnimation
-                    ? dy
-                    : 0.0
-                : 0.0,
-            end: showWarning ? dy : 0.0)
-        .animate(controller);
+    animation =
+        Tween(begin: hasSeenAnimation ? dy : 0.0, end: dy).animate(controller);
     controller.forward();
   }
 
@@ -79,59 +73,65 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return testRTL(
-      Scaffold(
-        backgroundColor: widget.backgroundColor,
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        appBar: !widget.showAppBar
-            ? null
-            : PreferredSize(
-                preferredSize: Size.fromHeight(appBarHeight),
-                child: Transform.translate(
-                  offset: Offset(0.0, animation.value),
-                  child: Stack(
-                    fit: StackFit.loose,
-                    alignment: AlignmentDirectional.topCenter,
-                    children: [
-                      AppBar(
-                        automaticallyImplyLeading:
-                            widget.automaticallyImplyLeading,
-                        title: widget.title is String
-                            ? CText(
-                                widget.title,
-                                style: tsHeading3
-                                    .copiedWith(color: widget.foregroundColor)
-                                    .short,
-                              )
-                            : widget.title,
-                        elevation: 1,
-                        shadowColor: grey3,
-                        foregroundColor: widget.foregroundColor,
-                        backgroundColor: widget.backgroundColor,
-                        iconTheme: IconThemeData(color: widget.foregroundColor),
-                        centerTitle: widget.centerTitle,
-                        titleSpacing: 0,
-                        actions: widget.actions,
-                      ),
-                      ConnectivityWarning(
-                          dy: animation.value, showWarning: showWarning),
-                    ],
+    return sessionModel
+        .shouldShowConnectivityWarning((context, showWarning, child) {
+      var verticalCorrection = showWarning ? animation.value : 0.0;
+      return testRTL(
+        Scaffold(
+          backgroundColor: widget.backgroundColor,
+          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+          appBar: !widget.showAppBar
+              ? null
+              : PreferredSize(
+                  preferredSize: Size.fromHeight(appBarHeight),
+                  child: Transform.translate(
+                    offset: Offset(0.0, verticalCorrection),
+                    child: Stack(
+                      fit: StackFit.loose,
+                      alignment: AlignmentDirectional.topCenter,
+                      children: [
+                        AppBar(
+                          automaticallyImplyLeading:
+                              widget.automaticallyImplyLeading,
+                          title: widget.title is String
+                              ? CText(
+                                  widget.title,
+                                  style: tsHeading3
+                                      .copiedWith(color: widget.foregroundColor)
+                                      .short,
+                                )
+                              : widget.title,
+                          elevation: 1,
+                          shadowColor: grey3,
+                          foregroundColor: widget.foregroundColor,
+                          backgroundColor: widget.backgroundColor,
+                          iconTheme:
+                              IconThemeData(color: widget.foregroundColor),
+                          centerTitle: widget.centerTitle,
+                          titleSpacing: 0,
+                          actions: widget.actions,
+                        ),
+                        ConnectivityWarning(dy: verticalCorrection),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-        body: Padding(
-          padding: EdgeInsetsDirectional.only(
-            start: widget.padHorizontal ? 16 : 0,
-            end: widget.padHorizontal ? 16 : 0,
-            top: widget.padVertical ? 16 + animation.value : animation.value,
-            bottom: widget.padVertical ? 16 : 0,
+          body: Padding(
+            padding: EdgeInsetsDirectional.only(
+              start: widget.padHorizontal ? 16 : 0,
+              end: widget.padHorizontal ? 16 : 0,
+              top: widget.padVertical
+                  ? 16 + verticalCorrection
+                  : verticalCorrection,
+              bottom: widget.padVertical ? 16 : 0,
+            ),
+            child: widget.body,
           ),
-          child: widget.body,
+          floatingActionButton: widget.actionButton,
+          floatingActionButtonLocation: widget.floatingActionButtonLocation,
         ),
-        floatingActionButton: widget.actionButton,
-        floatingActionButtonLocation: widget.floatingActionButtonLocation,
-      ),
-    );
+      );
+    });
   }
 
   Widget testRTL(Widget child) {
@@ -148,11 +148,9 @@ class ConnectivityWarning extends StatelessWidget {
   const ConnectivityWarning({
     Key? key,
     required this.dy,
-    required this.showWarning,
   }) : super(key: key);
 
   final double dy;
-  final bool showWarning;
 
   @override
   Widget build(BuildContext context) {

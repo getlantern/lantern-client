@@ -101,6 +101,14 @@ class SessionModel(
                     tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
                 }
             }
+            "toggleWarningVisibility" -> {
+                return db.mutate { tx ->
+                    val connectivityError = tx.get("/connectivityError") ?: false
+                    db.mutate { tx ->
+                        tx.put("/connectivityError", !connectivityError)
+                    }
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
