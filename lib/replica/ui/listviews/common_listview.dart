@@ -80,7 +80,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   }
 
   Widget showError(String err) {
-    logger.v('showError(): $err');
+    logger.e('Error while fetching search results: $err');
     return Expanded(
         child: Center(
             child: Row(
@@ -94,7 +94,8 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
           ),
           Flexible(
               child: CText(
-            'Error: $err',
+            'Encountered an error while fetching results. Please try again later'
+                .i18n,
             style: tsBody1.copiedWith(color: indicatorRed),
           ))
         ])));
