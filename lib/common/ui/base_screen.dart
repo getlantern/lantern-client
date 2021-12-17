@@ -46,40 +46,40 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   late final Animation<double> animation;
   final hasSeenAnimation = true;
 
+  var dy = defaultWarningBarHeight;
   var serverError = false;
   var networkError = false;
-  Function()? _cancelConnectivitySubscription;
 
   @override
   void initState() {
     super.initState();
+    var eventType = sessionModel.connectivityNotifier().value;
     // * Connectivity event stream
-    final connectivityManager = EventManager('connectivity_event_channel');
-    _cancelConnectivitySubscription =
-        connectivityManager.subscribe(Event.All, (eventName, params) {
-      final event = EventParsing.fromValue(eventName);
-      switch (event) {
-        case Event.NetworkError:
-          setState(() {
-            networkError = true;
-          });
-          break;
-        case Event.ServerError:
-          setState(() {
-            serverError = true;
-          });
-          break;
-        default:
-          throw Exception('Unhandled event $event');
-      }
-    });
+    switch (eventType) {
+      case Event.NetworkError:
+        setState(() {
+          networkError = true;
+        });
+        break;
+      case Event.ServerError:
+        setState(() {
+          serverError = true;
+        });
+        break;
+      default:
+        break;
+    }
 
     // * Animation
     var dy =
         defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
+
+    // * Animation // initializing this to 30.0 for now, will be fine-tuned in next lines
     WidgetsBinding.instance?.addPostFrameCallback((_) => () {
           var screenInfo = MediaQuery.of(context);
-          dy = screenInfo.viewInsets.top + screenInfo.padding.top;
+          setState(() {
+            dy = screenInfo.viewInsets.top + screenInfo.padding.top;
+          });
         });
 
     controller =
@@ -93,9 +93,6 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     controller.dispose();
-    if (_cancelConnectivitySubscription != null) {
-      _cancelConnectivitySubscription!();
-    }
     super.dispose();
   }
 

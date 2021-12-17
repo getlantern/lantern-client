@@ -73,7 +73,7 @@ public class DnsDetector {
 
     public Event onConnectivityChange() {
         // TODO: define
-        return Event.NetworkError;
+        return Event.ServerError;
     }
 
     public String getDnsServer() {
