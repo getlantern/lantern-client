@@ -276,7 +276,7 @@ project) and add the following to your
 
 ```
 KEYSTORE_PWD=$KEYSTORE_PASSWORD
-KEYSTORE_FILE=~/keystore.release.jks
+KEYSTORE_FILE=/path/to/your/keystore.release.jks
 KEY_PWD=$KEY_PASSWORD
 ```
 
@@ -358,6 +358,13 @@ VERSION=2.0.0 make sourcedump
 ```
 
 This will create a file `lantern-android-sources-2.0.0.tar.gz`.
+
+This tarball deliberately excludes UI resources like images and localized strings. It also deliberately excludes 3rd party Java libraries from the libs folder.
+
+The tarball does include vendored Go libraries, including all of the getlantern.org Go libraries. In this tarball, these are all licensed under the GPL
+as explained in [LICENSING.md](LICENSING.md).
+
+All embedded URL literals in the getlantern.org Go code are elided to make it harder for clones to build a working version of Lantern.
 
 TODO: once we're confident these are working well, we should automate the upload of these to S3 and GitHub along with the upload of releases.
 
