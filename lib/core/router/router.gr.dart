@@ -39,12 +39,14 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i2;
 import 'package:lantern/replica/models/replica_link.dart' as _i31;
 import 'package:lantern/replica/models/searchcategory.dart' as _i32;
-import 'package:lantern/replica/ui/image_preview_screen.dart' as _i18;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player.dart' as _i16;
+import 'package:lantern/replica/ui/media_views/image_preview_screen.dart'
+    as _i18;
+import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart'
+    as _i25;
 import 'package:lantern/replica/ui/media_views/video_player.dart' as _i14;
 import 'package:lantern/replica/ui/search_screen.dart' as _i26;
-import 'package:lantern/replica/ui/unknown_item_screen.dart' as _i25;
 
 class AppRouter extends _i27.RootStackRouter {
   AppRouter([_i28.GlobalKey<_i28.NavigatorState>? navigatorKey])

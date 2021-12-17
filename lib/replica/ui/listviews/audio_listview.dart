@@ -25,44 +25,15 @@ class ReplicaAudioListView extends ReplicaCommonListView {
 class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
   @override
   Widget build(BuildContext context) {
-    var w = super.prebuild(context);
-    if (w != null) {
-      return w;
-    }
-    return PagedListView<int, ReplicaSearchItem>.separated(
-      cacheExtent:
-          super.getCommonCacheExtent(super.pagingController.value.itemList),
-      scrollDirection: Axis.vertical,
-      pagingController: super.pagingController,
-      builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
-        animateTransitions: true,
-        noItemsFoundIndicatorBuilder: (context) {
-          return Column(
-            children: [
-              const CAssetImage(
-                path: ImagePaths.unknown,
-                size: 168,
-              ),
-              CText(
-                'Sorry, we couldn’t find anything matching that search'.i18n,
-                style: tsBody1,
-              ),
-            ],
-          );
+    return renderPaginatedListView((context, item, index) {
+      return ReplicaAudioListItem(
+        item: item,
+        onTap: () {
+          context.pushRoute(ReplicaAudioPlayerScreen(
+              replicaLink: item.replicaLink, mimeType: item.primaryMimeType));
         },
-        itemBuilder: (context, item, index) {
-          return ReplicaAudioListItem(
-            item: item,
-            onTap: () {
-              context.pushRoute(ReplicaAudioPlayerScreen(
-                  replicaLink: item.replicaLink,
-                  mimeType: item.primaryMimeType));
-            },
-            replicaApi: super.replicaApi,
-          );
-        },
-      ),
-      separatorBuilder: (context, index) => const SizedBox.shrink(),
-    );
+        replicaApi: super.replicaApi,
+      );
+    });
   }
 }

@@ -41,7 +41,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaScreen(
+    return renderReplicaMediaViewScreen(
         context: context,
         api: replicaApi,
         link: widget.replicaLink,

@@ -12,6 +12,8 @@ var logger = Logger(
 );
 
 /// ReplicaImagePreviewScreen renders a Replica image in the middle of its view
+///
+/// This screen supports landscape and portrait orientations
 class ReplicaImagePreviewScreen extends StatefulWidget {
   ReplicaImagePreviewScreen({Key? key, required this.replicaLink});
   final ReplicaLink replicaLink;
@@ -43,7 +45,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaScreen(
+    return renderReplicaMediaViewScreen(
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
