@@ -42,6 +42,7 @@ import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.PopUpAd
 import org.getlantern.mobilesdk.model.Survey
+import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -78,9 +79,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             }
         }
         connectivityEventManager = object : EventManager("connectivity_event_channel", flutterEngine) {
+            val dnsDetector = DnsDetector(application, "8.8.8.8")
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
-                    // TODO: talk to DnsDetector
+                    // TODO: receive stream from DnsDetector
+                    connectivityEventManager.onNewEvent(
+                        dnsDetector.onConnectivityChange(),
+                        hashMapOf("ts" to System.currentTimeMillis())
+                    )
                 }
             }
         }

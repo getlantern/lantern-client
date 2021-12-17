@@ -10,6 +10,7 @@ import android.net.NetworkRequest;
 
 import androidx.annotation.NonNull;
 
+import org.getlantern.lantern.event.Event;
 import org.getlantern.mobilesdk.Logger;
 
 import java.net.Inet6Address;
@@ -68,6 +69,11 @@ public class DnsDetector {
                     }
                 }
         );
+    }
+
+    public Event onConnectivityChange() {
+        // TODO: define
+        return Event.NetworkError;
     }
 
     public String getDnsServer() {
