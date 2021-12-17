@@ -95,8 +95,6 @@ android {
     }
 
     defaultConfig {
-        // Ensure all ABIs are included
-        ndk { abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64' }
         // Include this CMakeLists.txt file in the build pipeline
         externalNativeBuild {
             cmake {
