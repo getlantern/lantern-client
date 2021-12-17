@@ -1,6 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/uploader.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
 
@@ -17,12 +16,6 @@ class ReplicaHomeScreen extends StatefulWidget {
 
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   final _textEditingController = TextEditingController();
-
-  @override
-  void initState() {
-    ReplicaUploader.inst.init();
-    super.initState();
-  }
 
   // Two ways to navigate to seach screen:
   // - Click the magnifier icon next to the search bar
@@ -131,7 +124,9 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
             title: 'replica_upload_confirmation_title'.i18n,
             explanation: 'replica_upload_confirmation_body'.i18n,
             agreeText: 'replica_upload_confirmation_agree'.i18n,
-            agreeAction: () => ReplicaUploader.inst.uploadFile(file),
+            agreeAction: () => context.pushRoute(ReplicaUploadFileScreen(
+              fileToUpload: file,
+            )),
           );
         }
       },
