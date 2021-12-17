@@ -87,6 +87,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
         link: widget.replicaLink,
         category: SearchCategory.Video,
         backgroundColor: black,
+        foregroundColor: white,
         mimeType: widget.mimeType,
         body: Padding(
           padding: const EdgeInsetsDirectional.only(top: 8.0),

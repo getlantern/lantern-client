@@ -114,11 +114,9 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('replica_link_fetcher'.i18n),
-          backgroundColor: Colors.blue,
-        ),
+    return BaseScreen(
+        showAppBar: true,
+        title: 'replica_link_fetcher'.i18n,
         body: Center(child: renderBody()));
   }
 }

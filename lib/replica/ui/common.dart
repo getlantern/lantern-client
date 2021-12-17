@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/base_screen.dart';
+import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';
@@ -56,27 +57,29 @@ Widget renderReplicaMediaViewScreen({
   required SearchCategory category,
   required Widget body,
   required Color backgroundColor,
+  Color? foregroundColor,
   String? mimeType,
 }) {
   return BaseScreen(
       showAppBar: true,
+      foregroundColor: foregroundColor,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CText(
             link.displayName ?? 'untitled'.i18n,
-            style: tsHeading3,
+            style: tsHeading3.copiedWith(color: foregroundColor),
           ),
           if (mimeType != null)
             CText(
               mimeType,
-              style: tsOverline,
+              style: tsOverline.copiedWith(color: foregroundColor),
             )
           else
             CText(
               category.toShortString(),
-              style: tsOverline,
+              style: tsOverline.copiedWith(color: foregroundColor),
             )
         ],
       ),
@@ -86,17 +89,19 @@ Widget renderReplicaMediaViewScreen({
             onPressed: () async {
               await Share.share(link.toMagnetLink());
             },
-            icon: const CAssetImage(
+            icon: CAssetImage(
               size: 20,
               path: ImagePaths.share,
+              color: foregroundColor,
             )),
         IconButton(
             onPressed: () async {
               await api.download(link);
             },
-            icon: const CAssetImage(
+            icon: CAssetImage(
               size: 20,
               path: ImagePaths.file_download,
+              color: foregroundColor,
             )),
       ],
       body: body);
