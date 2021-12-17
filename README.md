@@ -270,12 +270,13 @@ The Android app is distributed in two ways, as an APK for side-loaded installati
 for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
 all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
 
-To create a release build, add the following to your
+To create a release build, put the keystore.release.jks in your home folder (or some other location outside of this
+project) and add the following to your
 `~/.gradle/gradle.properties` file:
 
 ```
 KEYSTORE_PWD=$KEYSTORE_PASSWORD
-KEYSTORE_FILE=keystore.release.jks
+KEYSTORE_FILE=~/keystore.release.jks
 KEY_PWD=$KEY_PASSWORD
 ```
 
