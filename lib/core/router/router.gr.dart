@@ -23,7 +23,6 @@ import 'package:lantern/account/language.dart' as _i15;
 import 'package:lantern/account/recovery_key.dart' as _i22;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i23;
 import 'package:lantern/account/settings.dart' as _i13;
-import 'package:lantern/common/common.dart' as _i30;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -32,13 +31,13 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messaging.dart' as _i31;
+import 'package:lantern/messaging/messaging.dart' as _i30;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i3;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i2;
-import 'package:lantern/replica/models/replica_link.dart' as _i32;
-import 'package:lantern/replica/models/searchcategory.dart' as _i33;
+import 'package:lantern/replica/models/replica_link.dart' as _i31;
+import 'package:lantern/replica/models/searchcategory.dart' as _i32;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player.dart' as _i16;
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart'
@@ -479,7 +478,7 @@ class FullScreenDialogPageArgs {
 /// [_i5.Conversation]
 class Conversation extends _i28.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i31.ContactId contactId,
+      {required _i30.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
       : super(Conversation.name,
@@ -498,7 +497,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i31.ContactId contactId;
+  final _i30.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -513,7 +512,7 @@ class ConversationArgs {
 /// generated route for
 /// [_i6.ContactInfo]
 class ContactInfo extends _i28.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i31.Contact contact})
+  ContactInfo({required _i30.Contact contact})
       : super(ContactInfo.name,
             path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
@@ -523,7 +522,7 @@ class ContactInfo extends _i28.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i31.Contact contact;
+  final _i30.Contact contact;
 
   @override
   String toString() {
@@ -551,7 +550,7 @@ class AddViaChatNumber extends _i28.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.Introduce]
 class Introduce extends _i28.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i31.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i30.Contact? contactToIntro})
       : super(Introduce.name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -565,7 +564,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i31.Contact? contactToIntro;
+  final _i30.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -608,7 +607,7 @@ class AccountManagementArgs {
 /// generated route for
 /// [_i12.ReplicaLinkOpenerScreen]
 class LinkOpenerScreen extends _i28.PageRouteInfo<LinkOpenerScreenArgs> {
-  LinkOpenerScreen({_i30.Key? key, required _i32.ReplicaLink replicaLink})
+  LinkOpenerScreen({_i30.Key? key, required _i31.ReplicaLink replicaLink})
       : super(LinkOpenerScreen.name,
             path: 'linkOpenerScreen',
             args: LinkOpenerScreenArgs(key: key, replicaLink: replicaLink));
@@ -621,7 +620,7 @@ class LinkOpenerScreenArgs {
 
   final _i30.Key? key;
 
-  final _i32.ReplicaLink replicaLink;
+  final _i31.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -654,7 +653,7 @@ class SettingsArgs {
 class ReplicaVideoPlayerScreen
     extends _i28.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
-      {_i30.Key? key, required _i32.ReplicaLink replicaLink, String? mimeType})
+      {_i30.Key? key, required _i31.ReplicaLink replicaLink, String? mimeType})
       : super(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen',
             args: ReplicaVideoPlayerScreenArgs(
@@ -669,7 +668,7 @@ class ReplicaVideoPlayerScreenArgs {
 
   final _i30.Key? key;
 
-  final _i32.ReplicaLink replicaLink;
+  final _i31.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -704,7 +703,7 @@ class LanguageArgs {
 class ReplicaAudioPlayerScreen
     extends _i28.PageRouteInfo<ReplicaAudioPlayerScreenArgs> {
   ReplicaAudioPlayerScreen(
-      {_i30.Key? key, required _i32.ReplicaLink replicaLink, String? mimeType})
+      {_i30.Key? key, required _i31.ReplicaLink replicaLink, String? mimeType})
       : super(ReplicaAudioPlayerScreen.name,
             path: 'replicaAudioPlayerScreen',
             args: ReplicaAudioPlayerScreenArgs(
@@ -719,7 +718,7 @@ class ReplicaAudioPlayerScreenArgs {
 
   final _i30.Key? key;
 
-  final _i32.ReplicaLink replicaLink;
+  final _i31.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -755,7 +754,7 @@ class AuthorizeProArgs {
 class ReplicaImagePreviewScreen
     extends _i28.PageRouteInfo<ReplicaImagePreviewScreenArgs> {
   ReplicaImagePreviewScreen(
-      {_i30.Key? key, required _i32.ReplicaLink replicaLink})
+      {_i30.Key? key, required _i31.ReplicaLink replicaLink})
       : super(ReplicaImagePreviewScreen.name,
             path: 'replicaImagePreviewScreen',
             args: ReplicaImagePreviewScreenArgs(
@@ -769,7 +768,7 @@ class ReplicaImagePreviewScreenArgs {
 
   final _i30.Key? key;
 
-  final _i32.ReplicaLink replicaLink;
+  final _i31.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -901,8 +900,8 @@ class ReplicaUnknownItemScreen
     extends _i28.PageRouteInfo<ReplicaUnknownItemScreenArgs> {
   ReplicaUnknownItemScreen(
       {_i30.Key? key,
-      required _i32.ReplicaLink replicaLink,
-      required _i33.SearchCategory category,
+      required _i31.ReplicaLink replicaLink,
+      required _i32.SearchCategory category,
       String? mimeType})
       : super(ReplicaUnknownItemScreen.name,
             path: 'replicaUnknownItemScreen',
@@ -924,9 +923,9 @@ class ReplicaUnknownItemScreenArgs {
 
   final _i30.Key? key;
 
-  final _i32.ReplicaLink replicaLink;
+  final _i31.ReplicaLink replicaLink;
 
-  final _i33.SearchCategory category;
+  final _i32.SearchCategory category;
 
   final String? mimeType;
 
