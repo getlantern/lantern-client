@@ -46,9 +46,35 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   late final Animation<double> animation;
   final hasSeenAnimation = true;
 
+  var serverError = false;
+  var networkError = false;
+  Function()? _cancelConnectivitySubscription;
+
   @override
   void initState() {
     super.initState();
+    // * Connectivity event stream
+    final connectivityManager = EventManager('connectivity_event_channel');
+    _cancelConnectivitySubscription =
+        connectivityManager.subscribe(Event.All, (eventName, params) {
+      final event = EventParsing.fromValue(eventName);
+      switch (event) {
+        case Event.NetworkError:
+          setState(() {
+            networkError = true;
+          });
+          break;
+        case Event.ServerError:
+          setState(() {
+            serverError = true;
+          });
+          break;
+        default:
+          throw Exception('Unhandled event $event');
+      }
+    });
+
+    // * Animation
     var dy =
         defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
     WidgetsBinding.instance?.addPostFrameCallback((_) => () {
@@ -67,70 +93,75 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     controller.dispose();
+    if (_cancelConnectivitySubscription != null) {
+      _cancelConnectivitySubscription!();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        .shouldShowConnectivityWarning((context, showWarning, child) {
-      var verticalCorrection = showWarning ? animation.value : 0.0;
-      return testRTL(
-        Scaffold(
-          backgroundColor: widget.backgroundColor,
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          appBar: !widget.showAppBar
-              ? null
-              : PreferredSize(
-                  preferredSize: Size.fromHeight(appBarHeight),
-                  child: Transform.translate(
-                    offset: Offset(0.0, verticalCorrection),
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                      alignment: AlignmentDirectional.topCenter,
-                      children: [
-                        AppBar(
-                          automaticallyImplyLeading:
-                              widget.automaticallyImplyLeading,
-                          title: widget.title is String
-                              ? CText(
-                                  widget.title,
-                                  style: tsHeading3
-                                      .copiedWith(color: widget.foregroundColor)
-                                      .short,
-                                )
-                              : widget.title,
-                          elevation: 1,
-                          shadowColor: grey3,
-                          foregroundColor: widget.foregroundColor,
-                          backgroundColor: widget.backgroundColor,
-                          iconTheme:
-                              IconThemeData(color: widget.foregroundColor),
-                          centerTitle: widget.centerTitle,
-                          titleSpacing: 0,
-                          actions: widget.actions,
-                        ),
-                        ConnectivityWarning(dy: verticalCorrection),
-                      ],
-                    ),
+    var verticalCorrection =
+        serverError || networkError ? animation.value : 0.0;
+
+    return testRTL(
+      Scaffold(
+        backgroundColor: widget.backgroundColor,
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+        appBar: !widget.showAppBar
+            ? null
+            : PreferredSize(
+                preferredSize: Size.fromHeight(appBarHeight),
+                child: Transform.translate(
+                  offset: Offset(0.0, verticalCorrection),
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: AlignmentDirectional.topCenter,
+                    children: [
+                      AppBar(
+                        automaticallyImplyLeading:
+                            widget.automaticallyImplyLeading,
+                        title: widget.title is String
+                            ? CText(
+                                widget.title,
+                                style: tsHeading3
+                                    .copiedWith(color: widget.foregroundColor)
+                                    .short,
+                              )
+                            : widget.title,
+                        elevation: 1,
+                        shadowColor: grey3,
+                        foregroundColor: widget.foregroundColor,
+                        backgroundColor: widget.backgroundColor,
+                        iconTheme: IconThemeData(color: widget.foregroundColor),
+                        centerTitle: widget.centerTitle,
+                        titleSpacing: 0,
+                        actions: widget.actions,
+                      ),
+                      ConnectivityWarning(
+                        dy: verticalCorrection,
+                        networkError: networkError,
+                        serverError: serverError,
+                      ),
+                    ],
                   ),
                 ),
-          body: Padding(
-            padding: EdgeInsetsDirectional.only(
-              start: widget.padHorizontal ? 16 : 0,
-              end: widget.padHorizontal ? 16 : 0,
-              top: widget.padVertical
-                  ? 16 + verticalCorrection
-                  : verticalCorrection,
-              bottom: widget.padVertical ? 16 : 0,
-            ),
-            child: widget.body,
+              ),
+        body: Padding(
+          padding: EdgeInsetsDirectional.only(
+            start: widget.padHorizontal ? 16 : 0,
+            end: widget.padHorizontal ? 16 : 0,
+            top: widget.padVertical
+                ? 16 + verticalCorrection
+                : verticalCorrection,
+            bottom: widget.padVertical ? 16 : 0,
           ),
-          floatingActionButton: widget.actionButton,
-          floatingActionButtonLocation: widget.floatingActionButtonLocation,
+          child: widget.body,
         ),
-      );
-    });
+        floatingActionButton: widget.actionButton,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      ),
+    );
   }
 
   Widget testRTL(Widget child) {
@@ -147,41 +178,54 @@ class ConnectivityWarning extends StatelessWidget {
   const ConnectivityWarning({
     Key? key,
     required this.dy,
+    required this.networkError,
+    required this.serverError,
   }) : super(key: key);
 
   final double dy;
+  final bool networkError;
+  final bool serverError;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      color: yellow6,
-      height: dy,
-      child: GestureDetector(
-        onTap: isNetworkError()
-            ? null
-            : () => showInfoDialog(context,
-                title: 'connection_error'.i18n,
-                des: 'connection_error_des'.i18n,
-                buttonText: 'connection_error_button'.i18n,
-                showCancel: true,
-                buttonAction: () => context.router.push(Settings())),
-        child: CText(
-          (isNetworkError() ? 'no_network_connection' : 'connection_error')
-              .i18n
-              .toUpperCase(),
-          style: tsBody2.copiedWith(
-              color: white,
-              lineHeight:
-                  24), // TODO: hardcoding this isn't great, but I'm having a hard time centering the text vertically otherwise
-          textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: serverError
+          ? () => showInfoDialog(context,
+              title: 'connection_error'.i18n,
+              des: 'connection_error_des'.i18n,
+              buttonText: 'connection_error_button'.i18n,
+              showCancel: true,
+              buttonAction: () => context.router.push(Settings()))
+          : null,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        color: yellow6,
+        height: dy,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CText(
+              (serverError ? 'connection_error' : 'no_network_connection')
+                  .i18n
+                  .toUpperCase(),
+              style: tsBody2.copiedWith(
+                color: white,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (serverError)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 4.0, top: 3.0),
+                child: CAssetImage(
+                  path: ImagePaths.info,
+                  size: 12,
+                  color: white,
+                ),
+              )
+          ],
         ),
       ),
     );
-  }
-
-  // returns true if this is a network error
-  bool isNetworkError() {
-    return false;
   }
 }

@@ -21,6 +21,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             margin: const EdgeInsetsDirectional.only(bottom: 16.0),
             child: CText('dev_payment_mode'.i18n, style: tsBody3),
           ),
+          // * PAYMENT TEST MODE
           ListItemFactory.settingsItem(
             content: 'Payment Test Mode'.i18n,
             trailingArray: [
@@ -40,6 +41,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
+          // * PLAY VERSION
           ListItemFactory.settingsItem(
             content: 'Play Version'.i18n,
             trailingArray: [
@@ -59,6 +61,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
+          // * FORCE COUNTRY
           ListItemFactory.settingsItem(
             content: 'Force Country'.i18n,
             trailingArray: [
@@ -88,78 +91,79 @@ class DeveloperSettingsTab extends StatelessWidget {
               })
             ],
           ),
+          // * RESET ALL TIMESTAMPS
           ListItemFactory.settingsItem(
             content: 'Reset all timestamps',
             trailingArray: [
               TextButton(
-                  onPressed: () async {
-                    await messagingModel.resetTimestamps();
-                  },
-                  child: CText('Reset'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+                onPressed: () async {
+                  await messagingModel.resetTimestamps();
+                },
+                child: CText(
+                  'Reset'.toUpperCase(),
+                  style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                ),
+              )
             ],
           ),
+          // * RESET ONBOARDING + RECOVERY KEY FLAGS
           ListItemFactory.settingsItem(
             content: 'Reset onboarding and recovery key flags',
             trailingArray: [
               TextButton(
-                  onPressed: () async {
-                    await messagingModel.resetFlags();
-                  },
-                  child: CText('Reset'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+                onPressed: () async {
+                  await messagingModel.resetFlags();
+                },
+                child: CText(
+                  'Reset'.toUpperCase(),
+                  style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                ),
+              )
             ],
           ),
+          // * START MESSAGING
           ListItemFactory.settingsItem(
             content: 'Start messaging',
             trailingArray: [
               TextButton(
-                  onPressed: () async {
-                    await messagingModel.start();
-                  },
-                  child: CText('start'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+                onPressed: () async {
+                  await messagingModel.start();
+                },
+                child: CText(
+                  'start'.toUpperCase(),
+                  style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                ),
+              )
             ],
           ),
+          // * KILL MESSAGING
           ListItemFactory.settingsItem(
             content: 'Kill messaging',
             trailingArray: [
               TextButton(
-                  onPressed: () async {
-                    await messagingModel.kill();
-                  },
-                  child: CText('kill'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+                onPressed: () async {
+                  await messagingModel.kill();
+                },
+                child: CText(
+                  'kill'.toUpperCase(),
+                  style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                ),
+              )
             ],
           ),
+          // * WIPE DATA
           ListItemFactory.settingsItem(
             content: 'Wipe data and restart',
             trailingArray: [
               TextButton(
-                  onPressed: () async {
-                    await messagingModel.wipeData();
-                  },
-                  child: CText('Wipe'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
-            ],
-          ),
-          ListItemFactory.settingsItem(
-            content: sessionModel.shouldShowConnectivityWarning(
-                (context, value, child) =>
-                    CText('Showing warning: $value', style: tsSubtitle1)),
-            trailingArray: [
-              TextButton(
-                  onPressed: () async {
-                    await sessionModel.toggleWarningVisibility();
-                  },
-                  child: CText('Toggle'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepPurpleAccent)))
+                onPressed: () async {
+                  await messagingModel.wipeData();
+                },
+                child: CText(
+                  'Wipe'.toUpperCase(),
+                  style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                ),
+              )
             ],
           ),
         ],

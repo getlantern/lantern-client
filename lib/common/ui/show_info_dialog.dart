@@ -2,8 +2,8 @@ import 'package:lantern/common/common.dart';
 
 void showInfoDialog(
   BuildContext parentContext, {
-  String title = '',
-  String des = '',
+  dynamic title = '',
+  dynamic des = '',
   String assetPath = '',
   String buttonText = 'OK',
   bool popParentContext = false,
@@ -35,10 +35,12 @@ void showInfoDialog(
                 ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: CText(
-                  title,
-                  style: tsSubtitle1,
-                ),
+                child: (title is String)
+                    ? CText(
+                        title,
+                        style: tsSubtitle1,
+                      )
+                    : title,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -47,10 +49,12 @@ void showInfoDialog(
                     top: 16,
                     bottom: 24,
                   ),
-                  child: CText(
-                    des,
-                    style: tsBody1Color(unselectedTabIconColor),
-                  ),
+                  child: (des is String)
+                      ? CText(
+                          des,
+                          style: tsBody1Color(unselectedTabIconColor),
+                        )
+                      : des,
                 ),
               ),
               Row(
