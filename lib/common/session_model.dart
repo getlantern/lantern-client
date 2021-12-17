@@ -126,4 +126,8 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<int>('/tabIndex',
         defaultValue: 0, builder: builder);
   }
+
+  ValueNotifier<Event?> getConnectivityStatus() {
+    return connectivityNotifier();
+  }
 }
