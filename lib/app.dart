@@ -16,6 +16,8 @@ class LanternApp extends StatelessWidget {
       providers: [
         Provider(create: (context) => EventManager('lantern_event_channel')),
         Provider(
+            create: (context) => EventManager('connectivity_event_channel')),
+        Provider(
             create: (context) => const MethodChannel('lantern_method_channel')),
       ],
       // We typically don't use FutureBuilder, but it's okay here

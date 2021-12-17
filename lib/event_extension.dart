@@ -1,6 +1,8 @@
 enum Event {
   All,
   SurveyAvailable,
+  NetworkError,
+  ServerError,
 }
 
 extension EventParsing on Event {

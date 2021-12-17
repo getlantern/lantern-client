@@ -126,13 +126,4 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<int>('/tabIndex',
         defaultValue: 0, builder: builder);
   }
-
-  Future<void> toggleWarningVisibility() {
-    return methodChannel.invokeMethod('toggleWarningVisibility');
-  }
-
-  Widget shouldShowConnectivityWarning(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/connectivityError',
-        defaultValue: false, builder: builder);
-  }
 }

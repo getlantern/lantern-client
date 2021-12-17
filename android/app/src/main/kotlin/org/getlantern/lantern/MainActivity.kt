@@ -54,6 +54,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
+    private lateinit var connectivityEventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var flutterSignaling: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
@@ -73,6 +74,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 if (LanternApp.getSession().lanternDidStart()) {
                     fetchLoConf()
                     Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
+                }
+            }
+        }
+        connectivityEventManager = object : EventManager("connectivity_event_channel", flutterEngine) {
+            override fun onListen(event: Event) {
+                if (LanternApp.getSession().lanternDidStart()) {
+                    // TODO: talk to DnsDetector
                 }
             }
         }
