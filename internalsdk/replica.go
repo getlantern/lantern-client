@@ -81,7 +81,7 @@ func newReplicaHttpHandler(
 	// the privacy of uploaders
 	input.AddUploadsToTorrentClient = false
 	input.StoreUploadsLocally = false
-	// input.StoreMetainfoFileAndTokenLocally = false
+	input.StoreMetainfoFileAndTokenLocally = false
 	input.CacheDir = configDir
 	input.AddCommonHeaders = func(r *http.Request) {
 		common.AddCommonHeaders(userConfig, r)
