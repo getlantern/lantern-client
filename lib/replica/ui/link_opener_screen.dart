@@ -1,6 +1,4 @@
-import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:flutter/material.dart';
-import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
@@ -14,7 +12,7 @@ var logger = Logger(
 /// LinkOpenerScreen is a 'loading' screen for Replica links that:
 /// - Checks if Replica is available by re-running ReplicaCommon.init()
 ///   - This may not be initialized if we came from a deeplink
-/// - Determine what's the content type of this Replica link (e.g., video, PDF, etc.)
+/// - Determine the content type of this Replica link (e.g., video, PDF, etc.)
 /// - Show a spinner until we figure out the content type
 /// - If we failed to do so (because of a timeout, Replica is not initialized,
 ///   etc.), show an error and don't proceed; the user is expected to press the
@@ -45,26 +43,29 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
   @override
   void initState() {
     ReplicaCommon.init().then((_) {
-      logger.v('initState(): ReplicaCommon.init() ran');
       if (!ReplicaCommon.isReplicaRunning()) {
         if (mounted) {
           setState(() {
-            logger.v('initState(): ReplicaCommon.init() failed');
+            logger.e(
+                'initState(): ReplicaCommon.init() failed. We will not continue');
             _didFailToInitReplica = true;
           });
         }
         return;
       }
 
-      logger.v('initState(): ReplicaCommon.init() OK');
       _replicaApi.fetchCategoryFromReplicaLink(widget.replicaLink).then((cat) {
-        logger.v('initState: category is ${cat.toString()}');
+        logger.v('category is ${cat.toString()}');
         switch (cat) {
           case SearchCategory.Video:
             return context.replaceRoute(
                 ReplicaVideoPlayerScreen(replicaLink: widget.replicaLink));
           case SearchCategory.Image:
+            return context.replaceRoute(
+                ReplicaImagePreviewScreen(replicaLink: widget.replicaLink));
           case SearchCategory.Audio:
+            return context.replaceRoute(
+                ReplicaAudioPlayerScreen(replicaLink: widget.replicaLink));
           case SearchCategory.Document:
           case SearchCategory.App:
           case SearchCategory.Unknown:
@@ -87,9 +88,9 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
               color: Colors.red,
               size: 60,
             ),
-            const Flexible(
+            Flexible(
                 child: Text(
-              'Error: Failed to initialize Replica',
+              'failed_to_init_replica'.i18n,
             ))
           ]);
     }
@@ -103,9 +104,9 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
           height: 60,
           child: CircularProgressIndicator(),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 16),
-          child: Text('Awaiting result...'),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 16),
+          child: Text('awaiting_result'.i18n),
         ),
       ],
     );
@@ -115,7 +116,7 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Replica Link Fetcher'),
+          title: Text('replica_link_fetcher'.i18n),
           backgroundColor: Colors.blue,
         ),
         body: Center(child: renderBody()));

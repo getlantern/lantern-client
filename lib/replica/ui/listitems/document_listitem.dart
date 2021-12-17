@@ -41,7 +41,7 @@ class ReplicaDocumentListItem extends StatelessWidget {
                   )
                 else
                   CText(
-                    'document/unknown'.i18n,
+                    'document_unknown'.i18n,
                     style: tsBody1.copiedWith(color: pink4),
                   ),
               ],

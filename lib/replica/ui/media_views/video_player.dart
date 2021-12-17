@@ -15,12 +15,10 @@ var logger = Logger(
 /// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to
 /// stream it. If it can't stream the link, it'll show an error screen.
 ///
-/// Example:
+/// This screen supports landscape and portrait orientations
 ///
-///   ReplicaVideoPlayerScreen(
-///     replicaLink:
-///       ReplicaLink.New('magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26so%3D0'))
-///
+/// The playback controls container are shown/hidden by tapping away from the
+/// playback controls
 class ReplicaVideoPlayerScreen extends StatefulWidget {
   ReplicaVideoPlayerScreen({Key? key, required this.replicaLink, this.mimeType})
       : super(key: key);
@@ -83,7 +81,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaScreen(
+    return renderReplicaMediaViewScreen(
         context: context,
         api: _replicaApi,
         link: widget.replicaLink,
@@ -91,7 +89,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
         backgroundColor: black,
         mimeType: widget.mimeType,
         body: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsetsDirectional.only(top: 8.0),
           child: FutureBuilder(
             future: _initializeVideoPlayerFuture,
             builder: (context, snapshot) {
@@ -118,8 +116,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                       ),
                       Flexible(
                           child: CText(
-                        'Encountered an error rendering the video. Please try again later'
-                            .i18n,
+                        'video_stream_error'.i18n,
                         style: CTextStyle(
                             fontSize: 16, color: white, lineHeight: 19),
                       ))
@@ -139,7 +136,10 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                           });
                         },
                         child: VideoPlayer(_videoController)),
-                    // Only display controls if we it should be visible
+                    // Only render controls if the playback controls are
+                    // visible. Just hiding the opacity of the playback
+                    // controls is not sufficient since the tap gestures will be
+                    // absorbed by the playback controls
                     if (_playbackControlsVisible)
                       Align(
                           alignment: FractionalOffset.bottomCenter,
@@ -225,6 +225,8 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     );
   }
 
+  // XXX <17-12-2021> soltzen: those controls are the same as the audio playback
+  // controls.
   Widget renderPlaybackSlider() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

@@ -1,14 +1,9 @@
-import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/listitems/audio_listitem.dart';
+import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(

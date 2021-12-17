@@ -40,7 +40,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   Widget build(BuildContext context) {
     return BaseScreen(
         centerTitle: true,
-        title: 'Discover'.i18n,
+        title: 'discover'.i18n,
         body: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -56,7 +56,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 });
               },
               decoration: InputDecoration(
-                labelText: 'Search',
+                labelText: 'search'.i18n,
                 suffixIcon: Material(
                   color: blue4,
                   child: IconButton(
@@ -94,24 +94,25 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               labelStyle: const TextStyle(fontSize: 12.0),
               tabs: <Widget>[
                 Tab(
-                  text: 'Video'.i18n,
+                  text: 'video'.i18n,
                 ),
                 Tab(
-                  text: 'Image'.i18n,
+                  text: 'image'.i18n,
                 ),
                 Tab(
-                  text: 'Audio'.i18n,
+                  text: 'audio'.i18n,
                 ),
                 Tab(
-                  text: 'Document'.i18n,
+                  text: 'document'.i18n,
                 ),
                 Tab(
-                  text: 'App'.i18n,
+                  text: 'app'.i18n,
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            // TODO ValueListenableBuilder may not be necessary: try without it (just with setState and see)
+            // TODO <17-12-2021> soltzen: ValueListenableBuilder may not be
+            // necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
                 valueListenable: _searchQueryListener,
                 builder: (BuildContext context, String value, Widget? child) {

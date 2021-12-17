@@ -83,7 +83,7 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
           )
         else
           CText(
-            'audio/unknown'.i18n,
+            'audio_unknown'.i18n,
             style: tsBody1.copiedWith(color: pink4),
           ),
       ],
