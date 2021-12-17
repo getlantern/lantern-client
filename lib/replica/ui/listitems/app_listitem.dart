@@ -41,7 +41,7 @@ class ReplicaAppListItem extends StatelessWidget {
                   )
                 else
                   CText(
-                    'app/unknown'.i18n,
+                    'app_unknown'.i18n,
                     style: tsBody1.copiedWith(color: pink4),
                   ),
               ],

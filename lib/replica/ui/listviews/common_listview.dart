@@ -72,7 +72,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
         pagingController.appendPage(ret, nextPageKey);
       }
     } catch (err) {
-      logger.v('fetchPage err: $err');
+      logger.w('fetchPage err: $err');
       if (mounted) {
         pagingController.error = 'fetching search result with $err';
       }
@@ -94,8 +94,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
           ),
           Flexible(
               child: CText(
-            'Encountered an error while fetching results. Please try again later'
-                .i18n,
+            'search_result_error'.i18n,
             style: tsBody1.copiedWith(color: indicatorRed),
           ))
         ])));

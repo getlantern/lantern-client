@@ -1,6 +1,5 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:logger/logger.dart';
@@ -27,6 +26,7 @@ var logger = Logger(
 class ReplicaUploader {
   // Private, named constructor to avoid instantiations
   ReplicaUploader._private();
+
   // Singleton instance to access the class
   static final ReplicaUploader inst = ReplicaUploader._private();
   FlutterUploader? uploader;
@@ -61,7 +61,10 @@ void ReplicaUploaderBackgroundHandler() {
   // Listen to progress and show a single notification showing the progress
   isolateUploader.progress.listen((progress) {
     notifications.flutterLocalNotificationsPlugin
-        .show(progress.taskId.hashCode, 'Uploader', 'Upload in Progress',
+        .show(
+            progress.taskId.hashCode,
+            'uploader'.i18n,
+            'upload_in_progress'.i18n,
             notifications.getUploadProgressChannel(progress.progress ?? 0))
         .catchError((e, stack) {
       logger.e('Error while showing notification: $e, $stack');
@@ -84,14 +87,14 @@ void ReplicaUploaderBackgroundHandler() {
         .cancel(result.taskId.hashCode);
 
     // Show a notification for completed, failed or canceled notifications
-    var title = 'Upload Complete';
+    var title = 'upload_complete'.i18n;
     if (result.status == UploadTaskStatus.failed) {
-      title = 'Upload Failed';
+      title = 'upload_failed'.i18n;
     } else if (result.status == UploadTaskStatus.canceled) {
-      title = 'Upload Canceled';
+      title = 'upload_canceled'.i18n;
     }
     notifications.flutterLocalNotificationsPlugin
-        .show(result.taskId.hashCode, 'Uploader', title,
+        .show(result.taskId.hashCode, 'uploader'.i18n, title,
             notifications.getUploadCompleteChannel(result),
             payload: Payload(type: PayloadType.Upload, data: result.response)
                 .toJson())

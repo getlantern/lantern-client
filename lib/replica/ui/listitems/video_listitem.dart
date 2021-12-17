@@ -1,12 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/custom/list_item_factory.dart';
-import 'package:lantern/common/ui/custom/text.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:logger/logger.dart';

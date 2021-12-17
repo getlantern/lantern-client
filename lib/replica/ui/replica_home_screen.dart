@@ -41,7 +41,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         child: BaseScreen(
             actionButton: renderFap(context),
             centerTitle: true,
-            title: 'Discover'.i18n,
+            title: 'discover'.i18n,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -52,10 +52,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   Widget renderDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
-      child: CText(
-          'Search user-uploaded content on the Lantern Network, or upload your own for others to discover.'
-              .i18n,
-          style: tsBody1),
+      child: CText('replica_search_intro'.i18n, style: tsBody1),
     );
   }
 
@@ -69,7 +66,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           await _navigateToSearchScreen(query);
         },
         decoration: InputDecoration(
-          labelText: 'Search',
+          labelText: 'search'.i18n,
           suffixIcon: Material(
             color: blue4,
             child: IconButton(
@@ -79,7 +76,8 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                 icon: const Icon(Icons.search),
                 color: white),
           ),
-          contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          contentPadding:
+              const EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 10.0),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: grey3,
@@ -120,7 +118,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           return;
         }
         var file = File(result.files.single.path);
-        logger.v('Pick a file $file');
+        logger.v('Picked a file $file');
 
         // If the checkbox value is false, show it
         // If true, don't

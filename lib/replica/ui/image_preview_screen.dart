@@ -68,7 +68,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
                         const Padding(
                             padding: EdgeInsets.symmetric(vertical: 6.0)),
                         CText(
-                          'No preview for this type of file'.i18n,
+                          'no_preview_for_this_type_of_file'.i18n,
                           style: tsBody1,
                         ),
                       ]);

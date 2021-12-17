@@ -17,6 +17,8 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+// renderReplicaLongPressMenuItem is used for rendering list/grid items located
+// in the ./ui/replica/listitems directory
 SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   return SizedBox(
     height: 96,
@@ -29,13 +31,13 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
         children: [
           ListItemFactory.focusMenuItem(
               icon: ImagePaths.file_download,
-              content: 'Download'.i18n,
+              content: 'download'.i18n,
               onTap: () async {
                 await api.download(link);
               }),
           ListItemFactory.focusMenuItem(
               icon: ImagePaths.share,
-              content: 'Share'.i18n,
+              content: 'share'.i18n,
               onTap: () async {
                 await Share.share('replica://${link.toMagnetLink()}');
               }),
@@ -45,7 +47,9 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   );
 }
 
-Widget renderReplicaMediaScreen({
+// renderReplicaMediaViewScreen is used as the root widget for all Replica media
+// views (located in ./ui/replica/media_views directory)
+Widget renderReplicaMediaViewScreen({
   required BuildContext context,
   required ReplicaApi api,
   required ReplicaLink link,
@@ -61,7 +65,7 @@ Widget renderReplicaMediaScreen({
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CText(
-            link.displayName ?? 'Untitled',
+            link.displayName ?? 'untitled'.i18n,
             style: tsHeading3,
           ),
           if (mimeType != null)
