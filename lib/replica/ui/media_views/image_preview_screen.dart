@@ -53,7 +53,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
         category: SearchCategory.Image,
         body: Center(
             child: CachedNetworkImage(
-                imageUrl: replicaApi.getThumbnailAddr(widget.replicaLink),
+                imageUrl: replicaApi.getDownloadAddr(widget.replicaLink),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(value: downloadProgress.progress),
                 errorWidget: (context, url, error) {
