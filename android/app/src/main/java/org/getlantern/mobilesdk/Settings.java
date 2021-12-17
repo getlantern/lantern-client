@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 
 import org.getlantern.lantern.util.Json;
+import org.getlantern.mobilesdk.features.ReplicaEnabledState;
 
 import java.io.InputStream;
 
@@ -26,10 +27,8 @@ public class Settings implements internalsdk.Settings {
     private long startTimeoutMillis;
 
     // Declare as transient so that Gson ignores this
-    // TODO <13-10-21, soltzen> We'll set this to true always in the future,
-    // when Replica is ready on mobile. For now, just keep it public and easy
-    // to work with
-    public transient boolean shouldRunReplica = true;
+    // XXX <16-12-21, soltzen> See the 'Enabling Replica' section in the README for more info
+    public transient ReplicaEnabledState replicaEnabledState = ReplicaEnabledState.GLOBAL_CONFIG;
 
     public static Settings init(final Context context) {
         try {
@@ -62,7 +61,7 @@ public class Settings implements internalsdk.Settings {
         return httpProxyPort;
     }
 
-    public boolean shouldRunReplica() {
-        return shouldRunReplica;
+    public long getReplicaEnabledState() {
+        return replicaEnabledState.getValue();
     }
 }

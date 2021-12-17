@@ -13,6 +13,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
 import org.getlantern.mobilesdk.embedded.EmbeddedLantern;
+import org.getlantern.mobilesdk.features.ReplicaEnabledState;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class ReplicaTest extends BaseTest {
         // Initialize internalsdk
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Settings settings = Settings.init(InstrumentationRegistry.getInstrumentation().getTargetContext());
-        settings.shouldRunReplica = true;
+        settings.replicaEnabledState = ReplicaEnabledState.YES;
         StartResult result = new EmbeddedLantern().start(
                 Paths.get(context.getFilesDir().getAbsolutePath(), ".lantern").toString(),
                 "en_US", settings, LanternApp.getSession());

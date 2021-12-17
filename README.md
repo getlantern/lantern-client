@@ -52,6 +52,16 @@ Lantern Android is an app that uses the [VpnService][https://developer.android.c
 
 This project is meant to be used inside of the context of a local clone of https://github.com/getlantern/lantern-build.
 
+### Enabling Replica
+
+Whether Replica is enabled or not is determined like this:
+- mobilesdk/Settings.java has a flag called `replicaEnabledState` of type `ReplicaEnabledState`
+  - `ReplicaEnabledState` has three states:
+    - `YES` - Always enabled, regardless of what global config says
+    - `NO` - Always disabled, regardless of what global config says
+    - `GLOBAL_CONFIG` - Depends whether your country in global config has the Replica feature enabled:
+      - See here for enabled countries https://github.com/getlantern/lantern_aws/blob/c1896cf884a4a91d15a61f8a1695fe2bf713f512/salt/update_masquerades/cloud.yaml.tmpl#L73
+
 ## Acknowledgements
 
 This application uses ringtone sounds from Mike Koenig available [here](https://soundbible.com/1868-Ringing-Phone.html)

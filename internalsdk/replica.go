@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/getlantern/flashlight"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
 	"github.com/getlantern/flashlight/geolookup"
@@ -16,6 +17,34 @@ import (
 	replicaService "github.com/getlantern/replica/service"
 	"github.com/gorilla/mux"
 )
+
+// Same as from mobilesdk/Settings.java
+const (
+	REPLICAENABLED_YES           = iota
+	REPLICAENABLED_NO            = iota
+	REPLICAENABLED_GLOBAL_CONFIG = iota
+)
+
+// See the 'Enabling Replica' section in the README for more info on the
+// decision tree here
+func shouldRunReplica(settings Settings, flashlightInst *flashlight.Flashlight) bool {
+	switch settings.GetReplicaEnabledState() {
+	case REPLICAENABLED_YES:
+		log.Debugf("shouldRunReplica: returning true regardless of global config")
+		return true
+	case REPLICAENABLED_NO:
+		log.Debugf("shouldRunReplica: returning false regardless of global config")
+		return false
+	case REPLICAENABLED_GLOBAL_CONFIG:
+		features := flashlightInst.EnabledFeatures()
+		log.Debugf("All enabled features for country [%+v]: %+v", geolookup.GetCountry(5*time.Second), features)
+		_, ok := features[config.FeatureReplica]
+		log.Debugf("shouldRunReplica: returning %v", ok)
+		return ok
+	default:
+		panic(log.Errorf("Unknown option for GetReplicaEnabledState(). This should never happen"))
+	}
+}
 
 // NewReplicaServer uses 'handler' to setup a new net.Listener for Replica
 // on localhost over the next available TCP port.

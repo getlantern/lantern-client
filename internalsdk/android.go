@@ -52,13 +52,14 @@ var (
 
 	clEventual               = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
-	replicaAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
+
+	replicaAddrEventual eventual.Value
 )
 
 type Settings interface {
 	StickyConfig() bool
-	ShouldRunReplica() bool
+	GetReplicaEnabledState() int
 	GetHttpProxyHost() string
 	GetHttpProxyPort() int
 	TimeoutMillis() int
@@ -443,10 +444,14 @@ func Start(configDir string,
 		return nil, err
 	}
 	replicaAddr := ""
-	// XXX <16-12-21, soltzen> From the run() call above, we should by now have
-	// an address for Replica in replicaAddrEventual. If we don't, we failed to
-	// initialize Replica and have to move on without it
-	if settings.ShouldRunReplica() {
+	// XXX <16-12-21, soltzen> From the run() call above, replicaAddrEventual
+	// will be initialized and we should by now have an address for Replica in
+	// replicaAddrEventual. If we don't, we failed to initialize Replica and
+	// have to move on without it.
+	//
+	// If replicaAddrEventual is nil, we don't want Replica initialized in the
+	// first place, so you can skip it
+	if replicaAddrEventual != nil {
 		v, ok := replicaAddrEventual.Get(startTimeout - elapsed())
 		if ok {
 			replicaAddr = v.(string)
@@ -468,6 +473,7 @@ func EnableLogging(configDir string) {
 
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
+	geolookup.Refresh()
 
 	memhelper.Track(15*time.Second, 15*time.Second)
 	appdir.SetHomeDir(configDir)
@@ -577,25 +583,25 @@ func run(configDir, locale string,
 		log.Fatalf("Failed to start flashlight: %v", err)
 	}
 
-	if settings.ShouldRunReplica() {
-		func() {
-			h, err := newReplicaHttpHandler(configDir,
-				userConfig, runner.FeatureOptions)
-			if err != nil {
-				log.Debugf(
-					"Failed to start replica server. Will continue without it. Err: %v", err)
-				return
-			}
-			l, srv, err := NewReplicaServer(h)
-			if err != nil {
-				log.Debugf(
-					"Failed to start replica server. Will continue without it. Err: %v", err)
-				return
-			}
-			replicaAddrEventual.Set("localhost:" +
-				strconv.Itoa(l.Addr().(*net.TCPAddr).Port))
-			go srv.Serve(l)
-		}()
+	if shouldRunReplica(settings, runner) {
+		replicaAddrEventual = eventual.NewValue()
+
+		h, err := newReplicaHttpHandler(configDir,
+			userConfig, runner.FeatureOptions)
+		if err != nil {
+			log.Debugf(
+				"Failed to start replica server. Will continue without it. Err: %v", err)
+			return
+		}
+		l, srv, err := NewReplicaServer(h)
+		if err != nil {
+			log.Debugf(
+				"Failed to start replica server. Will continue without it. Err: %v", err)
+			return
+		}
+		replicaAddrEventual.Set("localhost:" +
+			strconv.Itoa(l.Addr().(*net.TCPAddr).Port))
+		go srv.Serve(l)
 	}
 
 	go runner.Run(
