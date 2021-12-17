@@ -43,18 +43,7 @@ class _ReplicaImageListViewState extends ReplicaCommonListViewState {
       builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
         animateTransitions: true,
         noItemsFoundIndicatorBuilder: (context) {
-          return Column(
-            children: [
-              const CAssetImage(
-                path: ImagePaths.unknown,
-                size: 168,
-              ),
-              CText(
-                'Sorry, we couldn’t find anything matching that search'.i18n,
-                style: tsBody1,
-              ),
-            ],
-          );
+          return renderNoItemsFoundWidget();
         },
         itemBuilder: (context, item, index) {
           return ReplicaImageListItem(

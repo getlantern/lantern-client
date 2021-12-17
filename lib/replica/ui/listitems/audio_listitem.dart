@@ -5,6 +5,7 @@ import 'package:lantern/replica/models/search_item.dart';
 class ReplicaAudioListItem extends StatefulWidget {
   ReplicaAudioListItem(
       {required this.item, required this.onTap, required this.replicaApi});
+
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
@@ -43,14 +44,11 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
   }
 
   Widget renderAudioFilename() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(4.0),
-      child: CText(
-        widget.item.displayName,
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: tsSubtitle1Short,
-      ),
+    return CText(
+      widget.item.displayName,
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+      style: tsSubtitle1Short,
     );
   }
 
@@ -69,13 +67,10 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
             if (snapshot.hasError ||
                 !snapshot.hasData ||
                 snapshot.data == null) {
-              return CText(
-                '??:??',
-                style: tsBody1,
-              );
+              return Container();
             }
             return CText(
-              snapshot.data!.toStringAsFixed(2),
+              snapshot.data!.toMinutesAndSeconds(),
               style: tsBody1,
             );
           },
@@ -88,7 +83,7 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
           )
         else
           CText(
-            'audio/unknown'.i18n,
+            'audio_unknown'.i18n,
             style: tsBody1.copiedWith(color: pink4),
           ),
       ],

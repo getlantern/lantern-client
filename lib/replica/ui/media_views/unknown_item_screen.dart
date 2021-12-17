@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
@@ -42,7 +41,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaScreen(
+    return renderReplicaMediaViewScreen(
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
@@ -62,7 +61,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
                 CText(
-                  'No preview for this type of file',
+                  'no_preview_for_this_type_of_file'.i18n,
                   style: tsBody1,
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
@@ -71,7 +70,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                     await replicaApi.download(widget.replicaLink);
                   },
                   child: CText(
-                    'Download',
+                    'download'.i18n,
                     style: tsButton.copiedWith(color: indicatorRed),
                   ),
                 ),

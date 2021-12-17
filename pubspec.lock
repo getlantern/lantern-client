@@ -532,6 +532,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_uploader:
+    dependency: "direct main"
+    description:
+      name: flutter_uploader
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0-beta.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -1068,12 +1075,12 @@ packages:
     source: hosted
     version: "2.0.3"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.9"
+    version: "2.0.11"
   shared_preferences_android:
     dependency: transitive
     description:

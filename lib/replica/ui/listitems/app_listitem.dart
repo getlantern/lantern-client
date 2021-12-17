@@ -5,6 +5,7 @@ import 'package:lantern/replica/models/search_item.dart';
 class ReplicaAppListItem extends StatelessWidget {
   ReplicaAppListItem(
       {required this.item, required this.onTap, required this.replicaApi});
+
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
@@ -21,14 +22,11 @@ class ReplicaAppListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           verticalDirection: VerticalDirection.down,
           children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.all(4.0),
-              child: CText(
-                item.displayName,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: tsSubtitle1Short,
-              ),
+            CText(
+              item.displayName,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: tsSubtitle1Short,
             ),
             // Render the duration and mime types
             // If mimetype is nil, just render 'app/unknown'
@@ -43,7 +41,7 @@ class ReplicaAppListItem extends StatelessWidget {
                   )
                 else
                   CText(
-                    'app/unknown'.i18n,
+                    'app_unknown'.i18n,
                     style: tsBody1.copiedWith(color: pink4),
                   ),
               ],
