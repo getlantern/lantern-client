@@ -133,7 +133,6 @@ MOBILE_DEBUG_APK := $(INSTALLER_NAME)-$(ANDROID_ARCH)-debug.apk
 MOBILE_BUNDLE := lantern-$(ANDROID_ARCH).aab
 MOBILE_TEST_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/androidTest/autoTest/debug/app-autoTest-debug-androidTest.apk
 MOBILE_TESTS_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/autoTest/debug/app-autoTest-debug.apk
-ANDROID_KEYSTORE := $(MOBILE_DIR)/app/keystore.release.jks
 
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
@@ -207,10 +206,6 @@ require-secrets-dir: guard-SECRETS_DIR
 
 .PHONY: require-release-track
 require-release-track: guard-APK_RELEASE_TRACK
-
-.PHONY: require-android-keystore
-require-android-keystore:
-	@ if [ ! -f '${ANDROID_KEYSTORE}' ]; then echo 'Android keystore not found' && exit 1; fi
 
 .PHONY: require-lantern-binaries
 require-lantern-binaries:
@@ -386,7 +381,6 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
-	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
@@ -401,7 +395,6 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 
 $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
-	cp gradle.properties.user ~/.gradle/gradle.properties && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
@@ -430,9 +423,8 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-package-android: require-version require-android-keystore
-	@cp ~/.gradle/gradle.properties gradle.properties.user && \
-	make pubget android-release && \
+package-android: require-version
+	@make pubget android-release && \
 	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
 
