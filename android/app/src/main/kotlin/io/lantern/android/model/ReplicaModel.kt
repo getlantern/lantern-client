@@ -33,14 +33,15 @@ class ReplicaModel(
     }
 
     private fun getReplicaAddr(result: MethodChannel.Result) {
-        Log.w(TAG, "getReplicaAddr: ")
         if (!LanternApp.getSession().lanternDidStart()) {
             Log.w(TAG, "getReplicaAddr: lantern did not start yet")
             result.error(ERROR_LANTERN_UNAVAILABLE, "", "")
+            return;
         }
         if (LanternApp.getSession().replicaAddr.isEmpty()) {
             Log.w(TAG, "getReplicaAddr: replica failed to start")
             result.error(ERROR_REPLICA_UNAVAILABLE, "", "")
+            return;
         }
         Log.w(TAG, "getReplicaAddr: lantern started: " + LanternApp.getSession().replicaAddr)
         result.success(LanternApp.getSession().replicaAddr)
