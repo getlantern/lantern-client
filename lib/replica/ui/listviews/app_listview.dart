@@ -25,44 +25,15 @@ class ReplicaAppListView extends ReplicaCommonListView {
 class _ReplicaAppListViewState extends ReplicaCommonListViewState {
   @override
   Widget build(BuildContext context) {
-    logger.v('renderListView: query: ${super.lastSearchQuery}');
-    var w = super.prebuild(context);
-    if (w != null) {
-      return w;
-    }
-    return PagedListView<int, ReplicaSearchItem>.separated(
-      cacheExtent:
-          super.getCommonCacheExtent(super.pagingController.value.itemList),
-      scrollDirection: Axis.vertical,
-      pagingController: super.pagingController,
-      builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
-        animateTransitions: true,
-        noItemsFoundIndicatorBuilder: (context) {
-          return Column(
-            children: [
-              const CAssetImage(
-                path: ImagePaths.unknown,
-                size: 168,
-              ),
-              CText(
-                'Sorry, we couldn’t find anything matching that search'.i18n,
-                style: tsBody1,
-              ),
-            ],
-          );
+    return renderPaginatedListView((context, item, index) {
+      return ReplicaAppListItem(
+        item: item,
+        replicaApi: replicaApi,
+        onTap: () async {
+          await context.pushRoute(ReplicaUnknownItemScreen(
+              replicaLink: item.replicaLink, category: SearchCategory.App));
         },
-        itemBuilder: (context, item, index) {
-          return ReplicaAppListItem(
-            item: item,
-            replicaApi: replicaApi,
-            onTap: () async {
-              await context.pushRoute(ReplicaUnknownItemScreen(
-                  replicaLink: item.replicaLink, category: SearchCategory.App));
-            },
-          );
-        },
-      ),
-      separatorBuilder: (context, index) => const SizedBox.shrink(),
-    );
+      );
+    });
   }
 }

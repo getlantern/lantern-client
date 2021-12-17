@@ -20,11 +20,11 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
-import 'package:lantern/replica/ui/image_preview_screen.dart';
+import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
 import 'package:lantern/replica/ui/media_views/audio_player.dart';
 import 'package:lantern/replica/ui/search_screen.dart';
-import 'package:lantern/replica/ui/unknown_item_screen.dart';
+import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
 import 'package:lantern/replica/ui/media_views/video_player.dart';
 
 @AdaptiveAutoRouter(
