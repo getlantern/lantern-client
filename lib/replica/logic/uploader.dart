@@ -3,7 +3,6 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -42,9 +41,9 @@ class ReplicaUploader {
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
   }
 
-  Future<void> uploadFile(File file) async {
+  Future<void> uploadFile(File file, String displayName) async {
     var uploadUrl =
-        'http://${ReplicaCommon.getReplicaServerAddr()!}/replica/upload?name=${Uri.encodeComponent(basename(file.path))}';
+        'http://${ReplicaCommon.getReplicaServerAddr()!}/replica/upload?name=${Uri.encodeComponent(displayName)}';
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(RawUpload(
       url: uploadUrl,

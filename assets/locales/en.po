@@ -999,3 +999,12 @@ msgstr "Search user-uploaded content on the Lantern Network, or upload your own 
 
 msgid "share"
 msgstr "Share"
+
+msgid "upload_file_screen"
+msgstr "Upload File"
+
+msgid "name_your_file"
+msgstr "Name Your File"
+
+msgid "upload"
+msgstr "Upload"

@@ -26,6 +26,7 @@ import 'package:lantern/replica/ui/media_views/audio_player.dart';
 import 'package:lantern/replica/ui/search_screen.dart';
 import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
 import 'package:lantern/replica/ui/media_views/video_player.dart';
+import 'package:lantern/replica/ui/upload_file.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -208,6 +209,13 @@ import 'package:lantern/replica/ui/media_views/video_player.dart';
         page: ReplicaSearchScreen,
         name: 'ReplicaSearchScreen',
         path: 'replicaSearchScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaUploadFileScreen,
+        name: 'ReplicaUploadFileScreen',
+        path: 'replicaUploadFileScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
